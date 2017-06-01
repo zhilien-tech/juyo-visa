@@ -1,0 +1,34 @@
+.mui-switch {
+    width: 78px;
+    height: 31px;
+    top: -5px;
+    position: relative;
+    border: 1px solid #dfdfdf;
+    background-color: #EEEEEE;
+    border-radius: 0px;
+    background-clip: content-box;
+    display: inline-block;
+    -webkit-appearance: none;
+    user-select: none;
+    outline: none;
+}
+
+.mui-switch:before {
+    content: '';
+    width: 29px;
+    height: 29px;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    border-radius: 0px;
+    background-color: #fff;
+}
+
+.mui-switch:checked {
+    border-color: #428BCA;
+    background-color: #428BCA;
+}
+
+.mui-switch:checked:before {
+    left: 47px;
+}

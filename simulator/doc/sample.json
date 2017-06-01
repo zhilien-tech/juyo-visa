@@ -1,0 +1,494 @@
+{
+  /*第一页，填写保密问题*/
+  "ctl00_SiteContentPlaceHolder_ucLocation_ddlLocation": "BEJ",
+  "ctl00_SiteContentPlaceHolder_txtAnswer": "Mother Name",
+  /*个人信息1*/
+  /*名字*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_SURNAME": "Alan",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_GIVEN_NAME": "Liu",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_FULL_NAME_NATIVE": "Alan Liu",
+  "ctl00_SiteContentPlaceHolder_FormView1_cbxAPP_FULL_NAME_NATIVE_NA": true,
+  /*这个字段不用管*/
+  /*曾用名信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblOtherNames_0": true,
+  /*有就是true，没有false*/
+  "ctl00_SiteContentPlaceHolder_FormView1_DListAlias_ctl_InsertButtonAlias": [
+    {},
+    {}
+  ],
+  /*有几个曾用名就生成几个空对象即可*/
+  /*曾用名1*/
+  "ctl00_SiteContentPlaceHolder_FormView1_DListAlias_ctl00_tbxSURNAME": "OldSurname",
+  "ctl00_SiteContentPlaceHolder_FormView1_DListAlias_ctl00_tbxGIVEN_NAME": "OldGivenname",
+  /*曾用名2*/
+  "ctl00_SiteContentPlaceHolder_FormView1_DListAlias_ctl01_tbxSURNAME": "OldSurname",
+  "ctl00_SiteContentPlaceHolder_FormView1_DListAlias_ctl01_tbxGIVEN_NAME": "OldGivenname",
+  "ctl00_SiteContentPlaceHolder_FormView1_rblTelecodeQuestion_0": false,
+  /*姓名电码,一般必须填写*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_TelecodeSURNAME": "4432",
+  /*姓，电码*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_TelecodeGIVEN_NAME": "4421",
+  /*名,电码*/
+
+  /*性别，婚姻状况MSDW，出生年月日,出生城市，省，国家*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblAPP_GENDER_0": false,
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_MARITAL_STATUS": "S",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlDOBDay_1": "28",
+  /*一位数字用01,02表示*/
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlDOBMonth_1": "JAN",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxDOBYear_1": "1983",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_POB_CITY": "BEIJING",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_POB_ST_PROVINCE": "BEIJING",
+  "ctl00_SiteContentPlaceHolder_FormView1_cbxAPP_POB_ST_PROVINCE_NA": true,
+  /*如果没有省就是true*/
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_POB_CNTRY": "CHIN",
+  /*个人信息2：国籍,是否拥有别国国籍（不用管），是否是其他国家永久居民，身份证号码*/
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_NATL": "CHIN",
+  "ctl00_SiteContentPlaceHolder_FormView1_rblAPP_OTH_NATL_IND_0": false,
+  /*不用管，不会有双国籍*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblPermResOtherCntryInd_0": false,
+  /*是否是别国永久居民*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlOthPermResCntry_ctl_InsertButtonOTHER_PERM_RES": [
+    {},
+    {}
+  ],
+  /*几个国家就生成几个空对象*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlOthPermResCntry_ctl00_ddlOthPermResCntry": "ARG",
+  /*如果是多国居民，按照顺序填入所有国家*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlOthPermResCntry_ctl01_ddlOthPermResCntry": "ANTI",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_NATIONAL_ID": "1101009198710189765",
+  "ctl00_SiteContentPlaceHolder_FormView1_cbxAPP_SSN_NA": true,
+  /*不管*/
+  "ctl00_SiteContentPlaceHolder_FormView1_cbxAPP_TAX_ID_NA": true,
+  /*不管*/
+  /*地址与电话信息,家庭地址*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_LN1": "Street address 1",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_LN2": "Street address 2",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_CITY": "BeiJing",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_STATE": "Beijing",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_POSTAL_CD": "100083",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlCountry": "CHIN",
+  /*邮件地址与家庭地址相同,不用管*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblMailingAddrSame_0": true,
+  /*不管*/
+  /*电话信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_HOME_TEL": "18687184553",
+  "ctl00_SiteContentPlaceHolder_FormView1_cbxAPP_BUS_TEL_NA": true,
+  /*不管,没有办公电话*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_MOBILE_TEL": "82459957",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_EMAIL_ADDR": "82459957@qq.com",
+  /*护照信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_TYPE": "R",
+  /*类型RODT*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_NUM": "G21323345",
+  "ctl00_SiteContentPlaceHolder_FormView1_cbxPPT_BOOK_NUM_NA": true,
+  /*不管*/
+  /*发照相关信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_ISSUED_CNTRY": "CHIN",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_ISSUED_IN_CITY": "KUNMING",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_ISSUED_IN_STATE": "YUNNAN",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_ISSUED_IN_CNTRY": "CHIN",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_ISSUED_DTEDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_ISSUED_DTEMonth": "01",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_ISSUEDYear": "2005",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_EXPIRE_DTEDay": "27",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_EXPIRE_DTEMonth": "01",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_EXPIREYear": "2025",
+  "ctl00_SiteContentPlaceHolder_FormView1_rblLOST_PPT_IND_0": true,
+  /*是否丢失过护照*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlLostPPT_ctl_InsertButtonLostPPT": [
+    {},
+    {}
+  ],
+  /*几条数据生成几个空对象*/
+  /*丢失护照的相关信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlLostPPT_ctl00_tbxLOST_PPT_NUM": "G21323322",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlLostPPT_ctl00_ddlLOST_PPT_NATL": "CHIN",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlLostPPT_ctl00_tbxLOST_PPT_EXPL": "Exp... ",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlLostPPT_ctl01_tbxLOST_PPT_NUM": "G21323323",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlLostPPT_ctl01_ddlLOST_PPT_NATL": "CHIN",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlLostPPT_ctl01_tbxLOST_PPT_EXPL": "Exp... ",
+  /*本次旅游的相关信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlPurposeOfTrip": "B",
+  /*不管，基本都是B签*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlOtherPurpose": "B1-B2",
+  /*不管*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblSpecificTravel_0": true,
+  /*不管*/
+  /*到达美国的相应信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlARRIVAL_US_DTEDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlARRIVAL_US_DTEMonth": "4",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxARRIVAL_US_DTEYear": "2017",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxArriveCity": "Palo Alto",
+  /*离开美国的相应信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlDEPARTURE_US_DTEDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlDEPARTURE_US_DTEMonth": "5",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxDEPARTURE_US_DTEYear": "2017",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxDepartCity": "Palo Alto",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlTravelLoc_ctl_InsertButtonTravelLoc": [
+    {},
+    {}
+  ],
+  /*有几个城市就生成几个空对象*/
+  /*将在美国访问那些城市*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlTravelLoc_ctl00_tbxSPECTRAVEL_LOCATION": "Palo Alto",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlTravelLoc_ctl01_tbxSPECTRAVEL_LOCATION": "Los Angelas",
+  /*在美国逗留的地址*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxStreetAddress1": "USA Address Stay",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxCity": "Palo Alto",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlTravelState": "CA",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbZIPCode": "10020",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlWhoIsPaying": "O",
+  /*由谁支付,S,O,C*/
+  /*如果是由个人S支付，则忽略以下字段*/
+  /*如果是别人O支付,相关信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPayerSurname": "PayerSurName",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPayerGivenName": "PayerGivName",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPayerPhone": "18687184444",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPAYER_EMAIL_ADDR": "18687184444@163.com",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlPayerRelationship": "O",
+  /*选择，与本人关系*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblPayerAddrSameAsInd_0": true,
+  /*如果是由公司C支付*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPayingCompany": "CompanyName",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPayerPhone": "01056647568",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxCompanyRelation": "Employee",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPayerStreetAddress1": "Company Address 1",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPayerStreetAddress2": "Company Address 2",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPayerCity": "BeiJing",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPayerStateProvince": "BeiJing",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPayerPostalZIPCode": "100010",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlPayerCountry": "CHIN",
+  /*通行人信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblOtherPersonsTravelingWithYou_0": true,
+  /*是否有同行人*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblGroupTravel_0": false,
+  /*是否团队*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxGroupName": "GroupName",
+  /*如果有团队，团队名称*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl_InsertButtonPrincipalPOT": [
+    {},
+    {}
+  ],
+  /*有几个同行人，生成几个空对象*/
+  /*如果不是团队，同行人相关信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl00_tbxSurname": "CompanionS",
+  "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl00_tbxGivenName": "CompanionG",
+  "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl00_ddlTCRelationship": "P",
+  "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl01_tbxSurname": "CompanionS",
+  "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl01_tbxGivenName": "CompanionG",
+  "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl01_ddlTCRelationship": "F",
+  /*过往的美国旅行经历*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_US_TRAVEL_IND_0": true,
+  /*是否到过美国*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl_InsertButtonPREV_US_VISIT": [
+    {},
+    {}
+  ],
+  /*去过几次生成几个空对象*/
+
+  /*过往到过美国的相关信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_ddlPREV_US_VISIT_DTEDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_ddlPREV_US_VISIT_DTEMonth": "1",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_tbxPREV_US_VISIT_DTEYear": "1998",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_tbxPREV_US_VISIT_LOS": "5",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_ddlPREV_US_VISIT_LOS_CD": "D",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_ddlPREV_US_VISIT_DTEDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_ddlPREV_US_VISIT_DTEMonth": "1",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_tbxPREV_US_VISIT_DTEYear": "2005",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_tbxPREV_US_VISIT_LOS": "5",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_ddlPREV_US_VISIT_LOS_CD": "D",
+  /*如果有，美国驾照的相关信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_US_DRIVER_LIC_IND_0": true,
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlUS_DRIVER_LICENSE_ctl00_tbxUS_DRIVER_LICENSE": "100210120120",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlUS_DRIVER_LICENSE_ctl00_ddlUS_DRIVER_LICENSE_STATE": "CA",
+  /*是否有过美国Visa*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_IND_0": true,
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlPREV_VISA_ISSUED_DTEDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlPREV_VISA_ISSUED_DTEMonth": "1",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPREV_VISA_ISSUED_DTEYear": "2005",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxPREV_VISA_FOIL_NUMBER": "12345678",
+  "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_SAME_TYPE_IND_0": true,
+  /*是否签发类型一致*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_SAME_CNTRY_IND_0": true,
+  /*不管*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_TEN_PRINT_IND_0": true,
+  /*不管*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_LOST_IND_0": false,
+  /*不管*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_CANCELLED_IND_0": false,
+  /*不管*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_REFUSED_IND_0": false,
+  /*不管*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblIV_PETITION_IND_0": true,
+  /*是否提出过移民申请*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxIV_PETITION_EXPL": "Exp......",
+  /*移民申请说明*/
+  /*美国联系人信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_cbxUS_POC_ORG_NA_IND": true,
+  /*不管，这个是指定美国只能有联系人，不能是个组织的*/
+  /*联系人相关信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_SURNAME": "ContactSurname",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_GIVEN_NAME": "ContactGivname",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_REL_TO_APP": "R",
+  /*和我的关系*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_LN1": "Contact Address Line",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_CITY": "Palo Alto",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_ADDR_STATE": "CA",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_POSTAL_CD": "10010",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_HOME_TEL": "18687184667",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_EMAIL_ADDR": "18687184667@163.com",
+  /*家庭相关信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_cbxFATHER_SURNAME_UNK_IND": true,
+  /*是否不知道父亲的姓氏*/
+  "ctl00_SiteContentPlaceHolder_FormView1_cbxFATHER_GIVEN_NAME_UNK_IND": true,
+  /*是否不知道父亲的名字*/
+  /*如果不知道父亲的姓氏和名字的话，后面父亲的信息就可以不填了*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxFATHER_SURNAME": "FatherSurName",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxFATHER_GIVEN_NAME": "FatherGivName",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlFathersDOBDay": "27",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlFathersDOBMonth": "APR",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxFathersDOBYear": "1957",
+  "ctl00_SiteContentPlaceHolder_FormView1_rblFATHER_LIVE_IN_US_IND_0": true,
+  /*父亲是否在美国*/
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlFATHER_US_STATUS": "S",
+  /*父亲在美国属于什么身份SCPO，前端似乎没这个字段，这是后端填表必须要的信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_cbxMOTHER_SURNAME_UNK_IND": true,
+  /*是否不知道母亲的姓氏*/
+  "ctl00_SiteContentPlaceHolder_FormView1_cbxMOTHER_GIVEN_NAME_UNK_IND": true,
+  /*是否不知道母亲的名字*/
+  /*如果不知道母亲的姓氏和名字的话，后面母亲的信息就可以不填了*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxMOTHER_SURNAME": "MotherSurName",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxMOTHER_GIVEN_NAME": "MotherGivName",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlMothersDOBDay": "27",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlMothersDOBMonth": "APR",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxMothersDOBYear": "1957",
+  "ctl00_SiteContentPlaceHolder_FormView1_rblMOTHER_LIVE_IN_US_IND_0": true,
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlMOTHER_US_STATUS": "C",
+  /*母亲在美国属于什么身份SCPO，前端似乎没这个字段，这是后端填表必须要的信息*/
+  /*直系亲属信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblUS_IMMED_RELATIVE_IND_0": true,
+  /*是否有直系亲属*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl_InsertButtonUSRelative": [
+    {},
+    {}
+  ],
+  /*有几个直系亲属生成几个空对象*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl00_tbxUS_REL_SURNAME": "SurName",
+  "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl00_tbxUS_REL_GIVEN_NAME": "GivenName",
+  "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl00_ddlUS_REL_TYPE": "C",
+  "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl00_ddlUS_REL_STATUS": "S",
+  "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl01_tbxUS_REL_SURNAME": "SurName",
+  "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl01_tbxUS_REL_GIVEN_NAME": "GivenName",
+  "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl01_ddlUS_REL_TYPE": "B",
+  "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl01_ddlUS_REL_STATUS": "S",
+  "ctl00_SiteContentPlaceHolder_FormView1_rblUS_OTHER_RELATIVE_IND_0": true,
+  /*是否有其他非直系亲属*/
+  /*配偶信息，当ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_MARITAL_STATUS 为S之外的值时，有如下情况*/
+  /*已婚M*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxSpouseSurname": "SpouseSurName",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxSpouseGivenName": "SpouseGivName",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlDOBDay_2": "28",
+  /*一位数字用01,02表示*/
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlDOBMonth_2": "FEB",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxDOBYear_2": "1983",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlSpouseNatDropDownList": "CHIN",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxSpousePOBCity": "BeiJing",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlSpousePOBCountry": "CHIN",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlSpouseAddressType": "O",
+  /*如果配偶与我地址不同*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxSPOUSE_ADDR_LN1": "Spouse Address Line",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxSPOUSE_ADDR_LN1": "Spouse Address Line",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxSPOUSE_ADDR_CITY": "Beijing",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxSPOUSE_ADDR_STATE": "Beijing",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxSPOUSE_ADDR_POSTAL_CD": "100083",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlSPOUSE_ADDR_CNTRY": "CHIN",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlSpouseAddressType": "H",
+  /*配偶与我地址相同*/
+  /*离婚D*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxNumberOfPrevSpouses": "1",
+  /*离异的配偶数量*/
+  "ctl00_SiteContentPlaceHolder_FormView1_DListSpouse_ctl00_tbxSURNAME": "SpouseSurName",
+  "ctl00_SiteContentPlaceHolder_FormView1_DListSpouse_ctl00_tbxGIVEN_NAME": "SpouseGivName",
+  "ctl00_SiteContentPlaceHolder_FormView1_DListSpouse_ctl00_ddlDOBDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_DListSpouse_ctl00_ddlDOBMonth": "FEB",
+  "ctl00_SiteContentPlaceHolder_FormView1_DListSpouse_ctl00_tbxDOBYear": "1983",
+  "ctl00_SiteContentPlaceHolder_FormView1_DListSpouse_ctl00_ddlSpouseNatDropDownList": "CHIN",
+  "ctl00_SiteContentPlaceHolder_FormView1_DListSpouse_ctl00_tbxSpousePOBCity": "BeiJing",
+  "ctl00_SiteContentPlaceHolder_FormView1_DListSpouse_ctl00_ddlSpousePOBCountry": "CHIN",
+  "ctl00_SiteContentPlaceHolder_FormView1_DListSpouse_ctl00_ddlDomDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_DListSpouse_ctl00_ddlDomMonth": "2",
+  "ctl00_SiteContentPlaceHolder_FormView1_DListSpouse_ctl00_txtDomYear": "2010",
+  "ctl00_SiteContentPlaceHolder_FormView1_DListSpouse_ctl00_ddlDomEndDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_DListSpouse_ctl00_ddlDomEndMonth": "2",
+  "ctl00_SiteContentPlaceHolder_FormView1_DListSpouse_ctl00_txtDomEndYear": "2012",
+  "ctl00_SiteContentPlaceHolder_FormView1_DListSpouse_ctl00_tbxHowMarriageEnded": "EXP.....EXP....",
+  "ctl00_SiteContentPlaceHolder_FormView1_DListSpouse_ctl00_ddlMarriageEnded_CNTRY": "CHIN",
+  /*丧偶W*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxSURNAME": "SpouseSurName",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxGIVEN_NAME": "SpouseGivName",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlDOBDay_3": "28",
+  /*一位数字用01,02表示*/
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlDOBMonth_3": "FEB",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxDOBYear_3": "1983",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlSpouseNatDropDownList": "CHIN",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxSpousePOBCity": "BeiJing",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlSpousePOBCountry": "CHIN",
+  /*当前工作信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlPresentOccupation": "EN",
+  /*如果当前职业为N，有如下*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxExplainOtherPresentOccupation": "the not employed reason is...",
+  /*如果当前职业为H或者RT，有如下*/
+  /*什么也不填*/
+  /*如果当前职业为所有其他正常职业*/
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSchName": "ORGName",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSchAddr1": "ORG Address",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSchCity": "BeiJing",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxWORK_EDUC_ADDR_STATE": "Beijing",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxWORK_EDUC_ADDR_POSTAL_CD": "100083",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxWORK_EDUC_TEL": "18687184553",
+  "ctl00_SiteContentPlaceHolder_FormView1_ddlEmpSchCountry": "CHIN",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxCURR_MONTHLY_SALARY": "10000",
+  "ctl00_SiteContentPlaceHolder_FormView1_tbxDescribeDuties": "My duties is to make everything happen.",
+  /*曾经雇佣信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblPreviouslyEmployed_0": true,
+  /*是否曾经被雇佣过,如果没有就是false，并且后面的雇佣信息就都没了*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl_InsertButtonPrevEmpl": [
+    {},
+    {}
+  ],
+  /*雇佣几次生成几个空对象*/
+  /*雇佣信息1*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbEmployerName": "EmployerName",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbEmployerStreetAddress1": "Address Line 1",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbEmployerStreetAddress2": "Address Line2",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbEmployerCity": "Beijing",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbxPREV_EMPL_ADDR_STATE": "Beijing",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbxPREV_EMPL_ADDR_POSTAL_CD": "100083",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_DropDownList2": "CHIN",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbEmployerPhone": "18687184553",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbJobTitle": "JOBTITLE",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbSupervisorSurname": "SupervisorSurname",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbSupervisorGivenName": "SupervisorGName",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_ddlEmpDateFromDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_ddlEmpDateFromMonth": "4",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbxEmpDateFromYear": "2010",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_ddlEmpDateToDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_ddlEmpDateToMonth": "5",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbxEmpDateToYear": "2011",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbDescribeDuties": "Mymake Everything happen",
+  /*雇佣信息2*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbEmployerName": "LaterEmployerName",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbEmployerStreetAddress1": "Address Line 1",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbEmployerStreetAddress2": "Address Line2",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbEmployerCity": "Beijing",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbxPREV_EMPL_ADDR_STATE": "Beijing",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbxPREV_EMPL_ADDR_POSTAL_CD": "100083",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_DropDownList2": "CHIN",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbEmployerPhone": "18687184553",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbJobTitle": "JOBTITLE",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbSupervisorSurname": "SupervisorSurname",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbSupervisorGivenName": "SupervisorGName",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_ddlEmpDateFromDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_ddlEmpDateFromMonth": "4",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbxEmpDateFromYear": "2014",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_ddlEmpDateToDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_ddlEmpDateToMonth": "5",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbxEmpDateToYear": "2015",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbDescribeDuties": "Mymake Everything happen",
+  /*教育信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblOtherEduc_0": true,
+  /*有高中以上学历，如果没有，后面信息就都没了*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl_InsertButtonPrevEduc": [
+    {},
+    {}
+  ],
+  /*每个学校生成一个空对象*/
+  /*学校1*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolName": "FirstSchool",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolAddr1": "AddressLine1",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolAddr2": "AddressLine2",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolCity": "Beijing",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxEDUC_INST_ADDR_STATE": "Beijing",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxEDUC_INST_POSTAL_CD": "100083",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_ddlSchoolCountry": "CHIN",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolCourseOfStudy": "CourseOfStudy",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_ddlSchoolFromDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_ddlSchoolFromMonth": "4",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolFromYear": "1999",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_ddlSchoolToDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_ddlSchoolToMonth": "5",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolToYear": "2000",
+  /*学校2*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxSchoolName": "SecondSchool",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxSchoolAddr1": "Address Line1",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxSchoolAddr2": "AddressLine2",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxSchoolCity": "Beijing",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxEDUC_INST_ADDR_STATE": "Beijing",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxEDUC_INST_POSTAL_CD": "100083",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_ddlSchoolCountry": "CHIN",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxSchoolCourseOfStudy": "CourseOfStudy",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_ddlSchoolFromDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_ddlSchoolFromMonth": "4",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxSchoolFromYear": "2001",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_ddlSchoolToDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_ddlSchoolToMonth": "5",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxSchoolToYear": "2002",
+  /*会说的语言种类*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblCLAN_TRIBE_IND_0": false,
+  /*不管*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlLANGUAGES_ctl_InsertButtonLANGUAGE": [
+    {},
+    {}
+  ],
+  /*会几种语言就输出几个空对象*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlLANGUAGES_ctl00_tbxLANGUAGE_NAME": "CHINESE",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlLANGUAGES_ctl01_tbxLANGUAGE_NAME": "ENGLISH",
+  /*曾经去过的国家*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblCOUNTRIES_VISITED_IND_0": true,
+  /*是否去过别的国家，去过就是true,不是就是Flase*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl_InsertButtonCountriesVisited": [
+    {},
+    {}
+  ],
+  /*去过几个国家就生成几个空对象*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl00_ddlCOUNTRIES_VISITED": "ALGR",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl01_ddlCOUNTRIES_VISITED": "ARG",
+  /*曾经加入的职业协会，社会团体*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblORGANIZATION_IND_0": true,
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlORGANIZATIONS_ctl_InsertButtonORGANIZATION": [
+    {},
+    {}
+  ],
+  /*加入一个就生成一个空对象*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlORGANIZATIONS_ctl00_tbxORGANIZATION_NAME": "ORGNAMEA",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlORGANIZATIONS_ctl01_tbxORGANIZATION_NAME": "ORGNAMEB",
+  /*额外的信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblSPECIALIZED_SKILLS_IND_0": false,
+  /*不管*/
+  "ctl00_SiteContentPlaceHolder_FormView1_rblMILITARY_SERVICE_IND_0": false,
+  /*是否参军*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl_InsertButtonMILITARY_SERVICE": [
+    {}
+  ],
+  /*每参加过一个兵种就加一个空对象*/
+  /*如果参军过，有如下信息*/
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_ddlMILITARY_SVC_CNTRY": "CHIN",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_tbxMILITARY_SVC_BRANCH": "BranchService1",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_tbxMILITARY_SVC_RANK": "RankPos",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_tbxMILITARY_SVC_SPECIALTY": "BOMB",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_ddlMILITARY_SVC_FROMDay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_ddlMILITARY_SVC_FROMMonth": "3",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_tbxMILITARY_SVC_FROMYear": "1999",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_ddlMILITARY_SVC_TODay": "28",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_ddlMILITARY_SVC_TOMonth": "5",
+  "ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_tbxMILITARY_SVC_TOYear": "2001",
+  "ctl00_SiteContentPlaceHolder_FormView1_rblINSURGENT_ORG_IND_0": false,
+  /*不管*/
+  "ctl00_cphMain_imageFileUpload": "~/SSSS.jpg",
+  /*上传的照片文件名字，最好用绝对路径消除操作系统间的差异*/
+  "ctl00_SiteContentPlaceHolder_FormView3_rblPREP_IND_0": false,
+  /*不管*/
+  "ctl00_SiteContentPlaceHolder_PPTNumTbx": "G21323345"
+  /*护照号码*/
+}

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>补录信息-签手世界</title>
+    <link rel="stylesheet" href="/res/plugin/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.common.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.office365.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/res/css/colors.min.css"/>
+    <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
+
+    <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
+</head>
+<body>
+<div>
+    <div class="container-fluid" style="padding-bottom: 15px;">
+        <ul id="panelbar" class="col-xs-12" data-role="panelbar" data-expand-mode="single">
+            <li>
+                <span class="k-link">出行信息</span>
+                <div class="container-fluid">
+                    <!--出行目的-->
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label for="aim">出行目的:</label>
+                                <div class='input-group'>
+                                    <input id="aim" class="k-textbox fill" data-bind="value:order.aim"/>
+                                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label>入境日期</label>
+                                <input id="start" class="fill" data-role="datepicker"
+                                       data-bind="value:order.entry.date,events:{change:onDateChange}"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-9">
+                            <div class="form-group">
+                                <label>入境航班</label>
+                                <input class="fill"
+                                       data-role="dropdownlist"
+                                       data-filter="startswith"
+                                       data-value-field="id"
+                                       data-text-field="to"
+                                       data-auto-bind="true"
+                                       data-value-template="tpl_flight"
+                                       data-template="tpl_flight"
+                                       data-bind="source:flights,value:order.entry.flight"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label>出境日期</label>
+                                <input id="end" class="fill" data-role="datepicker"
+                                       data-bind="value:order.depart.date,events:{change:onDateChange}"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-9">
+                            <div class="form-group">
+                                <label>出境航班</label>
+                                <input class="fill"
+                                       data-role="dropdownlist"
+                                       data-filter="startswith"
+                                       data-value-field="id"
+                                       data-text-field="to"
+                                       data-auto-bind="true"
+                                       data-value-template="tpl_flight"
+                                       data-template="tpl_flight"
+                                       data-bind="source:flights,value:order.depart.flight"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <span class="k-link">行程安排</span>
+                <div class="container-fluid">
+                    <div data-bind="source:order.trips" data-template="tpl_trip"></div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button data-bind="click:addOne" data-params="order.trips"
+                                    class="k-button col-xs-12 k-button-icontext">
+                                <span class="k-icon k-i-plus"></span>添加行程
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="row" style="padding-top: 15px;">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <button id="next" class="k-primary k-button col-xs-12">
+                        <i class="fa fa-save"></i> 保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<!--引入 js 模板片段-->
+<script id="tpl_trip" type="text/x-kendo-template">
+    <div>
+        <div class="row">
+            <div class="col-xs-3">
+                <div class="form-group">
+                    <label>日期</label>
+                    <input type="text" class="fill" data-role="datepicker" data-bind="value:date"/>
+                </div>
+            </div>
+            <div class="col-xs-9">
+                <div class="form-group">
+                    <label>游玩内容</label>
+                    <select class="fill"
+                            data-role="multiselect"
+                            data-auto-close="false"
+                            data-tag-mode="multiple"
+                            data-value-field="id"
+                            data-text-field="name"
+                            data-bind="source:scenic,value:scenics">
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-8">
+                <div class="form-group">
+                    <label>入住酒店</label>
+                    <input class="fill"
+                           data-role="dropdownlist"
+                           data-filter="startswith"
+                           data-value-field="id"
+                           data-text-field="name"
+                           data-value-template="tpl_hotel"
+                           data-bind="source:hotels,value:hotel"/>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <label>房间类型</label>
+                    <select class="fill" data-role="dropdownlist" data-value-primitive="true" data-bind="value:room">
+                        <option>TWN 1 室</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <label>入住时间</label>
+                    <input type="text" class="fill" data-role="timepicker" data-bind="value:startTime"/>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <label>退房时间</label>
+                    <input type="text" class="fill" data-role="timepicker" data-bind="value:endTime"/>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <label>早餐</label>
+                    <select class="fill" data-role="dropdownlist" data-value-primitive="true" data-bind="value:breakfast">
+                        <option>無</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <label>晚餐</label>
+                    <select class="fill" data-role="dropdownlist" data-value-primitive="true" data-bind="value:dinner">
+                        <option>無</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <label>操作&nbsp;</label>
+                    <button data-bind="click:delOne" data-params="order.trips"
+                            class="k-button col-xs-12 k-button-icontext">
+                        <span class="k-icon k-i-close"></span>移除此行程
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="tpl_flight" type="text/x-kendo-template">
+    #if(data.line){#
+    #=data.line+":"+data.from+"->"+data.to#
+    #}#
+</script>
+<script id="tpl_hotel" type="text/x-kendo-template">
+    #if(data.name){#
+    #=data.name+"("+data.phone+")"#
+    #}#
+</script>
+<!--引入 js 库文件-->
+<script src="/res/plugin/template.js"></script>
+<script src="/res/plugin/jquery.min.js"></script>
+<script src="/res/plugin/layer/layer.js"></script>
+<script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
+<script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
+<script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
+<script src="/res/js/common.js"></script>
+
+<script src="/res/js/order/patch.js"></script>
+</html>

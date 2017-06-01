@@ -1,0 +1,167 @@
+html {
+  height: 100%;
+  margin: 0;
+}
+body {
+  height: 100%;
+  margin: 0;
+}
+.clear-scroll {
+  height: 100% !important;
+  overflow: hidden !important;
+}
+.ellipsis {
+  display: block;
+  /*内联对象需加*/
+  word-break: keep-all;
+  /* 不换行 */
+  white-space: nowrap;
+  /* 不换行 */
+  overflow: hidden;
+  /* 内容超出宽度时隐藏超出部分的内容 */
+  text-overflow: ellipsis;
+  /* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
+}
+.ic-offset {
+  margin-right: 3px;
+}
+.base {
+  margin-right: 3px;
+  padding-top: 1px;
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 1.28571429em;
+  text-align: center;
+  background-image: none !important;
+}
+.k-grid-toolbar:first-child {
+  border-color: #c9c9c9;
+  background-color: #FBFBFB;
+}
+a:focus,
+a:hover {
+  text-decoration: none !important;
+}
+.k-grid tr td {
+  overflow: visible;
+}
+.k-alt {
+  background-color: #f1f1f1;
+}
+.k-widget.k-splitter {
+  border-style: none;
+  border-width: 0px;
+}
+.k-icon.k-i-expand,
+.k-icon.k-i-collapse {
+  margin-top: -2px;
+}
+/* reset everything to the default box model */
+*,
+:before,
+:after {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+/* set a border-box model only to elements that need it */
+.form-control,
+.container,
+.container-fluid,
+.row,
+.col-xs-1,
+.col-sm-1,
+.col-md-1,
+.col-lg-1,
+.col-xs-2,
+.col-sm-2,
+.col-md-2,
+.col-lg-2,
+.col-xs-3,
+.col-sm-3,
+.col-md-3,
+.col-lg-3,
+.col-xs-4,
+.col-sm-4,
+.col-md-4,
+.col-lg-4,
+.col-xs-5,
+.col-sm-5,
+.col-md-5,
+.col-lg-5,
+.col-xs-6,
+.col-sm-6,
+.col-md-6,
+.col-lg-6,
+.col-xs-7,
+.col-sm-7,
+.col-md-7,
+.col-lg-7,
+.col-xs-8,
+.col-sm-8,
+.col-md-8,
+.col-lg-8,
+.col-xs-9,
+.col-sm-9,
+.col-md-9,
+.col-lg-9,
+.col-xs-10,
+.col-sm-10,
+.col-md-10,
+.col-lg-10,
+.col-xs-11,
+.col-sm-11,
+.col-md-11,
+.col-lg-11,
+.col-xs-12,
+.col-sm-12,
+.col-md-12,
+.col-lg-12 {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.k-panelbar > li > .k-link {
+  background-color: #cccccc;
+}
+.k-panelbar > li > .k-state-selected {
+  background-color: #0072c6 !important;
+}
+.line {
+  padding-bottom: 10px;
+  padding-top: 10px;
+  cursor: pointer;
+  border-bottom-width: 1px;
+  border-bottom-color: #cccccc;
+  border-bottom-style: solid;
+}
+.readOnly {
+  border: none;
+  width: 100%;
+}
+.check-box-label {
+  width: calc(100% - 82px);
+  top: -15px;
+  position: relative;
+}
+#panelbar > li > .container-fluid {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.input-group-addon:last-child {
+  border-radius: 0px;
+  cursor: pointer;
+}
+.fill {
+  width: 100%;
+}
+.pto-6 {
+  padding-top: 6px;
+}
+.uppercase {
+  text-transform: uppercase;
+}

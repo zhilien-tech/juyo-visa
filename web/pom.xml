@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>JSite</artifactId>
+        <groupId>io.znz.jsite</groupId>
+        <version>5.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>jsite-web</artifactId>
+    <packaging>war</packaging>
+    <name>jsite-web Maven Webapp</name>
+    <url>http://maven.apache.org</url>
+    <dependencies>
+        <!--依赖jsite核心包-->
+        <dependency>
+            <groupId>io.znz.jsite</groupId>
+            <artifactId>jsite-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!--签那儿-->
+        <dependency>
+            <groupId>io.znz.jsite</groupId>
+            <artifactId>jsite-visa</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <finalName>jsite-web</finalName>
+    </build>
+</project>

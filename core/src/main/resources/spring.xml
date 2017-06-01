@@ -1,0 +1,88 @@
+<?xml version="1.1" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:cache="http://www.springframework.org/schema/cache"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd"
+        default-lazy-init="true">
+
+	<description>Spring公共配置 </description>
+
+	<!-- 读取配置文件 -->
+	<context:property-placeholder ignore-unresolvable="true" file-encoding="UTF-8"
+        location="classpath*:/**/*.properties" />
+
+	<!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
+	<context:component-scan base-package="io.znz.jsite.**">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+	</context:component-scan>
+
+    <cache:annotation-driven cache-manager="cacheManager" />
+    <!--cache-manager-->
+    <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:/cache/ehcache-local.xml" />
+        <property name="shared" value="true" />
+    </bean>
+
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehCacheManager" />
+    </bean>
+
+	<!-- 数据源配置, 使用druid连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<property name="driverClassName" value="${database.driverClass}"/>
+		<property name="url" value="${database.jdbcUrl}"/>
+		<property name="username" value="${database.user}"/>
+		<property name="password" value="${database.password}"/>
+		<!-- 开启Druid的监控统计功能 -->
+		<property name="filters" value="stat" />
+        <!--<property name="filters" value="config" />-->
+        <!--&lt;!&ndash;从本地文件读取配置文件&ndash;&gt;-->
+        <!--<property name="connectionProperties" value="config.file=file:///home/admin/druid-pool.properties" />-->
+        <!--&lt;!&ndash;从远程服务器读取陪配置文件&ndash;&gt;-->
+        <!--<property name="connectionProperties" value="config.file=http://127.0.0.1/druid-pool.properties" />-->
+        <!--&lt;!&ndash;数据库密码加密&ndash;&gt;-->
+        <!--<property name="connectionProperties" value="config.file=file:///home/admin/druid-pool.properties" />-->
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="${database.initialSize}"/>
+		<!--initialSize: 初始化连接 -->
+		<property name="minIdle" value="${database.minIdle}"/>
+		<!--maxActive: 最大连接数量 -->
+		<property name="maxActive" value="${database.maxActive}"/>
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="${database.maxWait}"/>
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="${database.timeBetweenEvictionRunsMillis}"/>
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="${database.minEvictableIdleTimeMillis}"/>
+		<!-- 检测连接 -->
+		<property name="validationQuery" value="SELECT 'x' from dual"/>
+		<!-- 申请连接的时候检测 -->
+		<property name="testWhileIdle" value="true"/>
+		<property name="testOnBorrow" value="false"/>
+		<property name="testOnReturn" value="false"/>
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+		<property name="poolPreparedStatements" value="${database.poolPreparedStatements}"/>
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="${database.maxPoolPreparedStatementPerConnectionSize}"/>
+	</bean>
+
+	<!-- 配置 JSR303 Bean Validator 定义 -->
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+
+    <!--有了这个Spring就能够自动扫描被@Aspect标注的切面了-->
+    <aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true"/>
+
+	<import resource="spring-jpa.xml"/>
+
+	<import resource="spring-shiro.xml"/>
+
+	<import resource="spring-quartz.xml"/>
+
+    <import resource="classpath*:/**/*-spring.xml" />
+
+</beans>

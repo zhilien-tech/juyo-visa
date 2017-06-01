@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--角色选择跳转页面-->
+    <mvc:view-controller path="guide" view-name="/sys/guide"/>
+
+    <!--API展示-->
+    <mvc:view-controller path="${adminPath}/swagger" view-name="sys/swagger.ftl"/>
+    <!--测试页面-->
+    <mvc:view-controller path="${adminPath}/test" view-name="sys/test.ftl"/>
+
+</beans>

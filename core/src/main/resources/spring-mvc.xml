@@ -1,0 +1,164 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+    <!--
+        在使用spring mvc时，实际上是两个spring容器：
+        dispatcher-servlet.xml 是一个，我们的controller就在这里，
+        所以这个里面也需要注入属性文件
+    -->
+    <context:property-placeholder ignore-unresolvable="true" file-encoding="UTF-8" location="classpath*:/**/*.properties"/>
+
+    <!-- 开启SpringMVC注解 -->
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg value="UTF-8"/>
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>text/html;charset=UTF-8</value>
+                    </list>
+                </property>
+                <property name="writeAcceptCharset">
+                    <value>false</value>
+                </property>
+            </bean>
+            <!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
+            <!--JSON渲染视图-->
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter4">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json</value>
+                    </list>
+                </property>
+                <property name="fastJsonConfig">
+                    <bean class="com.alibaba.fastjson.support.config.FastJsonConfig">
+                        <property name="serializerFeatures">
+                            <list>
+                                <value>WriteNullListAsEmpty</value>
+                                <value>WriteNullNumberAsZero</value>
+                                <value>WriteNullStringAsEmpty</value>
+                                <value>WriteNullBooleanAsFalse</value>
+                                <value>WriteDateUseDateFormat</value>
+                                <value>DisableCircularReferenceDetect</value>
+                            </list>
+                        </property>
+                        <property name="serializeFilters">
+                            <list>
+                                <bean class="io.znz.jsite.base.HibernatePropertyFilter"/>
+                            </list>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!-- 对静态资源文件的访问  方案一 （二选一） -->
+    <!--<mvc:resources mapping="/res/**" location="/res/" cache-period="0"/>-->
+    <!-- 开启默认处理对静态资源文件的访问  方案二 （二选一）-->
+    <mvc:default-servlet-handler/>
+
+    <!-- 自动扫描且只扫描@Controller -->
+    <context:component-scan base-package="io.znz.jsite.**.web" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+
+    <!-- FreeMarker的配置 -->
+    <bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="/WEB-INF/views/tpl/"/>
+        <!--关闭文件系统查找来支持加载jar包中的模板-->
+        <property name="preferFileSystemAccess" value="false"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="template_update_delay">0</prop>
+                <prop key="localized_lookup">false</prop>
+                <prop key="locale">zh_CN</prop>
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="date_format">yyyy-MM-dd</prop>
+                <!--<prop key="number_format">0.00</prop>-->
+                <prop key="template_update_delay">0</prop>
+            </props>
+        </property>
+        <property name="freemarkerVariables">
+            <map>
+                <entry key="base" value="#{servletContext.contextPath}/"/>
+                <entry key="shiro">
+                    <bean id="shiroTags" class="com.jagregory.shiro.freemarker.ShiroTags"/>
+                </entry>
+                <!--<entry key="site" value="#{T(io.znz.jsite.util.SiteUtil).get()}"/>-->
+                <entry key="xml_escape">
+                    <bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape"/>
+                </entry>
+                <!--Method-->
+                <entry key="formatByte" value-ref="formatByteMethod"/>
+                <!--Directive-->
+                <entry key="menu" value-ref="menuDirective"/>
+            </map>
+        </property>
+    </bean>
+    <bean id="shiroTags" class="com.jagregory.shiro.freemarker.ShiroTags"/>
+    <!-- FreeMarker视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+        <property name="viewNames" value="*.ftl"/>
+        <property name="contentType" value="text/html;charset=utf-8"/>
+        <property name="exposeRequestAttributes" value="true"/>
+        <property name="exposeSessionAttributes" value="true"/>
+        <property name="order" value="1"/>
+        <property name="cache" value="false"/>
+        <property name="allowSessionOverride" value="true"/>
+    </bean>
+
+    <!-- JSP视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+        <property name="order" value="99"/>
+    </bean>
+
+    <!-- 文件上传配置注意:这里申明的id必须为multipartResolver -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8"/>
+        <!--<property name="maxUploadSize" value="10485760000"/>-->
+        <!--<property name="maxInMemorySize" value="40960"/>-->
+    </bean>
+
+    <!--有了这个Spring就能够自动扫描被@Aspect标注的切面了-->
+    <aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true"/>
+
+    <!-- 自定义拦截请求链接链配置 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/*/*/create"/>
+            <mvc:mapping path="/*/*/delete/*"/>
+            <mvc:mapping path="/*/*/update"/>
+            <mvc:mapping path="/*/*/upload"/>
+            <bean class="io.znz.jsite.core.interceptor.LogInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/*"/>
+            <bean class="io.znz.jsite.core.interceptor.SiteInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!-- 定义无需Controller的url<->view直接映射 -->
+    <import resource="spring-route.xml"/>
+
+    <import resource="classpath*:/**/*-spring-mvc.xml"/>
+
+</beans>
