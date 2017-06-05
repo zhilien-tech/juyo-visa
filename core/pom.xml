@@ -28,9 +28,37 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <common.version>1.0.0</common.version>
+		<db.version>1.0.0</db.version>
+		<web.version>1.0.0</web.version>
     </properties>
 
     <dependencies>
+    		<!-- nutz 相关 begin -->
+    		<!-- 通用工具-->
+			<dependency>
+				<groupId>com.we</groupId>
+				<artifactId>we-core-common</artifactId>
+				<version>${common.version}</version>
+				<scope>compile</scope>
+			</dependency>
+			<!-- 数据库持久包 -->
+			<dependency>
+				<groupId>com.we</groupId>
+				<artifactId>we-core-db</artifactId>
+				<version>${db.version}</version>
+				<scope>compile</scope>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.we</groupId>
+				<artifactId>we-core-web</artifactId>
+				<version>${web.version}</version>
+				<scope>compile</scope>
+			</dependency>
+			
+    	<!-- nutz 相关 end -->
+    	
         <!--Spring -->
         <!--Spring核心-->
         <!--添加Spring-webmvc支持会自动添加支持的spring-core等依赖-->
