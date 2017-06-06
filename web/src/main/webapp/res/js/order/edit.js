@@ -107,6 +107,9 @@ var onSave = function (e) {
             $("#next").bind("click", onSave);
         }
     });
+    /* document.forms[0].action="order/list.html";
+	document.forms[0].submit();*/
+
 }
 $(function () {
     //如果有传递ID就是修改
