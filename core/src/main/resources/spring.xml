@@ -26,14 +26,14 @@
 
     <cache:annotation-driven cache-manager="cacheManager" />
     <!--cache-manager-->
-    <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+   <!--  <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
         <property name="configLocation" value="classpath:/cache/ehcache-local.xml" />
         <property name="shared" value="true" />
     </bean>
 
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
         <property name="cacheManager" ref="ehCacheManager" />
-    </bean>
+    </bean> -->
 
 	<!-- 数据源配置, 使用druid连接池 -->
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
