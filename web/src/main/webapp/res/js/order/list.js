@@ -1,6 +1,7 @@
 /**
  * Created by Chaly on 2017/1/26.
  */
+
 //注册命令
 function regCmd(command) {
     var select = function (e) {
@@ -44,7 +45,7 @@ function regCmd(command) {
                     break;
                 case "modify":
                     var data = grid.dataItem($(e.currentTarget).closest("tr"));
-                    $.layer.open({
+                    layer.open({
                         type: 2,
                         title: '编辑订单',
                         area: ['700px', '600px'],
@@ -174,6 +175,7 @@ function detailInit(e) {
         ]
     });
 }
+
 //初始化上部的表格布局
 var grid = $("#grid").kendoGrid({
     height: "100%",
@@ -261,3 +263,16 @@ var grid = $("#grid").kendoGrid({
         }
     ]
 }).data("kendoGrid");
+//页面刷新
+function successCallback(id){
+	alert(111);
+	//grid.GetJQuery().refresh();
+	grid.dataSource.read();
+	 /* if(id == '1'){
+		  layer.msg("添加成功",{time: 2000});
+	  }else if(id == '2'){
+		  layer.msg("修改成功",{time: 2000});
+	  }else if(id == '3'){
+		  layer.msg("刷新成功",{time: 2000});
+	  }*/
+  }

@@ -24,7 +24,7 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice" />
 	</context:component-scan>
 
-    <cache:annotation-driven cache-manager="cacheManager" />
+   <!--  <cache:annotation-driven cache-manager="cacheManager" /> -->
     <!--cache-manager-->
    <!--  <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
         <property name="configLocation" value="classpath:/cache/ehcache-local.xml" />

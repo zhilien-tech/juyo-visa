@@ -101,13 +101,18 @@ var onSave = function (e) {
                 $.layer.alert(result.msg);
             } else {
                 $.layer.msg("操作成功", {}, function () {
-                    $.layer.closeAll();
+                	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                	//$.layer.closeAll();
+                	parent.layer.close(index);
+                	alert(222);
+                	window.parent.successCallback('3');
+                	 //alert(parent.$("#na").val());
                 });
             }
             $("#next").bind("click", onSave);
         }
     });
-    /* document.forms[0].action="order/list.html";
+ /*   document.forms[0].action="/visa/order/list";
 	document.forms[0].submit();*/
 
 }

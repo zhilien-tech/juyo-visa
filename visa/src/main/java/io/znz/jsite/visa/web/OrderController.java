@@ -210,8 +210,8 @@ public class OrderController extends BaseController {
 				order.setUser(UserUtil.getUser());
 			}
 		}
-		//return orderService.save(order);
-		orderService.save(order);
+		return orderService.save(order);
+		/*orderService.save(order);
 		User user = UserUtil.getUser();
 		if (filter == null)
 			filter = new PageFilter();
@@ -220,8 +220,8 @@ public class OrderController extends BaseController {
 		//如果不是管理员则按照登录人查看订单,如果是管理员则差看所有
 		if (!SecurityUtils.getSubject().hasRole("admin")) {
 			filters = filters.add(Restrictions.in("user.id", Lists.newArrayList(user.getId())));
-		}
-		return orderService.search(pageable, filters);
+		}*/
+		//return orderService.search(pageable, filters);
 
 	}
 
