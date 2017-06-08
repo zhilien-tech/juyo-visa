@@ -6,16 +6,16 @@
 
 package io.znz.jsite.visa.web;
 
-import io.znz.jsite.base.bean.PageFilter;
-import io.znz.jsite.core.bean.User;
+import io.znz.jsite.base.BaseController;
 import io.znz.jsite.visa.service.UserViewService;
 
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.fastjson.JSON;
 
 /**
  * 个人信息控制类
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("visa/personalinfo")
-public class PersonalInfoController {
+public class PersonalInfoController extends BaseController {
 
 	@Autowired
 	private UserViewService userViewService;
@@ -35,11 +35,14 @@ public class PersonalInfoController {
 	 */
 	@RequestMapping(value = "personallist")
 	@ResponseBody
-	private Object personallist(@RequestBody(required = false) PageFilter filter) {
-		if (filter == null) {
-			filter = new PageFilter();
-		}
-		Restrictions.conjunction(filter.getFilter(User.class));
+	private Object personallist() {
 		return userViewService.userListData();
+	}
+
+	@RequestMapping(value = "show", method = RequestMethod.GET)
+	@ResponseBody
+	public Object show(long cid) {
+		//Customer customer = userViewService
+		return JSON.parseObject("");
 	}
 }
