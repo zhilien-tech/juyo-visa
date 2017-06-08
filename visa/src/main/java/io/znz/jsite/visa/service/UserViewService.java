@@ -10,6 +10,7 @@ import io.znz.jsite.base.NutzBaseService;
 import io.znz.jsite.core.bean.User;
 import io.znz.jsite.core.util.UserUtil;
 import io.znz.jsite.exception.JSiteException;
+import io.znz.jsite.visa.bean.entity.SysUserEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import java.util.Map;
 import org.apache.poi.ss.formula.functions.T;
 import org.nutz.dao.Cnd;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Maps;
 import com.uxuexi.core.common.util.Util;
@@ -27,6 +29,7 @@ import com.uxuexi.core.common.util.Util;
  * @Date	 2017年6月6日 	 
  */
 @Service
+@Transactional(readOnly = true)
 public class UserViewService extends NutzBaseService<T> {
 
 	/**
@@ -43,7 +46,7 @@ public class UserViewService extends NutzBaseService<T> {
 			throw new JSiteException("请登录后再试!");
 		}
 		Map<String, Object> obj = Maps.newHashMap();
-		List<User> userlist = dbDao.query(User.class, Cnd.where("id", "=", userId), null);
+		List<SysUserEntity> userlist = dbDao.query(SysUserEntity.class, Cnd.where("id", "=", userId), null);
 		obj.put("userlist", userlist);
 		return obj;
 	}
