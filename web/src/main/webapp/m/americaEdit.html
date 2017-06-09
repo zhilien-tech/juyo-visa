@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>编辑-订单-签手世界</title>
+    <title>编辑-美国-数据采集-签手世界</title>
     <link rel="stylesheet" href="/res/plugin/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.common.min.css"/>
     <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.office365.min.css"/>
@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
 
     <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
-    <link rel="stylesheet" href="/res/plugin/h+/css/america.css"/><!-- 本页面样式 -->
 </head>
 <body>
 <div>
@@ -38,13 +37,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--公司名称/客户来源-->
+                            <!--公司全称/客户来源-->
                             <div class="row">
                                 <div class="col-xs-8">
                                     <div class="form-group">
-                                        <label for="last_name_cn">公司名称:<span style="color: red">*</span></label>
+                                        <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="" type="text" data-bind="" class="k-textbox" style="width: 100%;"/>
+                                            <input id="" type="text" data-bind="value:customer.lastName" class="k-textbox" style="width: 100%;"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -53,152 +52,7 @@
                                     <div class="form-group">
                                         <label for="last_name_en">客户来源:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-	                                        <select id="birth_country"
-	                                                data-role="dropdownlist"
-	                                                data-filter="startswith"
-	                                                data-suggest="true"
-	                                                data-auto-bind="true"
-	                                                data-value-primitive="true"
-	                                                data-text-field="text"
-	                                                data-value-field="value"
-	                                                data-bind=" "
-	                                                style="width: 100%;"></select>
-	                                        <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--end 公司名称/客户来源-->
-                            
-                            <!--联系人/手机/邮箱-->
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <div class="form-group">
-                                        <label for="first_name_cn">联系人:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="" data-bind="" class="k-textbox"
-                                                   style="width: 100%;"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-4">
-                                    <div class="form-group">
-                                        <label for="first_name_en">手机:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="" data-bind="" class="k-textbox" 
-                                            		style="width: 100%;text-transform:uppercase;"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-4">
-                                    <div class="form-group">
-                                        <label for="first_name_en">邮箱:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="" data-bind="" class="k-textbox" 
-                                            		style="width: 100%;text-transform:uppercase;"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--end 联系人/手机/邮箱-->
-                            <!--护照性别-->
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <div class="form-group">
-                                        <label for="passport_code">护照号:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="passport_code" data-bind="value:customer.passport" class="k-textbox"
-                                                   style="width: 100%;text-transform:uppercase;"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <div class="form-group">
-                                        <label for="gender">性别:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <select id="gender" style="width: 100%;"
-                                                    data-role="dropdownlist"
-                                                    data-value-primitive="true"
-                                                    data-bind="value:customer.gender">
-                                                <option>男</option>
-                                                <option>女</option>
-                                            </select>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--护照有效期-->
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <div class="form-group">
-                                        <label for="signed_at">护照签发日期:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="signed_at" style="width: 100%;" data-role="datepicker"
-                                                   data-bind="value:customer.issueDate,events:{change:onDateChange}"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <div class="form-group">
-                                        <label for="expire_at">护照有效日期:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="expire_at" style="width: 100%;" data-role="datepicker"
-                                                   data-bind="value:customer.expiryDate,events:{change:onDateChange}"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--护照签发省市-->
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <div class="form-group">
-                                        <label for="province_signed_en">护照签发省份（拼音）:<span
-                                                style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="province_signed_en" data-bind="value:customer.issueProvince"
-                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <div class="form-group">
-                                        <label for="city_signed_en">护照签发城市（拼音）:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="city_signed_en" data-bind="value:customer.issueCity"
-                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--身份证号-->
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="card_id">身份证号:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="card_id" data-bind="value:customer.idCardNo" class="k-textbox"
-                                                   style="width: 100%;"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--出生地-->
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <div class="form-group">
-                                        <label for="birth_country">办理人出生国家:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <select id="birth_country"
+                                            <select id=""
                                                     data-role="dropdownlist"
                                                     data-filter="startswith"
                                                     data-suggest="true"
@@ -212,75 +66,15 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xs-4">
-                                    <div class="form-group">
-                                        <label for="birth_province_en">省份（拼音）:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="birth_province_en" data-bind="value:customer.birthProvince"
-                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-4">
-                                    <div class="form-group">
-                                        <label for="birth_city_en">城市（拼音）:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="birth_city_en" data-bind="value:customer.birthCity" class="k-textbox"
-                                                   style="width: 100%;text-transform:uppercase;"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
-                            <!--国籍-->
+                            <!-- end 公司全称/客户来源 -->
+                            <!--联系人/手机/邮箱-->
                             <div class="row">
                                 <div class="col-xs-4">
                                     <div class="form-group">
-                                        <label for="home_nationality">办理人国籍:<span style="color: red">*</span></label>
+                                        <label for="first_name_cn">联系人:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <select id="home_nationality"
-                                                    data-role="dropdownlist"
-                                                    data-filter="startswith"
-                                                    data-suggest="true"
-                                                    data-auto-bind="true"
-                                                    data-value-primitive="true"
-                                                    data-text-field="text"
-                                                    data-value-field="value"
-                                                    data-bind="value:customer.country,source:countries"
-                                                    style="width: 100%;"></select>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-4">
-                                    <div class="form-group">
-                                        <label for="home_province_en">居住省份（拼音）:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="home_province_en" data-bind="value:customer.province"
-                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-4">
-                                    <div class="form-group">
-                                        <label for="home_city_en">居住城市（拼音）:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="home_city_en" data-bind="value:customer.city" class="k-textbox"
-                                                   style="width: 100%;text-transform:uppercase;"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--电话-->
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <div class="form-group">
-                                        <label for="mobile">手机号码:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="mobile" data-bind="value:customer.mobile" class="k-textbox"
+                                            <input id="first_name_cn" data-bind="value:customer.firstName" class="k-textbox"
                                                    style="width: 100%;"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -288,218 +82,22 @@
                                 </div>
                                 <div class="col-xs-4">
                                     <div class="form-group">
-                                        <label for="home_phone">家庭电话:<span style="color: red">*</span></label>
+                                        <label for="first_name_en">手机:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="home_phone" data-bind="value:customer.phone" class="k-textbox"
-                                                   style="width: 100%;"/>
+                                            <input id="first_name_en" data-bind="value:customer.firstNameEN"
+                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-4">
                                     <div class="form-group">
-                                        <label for="email">电子邮箱:<span style="color: red">*</span></label>
+                                        <label for="first_name_en">邮箱:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="email" data-bind="value:customer.email" class="k-textbox"
-                                                   style="width: 100%;"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--详细地址(中文)-->
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="home_address_cn_1">住址的房间/单元/楼号/门牌号，小区/社区（中文）:</label>
-                                        <div class='input-group'>
-                                            <input id="home_address_cn_1"
-                                                   data-bind="value:customer.address"
-                                                   onchange="translateZhToEn(this,'home_address_en_1')" class="k-textbox"
-                                                   style="width: 100%;" placeholder="住址的房间/单元/楼号/门牌号，小区/社区（中文）"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--地址城市(中文)-->
-                            <div class="row">
-                                <div class="col-xs-8">
-                                    <div class="form-group">
-                                        <label for="home_address_cn_2">住址的街道/区/县名称，不包括省份（中文）:</label>
-                                        <div class='input-group'>
-                                            <input id="home_address_cn_2"
-                                                   data-bind="value:customer.room"
-                                                   onchange="translateZhToEn(this,'home_address_en_2')" class="k-textbox"
-                                                   style="width: 100%;" placeholder="住址的街道/区/县名称，不包括省份（中文）"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-4">
-                                    <div class="form-group">
-                                        <label for="home_post_code">邮编:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="home_post_code" data-bind="value:customer.zipCode" class="k-textbox"
-                                                   style="width: 100%;" placeholder="住址的邮编"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--详细地址(英文)-->
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="home_address_en_1">住址的房间/单元/楼号/门牌号（英文），填写中文自动翻译:<span
-                                                style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="home_address_en_1" class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.addressEN"
-                                                   placeholder="住址的房间/单元/楼号/门牌号（英文），填写中文自动翻译"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--地址城市(英文)-->
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="home_address_en_2">住址的街道/区/县名称，不包括省份（（英文），填写中文自动翻译:<span
-                                                style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="home_address_en_2" class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.roomEN"
-                                                   placeholder="住址的街道/区/县名称，不包括省份（英文），填写中文自动翻译"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--是否丢失过护照-->
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="pp_lost" class="check-box-label">我丢失过护照</label>
-                                        <input id='pp_lost' data-bind="checked:oldPassportEnable" class="mui-switch"
-                                               type="checkbox"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row pp_lost" data-bind="visible:oldPassportEnable">
-                                <div class="col-xs-6">
-                                    <div class="form-group">
-                                        <label>签发国:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input data-role="dropdownlist"
-                                                   data-filter="startswith"
-                                                   data-suggest="true"
-                                                   data-auto-bind="true"
-                                                   data-value-primitive="false"
-                                                   data-text-field="text"
-                                                   data-value-field="value"
-                                                   data-bind="value:customer.oldPassport.country,source:countries"
-                                                   style="width: 100%;">
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <div class="form-group">
-                                        <label>护照号:</label>
-                                        <div class='input-group'>
-                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="value:customer.oldPassport.passport"
-                                                   placeholder="护照号码格式必需是 E/G 开头后接8位数字，如忘记可不填"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="pp_lost_why_cn">原因（中文）:</label>
-                                        <div class='input-group'>
-                                            <input id="pp_lost_why_cn" data-bind="value:customer.oldPassport.why"
-                                                   onchange="translateZhToEn(this,'pp_lost_why_en')"
-                                                   class="k-textbox" style="width: 100%;"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label>原因（英文），填写中文自动翻译:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="pp_lost_why_en" data-bind="value:customer.oldPassport.whyEN"
-                                                   class="k-textbox"
-                                                   style="width: 100%;"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--我有曾用名-->
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="has_used_name" class="check-box-label">我有曾用名</label>
-                                        <input id='has_used_name' data-bind="checked:oldNameEnable" class="mui-switch"
-                                               type="checkbox"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row has_used_name" data-bind="visible:oldNameEnable">
-                                <!--曾用姓-->
-                                <div class="col-xs-6">
-                                    <div class="form-group">
-                                        <label for="old_usrname_cn">曾用姓:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="old_usrname_cn" data-bind="value:customer.oldName.oldLastName"
-                                                   class="k-textbox" style="width: 100%;"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <div class="form-group">
-                                        <label for="old_usrname_en">拼音:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="old_usrname_en" data-bind="value:customer.oldName.oldLastNameEN"
+                                            <input id="first_name_en" data-bind="value:customer.firstNameEN"
                                                    class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
-                                    </div>
-                                </div>
-                                <!--曾用名-->
-                                <div class="col-xs-6">
-                                    <div class="form-group">
-                                        <label for="old_given_name_cn">曾用名:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="old_given_name_cn" data-bind="value:customer.oldName.oldFirstName"
-                                                   class="k-textbox" style="width: 100%;"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <div class="form-group">
-                                        <label for="old_given_name_en">拼音:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="old_given_name_en" data-bind="value:customer.oldName.oldFirstNameEN"
-                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--其他国家居民-->
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="has_pr" class="check-box-label">我是其他国家／地区永久居民</label>
-                                        <input id='has_pr' data-bind="checked:otherCountryEnable"
-                                               class="mui-switch" type="checkbox"/>
                                     </div>
                                 </div>
                             </div>
@@ -517,8 +115,134 @@
                             </div>
                         </div>
                     </li>
-                    <li>
-                        出行信息
+                    <li> 订单信息
+                        <div class="container-fluid">
+                            <!--人数/签证类型/领取/加急/收款方式-->
+                            <div class="row">
+                                <div class="col-xs-2">
+                                    <div class="form-group">
+                                        <label for="usa_arrival_date">人数:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="usa_arrival_date" style="width: 100%;" class="k-textbox"
+                                                   data-bind="value:customer.travel.arrivalDate"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div class="form-group">
+                                        <label for="usa_times_stay_unit">签证类型:</label>
+                                        <div class='input-group'>
+                                            <select id="usa_times_stay_unit" style="width:100%;"
+                                                    data-role="dropdownlist"
+                                                    data-value-primitive="true"
+                                                    data-bind="value:customer.travel.period">
+                                                <option>面试</option>
+                                                <option>免面试</option>
+                                            </select>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div class="form-group">
+                                        <label for="usa_times_stay_unit">领区:</label>
+                                        <div class='input-group'>
+                                            <select id="usa_times_stay_unit" style="width:100%;"
+                                                    data-role="dropdownlist"
+                                                    data-value-primitive="true"
+                                                    data-bind="value:customer.travel.period">
+                                                <option>东北</option>
+                                                <option>东南</option>
+                                                <option>华南</option>
+                                            </select>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div class="form-group">
+                                        <label for="usa_times_stay_unit">加急:</label>
+                                        <div class='input-group'>
+                                            <input id='join_group' data-bind="checked:customer.travel.team"
+                                               class="mui-switch" type="checkbox"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div class="form-group">
+                                        <label for="usa_times_stay_unit">付款方式:</label>
+                                        <div class='input-group'>
+                                            <select id="usa_times_stay_unit" style="width:100%;"
+                                                    data-role="dropdownlist"
+                                                    data-value-primitive="true"
+                                                    data-bind="value:customer.travel.period">
+                                                <option>现金</option>
+                                                <option>出签付</option>
+                                                <option>微信</option>
+                                                <option>支付宝</option>
+                                                <option>月付</option>
+                                            </select>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end人数/签证类型/领取/加急/收款方式-->
+                            
+                            <!--金额/送签时间/出签时间-->
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label for="us_contact_last_name_cn">金额:</label>
+                                        <div class='input-group'>
+                                            <input id="us_contact_last_name_cn"
+                                                   data-bind="value:customer.travel.contactsFirstName"
+                                                   class="k-textbox" style="width: 100%;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label for="us_contact_last_name_en">送签时间:</label>
+                                        <div class='input-group'>
+                                            <input id="us_contact_last_name_en" data-role="datepicker" style="width: 100%;"
+                                                   data-bind="value:customer.travel.contactsFirstNameEN"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label for="us_contact_last_name_en">出签时间:</label>
+                                        <div class='input-group'>
+                                            <input id="us_contact_last_name_en" data-role="datepicker" style="width: 100%;"
+                                                   data-bind="value:customer.travel.contactsFirstNameEN"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end 金额/送签时间/出签时间-->
+                            <!--备注-->
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="us_contact_first_name_cn">备注:</label>
+                                        <div class='input-group'>
+                                            <input id="us_contact_first_name_cn"
+                                                   data-bind="value:customer.travel.contactsLastName"
+                                                   class="k-textbox" style="width: 100%;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end 备注-->
+                        </div>
+                    </li>
+                    <li> 出行信息
                         <div class="container-fluid">
                             <!--到达和停留时间-->
                             <div class="row">
@@ -1138,8 +862,449 @@
                             </div>
                         </div>
                     </li>
-                    <li>
-                        父亲信息
+                    <li> 快递信息
+                        <div class="container-fluid">
+                            <!--资料来源/快递号/回邮方式-->
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <div class="form-group">
+                                        <label for="usa_times_stay_unit">资料来源:</label>
+                                        <div class='input-group'>
+                                            <select id="usa_times_stay_unit" style="width: 100%;"
+                                                    data-role="dropdownlist"
+                                                    data-value-primitive="true"
+                                                    data-bind="value:customer.travel.period">
+                                                <option>快递</option>
+                                                <option>前台</option>
+                                                <option>其他</option>
+                                            </select>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="join_group_name">快递号:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="join_group_name" class="k-textbox" style="width: 100%;"
+                                                   data-bind="value:customer.travel.team"
+                                                   placeholder="需填写参加的团队名称"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3">
+                                    <div class="form-group">
+                                        <label for="usa_times_stay_unit">回邮方式:</label>
+                                        <div class='input-group'>
+                                            <select id="usa_times_stay_unit" style="width: 100%;"
+                                                    data-role="dropdownlist"
+                                                    data-value-primitive="true"
+                                                    data-bind="value:customer.travel.period">
+                                                <option>快递</option>
+                                                <option>自取</option>
+                                            </select>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end 资料来源/快递号/回邮方式-->
+                            <!--回邮地址-->
+                            <div class="row join_group">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="join_group_name">回邮地址:</label>
+                                        <div class='input-group'>
+                                            <input id="join_group_name" class="k-textbox" style="width: 100%;"
+                                                   data-bind="value:customer.travel.team"
+                                                   placeholder=" "/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end 回邮地址-->
+                            <!--联系人/电话-->
+                            <div class="row">
+                            	<div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="usa_city">联系人:</label>
+                                        <div class='input-group'>
+                                            <input id="usa_city" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.travel.entryCity"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="usa_city">电话:</label>
+                                        <div class='input-group'>
+                                            <input id="usa_city" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.travel.entryCity"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end 联系人/电话-->
+                            <!--发票项目内容/发票抬头-->
+                            <div class="row">
+                            	<div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="usa_city">发票项目内容:</label>
+                                        <div class='input-group'>
+                                            <input id="usa_city" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.travel.entryCity"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="usa_city">发票抬头:</label>
+                                        <div class='input-group'>
+                                            <input id="usa_city" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.travel.entryCity"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end 联系人/电话-->
+                            
+                            <!--备注-->
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="us_contact_address">备注:</label>
+                                        <div class='input-group'>
+                                            <input id="us_contact_address" class="k-textbox" style="width: 100%;"
+                                                   data-bind="value:customer.travel.contactsAddress"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end 备注-->
+                            
+                            
+                            
+                            
+                            
+                            <!-- 此内容在页面并没有 起到作用 删掉后样式就乱了... -->
+                            <div data-bind="visible:payType('其他人')">
+                                <!--支付人姓-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="payer_last_name_cn">付费人姓:</label>
+                                            <div class='input-group'>
+                                                <input id="payer_last_name_cn" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.travel.payerLastName"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="payer_last_name_en">拼音:</label>
+                                            <div class='input-group'>
+                                                <input id="payer_last_name_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                       data-bind="value:customer.travel.payerLastNameEN"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--支付人名-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="payer_first_name_cn">付费人名:</label>
+                                            <div class='input-group'>
+                                                <input id="payer_first_name_cn" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.travel.payerFirstName"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="payer_first_name_en">拼音:</label>
+                                            <div class='input-group'>
+                                                <input id="payer_first_name_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                       data-bind="value:customer.travel.payerFirstNameEN"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--支付人联系方式-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="payer_phone">付费人电话:</label>
+                                            <div class='input-group'>
+                                                <input id="payer_phone" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.travel.payerPhone"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="payer_email">付费人邮箱:</label>
+                                            <div class='input-group'>
+                                                <input id="payer_email" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.travel.payerEmail"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费人和我的关系-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="payer_relation">付费人和我的关系:</label>
+                                            <div class='input-group'>
+                                                <select id="payer_relation" style="width: 100%;"
+                                                        data-role="dropdownlist"
+                                                        data-value-primitive="true"
+                                                        data-bind="value:customer.travel.payerRelation">
+                                                    <option>配偶</option>
+                                                    <option>子女</option>
+                                                    <option>父母</option>
+                                                    <option>亲戚</option>
+                                                    <option>朋友</option>
+                                                    <option>生意关联方</option>
+                                                    <option>其他</option>
+                                                </select>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-bind="visible:payType('公司/组织')">
+                                <!--付费公司名称(中文)-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="paying_company_name_cn">付费公司名称（中文）:<span
+                                                    style="color: red">*</span></label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_name_cn"
+                                                       onchange="translateZhToEn(this,'paying_company_name_en')"
+                                                       data-bind="value:customer.travel.companyName"
+                                                       class="k-textbox" style="width: 100%;"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司名称(英文)-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="paying_company_name_en">
+                                                付费公司名称（英文），填写中文自动翻译:
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_name_en" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.travel.companyNameEN"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司和我关系（中文）-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="paying_company_relation_cn">
+                                                付费公司和我关系（中文）:
+                                                <span style="color: red">*</span></label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_relation_cn" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.travel.companyRelation"
+                                                       onchange="translateZhToEn(this,'paying_company_relation_en')"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司和我关系(英文)-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="paying_company_relation_en">付费公司和我关系（英文），填写中文自动翻译:<span
+                                                    style="color: red">*</span></label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_relation_en" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.travel.companyRelationEN"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司省市区-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-4">
+                                        <div class="form-group">
+                                            <label for="paying_company_country">付费公司国家:<span style="color: red">*</span></label>
+                                            <div class='input-group'>
+                                                <select id="paying_company_country" style="width: 100%;"
+                                                        data-role="dropdownlist"
+                                                        data-filter="startswith"
+                                                        data-suggest="true"
+                                                        data-auto-bind="true"
+                                                        data-value-primitive="true"
+                                                        data-text-field="text"
+                                                        data-value-field="value"
+                                                        data-bind="source:countries,value:customer.travel.companyCountry"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div class="form-group">
+                                            <label for="paying_company_province_en">
+                                                省份（拼音）:
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_province_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                       data-bind="value:customer.travel.companyProvince"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div class="form-group">
+                                            <label for="paying_company_city_en">城市（拼音）:<span style="color: red">*</span></label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_city_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                       data-bind="value:customer.travel.companyCity"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司联系地址（中文）-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="paying_company_address_cn_1">付费公司地址的门牌号/房间/单元/楼宇（中文）:<span
+                                                    style="color: red">*</span></label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_address_cn_1" class="k-textbox" style="width: 100%;"
+                                                       onchange="translateZhToEn(this,'paying_company_address_en')"
+                                                       data-bind="value:customer.travel.companyRoom"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司联系城市(中文)-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="paying_company_address_cn_2">
+                                                付费公司地址的街道/区/县（中文）:
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_address_cn_2" class="k-textbox" style="width: 100%;"
+                                                       onchange="translateZhToEn(this,'paying_company_address_en2')"
+                                                       data-bind="value:customer.travel.companyAddress"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司联系地址（英文）-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="paying_company_address_en">
+                                                付费公司地址的门牌号/房间/单元/楼宇（英文），填写中文自动翻译:
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_address_en" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.travel.companyRoomEN"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司联系城市(英文)-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="paying_company_address_en2">
+                                                付费公司地址的街道/区/县（英文），填写中文自动翻译:
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_address_en2" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.travel.companyAddressEN"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司联系方式-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="paying_company_phone">
+                                                付费公司电话:
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_phone" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.travel.companyPhone"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="paying_company_zip_code">
+                                                付费公司邮编:
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_zip_code" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.travel.companyZipCode"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div data-template="tpl_traveler" data-bind="source:customer.travel.togethers"></div>
+                            <div class="row traveler" data-bind="visible:hasTogether">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <button data-bind="click:addOne" data-params="customer.travel.togethers"
+                                                class="k-button col-xs-12 k-button-icontext">
+                                            <span class="k-icon k-i-plus"></span>添加一名同行人
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 等我回来 再详细解决 -->
+                            
+                        </div>
+                    </li>
+                    <li>父亲信息
                         <div class="container-fluid">
                             <!--父亲姓-->
                             <div class="row">
@@ -1217,8 +1382,7 @@
                             </div>
                         </div>
                     </li>
-                    <li>
-                        母亲信息
+                    <li> 母亲信息
                         <div class="container-fluid">
                             <!--母亲姓-->
                             <div class="row">
@@ -1296,8 +1460,7 @@
                             </div>
                         </div>
                     </li>
-                    <li>
-                        配偶信息
+                    <li> 配偶信息
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-xs-12">
@@ -1668,8 +1831,7 @@
                             </div>
                         </div>
                     </li>
-                    <li>
-                        亲属信息
+                    <li> 亲属信息
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-xs-12">
@@ -1705,8 +1867,7 @@
                             </div>
                         </div>
                     </li>
-                    <li>
-                        美国相关信息
+                    <li> 美国相关信息
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-xs-12">
@@ -1887,8 +2048,7 @@
                             </div>
                         </div>
                     </li>
-                    <li>
-                        教育信息
+                    <li>教育信息
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-xs-12">
@@ -1916,8 +2076,7 @@
                             </div>
                         </div>
                     </li>
-                    <li>
-                        工作信息
+                    <li> 工作信息
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-xs-12">
@@ -2200,8 +2359,7 @@
                             </div>
                         </div>
                     </li>
-                    <li>
-                        过往工作信息
+                    <li>过往工作信息
                         <div class="container-fluid">
                             <div data-template="tpl_org" data-bind="source:customer.works"></div>
                             <div class="row">
@@ -2217,8 +2375,7 @@
                             </div>
                         </div>
                     </li>
-                    <li class="disabled">
-                        其他信息
+                    <li class="disabled">其他信息
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-xs-10">
@@ -3194,6 +3351,6 @@
 
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
-<script src="/res/js/usa.js"></script>
+<script src="/res/js/americaEdit.js"></script>
 <script src="/res/js/wintone.js?v=4"></script>
 </html>

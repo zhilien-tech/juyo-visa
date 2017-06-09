@@ -1,6 +1,3 @@
-/**
- * Created by Chaly on 2017/1/26.
- */
 
 //注册命令
 function regCmd(command) {
@@ -38,7 +35,7 @@ function regCmd(command) {
                     layer.open({
                         type: 2,
                         title: '编辑订单',
-                        area: ['700px', '600px'],
+                        area: ['950px', '600px'],
                         shadeClose: true,
                         content: '/m/americaEdit.html?cid=' + data.id + "&check=true"
                     });
@@ -83,12 +80,10 @@ function detailInit(e) {
             }
         },
         columns: [
-            /*{field: 'id', title: '客户编号'},*/
             {field: 'name',title: '姓名',template: "<a href='javascript:download(#=data.id#);'>#= data.lastName + data.firstName #</a>"},
             {field: 'passport', title: '电话'},
             {field: 'passport', title: '护照号'},
             {field: 'gender', title: '性别', width: 60},
-            /*{field: 'idCardNo', title: '身份证'},*/
             {field: ' ', title: '送签时间'},
             {field: ' ', title: '出签时间'},
             {field: 'state', title: ' 状态'},
@@ -128,9 +123,7 @@ var grid = $("#grid").kendoGrid({
     sortable: {
         mode: "multiple",
     },
-    toolbar: [
-        {name: "modify", imageClass: "base fa-cart-arrow-down green", text: "下单"},
-    ],
+    toolbar: false,
     dataSource: {
         transport: {
             read: {
