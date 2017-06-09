@@ -15,7 +15,6 @@ import io.znz.jsite.visa.bean.entity.SysUserEntity;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.poi.ss.formula.functions.T;
 import org.nutz.dao.Cnd;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +29,7 @@ import com.uxuexi.core.common.util.Util;
  */
 @Service
 @Transactional(readOnly = true)
-public class UserViewService extends NutzBaseService<T> {
+public class UserViewService extends NutzBaseService<SysUserEntity> {
 
 	/**
 	 * 根据用户id查出个人信息
