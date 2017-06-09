@@ -19,8 +19,11 @@ ol, ul {padding-left: 0;list-style: none;}
 .padding-0{padding:0;}
 
 
-
-
+/*按钮样式*/
+.k-red{background-color: #f43838;color: #fff;border: solid 1px #e43939;}
+.k-red:hover{background-color: #e43939;color: #fff;border: solid 1px #e43939;}
+.k-red:focus{color: #fff;background-color: #e63333;border: solid 1px #ce3535;}
+.k-red:active:hover,.k-red.active:hover,.k-red:active:focus{background-color: #e43939;color: #fff;border: solid 1px #e43939;}
 
 
 
