@@ -205,14 +205,29 @@ var grid = $("#grid").kendoGrid({
                 dataType: "json",
                 url: "/visa/order/list",
                 contentType: 'application/json;charset=UTF-8',
+                data:{
+                param:"ASBDASDHASDG"
+                }
             },
             parameterMap: function (options, type) {
-                return JSON.stringify(options);
+            	var parameter = {
+                        pageNumber : options.page,    //当前页
+                        pageSize : options.pageSize,//每页显示个数
+                        param:"4444"
+                    };
+               return kendo.stringify(parameter);
+              //  return JSON.stringify(options);
             },
         },
         schema: {
-            data: "content",
-            total: "totalElements",
+//            data: "content",
+//            total: "totalElements",
+        	data : function(d) {
+                return d.list;  //响应到页面的数据
+            },
+            total : function(d) {
+                return d.recordCount;   //总条数
+            },
             model: {
                 id: "id",
                 fields: {

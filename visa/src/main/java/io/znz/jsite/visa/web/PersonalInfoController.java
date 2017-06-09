@@ -7,10 +7,15 @@
 package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.BaseController;
+import io.znz.jsite.base.bean.ResultObject;
+import io.znz.jsite.visa.bean.entity.SysUserEntity;
+import io.znz.jsite.visa.form.SysUserSqlForm;
 import io.znz.jsite.visa.service.UserViewService;
 
+import org.nutz.dao.pager.Pager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,14 +40,26 @@ public class PersonalInfoController extends BaseController {
 	 */
 	@RequestMapping(value = "personallist")
 	@ResponseBody
-	private Object personallist() {
-		return userViewService.userListData();
+	private Object personallist(@RequestBody SysUserSqlForm form) {
+		Pager pager = new Pager();
+		pager.setPageNumber(form.getPageNumber());
+		pager.setPageSize(form.getPageSize());
+		return userViewService.listPage(form, pager);
+		//return userViewService.userListData();
 	}
 
+	/**
+	 * 数据展示
+	 * @param cid
+	 */
 	@RequestMapping(value = "show", method = RequestMethod.GET)
 	@ResponseBody
 	public Object show(long cid) {
-		//Customer customer = userViewService
-		return JSON.parseObject("");
+		SysUserEntity one = userViewService.fetch(cid);
+		if (one == null) {
+			return ResultObject.fail("个人信息不存在,请核实后再试!");
+		}
+		String json = JSON.toJSONStringWithDateFormat(one, "yyyy-MM-dd");
+		return JSON.parseObject(json);
 	}
 }

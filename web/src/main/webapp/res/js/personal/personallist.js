@@ -137,43 +137,7 @@ function download(cid) {
         }
     });
 }
-function detailInit(e) {
-    $("<div/>").appendTo(e.detailCell).kendoGrid({
-        scrollable: false,
-        dataSource: {
-            transport: {
-                read: {
-                    type: "GET",
-                    dataType: "json",
-                    url: "/visa/personalinfo/show/" + e.data.id + "?type=customer",
-                }
-            }
-        },
-        columns: [
-            {field: 'id', title: '客户编号'},
-            {field: 'passport', title: '护照号'},
-            {
-                field: 'name',
-                title: '姓名',
-                template: "<a href='javascript:download(#=data.id#);'>#= data.lastName + data.firstName #</a>"
-            },
-            {field: 'gender', title: '性别', width: 60},
-            {field: 'idCardNo', title: '身份证'},
-            {field: 'state', title: ' 状态'},
-            {
-                title: "操作", width: 228,
-                command: [
-                    {name: "usa", imageClass: "ic-offset flag-icon flag-icon-us", text: "美国"},
-                    {name: "japan", imageClass: "ic-offset flag-icon flag-icon-jp", text: "日本"},
-                    {name: "download", imageClass: "base fa-cloud-download purple", text: "下载"},
-                    regCmd("usa"),
-                    regCmd("japan"),
-                    regCmd("download"),
-                ],
-            },
-        ]
-    });
-}
+
 //初始化上部的表格布局
 var grid = $("#grid").kendoGrid({
     height: "100%",
@@ -189,7 +153,6 @@ var grid = $("#grid").kendoGrid({
         pageSizes: true,
         buttonCount: 5
     },
-    detailInit: detailInit,
     sortable: {
         mode: "multiple",
     },
@@ -206,12 +169,31 @@ var grid = $("#grid").kendoGrid({
                 contentType: 'application/json;charset=UTF-8',
             },
             parameterMap: function (options, type) {
-                return JSON.stringify(options);
+            	/*var parameter = {
+                        page : options.page,    //当前页
+                        pageSize : options.pageSize//每页显示个数
+                        
+                    };
+               return kendo.stringify(parameter);*/
+            	var parameter = {
+                        pageNumber : options.page,    //当前页
+                        pageSize : options.pageSize,//每页显示个数
+                    };
+            	alert(kendo.stringify(parameter));
+               return kendo.stringify(parameter);
             },
         },
         schema: {
-            data: "content",
-            total: "totalElements",
+           /* data: "content",
+            total: "totalElements",*/
+        	data : function(d) {
+        		alert(JSON.stringify(d.list));
+                return d.list;  //响应到页面的数据
+            },
+            total : function(d) {
+            	alert(d.recordCount);
+                return d.recordCount;   //总条数
+            },
             model: {
                 id: "id",
                 fields: {
@@ -239,7 +221,7 @@ var grid = $("#grid").kendoGrid({
         },
         {
             field: 'name', title: '名称', width: 90,
-            template: "<span class='ellipsis' title='#=userlist.name#'>#=userlist.name#</span>"
+            template: "<span class='ellipsis' title='#=data.name#'>#=data.name#</span>"
         },
         {
         	field: 'avatar', title: '联系人', width: 90,
@@ -249,9 +231,9 @@ var grid = $("#grid").kendoGrid({
             field: 'birthday', title: '出生日期', template: "<span class='ellipsis' title='#=data.birthday#'>#=data.birthday#</span>"
         },
         {
-        	field: 'email', title: '出生日期', template: "<span class='ellipsis' title='#=data.email#'>#=data.email#</span>"
+        	field: 'email', title: '邮箱', template: "<span class='ellipsis' title='#=data.email#'>#=data.email#</span>"
         },
-        {field: 'EMAIL', title: '邮箱', values: ["美国", "日本"], width: 80,},
+        /*{field: 'EMAIL', title: '邮箱', values: ["美国", "日本"], width: 80,},*/
         {
             title: "操作", width: 369,
             command: [
