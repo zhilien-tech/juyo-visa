@@ -179,7 +179,6 @@ var grid = $("#grid").kendoGrid({
                         pageNumber : options.page,    //当前页
                         pageSize : options.pageSize,//每页显示个数
                     };
-            	alert(kendo.stringify(parameter));
                return kendo.stringify(parameter);
             },
         },
@@ -187,11 +186,9 @@ var grid = $("#grid").kendoGrid({
            /* data: "content",
             total: "totalElements",*/
         	data : function(d) {
-        		alert(JSON.stringify(d.list));
                 return d.list;  //响应到页面的数据
             },
             total : function(d) {
-            	alert(d.recordCount);
                 return d.recordCount;   //总条数
             },
             model: {

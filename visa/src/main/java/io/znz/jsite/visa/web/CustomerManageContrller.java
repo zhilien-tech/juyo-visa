@@ -8,13 +8,27 @@ package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.BaseController;
 import io.znz.jsite.visa.bean.entity.CustomerManageEntity;
+import io.znz.jsite.visa.forms.customerform.CustomerAddForm;
+import io.znz.jsite.visa.forms.customerform.CustomerSqlForm;
+import io.znz.jsite.visa.forms.customerform.CustomerUpdateForm;
 import io.znz.jsite.visa.service.CustomerViewService;
 
-import org.nutz.mvc.annotation.Param;
+import java.util.Date;
+
+import org.nutz.dao.pager.Pager;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.GET;
+import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.POST;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.uxuexi.core.db.dao.IDbDao;
+import com.uxuexi.core.web.util.FormUtil;
 
 /**
  * 客户管理控制类
@@ -28,28 +42,47 @@ public class CustomerManageContrller extends BaseController {
 	@Autowired
 	private CustomerViewService customerViewService;
 
+	@Autowired
+	protected IDbDao dbDao;
+
 	/**
 	 * 列表信息展示
 	 */
 	@RequestMapping(value = "customerlist")
 	@ResponseBody
-	private Object customerlist() {
-		return customerViewService.customerListData();
+	public Object customerlist(@RequestBody CustomerSqlForm sqlForm) {
+		Pager pager = new Pager();
+		pager.setPageNumber(sqlForm.getPageNumber());
+		pager.setPageSize(sqlForm.getPageSize());
+		return customerViewService.listPage(sqlForm, pager);
+	}
+
+	@At
+	@GET
+	@Ok("jsp")
+	public Object addCustomer() {
+		return null;
 	}
 
 	/**
 	 * 添加数据
 	 * @param addForm
 	 */
-	private Object addData(@Param("..") final CustomerManageEntity addForm) {
-		return customerViewService.addSaveDate(addForm);
+	@RequestMapping(value = "addData")
+	@ResponseBody
+	@POST
+	public Object addData(CustomerAddForm addForm) {
+		CustomerManageEntity cusdto = FormUtil.add(dbDao, addForm, CustomerManageEntity.class);
+		addForm.setCreateTime(new Date());
+		addForm.setSerialNumber(cusdto.getId());
+		return cusdto;
 	}
 
 	/**
 	 * 更新数据
 	 * @param updateForm
 	 */
-	private Object updateData(@Param("..") final CustomerManageEntity updateForm) {
+	public Object updateData(CustomerUpdateForm updateForm) {
 		return customerViewService.updateSaveDate(updateForm);
 	}
 
@@ -57,7 +90,7 @@ public class CustomerManageContrller extends BaseController {
 	 * 根据id删除单条数据
 	 * @param id
 	 */
-	private Object deleteData(@Param("id") final long id) {
-		return customerViewService.deleteById(id);
+	public Object deleteData(@PathVariable long cid) {
+		return customerViewService.deleteById(cid);
 	}
 }

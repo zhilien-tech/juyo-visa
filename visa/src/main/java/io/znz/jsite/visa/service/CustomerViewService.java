@@ -8,6 +8,7 @@ package io.znz.jsite.visa.service;
 
 import io.znz.jsite.base.NutzBaseService;
 import io.znz.jsite.visa.bean.entity.CustomerManageEntity;
+import io.znz.jsite.visa.forms.customerform.CustomerUpdateForm;
 
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,7 @@ public class CustomerViewService extends NutzBaseService<CustomerManageEntity> {
 	 * 修改客户信息
 	 * @param updateForm 
 	 */
-	public Object updateSaveDate(CustomerManageEntity updateForm) {
+	public Object updateSaveDate(CustomerUpdateForm updateForm) {
 		Map<String, Object> obj = Maps.newHashMap();
 
 		return obj;

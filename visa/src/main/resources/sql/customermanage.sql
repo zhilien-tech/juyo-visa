@@ -1,0 +1,21 @@
+/*customermanage_list_data*/
+SELECT
+	vcm.id,
+	vcm.serialNumber,
+	vcm.fullComName,
+	vcm.customerSource,
+	vcm.linkman,
+	vcm.telephone,
+	vcm.email,
+	vcm.`status`,
+	vcm.createTime,
+	vcm.updateTime,
+	vcm.remark,
+	vcm.res1,
+	vcm.res2,
+	vcm.res3,
+	vcm.res4,
+	vcm.res5
+FROM
+	visa_customer_management vcm
+$condition
