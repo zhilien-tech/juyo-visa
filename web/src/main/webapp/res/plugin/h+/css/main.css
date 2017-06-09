@@ -14,8 +14,9 @@
 .btn-primary:active.focus,
 .btn-primary.active.focus,
 .open > .dropdown-toggle.btn-primary.focus {color: #fff;background-color: #32a1e4;border-color: #2b82b7;}
-
-
+/*客户管理 编辑 弹框的样式修改*/
+ol, ul {padding-left: 0;list-style: none;}
+.padding-0{padding:0;}
 
 
 

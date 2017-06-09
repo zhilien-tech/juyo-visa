@@ -2,6 +2,7 @@
 function regCmd(command) {
     var select = function (e) {
         var data = grid.dataItem($(e.currentTarget).closest("tr"));
+        
         if (!data) {
             $.layer.alert("请先选择需要操作的数据行");
         }
@@ -16,13 +17,14 @@ function regCmd(command) {
             var data;
             switch (command) {
                 case "edit":
+                	var data = grid.dataItem($(e.currentTarget).closest("tr"));
                     if (!(data = select(e))) return;
-                    $.layer.open({
+                    layer.open({
                         type: 2,
-                        title: '信息收集表',
+                        title: '编辑',
                         maxmin: true, //开启最大化最小化按钮
-                        area: ['700px', '600px'],
-                        content: '/m/newCustomer.html?cid=' + data.id + "&check=true"
+                        area: ['700px', '290px'],
+                        content: '/m/newCustomeEdit.html?cid=' + data.id + "&check=true"
                     });
                     break;
                 default:
