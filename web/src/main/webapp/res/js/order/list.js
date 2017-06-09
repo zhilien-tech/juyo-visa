@@ -144,22 +144,35 @@ function detailInit(e) {
         dataSource: {
             transport: {
                 read: {
-                    type: "GET",
+                    /*type: "GET",*/
                     dataType: "json",
-                    url: "/visa/order/show/" + e.data.id + "?type=customer",
+                    url: "/visa/order/childList?type=customer&orderId=" + e.data.id ,
                 }
             }
         },
+        schema: {
+//          data: "content",
+//          total: "totalElements",
+        	data : function(d) {
+        		alert(JSON.stringify(d.list));
+	              return d.list;  //响应到页面的数据
+	          },
+	          total : function(d) {
+	              return d.recordCount;   //总条数
+	          }
+      },
         columns: [
             {field: 'id', title: '客户编号'},
-            {field: 'passport', title: '护照号'},
+            {field: 'passport', title: '护照号',
+            	template: "<span class='ellipsis' title='#=data.passport#'>#=data.passport#</span>"
+            },
             {
-                field: 'name',
+                field: 'last_name',
                 title: '姓名',
-                template: "<a href='javascript:download(#=data.id#);'>#= data.lastName + data.firstName #</a>"
+                template: "<a href='javascript:download(#=data.id#);'>#= data.last_name #</a>"
             },
             {field: 'gender', title: '性别', width: 60},
-            {field: 'idCardNo', title: '身份证'},
+            {field: 'id_card_no', title: '身份证'},
             {field: 'state', title: ' 状态'},
             {
                 title: "操作", width: 228,

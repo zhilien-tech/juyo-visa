@@ -3,15 +3,19 @@ package io.znz.jsite.visa.web;
 import io.znz.jsite.base.BaseController;
 import io.znz.jsite.core.service.MailService;
 import io.znz.jsite.visa.bean.Customer;
+import io.znz.jsite.visa.bean.entity.CustomerEntity;
 import io.znz.jsite.visa.form.KenDoTestSqlForm;
 import io.znz.jsite.visa.service.OrderService;
 import io.znz.jsite.visa.service.PdfService;
 
 import java.util.List;
 
+import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.SqlManager;
+import org.nutz.dao.Sqls;
 import org.nutz.dao.pager.Pager;
+import org.nutz.dao.sql.Sql;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.uxuexi.core.db.dao.IDbDao;
+import com.uxuexi.core.db.util.DbSqlUtil;
 
 /**
  * Created by Chaly on 2017/3/23.
@@ -70,6 +75,32 @@ public class OrderController extends BaseController {
 		pager.setPageNumber(form.getPageNumber());
 		pager.setPageSize(form.getPageSize());
 		return orderService.listPage(form, pager);
+	}
+
+	/***
+	 * 
+	 * 查询子页面的相关信息
+	 * <p>
+	 *
+	 * @param customers
+	 * @param customer
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	@RequestMapping(value = "childList")
+	@ResponseBody
+	public Object childList(long orderId) {
+		/*CustomerSqlForm form = new CustomerSqlForm();
+		form.setOrderId(orderId);
+		Pager pager = new Pager();
+		return orderService.listPage(form, pager);*/
+		//	dbDao.f
+		Cnd cnd = Cnd.NEW();
+		//List<CustomerEntity> query = dbDao.query(CustomerEntity.class, Cnd.where("id", "=",orderId ), null);
+		String sqlString = sqlManager.get("customer_list");
+		Sql sql = Sqls.create(sqlString);
+		sql.setParam("orderId", orderId);
+		List<CustomerEntity> query = DbSqlUtil.query(dbDao, CustomerEntity.class, sql);
+		return query;
 	}
 
 	private Customer contains(List<Customer> customers, Customer customer) {
