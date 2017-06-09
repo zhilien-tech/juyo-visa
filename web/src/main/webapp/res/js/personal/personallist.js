@@ -142,12 +142,13 @@ function download(cid) {
 var grid = $("#grid").kendoGrid({
     height: "100%",
     selectable: "row",
-    sortable: true,
+  sortable: true,
     resizable: true,
     filterable: true,
     reorderable: true,
     columnMenu: true,
     scrollable: true,
+    serverSorting: true,
     pageable: {
         refresh: true,
         pageSizes: true,
@@ -179,7 +180,6 @@ var grid = $("#grid").kendoGrid({
                         pageNumber : options.page,    //当前页
                         pageSize : options.pageSize,//每页显示个数
                     };
-            	alert(kendo.stringify(parameter));
                return kendo.stringify(parameter);
             },
         },
@@ -187,11 +187,9 @@ var grid = $("#grid").kendoGrid({
            /* data: "content",
             total: "totalElements",*/
         	data : function(d) {
-        		alert(JSON.stringify(d.list));
                 return d.list;  //响应到页面的数据
             },
             total : function(d) {
-            	alert(d.recordCount);
                 return d.recordCount;   //总条数
             },
             model: {
@@ -208,8 +206,8 @@ var grid = $("#grid").kendoGrid({
         },
         pageSize: 20,
         serverPaging: true,
-        serverFiltering: true,
-        serverSorting: true
+        serverFiltering: true
+        /*serverSorting: true*/
     },
     columns: [
         {
