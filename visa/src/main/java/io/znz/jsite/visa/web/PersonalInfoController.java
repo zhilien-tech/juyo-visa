@@ -7,6 +7,8 @@
 package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.BaseController;
+import io.znz.jsite.base.bean.ResultObject;
+import io.znz.jsite.visa.bean.entity.SysUserEntity;
 import io.znz.jsite.visa.service.UserViewService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +41,18 @@ public class PersonalInfoController extends BaseController {
 		return userViewService.userListData();
 	}
 
+	/**
+	 * 数据展示
+	 * @param cid
+	 */
 	@RequestMapping(value = "show", method = RequestMethod.GET)
 	@ResponseBody
 	public Object show(long cid) {
-		//Customer customer = userViewService
-		return JSON.parseObject("");
+		SysUserEntity one = userViewService.fetch(cid);
+		if (one == null) {
+			return ResultObject.fail("个人信息不存在,请核实后再试!");
+		}
+		String json = JSON.toJSONStringWithDateFormat(one, "yyyy-MM-dd");
+		return JSON.parseObject(json);
 	}
 }
