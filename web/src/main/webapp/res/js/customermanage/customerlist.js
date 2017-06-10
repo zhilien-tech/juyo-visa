@@ -138,6 +138,7 @@ var grid = $("#grid").kendoGrid({
         {
         	title: '手机',
         	field: 'telephone'
+        	
         	//template: '#= data.telephone#'
         },
         {

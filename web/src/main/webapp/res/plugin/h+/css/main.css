@@ -5,22 +5,25 @@
 .btn-primary{background-color: #39aef5;border: solid 1px #349ad8;}
 .btn-primary:hover{background-color: #32a1e4;border: solid 1px #2b82b7;}
 .btn-primary:focus,.btn-primary.focus {color: #fff;background-color: #32a1e4;border-color: #2b82b7;}
-.btn-primary:active:hover,
-.btn-primary.active:hover,
-.open > .dropdown-toggle.btn-primary:hover,
-.btn-primary:active:focus,
-.btn-primary.active:focus,
-.open > .dropdown-toggle.btn-primary:focus,
-.btn-primary:active.focus,
-.btn-primary.active.focus,
+.btn-primary:active:hover,.btn-primary.active:hover,.open > .dropdown-toggle.btn-primary:hover,
+.btn-primary:active:focus,.btn-primary.active:focus,.open > .dropdown-toggle.btn-primary:focus,
+.btn-primary:active.focus,.btn-primary.active.focus,
 .open > .dropdown-toggle.btn-primary.focus {color: #fff;background-color: #32a1e4;border-color: #2b82b7;}
+/*时间样式*/
+.timeInput{display: inline-block;width: 45%;}
+.timeLabel{float: left;line-height: 30px;font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;font-weight: 500;}
+/*end 时间样式*/
+
 /*客户管理 编辑 弹框的样式修改*/
 ol, ul {padding-left: 0;list-style: none;}
 .padding-0{padding:0;}
 
 
-
-
+/*按钮样式*/
+.k-red{background-color: #f43838;color: #fff;border: solid 1px #e43939;}
+.k-red:hover{background-color: #e43939;color: #fff;border: solid 1px #e43939;}
+.k-red:focus{color: #fff;background-color: #e63333;border: solid 1px #ce3535;}
+.k-red:active:hover,.k-red.active:hover,.k-red:active:focus{background-color: #e43939;color: #fff;border: solid 1px #e43939;}
 
 
 

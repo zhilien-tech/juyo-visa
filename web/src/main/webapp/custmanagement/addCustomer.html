@@ -30,7 +30,7 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="fullComNameId" name="fullComName" type="text" data-bind="value:customer.lastName" placeholder="请输入公司名称" class="k-textbox" style="width: 100%;"/>
+	                                            <input id="fullComNameId" name="fullComName" type="text"  placeholder="请输入公司名称" class="k-textbox" style="width: 100%;"/>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -67,7 +67,7 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">手机:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="telephoneId" name="telephone" type="text" data-bind="value:customer.lastName" placeholder="请输入手机号" class="k-textbox" style="width: 100%;"/>
+	                                            <input id="telephoneId" name="telephone" oninput="checkTelephone()" required data-message="手机号码格式错误" type="text" placeholder="请输入手机号" class="k-textbox" style="width: 100%;"/>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -114,8 +114,57 @@
 <!-- <script src="/res/js/usa.js"></script> -->
 <script src="/res/js/wintone.js?v=4"></script>
 <script type="text/javascript">
+var curWwwPath = window.document.location.href;  
+var pathName =  window.document.location.pathname;  
+var pos = curWwwPath.indexOf(pathName);  
+var localhostPaht = curWwwPath.substring(0,pos);  
+var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+//唯一性校验
+/* function checkTelephone(){
+	var telephone = $("#telephoneId").val();
+	$.ajax({
+		type : "POST",
+		url : localhostPaht +'/visa/customermanagement/checkTelephone',
+		data : {
+			telephone:telephone
+		},
+		success : function(data) {
+			if(data=="false"){
+				layer.msg('手机号码已存在');
+				return false;
+			}
+		},
+		error : function(request) {
+			layer.msg('手机号码格式有误');
+		}
+	});
+} */
+$("#addForm").kendoValidator({
+    messages: {
+        //定义“自定义”验证规则
+        custom: "^[1][34578][0-9]{9}$",
+        //自定义要求信息
+        required: "电话号码号格式错误",
+        //使用返回实际消息的自定义函数
+        telephone: function(input) {
+            return getMessage(input);
+        }
+    },
+    rules: {
+      custom: function(input) {
+        if (input.is("[name=telephone]")) {
+            return input.val() === "telephone";
+        }
+        return true;
+      }
+    }
+});
+function getMessage(input) {
+    return input.data("message");
+  }
 //添加保存
 $("#customerSave").click(function(){
+	//checkTelephone();
 	var fullComName = $("#fullComNameId").val();
 	var customerSource = $('#f_at_usa').find("option:selected").text();
 	var linkman = $("#linkmanId").val();
@@ -141,11 +190,6 @@ $("#customerSave").click(function(){
 		layer.msg('邮箱不能为空');
 		return false;
 	}
-	var curWwwPath = window.document.location.href;  
-    var pathName =  window.document.location.pathname;  
-    var pos = curWwwPath.indexOf(pathName);  
-    var localhostPaht = curWwwPath.substring(0,pos);  
-    var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);  
 	$.ajax({
 		type : "POST",
 		url : localhostPaht +'/visa/customermanagement/addData',

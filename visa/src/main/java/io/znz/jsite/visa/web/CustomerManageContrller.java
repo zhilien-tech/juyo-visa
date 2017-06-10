@@ -15,6 +15,8 @@ import io.znz.jsite.visa.service.CustomerViewService;
 
 import java.util.Date;
 
+import org.nutz.dao.Cnd;
+import org.nutz.dao.Dao;
 import org.nutz.dao.pager.Pager;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.GET;
@@ -45,6 +47,9 @@ public class CustomerManageContrller extends BaseController {
 	@Autowired
 	protected IDbDao dbDao;
 
+	@Autowired
+	protected Dao nutDao;
+
 	/**
 	 * 列表信息展示
 	 */
@@ -72,9 +77,8 @@ public class CustomerManageContrller extends BaseController {
 	@ResponseBody
 	@POST
 	public Object addData(CustomerAddForm addForm) {
-		CustomerManageEntity cusdto = FormUtil.add(dbDao, addForm, CustomerManageEntity.class);
 		addForm.setCreateTime(new Date());
-		addForm.setSerialNumber(cusdto.getId());
+		CustomerManageEntity cusdto = FormUtil.add(dbDao, addForm, CustomerManageEntity.class);
 		return cusdto;
 	}
 
@@ -92,5 +96,17 @@ public class CustomerManageContrller extends BaseController {
 	 */
 	public Object deleteData(@PathVariable long cid) {
 		return customerViewService.deleteById(cid);
+	}
+
+	@RequestMapping(value = "checkTelephone")
+	@ResponseBody
+	@POST
+	public Boolean checkTelephone(String telephone) {
+		int count = nutDao.count(CustomerManageEntity.class, Cnd.where("telephone", "=", telephone));
+		if (count > 0) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

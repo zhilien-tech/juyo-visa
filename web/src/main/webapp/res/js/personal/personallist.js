@@ -142,12 +142,13 @@ function download(cid) {
 var grid = $("#grid").kendoGrid({
     height: "100%",
     selectable: "row",
-    sortable: true,
+  sortable: true,
     resizable: true,
     filterable: true,
     reorderable: true,
     columnMenu: true,
     scrollable: true,
+    serverSorting: true,
     pageable: {
         refresh: true,
         pageSizes: true,
@@ -205,8 +206,8 @@ var grid = $("#grid").kendoGrid({
         },
         pageSize: 20,
         serverPaging: true,
-        serverFiltering: true,
-        serverSorting: true
+        serverFiltering: true
+        /*serverSorting: true*/
     },
     columns: [
         {
