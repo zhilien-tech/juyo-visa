@@ -32,7 +32,7 @@ import com.uxuexi.core.common.util.Util;
 public class UserViewService extends NutzBaseService<SysUserEntity> {
 
 	/**
-	 * 根据用户id查出个人信息
+	 * 根据当前登录用户查出个人信息
 	 * @param userlist
 	 */
 	public Object userListData() {
