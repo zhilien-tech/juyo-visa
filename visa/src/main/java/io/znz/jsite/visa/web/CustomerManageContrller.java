@@ -98,6 +98,10 @@ public class CustomerManageContrller extends BaseController {
 		return customerViewService.deleteById(cid);
 	}
 
+	/**
+	 * 手机号码唯一性校验
+	 * @param telephone
+	 */
 	@RequestMapping(value = "checkTelephone")
 	@ResponseBody
 	@POST
