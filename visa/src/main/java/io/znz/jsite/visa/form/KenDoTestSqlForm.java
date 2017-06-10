@@ -6,6 +6,8 @@
 
 package io.znz.jsite.visa.form;
 
+import java.util.Date;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,6 +15,9 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
+import org.nutz.dao.util.cri.SqlExpressionGroup;
+
+import com.uxuexi.core.common.util.Util;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -24,7 +29,9 @@ import org.nutz.dao.sql.Sql;
 public class KenDoTestSqlForm extends KenDoParamForm {
 
 	//字典信息
-	private String param;
+	private Date start_time;
+	private Date end_time;
+	private String keywords;
 
 	@Override
 	public Sql sql(SqlManager paramSqlManager) {
@@ -40,8 +47,29 @@ public class KenDoTestSqlForm extends KenDoParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
-		//TODO 添加自定义查询条件（可选）
-
+		if (!Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
+			SqlExpressionGroup e1 = Cnd.exps("vo.send_date", ">", start_time).and("vo.send_date", "<", end_time);
+			SqlExpressionGroup e2 = Cnd.exps("vo.start_date", ">", start_time).and("vo.start_date", "<", end_time);
+			cnd.and(e1).or(e2);
+		} else if (Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
+			SqlExpressionGroup e1 = Cnd.exps("vo.send_date", "<", end_time);
+			SqlExpressionGroup e2 = Cnd.exps("vo.start_date", "<", end_time);
+			cnd.and(e1).or(e2);
+		} else if (!Util.isEmpty(start_time) && Util.isEmpty(end_time)) {
+			SqlExpressionGroup e1 = Cnd.exps("vo.send_date", ">", start_time);
+			SqlExpressionGroup e2 = Cnd.exps("vo.start_date", ">", start_time);
+			cnd.and(e1).or(e2);
+		}
+		if (!Util.isEmpty(keywords)) {
+			SqlExpressionGroup e1 = Cnd.exps("vo.id", "like", keywords);
+			SqlExpressionGroup e2 = Cnd.exps("vo.contact", "like", keywords);
+			SqlExpressionGroup e3 = Cnd.exps("vc.phone", "like", keywords);
+			SqlExpressionGroup e4 = Cnd.exps("vo.email", "like", keywords);
+			SqlExpressionGroup e5 = Cnd.exps("vc.last_name", "like", keywords);
+			//SqlExpressionGroup e6 = Cnd.exps("vo.id", "like", keywords);
+			cnd.and(e1).or(e2).or(e3).or(e4).or(e5);
+		}
+		cnd.groupBy("vo.id");
 		return cnd;
 	}
 }

@@ -73,19 +73,29 @@ function detailInit(e) {
         dataSource: {
             transport: {
                 read: {
-                    type: "GET",
+                    /*type: "GET",*/
                     dataType: "json",
-                    url: "/visa/order/show/" + e.data.id + "?type=customer",
+                    url: "/visa/order/childList?type=customer&orderId=" + e.data.id ,
                 }
             }
         },
+        schema: {
+//          data: "content",
+//          total: "totalElements",
+        	data : function(d) {
+	              return d.list;  //响应到页面的数据
+	          },
+	          total : function(d) {
+	              return d.recordCount;   //总条数
+	          }
+      },
         columns: [
-            {field: 'name',title: '姓名',template: "<a href='javascript:download(#=data.id#);'>#= data.lastName + data.firstName #</a>"},
-            {field: 'passport', title: '电话'},
+            {field: 'last_name',title: '姓名'},
+            {field: 'phone', title: '电话'},
             {field: 'passport', title: '护照号'},
             {field: 'gender', title: '性别', width: 60},
-            {field: ' ', title: '送签时间'},
-            {field: ' ', title: '出签时间'},
+            {field: 'start_date', title: '送签时间',format: "{0: yyyy-MM-dd}"},
+            {field: 'end_date', title: '出签时间',format: "{0: yyyy-MM-dd}"},
             {field: 'state', title: ' 状态'},
             {
                 title: "操作", width: 308,
@@ -133,28 +143,41 @@ var grid = $("#grid").kendoGrid({
                 contentType: 'application/json;charset=UTF-8',
             },
             parameterMap: function (options, type) {
-                return JSON.stringify(options);
+                /*return JSON.stringify(options);*/
+            	var parameter = {
+                        pageNumber : options.page,    //当前页
+                        pageSize : options.pageSize,//每页显示个数
+                        start_time:$("#start_time").val(),
+                        end_time:$("#end_time").val(),
+                        keywords:$("#keywords").val(),
+                    };
+               return kendo.stringify(parameter);
             },
         },
         schema: {
-            data: "content",
-            total: "totalElements",
+           /* data: "content",
+            total: "totalElements",*/
+        	data : function(d) {
+                return d.list;  //响应到页面的数据
+            },
+            total : function(d) {
+                return d.recordCount;   //总条数
+            },
             model: {
                 id: "id",
                 fields: {
-                    startDate: {type: "date"},
-                    endDate: {type: "date"},
-                    email: {type: "email"},
-                    user: {defaultValue: {id: "1", name: "管理员"}},
+                    start_date: {type: "date"},
+                    send_date: {type: "date"},
+                    email: {type: "string"}
+                   /* user: {defaultValue: {id: "1", name: "管理员"}},
                     useFor: {defaultValue: "美国"},
-                    amount: {type: "number", defaultValue: 1, validation: {min: 1, required: true}}
+                    amount: {type: "number", defaultValue: 1, validation: {min: 1, required: true}}*/
                 }
             }
         },
         pageSize: 20,
         serverPaging: true,
-        serverFiltering: true,
-        serverSorting: true
+        serverFiltering: true
     },
     columns: [
         {
@@ -166,11 +189,11 @@ var grid = $("#grid").kendoGrid({
         },
         {field: 'contact', title: '联系人', width: 90,template: "<span class='ellipsis' title='#=data.contact#'>#=data.contact#</span>"},
         {field: 'email', title: '邮箱', template: "<span class='ellipsis' title='#=data.email#'>#=data.email#</span>"},
-        {field: 'email', title: '送签时间', template: "<span class='ellipsis' title='#=data.email#'>#=data.email#</span>"},
-        {field: 'email', title: '出签时间', template: "<span class='ellipsis' title='#=data.email#'>#=data.email#</span>"},
-        {field: 'useFor', title: '人数', values: ["美国", "日本"], width: 80,},
-        {field: 'useFor', title: '国家', values: ["美国", "日本"], width: 80,},
-        {field: 'useFor', title: '状态', values: ["美国", "日本"], width: 80,},
+        {field: 'send_date', title: '送签时间',format: "{0: yyyy-MM-dd}" },
+        {field: 'start_date', title: '出签时间',format: "{0: yyyy-MM-dd}"},
+        {field: 'use_for', title: '人数', values: ["美国", "日本"], width: 80,},
+        {field: 'use_for', title: '国家', width: 80,},
+        {field: 'use_for', title: '状态', values: ["美国", "日本"], width: 80,},
         {
             title: "操作", width: 320,
             command: [
@@ -186,7 +209,7 @@ var grid = $("#grid").kendoGrid({
 }).data("kendoGrid");
 //页面刷新
 function successCallback(id){
-	alert(111);
+	alert(11);
 	//grid.GetJQuery().refresh();
 	grid.dataSource.read();
 	 /* if(id == '1'){
@@ -197,3 +220,15 @@ function successCallback(id){
 		  layer.msg("刷新成功",{time: 2000});
 	  }*/
   }
+//页面加载时加载日历
+$(function(){
+	$("#start_time").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});
+	$("#end_time").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});
+});
+/*//点击触发日历
+$().click(function(
+		
+));*/
+
+
+

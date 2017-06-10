@@ -103,6 +103,26 @@ public class OrderController extends BaseController {
 		return query;
 	}
 
+	/**
+	 * 
+	 * 下单的时候客户信息中手机和邮箱查询的来源
+	 * <p>
+	 *
+	 * @param orderId
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	@RequestMapping(value = "custominfo")
+	@ResponseBody
+	public Object custominfo() {
+
+		/*String sqlString = sqlManager.get("customer_list");
+		Sql sql = Sqls.create(sqlString);
+		sql.setParam("orderId", orderId);
+		List<CustomerEntity> query = DbSqlUtil.query(dbDao, CustomerEntity.class, sql);
+		dbDao.query(clazz, cnd, pager)*/
+		return "";
+	}
+
 	private Customer contains(List<Customer> customers, Customer customer) {
 		for (Customer c : customers) {
 			if (c.getId().equals(customer.getId())) {

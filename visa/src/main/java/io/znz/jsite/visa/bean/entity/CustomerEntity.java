@@ -63,7 +63,7 @@ public class CustomerEntity {
 	@Column
 	private String email;
 	@Column
-	private Date expiry_date;
+	private Date start_date;
 	@Column
 	private String files;
 	@Column
@@ -83,7 +83,7 @@ public class CustomerEntity {
 	@Column
 	private String issue_city;
 	@Column
-	private Date issue_date;
+	private Date end_date;
 	@Column
 	private String issue_province;
 	@Column

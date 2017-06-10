@@ -154,7 +154,6 @@ function detailInit(e) {
 //          data: "content",
 //          total: "totalElements",
         	data : function(d) {
-        		alert(JSON.stringify(d.list));
 	              return d.list;  //响应到页面的数据
 	          },
 	          total : function(d) {
@@ -226,7 +225,6 @@ var grid = $("#grid").kendoGrid({
             	var parameter = {
                         pageNumber : options.page,    //当前页
                         pageSize : options.pageSize,//每页显示个数
-                        param:"4444"
                     };
                return kendo.stringify(parameter);
               //  return JSON.stringify(options);
@@ -255,8 +253,7 @@ var grid = $("#grid").kendoGrid({
         },
         pageSize: 20,
         serverPaging: true,
-        serverFiltering: true,
-        serverSorting: true
+        serverFiltering: true
     },
     columns: [
         {
@@ -273,7 +270,7 @@ var grid = $("#grid").kendoGrid({
         {
             field: 'email', title: '邮箱', template: "<span class='ellipsis' title='#=data.email#'>#=data.email#</span>"
         },
-        {field: 'useFor', title: '国家', values: ["美国", "日本"], width: 80,},
+        {field: 'country', title: '国家', values: ["美国", "日本"], width: 80,},
         {
             title: "操作", width: 369,
             command: [
