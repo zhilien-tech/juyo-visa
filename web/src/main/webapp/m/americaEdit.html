@@ -43,7 +43,7 @@
                                     <div class="form-group">
                                         <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="" type="text" data-bind="value:customer.lastName" class="k-textbox" style="width: 100%;"/>
+                                            <input id="cus_fullComName" type="text" class="k-textbox" style="width: 100%;" name="fullComName"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -52,7 +52,7 @@
                                     <div class="form-group">
                                         <label for="last_name_en">客户来源:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <select id=""
+                                            <!-- <select id=""
                                                     data-role="dropdownlist"
                                                     data-filter="startswith"
                                                     data-suggest="true"
@@ -61,7 +61,9 @@
                                                     data-text-field="text"
                                                     data-value-field="value"
                                                     data-bind="value:customer.birthCountry,source:countries"
-                                                    style="width: 100%;"></select>
+                                                    style="width: 100%;"></select> -->
+                                                      <input id="cus_source"  class="k-textbox"
+                                                   style="width: 100%;" name="customerSource"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -74,8 +76,8 @@
                                     <div class="form-group">
                                         <label for="first_name_cn">联系人:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="first_name_cn" data-bind="value:customer.firstName" class="k-textbox"
-                                                   style="width: 100%;"/>
+                                            <input id="cus_linkman" class="k-textbox"
+                                                   style="width: 100%;" name="linkman"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -84,9 +86,9 @@
                                     <div class="form-group">
                                         <label for="first_name_en">手机:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                           <!--  <input id="first_name_en" data-bind="value:customer.firstNameEN"
-                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/> -->
-                                            <select class="k-textbox" style="width: 100%;text-transform:uppercase;" id="cus_phone"></select>
+                                           <input id="cus_phone" name="telephone"
+                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
+                                           <!--  <select class="k-textbox" style="width: 100%;text-transform:uppercase;" id="cus_phone"></select> -->
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -95,9 +97,9 @@
                                     <div class="form-group">
                                         <label for="first_name_en">邮箱:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <!-- <input id="first_name_en" data-bind="value:customer.firstNameEN"
-                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/> -->
-                                                   <select class="k-textbox" style="width: 100%;text-transform:uppercase;" id="cus_email"></select>
+                                             <input id="cus_email" name="email"
+                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
+                                                   <!-- <select class="k-textbox" style="width: 100%;text-transform:uppercase;" id="cus_email"></select> -->
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -126,7 +128,7 @@
                                         <label for="usa_arrival_date">人数:<span style="color: red">*</span></label>
                                         <div class='input-group'>
                                             <input id="usa_arrival_date" style="width: 100%;" class="k-textbox"
-                                                   data-bind="value:customer.travel.arrivalDate"/>
+                                                   data-bind="value:customer.travel.arrivalDate" name="headcount"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -2591,7 +2593,6 @@
         </div>
     </div>
 </div>
-
 </body>
 <!--引入 js 模板片段-->
 <script id="tpl_has_pr" type="text/text">
@@ -3342,6 +3343,7 @@
     </div>
 </script>
 
+
 <!--引入 js 库文件-->
 <script src="/res/plugin/template.js"></script>
 <script src="/res/plugin/jquery.min.js"></script>
@@ -3356,10 +3358,10 @@
 <script src="/res/js/americaEdit.js"></script>
 <script src="/res/js/wintone.js?v=4"></script>
 <script type="text/javascript">
-<script type="text/javascript">
 $(function () {
-    $("#cus_phone").kendoDropDownList({
-　　  optionLabel: "--请选择手机号--",
+    $("#cus_phone").kendoMultiSelect({
+　　 /*  optionLabel: "--请选择手机号--", */
+   		placeholder:"请选择手机号",
         dataTextField: "telephone",
         dataValueField: "id",
         dataSource: {
@@ -3369,8 +3371,136 @@ $(function () {
                     url: "/visa/order/custominfo"
                 }
             }
+        },
+        maxSelectedItems:1,
+        change:function(data){
+        	var cobVal = $("#cus_phone").data("kendoMultiSelect").value();
+        	alert(cobVal);
+        	var falg='telephone';
+        	$.ajax({
+    			type : 'POST',
+    			data : {
+    				id:cobVal
+    			},
+    			dataType : 'json',
+    			url : "/visa/order/custominfowrite",
+    			success : function(data) {
+    				$("#cus_fullComName").val(data.fullComName);
+    				$("#cus_linkman").val(data.linkman);
+    				//$("#cus_fullComName").val(data.fullComName);
+    				var color = $("#cus_email").data("kendoMultiSelect");
+    				color.value(data.id);
+    				var color1 = $("#cus_source").data("kendoDropDownList");
+    				color1.select(data.customerSource);
+    			},
+    			error : function(xhr) {
+    			}
+    		});
+        	
+        	
+        	
+        	
+        	
         }
     });
+    
+    
+    
+});
+
+$(function () {
+	$("#cus_email").kendoMultiSelect({
+　　  /* optionLabel: "--请选择邮箱--", */
+    	placeholder:"请选择邮箱",
+        dataTextField: "email",
+        dataValueField: "id",
+        dataSource: {
+            transport: {
+                read: {
+                    dataType: "json",
+                    url: "/visa/order/custominfo"
+                }
+            }
+        },
+        maxSelectedItems:1,
+        change:function(data){
+        	var cobVal = $("#cus_email").data("kendoMultiSelect").value();
+        	$.ajax({
+    			type : 'POST',
+    			data : {
+    				id:cobVal
+    			},
+    			dataType : 'json',
+    			url : "/visa/order/custominfowrite",
+    			success : function(data) {
+    				$("#cus_fullComName").val(data.telephone);
+    				$("#cus_linkman").val(data.linkman);
+    				$("#cus_fullComName").val(data.fullComName);
+    				var color = $("#cus_phone").data("kendoMultiSelect");
+    				color.value(data.id);
+    				var color1 = $("#cus_source").data("kendoDropDownList");
+    				color1.select(data.customerSource);
+    			},
+    			error : function(xhr) {
+    				//layer.msg("审核失败", "", 3000);
+    			}
+    		});
+        	
+        	
+        	
+        	
+        	
+        }
+    });
+});
+
+
+//客户来源
+var customersourceEnum=[
+    {text:"线上",value:1},
+    {text:"OTS",value:2},
+    {text:"直客",value:3},
+    {text:"线下",value:4}
+    
+  ];
+
+
+$(function () {
+    $("#cus_source").kendoDropDownList({
+　　  optionLabel: "--请选择客户来源--",
+        dataTextField: "text",
+        dataValueField: "value",
+        dataSource:customersourceEnum/* ,
+        change:function(data){
+        	var cobVal = $("#cus_email").data("kendoDropDownList").value();
+        	var falg='telephone';
+        	$.ajax({
+    			type : 'POST',
+    			data : {
+    				id:cobVal
+    			},
+    			dataType : 'json',
+    			url : "/visa/order/custominfowrite",
+    			success : function(data) {
+    				alert(JSON.stringify(data));
+    				$("#cus_fullComName").val(data.telephone);
+    				$("#cus_phone").val(data.email);
+    				$("#cus_linkman").val(data.linkman);
+    				$("#cus_fullComName").val(data.fullComName);
+    			},
+    			error : function(xhr) {
+    				//layer.msg("审核失败", "", 3000);
+    			}
+    		});
+        	
+        	
+        	
+        	
+        	
+        } */
+    });
+});
+$(function(){
 });
 </script>
 

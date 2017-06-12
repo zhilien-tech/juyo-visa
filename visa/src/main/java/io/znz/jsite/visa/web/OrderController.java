@@ -4,6 +4,7 @@ import io.znz.jsite.base.BaseController;
 import io.znz.jsite.core.service.MailService;
 import io.znz.jsite.visa.bean.Customer;
 import io.znz.jsite.visa.bean.entity.CustomerEntity;
+import io.znz.jsite.visa.bean.entity.CustomerManageEntity;
 import io.znz.jsite.visa.form.KenDoTestSqlForm;
 import io.znz.jsite.visa.service.OrderService;
 import io.znz.jsite.visa.service.PdfService;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
 import com.uxuexi.core.db.util.DbSqlUtil;
 
@@ -114,13 +116,27 @@ public class OrderController extends BaseController {
 	@RequestMapping(value = "custominfo")
 	@ResponseBody
 	public Object custominfo() {
+		List<CustomerManageEntity> query = dbDao.query(CustomerManageEntity.class, null, null);
+		return query;
+	}
 
-		/*String sqlString = sqlManager.get("customer_list");
-		Sql sql = Sqls.create(sqlString);
-		sql.setParam("orderId", orderId);
-		List<CustomerEntity> query = DbSqlUtil.query(dbDao, CustomerEntity.class, sql);
-		dbDao.query(clazz, cnd, pager)*/
-		return "";
+	/***
+	 * 
+	 * 
+	 * 订单列表下单中的客户信息的查询
+	 * <p>
+	 *
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	@RequestMapping(value = "custominfowrite")
+	@ResponseBody
+	public Object custominfowrite(String id) {
+		if (Util.isEmpty(id)) {
+			return null;
+		}
+		Long idNew = Long.valueOf(id);
+		CustomerManageEntity customerManageEntity = dbDao.fetch(CustomerManageEntity.class, idNew);
+		return customerManageEntity;
 	}
 
 	private Customer contains(List<Customer> customers, Customer customer) {
