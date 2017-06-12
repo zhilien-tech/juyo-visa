@@ -8,6 +8,7 @@ var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 function regCmd(command) {
     var select = function (e) {
         var data = grid.dataItem($(e.currentTarget).closest("tr"));
+        
         if (!data) {
             $.layer.alert("请先选择需要操作的数据行");
         }
@@ -23,18 +24,14 @@ function regCmd(command) {
             switch (command) {
                 case "edit":
                 	var data = grid.dataItem($(e.currentTarget).closest("tr"));
-                	
-                    if (!(data = select(e))){
-                    	return;
-                    }else{
-                    	layer.open({
-                    		type: 2,
-                    		title: '编辑',
-                    		maxmin: true, //开启最大化最小化按钮
-                    		area: ['700px', '290px'],
-                    		content: '/custmanagement/updateCustomer.html?cid=' + data.id
-                    	});
-                    }
+                    if (!(data = select(e))) return;
+                    layer.open({
+                        type: 2,
+                        title: '基本资料',
+                        maxmin: false, //开启最大化最小化按钮
+                        area: ['750px', '500px'],
+                        content: '/employee/updateEmployee.html?uid=' + data.id
+                    });
                     break;
                 default:
                     $.layer.alert(command);
@@ -43,8 +40,8 @@ function regCmd(command) {
         }
     };
 }
-//添加客户
-function addCustomer(){
+//添加员工
+function addUser(){
   layer.open({
 	    type: 2,
 	    title:false,
@@ -52,24 +49,15 @@ function addCustomer(){
 	    fix: false,
 	    maxmin: true,
 	    shadeClose: false,
-	    title: '添加',
-	    area: ['700px', '290px'],
-	    content: '/custmanagement/addCustomer.html',
+	    title: '基本资料',
+	    area: ['750px', '500px'],
+	    content: '/employee/addEmployee.html',
 	    end: function(){//添加完页面点击返回的时候自动加载表格数据
 	    	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
 	    }
 	 });
 }
-
-//客户来源
-var customersourceEnum=[
-    {text:"线上",value:1},
-    {text:"OTS",value:2},
-    {text:"直客",value:3},
-    {text:"线下",value:4}
-    
-  ];
 //初始化上部的表格布局
 var grid = $("#grid").kendoGrid({
     pageSize: 20,
@@ -95,14 +83,13 @@ var grid = $("#grid").kendoGrid({
             read: {
                 type: "POST",
                 dataType: "json",
-                url: "/visa/customermanagement/customerlist",
+                url: "/visa/employeemanage/employeelist",
                 contentType: 'application/json;charset=UTF-8',
             },
             parameterMap: function (options, type) {
-            		var parameter = {
+            	var parameter = {
                         pageNumber : options.page,    //当前页
                         pageSize : options.pageSize,//每页显示个数
-                        keyword:$("#keyword").val(),//检索条件
                     };
                return kendo.stringify(parameter);
             }
@@ -125,41 +112,30 @@ var grid = $("#grid").kendoGrid({
     columns: [
         {
         	title: '序号',
-        	field: 'serialnumber',
+        	field: 'id',
         	template: "<span class='row-number'></span>" 
         },
-        
         {
-        	title: '公司名称',
-        	field: 'fullcomname'
-        	//template: '#= data.fullcomname#'
+        	title: '姓名',
+        	field: 'name',
         },
         {
-        	title: '客户来源', 
-        	field: 'customersource', 
-        	values:customersourceEnum
+        	title: '电话',
+        	field: 'phone'
         },
         {
-        	title: '联系人',
-        	field: 'linkman' 
-        	//template: '#= data.linkman#'
+        	title: '部门',
+        	field: 'department'
         },
         {
-        	title: '手机',
-        	field: 'telephone'
-        	
-        	//template: '#= data.telephone#'
-        },
-        {
-        	title: '邮箱',
-        	field: 'email'
-        	//template: '#= data.email#'
+        	title: '职位',
+        	field: 'job'
         },
         {
             title: "操作", width: 98,
             command: [
                 {name: "edit", imageClass: "base fa-pencil-square-o purple", text: "编辑"},
-                regCmd("edit")
+                regCmd("edit"),
             ]
         }
     ],
@@ -172,7 +148,6 @@ var grid = $("#grid").kendoGrid({
 	    });  
     },
 }).data("kendoGrid");
-
 
 //注册全局刷新以方便其他页面调用刷新
 parent.refresh = function () {
@@ -191,14 +166,4 @@ function successCallback(id){
 	}else if(id == '4'){
 		layer.msg("初始化密码成功",{time:2000});
 	}
-}
-//列表页检索
-$("#searchBtn").on('click', function () {
-	grid.dataSource.read();
-})
-//搜索回车事件
-function onkeyEnter(){
-	 if(event.keyCode==13){
-		 $("#searchBtn").click();
-	 }
 }

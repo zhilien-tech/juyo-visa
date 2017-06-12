@@ -7,7 +7,7 @@
 package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.BaseController;
-import io.znz.jsite.visa.bean.entity.CustomerManageEntity;
+import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
 import io.znz.jsite.visa.forms.customerform.CustomerAddForm;
 import io.znz.jsite.visa.forms.customerform.CustomerSqlForm;
 import io.znz.jsite.visa.forms.customerform.CustomerUpdateForm;
@@ -62,6 +62,9 @@ public class CustomerManageContrller extends BaseController {
 		return customerViewService.listPage(sqlForm, pager);
 	}
 
+	/**
+	 * 打开客户添加页面
+	 */
 	@At
 	@GET
 	@Ok("jsp")
@@ -70,7 +73,7 @@ public class CustomerManageContrller extends BaseController {
 	}
 
 	/**
-	 * 添加数据
+	 * 添加数据操作
 	 * @param addForm
 	 */
 	@RequestMapping(value = "addData")
@@ -83,11 +86,23 @@ public class CustomerManageContrller extends BaseController {
 	}
 
 	/**
-	 * 更新数据
+	 * 回显数据
 	 * @param updateForm
 	 */
-	public Object updateData(CustomerUpdateForm updateForm) {
-		return customerViewService.updateSaveDate(updateForm);
+	@RequestMapping(value = "updateData")
+	@ResponseBody
+	public Object updateData(long cid) {
+		return customerViewService.updateDate(cid);
+	}
+
+	/**
+	 * 编辑保存客户信息
+	 * @param updateForm
+	 */
+	@RequestMapping(value = "updateDataSave")
+	@ResponseBody
+	public Object updateDataSave(CustomerUpdateForm updateForm) {
+		return customerViewService.updateDataSave(updateForm);
 	}
 
 	/**

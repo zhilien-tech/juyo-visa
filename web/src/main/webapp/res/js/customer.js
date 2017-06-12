@@ -20,6 +20,7 @@ function regCmd(command) {
             switch (command) {
                 case "usa":
                     if (!(data = select(e))) return;
+                    alert(JSON.stringify(data));
                     $.layer.open({
                         type: 2,
                         title: '信息收集表',

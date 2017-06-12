@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
     <link rel="stylesheet" href="/common/tld.jsp" />
 </head>
-<body>
+<body onload="document.getElementById('fullComNameId').focus()">
 <div>
     <div class="container-fluid" style="padding-top: 15px;">
         <div class="row">
@@ -43,6 +43,7 @@
 	                                                    data-role="dropdownlist"
 	                                                    data-value-primitive="true"
 	                                                    data-bind="value:customer.father.inUsa">
+	                                                <option value="">请选择客户来源</option>
 	                                                <option value="1">线上</option>
 	                                                <option value="2">OTS</option>
 	                                                <option value="3">直客</option>
@@ -58,7 +59,7 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">联系人:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="linkmanId" name="linkman" type="text" data-bind="value:customer.lastName" placeholder="请输入联系人" class="k-textbox" style="width: 100%;"/>
+	                                            <input id="linkmanId" name="linkman" type="text"  placeholder="请输入联系人" class="k-textbox" style="width: 100%;"/>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -76,7 +77,7 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">邮箱:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="emailId" name="email" type="text" data-bind="value:customer.lastName" placeholder="请输入邮箱" class="k-textbox" style="width: 100%;"/>
+	                                            <input id="emailId" name="email" type="text"  placeholder="请输入邮箱" class="k-textbox" style="width: 100%;"/>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -111,7 +112,6 @@
 <script src="/res/js/common.js"></script>
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
-<!-- <script src="/res/js/usa.js"></script> -->
 <script src="/res/js/wintone.js?v=4"></script>
 <script type="text/javascript">
 var curWwwPath = window.document.location.href;  
@@ -120,7 +120,7 @@ var pos = curWwwPath.indexOf(pathName);
 var localhostPaht = curWwwPath.substring(0,pos);  
 var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 //唯一性校验
-/* function checkTelephone(){
+function checkTelephone(){
 	var telephone = $("#telephoneId").val();
 	$.ajax({
 		type : "POST",
@@ -138,33 +138,13 @@ var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 			layer.msg('手机号码格式有误');
 		}
 	});
-} */
-$("#addForm").kendoValidator({
-    messages: {
-        //定义“自定义”验证规则
-        custom: "^[1][34578][0-9]{9}$",
-        //自定义要求信息
-        required: "电话号码号格式错误",
-        //使用返回实际消息的自定义函数
-        telephone: function(input) {
-            return getMessage(input);
-        }
-    },
-    rules: {
-      custom: function(input) {
-        if (input.is("[name=telephone]")) {
-            return input.val() === "telephone";
-        }
-        return true;
-      }
-    }
-});
+}
 function getMessage(input) {
     return input.data("message");
   }
 //添加保存
 $("#customerSave").click(function(){
-	//checkTelephone();
+	checkTelephone();
 	var fullComName = $("#fullComNameId").val();
 	var customerSource = $('#f_at_usa').find("option:selected").text();
 	var linkman = $("#linkmanId").val();

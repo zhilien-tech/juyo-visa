@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>编辑</title>
+    <link rel="stylesheet" href="/res/plugin/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.common.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.office365.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/res/css/colors.min.css"/>
+    <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
+    <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/><!--修改的样式-->
+    <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
+</head>
+<body onload="document.getElementById('nameId').focus()">
+<div>
+    <div class="container-fluid" style="padding-top: 15px;">
+        <div class="row">
+            <div class="col-xs-12 padding-0">
+                <ul id="panelbar">
+                    <li>
+                        <div class="container-fluid">
+                        	<!-- 用户名称    用户名/手机号 -->
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="last_name_cn">用户姓名:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="nameId" name="name" type="text" class="k-textbox" style="width: 100%;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="last_name_en">用户名/手机号:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="loginNameId" name="login_name" type="text"  class="k-textbox" style="width: 100%;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+							<!-- end 用户名称    用户名/手机号 -->
+							<!-- 联系QQ/座机号码 -->
+							<div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="last_name_cn">联系QQ:</label>
+                                        <div class='input-group'>
+                                            <input id="qqId" name="qq" type="text"  class="k-textbox" style="width: 100%;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="last_name_cn">座机号码:</label>
+                                        <div class='input-group'>
+                                            <input id="landlineId" name="landline" type="text" class="k-textbox" style="width: 100%;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end 联系QQ/座机号码 -->
+                            <!-- 电子邮箱/所属部门 -->
+							<div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="last_name_cn">电子邮箱:</label>
+                                        <div class='input-group'>
+                                            <input id="emailId" name="email" type="text" class="k-textbox" style="width: 100%;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- <div class="form-group">
+                                        <label for="last_name_cn">所属部门:</label>
+                                        <div class='input-group'>
+                                            <select id="usa_times_stay_unit" style="width:100%;"
+                                                    data-role="dropdownlist"
+                                                    data-value-primitive="true"
+                                                    data-bind="value:customer.travel.period">
+                                                <option>请选择</option>
+                                                <option> </option>
+                                            </select>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div> -->
+                                    <div class="form-group">
+                                        <label for="last_name_cn">所属部门:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="departmentId" name="department" type="text" class="k-textbox" style="width: 100%;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end 电子邮箱/所属部门 -->
+                            <!-- 用户职位/用户是否禁用 -->
+							<div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <!-- <label for="last_name_cn">用户职位:</label>
+                                        <div class='input-group'>
+                                            <select id="usa_times_stay_unit" style="width:100%;"
+                                                    data-role="dropdownlist"
+                                                    data-value-primitive="true"
+                                                    data-bind="value:customer.travel.period">
+                                                <option>请选择</option>
+                                                <option> </option>
+                                            </select>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div> -->
+                                    <label for="last_name_cn">用户职位:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="jobId" name="job" type="text" class="k-textbox" style="width: 100%;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="last_name_cn">用户是否禁用:</label>
+                                        <div class='input-group'>
+                                            <select id="disableUserStatusId" name="disableUserStatus" style="width:100%;"
+                                                    data-role="dropdownlist"
+                                                    data-value-primitive="true"
+                                                    data-bind="value:customer.travel.period">
+                                                <option value="1" selected="selected">否</option>
+                                                <option value="2">是</option>
+                                            </select>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end 电子邮箱/所属部门 -->
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row" data-bind="visible:showToolBar">
+        	<div class="col-xs-4">
+                <div class="form-group">
+                    <button id="deleteFlagId" class="k-red k-button col-xs-12"><i class="fa fa-save"></i> 删除</button>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <button id="saveId" class="k-primary k-button col-xs-12"><i class="fa fa-save"></i> 保存</button>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <button id="initPasswordId" class="k-button col-xs-12"><i class="fa fa-save"></i> 密码初始化</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!--引入 js 库文件-->
+<script src="/res/plugin/template.js"></script>
+<script src="/res/plugin/jquery.min.js"></script>
+<script src="/res/plugin/layer/layer.js"></script>
+<script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
+<script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
+<script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
+<script src="/res/js/common.js"></script>
+<script src="/res/plugin/webtoolkit.md5.js"></script>
+<script src="/res/js/idcard.js"></script>
+<script src="/res/js/wintone.js?v=4"></script>
+<script type="text/javascript">
+
+</script>
+</html>

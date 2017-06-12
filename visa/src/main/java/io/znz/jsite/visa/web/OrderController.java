@@ -3,7 +3,7 @@ package io.znz.jsite.visa.web;
 import io.znz.jsite.base.BaseController;
 import io.znz.jsite.core.service.MailService;
 import io.znz.jsite.visa.bean.Customer;
-import io.znz.jsite.visa.bean.entity.CustomerEntity;
+import io.znz.jsite.visa.entity.customer.CustomerEntity;
 import io.znz.jsite.visa.form.KenDoTestSqlForm;
 import io.znz.jsite.visa.service.OrderService;
 import io.znz.jsite.visa.service.PdfService;
