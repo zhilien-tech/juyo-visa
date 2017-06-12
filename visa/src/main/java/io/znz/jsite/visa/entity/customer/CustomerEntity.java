@@ -4,7 +4,7 @@
  * Copyright (c) 2017, 北京科技有限公司版权所有.
 */
 
-package io.znz.jsite.visa.bean.entity;
+package io.znz.jsite.visa.entity.customer;
 
 import java.util.Date;
 
@@ -63,7 +63,7 @@ public class CustomerEntity {
 	@Column
 	private String email;
 	@Column
-	private Date start_date;
+	private Date expiry_date;
 	@Column
 	private String files;
 	@Column
@@ -83,7 +83,7 @@ public class CustomerEntity {
 	@Column
 	private String issue_city;
 	@Column
-	private Date end_date;
+	private Date issue_date;
 	@Column
 	private String issue_province;
 	@Column

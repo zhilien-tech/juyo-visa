@@ -3,8 +3,9 @@ package io.znz.jsite.visa.web;
 import io.znz.jsite.base.BaseController;
 import io.znz.jsite.core.service.MailService;
 import io.znz.jsite.visa.bean.Customer;
-import io.znz.jsite.visa.bean.entity.CustomerEntity;
-import io.znz.jsite.visa.bean.entity.CustomerManageEntity;
+import io.znz.jsite.visa.entity.customer.CustomerEntity;
+import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
+import io.znz.jsite.visa.entity.usa.NewOrderEntity;
 import io.znz.jsite.visa.form.KenDoTestSqlForm;
 import io.znz.jsite.visa.service.OrderService;
 import io.znz.jsite.visa.service.PdfService;
@@ -137,6 +138,23 @@ public class OrderController extends BaseController {
 		Long idNew = Long.valueOf(id);
 		CustomerManageEntity customerManageEntity = dbDao.fetch(CustomerManageEntity.class, idNew);
 		return customerManageEntity;
+	}
+
+	/*****
+	 * 
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param customers
+	 * @param customer
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	@RequestMapping(value = "orderSave")
+	@ResponseBody
+	public Object orderSave(NewOrderEntity order) {
+
+		return "";
 	}
 
 	private Customer contains(List<Customer> customers, Customer customer) {

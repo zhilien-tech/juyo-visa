@@ -8,7 +8,7 @@ package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.BaseController;
 import io.znz.jsite.base.bean.ResultObject;
-import io.znz.jsite.visa.bean.entity.SysUserEntity;
+import io.znz.jsite.visa.entity.user.SysUserEntity;
 import io.znz.jsite.visa.form.SysUserSqlForm;
 import io.znz.jsite.visa.service.UserViewService;
 

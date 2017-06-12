@@ -18,6 +18,8 @@ import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 
+import com.uxuexi.core.common.util.Util;
+
 /**
  * 客户管理sqlForm
  * @author   崔建斌
@@ -49,6 +51,8 @@ public class CustomerSqlForm extends KenDoParamForm {
 	//备注
 	private String remark;
 
+	private String keyword;
+
 	@Override
 	public Sql sql(SqlManager paramSqlManager) {
 		/**
@@ -63,6 +67,11 @@ public class CustomerSqlForm extends KenDoParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
+		if (!Util.isEmpty(keyword)) {
+			cnd.and("vcm.fullComName", "like", "%" + keyword + "%").or("vcm.linkman", "like", "%" + keyword + "%")
+					.or("vcm.telephone", "like", "%" + keyword + "%");
+		}
+
 		cnd.orderBy("vcm.createTime", "DESC");
 		return cnd;
 	}

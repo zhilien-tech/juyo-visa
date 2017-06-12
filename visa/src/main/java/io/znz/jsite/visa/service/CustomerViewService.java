@@ -7,15 +7,17 @@
 package io.znz.jsite.visa.service;
 
 import io.znz.jsite.base.NutzBaseService;
-import io.znz.jsite.visa.bean.entity.CustomerManageEntity;
+import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
 import io.znz.jsite.visa.forms.customerform.CustomerUpdateForm;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
+import org.nutz.dao.Cnd;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.Maps;
+import com.google.common.collect.Lists;
+import com.uxuexi.core.common.util.Util;
 
 /**
  * 客户管理业务层
@@ -26,32 +28,39 @@ import com.google.common.collect.Maps;
 public class CustomerViewService extends NutzBaseService<CustomerManageEntity> {
 
 	/**
-	 * 查询出客户管理的数据
+	 * 回显客户信息数据
+	 * @param cid 
 	 */
-	public Object customerListData() {
-		Map<String, Object> map = Maps.newHashMap();
-		List<CustomerManageEntity> queryList = dbDao.query(CustomerManageEntity.class, null, null);
-		map.put("queryList", queryList);
-		return map;
+	public Object updateDate(long cid) {
+		CustomerManageEntity one = dbDao.fetch(CustomerManageEntity.class, cid);
+		return one;
 	}
 
 	/**
-	 * 添加客户信息
-	 * @param addForm 
+	 * 编辑保存
+	 * @param updateForm
+	 * @return 
 	 */
-	public Object addSaveDate(CustomerManageEntity addForm) {
-		Map<String, Object> obj = Maps.newHashMap();
-
-		return obj;
-	}
-
-	/**
-	 * 修改客户信息
-	 * @param updateForm 
-	 */
-	public Object updateSaveDate(CustomerUpdateForm updateForm) {
-		Map<String, Object> obj = Maps.newHashMap();
-
-		return obj;
+	public Object updateDataSave(CustomerUpdateForm updateForm) {
+		//查询出当前数据库中已存在的数据
+		List<CustomerManageEntity> before = dbDao.query(CustomerManageEntity.class,
+				Cnd.where("id", "=", updateForm.getId()), null);
+		//欲更新为
+		List<CustomerManageEntity> after = Lists.newArrayList();
+		if (!Util.isEmpty(before)) {
+			for (CustomerManageEntity t : before) {
+				CustomerManageEntity m = new CustomerManageEntity();
+				m.setFullComName(updateForm.getFullComName());
+				m.setCustomerSource(updateForm.getCustomerSource());
+				m.setLinkman(updateForm.getLinkman());
+				m.setTelephone(updateForm.getTelephone());
+				m.setEmail(updateForm.getEmail());
+				m.setCreateTime(t.getCreateTime());
+				m.setUpdateTime(new Date());
+				after.add(m);
+			}
+		}
+		dbDao.updateRelations(before, after);
+		return null;
 	}
 }

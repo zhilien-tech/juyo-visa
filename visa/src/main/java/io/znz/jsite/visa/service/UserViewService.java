@@ -10,7 +10,7 @@ import io.znz.jsite.base.NutzBaseService;
 import io.znz.jsite.core.bean.User;
 import io.znz.jsite.core.util.UserUtil;
 import io.znz.jsite.exception.JSiteException;
-import io.znz.jsite.visa.bean.entity.SysUserEntity;
+import io.znz.jsite.visa.entity.user.SysUserEntity;
 
 import java.util.List;
 import java.util.Map;

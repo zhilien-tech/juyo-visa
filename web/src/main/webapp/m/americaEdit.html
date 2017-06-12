@@ -140,9 +140,9 @@
                                             <select id="usa_times_stay_unit" style="width:100%;"
                                                     data-role="dropdownlist"
                                                     data-value-primitive="true"
-                                                    data-bind="value:customer.travel.period">
-                                                <option>面试</option>
-                                                <option>免面试</option>
+                                                    data-bind="value:customer.travel.period" name="visatype">
+                                                <option value="0">面试</option>
+                                                <option value="1">免面试</option>
                                             </select>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -155,10 +155,10 @@
                                             <select id="usa_times_stay_unit" style="width:100%;"
                                                     data-role="dropdownlist"
                                                     data-value-primitive="true"
-                                                    data-bind="value:customer.travel.period">
-                                                <option>东北</option>
-                                                <option>东南</option>
-                                                <option>华南</option>
+                                                    data-bind="value:customer.travel.period" name="area">
+                                                <option value="0">东北</option>
+                                                <option value="1">华东</option>
+                                                <option value="2">华南</option>
                                             </select>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -168,8 +168,8 @@
                                     <div class="form-group">
                                         <label for="usa_times_stay_unit">加急:</label>
                                         <div class='input-group'>
-                                            <input id='join_group' data-bind="checked:customer.travel.team"
-                                               class="mui-switch" type="checkbox"/>
+                                            <input id="order_hurry" checked="" value="true"
+                                               class="mui-switch" type="checkbox" name="ishurry" onclick="test();"/>
                                         </div>
                                     </div>
                                 </div>
@@ -180,12 +180,12 @@
                                             <select id="usa_times_stay_unit" style="width:100%;"
                                                     data-role="dropdownlist"
                                                     data-value-primitive="true"
-                                                    data-bind="value:customer.travel.period">
-                                                <option>现金</option>
-                                                <option>出签付</option>
-                                                <option>微信</option>
-                                                <option>支付宝</option>
-                                                <option>月付</option>
+                                                    data-bind="value:customer.travel.period" name="paytype">
+                                                <option value="0">现金</option>
+                                                <option value="1">出签付</option>
+                                                <option value="2">微信</option>
+                                                <option value="3">支付宝</option>
+                                                <option value="4">月付</option>
                                             </select>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -202,7 +202,7 @@
                                         <div class='input-group'>
                                             <input id="us_contact_last_name_cn"
                                                    data-bind="value:customer.travel.contactsFirstName"
-                                                   class="k-textbox" style="width: 100%;"/>
+                                                   class="k-textbox" style="width: 100%;" name="money"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -212,7 +212,7 @@
                                         <label for="us_contact_last_name_en">送签时间:</label>
                                         <div class='input-group'>
                                             <input id="us_contact_last_name_en" data-role="datepicker" style="width: 100%;"
-                                                   data-bind="value:customer.travel.contactsFirstNameEN"/>
+                                                   data-bind="value:customer.travel.contactsFirstNameEN" name="sendtime"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -222,7 +222,7 @@
                                         <label for="us_contact_last_name_en">出签时间:</label>
                                         <div class='input-group'>
                                             <input id="us_contact_last_name_en" data-role="datepicker" style="width: 100%;"
-                                                   data-bind="value:customer.travel.contactsFirstNameEN"/>
+                                                   data-bind="value:customer.travel.contactsFirstNameEN" name="outtime"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -237,7 +237,7 @@
                                         <div class='input-group'>
                                             <input id="us_contact_first_name_cn"
                                                    data-bind="value:customer.travel.contactsLastName"
-                                                   class="k-textbox" style="width: 100%;"/>
+                                                   class="k-textbox" style="width: 100%;" name="remaker"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -3502,6 +3502,18 @@ $(function () {
 });
 $(function(){
 });
+
+
+function test(){
+	var flag=$("#order_hurry").val();
+	if(flag=='false'){
+		$("#order_hurry").val("true");
+	}else{
+		$("#order_hurry").val("false");
+		
+	}
+	alert($("#order_hurry").val());
+}
 </script>
 
 </script>
