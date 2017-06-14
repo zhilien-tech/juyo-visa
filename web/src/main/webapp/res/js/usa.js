@@ -145,6 +145,7 @@ var countries = new kendo.data.DataSource({
 var model = kendo.observable({
     countries: countries,
     states: states,
+    customer: dafaults,
     onDateChange: function (e) {
         var target = e.sender.element.attr("id");
         var start = $("#signed_at").data("kendoDatePicker");
@@ -164,6 +165,7 @@ var model = kendo.observable({
     addOne: function (e) {
         var key = $.isString(e) ? e : $(e.target).data('params');
         console.log(key);
+        console.log(keys[key]);
         model.get(key).push(keys[key]);
     },
     delOne: function (e) {
@@ -204,6 +206,7 @@ var model = kendo.observable({
         var togethers = model.get("customer.travel.togethers");
         var state = false;
         if (togethers) state = togethers.length > 0;
+        alert(state);
         return state;
     },
     // 婚姻状态
@@ -258,8 +261,8 @@ var model = kendo.observable({
     joinArmy: function () {
         var state = model.get("customer.army");
         return state;
-    },
-    customer: dafaults,
+    }
+    
 });
 kendo.bind($(document.body), model);
 /*****************************************************
