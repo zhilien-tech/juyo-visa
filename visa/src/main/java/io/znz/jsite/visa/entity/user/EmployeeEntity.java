@@ -1,6 +1,6 @@
 /**
- * SysUserEntity.java
- * io.znz.jsite.visa.bean.entity
+ * EmployeeEntity.java
+ * io.znz.jsite.visa.entity.user
  * Copyright (c) 2017, 北京科技有限公司版权所有.
 */
 
@@ -16,63 +16,29 @@ import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.Table;
 
 /**
- * 用户实体
+ * 员工管理
  * @author   崔建斌
- * @Date	 2017年6月7日 	 
+ * @Date	 2017年6月12日 	 
  */
 @Data
-@Table("sys_user")
-public class SysUserEntity {
-
+@Table("visa_employee")
+public class EmployeeEntity {
 	@Column
 	@Id(auto = true)
 	@Comment("主键")
 	private Integer id;
 	@Column
-	private String avatar;
-	@Column
-	private Date birthday;
-	@Column
-	private Date create_date;
-	@Column
-	private String del_flag;
-	@Column
-	private String description;
-	@Column
-	private String email;
-	@Column
-	private Integer gender;
-	@Column
-	private Date last_visit;
-	@Column
-	private Integer login_count;
-	@Column
-	private String login_name;
+	@Comment("公司id")
+	private Integer comId;
 	@Column
 	@Comment("用户姓名")
-	private String name;
+	private String fullName;
+	@Column
+	@Comment("用户名/手机号码")
+	private String telephone;
 	@Column
 	@Comment("密码")
 	private String password;
-	@Column
-	@Comment("联系电话")
-	private String phone;
-	@Column
-	private Date previous_visit;
-	@Column
-	private String salt;
-	@Column
-	private String state;
-	@Column
-	private String city;
-	@Column
-	private String brief;
-	@Column
-	private String extra;
-
-	@Column
-	@Comment("公司id")
-	private Integer comId;
 	@Column
 	@Comment("用户类型")
 	private Integer userType;
@@ -82,6 +48,9 @@ public class SysUserEntity {
 	@Column
 	@Comment("座机号码")
 	private String landline;
+	@Column
+	@Comment("电子邮箱")
+	private String email;
 	@Column
 	@Comment("所属部门")
 	private String department;
@@ -95,8 +64,14 @@ public class SysUserEntity {
 	@Comment("状态")
 	private Integer status;
 	@Column
-	@Comment("修改时间")
+	@Comment("创建时间")
+	private Date createTime;
+	@Column
+	@Comment("更新时间")
 	private Date updateTime;
+	@Column
+	@Comment("备注")
+	private String remark;
 	@Column
 	@Comment("预留字段1")
 	private String res1;
