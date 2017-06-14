@@ -7,13 +7,10 @@
 package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.BaseController;
-import io.znz.jsite.visa.entity.user.SysUserEntity;
-import io.znz.jsite.visa.enums.UserStatusEnum;
-import io.znz.jsite.visa.forms.employeeform.UserAddForm;
-import io.znz.jsite.visa.forms.employeeform.UserSqlForm;
+import io.znz.jsite.visa.forms.employeeform.EmployeeAddForm;
+import io.znz.jsite.visa.forms.employeeform.EmployeeSqlForm;
+import io.znz.jsite.visa.forms.employeeform.EmployeeUpdateForm;
 import io.znz.jsite.visa.service.EmployeeViewService;
-
-import java.util.Date;
 
 import org.nutz.dao.Dao;
 import org.nutz.dao.pager.Pager;
@@ -25,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.uxuexi.core.db.dao.IDbDao;
-import com.uxuexi.core.web.util.FormUtil;
 
 /**
  * 员工管理控制类
@@ -49,7 +45,7 @@ public class employeeController extends BaseController {
 	 */
 	@RequestMapping(value = "employeelist")
 	@ResponseBody
-	public Object employeelist(@RequestBody UserSqlForm sqlForm) {
+	public Object employeelist(@RequestBody EmployeeSqlForm sqlForm) {
 		Pager pager = new Pager();
 		pager.setPageNumber(sqlForm.getPageNumber());
 		pager.setPageSize(sqlForm.getPageSize());
@@ -63,10 +59,47 @@ public class employeeController extends BaseController {
 	@RequestMapping(value = "addUserData")
 	@ResponseBody
 	@POST
-	public Object addUserData(UserAddForm addForm) {
-		addForm.setCreate_date(new Date());
-		addForm.setDisableUserStatus(UserStatusEnum.VALID.intKey());//激活
-		SysUserEntity userdto = FormUtil.add(dbDao, addForm, SysUserEntity.class);
-		return userdto;
+	public Object addUserData(EmployeeAddForm addForm) {
+		return employeeViewService.addUserData(addForm);
+	}
+
+	/**
+	 * 回显数据
+	 * @param updateForm
+	 */
+	@RequestMapping(value = "updateData")
+	@ResponseBody
+	public Object updateData(long uid) {
+		return employeeViewService.updateDate(uid);
+	}
+
+	/**
+	 * 编辑保存员工信息
+	 * @param updateForm
+	 */
+	@RequestMapping(value = "updateUserData")
+	@ResponseBody
+	public Object updateUserData(EmployeeUpdateForm updateForm) {
+		return employeeViewService.updateDataSave(updateForm);
+	}
+
+	/**
+	 * 删除单条数据
+	 * @param userId
+	 */
+	@RequestMapping(value = "deleteUserData")
+	@ResponseBody
+	public boolean deleteUserData(Integer userId) {
+		return employeeViewService.deleteUserData(userId);
+	}
+
+	/**
+	 * 初始化密码操作
+	 * @param userId
+	 */
+	@RequestMapping(value = "initpassword")
+	@ResponseBody
+	public boolean initpassword(Integer userId) {
+		return employeeViewService.initpassword(userId);
 	}
 }

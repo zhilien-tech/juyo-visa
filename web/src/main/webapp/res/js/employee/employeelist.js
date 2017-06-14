@@ -8,7 +8,6 @@ var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 function regCmd(command) {
     var select = function (e) {
         var data = grid.dataItem($(e.currentTarget).closest("tr"));
-        
         if (!data) {
             $.layer.alert("请先选择需要操作的数据行");
         }
@@ -28,7 +27,7 @@ function regCmd(command) {
                     layer.open({
                         type: 2,
                         title: '基本资料',
-                        maxmin: false, //开启最大化最小化按钮
+                        maxmin: true, //开启最大化最小化按钮
                         area: ['750px', '500px'],
                         content: '/employee/updateEmployee.html?uid=' + data.id
                     });
@@ -117,11 +116,11 @@ var grid = $("#grid").kendoGrid({
         },
         {
         	title: '姓名',
-        	field: 'name',
+        	field: 'fullname',
         },
         {
         	title: '电话',
-        	field: 'phone'
+        	field: 'telephone'
         },
         {
         	title: '部门',
