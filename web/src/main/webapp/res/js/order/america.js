@@ -1,4 +1,18 @@
-
+//国家
+var countrylist=[
+    {text:"美国",value:0},
+    {text:"日本",value:1},
+   
+    
+  ];
+//状态listorder
+var statuslist=[
+    {text:"草稿",value:0},
+    {text:"提交中",value:1},
+    {text:"同意",value:2},
+    {text:"拒绝",value:3}
+    
+  ];
 //注册命令
 function regCmd(command) {
     var select = function (e) {
@@ -73,20 +87,30 @@ function detailInit(e) {
         dataSource: {
             transport: {
                 read: {
-                    type: "GET",
+                    /*type: "GET",*/
                     dataType: "json",
-                    url: "/visa/order/show/" + e.data.id + "?type=customer",
+                    url: "/visa/order/childList?type=customer&orderId=" + e.data.id ,
                 }
             }
         },
+        schema: {
+//          data: "content",
+//          total: "totalElements",
+        	data : function(d) {
+	              return d.list;  //响应到页面的数据
+	          },
+	          total : function(d) {
+	              return d.recordCount;   //总条数
+	          }
+      },
         columns: [
-            {field: 'name',title: '姓名',template: "<a href='javascript:download(#=data.id#);'>#= data.lastName + data.firstName #</a>"},
-            {field: 'passport', title: '电话'},
+            {field: 'chinesefullname',title: '姓名'},
+            {field: 'phone', title: '电话'},
             {field: 'passport', title: '护照号'},
             {field: 'gender', title: '性别', width: 60},
-            {field: ' ', title: '送签时间'},
-            {field: ' ', title: '出签时间'},
-            {field: 'state', title: ' 状态'},
+            {field: 'sendtime', title: '送签时间',format: "{0: yyyy-MM-dd}"},
+            {field: 'outtime', title: '出签时间',format: "{0: yyyy-MM-dd}"},
+            {field: 'status', title: ' 状态',values:statuslist},
             {
                 title: "操作", width: 308,
                 command: [
@@ -133,44 +157,57 @@ var grid = $("#grid").kendoGrid({
                 contentType: 'application/json;charset=UTF-8',
             },
             parameterMap: function (options, type) {
-                return JSON.stringify(options);
+                /*return JSON.stringify(options);*/
+            	var parameter = {
+                        pageNumber : options.page,    //当前页
+                        pageSize : options.pageSize,//每页显示个数
+                        start_time:$("#start_time").val(),
+                        end_time:$("#end_time").val(),
+                        keywords:$("#keywords").val(),
+                    };
+               return kendo.stringify(parameter);
             },
         },
         schema: {
-            data: "content",
-            total: "totalElements",
+           /* data: "content",
+            total: "totalElements",*/
+        	data : function(d) {
+                return d.list;  //响应到页面的数据
+            },
+            total : function(d) {
+                return d.recordCount;   //总条数
+            },
             model: {
                 id: "id",
                 fields: {
-                    startDate: {type: "date"},
-                    endDate: {type: "date"},
-                    email: {type: "email"},
-                    user: {defaultValue: {id: "1", name: "管理员"}},
+                	sendtime: {type: "date"},
+                	outtime: {type: "date"},
+                    email: {type: "string"}
+                   /* user: {defaultValue: {id: "1", name: "管理员"}},
                     useFor: {defaultValue: "美国"},
-                    amount: {type: "number", defaultValue: 1, validation: {min: 1, required: true}}
+                    amount: {type: "number", defaultValue: 1, validation: {min: 1, required: true}}*/
                 }
             }
         },
         pageSize: 20,
         serverPaging: true,
-        serverFiltering: true,
-        serverSorting: true
+        serverFiltering: true
     },
     columns: [
         {
-            field: 'id', title: ' 订单号', width: 150,
-            template: "<span class='ellipsis' title='#=id#'>#=id#</span>",
+            field: 'ordernumber', title: ' 订单号', width: 150,
+            template: "<span class='ellipsis' title='#=ordernumber#'>#=ordernumber#</span>",
             editor: function (container, options) {
                 container.hide().prev().hide();
             }
         },
-        {field: 'contact', title: '联系人', width: 90,template: "<span class='ellipsis' title='#=data.contact#'>#=data.contact#</span>"},
-        {field: 'email', title: '邮箱', template: "<span class='ellipsis' title='#=data.email#'>#=data.email#</span>"},
-        {field: 'email', title: '送签时间', template: "<span class='ellipsis' title='#=data.email#'>#=data.email#</span>"},
-        {field: 'email', title: '出签时间', template: "<span class='ellipsis' title='#=data.email#'>#=data.email#</span>"},
-        {field: 'useFor', title: '人数', values: ["美国", "日本"], width: 80,},
-        {field: 'useFor', title: '国家', values: ["美国", "日本"], width: 80,},
-        {field: 'useFor', title: '状态', values: ["美国", "日本"], width: 80,},
+        {field: 'linkman', title: '联系人', width: 90,template: "<span class='ellipsis' title='#=data.linkman#'>#=data.linkman#</span>"},
+        {field: 'email', title: '邮箱'},
+        {field: 'sendtime', title: '送签时间',format: "{0: yyyy-MM-dd }" },
+        {field: 'outtime', title: '出签时间',format: "{0: yyyy-MM-dd }"},
+        {field: 'headcount', title: '人数', values: ["美国", "日本"], width: 80,},
+        {field: 'countrytype', title: '国家', width: 80,values:countrylist},
+        {field: 'status', title: '状态',values:statuslist, width: 80,},
         {
             title: "操作", width: 320,
             command: [
@@ -186,14 +223,26 @@ var grid = $("#grid").kendoGrid({
 }).data("kendoGrid");
 //页面刷新
 function successCallback(id){
-	alert(111);
 	//grid.GetJQuery().refresh();
 	grid.dataSource.read();
-	 /* if(id == '1'){
+	
+	  if(id == '1'){
 		  layer.msg("添加成功",{time: 2000});
 	  }else if(id == '2'){
 		  layer.msg("修改成功",{time: 2000});
 	  }else if(id == '3'){
 		  layer.msg("刷新成功",{time: 2000});
-	  }*/
+	  }
   }
+//页面加载时加载日历
+$(function(){
+	$("#start_time").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});
+	$("#end_time").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});
+});
+/*//点击触发日历
+$().click(function(
+		
+));*/
+
+
+
