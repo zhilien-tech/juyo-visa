@@ -1,4 +1,18 @@
-
+//国家
+var countrylist=[
+    {text:"美国",value:0},
+    {text:"日本",value:1},
+   
+    
+  ];
+//状态listorder
+var statuslist=[
+    {text:"草稿",value:0},
+    {text:"提交中",value:1},
+    {text:"同意",value:2},
+    {text:"拒绝",value:3}
+    
+  ];
 //注册命令
 function regCmd(command) {
     var select = function (e) {
@@ -90,13 +104,13 @@ function detailInit(e) {
 	          }
       },
         columns: [
-            {field: 'last_name',title: '姓名'},
+            {field: 'chinesefullname',title: '姓名'},
             {field: 'phone', title: '电话'},
             {field: 'passport', title: '护照号'},
             {field: 'gender', title: '性别', width: 60},
-            {field: 'start_date', title: '送签时间',format: "{0: yyyy-MM-dd}"},
-            {field: 'end_date', title: '出签时间',format: "{0: yyyy-MM-dd}"},
-            {field: 'state', title: ' 状态'},
+            {field: 'sendtime', title: '送签时间',format: "{0: yyyy-MM-dd}"},
+            {field: 'outtime', title: '出签时间',format: "{0: yyyy-MM-dd}"},
+            {field: 'status', title: ' 状态',values:statuslist},
             {
                 title: "操作", width: 308,
                 command: [
@@ -166,8 +180,8 @@ var grid = $("#grid").kendoGrid({
             model: {
                 id: "id",
                 fields: {
-                    start_date: {type: "date"},
-                    send_date: {type: "date"},
+                	sendtime: {type: "date"},
+                	outtime: {type: "date"},
                     email: {type: "string"}
                    /* user: {defaultValue: {id: "1", name: "管理员"}},
                     useFor: {defaultValue: "美国"},
@@ -181,19 +195,19 @@ var grid = $("#grid").kendoGrid({
     },
     columns: [
         {
-            field: 'id', title: ' 订单号', width: 150,
-            template: "<span class='ellipsis' title='#=id#'>#=id#</span>",
+            field: 'ordernumber', title: ' 订单号', width: 150,
+            template: "<span class='ellipsis' title='#=ordernumber#'>#=ordernumber#</span>",
             editor: function (container, options) {
                 container.hide().prev().hide();
             }
         },
-        {field: 'contact', title: '联系人', width: 90,template: "<span class='ellipsis' title='#=data.contact#'>#=data.contact#</span>"},
-        {field: 'email', title: '邮箱', template: "<span class='ellipsis' title='#=data.email#'>#=data.email#</span>"},
-        {field: 'send_date', title: '送签时间',format: "{0: yyyy-MM-dd}" },
-        {field: 'start_date', title: '出签时间',format: "{0: yyyy-MM-dd}"},
-        {field: 'use_for', title: '人数', values: ["美国", "日本"], width: 80,},
-        {field: 'use_for', title: '国家', width: 80,},
-        {field: 'use_for', title: '状态', values: ["美国", "日本"], width: 80,},
+        {field: 'linkman', title: '联系人', width: 90,template: "<span class='ellipsis' title='#=data.linkman#'>#=data.linkman#</span>"},
+        {field: 'email', title: '邮箱'},
+        {field: 'sendtime', title: '送签时间',format: "{0: yyyy-MM-dd }" },
+        {field: 'outtime', title: '出签时间',format: "{0: yyyy-MM-dd }"},
+        {field: 'headcount', title: '人数', values: ["美国", "日本"], width: 80,},
+        {field: 'countrytype', title: '国家', width: 80,values:countrylist},
+        {field: 'status', title: '状态',values:statuslist, width: 80,},
         {
             title: "操作", width: 320,
             command: [
@@ -209,16 +223,16 @@ var grid = $("#grid").kendoGrid({
 }).data("kendoGrid");
 //页面刷新
 function successCallback(id){
-	alert(11);
 	//grid.GetJQuery().refresh();
 	grid.dataSource.read();
-	 /* if(id == '1'){
+	
+	  if(id == '1'){
 		  layer.msg("添加成功",{time: 2000});
 	  }else if(id == '2'){
 		  layer.msg("修改成功",{time: 2000});
 	  }else if(id == '3'){
 		  layer.msg("刷新成功",{time: 2000});
-	  }*/
+	  }
   }
 //页面加载时加载日历
 $(function(){

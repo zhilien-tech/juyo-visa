@@ -48,28 +48,29 @@ public class KenDoTestSqlForm extends KenDoParamForm {
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
 		if (!Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
-			SqlExpressionGroup e1 = Cnd.exps("vo.send_date", ">", start_time).and("vo.send_date", "<", end_time);
-			SqlExpressionGroup e2 = Cnd.exps("vo.start_date", ">", start_time).and("vo.start_date", "<", end_time);
+			SqlExpressionGroup e1 = Cnd.exps("vno.sendtime", ">=", start_time).and("vno.sendtime", "<=", end_time);
+			SqlExpressionGroup e2 = Cnd.exps("vno.outtime", ">=", start_time).and("vno.outtime", "<=", end_time);
 			cnd.and(e1).or(e2);
 		} else if (Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
-			SqlExpressionGroup e1 = Cnd.exps("vo.send_date", "<", end_time);
-			SqlExpressionGroup e2 = Cnd.exps("vo.start_date", "<", end_time);
+			SqlExpressionGroup e1 = Cnd.exps("vno.sendtime", "<=", end_time);
+			SqlExpressionGroup e2 = Cnd.exps("vno.outtime", "<=", end_time);
 			cnd.and(e1).or(e2);
 		} else if (!Util.isEmpty(start_time) && Util.isEmpty(end_time)) {
-			SqlExpressionGroup e1 = Cnd.exps("vo.send_date", ">", start_time);
-			SqlExpressionGroup e2 = Cnd.exps("vo.start_date", ">", start_time);
+			SqlExpressionGroup e1 = Cnd.exps("vno.sendtime", ">=", start_time);
+			SqlExpressionGroup e2 = Cnd.exps("vno.outtime", ">=", start_time);
 			cnd.and(e1).or(e2);
 		}
 		if (!Util.isEmpty(keywords)) {
-			SqlExpressionGroup e1 = Cnd.exps("vo.id", "like", keywords);
-			SqlExpressionGroup e2 = Cnd.exps("vo.contact", "like", keywords);
-			SqlExpressionGroup e3 = Cnd.exps("vc.phone", "like", keywords);
-			SqlExpressionGroup e4 = Cnd.exps("vo.email", "like", keywords);
-			SqlExpressionGroup e5 = Cnd.exps("vc.last_name", "like", keywords);
+			SqlExpressionGroup e1 = Cnd.exps("vno.id", "like", keywords);
+			SqlExpressionGroup e2 = Cnd.exps("vnc.chinesefullname", "like", keywords);
+			SqlExpressionGroup e3 = Cnd.exps("vcm.telephone", "like", keywords);
+			SqlExpressionGroup e4 = Cnd.exps("vcm.email", "like", keywords);
+			SqlExpressionGroup e5 = Cnd.exps("vcm.linkman", "like", keywords);
 			//SqlExpressionGroup e6 = Cnd.exps("vo.id", "like", keywords);
 			cnd.and(e1).or(e2).or(e3).or(e4).or(e5);
 		}
-		cnd.groupBy("vo.id");
+		cnd.orderBy("vno.updatetime", "desc");
+		cnd.groupBy("vno.id");
 		return cnd;
 	}
 }
