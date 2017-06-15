@@ -12,8 +12,14 @@
     <link rel="stylesheet" href="/res/plugin/font-awesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/res/css/colors.min.css"/>
     <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
-
     <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
+    
+    <style type="text/css">
+    	.k-multiselect>.k-multiselect-wrap>.k-i-close {top: 50%;}
+    	.k-select span.k-i-close {left: -15px;}
+    	.k-multiselect-wrap li{margin: 4px 0 1px 2px;padding: 10px 23px 10px 1px;line-height: 0;}
+    	.k-multiselect-wrap .k-input {height: 1.54em;line-height: 1.54em;}
+    </style>
 </head>
 <body>
 <div>
@@ -1343,10 +1349,15 @@
 <script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
 <script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
 <script src="/res/js/common.js"></script>
-
+<script type="text/javascript"><!--面板条 动画效果--> 
+    $(function () {
+        $("#panelbar").kendoPanelBar({
+            expandMode: "single" //设置展开模式只能展开单个
+        });
+    });
+</script>
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
 <script src="/res/js/americaEdit.js"></script>
 <script src="/res/js/wintone.js?v=4"></script>
-
 </html>

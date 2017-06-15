@@ -23,7 +23,6 @@ function regCmd(command) {
             switch (command) {
                 case "edit":
                 	var data = grid.dataItem($(e.currentTarget).closest("tr"));
-                	
                     if (!(data = select(e))){
                     	return;
                     }else{

@@ -9,22 +9,26 @@
 .btn-primary:active:focus,.btn-primary.active:focus,.open > .dropdown-toggle.btn-primary:focus,
 .btn-primary:active.focus,.btn-primary.active.focus,
 .open > .dropdown-toggle.btn-primary.focus {color: #fff;background-color: #32a1e4;border-color: #2b82b7;}
+/*日期插件style*/
+.k-gantt-toolbar .k-state-default, .k-grid .k-grouping-header, .k-grid-header, .k-grid-header-wrap, .k-grouping-header .k-group-indicator, .k-header, .k-pager-wrap, .k-pager-wrap .k-link, .k-pager-wrap .k-textbox {border-color: #c9c9c9;border: 1px;}
+.k-picker-wrap .k-input {height: 29px;padding: 0;}
+.k-textbox .k-icon {left: 6.5px;}
+
+
+/*end 日期插件style*/
 /*时间样式*/
 .timeInput{display: inline-block;width: 45%;}
 .timeLabel{float: left;line-height: 30px;font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;font-weight: 500;}
 /*end 时间样式*/
-
 /*客户管理 编辑 弹框的样式修改*/
 ol, ul {padding-left: 0;list-style: none;}
 .padding-0{padding:0;}
-
-
 /*按钮样式*/
 .k-red{background-color: #f43838;color: #fff;border: solid 1px #e43939;}
 .k-red:hover{background-color: #e43939;color: #fff;border: solid 1px #e43939;}
 .k-red:focus{color: #fff;background-color: #e63333;border: solid 1px #ce3535;}
 .k-red:active:hover,.k-red.active:hover,.k-red:active:focus{background-color: #e43939;color: #fff;border: solid 1px #e43939;}
-
+.layui-layer-close{background-position:2px -40px !important;}/*弹框 关闭按钮的位置*/
 
 
 
