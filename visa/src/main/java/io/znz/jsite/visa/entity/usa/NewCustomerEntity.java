@@ -1,6 +1,23 @@
 package io.znz.jsite.visa.entity.usa;
 
+import io.znz.jsite.visa.entity.customer.NewArmyEntity;
+import io.znz.jsite.visa.entity.customer.NewLanguageEntity;
+import io.znz.jsite.visa.entity.customer.NewOldnameEntity;
+import io.znz.jsite.visa.entity.customer.NewOldworksEntity;
+import io.znz.jsite.visa.entity.customer.NewOrthercountryEntity;
+import io.znz.jsite.visa.entity.customer.NewParentsEntity;
+import io.znz.jsite.visa.entity.customer.NewPassportloseEntity;
+import io.znz.jsite.visa.entity.customer.NewRecentlyintousaEntity;
+import io.znz.jsite.visa.entity.customer.NewRelationEntity;
+import io.znz.jsite.visa.entity.customer.NewSpouseEntity;
+import io.znz.jsite.visa.entity.customer.NewTeachinfoEntity;
+import io.znz.jsite.visa.entity.customer.NewUsainfoEntity;
+import io.znz.jsite.visa.entity.customer.NewVisitedcountryEntity;
+import io.znz.jsite.visa.entity.customer.NewWorkedplaceEntity;
+import io.znz.jsite.visa.entity.customer.NewWorkinfoEntity;
+
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.Data;
 
@@ -143,4 +160,35 @@ public class NewCustomerEntity implements Serializable {
 	@Comment("通知次数")
 	private Integer noticecount;
 
+	private NewPassportloseEntity passportlose;
+
+	private NewOldnameEntity oldname;
+
+	private List<NewOrthercountryEntity> orthercountrylist;
+
+	private NewParentsEntity father;
+
+	private NewParentsEntity mother;
+
+	private List<NewRelationEntity> relation;
+
+	private NewSpouseEntity spouse;
+
+	private NewUsainfoEntity usainfo;
+
+	private List<NewTeachinfoEntity> teachinfo;
+
+	private List<NewRecentlyintousaEntity> recentlyintousalist;
+
+	private NewWorkinfoEntity workinfo;
+
+	private List<NewOldworksEntity> oldworkslist;
+
+	private List<NewLanguageEntity> languagelist;
+
+	private List<NewVisitedcountryEntity> visitedcountrylist;
+
+	private List<NewWorkedplaceEntity> workedplacelist;
+
+	private NewArmyEntity army;
 }

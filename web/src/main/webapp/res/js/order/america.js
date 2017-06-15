@@ -54,6 +54,16 @@ function regCmd(command) {
                         content: '/m/americaEdit.html?cid=' + data.id + "&check=true"
                     });
                     break;
+                case "customerEdit":
+                	var data = grid.dataItem($(e.currentTarget).closest("tr"));
+                	layer.open({
+                		type: 2,
+                		title: '编辑客户信息',
+                		area: ['950px', '600px'],
+                		shadeClose: true,
+                		content: '/order/customerEdit.html?cid=' + data.id + "&check=true"
+                	});
+                	break;
                 default:
                     $.layer.alert(command);
                     break;
@@ -114,11 +124,11 @@ function detailInit(e) {
             {
                 title: "操作", width: 308,
                 command: [
-                    {name: " ", imageClass: "base fa-pencil", text: "编辑"},
+                    {name: "customerEdit", imageClass: "base fa-pencil", text: "编辑"},
                     {name: " ", imageClass: "base fa-send", text: "递送"},
                     {name: " ", imageClass: "base fa-share-alt", text: "分享"},
                     {name: " ", imageClass: "base fa-bell-o", text: "通知"},
-                    regCmd(" "),
+                    regCmd("customerEdit"),
                     regCmd(" "),
                     regCmd(" "),
                     regCmd(" "),

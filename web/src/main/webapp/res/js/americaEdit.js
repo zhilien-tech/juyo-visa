@@ -114,6 +114,7 @@ var countries = new kendo.data.DataSource({
  ****************************************************/
 var viewModel = kendo.observable({
     customer: dafaults,
+    countries:countries,
     customersourceEnum:customersourceEnum,
     states:states,
     hasTogether: function () {
@@ -288,7 +289,7 @@ $(function () {
 //信息保存
 
 function ordersave(){
-	   console.log(JSON.stringify(viewModel.customer));
+	   
     $.ajax({
         type: "POST",
         url: "/visa/order/orderSave",
@@ -308,6 +309,29 @@ function ordersave(){
     });
 }
 
+
+$(function () {
+    //如果有传递ID就是修改
+    var oid = $.queryString("cid");
+    if (oid) {
+        $.getJSON("/visa/order/showDetail?orderid=" + oid, function (resp) {
+        	viewModel.set("customer", $.extend(true, dafaults, resp));
+        	dafaults.customermanage.telephone=resp.customermanage.telephone;
+        	dafaults.customermanage.email=resp.customermanage.email;
+        	var color = $("#cus_phone").data("kendoMultiSelect");
+			color.value(resp.customermanage.id);
+        	var color = $("#cus_email").data("kendoMultiSelect");
+			color.value(resp.customermanage.id);
+        });
+    }
+    console.log(JSON.stringify(viewModel.customer));
+    //折叠面板的显隐切换
+    $(document).on("click", ".k-link", function () {
+        $(this).find(".k-icon").toggleClass("k-i-arrow-60-down k-i-arrow-n");
+        $(this).next().toggle();
+    });
+   
+});
 
 
 
