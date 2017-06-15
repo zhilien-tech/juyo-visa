@@ -240,6 +240,40 @@ public class OrderController extends BaseController {
 		return ResultObject.success("添加成功");
 	}
 
+	@RequestMapping(value = "showDetail")
+	@ResponseBody
+	public Object showDetail(long orderid) {
+		NewOrderEntity order = dbDao.fetch(NewOrderEntity.class, orderid);
+		CustomerManageEntity customerManageEntity = dbDao.fetch(CustomerManageEntity.class,
+				order.getCus_management_id());
+		if (!Util.isEmpty(customerManageEntity)) {
+			order.setCustomermanage(customerManageEntity);
+		}
+		List<NewTrip> newTrips = dbDao.query(NewTrip.class, Cnd.where("orderid", "=", orderid), null);
+		if (!Util.isEmpty(newTrips) && newTrips.size() > 0) {
+			order.setTrip(newTrips.get(0));
+			List<NewPeerPersionEntity> query = dbDao.query(NewPeerPersionEntity.class,
+					Cnd.where("tripid", "=", newTrips.get(0).getId()), null);
+			order.setPeerList(query);
+		}
+		List<NewPayPersionEntity> newPayPersionEntities = dbDao.query(NewPayPersionEntity.class,
+				Cnd.where("orderid", "=", orderid), null);
+		if (!Util.isEmpty(newPayPersionEntities) && newPayPersionEntities.size() > 0) {
+			order.setPayPersion(newPayPersionEntities.get(0));
+		}
+		List<NewPayCompanyEntity> newPayCompanyEntities = dbDao.query(NewPayCompanyEntity.class,
+				Cnd.where("orderid", "=", orderid), null);
+		if (!Util.isEmpty(newPayCompanyEntities) && newPayCompanyEntities.size() > 0) {
+			order.setPayCompany(newPayCompanyEntities.get(0));
+		}
+		List<NewFastMailEntity> newFastMailEntities = dbDao.query(NewFastMailEntity.class,
+				Cnd.where("orderid", "=", orderid), null);
+		if (!Util.isEmpty(newFastMailEntities) && newFastMailEntities.size() > 0) {
+			order.setFastMail(newFastMailEntities.get(0));
+		}
+		return order;
+	}
+
 	private Customer contains(List<Customer> customers, Customer customer) {
 		for (Customer c : customers) {
 			if (c.getId().equals(customer.getId())) {
