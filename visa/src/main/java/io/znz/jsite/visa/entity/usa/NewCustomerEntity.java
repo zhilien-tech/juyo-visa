@@ -160,10 +160,6 @@ public class NewCustomerEntity implements Serializable {
 	@Comment("通知次数")
 	private Integer noticecount;
 
-	@Column
-	@Comment("是否有非直系亲属在美国")
-	private boolean friendinusa;
-
 	private NewPassportloseEntity passportlose;
 
 	private NewOldnameEntity oldname;
