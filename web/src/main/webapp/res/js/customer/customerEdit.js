@@ -63,7 +63,10 @@ var countries = new kendo.data.DataSource({
 		"customer.languagelist":{},
 		"customer.visitedcountrylist":{},
 		"customer.workedplacelist":{},
-		"customer.relation":{},
+		"customer.relation":{
+			xing:""
+			
+		},
 		"customer.teachinfo":{}
 		
 	}
@@ -76,12 +79,6 @@ var viewModel = kendo.observable({
     countries:countries,
     customersourceEnum:customersourceEnum,
     states:states,
-    hasTogether: function () {
-        var togethers = viewModel.get("customer.travel.togethers");
-        var state = false;
-        if (togethers) state = togethers.length > 0;
-        return state;
-    },
     addOne: function (e) {
         var key = $.isString(e) ? e : $(e.target).data('params');
         console.log(key);
@@ -118,7 +115,176 @@ var viewModel = kendo.observable({
     payType: function (type) {
         return viewModel.get("customer.trip.paypersion") === type;
     },
+    // 婚姻状态
+    spouseState: function (state) {
+        return state.indexOf(viewModel.get("customer.spouse.marrystatus")) > -1;
+    },
+    //是否与配偶一起
+    sameAsMe: function () {
+        return viewModel.get("customer.spouse.spousezipcode")
+            && viewModel.get("customer.spouse.spouselinkaddress")
+            && viewModel.get("customer.spouse.spouselinkaddressen");
+    },
+    //是否有直系亲属在美国
+    hasFamilyInUSA: function () {
+        var families = viewModel.get("customer.relation");
+        var state = families ? families.length > 0 : false;
+        return state;
+    },
+    //历史入境信息
+    hasHistory: function () {
+        var history = viewModel.get("customer.recentlyintousalist");
+        var state = history ? history.length > 0 : false;
+        return state;
+    },
+    //是否有美国驾照
+    hasDriving: function () {
+        var state = viewModel.get("customer.usainfo.usadriveport");
+        return state;
+    },
+    //是否申请过移民
+    hasImmigrant: function () {
+        var state = viewModel.get("customer.usainfo.instruction") || viewModel.get("customer.usainfo.instructionen");
+        return state;
+    },
+    //是否有就签证
+    hasOldVisa: function () {
+        var state = viewModel.get("customer.usainfo.visaport");
+        return state;
+    },
+    //教育信息
+    hasSchool: function () {
+        var schools = viewModel.get("customer.teachinfo");
+        var state = schools ? schools.length > 0 : false;
+        return state;
+    },
+    //参过军
+   /* joinArmy: function () {
+        var state = viewModel.get("customer.army");
+    	var schools = viewModel.get("customer.army");
+        var state = schools ? schools.length > 0 : false;
+        return state;
+    },*///工作信息详情
+    hasWorkDetail: function (state) {
+        var industry = viewModel.get("customer.workinfo.jobstatus");
+        return !(industry === "S" || industry === "RT" || industry === "N");
+    },
+    add: function (key) {
+    	viewModel.set(key, keys[key]);
+    },
+    clear: function (key) {
+    	viewModel.set(key, undefined);
+    },
+    onDateChange: function (e) {
+        var target = e.sender.element.attr("id");
+        var start = $("#signed_at").data("kendoDatePicker");
+        var end = $("#expire_at").data("kendoDatePicker");
+        if (target === "signed_at") {
+            end.min(start.value());
+        } else {
+            start.max(end.value());
+        }
+    },
+    showSaveBtn: function () {
+        return !$.queryString("check");
+    },
+    showToolBar: function () {
+        return $.queryString("check");
+    }/*,
+    // 旧护照
+    oldPassportEnable: function () {
+        return viewModel.get("customer.passportlose");
+    },
+    // 曾用名
+    oldNameEnable: function () {
+        return viewModel.get("customer.oldname");
+    },
+    // 其他国家公民
+    otherCountryEnable: function () {
+        var otherCountry = viewModel.get("customer.orthercountrylist");
+        var state = otherCountry ? otherCountry.length > 0 : false;
+        return state;
+    }*/
     
 });
 kendo.bind($(document.body), viewModel);
 
+
+/*****************************************************
+ * 配偶信息
+ ****************************************************/
+$("#same_as_home").change(function () {
+    var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.spouse.spousezipcode", value);
+    viewModel.set("customer.spouse.spouselinkaddress", value);
+    viewModel.set("customer.spouse.spouselinkaddressen", value);
+});
+/*****************************************************
+ * 亲属信息
+ ****************************************************/
+$("#has_immediate_relatives").change(function () {
+    if ($(this).is(':checked')) {
+    	viewModel.addOne("customer.relation");
+    } else {
+    	viewModel.clearAll("customer.relation");
+    }
+});
+$("#other_relatives").change(function () {
+	viewModel.set("customer.friendinusa", $(this).is(':checked'));
+});
+/*****************************************************
+ * 美国相关信息
+ ****************************************************/
+
+
+
+
+
+
+
+//最近5次进入美国的信息
+$("#has_usa_aboard").change(function () {
+    if ($(this).is(':checked')) {
+    	viewModel.addOne("customer.recentlyintousalist");
+    } else {
+    	viewModel.clearAll("customer.recentlyintousalist");
+    }
+});
+//美国驾照
+$("#have_usa_dl").change(function () {
+	viewModel.set("customer.usainfo.usadriveport", $(this).is(':checked') ? " " : "");
+});
+//申请移民过
+$("#old_apply").change(function () {
+    var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.usainfo.instruction", value);
+    viewModel.set("customer.usainfo.instructionen", value);
+});
+//申请过美国签证
+$("#old_apply2").change(function () {
+	viewModel.set("customer.usainfo.visaport", $(this).is(':checked') ? " " : "");
+});
+//本次签证和上次的一样
+$("#type_same_as_previous").change(function () {
+	viewModel.set("customer.usainfo.sameaslast", $(this).is(':checked'));
+});
+/*****************************************************
+ * 教育信息
+ ****************************************************/
+$("#has_never_educated").change(function () {
+    if ($(this).is(':checked')) {
+    	viewModel.addOne("customer.teachinfo");
+    } else {
+    	viewModel.clearAll("customer.teachinfo");
+    }
+});
+/*****************************************************
+ * 其他信息
+ ****************************************************/
+$("#join_army").change(function () {
+    if ($(this).is(':checked')) {
+    	viewModel.add("customer.army");
+    } else {
+    	viewModel.clear("customer.army");
+    }
+});
