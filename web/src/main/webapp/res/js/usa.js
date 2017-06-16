@@ -206,7 +206,6 @@ var model = kendo.observable({
         var togethers = model.get("customer.travel.togethers");
         var state = false;
         if (togethers) state = togethers.length > 0;
-        alert(state);
         return state;
     },
     // 婚姻状态

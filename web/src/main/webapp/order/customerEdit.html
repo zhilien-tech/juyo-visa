@@ -485,7 +485,7 @@
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <button data-bind="click:addOne"
-                                                data-params="customer.otherCountry"
+                                                data-params="customer.orthercountrylist"
                                                 class="k-button col-xs-12 k-button-icontext">
                                             <span class="k-icon k-i-plus"></span>添加
                                         </button>
@@ -663,7 +663,7 @@
                                             <select id="marital_status" style="width: 100%;"
                                                     data-role="dropdownlist"
                                                     data-bind="value:customer.spouse.marrystatus">
-                                                <option value="单身">单身</option>
+                                               <option value="单身">单身</option>
                                                 <option value="已婚">已婚</option>
                                                 <option value="离异">离异</option>
                                                 <option value="丧偶">丧偶</option>
@@ -1031,7 +1031,7 @@
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <label for="has_immediate_relatives" class="check-box-label">
-                                            我有直系亲属在美国（配偶，未婚妻，未婚夫，子女，兄弟姐妹
+                                            我有直系亲属在美国（配偶，未婚妻，未婚夫，子女，兄弟姐妹)
                                         </label>
                                         <input id='has_immediate_relatives' class="mui-switch" type="checkbox"
                                                data-bind="checked:hasFamilyInUSA"/>
@@ -1054,7 +1054,7 @@
                                     <div class="form-group" style="padding-top: 15px;">
                                         <label for="other_relatives"
                                                class="check-box-label">我有<strong>非直系</strong>亲属在美国</label>
-                                        <input id='other_relatives' data-bind="checked:customer.friendInUSA"
+                                        <input id='other_relatives' data-bind="checked:customer.friendinusa"
                                                class="mui-switch" type="checkbox"/>
                                     </div>
                                 </div>
@@ -1195,7 +1195,7 @@
                                                 本次申请的签证类型和上次一样
                                             </label>
                                             <input id='type_same_as_previous'
-                                                   data-bind="checked:customer.usainfo.usadriveport"
+                                                   data-bind="checked:customer.usainfo.sameaslast"
                                                    class="mui-switch" type="checkbox"/>
                                         </div>
                                     </div>
@@ -1804,14 +1804,14 @@
                            data-value-primitive="true"
                            data-text-field="text"
                            data-value-field="value"
-                           data-bind="value:value,source:countries"/>
+                           data-bind="value:customer.orthercountrylist.country,source:countries"/>
                     <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                 </div>
             </div>
         </div>
         <div class="col-xs-2">
             <div class="form-group">
-                <button data-bind="click:delOne" data-params="customer.otherCountry" class="k-button col-xs-12 k-button-icontext">
+                <button data-bind="click:delOne" data-params="customer.orthercountrylist" class="k-button col-xs-12 k-button-icontext">
                     <span class="k-icon k-i-close"></span>删除
                 </button>
             </div>
@@ -2473,6 +2473,6 @@
 
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
-<script src="/res/js/customerEdit.js"></script>
+<script src="/res/js/customer/customerEdit.js"></script>
 <script src="/res/js/wintone.js?v=4"></script>
 </html>
