@@ -16,10 +16,6 @@ function translateZhToEn(from, to) {
 
 
 
-
-
-
-
 var countries = new kendo.data.DataSource({
         transport: {
             read: {
@@ -326,10 +322,10 @@ $(function () {
     }
     console.log(JSON.stringify(viewModel.customer));
     //折叠面板的显隐切换
-    $(document).on("click", ".k-link", function () {
+    /*$(document).on("click", ".k-link", function () {
         $(this).find(".k-icon").toggleClass("k-i-arrow-60-down k-i-arrow-n");
         $(this).next().toggle();
-    });
+    });*/
    
 });
 
