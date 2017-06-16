@@ -211,10 +211,10 @@ var grid = $("#grid").kendoGrid({
                 container.hide().prev().hide();
             }
         },
-        {field: 'linkman', title: '联系人', width: 90,template: "<span class='ellipsis' title='#=data.linkman#'>#=data.linkman#</span>"},
+        {field: 'linkman', title: '联系人', width: 90,template: "<span class='ellipsis' title='#=data.linkman#'>#=data.linkman?data.linkman:''#</span>"},
         {field: 'email', title: '邮箱',template: "<span class='ellipsis' title='#=data.email#'>#=data.email#</span>"},
-        {field: 'sendtime', title: '送签时间',format: "{0: yyyy-MM-dd }",template: "<span class='ellipsis' title='#=data.sendtime#'>#=data.sendtime#</span>"},
-        {field: 'outtime', title: '出签时间',format: "{0: yyyy-MM-dd }",template: "<span class='ellipsis' title='#=data.outtime#'>#=data.outtime#</span>"},
+        {field: 'sendtime', title: '送签时间',format: "{0: yyyy-MM-dd }",template: "<span class='ellipsis' title='#=data.sendtime#'>#=data.sendtime?kendo.toString(data.sendtime, 'yyyy-MM-dd'):''#</span>"},
+        {field: 'outtime', title: '出签时间',format: "{0: yyyy-MM-dd }",template: "<span class='ellipsis' title='#=data.outtime#'>#=data.outtime?kendo.toString(data.outtime, 'yyyy-MM-dd'):''#</span>"},
         {field: 'headcount', title: '人数', values: ["美国", "日本"], width: 80,},
         {field: 'countrytype', title: '国家', width: 80,values:countrylist},
         {field: 'status', title: '状态',values:statuslist, width: 80,},
