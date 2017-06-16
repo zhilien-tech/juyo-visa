@@ -4,7 +4,7 @@
  * Copyright (c) 2017, 北京科技有限公司版权所有.
 */
 
-package test;
+package test.pdf;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,7 +13,6 @@ import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.pdfbox.PDFReader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 
@@ -29,10 +28,11 @@ public class ReadFdf {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		PDFReader pdfReader = new PDFReader();
+		ReadFdf pdfReader = new ReadFdf();
 		try {
-			// 取得E盘下的SpringGuide.pdf的内容
-			//pdfReader.readFdf("E:\\SpringGuide.pdf");
+			// 取得EK:\\wordToPdf\\新文件.pdf的内容
+			pdfReader.readFdf("K:\\wordToPdf\\mergedTest.pdf");
+			System.out.println("<<<读取完成!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

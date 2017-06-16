@@ -4,13 +4,13 @@
  * Copyright (c) 2017, 北京科技有限公司版权所有.
 */
 
-package test;
+package test.passwordtest;
 
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 
 /**
- * TODO(这里用一句话描述这个类的作用)
+ * 测试给密码加密
  * @author   崔建斌
  * @Date	 2017年6月12日 	 
  */
