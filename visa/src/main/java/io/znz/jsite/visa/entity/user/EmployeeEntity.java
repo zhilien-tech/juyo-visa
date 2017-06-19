@@ -74,7 +74,7 @@ public class EmployeeEntity {
 	private String remark;
 	@Column
 	@Comment("预留字段1")
-	private String res1;
+	private String salt;
 	@Column
 	@Comment("预留字段2")
 	private String res2;

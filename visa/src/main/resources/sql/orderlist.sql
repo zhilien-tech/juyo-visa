@@ -8,3 +8,8 @@ LEFT JOIN visa_new_customer vnc on vnc.id=vnco.customerid
 $condition
 /*orderlist_custominfo_phone*/
 select * from visa_customer_management vcm
+/*orderlist_ordernum*/
+select * from visa_new_order
+where date(createtime)=date(now())
+$condition
+order by createtime desc

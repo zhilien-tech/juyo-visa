@@ -3,6 +3,8 @@ package io.znz.jsite.visa.web;
 import io.znz.jsite.base.BaseController;
 import io.znz.jsite.base.bean.ResultObject;
 import io.znz.jsite.core.service.MailService;
+import io.znz.jsite.util.security.Digests;
+import io.znz.jsite.util.security.Encodes;
 import io.znz.jsite.visa.bean.Customer;
 import io.znz.jsite.visa.entity.customer.CustomerEntity;
 import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
@@ -14,20 +16,27 @@ import io.znz.jsite.visa.entity.usa.NewPayCompanyEntity;
 import io.znz.jsite.visa.entity.usa.NewPayPersionEntity;
 import io.znz.jsite.visa.entity.usa.NewPeerPersionEntity;
 import io.znz.jsite.visa.entity.usa.NewTrip;
+import io.znz.jsite.visa.entity.user.EmployeeEntity;
 import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
+import io.znz.jsite.visa.enums.UserTypeEnum;
 import io.znz.jsite.visa.form.KenDoTestSqlForm;
 import io.znz.jsite.visa.service.OrderService;
 import io.znz.jsite.visa.service.PdfService;
 
-import java.util.Calendar;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.io.IOUtils;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
+import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,66 +185,142 @@ public class OrderController extends BaseController {
 			chain.add("email", customermanage.getEmail());
 			dbDao.update(CustomerManageEntity.class, chain, Cnd.where("id", "=", customermanage.getId()));
 		}
-		order.setStatus(OrderVisaApproStatusEnum.draft.intKey());
-		order.setCreatetime(new Date());
-		order.setUpdatetime(new Date());
-		NewOrderEntity orderOld = dbDao.insert(order);
-		//根据人数插入多个申请人的数据
-		for (int i = orderOld.getHeadcount(); i > 0; i--) {
-			NewCustomerEntity c = new NewCustomerEntity();
+		//根据他们的id是否存在判断是更新还是删除
+		NewOrderEntity orderOld = order;
+		if (!Util.isEmpty(order.getId()) && order.getId() > 0) {
+			NewOrderEntity orderNew = dbDao.fetch(NewOrderEntity.class, order.getId());
+			order.setUpdatetime(new Date());
+			nutDao.update(order);
+			int a = order.getHeadcount() - orderNew.getHeadcount();
+			if (a > 0) {
 
-			NewCustomerEntity insert = dbDao.insert(c);
-			NewCustomerOrderEntity customerOrderEntity = new NewCustomerOrderEntity();
-			customerOrderEntity.setCustomerid(insert.getId());
-			customerOrderEntity.setOrderid(orderOld.getId());
-			dbDao.insert(customerOrderEntity);
-		}
-		//生成订单号
-		Date date = new Date();
-		Calendar now = Calendar.getInstance();
-		now.setTime(new Date());
-		String ordernum = "" + now.get(Calendar.YEAR) + (now.get(Calendar.MONTH) + 1) + now.get(Calendar.DAY_OF_MONTH)
-				+ "000" + orderOld.getId();
+				//根据人数插入多个申请人的数据
+				for (int i = a; i > 0; i--) {
+					NewCustomerEntity c = new NewCustomerEntity();
+					c.setCreatetime(new Date());
+					c.setUpdatetime(new Date());
+					NewCustomerEntity insert = dbDao.insert(c);
+					NewCustomerOrderEntity customerOrderEntity = new NewCustomerOrderEntity();
+					customerOrderEntity.setCustomerid(insert.getId());
+					customerOrderEntity.setOrderid(orderOld.getId());
+					customerOrderEntity.setCreatetime(new Date());
+					customerOrderEntity.setUpdatetime(new Date());
+					dbDao.insert(customerOrderEntity);
+				}
+			} else if (a < 0) {
+				int n = -a;
+				List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
+						Cnd.where("orderid", "=", order.getId()).orderBy("updatetime", "asc"), null);
+				for (int i = 0; i < n; i++) {
+					NewCustomerOrderEntity c = query.get(i);
+					dbDao.delete(c);
+					dbDao.delete(NewCustomerEntity.class, c.getCustomerid());
+				}
+			}
 
-		String random = "";
-		for (int i = 0; i < 16 - ordernum.length(); i++) {
-			int a = (int) (Math.random() * 10);
-			random = random + a;
+		} else {
+			order.setStatus(OrderVisaApproStatusEnum.placeOrder.intKey());
+			order.setCreatetime(new Date());
+			order.setUpdatetime(new Date());
+
+			//生成订单号
+			SimpleDateFormat smf = new SimpleDateFormat("yyyyMMdd");
+			String format = smf.format(new Date());
+			String sqlString = sqlManager.get("orderlist_ordernum");
+			Sql sql = Sqls.create(sqlString);
+			List<Record> query = dbDao.query(sql, null, null);
+			int sum = 1;
+			if (!Util.isEmpty(query) && query.size() > 0) {
+				String string = query.get(0).getString("ordernumber");
+				int a = Integer.valueOf(string.substring(11, string.length()));
+				sum += a;
+			}
+			String sum1 = "";
+			if (sum / 10 == 0) {
+				sum1 = "000" + sum;
+			} else if (sum / 100 == 0) {
+				sum1 = "00" + sum;
+
+			} else if (sum / 1000 == 0) {
+				sum1 = "0" + sum;
+			} else {
+				sum1 = "" + sum;
+
+			}
+			String ordernum = format + "US" + sum1;
+
+			order.setOrdernumber(ordernum);
+
+			orderOld = dbDao.insert(order);
+			//根据人数插入多个申请人的数据
+			for (int i = orderOld.getHeadcount(); i > 0; i--) {
+				NewCustomerEntity c = new NewCustomerEntity();
+				c.setCreatetime(new Date());
+				c.setUpdatetime(new Date());
+				NewCustomerEntity insert = dbDao.insert(c);
+				NewCustomerOrderEntity customerOrderEntity = new NewCustomerOrderEntity();
+				customerOrderEntity.setCustomerid(insert.getId());
+				customerOrderEntity.setOrderid(orderOld.getId());
+				customerOrderEntity.setCreatetime(new Date());
+				customerOrderEntity.setUpdatetime(new Date());
+				dbDao.insert(customerOrderEntity);
+			}
+
+			//	dbDao.update(NewOrderEntity.class, Chain.make("ordernumber", ordernum), Cnd.where("id", "=", orderOld.getId()));
 		}
-		ordernum += random;
-		orderOld.setOrdernumber(ordernum);
-		dbDao.update(NewOrderEntity.class, Chain.make("ordernumber", ordernum), Cnd.where("id", "=", orderOld.getId()));
+
 		NewFastMailEntity fastMail = order.getFastMail();
 		if (!Util.isEmpty(fastMail)) {
+			if (!Util.isEmpty(fastMail.getId()) && fastMail.getId() > 0) {
+				nutDao.update(fastMail);
+			} else {
 
-			fastMail.setOrderid(orderOld.getId());
-			dbDao.insert(fastMail);
+				fastMail.setOrderid(orderOld.getId());
+				dbDao.insert(fastMail);
+			}
 		}
 		NewPayCompanyEntity payCompany = order.getPayCompany();
 		if (!Util.isEmpty(payCompany)) {
+			if (!Util.isEmpty(payCompany.getId()) && payCompany.getId() > 0) {
+				nutDao.update(payCompany);
+			} else {
 
-			payCompany.setOrderid(orderOld.getId());
-			dbDao.insert(payCompany);
+				payCompany.setOrderid(orderOld.getId());
+				dbDao.insert(payCompany);
+			}
 		}
 		NewPayPersionEntity payPersion = order.getPayPersion();
 		if (!Util.isEmpty(payPersion)) {
+			if (!Util.isEmpty(payPersion.getId()) && payPersion.getId() > 0) {
+				nutDao.update(payPersion);
+			} else {
 
-			payPersion.setOrderid(orderOld.getId());
-			dbDao.insert(payPersion);
+				payPersion.setOrderid(orderOld.getId());
+				dbDao.insert(payPersion);
+			}
 		}
 		NewTrip trip = order.getTrip();
 		if (!Util.isEmpty(trip)) {
+			if (!Util.isEmpty(trip.getId()) && trip.getId() > 0) {
+				nutDao.update(trip);
+			} else {
 
-			trip.setOrderid(orderOld.getId());
-			trip = dbDao.insert(trip);
+				trip.setOrderid(orderOld.getId());
+				trip = dbDao.insert(trip);
+			}
 		}
 		List<NewPeerPersionEntity> peerList = order.getPeerList();
 		if (!Util.isEmpty(peerList) && peerList.size() > 0) {
 
 			for (NewPeerPersionEntity newPeerPersionEntity : peerList) {
-				newPeerPersionEntity.setTripid(trip.getId());
+				if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
+					nutDao.update(newPeerPersionEntity);
+				} else {
+					newPeerPersionEntity.setTripid(trip.getId());
+					dbDao.insert(newPeerPersionEntity);
+				}
 			}
-			List<NewPeerPersionEntity> insert = dbDao.insert(peerList);
+			//List<NewPeerPersionEntity> insert = dbDao.insert(peerList);
 		}
 		return ResultObject.success("添加成功");
 	}
@@ -272,6 +357,399 @@ public class OrderController extends BaseController {
 			order.setFastMail(newFastMailEntities.get(0));
 		}
 		return order;
+	}
+
+	/**
+	//	 * 将订单完善连接分享到用户邮箱或者手机
+	//	 *
+	//	 * @param request
+	//	 * @param oid     订单ID
+	//	 */
+	@RequestMapping(value = "share")
+	@ResponseBody
+	public Object share(HttpServletRequest request, long customerid, String type) throws IOException {
+
+		/*String href = RequestUtil.getServerPath(request) + "/m/delivery.html?oid=" + oid;*/
+		NewCustomerEntity customer = null;
+		NewOrderEntity order = null;
+		long orderid = 0;
+		if ("customer".equals(type)) {
+
+			customer = dbDao.fetch(NewCustomerEntity.class, customerid);
+			List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
+					Cnd.where("customerid", "=", customerid), null);
+			orderid = query.get(0).getOrderid();
+			order = dbDao.fetch(NewOrderEntity.class, orderid);
+		}
+		List<String> lines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("mail.html"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : lines) {
+			tmp.append(line);
+		}
+		//发送邮件前进行游客信息的注册
+		String phone = customer.getPhone();
+
+		EmployeeEntity employeeEntity = new EmployeeEntity();
+		employeeEntity.setTelephone(phone);
+		employeeEntity.setUserType(UserTypeEnum.TOURIST_IDENTITY.intKey());
+		//生成六位数的随机密码
+		String pwd = "";
+		for (int i = 0; i < 6; i++) {
+			int a = (int) (Math.random() * 10);
+			pwd += a;
+
+		}
+		String temp = pwd;
+		byte[] salt = Digests.generateSalt(8);
+		employeeEntity.setSalt(Encodes.encodeHex(salt));
+		byte[] password = pwd.getBytes();
+		byte[] hashPassword = Digests.sha1(password, salt, 1024);
+		pwd = Encodes.encodeHex(hashPassword);
+		List<EmployeeEntity> query = dbDao.query(EmployeeEntity.class,
+				Cnd.where("telephone", "=", phone).and("userType", "=", UserTypeEnum.TOURIST_IDENTITY.intKey()), null);
+		employeeEntity.setPassword(pwd);
+		if (!Util.isEmpty(query) && query.size() > 0) {
+			employeeEntity.setId(query.get(0).getId());
+			try {
+				nutDao.update(employeeEntity);
+			} catch (Exception e) {
+
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
+			}
+		} else {
+
+			dbDao.insert(employeeEntity);
+		}
+
+		String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
+				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
+				.replace("${logininfo}", "用户名:" + phone + "密码:" + temp);
+		String result = mailService.send(customer.getEmail(), html, "签证资料录入", MailService.Type.HTML);
+		if ("success".equalsIgnoreCase(result)) {
+			//成功以后分享次数加1
+			dbDao.update(NewCustomerEntity.class, Chain.make("sharecount", customer.getSharecount() + 1),
+					Cnd.where("id", "=", customer.getId()));
+
+			return ResultObject.success(result);
+		} else {
+			return ResultObject.fail(result);
+		}
+	}
+
+	/**
+	//	 * 将订单完善连接分享到用户邮箱或者手机
+	//	 *批量分享每个人看见自己的
+	//	 * @param request
+	//	 * @param oid     订单ID
+	//	 */
+	@RequestMapping(value = "shareall")
+	@ResponseBody
+	public Object shareall(HttpServletRequest request, long orderid, String type) throws IOException {
+
+		NewOrderEntity order = dbDao.fetch(NewOrderEntity.class, orderid);
+		CustomerManageEntity customerManage = dbDao.fetch(CustomerManageEntity.class, order.getCus_management_id());
+		//发送邮件前进行游客信息的注册
+		String phone = customerManage.getTelephone();
+
+		String result = getMailContent(order, phone, null, customerManage);
+		if ("success".equalsIgnoreCase(result)) {
+			dbDao.update(NewOrderEntity.class, Chain.make("sharecountmany", order.getSharecountmany() + 1),
+					Cnd.where("id", "=", orderid));
+			//成功以后分享次数加1
+		}
+
+		List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
+				Cnd.where("orderid", "=", orderid), null);
+
+		for (NewCustomerOrderEntity newCustomerOrderEntity : query) {
+			NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, newCustomerOrderEntity.getCustomerid());
+
+			phone = customer.getPhone();
+
+			result = getMailContent(order, phone, customer, null);
+			if ("success".equalsIgnoreCase(result)) {
+				//成功以后分享次数加1
+				dbDao.update(NewCustomerEntity.class, Chain.make("sharecount", customer.getSharecount() + 1),
+						Cnd.where("id", "=", customer.getId()));
+			}
+
+		}
+		return ResultObject.success(result);
+	}
+
+	private String getMailContent(NewOrderEntity order, String phone, NewCustomerEntity customer,
+			CustomerManageEntity customerManage) throws IOException {
+		List<String> lines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("mail.html"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : lines) {
+			tmp.append(line);
+		}
+
+		EmployeeEntity employeeEntity = new EmployeeEntity();
+		employeeEntity.setTelephone(phone);
+		employeeEntity.setUserType(UserTypeEnum.TOURIST_IDENTITY.intKey());
+		//生成六位数的随机密码
+		String pwd = "";
+		for (int i = 0; i < 6; i++) {
+			int a = (int) (Math.random() * 10);
+			pwd += a;
+
+		}
+		byte[] salt = Digests.generateSalt(8);
+		employeeEntity.setSalt(Encodes.encodeHex(salt));
+		byte[] password = pwd.getBytes();
+		byte[] hashPassword = Digests.sha1(password, salt, 1024);
+		pwd = Encodes.encodeHex(hashPassword);
+
+		employeeEntity.setPassword(pwd);
+		List<EmployeeEntity> query = dbDao.query(EmployeeEntity.class,
+				Cnd.where("telephone", "=", phone).and("userType", "=", UserTypeEnum.TOURIST_IDENTITY.intKey()), null);
+		if (!Util.isEmpty(query) && query.size() > 0) {
+			employeeEntity.setId(query.get(0).getId());
+			nutDao.update(employeeEntity);
+		} else {
+
+			dbDao.insert(employeeEntity);
+		}
+		String name = null;
+		String email = null;
+		if (Util.isEmpty(customer)) {
+			name = customerManage.getLinkman();
+			email = customerManage.getEmail();
+		} else {
+			name = customer.getChinesexing() + customer.getChinesename();
+			email = customer.getEmail();
+		}
+		String html = tmp.toString().replace("${name}", name).replace("${oid}", order.getOrdernumber())
+				.replace("${href}", "http://www.baidu.com").replace("${logininfo}", "用户名:" + phone + "密码:" + pwd);
+		String result = mailService.send(email, html, "签证资料录入", MailService.Type.HTML);
+		return result;
+	}
+
+	/**
+	//	 * 将订单完善连接分享到用户邮箱或者手机
+	//	 *批量分享都可以看见
+	//	 * @param request
+	//	 * @param oid     订单ID
+	//	 */
+	@RequestMapping(value = "shareallothers")
+	@ResponseBody
+	public Object shareallothers(HttpServletRequest request, long orderid, String type) throws IOException {
+		List<String> lines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("mail.html"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : lines) {
+			tmp.append(line);
+		}
+
+		NewOrderEntity order = dbDao.fetch(NewOrderEntity.class, orderid);
+		CustomerManageEntity customerManage = dbDao.fetch(CustomerManageEntity.class, order.getCus_management_id());
+		//发送邮件前进行游客信息的注册
+		String phone = customerManage.getTelephone();
+		String info = "";
+		EmployeeEntity employeeEntity = new EmployeeEntity();
+		employeeEntity.setTelephone(phone);
+		info += customerManage.getLinkman() + ":" + phone;
+		employeeEntity.setUserType(UserTypeEnum.TOURIST_IDENTITY.intKey());
+		//生成六位数的随机密码
+		String pwd = "";
+		for (int i = 0; i < 6; i++) {
+			int a = (int) (Math.random() * 10);
+			pwd += a;
+
+		}
+
+		info += "密码:" + pwd + "<br/>";
+		byte[] salt = Digests.generateSalt(8);
+		employeeEntity.setSalt(Encodes.encodeHex(salt));
+		byte[] password = pwd.getBytes();
+		byte[] hashPassword = Digests.sha1(password, salt, 1024);
+		pwd = Encodes.encodeHex(hashPassword);
+		employeeEntity.setPassword(pwd);
+		List<EmployeeEntity> query2 = dbDao.query(EmployeeEntity.class,
+				Cnd.where("telephone", "=", phone).and("userType", "=", UserTypeEnum.TOURIST_IDENTITY.intKey()), null);
+		if (!Util.isEmpty(query2) && query2.size() > 0) {
+			employeeEntity.setId(query2.get(0).getId());
+			nutDao.update(employeeEntity);
+		} else {
+
+			dbDao.insert(employeeEntity);
+		}
+		//客户表开始
+
+		List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
+				Cnd.where("orderid", "=", orderid), null);
+
+		for (NewCustomerOrderEntity newCustomerOrderEntity : query) {
+			NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, newCustomerOrderEntity.getCustomerid());
+
+			phone = customer.getPhone();
+			employeeEntity = new EmployeeEntity();
+			employeeEntity.setTelephone(phone);
+			employeeEntity.setUserType(UserTypeEnum.TOURIST_IDENTITY.intKey());
+			//生成六位数的随机密码
+			info += customer.getChinesexing() + customer.getChinesefullname() + ":" + phone;
+			pwd = "";
+			for (int i = 0; i < 6; i++) {
+				int a = (int) (Math.random() * 10);
+				pwd += a;
+
+			}
+			info += "密码:" + pwd + "<br/>";
+			byte[] salt1 = Digests.generateSalt(8);
+			employeeEntity.setSalt(Encodes.encodeHex(salt1));
+			byte[] password1 = pwd.getBytes();
+			byte[] hashPassword1 = Digests.sha1(password1, salt1, 1024);
+			pwd = Encodes.encodeHex(hashPassword1);
+			employeeEntity.setPassword(pwd);
+			List<EmployeeEntity> query1 = dbDao.query(EmployeeEntity.class,
+					Cnd.where("telephone", "=", phone).and("userType", "=", UserTypeEnum.TOURIST_IDENTITY.intKey()),
+					null);
+			if (!Util.isEmpty(query1) && query1.size() > 0) {
+				employeeEntity.setId(query1.get(0).getId());
+				nutDao.update(employeeEntity);
+			} else {
+
+				dbDao.insert(employeeEntity);
+			}
+
+		}
+		//订单表联系人的发送
+
+		String html = tmp.toString().replace("${name}", customerManage.getLinkman())
+				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
+				.replace("${logininfo}", info);
+
+		String result = mailService.send(customerManage.getEmail(), html, "签证资料录入", MailService.Type.HTML);
+		if ("success".equalsIgnoreCase(result)) {
+			dbDao.update(NewOrderEntity.class, Chain.make("sharecountmany", order.getSharecountmany() + 1),
+					Cnd.where("id", "=", orderid));
+			//成功以后分享次数加1
+		}
+
+		//客户联系人的发送
+		for (NewCustomerOrderEntity newCustomerOrderEntity : query) {
+			NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, newCustomerOrderEntity.getCustomerid());
+			html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
+					.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
+					.replace("${logininfo}", info);
+
+			result = mailService.send(customer.getEmail(), html, "签证资料录入", MailService.Type.HTML);
+
+			if ("success".equalsIgnoreCase(result)) {
+				//成功以后分享次数加1
+				dbDao.update(NewCustomerEntity.class, Chain.make("sharecount", customer.getSharecount() + 1),
+						Cnd.where("id", "=", customer.getId()));
+			}
+		}
+
+		return ResultObject.success(result);
+	}
+
+	/**
+	//	 * 第二次发邮件将面签时间通知（单个通知）
+	//	 *
+	//	 * @param request
+	//	 * @param oid     订单ID
+	//	 */
+	@RequestMapping(value = "notice")
+	@ResponseBody
+	public Object notice(long customerid, String type) throws IOException {
+
+		/*String href = RequestUtil.getServerPath(request) + "/m/delivery.html?oid=" + oid;*/
+		NewCustomerEntity customer = null;
+		NewOrderEntity order = null;
+		long orderid = 0;
+		if ("customer".equals(type)) {
+
+			customer = dbDao.fetch(NewCustomerEntity.class, customerid);
+			List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
+					Cnd.where("customerid", "=", customerid), null);
+			orderid = query.get(0).getOrderid();
+			order = dbDao.fetch(NewOrderEntity.class, orderid);
+		}
+		List<String> lines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("notice.html"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : lines) {
+			tmp.append(line);
+		}
+		//发送邮件前进行游客信息的注册
+		String phone = customer.getPhone();
+
+		String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
+				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
+				.replace("${interview}", (new SimpleDateFormat("yyyy-MM-dd")).format(new Date()));
+		String result = mailService.send(customer.getEmail(), html, "签证信息通知", MailService.Type.HTML);
+		if ("success".equalsIgnoreCase(result)) {
+			//成功以后分享次数加1
+			dbDao.update(NewCustomerEntity.class, Chain.make("noticecount", customer.getSharecount() + 1),
+					Cnd.where("id", "=", customer.getId()));
+
+			return ResultObject.success(result);
+		} else {
+			return ResultObject.fail(result);
+		}
+	}
+
+	/**
+	//	 * 批量通知
+	//	 * @param request
+	//	 * @param oid     订单ID
+	//	 */
+	@RequestMapping(value = "noticeall")
+	@ResponseBody
+	public Object noticeall(long orderid, String type) throws IOException {
+		List<String> lines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("notice.html"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : lines) {
+			tmp.append(line);
+		}
+
+		NewOrderEntity order = dbDao.fetch(NewOrderEntity.class, orderid);
+		CustomerManageEntity customerManage = dbDao.fetch(CustomerManageEntity.class, order.getCus_management_id());
+		//发送邮件前进行游客信息的注册
+		String phone = customerManage.getTelephone();
+
+		List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
+				Cnd.where("orderid", "=", orderid), null);
+
+		/*for (NewCustomerOrderEntity newCustomerOrderEntity : query) {
+			NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, newCustomerOrderEntity.getCustomerid());
+
+			phone = customer.getPhone();
+
+		}*/
+		//订单表联系人的发送
+
+		String html = tmp.toString().replace("${name}", customerManage.getLinkman())
+				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
+				.replace("${interview}", (new SimpleDateFormat("yyyy-MM-dd")).format(new Date()));
+
+		String result = mailService.send(customerManage.getEmail(), html, "签证信息通知", MailService.Type.HTML);
+		if ("success".equalsIgnoreCase(result)) {
+			dbDao.update(NewOrderEntity.class, Chain.make("noticecountmany", order.getSharecountmany() + 1),
+					Cnd.where("id", "=", orderid));
+			//成功以后分享次数加1
+		}
+
+		//客户联系人的发送
+		for (NewCustomerOrderEntity newCustomerOrderEntity : query) {
+			NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, newCustomerOrderEntity.getCustomerid());
+			html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
+					.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
+					.replace("${interview}", (new SimpleDateFormat("yyyy-MM-dd")).format(new Date()));
+
+			result = mailService.send(customer.getEmail(), html, "签证信息通知", MailService.Type.HTML);
+
+			if ("success".equalsIgnoreCase(result)) {
+				//成功以后分享次数加1
+				dbDao.update(NewCustomerEntity.class, Chain.make("noticecount", customer.getSharecount() + 1),
+						Cnd.where("id", "=", customer.getId()));
+			}
+		}
+
+		return ResultObject.success(result);
 	}
 
 	private Customer contains(List<Customer> customers, Customer customer) {

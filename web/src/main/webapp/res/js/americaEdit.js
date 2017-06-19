@@ -205,18 +205,25 @@ $(function () {
     			dataType : 'json',
     			url : "/visa/order/custominfowrite",
     			success : function(data) {
-    				$("#cus_fullComName").val(data.fullComName);
-    				viewModel.set("customer.customermanage.fullComName",data.fullComName);
-    				$("#cus_linkman").val(data.linkman);
+    				//联系人
     				viewModel.set("customer.customermanage.linkman",data.linkman);
-    				viewModel.set("customer.customermanage.telephone",data.telephone);
-    				viewModel.set("customer.customermanage.email",data.email);
+    				var color = $("#cus_linkman").data("kendoMultiSelect");
+    				color.value(data.id);
+    				//公司全称
+    				viewModel.set("customer.customermanage.fullComName",data.fullComName);
+    				var color = $("#cus_fullComName").data("kendoMultiSelect");
+    				color.value(data.id);
+    				//客户来源
+    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
-    				//$("#cus_fullComName").val(data.fullComName);
+    				//电话
+    				viewModel.set("customer.customermanage.telephone",data.telephone);
+    				var color = $("#cus_phone").data("kendoMultiSelect");
+    				color.value(data.id);
+    				//邮箱
+    				viewModel.set("customer.customermanage.email",data.email);
     				var color = $("#cus_email").data("kendoMultiSelect");
     				color.value(data.id);
-    				viewModel.set("customer.customermanage.email",data.email);
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
     			},
     			error : function(xhr) {
     			}
@@ -257,18 +264,142 @@ $(function () {
     			dataType : 'json',
     			url : "/visa/order/custominfowrite",
     			success : function(data) {
-    				$("#cus_fullComName").val(data.telephone);
-    				viewModel.set("customer.customermanage.fullComName",data.fullComName);
-    				$("#cus_linkman").val(data.linkman);
+    				//联系人
     				viewModel.set("customer.customermanage.linkman",data.linkman);
-    				viewModel.set("customer.customermanage.id",data.id);
-    				$("#cus_fullComName").val(data.fullComName);
-    				viewModel.set("customer.customermanage.telephone",data.telephone);
+    				var color = $("#cus_linkman").data("kendoMultiSelect");
+    				color.value(data.id);
+    				//公司全称
+    				viewModel.set("customer.customermanage.fullComName",data.fullComName);
+    				var color = $("#cus_fullComName").data("kendoMultiSelect");
+    				color.value(data.id);
+    				//客户来源
     				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				viewModel.set("customer.customermanage.id",data.id);
+    				//电话
+    				viewModel.set("customer.customermanage.telephone",data.telephone);
     				var color = $("#cus_phone").data("kendoMultiSelect");
     				color.value(data.id);
+    				//邮箱
     				viewModel.set("customer.customermanage.email",data.email);
+    				var color = $("#cus_email").data("kendoMultiSelect");
+    				color.value(data.id);
+    				
+    			},
+    			error : function(xhr) {
+    			}
+    		});
+        	
+        	
+        	
+        	
+        	
+        }
+    });
+});
+//联系人
+
+$(function () {
+	$("#cus_linkman").kendoMultiSelect({
+    	placeholder:"请选择联系人",
+        dataTextField: "linkman",
+        dataValueField: "id",
+        dataSource: {
+            transport: {
+                read: {
+                    dataType: "json",
+                    url: "/visa/order/custominfo"
+                }
+            }
+        },
+        maxSelectedItems:1,
+        change:function(data){
+        	var cobVal = $("#cus_linkman").data("kendoMultiSelect").value();
+        	$.ajax({
+    			type : 'POST',
+    			data : {
+    				id:cobVal
+    			},
+    			dataType : 'json',
+    			url : "/visa/order/custominfowrite",
+    			success : function(data) {
+    				//联系人
+    				viewModel.set("customer.customermanage.linkman",data.linkman);
+    				var color = $("#cus_linkman").data("kendoMultiSelect");
+    				color.value(data.id);
+    				//公司全称
+    				viewModel.set("customer.customermanage.fullComName",data.fullComName);
+    				var color = $("#cus_fullComName").data("kendoMultiSelect");
+    				color.value(data.id);
+    				//客户来源
+    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				viewModel.set("customer.customermanage.id",data.id);
+    				//电话
+    				viewModel.set("customer.customermanage.telephone",data.telephone);
+    				var color = $("#cus_phone").data("kendoMultiSelect");
+    				color.value(data.id);
+    				//邮箱
     				viewModel.set("customer.customermanage.email",data.email);
+    				var color = $("#cus_email").data("kendoMultiSelect");
+    				color.value(data.id);
+    			},
+    			error : function(xhr) {
+    			}
+    		});
+        	
+        	
+        	
+        	
+        	
+        }
+    });
+});
+
+
+//公司全称
+
+$(function () {
+	$("#cus_fullComName").kendoMultiSelect({
+    	placeholder:"请选择公司全称",
+        dataTextField: "fullComName",
+        dataValueField: "id",
+        dataSource: {
+            transport: {
+                read: {
+                    dataType: "json",
+                    url: "/visa/order/custominfo"
+                }
+            }
+        },
+        maxSelectedItems:1,
+        change:function(data){
+        	var cobVal = $("#cus_fullComName").data("kendoMultiSelect").value();
+        	$.ajax({
+    			type : 'POST',
+    			data : {
+    				id:cobVal
+    			},
+    			dataType : 'json',
+    			url : "/visa/order/custominfowrite",
+    			success : function(data) {
+    				//联系人
+    				viewModel.set("customer.customermanage.linkman",data.linkman);
+    				var color = $("#cus_linkman").data("kendoMultiSelect");
+    				color.value(data.id);
+    				//公司全称
+    				viewModel.set("customer.customermanage.fullComName",data.fullComName);
+    				var color = $("#cus_fullComName").data("kendoMultiSelect");
+    				color.value(data.id);
+    				//客户来源
+    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				viewModel.set("customer.customermanage.id",data.id);
+    				//电话
+    				viewModel.set("customer.customermanage.telephone",data.telephone);
+    				var color = $("#cus_phone").data("kendoMultiSelect");
+    				color.value(data.id);
+    				//邮箱
+    				viewModel.set("customer.customermanage.email",data.email);
+    				var color = $("#cus_email").data("kendoMultiSelect");
+    				color.value(data.id);
     			},
     			error : function(xhr) {
     			}
@@ -285,27 +416,29 @@ $(function () {
 //信息保存
 
 function ordersave(){
-	   
-    $.ajax({
-        type: "POST",
-        url: "/visa/order/orderSave",
-        contentType: "application/json",
-        dataType: "json",
-        data: JSON.stringify(viewModel.customer),
-        success: function (result) {
-        	  console.log(result.code);
-            if(result.code=="SUCCESS"){
-            	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-            	//$.layer.closeAll();
-            	parent.layer.close(index);
-            	window.parent.successCallback('1');
-            	
-            }
-        }
-    });
+	
+		 
+		 $.ajax({
+			 type: "POST",
+			 url: "/visa/order/orderSave",
+			 contentType: "application/json",
+			 dataType: "json",
+			 data: JSON.stringify(viewModel.customer),
+			 success: function (result) {
+				 console.log(result.code);
+				 if(result.code=="SUCCESS"){
+					 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+					 //$.layer.closeAll();
+					 parent.layer.close(index);
+					 window.parent.successCallback('1');
+					 
+				 }
+			 }
+		 });
+	 
 }
 
-
+var validator = $("#orderForm").kendoValidator().data("kendoValidator");
 $(function () {
     //如果有传递ID就是修改
     var oid = $.queryString("cid");
@@ -318,9 +451,12 @@ $(function () {
 			color.value(resp.customermanage.id);
         	var color = $("#cus_email").data("kendoMultiSelect");
 			color.value(resp.customermanage.id);
+			var color = $("#cus_fullComName").data("kendoMultiSelect");
+			color.value(resp.customermanage.id);
+			var color = $("#cus_linkman").data("kendoMultiSelect");
+			color.value(resp.customermanage.id);
         });
     }
-    console.log(JSON.stringify(viewModel.customer));
     //折叠面板的显隐切换
     /*$(document).on("click", ".k-link", function () {
         $(this).find(".k-icon").toggleClass("k-i-arrow-60-down k-i-arrow-n");
