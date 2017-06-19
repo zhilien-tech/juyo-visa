@@ -1,22 +1,21 @@
 package io.znz.jsite.core.web;
 
 import io.znz.jsite.base.BaseController;
+import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.enums.UserLoginEnum;
-import io.znz.jsite.ext.shiro.CaptchaException;
-import io.znz.jsite.ext.shiro.UsernamePasswordCaptchaToken;
-import io.znz.jsite.util.IPUtil;
 import io.znz.jsite.util.StringUtils;
+import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.util.SavedRequest;
 import org.apache.shiro.web.util.WebUtils;
+import org.nutz.dao.Cnd;
+import org.nutz.dao.Dao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
-import com.alibaba.fastjson.JSON;
+import com.uxuexi.core.common.util.Util;
+import com.uxuexi.core.db.dao.IDbDao;
 
 /**
  * 登录controller
@@ -35,6 +35,14 @@ import com.alibaba.fastjson.JSON;
 @Controller
 @Qualifier("loginController")
 public class LoginController extends BaseController {
+
+	@Autowired
+	protected IDbDao dbDao;
+
+	@Autowired
+	protected Dao nutDao;
+
+	public static final int HASH_INTERATIONS = 1024;
 
 	/**
 	 * 登录页面.这页面不是实际的登录页,而是按照不同的规则进行跳转以达到多登录页的效果
@@ -65,7 +73,7 @@ public class LoginController extends BaseController {
 			@RequestParam(value = FormAuthenticationFilter.DEFAULT_REMEMBER_ME_PARAM, required = false) boolean rememberMe,
 			@RequestParam(required = false) String captcha, HttpServletRequest request, RedirectAttributesModelMap model) {
 		//获取Shiro自动保存的跳转
-		SavedRequest savedRequest = WebUtils.getSavedRequest(request);
+		/*SavedRequest savedRequest = WebUtils.getSavedRequest(request);
 		if (savedRequest != null && StringUtils.isNotBlank(savedRequest.getRequestUrl())) {
 			to = savedRequest.getRequestUrl();
 		}
@@ -102,11 +110,32 @@ public class LoginController extends BaseController {
 				login = request.getHeader("referer");
 			}
 			return "redirect:" + login;
+		}*/
+		EmployeeEntity fetch = dbDao.fetch(EmployeeEntity.class, Cnd.where("telephone", "=", username));
+		Integer userType = fetch.getUserType();//得到用户类型
+		String telephone = fetch.getTelephone();
+		String pwd = fetch.getPassword();
+		String slt = fetch.getSalt();
+
+		byte[] salt = Encodes.decodeHex(slt);
+		byte[] password2 = password.getBytes();
+		byte[] hashPassword = Digests.sha1(password2, salt, HASH_INTERATIONS);
+		String newpass = Encodes.encodeHex(hashPassword);
+		System.out.println(newpass);
+		if (!username.equals(telephone)) {
+			model.addFlashAttribute("error", "用户名不正确，请重新输入！");
+		} else if (!newpass.equals(pwd)) {
+			model.addFlashAttribute("error", "密码有误,请重新输入！");
 		}
-		if (UserLoginEnum.PERSONNEL.intKey() == logintype) {//工作人员登录
-			return "redirect:" + to;
-		} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype) {//游客身份登录
-			return "redirect:" + to;
+		if (!Util.isEmpty(fetch)) {
+			if (username.equals(telephone) && newpass.equals(pwd)) {
+				if (UserLoginEnum.PERSONNEL.intKey() == logintype && UserLoginEnum.PERSONNEL.intKey() == userType) {//工作人员登录
+					return "redirect:" + to;
+				} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype
+						&& UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {//游客身份登录
+					return "redirect:" + to;
+				}
+			}
 		}
 		return "redirect:" + login;
 	}

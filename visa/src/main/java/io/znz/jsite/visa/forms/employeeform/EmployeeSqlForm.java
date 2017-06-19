@@ -57,6 +57,8 @@ public class EmployeeSqlForm extends KenDoParamForm {
 	private Date updateTime;
 	//备注
 	private String remark;
+	//盐
+	private String salt;
 
 	@Override
 	public Sql sql(SqlManager paramSqlManager) {

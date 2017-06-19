@@ -38,8 +38,8 @@ import com.uxuexi.core.web.util.FormUtil;
 public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 
 	public static final int HASH_INTERATIONS = 1024;
-	private static final String SALT_SIZE = "8"; //盐长度
-	private static final String INIT_PASSWORD = "123456"; //初始密码
+	private static final int SALT_SIZE = 8; //盐长度
+	private static final String INIT_PASSWORD = "000000"; //初始密码
 
 	/**
 	 * 添加员工操作
@@ -51,7 +51,8 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 		addForm.setUserType(UserTypeEnum.PERSONNEL.intKey());//工作人员身份
 		addForm.setDisableUserStatus(UserStatusEnum.VALID.intKey());//激活
 		//初始密码
-		byte[] salt = SALT_SIZE.getBytes();
+		byte[] salt = Digests.generateSalt(SALT_SIZE);
+		addForm.setSalt(Encodes.encodeHex(salt));
 		byte[] password = INIT_PASSWORD.getBytes();
 		byte[] hashPassword = Digests.sha1(password, salt, HASH_INTERATIONS);
 		addForm.setPassword(Encodes.encodeHex(hashPassword));
@@ -119,11 +120,14 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 	 */
 	public boolean initpassword(long userId) {
 		if (!Util.isEmpty(userId)) {
-			byte[] salt = SALT_SIZE.getBytes();
+			//EmployeeEntity fetch = dbDao.fetch(EmployeeEntity.class, userId);
+			byte[] slt = Digests.generateSalt(SALT_SIZE);
+			String salt = Encodes.encodeHex(slt);
 			byte[] password = INIT_PASSWORD.getBytes();
-			byte[] hashPassword = Digests.sha1(password, salt, HASH_INTERATIONS);
+			byte[] hashPassword = Digests.sha1(password, slt, HASH_INTERATIONS);
 			String encodeHex = Encodes.encodeHex(hashPassword);
-			dbDao.update(EmployeeEntity.class, Chain.make("password", encodeHex), Cnd.where("id", "=", userId));
+			dbDao.update(EmployeeEntity.class, Chain.make("password", encodeHex).add("salt", salt),
+					Cnd.where("id", "=", userId));
 		}
 		return true;
 	}
