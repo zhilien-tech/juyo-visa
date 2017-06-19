@@ -4,7 +4,7 @@
  * Copyright (c) 2017, 北京科技有限公司版权所有.
 */
 
-package test;
+package test.pdf;
 
 import java.io.FileOutputStream;
 
@@ -14,7 +14,7 @@ import com.lowagie.text.pdf.PdfImportedPage;
 import com.lowagie.text.pdf.PdfReader;
 
 /**
- * TODO(这里用一句话描述这个类的作用)
+ * 使用iTextPdf技术将不同的pdf进行合并,所给文件路径顺序不同在合并之后的文件中内容所处位置不同
  * @author   崔建斌
  * @Date	 2017年6月14日 	 
  */

@@ -4,7 +4,7 @@
  * Copyright (c) 2017, 北京科技有限公司版权所有.
 */
 
-package test;
+package test.pdf;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.util.PDFMergerUtility;
 
 /**
- * 测试将pdf文件合并
+ * 使用pdfbox技术将同一个目录下的多个pdf文件进行合并
  * @author   崔建斌
  * @Date	 2017年6月14日 	 
  */

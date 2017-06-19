@@ -52,7 +52,7 @@ public class EmployeeUpdateForm extends ModForm {
 	//备注
 	private String remark;
 	//预留字段1
-	private String res1;
+	private String salt;
 	//预留字段2
 	private String res2;
 	//预留字段3

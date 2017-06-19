@@ -4,7 +4,7 @@
  * Copyright (c) 2017, 北京科技有限公司版权所有.
 */
 
-package test;
+package test.pdf;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

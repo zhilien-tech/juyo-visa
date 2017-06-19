@@ -226,7 +226,7 @@ $("#has_immediate_relatives").change(function () {
     }
 });
 $("#other_relatives").change(function () {
-	viewModel.set("customer.friendinusa", $(this).is(':checked'));
+	viewModel.set("customer.relation.indirect", $(this).is(':checked'));
 });
 /*****************************************************
  * 美国相关信息
