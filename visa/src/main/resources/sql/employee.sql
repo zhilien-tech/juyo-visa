@@ -17,7 +17,7 @@ SELECT
 	ve.updateTime,
 	ve.remark,
 	ve.salt,
-	ve.res2,
+	ve.countryType,
 	ve.res3,
 	ve.res4,
 	ve.res5
