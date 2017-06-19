@@ -51,10 +51,10 @@ public class EmployeeUpdateForm extends ModForm {
 	private Date updateTime;
 	//备注
 	private String remark;
-	//预留字段1
+	//盐值
 	private String salt;
-	//预留字段2
-	private String res2;
+	//国家类型
+	private Integer countryType;
 	//预留字段3
 	private String res3;
 	//预留字段4
