@@ -6,6 +6,8 @@
 
 package io.znz.jsite.visa.entity.usa;
 
+import java.util.Date;
+
 import lombok.Data;
 
 import org.nutz.dao.entity.annotation.Column;
@@ -33,4 +35,8 @@ public class NewCustomerOrderEntity {
 	private int orderid;
 	@Column
 	private int customerid;
+	@Column
+	private Date createtime;
+	@Column
+	private Date updatetime;
 }

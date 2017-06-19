@@ -14,12 +14,6 @@ function translateZhToEn(from, to) {
 
 
 
-
-
-
-
-
-
 var countries = new kendo.data.DataSource({
         transport: {
             read: {
@@ -117,7 +111,8 @@ var viewModel = kendo.observable({
     },
     // 婚姻状态
     spouseState: function (state) {
-        return state.indexOf(viewModel.get("customer.spouse.marrystatus")) > -1;
+    	var marriage = viewModel.get("customer.spouse.marrystatus");
+    	return state.indexOf(marriage) > -1;
     },
     //是否与配偶一起
     sameAsMe: function () {
@@ -164,7 +159,8 @@ var viewModel = kendo.observable({
     	var schools = viewModel.get("customer.army");
         var state = schools ? schools.length > 0 : false;
         return state;
-    },*///工作信息详情
+    },*/
+    //工作信息详情
     hasWorkDetail: function (state) {
         var industry = viewModel.get("customer.workinfo.jobstatus");
         return !(industry === "S" || industry === "RT" || industry === "N");
@@ -190,7 +186,7 @@ var viewModel = kendo.observable({
     },
     showToolBar: function () {
         return $.queryString("check");
-    }/*,
+    },
     // 旧护照
     oldPassportEnable: function () {
         return viewModel.get("customer.passportlose");
@@ -204,10 +200,53 @@ var viewModel = kendo.observable({
         var otherCountry = viewModel.get("customer.orthercountrylist");
         var state = otherCountry ? otherCountry.length > 0 : false;
         return state;
-    }*/
+    }
     
 });
 kendo.bind($(document.body), viewModel);
+
+
+
+
+//丢过护照
+$("#pp_lost").change(function () {
+    if ($(this).is(':checked')) {
+    	viewModel.add("customer.passportlose");
+    } else {
+    	viewModel.clear("customer.passportlose");
+    }
+});
+//曾用名
+$("#has_used_name").change(function () {
+    if ($(this).is(':checked')) {
+    	viewModel.add("customer.oldname");
+    } else {
+    	viewModel.clear("customer.oldname");
+    }
+});
+//其他国家居民
+$("#has_pr").change(function () {
+    if ($(this).is(':checked')) {
+    	viewModel.addOne("customer.orthercountrylist");
+    } else {
+    	viewModel.clearAll("customer.orthercountrylist");
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*****************************************************
@@ -288,3 +327,53 @@ $("#join_army").change(function () {
     	viewModel.clear("customer.army");
     }
 });
+
+
+
+
+
+//信息保存
+
+function customersave(){
+	console.log(JSON.stringify(viewModel.customer));
+    $.ajax({
+        type: "POST",
+        url: "/visa/newcustomer/customerSave",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify(viewModel.customer),
+        success: function (result) {
+        	  console.log(result.code);
+            if(result.code=="SUCCESS"){
+            	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            	//$.layer.closeAll();
+            	parent.layer.close(index);
+            	window.parent.successCallback('1');
+            	
+            }
+        }
+    });
+}
+$(function () {
+    //如果有传递ID就是修改
+    var oid = $.queryString("cid");
+    if (oid) {
+        $.getJSON("/visa/newcustomer/showDetail?customerid=" + oid, function (resp) {
+        	viewModel.set("customer", $.extend(true, dafaults, resp));
+        /*	dafaults.customermanage.telephone=resp.customermanage.telephone;
+        	dafaults.customermanage.email=resp.customermanage.email;
+        	var color = $("#cus_phone").data("kendoMultiSelect");
+			color.value(resp.customermanage.id);
+        	var color = $("#cus_email").data("kendoMultiSelect");
+			color.value(resp.customermanage.id);*/
+        });
+    }
+   /* console.log(JSON.stringify(viewModel.customer));*/
+    //折叠面板的显隐切换
+    /*$(document).on("click", ".k-link", function () {
+        $(this).find(".k-icon").toggleClass("k-i-arrow-60-down k-i-arrow-n");
+        $(this).next().toggle();
+    });*/
+   
+});
+

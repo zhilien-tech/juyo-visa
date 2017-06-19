@@ -17,6 +17,7 @@ import io.znz.jsite.visa.entity.customer.NewWorkedplaceEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkinfoEntity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import lombok.Data;
@@ -31,6 +32,8 @@ import org.nutz.dao.entity.annotation.Table;
 public class NewCustomerEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id(auto = true)
+	@Column
+	@Comment("主键")
 	private Integer id;
 
 	@Column
@@ -62,11 +65,11 @@ public class NewCustomerEntity implements Serializable {
 
 	@Column
 	@Comment("护照签发日期")
-	private String passportsenddate;
+	private Date passportsenddate;
 
 	@Column
 	@Comment("护照有效日期")
-	private String passporteffectdate;
+	private Date passporteffectdate;
 
 	@Column
 	@Comment("护照签发省份")
@@ -138,11 +141,11 @@ public class NewCustomerEntity implements Serializable {
 
 	@Column
 	@Comment("创建时间")
-	private String createtime;
+	private Date createtime;
 
 	@Column
 	@Comment("修改时间")
-	private String updatetime;
+	private Date updatetime;
 
 	@Column
 	@Comment("状态")
