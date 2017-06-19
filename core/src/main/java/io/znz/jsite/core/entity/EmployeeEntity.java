@@ -76,8 +76,8 @@ public class EmployeeEntity {
 	@Comment("盐")
 	private String salt;
 	@Column
-	@Comment("预留字段2")
-	private String res2;
+	@Comment("国家类型")
+	private Integer countryType;
 	@Column
 	@Comment("预留字段3")
 	private String res3;

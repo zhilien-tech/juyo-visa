@@ -6,8 +6,8 @@
 
 package io.znz.jsite.visa.web;
 
-import java.util.Calendar;
-import java.util.Date;
+import io.znz.jsite.util.security.Digests;
+import io.znz.jsite.util.security.Encodes;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -18,19 +18,19 @@ import java.util.Date;
  * @Date	 2017年6月14日 	 
  */
 public class Test {
+	public static final String HASH_ALGORITHM = "SHA-1";
+	public static final int HASH_INTERATIONS = 1024;
+	private static final int SALT_SIZE = 8; //盐长度
+
 	public static void main(String[] args) {
-		//生成订单号
-		Date date = new Date();
-		Calendar now = Calendar.getInstance();
-		now.setTime(new Date());
-		String ordernum = "" + now.get(Calendar.YEAR) + (now.get(Calendar.MONTH) + 1) + now.get(Calendar.DAY_OF_MONTH)
-				+ "000" + 56;
-		String random = "";
-		for (int i = 0; i < 16 - ordernum.length(); i++) {
-			int a = (int) (Math.random() * 10);
-			random = random + a;
-		}
-		ordernum += random;
-		System.out.println(ordernum);
+		//		byte[] salt = Digests.generateSalt(SALT_SIZE);
+		byte[] salt = Encodes.decodeHex("93219f213a6a0f27");
+
+		System.out.println(new String(salt));
+		Encodes.encodeHex(salt);
+
+		byte[] hashPassword = Digests.sha1("123456".getBytes(), salt, HASH_INTERATIONS);
+		String pwd = Encodes.encodeHex(hashPassword);
+		System.out.println(pwd);
 	}
 }

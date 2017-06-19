@@ -5,12 +5,30 @@ var countrylist=[
    
     
   ];
+//性别
+var genderlist=[
+                 {text:"男",value:1},
+                 {text:"女",value:0},
+                 
+                 
+                 ];
 //状态listorder
 var statuslist=[
-    {text:"草稿",value:0},
-    {text:"提交中",value:1},
-    {text:"同意",value:2},
-    {text:"拒绝",value:3}
+    {text:"下单",value:0},
+    {text:"已分享",value:1},
+    {text:"资料填写",value:2},
+    {text:"初审",value:3},
+    {text:"通过",value:4},
+    {text:"拒绝",value:5},
+    {text:"代送",value:6},
+    {text:"DS-160",value:7},
+    {text:"准备提交使馆",value:8},
+    {text:"已提交使馆",value:9},
+    {text:"约签",value:10},
+    {text:"返回",value:11},
+    {text:"拒签",value:12},
+    {text:"完成",value:13},
+    {text:"EVUS",value:14}
     
   ];
 //注册命令
@@ -30,20 +48,93 @@ function regCmd(command) {
             switch (command) {
                 case "share":
                     if (!(data = select(e))) return;
-                    $.getJSON("/visa/order/share/" + data.id, {}, function (resp) {
+                    var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+                    $.getJSON("/visa/order/share?type=customer&customerid=" + data.id, {}, function (resp) {
                         if (resp.code === "SUCCESS") {
-                            $.layer.confirm('发送成功，打开预览？', {
+                			if(index!=null){
+        						
+            					layer.close(index);
+            					}
+                           /* $.layer.confirm('发送成功，打开预览？', {
                                 btn: ['预览', '关闭']
                             }, function (index, layero) {
                                 window.open(resp.data);
                             }, function (index) {
                                 $.layer.closeAll();
-                            });
+                            });*/
+                        	layer.msg("分享成功",{time: 2000});
                         } else {
                             $.layer.alert(resp.msg);
                         }
                     });
                     break;
+                case "notice":
+                	if (!(data = select(e))) return;
+                	 var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+                	$.getJSON("/visa/order/notice?type=customer&customerid=" + data.id, {}, function (resp) {
+                		if (resp.code === "SUCCESS") {
+                			if(index!=null){
+        						
+            					layer.close(index);
+            					}
+                			/* $.layer.confirm('发送成功，打开预览？', {
+                                btn: ['预览', '关闭']
+                            }, function (index, layero) {
+                                window.open(resp.data);
+                            }, function (index) {
+                                $.layer.closeAll();
+                            });*/
+                			layer.msg("通知成功",{time: 2000});
+                		} else {
+                			$.layer.alert(resp.msg);
+                		}
+                	});
+                	break;
+                case "shareall":
+                	if (!(data = select(e))) return;
+                	 var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+                	$.getJSON("/visa/order/shareallothers?type=order&orderid=" + data.id, {}, function (resp) {
+                		if (resp.code === "SUCCESS") {
+                			if(index!=null){
+        						
+            					layer.close(index);
+            					}
+                			/*$.layer.confirm('发送成功，打开预览？', {
+                				btn: ['预览', '关闭']
+                			}, function (index, layero) {
+                				window.open(resp.data);
+                			}, function (index) {
+                				$.layer.closeAll();
+                			});*/
+                			
+                			 layer.msg("分享成功",{time: 2000});
+                		} else {
+                			$.layer.alert(resp.msg);
+                		}
+                	});
+                	break;
+                case "noticeall":
+                	if (!(data = select(e))) return;
+                	 var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+                	$.getJSON("/visa/order/noticeall?type=order&orderid=" + data.id, {}, function (resp) {
+                		if (resp.code === "SUCCESS") {
+                			if(index!=null){
+        						
+            					layer.close(index);
+            					}
+                			/*$.layer.confirm('发送成功，打开预览？', {
+                				btn: ['预览', '关闭']
+                			}, function (index, layero) {
+                				window.open(resp.data);
+                			}, function (index) {
+                				$.layer.closeAll();
+                			});*/
+                			layer.msg("通知成功",{time: 2000});
+                		} else {
+                			$.layer.alert(resp.msg);
+                		}
+                	});
+                	break;
                 case "modify":
                     var data = grid.dataItem($(e.currentTarget).closest("tr"));
                     layer.open({
@@ -55,7 +146,9 @@ function regCmd(command) {
                     });
                     break;
                 case "customerEdit":
-                	var data = grid.dataItem($(e.currentTarget).closest("tr"));
+                	/*var data = grid.dataItem($(e.currentTarget).closest("tr"));*/
+                	/*var data = a.dataItem($(e.currentTarget).closest("tr"));*/
+                	   if (!(data = select(e))) return;
                 	layer.open({
                 		type: 2,
                 		title: '编辑客户信息',
@@ -91,8 +184,9 @@ function download(cid) {
         }
     });
 }
+var a;
 function detailInit(e) {
-    $("<div/>").appendTo(e.detailCell).kendoGrid({
+    a=$("<div/>").appendTo(e.detailCell).kendoGrid({
         scrollable: false,
         dataSource: {
             transport: {
@@ -117,20 +211,20 @@ function detailInit(e) {
             {field: 'chinesefullname',title: '姓名'},
             {field: 'phone', title: '电话'},
             {field: 'passport', title: '护照号'},
-            {field: 'gender', title: '性别', width: 60},
+            {field: 'gender', title: '性别', width: 60,values:genderlist},
             {field: 'sendtime', title: '送签时间',format: "{0: yyyy-MM-dd}"},
             {field: 'outtime', title: '出签时间',format: "{0: yyyy-MM-dd}"},
             {field: 'status', title: ' 状态',values:statuslist},
-            {
+            { 
                 title: "操作", width: 308,
                 command: [
                     {name: "customerEdit", imageClass: "base fa-pencil", text: "编辑"},
                     {name: " ", imageClass: "base fa-send", text: "递送"},
-                    {name: " ", imageClass: "base fa-share-alt", text: "分享"},
-                    {name: " ", imageClass: "base fa-bell-o", text: "通知"},
+                    {name: "share", imageClass: "base fa-share-alt", text: "分享"},//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
+                    {name: "notice", imageClass: "base fa-bell-o", text: "通知"},
                     regCmd("customerEdit"),
-                    regCmd(" "),
-                    regCmd(" "),
+                    regCmd("share"),
+                    regCmd("notice"),
                     regCmd(" "),
                 ],
             },
@@ -222,11 +316,11 @@ var grid = $("#grid").kendoGrid({
             title: "操作", width: 320,
             command: [
                 {name: "modify", imageClass: "base fa-pencil orange", text: " 编辑"},
-                {name: "share", imageClass: "base fa-share-alt green", text: "批量分享"},
-                {name: " ", imageClass: "base fa-bell-o green", text: "批量约签通知"},
+                {name: "shareall", imageClass: "base fa-share-alt green", text: "批量分享"},
+                {name: "noticeall", imageClass: "base fa-bell-o green", text: "批量约签通知"},
                 regCmd("modify"),
-                regCmd("share"),
-                regCmd(" "),
+                regCmd("shareall"),
+                regCmd("noticeall"),
             ]
         }
     ]

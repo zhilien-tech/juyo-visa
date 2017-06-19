@@ -14,7 +14,7 @@ import com.uxuexi.core.common.enums.IEnum;
  * @Date	 2017年6月11日 	 
  */
 public enum OrderVisaCountryTypeEnum implements IEnum {
-	USA(0, "美国"), UK(1, "英国");
+	USA(0, "美国"), JP(1, "日本");
 	private int key;
 	private String value;
 

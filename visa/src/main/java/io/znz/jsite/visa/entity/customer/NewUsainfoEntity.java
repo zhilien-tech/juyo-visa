@@ -20,6 +20,9 @@ public class NewUsainfoEntity implements Serializable {
 	@Column
 	@Comment("美国驾照号")
 	private String usadriveport;
+	@Column
+	@Comment("客户id")
+	private Integer customerid;
 
 	@Column
 	@Comment("驾照签发地")
