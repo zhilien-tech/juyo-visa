@@ -14,12 +14,6 @@ function translateZhToEn(from, to) {
 
 
 
-
-
-
-
-
-
 var countries = new kendo.data.DataSource({
         transport: {
             read: {
@@ -117,7 +111,8 @@ var viewModel = kendo.observable({
     },
     // 婚姻状态
     spouseState: function (state) {
-        return state.indexOf(viewModel.get("customer.spouse.marrystatus")) > -1;
+    	var marriage = viewModel.get("customer.spouse.marrystatus");
+    	return state.indexOf(marriage) > -1;
     },
     //是否与配偶一起
     sameAsMe: function () {
@@ -164,7 +159,8 @@ var viewModel = kendo.observable({
     	var schools = viewModel.get("customer.army");
         var state = schools ? schools.length > 0 : false;
         return state;
-    },*///工作信息详情
+    },*/
+    //工作信息详情
     hasWorkDetail: function (state) {
         var industry = viewModel.get("customer.workinfo.jobstatus");
         return !(industry === "S" || industry === "RT" || industry === "N");
@@ -380,5 +376,4 @@ $(function () {
     });*/
    
 });
-
 

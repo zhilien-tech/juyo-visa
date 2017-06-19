@@ -16,7 +16,7 @@ SELECT
 	ve.createTime,
 	ve.updateTime,
 	ve.remark,
-	ve.res1,
+	ve.salt,
 	ve.res2,
 	ve.res3,
 	ve.res4,
