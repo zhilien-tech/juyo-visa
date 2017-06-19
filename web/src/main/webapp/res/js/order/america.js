@@ -220,7 +220,8 @@ function detailInit(e) {
                 command: [
                     {name: "customerEdit", imageClass: "base fa-pencil", text: "编辑"},
                     {name: " ", imageClass: "base fa-send", text: "递送"},
-                    {name: "share", imageClass: "base fa-share-alt", text: "分享"},//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
+                    {name: "share", imageClass: "base fa-share-alt", text: "分享"	
+                    },//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
                     {name: "notice", imageClass: "base fa-bell-o", text: "通知"},
                     regCmd("customerEdit"),
                     regCmd("share"),

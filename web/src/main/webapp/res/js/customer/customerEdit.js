@@ -189,7 +189,9 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-        return viewModel.get("customer.passportlose");
+    	//alert(111);
+       // return viewModel.get("customer.passportlose");
+    	return true;
     },
     // 曾用名
     oldNameEnable: function () {
@@ -211,6 +213,7 @@ kendo.bind($(document.body), viewModel);
 //丢过护照
 $("#pp_lost").change(function () {
     if ($(this).is(':checked')) {
+    	alert($(this).is(':checked'));
     	viewModel.add("customer.passportlose");
     } else {
     	viewModel.clear("customer.passportlose");
