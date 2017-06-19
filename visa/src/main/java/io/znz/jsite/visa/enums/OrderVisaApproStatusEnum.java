@@ -16,7 +16,7 @@ import com.uxuexi.core.common.enums.IEnum;
 public enum OrderVisaApproStatusEnum implements IEnum {
 	placeOrder(0, "下单"), shared(1, "已分享"), writeInfo(2, "资料填写"), firstReview(3, "初审"), agree(4, "通过"), refuse(5, "拒绝"), waitingSend(
 			6, "代送"), DS(7, "DS-160"), readySubmit(8, "准备提交使馆"), submited(9, "已提交使馆"), yueVisa(10, "约签"), Return(11,
-			"返回"), refuseVisa(12, "拒签"), complete(13, "返回"), EVUS(14, "EVUS");
+			"返回"), refuseVisa(12, "拒签"), complete(13, "完成"), EVUS(14, "EVUS");
 	private int key;
 	private String value;
 

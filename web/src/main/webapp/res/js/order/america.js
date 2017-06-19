@@ -5,12 +5,30 @@ var countrylist=[
    
     
   ];
+//性别
+var genderlist=[
+                 {text:"男",value:1},
+                 {text:"女",value:0},
+                 
+                 
+                 ];
 //状态listorder
 var statuslist=[
-    {text:"草稿",value:0},
-    {text:"提交中",value:1},
-    {text:"同意",value:2},
-    {text:"拒绝",value:3}
+    {text:"下单",value:0},
+    {text:"已分享",value:1},
+    {text:"资料填写",value:2},
+    {text:"初审",value:3},
+    {text:"通过",value:4},
+    {text:"拒绝",value:5},
+    {text:"代送",value:6},
+    {text:"DS-160",value:7},
+    {text:"准备提交使馆",value:8},
+    {text:"已提交使馆",value:9},
+    {text:"约签",value:10},
+    {text:"返回",value:11},
+    {text:"拒签",value:12},
+    {text:"完成",value:13},
+    {text:"EVUS",value:14}
     
   ];
 //注册命令
@@ -183,8 +201,6 @@ function detailInit(e) {
 //          data: "content",
 //          total: "totalElements",
         	data : function(d) {
-        		alert(111);
-        		console.log(d.list);
 	              return d.list;  //响应到页面的数据
 	          },
 	          total : function(d) {
@@ -195,16 +211,16 @@ function detailInit(e) {
             {field: 'chinesefullname',title: '姓名'},
             {field: 'phone', title: '电话'},
             {field: 'passport', title: '护照号'},
-            {field: 'gender', title: '性别', width: 60},
+            {field: 'gender', title: '性别', width: 60,values:genderlist},
             {field: 'sendtime', title: '送签时间',format: "{0: yyyy-MM-dd}"},
             {field: 'outtime', title: '出签时间',format: "{0: yyyy-MM-dd}"},
             {field: 'status', title: ' 状态',values:statuslist},
-            {
+            { 
                 title: "操作", width: 308,
                 command: [
                     {name: "customerEdit", imageClass: "base fa-pencil", text: "编辑"},
                     {name: " ", imageClass: "base fa-send", text: "递送"},
-                    {name: "share", imageClass: "base fa-share-alt", text: "分享"},
+                    {name: "share", imageClass: "base fa-share-alt", text: "分享"},//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
                     {name: "notice", imageClass: "base fa-bell-o", text: "通知"},
                     regCmd("customerEdit"),
                     regCmd("share"),

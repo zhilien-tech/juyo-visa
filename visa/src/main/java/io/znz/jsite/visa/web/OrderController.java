@@ -6,7 +6,6 @@ import io.znz.jsite.core.service.MailService;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 import io.znz.jsite.visa.bean.Customer;
-import io.znz.jsite.visa.entity.customer.CustomerEntity;
 import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerOrderEntity;
@@ -123,7 +122,7 @@ public class OrderController extends BaseController {
 		String sqlString = sqlManager.get("customer_list");
 		Sql sql = Sqls.create(sqlString);
 		sql.setParam("orderId", orderId);
-		List<CustomerEntity> query = DbSqlUtil.query(dbDao, CustomerEntity.class, sql);
+		List<NewCustomerEntity> query = DbSqlUtil.query(dbDao, NewCustomerEntity.class, sql);
 		return query;
 	}
 
@@ -197,6 +196,7 @@ public class OrderController extends BaseController {
 				//根据人数插入多个申请人的数据
 				for (int i = a; i > 0; i--) {
 					NewCustomerEntity c = new NewCustomerEntity();
+					c.setStatus(OrderVisaApproStatusEnum.writeInfo.intKey());
 					c.setCreatetime(new Date());
 					c.setUpdatetime(new Date());
 					NewCustomerEntity insert = dbDao.insert(c);
@@ -257,10 +257,12 @@ public class OrderController extends BaseController {
 				NewCustomerEntity c = new NewCustomerEntity();
 				c.setCreatetime(new Date());
 				c.setUpdatetime(new Date());
+				c.setStatus(OrderVisaApproStatusEnum.writeInfo.intKey());
 				NewCustomerEntity insert = dbDao.insert(c);
 				NewCustomerOrderEntity customerOrderEntity = new NewCustomerOrderEntity();
 				customerOrderEntity.setCustomerid(insert.getId());
 				customerOrderEntity.setOrderid(orderOld.getId());
+
 				customerOrderEntity.setCreatetime(new Date());
 				customerOrderEntity.setUpdatetime(new Date());
 				dbDao.insert(customerOrderEntity);
@@ -429,8 +431,10 @@ public class OrderController extends BaseController {
 		String result = mailService.send(customer.getEmail(), html, "签证资料录入", MailService.Type.HTML);
 		if ("success".equalsIgnoreCase(result)) {
 			//成功以后分享次数加1
-			dbDao.update(NewCustomerEntity.class, Chain.make("sharecount", customer.getSharecount() + 1),
-					Cnd.where("id", "=", customer.getId()));
+			dbDao.update(
+					NewCustomerEntity.class,
+					Chain.make("sharecount", customer.getSharecount() + 1).add("status",
+							OrderVisaApproStatusEnum.shared.intKey()), Cnd.where("id", "=", customer.getId()));
 
 			return ResultObject.success(result);
 		} else {
@@ -623,8 +627,10 @@ public class OrderController extends BaseController {
 
 		String result = mailService.send(customerManage.getEmail(), html, "签证资料录入", MailService.Type.HTML);
 		if ("success".equalsIgnoreCase(result)) {
-			dbDao.update(NewOrderEntity.class, Chain.make("sharecountmany", order.getSharecountmany() + 1),
-					Cnd.where("id", "=", orderid));
+			dbDao.update(
+					NewOrderEntity.class,
+					Chain.make("sharecountmany", order.getSharecountmany() + 1).add("status",
+							OrderVisaApproStatusEnum.shared.intKey()), Cnd.where("id", "=", orderid));
 			//成功以后分享次数加1
 		}
 
@@ -639,8 +645,10 @@ public class OrderController extends BaseController {
 
 			if ("success".equalsIgnoreCase(result)) {
 				//成功以后分享次数加1
-				dbDao.update(NewCustomerEntity.class, Chain.make("sharecount", customer.getSharecount() + 1),
-						Cnd.where("id", "=", customer.getId()));
+				dbDao.update(
+						NewCustomerEntity.class,
+						Chain.make("sharecount", customer.getSharecount() + 1).add("status",
+								OrderVisaApproStatusEnum.shared.intKey()), Cnd.where("id", "=", customer.getId()));
 			}
 		}
 
