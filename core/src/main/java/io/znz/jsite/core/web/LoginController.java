@@ -128,6 +128,7 @@ public class LoginController extends BaseController {
 			model.addFlashAttribute("error", "密码有误,请重新输入！");
 		}
 		if (!Util.isEmpty(fetch)) {
+			request.getSession().setAttribute("fetch", fetch);
 			if (username.equals(telephone) && newpass.equals(pwd)) {
 				if (UserLoginEnum.PERSONNEL.intKey() == logintype && UserLoginEnum.PERSONNEL.intKey() == userType) {//工作人员登录
 					return "redirect:" + to;

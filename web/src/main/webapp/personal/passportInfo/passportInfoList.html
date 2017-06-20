@@ -19,7 +19,7 @@
 	<!--搜索条件 模块-->
     <div class="Search row">
       <div  class="col-xs-12">
-        <input type="button" class="btn btn-primary input-sm pull-right marginBtn editBtn" onclick=" " value="编辑">
+        <input type="button" class="btn btn-primary input-sm pull-right marginBtn editBtn" onclick="editPassPortInfo();" value="编辑">
       	<input type="button" class="btn btn-primary input-sm pull-right marginBtn cancelBtn hide" onclick=" " value="取消">
       	<input type="button" class="btn btn-primary input-sm pull-right marginBtn saveBtn hide" onclick=" " value="保存">
       </div>
@@ -33,7 +33,7 @@
                 <div class="form-group">
                     <label for="last_name_cn">类型:</label>
                     <div class='input-group'>
-                      <input id="" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="passportType" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                 <div class="form-group">
                     <label for="last_name_cn">国家码:</label>
                     <div class='input-group'>
-                      <input id="" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled="disabled"/>
+                      <input id="countryCode" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled="disabled"/>
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                 <div class="form-group">
                     <label for="last_name_cn">护照号码:</label>
                     <div class='input-group'>
-                      <input id="" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="passport" type="text" data-bind="value:customer.passport" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
@@ -61,21 +61,36 @@
            
            <!--姓名（中文）/姓名（拼音）-->
            <div class="row">
-             <div class="col-xs-6">
+             <div class="col-xs-4">
                 <div class="form-group">
                     <label for="last_name_cn">姓名（中文）:</label>
                     <div class='input-group'>
-                      <input id="" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="fullName" type="text" data-bind="value:customer.chinesefullname" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
              </div>
-             <div class="col-xs-6">
+             <div class="col-xs-4">
                 <div class="form-group">
                     <label for="last_name_cn">姓名（拼音）:</label>
                     <div class='input-group'>
-                      <input id="" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="xingMing" type="text" data-bind="value:customer.chinesexingen" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    </div>
+                </div>
+             </div>
+             <div class="col-xs-4">
+                <div class="form-group">
+                    <label for="last_name_cn">性别:</label>
+                    <div class='input-group'>
+                       <select id="gender" style="width: 100%;"
+                               data-role="dropdownlist"
+                               data-value-primitive="true"
+                               data-bind="value:customer.gender" >
+                               <option value="1">男</option>
+                               <option value="0">女</option>
+                       </select>
+                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
              </div>
@@ -84,26 +99,29 @@
            
            <!--性别/国籍-->
            <div class="row">
-             <div class="col-xs-6">
+             <div class="col-xs-4">
                 <div class="form-group">
-                    <label for="last_name_cn">性别:</label>
+                    <label for="last_name_cn">国籍:</label>
                     <div class='input-group'>
-                       <select id="sex" style="width: 100%;"
-                               data-role="dropdownlist"
-                               data-value-primitive="true"
-                               data-bind=" " >
-                               <option value="1">男</option>
-                               <option value="0">女</option>
-                       </select>
+                      <input id="nationality" type="text" data-bind="value:customer.birthcountry,source:countries" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    </div>
+                </div>
+             </div>
+             <div class="col-xs-4">
+                <div class="form-group">
+                    <label for="last_name_cn">出生日期:</label>
+                    <div class='input-group'>
+                       <input id="birthDate" style="width: 100%;" data-role="datepicker" data-bind=""/>
                        <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
              </div>
-             <div class="col-xs-6">
+             <div class="col-xs-4">
                 <div class="form-group">
-                    <label for="last_name_cn">国籍:</label>
+                    <label for="last_name_cn">出生地点（省份）:</label>
                     <div class='input-group'>
-                      <input id="" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="birthprovince" type="text" data-bind="value:customer.birthprovince" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
@@ -113,43 +131,61 @@
         
            <!--出生日期/出生地点（省份）-->
            <div class="row">
-             <div class="col-xs-6">
+			 <div class="col-xs-4">
                 <div class="form-group">
-                    <label for="last_name_cn">出生日期:</label>
+                    <label for="last_name_cn">签发日期:</label>
                     <div class='input-group'>
-                       <input id="birthDate" style="width: 100%;" data-role="datepicker" data-bind=""/>
+                       <input id="signedDate" style="width: 100%;" data-role="datepicker" data-bind="value:customer.passportsenddate,events:{change:onDateChange}"/>
                        <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
              </div>
-             <div class="col-xs-6">
+             <div class="col-xs-4">
                 <div class="form-group">
-                    <label for="last_name_cn">出生地点（省份）:</label>
+                    <label for="last_name_cn">签发地点（省份）:</label>
                     <div class='input-group'>
-                      <input id="" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="passportsendprovice" type="text" data-bind="value:customer.passportsendprovice" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
              </div>
+             <div class="col-xs-4">
+                <div class="form-group">
+                    <label for="last_name_cn">有效期至:</label>
+                    <div class='input-group'>
+                       <input id="validDate" style="width: 100%;" data-role="datepicker" data-bind="value:customer.passporteffectdate,events:{change:onDateChange}"/>
+                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    </div>
+                </div>
+             </div>         
            </div>
            <!--end 出生日期/出生地点（省份）-->
            
            <!--签发日期/签发地点（省份）-->
            <div class="row">
-             <div class="col-xs-6">
+           	 <div class="col-xs-4">
                 <div class="form-group">
-                    <label for="last_name_cn">签发日期:</label>
+                    <label for="last_name_cn">签发机关:</label>
                     <div class='input-group'>
-                       <input id="signedDate" style="width: 100%;" data-role="datepicker" data-bind=""/>
-                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                      <input id="signOrganization" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
              </div>
-             <div class="col-xs-6">
+             <div class="col-xs-4">
                 <div class="form-group">
-                    <label for="last_name_cn">签发地点（省份）:</label>
+                    <label for="last_name_cn">护照本号码:</label>
                     <div class='input-group'>
-                      <input id="" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="passportBookNum" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    </div>
+                </div>
+             </div>
+             <div class="col-xs-4">
+                <div class="form-group">
+                    <label for="last_name_cn">护照机读码:</label>
+                    <div class='input-group'>
+                      <input id="passportCode" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
@@ -159,12 +195,10 @@
         </div>
 	</div>
 </body>
-
 <!-- 引入JS文件 -->
-
 <script src="/res/plugin/jquery.min.js"></script>
-<!-- <script src="/res/plugin/template.js"></script>
-<script src="/res/plugin/layer/layer.js"></script> -->
+<!-- <script src="/res/plugin/template.js"></script> -->
+<script src="/res/plugin/layer/layer.js"></script>
 <script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
 <script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
 <script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
@@ -175,4 +209,7 @@
 <script src="/res/plugin/webtoolkit.md5.js"></script> -->
 <script src="/res/js/idcard.js"></script>
 <script src="/res/js/personal/passportInfo/passportInfoList.js"></script><!-- 本页面js -->
+<script type="text/javascript">
+
+</script>
 </html>

@@ -360,20 +360,7 @@ $(function () {
     if (oid) {
         $.getJSON("/visa/newcustomer/showDetail?customerid=" + oid, function (resp) {
         	viewModel.set("customer", $.extend(true, dafaults, resp));
-        /*	dafaults.customermanage.telephone=resp.customermanage.telephone;
-        	dafaults.customermanage.email=resp.customermanage.email;
-        	var color = $("#cus_phone").data("kendoMultiSelect");
-			color.value(resp.customermanage.id);
-        	var color = $("#cus_email").data("kendoMultiSelect");
-			color.value(resp.customermanage.id);*/
         });
     }
-   /* console.log(JSON.stringify(viewModel.customer));*/
-    //折叠面板的显隐切换
-    /*$(document).on("click", ".k-link", function () {
-        $(this).find(".k-icon").toggleClass("k-i-arrow-60-down k-i-arrow-n");
-        $(this).next().toggle();
-    });*/
-   
 });
 
