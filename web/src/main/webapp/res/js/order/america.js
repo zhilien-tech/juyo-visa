@@ -216,8 +216,9 @@ function detailInit(e) {
             {field: 'outtime', title: '出签时间',format: "{0: yyyy-MM-dd}"},
             {field: 'status', title: ' 状态',values:statuslist},
             { 
-                title: "操作", width: 308,
+                title: "操作", width: 300,
                 command: [
+
                     {name: "customerEdit", imageClass: "base fa-pencil", text: "编辑"},
                     {name: " ", imageClass: "base fa-send", text: "递送"},
                     {name: "share", imageClass: "base fa-share-alt", text: "分享"	
@@ -314,11 +315,11 @@ var grid = $("#grid").kendoGrid({
         {field: 'countrytype', title: '国家', width: 80,values:countrylist},
         {field: 'status', title: '状态',values:statuslist, width: 80,},
         {
-            title: "操作", width: 320,
+            title: "操作", width: 280,
             command: [
-                {name: "modify", imageClass: "base fa-pencil orange", text: " 编辑"},
-                {name: "shareall", imageClass: "base fa-share-alt green", text: "批量分享"},
-                {name: "noticeall", imageClass: "base fa-bell-o green", text: "批量约签通知"},
+                {name: "modify", imageClass:false, text: " 编辑"},
+                {name: "shareall", imageClass:false, text: "批量分享"},
+                {name: "noticeall", imageClass:false, text: "批量约签通知"},
                 regCmd("modify"),
                 regCmd("shareall"),
                 regCmd("noticeall"),
