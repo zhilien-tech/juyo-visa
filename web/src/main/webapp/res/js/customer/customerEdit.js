@@ -385,7 +385,7 @@ function agreeOrRefuse(flag){
 			 console.log(XMLHttpRequest);
 			 console.log(textStatus);
 			 console.log(errorThrown);
-            layer.msg('保存失败!',{time:2000});
+            layer.msg('操作失败!',{time:2000});
          }
 	});
 	

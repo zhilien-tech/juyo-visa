@@ -35,6 +35,9 @@ public class NewCustomerEntity implements Serializable {
 	@Column
 	@Comment("主键")
 	private Integer id;
+	@Column
+	@Comment("员工表id")
+	private Integer empid;
 
 	@Column
 	@Comment("中文姓")
