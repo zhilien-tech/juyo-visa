@@ -4,7 +4,6 @@ var customersourceEnum=[
     {text:"OTS",value:2},
     {text:"直客",value:3},
     {text:"线下",value:4}
-    
   ];
 function translateZhToEn(from, to) {
     $.getJSON("/translate/google", {q: $(from).val()}, function (result) {
@@ -47,8 +46,6 @@ var countries = new kendo.data.DataSource({
 			visitedcountrylist:[],
 			workedplacelist:[],
 			army:{}
-		
-		
     },
     keys = {
 		"customer.orthercountrylist":{},
