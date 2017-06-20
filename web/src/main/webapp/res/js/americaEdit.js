@@ -414,30 +414,30 @@ $(function () {
 
 //信息保存
 
+var validator = $("#orderForm").kendoValidator().data("kendoValidator");
 function ordersave(){
-	
-		 
-		 $.ajax({
-			 type: "POST",
-			 url: "/visa/order/orderSave",
-			 contentType: "application/json",
-			 dataType: "json",
-			 data: JSON.stringify(viewModel.customer),
-			 success: function (result) {
-				 console.log(result.code);
-				 if(result.code=="SUCCESS"){
-					 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-					 //$.layer.closeAll();
-					 parent.layer.close(index);
-					 window.parent.successCallback('1');
-					 
+		
+			 
+			 $.ajax({
+				 type: "POST",
+				 url: "/visa/order/orderSave",
+				 contentType: "application/json",
+				 dataType: "json",
+				 data: JSON.stringify(viewModel.customer),
+				 success: function (result) {
+					 console.log(result.code);
+					 if(result.code=="SUCCESS"){
+						 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+						 //$.layer.closeAll();
+						 parent.layer.close(index);
+						 window.parent.successCallback('1');
+						 
+					 }
 				 }
-			 }
-		 });
+			 });
 	 
 }
 
-var validator = $("#orderForm").kendoValidator().data("kendoValidator");
 $(function () {
     //如果有传递ID就是修改
     var oid = $.queryString("cid");

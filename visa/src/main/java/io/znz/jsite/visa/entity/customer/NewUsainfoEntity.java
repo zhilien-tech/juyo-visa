@@ -26,7 +26,7 @@ public class NewUsainfoEntity implements Serializable {
 
 	@Column
 	@Comment("驾照签发地")
-	private Date driveportsendstate;
+	private String usavisastate;
 
 	@Column
 	@Comment("说明")
