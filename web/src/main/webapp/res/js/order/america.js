@@ -18,8 +18,8 @@ var statuslist=[
     {text:"已分享",value:1},
     {text:"资料填写",value:2},
     {text:"初审",value:3},
-    {text:"通过",value:4},
-    {text:"拒绝",value:5},
+    {text:"初审通过",value:4},
+    {text:"初审拒绝",value:5},
     {text:"代送",value:6},
     {text:"DS-160",value:7},
     {text:"准备提交使馆",value:8},
@@ -218,10 +218,12 @@ function detailInit(e) {
             { 
                 title: "操作", width: 300,
                 command: [
-                    {name: "customerEdit", imageClass:false, text: "编辑"},
-                    {name: " ", imageClass:false, text: "递送"},
-                    {name: "share", imageClass:false, text: "分享"+"<span>(6)</span>"},//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
-                    {name: "notice", imageClass:false, text: "通知"},
+
+                    {name: "customerEdit", imageClass: "base fa-pencil", text: "编辑"},
+                    {name: " ", imageClass: "base fa-send", text: "递送"},
+                    {name: "share", imageClass: "base fa-share-alt", text: "分享"	
+                    },//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
+                    {name: "notice", imageClass: "base fa-bell-o", text: "通知"},
                     regCmd("customerEdit"),
                     regCmd("share"),
                     regCmd("notice"),
@@ -268,6 +270,7 @@ var grid = $("#grid").kendoGrid({
                         start_time:$("#start_time").val(),
                         end_time:$("#end_time").val(),
                         keywords:$("#keywords").val(),
+                        state:$("#state").val()
                     };
                return kendo.stringify(parameter);
             },
@@ -335,7 +338,7 @@ function successCallback(id){
 	  }else if(id == '2'){
 		  layer.msg("修改成功",{time: 2000});
 	  }else if(id == '3'){
-		  layer.msg("刷新成功",{time: 2000});
+		  layer.msg("操作成功",{time: 2000});
 	  }
   }
 //页面加载时加载日历

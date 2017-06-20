@@ -32,6 +32,7 @@ public class KenDoTestSqlForm extends KenDoParamForm {
 	private Date start_time;
 	private Date end_time;
 	private String keywords;
+	private Integer state;
 
 	@Override
 	public Sql sql(SqlManager paramSqlManager) {
@@ -61,7 +62,7 @@ public class KenDoTestSqlForm extends KenDoParamForm {
 			cnd.and(e1).or(e2);
 		}
 		if (!Util.isEmpty(keywords)) {
-			SqlExpressionGroup e1 = Cnd.exps("vno.id", "like", keywords);
+			SqlExpressionGroup e1 = Cnd.exps("vno.ordernumber", "like", keywords);
 			SqlExpressionGroup e2 = Cnd.exps("vnc.chinesefullname", "like", keywords);
 			SqlExpressionGroup e3 = Cnd.exps("vcm.telephone", "like", keywords);
 			SqlExpressionGroup e4 = Cnd.exps("vcm.email", "like", keywords);
@@ -69,6 +70,12 @@ public class KenDoTestSqlForm extends KenDoParamForm {
 			//SqlExpressionGroup e6 = Cnd.exps("vo.id", "like", keywords);
 			cnd.and(e1).or(e2).or(e3).or(e4).or(e5);
 		}
+		if (!Util.isEmpty(state) && state > 0) {
+			SqlExpressionGroup e1 = Cnd.exps("vno.status", "=", state);
+			SqlExpressionGroup e2 = Cnd.exps("vnc.status", "=", state);
+			cnd.and(e1).or(e2);
+		}
+
 		cnd.orderBy("vno.updatetime", "desc");
 		cnd.groupBy("vno.id");
 		return cnd;

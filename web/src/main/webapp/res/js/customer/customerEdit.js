@@ -37,11 +37,15 @@ var countries = new kendo.data.DataSource({
 			father:{},
 			mother:{},
 			relation:[],
-			spouse:{},
+			spouse:{
+				marrystatus:0
+			},
 			usainfo:{},
 			teachinfo:[],
 			recentlyintousalist:[],
-			workinfo:{},
+			workinfo:{
+				jobstatus:'S'
+			},
 			oldworkslist:[],
 			languagelist:[],
 			visitedcountrylist:[],
@@ -58,13 +62,11 @@ var countries = new kendo.data.DataSource({
 		"customer.visitedcountrylist":{},
 		"customer.workedplacelist":{},
 		"customer.relation":{
-			xing:""
 			
 		},
 		"customer.teachinfo":{}
 		
-	}
-;
+	};
 /*****************************************************
  * 数据绑定
  ****************************************************/
@@ -75,17 +77,6 @@ var viewModel = kendo.observable({
     states:states,
     addOne: function (e) {
         var key = $.isString(e) ? e : $(e.target).data('params');
-        console.log(key);
-       /* viewModel.get(key).push(
-        		{
-	          		peerxing: "",
-	            	peerxingen: "",
-	            	peernameen: "",
-	            	peername: "",
-	            	tripid: "",
-	            	relationme: ""
-	          	}
-        );*/
         viewModel.get(key).push(keys[key]);
     },
     delOne: function (e) {
@@ -154,12 +145,12 @@ var viewModel = kendo.observable({
         return state;
     },
     //参过军
-   /* joinArmy: function () {
+    joinArmy: function () {
         var state = viewModel.get("customer.army");
-    	var schools = viewModel.get("customer.army");
-        var state = schools ? schools.length > 0 : false;
+    	/*var schools = viewModel.get("customer.army");
+        var state = schools ? schools.length > 0 : false;*/
         return state;
-    },*/
+    },
     //工作信息详情
     hasWorkDetail: function (state) {
         var industry = viewModel.get("customer.workinfo.jobstatus");
@@ -189,7 +180,8 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-        return viewModel.get("customer.passportlose");
+    	//alert(111);
+       return viewModel.get("customer.passportlose");
     },
     // 曾用名
     oldNameEnable: function () {
@@ -200,8 +192,7 @@ var viewModel = kendo.observable({
         var otherCountry = viewModel.get("customer.orthercountrylist");
         var state = otherCountry ? otherCountry.length > 0 : false;
         return state;
-    }
-    
+    },
 });
 kendo.bind($(document.body), viewModel);
 
@@ -270,6 +261,7 @@ $("#has_immediate_relatives").change(function () {
 });
 $("#other_relatives").change(function () {
 	viewModel.set("customer.relation.indirect", $(this).is(':checked'));
+	 
 });
 /*****************************************************
  * 美国相关信息
@@ -334,26 +326,70 @@ $("#join_army").change(function () {
 
 //信息保存
 
-function customersave(){
+$("#saveCustomerData").on("click",function(){
 	console.log(JSON.stringify(viewModel.customer));
-    $.ajax({
-        type: "POST",
-        url: "/visa/newcustomer/customerSave",
-        contentType: "application/json",
-        dataType: "json",
-        data: JSON.stringify(viewModel.customer),
-        success: function (result) {
-        	  console.log(result.code);
-            if(result.code=="SUCCESS"){
-            	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-            	//$.layer.closeAll();
-            	parent.layer.close(index);
-            	window.parent.successCallback('1');
-            	
-            }
-        }
-    });
+	$.ajax({
+		 type: "POST",
+		 url: "/visa/newcustomer/customerSave",
+		 contentType:"application/json",
+		 data: JSON.stringify(viewModel.customer)+"",
+		 success: function (result){
+			 console.log(result);
+			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			 parent.layer.close(index);
+			 window.parent.successCallback('1');
+		 },
+		 error: function(XMLHttpRequest, textStatus, errorThrown) {
+			 console.log(XMLHttpRequest);
+			 console.log(textStatus);
+			 console.log(errorThrown);
+            layer.msg('保存失败!',{time:2000});
+         }
+	});
+});
+
+
+/*$.ajax({
+	cache : false,
+	type : "POST",
+	url : '${base}/admin/airlinepolicy/add.html',
+	data : $('#addFileInfoForm').serialize(),// 你的formid
+	error : function(request) {
+		layer.msg('添加失败!');
+	},
+	success : function(data) {
+		layer.close(index);
+		 formValidator();  
+		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	    parent.layer.close(index);
+	   window.parent.successCallback('1');
+	  
+	    
+	    
+	}
+});
+*/
+//通过或者拒绝的方法
+function agreeOrRefuse(flag){
+	var id=viewModel.get("customer.id");
+	$.ajax({
+		 type: "POST",
+		 url: "/visa/newcustomer/agreeOrRefuse?flag="+flag+"&customerid="+id,
+		 success: function (result){
+			 console.log(result);
+			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			 parent.layer.close(index);
+			 window.parent.successCallback('3');
+		 },
+		 error: function(XMLHttpRequest, textStatus, errorThrown) {
+			 console.log(XMLHttpRequest);
+			 console.log(textStatus);
+			 console.log(errorThrown);
+            layer.msg('操作失败!',{time:2000});
+         }
+	});
 }
+
 $(function () {
     //如果有传递ID就是修改
     var oid = $.queryString("cid");
@@ -363,4 +399,3 @@ $(function () {
         });
     }
 });
-

@@ -493,7 +493,8 @@
                             </div>
                         </div>
                     </li>
-                    <li> 父亲信息
+                     <li>
+                        父亲信息
                         <div class="container-fluid">
                             <!--父亲姓-->
                             <div class="row">
@@ -571,6 +572,8 @@
                             </div>
                         </div>
                     </li>
+                    
+                    
                     <li>母亲信息
                         <div class="container-fluid">
                             <!--母亲姓-->
@@ -649,7 +652,7 @@
                             </div>
                         </div>
                     </li>
-                    <li>配偶信息
+                     <li>配偶信息
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-xs-12">
@@ -660,18 +663,17 @@
                                                     data-role="dropdownlist"
                                                     data-value-primitive="true"
                                                     data-bind="value:customer.spouse.marrystatus">
-                                                <option value="单身">单身</option>
-                                                <option value="已婚">已婚</option>
-                                                <option value="离异">离异</option>
-                                                <option value="丧偶">丧偶</option>
+                                                <option value="0">单身</option>
+                                                <option value="1">已婚</option>
+                                                <option value="2">离异</option>
+                                                <option value="3">丧偶</option>
                                             </select>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div data-bind="visible:spouseState('离异')">
-                                <!--离婚国家-->
+                            <div data-bind="visible:spouseState('2')">
                                 <div class="row marital">
                                     <div class="col-xs-6">
                                         <div class="form-group">
@@ -703,7 +705,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--离婚原因-->
                                 <div class="row marital">
                                     <div class="col-xs-12">
                                         <div class="form-group">
@@ -734,7 +735,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div data-bind="visible:spouseState('已婚离异丧偶')">
+                            <div data-bind="visible:spouseState('123')">
                                 <div class="row marital">
                                     <div class="col-xs-12">
                                         <div class="form-group">
@@ -747,7 +748,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--配偶姓-->
                                 <div class="row marital">
                                     <div class="col-xs-6">
                                         <div class="form-group">
@@ -770,7 +770,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--配偶名-->
                                 <div class="row marital">
                                     <div class="col-xs-6">
                                         <div class="form-group">
@@ -822,7 +821,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--配偶生地-->
                                 <div class="row marital">
                                     <div class="col-xs-4">
                                         <div class="form-group">
@@ -871,7 +869,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--配偶现居住地-->
                                 <div class="row marital">
                                     <div class="col-xs-4">
                                         <div class="form-group">
@@ -919,7 +916,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--配偶地址与我的不同-->
                                 <div class="row marital">
                                     <div class="col-xs-12">
                                         <div class="form-group">
@@ -930,7 +926,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--配偶地址城市(中文)-->
                                 <div class="row marital same_as_home" data-bind="visible:sameAsMe">
                                     <div class="col-xs-8">
                                         <div class="form-group">
@@ -957,7 +952,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--配偶详细地址(英文)-->
                                 <div class="row marital same_as_home" data-bind="visible:sameAsMe">
                                     <div class="col-xs-12">
                                         <div class="form-group">
@@ -975,7 +969,6 @@
                                 </div>
                             </div>
                             <div data-bind="visible:spouseState('已婚离异丧偶')">
-                                <!--配偶单位名称(中文)-->
                                 <div class="row marital">
                                     <div class="col-xs-8">
                                         <div class="form-group">
@@ -999,7 +992,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--配偶详细地址(英文)-->
                                 <div class="row marital">
                                     <div class="col-xs-12">
                                         <div class="form-group">
@@ -1048,10 +1040,10 @@
                                                class="mui-switch" type="checkbox"/>
                                     </div>
                                 </div>
-                            </div>
+                            </div> 
                         </div>
                     </li>
-                    <li> 美国相关信息
+                     <li> 美国相关信息
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-xs-12">
@@ -1074,7 +1066,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--美国驾照-->
+                            美国驾照
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group" style="padding-top: 15px;">
@@ -1700,7 +1692,7 @@
                                 </div>
                             </div>
                         </div>
-                    </li>
+                    </li> 
                 </ul>
             </div>
         </div>
@@ -1718,7 +1710,7 @@
             <div class="col-xs-4">
                 <div class="form-group">
                     <label>&nbsp;</label>
-                    <button id="agree" data-process="agree" class="k-button col-xs-12 white" style="background-color: #00a157">
+                    <button id="agree" data-process="agree" class="k-button col-xs-12 white" style="background-color: #00a157" onclick="agreeOrRefuse('agree');">
                         <i class="fa fa-check-circle-o"></i> 通过
                     </button>
                 </div>
@@ -1726,15 +1718,17 @@
             <div class="col-xs-4">
                 <div class="form-group">
                     <label>&nbsp;</label>
-                    <button id="save" class="k-primary k-button col-xs-12">
-                        <i class="fa fa-save"></i> 保存
+                    <button id="saveCustomerData" class="k-primary k-button col-xs-12"> 
+                        <i class="fa fa-save"></i>保存
+
                     </button>
                 </div>
             </div>
+            <!-- <button onclick="customersave();">jsdjifioasdfiosa</button> -->
             <div class="col-xs-4">
                 <div class="form-group">
                     <label>&nbsp;</label>
-                    <button id="refuse" data-process="refuse" class="k-button col-xs-12 white" style="background-color: #f43838">
+                    <button id="refuse" data-process="refuse" class="k-button col-xs-12 white" style="background-color: #f43838" onclick="agreeOrRefuse('refuse');">
                         <i class="fa fa-ban"></i> 拒绝
                     </button>
                 </div>
@@ -1780,7 +1774,7 @@
                            data-value-primitive="true"
                            data-text-field="text"
                            data-value-field="value"
-                           data-bind="value:customer.orthercountrylist.country,source:countries"/>
+                           data-bind="value:country,source:countries"/>
                     <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                 </div>
             </div>
@@ -2456,6 +2450,6 @@
 </script>
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
-<script src="/res/js/customer/customerEdit.js"></script>
 <script src="/res/js/wintone.js?v=4"></script>
+<script src="/res/js/customer/customerEdit.js"></script>
 </html>
