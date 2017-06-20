@@ -22,7 +22,7 @@ public class NewRelationEntity implements Serializable {
 
 	@Column
 	@Comment("非直系亲属")
-	private Integer indirect;
+	private boolean indirect;
 
 	@Column
 	@Comment("直系亲属")

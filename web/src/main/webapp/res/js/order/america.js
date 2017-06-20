@@ -18,8 +18,8 @@ var statuslist=[
     {text:"已分享",value:1},
     {text:"资料填写",value:2},
     {text:"初审",value:3},
-    {text:"通过",value:4},
-    {text:"拒绝",value:5},
+    {text:"初审通过",value:4},
+    {text:"初审拒绝",value:5},
     {text:"代送",value:6},
     {text:"DS-160",value:7},
     {text:"准备提交使馆",value:8},
@@ -336,7 +336,7 @@ function successCallback(id){
 	  }else if(id == '2'){
 		  layer.msg("修改成功",{time: 2000});
 	  }else if(id == '3'){
-		  layer.msg("刷新成功",{time: 2000});
+		  layer.msg("操作成功",{time: 2000});
 	  }
   }
 //页面加载时加载日历

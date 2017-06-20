@@ -24,10 +24,12 @@ import io.znz.jsite.visa.entity.customer.NewWorkedplaceEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkinfoEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
 import io.znz.jsite.visa.enums.IsDadOrMumEnum;
+import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
 
 import java.util.Date;
 import java.util.List;
 
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.SqlManager;
@@ -35,6 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.uxuexi.core.common.util.Util;
@@ -74,7 +77,7 @@ public class NewCustomerController {
 	 * @param customer
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	@RequestMapping(value = "customerSave")
+	@RequestMapping(value = "customerSave", method = RequestMethod.POST)
 	@ResponseBody
 	public Object customerSave(@RequestBody NewCustomerEntity customer) {
 		String xing = customer.getChinesexing();
@@ -303,11 +306,16 @@ public class NewCustomerController {
 				Cnd.where("customerid", "=", customer.getId()), null);
 		if (!Util.isEmpty(passportlose) && passportlose.size() > 0) {
 			customer.setPassportlose(passportlose.get(0));
+		} else {
+			customer.setPassportlose(new NewPassportloseEntity());
+
 		}
 		List<NewOldnameEntity> oldname = dbDao.query(NewOldnameEntity.class,
 				Cnd.where("customerid", "=", customer.getId()), null);
 		if (!Util.isEmpty(oldname) && oldname.size() > 0) {
 			customer.setOldname(oldname.get(0));
+		} else {
+			customer.setOldname(new NewOldnameEntity());
 		}
 		List<NewOrthercountryEntity> orthercountry = dbDao.query(NewOrthercountryEntity.class,
 				Cnd.where("customerid", "=", customer.getId()), null);
@@ -318,11 +326,17 @@ public class NewCustomerController {
 				Cnd.where("customerid", "=", customer.getId()).and("dadormum", "=", IsDadOrMumEnum.dad.intKey()), null);
 		if (!Util.isEmpty(father) && father.size() > 0) {
 			customer.setFather(father.get(0));
+		} else {
+			customer.setFather(new NewParentsEntity());
+
 		}
 		List<NewParentsEntity> mother = dbDao.query(NewParentsEntity.class,
 				Cnd.where("customerid", "=", customer.getId()).and("dadormum", "=", IsDadOrMumEnum.mum.intKey()), null);
 		if (!Util.isEmpty(mother) && mother.size() > 0) {
 			customer.setMother(mother.get(0));
+		} else {
+			customer.setMother(new NewParentsEntity());
+
 		}
 		List<NewRelationEntity> relation = dbDao.query(NewRelationEntity.class,
 				Cnd.where("customerid", "=", customer.getId()), null);
@@ -333,11 +347,15 @@ public class NewCustomerController {
 				Cnd.where("customerid", "=", customer.getId()), null);
 		if (!Util.isEmpty(spouse) && spouse.size() > 0) {
 			customer.setSpouse(spouse.get(0));
+		} else {
+			customer.setSpouse(new NewSpouseEntity());
 		}
 		List<NewUsainfoEntity> usainfo = dbDao.query(NewUsainfoEntity.class,
 				Cnd.where("customerid", "=", customer.getId()), null);
 		if (!Util.isEmpty(usainfo) && usainfo.size() > 0) {
 			customer.setUsainfo(usainfo.get(0));
+		} else {
+			customer.setUsainfo(new NewUsainfoEntity());
 		}
 		List<NewTeachinfoEntity> teachinfo = dbDao.query(NewTeachinfoEntity.class,
 				Cnd.where("customerid", "=", customer.getId()), null);
@@ -353,6 +371,8 @@ public class NewCustomerController {
 				Cnd.where("customerid", "=", customer.getId()), null);
 		if (!Util.isEmpty(workinfo) && workinfo.size() > 0) {
 			customer.setWorkinfo(workinfo.get(0));
+		} else {
+			customer.setWorkinfo(new NewWorkinfoEntity());
 		}
 		List<NewOldworksEntity> oldworks = dbDao.query(NewOldworksEntity.class,
 				Cnd.where("customerid", "=", customer.getId()), null);
@@ -378,9 +398,32 @@ public class NewCustomerController {
 				null);
 		if (!Util.isEmpty(army) && army.size() > 0) {
 			customer.setArmy(army.get(0));
+		} else {
+			customer.setArmy(new NewArmyEntity());
 		}
 
 		return customer;
+	}
+
+	/****
+	 * 拒绝或者同意
+	 * 
+	 */
+
+	@RequestMapping(value = "agreeOrRefuse")
+	@ResponseBody
+	public Object agreeOrRefuse(String flag, long customerid) {
+		NewCustomerEntity newCustomer = dbDao.fetch(NewCustomerEntity.class, customerid);
+
+		if ("agree".equals(flag)) {
+			dbDao.update(NewCustomerEntity.class, Chain.make("status", OrderVisaApproStatusEnum.agree.intKey()),
+					Cnd.where("id", "=", newCustomer.getId()));
+		} else if ("refuse".equals(flag)) {
+			dbDao.update(NewCustomerEntity.class, Chain.make("status", OrderVisaApproStatusEnum.refuse.intKey()),
+					Cnd.where("id", "=", newCustomer.getId()));
+
+		}
+		return ResultObject.success("操作成功");
 	}
 
 }

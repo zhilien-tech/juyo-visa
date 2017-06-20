@@ -23,7 +23,7 @@ public class NewSpouseEntity implements Serializable {
 
 	@Column
 	@Comment("婚姻状况")
-	private String marrystatus;
+	private Integer marrystatus;
 
 	@Column
 	@Comment("结婚日期")
