@@ -261,12 +261,12 @@
                 <div class="form-group">
                    <label for="">护照是否遗失过或被偷过:</label>
                    <div class="input-group">
-                       <input id='' data-bind="" class="mui-switch" type="checkbox"/>
+                       <input id='pp_lost' data-bind="checked:oldPassportEnable" class="mui-switch" type="checkbox"/>
                    </div>
                 </div>
              </div>
            </div>
-           <div class="row"><!-- 护照是否遗失过或被偷过 隐藏/显示 -->
+           <div class="row" data-bind="visible:oldPassportEnable"><!-- 护照是否遗失过或被偷过 隐藏/显示 -->
            	 <div class="col-xs-3">
                 <div class="form-group">
                     <label for="last_name_cn">主要电话号码:</label>

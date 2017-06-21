@@ -198,20 +198,28 @@ kendo.bind($(document.body), viewModel);
 
 //丢过护照
 $("#pp_lost").change(function () {
+	viewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
+});
+/*$("#pp_lost").change(function () {
     if ($(this).is(':checked')) {
     	viewModel.add("customer.passportlose");
     } else {
     	viewModel.clear("customer.passportlose");
     }
-});
+});*/
+
 //曾用名
 $("#has_used_name").change(function () {
+	viewModel.set("customer.oldname", $(this).is(':checked') ? " " : "");
+});
+/*$("#has_used_name").change(function () {
     if ($(this).is(':checked')) {
     	viewModel.add("customer.oldname");
     } else {
     	viewModel.clear("customer.oldname");
     }
-});
+});*/
+
 //其他国家居民
 $("#has_pr").change(function () {
     if ($(this).is(':checked')) {
@@ -264,12 +272,6 @@ $("#other_relatives").change(function () {
  * 美国相关信息
  ****************************************************/
 
-
-
-
-
-
-
 //最近5次进入美国的信息
 $("#has_usa_aboard").change(function () {
     if ($(this).is(':checked')) {
@@ -309,13 +311,17 @@ $("#has_never_educated").change(function () {
 /*****************************************************
  * 其他信息
  ****************************************************/
+/*我曾参军*/
 $("#join_army").change(function () {
+	viewModel.set("customer.army", $(this).is(':checked') ? " " : "");
+});
+/*$("#join_army").change(function () {
     if ($(this).is(':checked')) {
     	viewModel.add("customer.army");
     } else {
     	viewModel.clear("customer.army");
     }
-});
+});*/
 
 
 

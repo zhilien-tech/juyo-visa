@@ -4,17 +4,12 @@ var customersourceEnum=[
     {text:"OTS",value:2},
     {text:"直客",value:3},
     {text:"线下",value:4}
-    
   ];
 function translateZhToEn(from, to) {
     $.getJSON("/translate/google", {q: $(from).val()}, function (result) {
         $("#" + to).val(result.data).change();
     });
 }
-
-
-
-
 
 var countries = new kendo.data.DataSource({
         transport: {
@@ -177,7 +172,6 @@ $("#has_other_travelers").change(function () {
     	viewModel.clearAll(key);
     }
 });
-
 
 $(function () {
     $("#cus_phone").kendoMultiSelect({
