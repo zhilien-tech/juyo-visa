@@ -437,6 +437,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="has_pr" data-template="tpl_has_pr" data-bind="source:customer.otherCountry"></div>
+                            <div class="row has_pr" data-bind="visible:otherCountryEnable">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <button data-bind="click:addOne"
+                                                data-params="customer.otherCountry"
+                                                class="k-button col-xs-12 k-button-icontext">
+                                            <span class="k-icon k-i-plus"></span>添加
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
@@ -458,22 +470,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="has_pr" data-template="tpl_has_pr" data-bind="source:customer.otherCountry"></div>
-                            <div class="row has_pr" data-bind="visible:otherCountryEnable">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <button data-bind="click:addOne"
-                                                data-params="customer.otherCountry"
-                                                class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </li>
-                    <li>
-                        工作信息
+                    <li>工作信息
                         <div class="container-fluid">
                             <!--我的职业-->
                             <div class="row">
@@ -520,8 +519,7 @@
                             </div>
                         </div>
                     </li>
-                    <li>
-                        财务信息
+                    <li> 财务信息
                         <div class="container-fluid">
                             <div data-template="tpl_finance" data-bind="source:customer.finances"></div>
                             <div class="row">
