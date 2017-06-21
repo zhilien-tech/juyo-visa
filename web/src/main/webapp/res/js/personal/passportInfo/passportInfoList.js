@@ -120,7 +120,7 @@ $("#updatePassportSave").on("click",function(){
 			 console.log(result);
 			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			 parent.layer.close(index);
-			 window.parent.successCallback('1');
+			 window.parent.successCallback('2');
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
 			 console.log(XMLHttpRequest);
@@ -139,7 +139,5 @@ function successCallback(id){
 		layer.msg("修改成功",{time:2000});
 	}else if(id == '3'){
 		layer.msg("删除成功",{time:2000});
-	}else if(id == '4'){
-		layer.msg("初始化密码成功",{time:2000});
 	}
 }
