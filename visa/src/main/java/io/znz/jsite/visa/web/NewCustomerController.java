@@ -23,6 +23,8 @@ import io.znz.jsite.visa.entity.customer.NewVisitedcountryEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkedplaceEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkinfoEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
+import io.znz.jsite.visa.entity.usa.NewCustomerOrderEntity;
+import io.znz.jsite.visa.entity.usa.NewOrderEntity;
 import io.znz.jsite.visa.enums.IsDadOrMumEnum;
 import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
 
@@ -91,6 +93,10 @@ public class NewCustomerController {
 			customer.setChinesefullname(xing);
 
 		}
+		List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
+				Cnd.where("customerid", "=", customer.getId()), null);
+		long orderid = query.get(0).getOrderid();
+		dbDao.update(NewOrderEntity.class, Chain.make("updatetime", new Date()), Cnd.where("id", "=", orderid));
 		if (!Util.isEmpty(customer.getId()) && customer.getId() > 0) {
 			customer.setUpdatetime(new Date());
 
