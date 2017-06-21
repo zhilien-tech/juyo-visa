@@ -29,7 +29,7 @@ ol, ul {padding-left: 0;list-style: none;}
 .k-red:focus{color: #fff;background-color: #e63333;border: solid 1px #ce3535;}
 .k-red:active:hover,.k-red.active:hover,.k-red:active:focus{background-color: #e43939;color: #fff;border: solid 1px #e43939;}
 .layui-layer-close{background-position:2px -40px !important;}/*弹框 关闭按钮的位置*/
-
+span.k-icon.false {width: 0;}
 
 
 

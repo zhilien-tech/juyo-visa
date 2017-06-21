@@ -157,7 +157,7 @@ var grid = $("#grid").kendoGrid({
         {
             title: "操作", width: 98,
             command: [
-                {name: "edit", imageClass: "base fa-pencil-square-o purple", text: "编辑"},
+                {name: "edit", imageClass:false, text: "编辑"},
                 regCmd("edit")
             ]
         }
