@@ -270,6 +270,7 @@ var grid = $("#grid").kendoGrid({
                         start_time:$("#start_time").val(),
                         end_time:$("#end_time").val(),
                         keywords:$("#keywords").val(),
+                        state:$("#state").val()
                     };
                return kendo.stringify(parameter);
             },

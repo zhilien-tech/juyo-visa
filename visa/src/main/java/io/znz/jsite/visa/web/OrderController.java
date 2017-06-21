@@ -422,7 +422,7 @@ public class OrderController extends BaseController {
 			}
 		} else {
 
-			dbDao.insert(employeeEntity);
+			employeeEntity = dbDao.insert(employeeEntity);
 		}
 
 		String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
@@ -433,8 +433,9 @@ public class OrderController extends BaseController {
 			//成功以后分享次数加1
 			dbDao.update(
 					NewCustomerEntity.class,
-					Chain.make("sharecount", customer.getSharecount() + 1).add("status",
-							OrderVisaApproStatusEnum.shared.intKey()), Cnd.where("id", "=", customer.getId()));
+					Chain.make("sharecount", customer.getSharecount() + 1)
+							.add("status", OrderVisaApproStatusEnum.shared.intKey())
+							.add("empid", employeeEntity.getId()), Cnd.where("id", "=", customer.getId()));
 
 			return ResultObject.success(result);
 		} else {
@@ -584,8 +585,9 @@ public class OrderController extends BaseController {
 
 		List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
 				Cnd.where("orderid", "=", orderid), null);
-
-		for (NewCustomerOrderEntity newCustomerOrderEntity : query) {
+		long num[] = new long[query.size()];
+		for (int j = 0; j < query.size(); j++) {
+			NewCustomerOrderEntity newCustomerOrderEntity = query.get(j);
 			NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, newCustomerOrderEntity.getCustomerid());
 
 			phone = customer.getPhone();
@@ -615,8 +617,10 @@ public class OrderController extends BaseController {
 				nutDao.update(employeeEntity);
 			} else {
 
-				dbDao.insert(employeeEntity);
+				employeeEntity = dbDao.insert(employeeEntity);
+
 			}
+			num[j] = employeeEntity.getId();
 
 		}
 		//订单表联系人的发送
@@ -635,7 +639,8 @@ public class OrderController extends BaseController {
 		}
 
 		//客户联系人的发送
-		for (NewCustomerOrderEntity newCustomerOrderEntity : query) {
+		for (int j = 0; j < query.size(); j++) {
+			NewCustomerOrderEntity newCustomerOrderEntity = query.get(j);
 			NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, newCustomerOrderEntity.getCustomerid());
 			html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
 					.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
@@ -647,8 +652,9 @@ public class OrderController extends BaseController {
 				//成功以后分享次数加1
 				dbDao.update(
 						NewCustomerEntity.class,
-						Chain.make("sharecount", customer.getSharecount() + 1).add("status",
-								OrderVisaApproStatusEnum.shared.intKey()), Cnd.where("id", "=", customer.getId()));
+						Chain.make("sharecount", customer.getSharecount() + 1)
+								.add("status", OrderVisaApproStatusEnum.shared.intKey()).add("empid", num[j]),
+						Cnd.where("id", "=", customer.getId()));
 			}
 		}
 

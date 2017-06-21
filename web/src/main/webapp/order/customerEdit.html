@@ -372,7 +372,7 @@
                                                    data-filter="startswith"
                                                    data-suggest="true"
                                                    data-auto-bind="true"
-                                                   data-value-primitive="false"
+                                                   data-value-primitive="true"
                                                    data-text-field="text"
                                                    data-value-field="value"
                                                    data-bind="value:customer.passportlose.sendcountry,source:countries"
@@ -703,7 +703,7 @@
                                         </div>
                                     </div>
                                 </div>
-                              <!--   离婚原因 -->
+                              <!-- 离婚原因 -->
                                 <div class="row marital">
                                     <div class="col-xs-12">
                                         <div class="form-group">
@@ -1102,7 +1102,7 @@
                                                    data-value-primitive="true"
                                                    data-text-field="text"
                                                    data-value-field="value"
-                                                   data-bind="value:customer.usainfo.driveportsendstate,source:states"/>
+                                                   data-bind="value:customer.usainfo.usavisastate,source:states"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -2299,7 +2299,7 @@
             <div class="form-group">
                 <label for="a_last_name_en_#:data.uid#">拼音:<span style="color:chargexingen">*</span></label>
                 <div class='input-group'>
-                    <input id="a_last_name_en_#:data.uid#" data-bind="value:bossLastNameEN"
+                    <input id="a_last_name_en_#:data.uid#" data-bind="value:chargexingen"
                            class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
                     <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                 </div>

@@ -37,6 +37,10 @@ public class NewCustomerEntity implements Serializable {
 	private Integer id;
 
 	@Column
+	@Comment("员工id")
+	private long empid;
+
+	@Column
 	@Comment("中文姓")
 	private String chinesexing;
 	@Column
@@ -162,6 +166,24 @@ public class NewCustomerEntity implements Serializable {
 	@Column
 	@Comment("通知次数")
 	private Integer noticecount;
+	@Column
+	@Comment("护照类型")
+	private Integer passporttype;
+	@Column
+	@Comment("国家码")
+	private String countrynum;
+	@Column
+	@Comment("出生日期")
+	private Date birthdate;
+	@Column
+	@Comment("签发机关")
+	private String visaoffice;
+	@Column
+	@Comment("护照本号码")
+	private String passportbooknum;
+	@Column
+	@Comment("护照机读码")
+	private String passportreadnum;
 
 	private NewPassportloseEntity passportlose;
 

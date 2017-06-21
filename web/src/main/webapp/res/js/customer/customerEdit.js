@@ -266,7 +266,6 @@ $("#has_immediate_relatives").change(function () {
 });
 $("#other_relatives").change(function () {
 	viewModel.set("customer.relation.indirect", $(this).is(':checked'));
-	 
 });
 /*****************************************************
  * 美国相关信息
@@ -331,6 +330,7 @@ $("#join_army").change(function () {
 
 $("#saveCustomerData").on("click",function(){
 	console.log(JSON.stringify(viewModel.customer));
+	viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
 	$.ajax({
 		 type: "POST",
 		 url: "/visa/newcustomer/customerSave",
@@ -388,24 +388,17 @@ function agreeOrRefuse(flag){
 			 console.log(XMLHttpRequest);
 			 console.log(textStatus);
 			 console.log(errorThrown);
-            layer.msg('保存失败!',{time:2000});
+            layer.msg('操作失败!',{time:2000});
          }
 	});
-	
 }
 
-
 $(function () {
-	
-	
     //如果有传递ID就是修改
     var oid = $.queryString("cid");
     if (oid) {
         $.getJSON("/visa/newcustomer/showDetail?customerid=" + oid, function (resp) {
         	viewModel.set("customer", $.extend(true, dafaults, resp));
-
         });
     }
-
 });
-
