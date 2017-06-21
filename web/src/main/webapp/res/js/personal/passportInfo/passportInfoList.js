@@ -7,7 +7,6 @@ var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 //页面加载时回显护照信息
 window.onload = function(){
 	 $.getJSON(localhostPaht +'/visa/passportinfo/listPassport', function (resp) {
-		 alert(JSON.stringify(resp));
      	viewModel.set("customer", $.extend(true, dafaults, resp));
      });
 }
@@ -92,32 +91,55 @@ keys = {
 	},
 	"customer.teachinfo":{}
 };
+//护照类型
+var passportTypeEnum=[
+    {text:"外交护照",value:1},
+    {text:"公务护照",value:2},
+    {text:"旅游护照",value:3},
+    {text:"海员护照",value:4},
+    {text:"特区护照",value:5},
+    {text:"难民护照",value:6}
+  ];
 //数据绑定
 var viewModel = kendo.observable({
 	customer: dafaults,
 	countries:countries,
-	states:states,
-	addOne: function (e) {
-		
-	}
+	passportTypeEnum:passportTypeEnum,
+	states:states
 });
 kendo.bind($(document.body), viewModel);
 //护照信息编辑保存
-function editPassPortInfo(){
-	/*$.ajax({
-		type : "POST",
-		url : localhostPaht +'/visa/passportinfo/listPassport',
-		data : $('#addForm').serialize(),// 你的formid
-		success : function(data) {
-			layer.load(1, {
-				 shade: [0.1,'#fff'] //0.1透明度的白色背景
-			});
-			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-		    parent.layer.close(index);
-		    window.parent.successCallback('1');
-		},
-		error : function(request) {
-			layer.msg('添加失败');
-		}
-	});*/
+$("#updatePassportSave").on("click",function(){
+	console.log(JSON.stringify(viewModel.customer));
+	$.ajax({
+		 type: "POST",
+		 url: "/visa/passportinfo/updatePassportSave",
+		 contentType:"application/json",
+		 data: JSON.stringify(viewModel.customer)+"",
+		 success: function (result){
+			 console.log(result);
+			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			 parent.layer.close(index);
+			 window.parent.successCallback('1');
+		 },
+		 error: function(XMLHttpRequest, textStatus, errorThrown) {
+			 console.log(XMLHttpRequest);
+			 console.log(textStatus);
+			 console.log(errorThrown);
+            layer.msg('保存失败!',{time:2000});
+         }
+	});
+});
+//事件提示
+function successCallback(id){
+	grid.dataSource.read();
+	if(id == '1'){
+		layer.msg("添加成功",{time:2000});
+	}else if(id == '2'){
+		layer.msg("修改成功",{time:2000});
+	}else if(id == '3'){
+		layer.msg("删除成功",{time:2000});
+	}else if(id == '4'){
+		layer.msg("初始化密码成功",{time:2000});
+	}
 }

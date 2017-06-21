@@ -7,6 +7,7 @@
 package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.BaseController;
+import io.znz.jsite.base.bean.ResultObject;
 import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.exception.JSiteException;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
@@ -17,6 +18,7 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -62,9 +64,11 @@ public class PassportInfoController extends BaseController {
 	 * 护照信息修改保存
 	 * 
 	 */
+	@SuppressWarnings("all")
 	@RequestMapping(value = "updatePassportSave")
 	@ResponseBody
-	public Object updatePassportSave() {
-		return null;
+	public Object updatePassportSave(@RequestBody NewCustomerEntity customer) {
+		dbDao.update(customer, null);
+		return ResultObject.success("修改成功");
 	}
 }
