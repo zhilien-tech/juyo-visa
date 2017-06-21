@@ -19,9 +19,9 @@
 	<!--搜索条件 模块-->
     <div class="Search row">
       <div  class="col-xs-12">
-        <input type="button" class="btn btn-primary input-sm pull-right marginBtn editBtn" onclick="editPassPortInfo();" value="编辑">
+        <input type="button" class="btn btn-primary input-sm pull-right marginBtn editBtn" value="编辑">
       	<input type="button" class="btn btn-primary input-sm pull-right marginBtn cancelBtn hide" onclick=" " value="取消">
-      	<input type="button" class="btn btn-primary input-sm pull-right marginBtn saveBtn hide" onclick=" " value="保存">
+      	<input id="updatePassportSave" type="button" class="btn btn-primary input-sm pull-right marginBtn saveBtn hide" value="保存">
       </div>
     </div>
     <!--end 搜索条件 模块-->
@@ -33,16 +33,29 @@
                 <div class="form-group">
                     <label for="last_name_cn">类型:</label>
                     <div class='input-group'>
-                      <input id="passportType" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                       <select id="passporttype" style="width: 100%;"
+                               data-role="dropdownlist"
+                               data-filter="startswith"
+                               data-suggest="true"
+                               data-auto-bind="true"
+                               data-value-primitive="true"
+                               data-text-field="text"
+                               data-value-field="value"
+                               data-bind="value:customer.passporttype,source:passportTypeEnum" >
+                       </select>
+                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
+                    <!-- <div class='input-group'>
+                      <input id="passportType" type="text" data-bind="value:customer.passporttype,source:passportTypeEnum" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    </div> -->
                 </div>
              </div>
              <div class="col-xs-4">
                 <div class="form-group">
                     <label for="last_name_cn">国家码:</label>
                     <div class='input-group'>
-                      <input id="countryCode" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled="disabled"/>
+                      <input id="countryCode" type="text" data-bind="value:customer.countrynum" class="k-textbox k-state-disabled" style="width: 100%;" disabled="disabled"/>
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
@@ -112,7 +125,7 @@
                 <div class="form-group">
                     <label for="last_name_cn">出生日期:</label>
                     <div class='input-group'>
-                       <input id="birthDate" style="width: 100%;" data-role="datepicker" data-bind=""/>
+                       <input id="birthDate" style="width: 100%;" data-role="datepicker" data-bind="value:customer.birthdate,events:{change:onDateChange}"/>
                        <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
@@ -167,7 +180,7 @@
                 <div class="form-group">
                     <label for="last_name_cn">签发机关:</label>
                     <div class='input-group'>
-                      <input id="signOrganization" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="signOrganization" type="text" data-bind="value:customer.visaoffice" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
@@ -176,7 +189,7 @@
                 <div class="form-group">
                     <label for="last_name_cn">护照本号码:</label>
                     <div class='input-group'>
-                      <input id="passportBookNum" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="passportBookNum" type="text" data-bind="value:customer.passportbooknum" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
@@ -185,7 +198,7 @@
                 <div class="form-group">
                     <label for="last_name_cn">护照机读码:</label>
                     <div class='input-group'>
-                      <input id="passportCode" type="text" data-bind="" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="passportCode" type="text" data-bind="value:customer.passportreadnum" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
@@ -209,7 +222,4 @@
 <script src="/res/plugin/webtoolkit.md5.js"></script> -->
 <script src="/res/js/idcard.js"></script>
 <script src="/res/js/personal/passportInfo/passportInfoList.js"></script><!-- 本页面js -->
-<script type="text/javascript">
-
-</script>
 </html>
