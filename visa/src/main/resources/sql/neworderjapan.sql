@@ -7,3 +7,9 @@ LEFT JOIN visa_new_customer_order_jp vncoj on vncoj.order_jp_id=vnoj.id
 LEFT JOIN visa_new_customer_jp  vncj on vncoj.customer_jp_id=vncj.id
 
 $condition
+
+/*neworderjapan_ordernum*/
+select * from visa_new_order_jp
+where date(createtime)=date(now())
+$condition
+order by createtime desc

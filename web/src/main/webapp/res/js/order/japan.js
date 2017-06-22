@@ -142,7 +142,7 @@ function regCmd(command) {
                         title: '编辑订单',
                         area: ['950px', '600px'],
                         shadeClose: true,
-                        content: '/m/americaEdit.html?cid=' + data.id + "&check=true"
+                        content: '/japan/japanEdit.html?cid=' + data.id + "&check=true"
                     });
                     break;
                 case "customerEdit":
