@@ -1,5 +1,7 @@
 package io.znz.jsite.visa.entity.japan;
 
+import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +18,7 @@ import org.nutz.dao.entity.annotation.Table;
 public class NewOrderJpEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id(auto = true)
-	private Integer id;
+	private long id;
 
 	@Column
 	@Comment("用户id")
@@ -24,7 +26,7 @@ public class NewOrderJpEntity implements Serializable {
 
 	@Column
 	@Comment("客户管理id")
-	private Integer customerManagerId;
+	private Integer customer_manager_id;
 
 	@Column
 	@Comment("订单类型")
@@ -94,12 +96,14 @@ public class NewOrderJpEntity implements Serializable {
 	@Comment("递送次数")
 	private Integer sendnum;
 
+	private CustomerManageEntity customermanage;
+
 	private NewTripJpEntity tripJp;
 
 	private List<NewDateplanJpEntity> dateplanJpList;
 
 	private List<NewTripplanJpEntity> tripplanJpList;
 
-	private NewFastmailJpEntity fastmailJp;
+	private NewFastmailJpEntity fastMail;
 
 }

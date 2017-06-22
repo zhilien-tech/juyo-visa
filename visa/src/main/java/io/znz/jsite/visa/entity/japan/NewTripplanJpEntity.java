@@ -1,11 +1,14 @@
 package io.znz.jsite.visa.entity.japan;
 
-import org.nutz.dao.entity.annotation.*;
-import lombok.Data;
+import java.io.Serializable;
 import java.util.Date;
 
-import java.io.Serializable;
+import lombok.Data;
 
+import org.nutz.dao.entity.annotation.Column;
+import org.nutz.dao.entity.annotation.Comment;
+import org.nutz.dao.entity.annotation.Id;
+import org.nutz.dao.entity.annotation.Table;
 
 @Data
 @Table("visa_new_tripplan_jp")
@@ -13,58 +16,57 @@ public class NewTripplanJpEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id(auto = true)
 	private Integer id;
-	
+
 	@Column
-    @Comment("订单id")
-	private Integer orderJpId;
-	
+	@Comment("订单id")
+	private Long order_jp_id;
+
 	@Column
-    @Comment("第几天")
+	@Comment("第几天")
 	private Integer daynum;
-	
+
 	@Column
-    @Comment("日期")
+	@Comment("日期")
 	private Date nowdate;
-	
+
 	@Column
-    @Comment("城市")
+	@Comment("城市")
 	private String city;
-	
+
 	@Column
-    @Comment("景区id")
+	@Comment("景区id")
 	private Integer viewid;
-	
+
 	@Column
-    @Comment("酒店id")
+	@Comment("酒店id")
 	private Integer hotelid;
-	
+
 	@Column
-    @Comment("房间类型")
+	@Comment("房间类型")
 	private Integer hometype;
-	
+
 	@Column
-    @Comment("房间数")
+	@Comment("房间数")
 	private Integer homenum;
-	
+
 	@Column
-    @Comment("住几晚")
+	@Comment("住几晚")
 	private Integer homeday;
-	
+
 	@Column
-    @Comment("入住时间")
+	@Comment("入住时间")
 	private Date intime;
-	
+
 	@Column
-    @Comment("退房时间")
+	@Comment("退房时间")
 	private Date outtime;
-	
+
 	@Column
-    @Comment("早餐")
+	@Comment("早餐")
 	private Integer breakfast;
-	
+
 	@Column
-    @Comment("晚餐")
+	@Comment("晚餐")
 	private Integer dinner;
-	
 
 }
