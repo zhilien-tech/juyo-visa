@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>编辑-日本-签手世界</title>
+    <link rel="stylesheet" href="/res/plugin/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.common.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.office365.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/res/css/colors.min.css"/>
+    <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
+
+    <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
+</head>
+<body>
+<div>
+    <div class="container-fluid" style="padding-bottom: 15px;">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul id="panelbar">
+                    <li>
+                        <span class="k-link k-state-selected">个人信息</span>
+                        <div class="container-fluid">
+                            <OBJECT classid="clsid:10EC554B-357B-4188-9E5E-AC5039454D8B" id="objIDCard" width="0" height="0"></OBJECT>
+                            <div id="scanner" class="row" style="display: none;">
+                                <div class="col-xs-12" style="margin-top: 10px;">
+                                    <img id="passport" class="photo img-responsive center-block" style="max-height: 280px;margin-bottom: 10px;display: none;"/>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <button onclick="RecognizeImg()" class="k-button col-xs-12 k-button-icontext" style="margin-bottom: 10px;">
+                                            <i class="fa fa-camera-retro"></i> 扫描护照
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--姓-->
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="last_name_cn">中文姓:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="last_name_cn" type="text" data-bind="value:customer.lastName" class="k-textbox" style="width: 100%;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="last_name_en">拼音:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="last_name_en" data-bind="value:customer.lastNameEN" class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--名-->
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="first_name_cn">中文名:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="first_name_cn" data-bind="value:customer.firstName" class="k-textbox"
+                                                   style="width: 100%;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="first_name_en">拼音:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="first_name_en" data-bind="value:customer.firstNameEN"
+                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--护照性别-->
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="passport_code">护照号:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="passport_code" data-bind="value:customer.passport" class="k-textbox fill uppercase"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="type">护照类别:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <select id="type" class="fill"
+                                                    data-role="dropdownlist"
+                                                    data-value-primitive="true"
+                                                    data-bind="value:customer.type">
+                                                <option>外交</option>
+                                                <option>公务</option>
+                                                <option>普通</option>
+                                                <option>其他</option>
+                                            </select>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--护照有效期-->
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="signed_at">护照签发日期:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="signed_at" style="width: 100%;" data-role="datepicker"
+                                                   data-bind="value:customer.issueDate,events:{change:onDateChange}"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="expire_at">护照有效日期:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="expire_at" style="width: 100%;" data-role="datepicker"
+                                                   data-bind="value:customer.expiryDate,events:{change:onDateChange}"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--护照签发省市-->
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="province_signed_en">护照签发地点:<span
+                                                style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="province_signed_en" data-bind="value:customer.issueProvince"
+                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="city_signed_en">护照签发机关:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="city_signed_en" data-bind="value:customer.issueCity"
+                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>性别:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <select class="fill"
+                                                    data-role="dropdownlist"
+                                                    data-value-primitive="true"
+                                                    data-bind="value:customer.gender">
+                                                <option>男</option>
+                                                <option>女</option>
+                                            </select>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="card_id">身份证号:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="card_id" data-bind="value:customer.idCardNo" class="k-textbox fill"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--出生地-->
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label for="home_nationality">办理人国籍:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <select id="home_nationality" class="fill"
+                                                    data-role="dropdownlist"
+                                                    data-filter="startswith"
+                                                    data-suggest="true"
+                                                    data-auto-bind="true"
+                                                    data-value-primitive="true"
+                                                    data-text-field="text"
+                                                    data-value-field="value"
+                                                    data-bind="value:customer.country,source:countries"></select>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label>出生省份:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input class="k-textbox fill uppercase" data-bind="value:customer.birthProvinceCN"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label>出生城市:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input data-bind="value:customer.birthCityCN" class="k-textbox fill uppercase"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--电话-->
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label for="mobile">手机号码:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="mobile" data-bind="value:customer.mobile" class="k-textbox fill"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label for="home_phone">家庭电话:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="home_phone" data-bind="value:customer.phone" class="k-textbox fill"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label for="email">电子邮箱:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="email" data-bind="value:customer.email" class="k-textbox fill"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--详细地址(中文)-->
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>居住地址省份:</label>
+                                        <div class='input-group'>
+                                            <input data-bind="value:customer.province" class="k-textbox fill"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>居住地址城市:</label>
+                                        <div class='input-group'>
+                                            <input data-bind="value:customer.city" class="k-textbox fill"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label>家庭详细地址/区(县)/街道/小区(社区)/楼号/单元/房间:</label>
+                                        <div class='input-group'>
+                                            <input data-bind="value:customer.address" class="k-textbox fill"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>婚姻状况:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <select class="fill"
+                                                    data-role="dropdownlist"
+                                                    data-value-primitive="true"
+                                                    data-bind="value:customer.spouse.state">
+                                                <option>单身</option>
+                                                <option>已婚</option>
+                                                <option>离异</option>
+                                                <option>丧偶</option>
+                                            </select>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>配偶或父母的职业:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input data-bind="value:customer.spouse.job" class="k-textbox fill"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--是否丢失过护照-->
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="pp_lost" class="check-box-label">我有过旧护照</label>
+                                        <input id='pp_lost' data-bind="checked:oldPassportEnable" class="mui-switch" type="checkbox"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pp_lost" data-bind="visible:oldPassportEnable">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>签发国:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input class="fill"
+                                                   data-role="dropdownlist"
+                                                   data-filter="startswith"
+                                                   data-suggest="true"
+                                                   data-auto-bind="true"
+                                                   data-value-primitive="false"
+                                                   data-text-field="text"
+                                                   data-value-field="value"
+                                                   data-bind="value:customer.oldPassport.country,source:countries"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>护照号:</label>
+                                        <div class='input-group'>
+                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.oldPassport.passport"
+                                                   placeholder="护照号码格式必需是 E/G 开头后接8位数字，如忘记可不填"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="pp_lost_why_cn">原因:</label>
+                                        <div class='input-group'>
+                                            <input id="pp_lost_why_cn" data-bind="value:customer.oldPassport.why"
+                                                   onchange="translateZhToEn(this,'pp_lost_why_en')"
+                                                   class="k-textbox" style="width: 100%;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label>原因（英文），填写中文自动翻译:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="pp_lost_why_en" data-bind="value:customer.oldPassport.whyEN"
+                                                   class="k-textbox"
+                                                   style="width: 100%;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--我有曾用名-->
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="has_used_name" class="check-box-label">我有曾用名</label>
+                                        <input id='has_used_name' data-bind="checked:oldNameEnable" class="mui-switch"
+                                               type="checkbox"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row has_used_name" data-bind="visible:oldNameEnable">
+                                <!--曾用姓-->
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="old_usrname_cn">曾用姓:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="old_usrname_cn" data-bind="value:customer.oldName.oldLastName"
+                                                   class="k-textbox" style="width: 100%;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="old_usrname_en">拼音:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="old_usrname_en" data-bind="value:customer.oldName.oldLastNameEN"
+                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--曾用名-->
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="old_given_name_cn">曾用名:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="old_given_name_cn" data-bind="value:customer.oldName.oldFirstName"
+                                                   class="k-textbox" style="width: 100%;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="old_given_name_en">拼音:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="old_given_name_en" data-bind="value:customer.oldName.oldFirstNameEN"
+                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--其他国家居民-->
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="has_pr" class="check-box-label">我是其他国家／地区永久居民</label>
+                                        <input id='has_pr' data-bind="checked:otherCountryEnable"
+                                               class="mui-switch" type="checkbox"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="has_pr" data-template="tpl_has_pr" data-bind="source:customer.otherCountry"></div>
+                            <div class="row has_pr" data-bind="visible:otherCountryEnable">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <button data-bind="click:addOne"
+                                                data-params="customer.otherCountry"
+                                                class="k-button col-xs-12 k-button-icontext">
+                                            <span class="k-icon k-i-plus"></span>添加
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="has_usa_aboard"
+                                               class="check-box-label">最近5次入境日本的信息</label>
+                                        <input id='has_usa_aboard' data-bind="checked:hasHistory"
+                                               class="mui-switch" type="checkbox"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-template="tpl_has_usa_aboard" data-bind="source:customer.histories"></div>
+                            <div class="row to_usa" data-bind="visible:hasHistory">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <button data-bind="click:addOne" data-params="customer.histories"
+                                                class="k-button col-xs-12 k-button-icontext">
+                                            <span class="k-icon k-i-plus"></span>添加
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>工作信息
+                        <div class="container-fluid">
+                            <!--我的职业-->
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label>我的职业:<span class="red">*</span></label>
+                                        <div class='input-group'>
+                                            <input data-bind="value:customer.work.job" class="k-textbox fill"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-8">
+                                    <div class="form-group">
+                                        <label for="unit_name_cn">单位名称:</label>
+                                        <div class='input-group'>
+                                            <input id="unit_name_cn" class="k-textbox fill uppercase" data-bind="value:customer.work.name"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label for="unit_phone">单位电话:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="unit_phone" class="k-textbox fill" data-bind="value:customer.work.phone"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="unit_address_cn_2">公司地址:</label>
+                                        <div class='input-group'>
+                                            <input id="unit_address_cn_2" class="k-textbox fill" data-bind="value:customer.work.address"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li> 财务信息
+                        <div class="container-fluid">
+                            <div data-template="tpl_finance" data-bind="source:customer.finances"></div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <button data-bind="click:addOne" data-params="customer.finances" class="k-button col-xs-12 k-button-icontext">
+                                            <span class="k-icon k-i-plus"></span>添加
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row" data-bind="visible:showSaveBtn">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button id="next1" class="k-primary k-button col-xs-12">
+                        <i class="fa fa-save"></i> 下一步，上传相关材料照片
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row" data-bind="visible:showToolBar">
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button id="agree" data-process="agree" class="k-button col-xs-12 white" style="background-color: #00a157">
+                        <i class="fa fa-check-circle-o"></i> 通过
+                    </button>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button id="save" class="k-primary k-button col-xs-12">
+                        <i class="fa fa-save"></i> 保存
+                    </button>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button id="refuse" data-process="refuse" class="k-button col-xs-12 white" style="background-color: #f43838">
+                        <i class="fa fa-ban"></i> 拒绝
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <a href="http://7sbs1m.com1.z0.glb.clouddn.com/%E9%A9%B1%E5%8A%A8V2.2.0.1.rar" target="_blank">
+                        <button class="k-button col-xs-12">
+                            <i class="fa fa-cloud-download"></i> 扫描仪驱动下载
+                        </button>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <a href="http://7sbs1m.com1.z0.glb.clouddn.com/SysWOW64.zip" target="_blank">
+                        <button class="k-button col-xs-12">
+                            <i class="fa fa-cloud-download"></i> IE扫描插件下载
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<!--引入 js 模板片段-->
+<script id="tpl_has_pr" type="text/text">
+    <div class="row has_pr">
+        <div class="col-xs-10">
+            <div class="form-group">
+                <div class='input-group'>
+                    <input id="pr_country" style="width: 100%;"
+                           data-role="dropdownlist"
+                           data-filter="startswith"
+                           data-suggest="true"
+                           data-auto-bind="true"
+                           data-value-primitive="true"
+                           data-text-field="text"
+                           data-value-field="value"
+                           data-bind="value:value,source:countries"/>
+                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="form-group">
+                <button data-bind="click:delOne" data-params="customer.otherCountry" class="k-button col-xs-12 k-button-icontext">
+                    <span class="k-icon k-i-close"></span>删除
+                </button>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="tpl_has_aboard" type="text/html">
+    <div class="row to_usa ">
+        <div class="col-xs-3">
+            <div class="form-group">
+                <label>入境日本时间</label>
+                <div class='input-group'>
+                    <input class="fill" data-role="datepicker" data-bind="value:arrivalDate"/>
+                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="form-group">
+                <label>停留时间</label>
+                <div class='input-group'>
+                    <input class="fill" data-role="numerictextbox" data-min="1" data-bind="value:stay"/>
+                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="form-group">
+                <label>天/周/月/年: 天:</label>
+                <div class='input-group'>
+                    <select class="fill"
+                            data-role="dropdownlist"
+                            data-value-primitive="true"
+                            data-bind="value:period">
+                        <option>天</option>
+                        <option>周</option>
+                        <option>月</option>
+                        <option>年</option>
+                    </select>
+                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="form-group">
+                <label>操作&nbsp;</label>
+                <button data-bind="click:delOne" data-params="customer.histories" class="k-button col-xs-12 k-button-icontext">
+                    <span class="k-icon k-i-close"></span>删除本次记录
+                </button>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="tpl_finance" type="text/html">
+    <div class="row">
+        <div class="col-xs-5">
+            <div class="form-group">
+                <div class='input-group'>
+                    <select class="fill"
+                            data-role="combobox"
+                            data-value-primitive="true"
+                            data-bind="value:text">
+                        <option value="银行流水账">银行流水账(万)</option>
+                        <option value="车产">车产(品牌)</option>
+                        <option value="房产">房产(平米)</option>
+                    </select>
+                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-5">
+            <div class="form-group">
+                <div class='input-group'>
+                    <input class="k-textbox fill" data-bind="value:value"/>
+                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="form-group">
+                <button data-bind="click:delOne" data-params="customer.finances" class="k-button col-xs-12 k-button-icontext">
+                    <span class="k-icon k-i-close"></span>删除
+                </button>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="tpl_has_usa_aboard" type="text/html">
+    <div class="row to_usa to_usa_row_#:data.uid#">
+        <div class="col-xs-3">
+            <div class="form-group">
+                <label for="to_usa_date_#:data.uid#">入境时间</label>
+                <div class='input-group'>
+                    <input id='to_usa_date_#:data.uid#' style="width: 100%;" data-role="datepicker" data-bind="value:arrivalDate"/>
+                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="form-group">
+                <label for="to_usa_date_stay_#:data.uid#">停留时间</label>
+                <div class='input-group'>
+                    <input id="to_usa_date_stay_#:data.uid#" style="width: 100%;"
+                           data-role="numerictextbox" data-min="1" data-bind="value:stay"/>
+                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="form-group">
+                <label for="to_usa_date_unit_#:data.uid#">天/周/月/年: 天:</label>
+                <div class='input-group'>
+                    <select id="to_usa_date_unit_#:data.uid#" style="width: 100%;"
+                            data-role="dropdownlist"
+                            data-value-primitive="true"
+                            data-bind="value:period">
+                        <option>天</option>
+                        <option>周</option>
+                        <option>月</option>
+                        <option>年</option>
+                    </select>
+                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="form-group">
+                <label for="to_usa_del_#:data.uid#">操作&nbsp;</label>
+                <button id="to_usa_del_#:data.uid#" data-bind="click:delOne" data-params="customer.histories"
+                        class="k-button col-xs-12 k-button-icontext">
+                    <span class="k-icon k-i-close"></span>删除本次记录
+                </button>
+            </div>
+        </div>
+    </div>
+</script>
+
+<!--引入 js 库文件-->
+<script src="/res/plugin/template.js"></script>
+<script src="/res/plugin/jquery.min.js"></script>
+<script src="/res/plugin/layer/layer.js"></script>
+<script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
+<script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
+<script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
+<script src="/res/js/common.js"></script>
+
+<script src="/res/plugin/webtoolkit.md5.js"></script>
+<script src="/res/js/idcard.js"></script>
+<script src="/res/js/_japanEdit.js"></script>
+<script src="/res/js/wintone.js?v=4"></script>
+</html>
