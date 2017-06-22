@@ -293,9 +293,7 @@ function saveBaseInfoData(){
 		 contentType:"application/json",
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){
-			 alert(typeof(result));
-			 layer.msg("编辑保存成功",{time:2000});
-			 location.reload();
+			layer.msg("编辑保存成功",{time:2000});
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
              layer.msg('编辑保存失败',{time:2000});
