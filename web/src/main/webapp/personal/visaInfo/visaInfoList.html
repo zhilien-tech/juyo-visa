@@ -28,7 +28,7 @@
     </div>
     <!--end 搜索条件 模块-->
     <div class="container-fluid" style="padding-bottom: 15px;">
-        <div class="row">
+        <div class="row" style="margin-top:15px;">
             <div class="col-xs-12">
                 <ul id="panelbar">
                     <li>
@@ -539,776 +539,362 @@
                             </div> 
                             <!-- end 你是否有其他亲属在美国 -->
                             
-                            <!-- 配偶全名/配偶出生日期 -->
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                        </div>
-                    </li>
-                    <li>配偶信息
-                        <div class="container-fluid">
+                            <!-- 配偶全名/配偶出生日期/配偶国籍 -->
                             <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="marital_status">婚姻状况:</label>
+	                           <div class="col-xs-4">
+	                               <div class="form-group">
+	                                    <label for="s_last_name_cn">配偶全称:<span style="color: red">*</span></label>
+	                                      <div class='input-group'>
+	                                      <input id="s_last_name_cn" class="k-textbox" style="width: 100%;"
+	                                             data-bind="value:customer.spouse.spousexing"/>
+	                                         <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                    </div>
+	                               </div>
+	                           </div>
+	                           <div class="col-xs-4">
+	                              <div class="form-group">
+	                                    <label for="s_birthday">配偶出生日期:<span style="color: red">*</span></label>
+	                                       <div class='input-group'>
+	                                          <input id="s_birthday" data-role="datepicker"
+	                                                 data-bind="value:customer.spouse.spousebirthday" style="width: 100%;"/>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                       </div>
+	                              </div>
+	                           </div> 
+	                           <div class="col-xs-4">
+	                              <div class="form-group">
+	                                  <label for="s_country">配偶国籍:<span style="color: red">*</span></label>
+	                                  <div class='input-group'>
+	                                      <input id="s_country" style="width: 100%;"
+	                                                       data-role="dropdownlist"
+	                                                       data-filter="startswith"
+	                                                       data-suggest="true"
+	                                                       data-auto-bind="true"
+	                                                       data-value-primitive="true"
+	                                                       data-text-field="text"
+	                                                       data-value-field="value"
+	                                                       data-bind="value:customer.spouse.spousecountry,source:countries"/>
+	                                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                  </div>
+	                              </div>
+	                           </div>  
+                           </div> 
+                           <!-- end 配偶全名/配偶出生日期/配偶国籍 --> 
+                            
+                           <!-- 配偶出生城市/配偶出生国家/配偶地址 --> 
+                           <div class="row">
+                           	  <div class="col-xs-4">
+                                   <div class="form-group">
+                                        <label for="s_at_city_en">配偶出生城市:
+                                           <span style="color: red">*</span>
+                                        </label>
                                         <div class='input-group'>
-                                            <select id="marital_status" style="width: 100%;"
-                                                    data-role="dropdownlist"
-                                                    data-value-primitive="true"
-                                                    data-bind="value:customer.spouse.marrystatus">
-                                                <option value="0">单身</option>
-                                                <option value="1">已婚</option>
-                                                <option value="2">离异</option>
-                                                <option value="3">丧偶</option>
-                                            </select>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                           <input id="s_at_city_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                  data-bind="value:customer.spouse.spousenowcity"/>
+                                           <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div data-bind="visible:spouseState('2')">
-                                <!-- 离婚国家 -->
-                                <div class="row marital">
-                                    <div class="col-xs-6">
-                                        <div class="form-group">
-                                            <label for="s_divorce_country"> 离婚国家:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="s_divorce_country" style="width: 100%;"
-                                                       data-role="dropdownlist"
-                                                       data-filter="startswith"
-                                                       data-suggest="true"
-                                                       data-auto-bind="true"
-                                                       data-value-primitive="true"
-                                                       data-text-field="text"
-                                                       data-value-field="value"
-                                                       data-bind="value:customer.spouse.splitcountry,source:countries"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6">
-                                        <div class="form-group">
-                                            <label for="s_divorce_date">离婚日期:<span style="color: red">*</span></label>
-                                            <div class='input-group'>
-                                                <input id="s_divorce_date" data-role="datepicker" style="width: 100%;"
-                                                       data-bind="value:customer.spouse.splitdate"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                              <!-- 离婚原因 -->
-                                <div class="row marital">
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label for="s_divorce_why_cn">离婚原因（中文）:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="s_divorce_why_cn" class="k-textbox" style="width: 100%;"
-                                                       onchange="translateZhToEn(this,'s_divorce_why')"
-                                                       data-bind="value:customer.spouse.splitreason"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row marital">
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label for="s_divorce_why"> 离婚原因（英文），填写中文自动翻译:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="s_divorce_why" class="k-textbox" style="width: 100%;"
-                                                       data-bind="value:customer.spouse.splitreasonen"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div data-bind="visible:spouseState('123')">
-                                <div class="row marital">
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label for="s_marriage_date">结婚日期:<span style="color: red">*</span></label>
-                                            <div class='input-group'>
-                                                <input id="s_marriage_date" data-role="datepicker"
-                                                       data-bind="value:customer.spouse.marrydate" style="width: 100%;"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- 配偶姓 -->
-                                <div class="row marital">
-                                    <div class="col-xs-6">
-                                        <div class="form-group">
-                                            <label for="s_last_name_cn">配偶姓:<span style="color: red">*</span></label>
-                                            <div class='input-group'>
-                                                <input id="s_last_name_cn" class="k-textbox" style="width: 100%;"
-                                                       data-bind="value:customer.spouse.spousexing"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6">
-                                        <div class="form-group">
-                                            <label for="s_last_name_en">拼音:<span style="color: red">*</span></label>
-                                            <div class='input-group'>
-                                                <input id="s_last_name_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                       data-bind="value:customer.spouse.spousexingen"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- 配偶名 -->
-                                <div class="row marital">
-                                    <div class="col-xs-6">
-                                        <div class="form-group">
-                                            <label for="s_first_name_cn">配偶名:<span style="color: red">*</span></label>
-                                            <div class='input-group'>
-                                                <input id="s_first_name_cn" class="k-textbox" style="width: 100%;"
-                                                       data-bind="value:customer.spouse.spousename"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6">
-                                        <div class="form-group">
-                                            <label for="s_first_name_en">拼音:<span style="color: red">*</span></label>
-                                            <div class='input-group'>
-                                                <input id="s_first_name_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                       data-bind="value:customer.spouse.spousenameen"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row marital">
-                                    <div class="col-xs-6">
-                                        <div class="form-group">
-                                            <label for="s_country">配偶国籍:<span style="color: red">*</span></label>
-                                            <div class='input-group'>
-                                                <input id="s_country" style="width: 100%;"
-                                                       data-role="dropdownlist"
-                                                       data-filter="startswith"
-                                                       data-suggest="true"
-                                                       data-auto-bind="true"
-                                                       data-value-primitive="true"
-                                                       data-text-field="text"
-                                                       data-value-field="value"
-                                                       data-bind="value:customer.spouse.spousecountry,source:countries"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6">
-                                        <div class="form-group">
-                                            <label for="s_birthday">配偶生日:<span style="color: red">*</span></label>
-                                            <div class='input-group'>
-                                                <input id="s_birthday" data-role="datepicker"
-                                                       data-bind="value:customer.spouse.spousebirthday" style="width: 100%;"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- 配偶生地 -->
-                                <div class="row marital">
-                                    <div class="col-xs-4">
-                                        <div class="form-group">
-                                            <label for="s_birth_country"> 配偶出生国家:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="s_birth_country" style="width: 100%;"
-                                                       data-role="dropdownlist"
-                                                       data-filter="startswith"
-                                                       data-suggest="true"
-                                                       data-auto-bind="true"
-                                                       data-value-primitive="true"
-                                                       data-text-field="text"
-                                                       data-value-field="value"
-                                                       data-bind="value:customer.spouse.spousebirthcountry,source:countries"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div class="form-group">
-                                            <label for="s_birth_province_en">出生省份（拼音）:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="s_birth_province_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                       data-bind="value:customer.spouse.spousebirthprevince"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div class="form-group">
-                                            <label for="s_birth_city_en"> 出生城市（拼音）:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="s_birth_city_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                       data-bind="value:customer.spouse.spousebirthcity"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                              <!--   配偶现居住地 -->
-                                <div class="row marital">
-                                    <div class="col-xs-4">
-                                        <div class="form-group">
-                                            <label for="s_at_country"> 配偶现在国家:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="s_at_country" style="width: 100%;"
-                                                       data-role="dropdownlist"
-                                                       data-filter="startswith"
-                                                       data-suggest="true"
-                                                       data-auto-bind="true"
-                                                       data-value-primitive="true"
-                                                       data-text-field="text"
-                                                       data-value-field="value"
-                                                       data-bind="value:customer.spouse.spousenowcountry,source:countries"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div class="form-group">
-                                            <label for="s_at_province_en">现在省份（拼音）:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="s_at_province_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                       data-bind="value:customer.spouse.spousenowprevince"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div class="form-group">
-                                            <label for="s_at_city_en">现在城市（拼音）:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="s_at_city_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                       data-bind="value:customer.spouse.spousenowcity"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- 配偶地址与我的不同 -->
-                                <div class="row marital">
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label for="same_as_home"
-                                                   class="check-box-label">配偶地址和我的地址不同</label>
-                                            <input id='same_as_home' data-bind="checked:sameAsMe" class="mui-switch"
-                                                   type="checkbox"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- 配偶地址城市(中文) -->
-                                <div class="row marital same_as_home" data-bind="visible:sameAsMe">
-                                    <div class="col-xs-8">
-                                        <div class="form-group">
-                                            <label for="s_at_address_cn"> 配偶联系地址（中文）:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="s_at_address_cn" class="k-textbox" style="width: 100%;"
-                                                       onchange="translateZhToEn(this,'s_at_address_en')"
-                                                       data-bind="value:customer.spouse.spouselinkaddress"
-                                                       placeholder="住址的房间/单元/楼号/门牌号，小区/社区（中文）"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div class="form-group">
-                                            <label for="s_at_post_code">邮编:</label>
-                                            <div class='input-group'>
-                                                <input id="s_at_post_code" class="k-textbox" style="width: 100%;"
-                                                       data-bind="value:customer.spouse.spousezipcode" placeholder="住址的邮编"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                               <!--  配偶详细地址(英文) -->
-                                <div class="row marital same_as_home" data-bind="visible:sameAsMe">
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label for="s_at_address_en">配偶联系地址（英文）,填写中文自动翻译:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="s_at_address_en" class="k-textbox" style="width: 100%;"
-                                                       data-bind="value:customer.spouse.spouselinkaddressen"
-                                                       placeholder="住址的房间/单元/楼号/门牌号（英文），填写中文自动翻译"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div data-bind="visible:spouseState('已婚离异丧偶')">
-                                <!-- 配偶单位名称(中文) -->
-                                <div class="row marital">
-                                    <div class="col-xs-8">
-                                        <div class="form-group">
-                                            <label for="s_unit_name_cn">配偶单位名称（中文）:</label>
-                                            <div class='input-group'>
-                                                <input id="s_unit_name_cn" class="k-textbox" style="width: 100%;"
-                                                       onchange="translateZhToEn(this,'s_unit_name_en')"
-                                                       data-bind="value:customer.spouse.spouseunitname"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div class="form-group">
-                                            <label for="s_unit_phone">配偶单位电话:</label>
-                                            <div class='input-group'>
-                                                <input id="s_unit_phone" class="k-textbox" style="width: 100%;"
-                                                       data-bind="value:customer.spouse.spouseunitphone"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- 配偶详细地址(英文) -->
-                                <div class="row marital">
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label for="s_unit_name_en">配偶单位名称（英文），填写中文自动翻译:</label>
-                                            <div class='input-group'>
-                                                <input id="s_unit_name_en" class="k-textbox" style="width: 100%;"
-                                                       data-bind="value:customer.spouse.spouseunitnameen"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li>亲属信息
-                        <div class="container-fluid">
+                              </div> 
+                              <div class="col-xs-4">
+                                 <div class="form-group">
+                                     <label for="s_birth_country"> 配偶出生国家:
+                                         <span style="color: red">*</span>
+                                     </label>
+                                     <div class='input-group'>
+                                        <input id="s_birth_country" style="width: 100%;"
+                                               data-role="dropdownlist"
+                                               data-filter="startswith"
+                                               data-suggest="true"
+                                               data-auto-bind="true"
+                                               data-value-primitive="true"
+                                               data-text-field="text"
+                                               data-value-field="value"
+                                               data-bind="value:customer.spouse.spousebirthcountry,source:countries"/>
+                                        <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                      </div>
+                                  </div>
+                               </div>
+                               <div class="col-xs-4">
+                                   <div class="form-group">
+                                       <label for="s_at_address_en">配偶地址:
+                                         <span style="color: red">*</span>
+                                       </label>
+                                       <div class='input-group'>
+                                          <input id="s_at_address_en" class="k-textbox" style="width: 100%;"
+                                                 data-bind="value:customer.spouse.spouselinkaddressen"
+                                                 placeholder="住址的房间/单元/楼号/门牌号（英文），填写中文自动翻译"/>
+                                          <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                       </div>
+                                   </div>
+                               </div>
+                               
+                           </div>
+                           <!-- end 配偶出生城市/配偶出生国家/配偶地址 --> 
                             
                             
                         </div>
                     </li>
-                    <li> 美国相关信息
+                    <li>工作/教育/培训信息
                         <div class="container-fluid">
+                        	<!-- 主要职业/现在单位或学校名称 -->
                             <div class="row">
-                                <div class="col-xs-12">
+                               <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label for="has_usa_aboard"
-                                               class="check-box-label">最近5次入境美国的信息</label>
-                                        <input id='has_usa_aboard' data-bind="checked:hasHistory" class="mui-switch"
-                                               type="checkbox"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div data-template="tpl_has_usa_aboard" data-bind="source:customer.recentlyintousalist"></div>
-                            <div class="row to_usa" data-bind="visible:hasHistory">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <button data-bind="click:addOne" data-params="customer.recentlyintousalist"
-                                                class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                           <!--  美国驾照 -->
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group" style="padding-top: 15px;">
-                                        <label for="have_usa_dl" class="check-box-label">持有美国驾照?</label>
-                                        <input id='have_usa_dl' data-bind="checked:hasDriving"
-                                               class="mui-switch" type="checkbox"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row dl" data-bind="visible:hasDriving">
-                                <div class="col-xs-6">
-                                    <div class="form-group">
-                                        <label for="usa_dl_number">美国驾照号:<span style="color: red">*</span></label>
+                                        <label for="usa_dl_number">主要职业:<span style="color: red">*</span></label>
                                         <div class='input-group'>
                                             <input id="usa_dl_number" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="value:customer.usainfo.usadriveport"/>
+                                                   data-bind=""/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label for="dl_signed_place">驾照签发地（州）:<span style="color: red">*</span></label>
+                                        <label for="usa_dl_number">现在单位或学校名称:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="dl_signed_place" style="width: 100%;"
-                                                   data-role="dropdownlist"
-                                                   data-filter="startswith"
-                                                   data-suggest="true"
-                                                   data-auto-bind="true"
-                                                   data-value-primitive="true"
-                                                   data-text-field="text"
-                                                   data-value-field="value"
-                                                   data-bind="value:customer.usainfo.usavisastate,source:states"/>
+                                            <input id="usa_dl_number" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind=""/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
+                                </div>  
+                            </div>
+                            <!-- end 主要职业/现在单位或学校名称 -->
+                            
+                            <!-- 地址 -->
+                            <div class="row">
+                               <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="usa_dl_number">地址:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="usa_dl_number" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                            <!-- end 地址 -->
+                            
+         					<!-- 城市/省份/邮编 -->
+                            <div class="row">
+                            	<div class="col-xs-4">
+                                   <div class="form-group">
+                                       <label for="unit_post_code">城市:</label>
+                                       <div class='input-group'>
+                                            <input id="unit_post_code" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                       </div>
+                                   </div>
+                                </div>
+                            	<div class="col-xs-4">
+                                   <div class="form-group">
+                                       <label for="unit_post_code">省份:</label>
+                                       <div class='input-group'>
+                                            <input id="unit_post_code" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                       </div>
+                                   </div>
+                                </div>
+                            	<div class="col-xs-4">
+                                   <div class="form-group">
+                                       <label for="unit_post_code">邮编:<span style="color: red">*</span></label>
+                                       <div class='input-group'>
+                                            <input id="unit_post_code" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.workinfo.zipcode"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                       </div>
+                                   </div>
                                 </div>
                             </div>
+                            <!-- end 城市/省份/邮编 -->
                             
+                            <!-- 国家/工作电话号码/月薪 -->
+                            <div class="row">
+                            	<div class="col-xs-4">
+                                   <div class="form-group">
+                                       <label for="unit_post_code">国家:</label>
+                                       <div class='input-group'>
+                                            <input id="unit_post_code" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                       </div>
+                                   </div>
+                                </div>
+                            	<div class="col-xs-4">
+                                   <div class="form-group">
+                                       <label for="unit_post_code">工作电话号码:</label>
+                                       <div class='input-group'>
+                                            <input id="unit_post_code" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                       </div>
+                                   </div>
+                                </div>
+                            	<div class="col-xs-4">
+                                   <div class="form-group">
+                                       <label for="unit_post_code">月薪:<span style="color: red">*</span></label>
+                                       <div class='input-group'>
+                                            <input id="unit_post_code" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                       </div>
+                                   </div>
+                                </div>
+                            </div>
+                            <!-- end 国家/工作电话号码/月薪 -->
+                            <!-- 简要描述你的职责 -->
+                            <div class="row">
+                            	<div class="col-xs-12">
+                                   <div class="form-group">
+                                       <label for="unit_post_code">简要描述你的职责:<span style="color: red">*</span></label>
+                                       <div class='input-group'>
+                                            <input id="unit_post_code" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                       </div>
+                                   </div>
+                                </div>
+                            </div>
+                            <!-- end 简要描述你的职责 -->
                             
-                        </div>
-                    </li>
-                    <li> 教育信息
-                        <div class="container-fluid">
+                            <!-- 你在此之前是否工作过 -->
+                            <div class="row">
+	                            <div class="col-xs-12">
+	                                    <div class="form-group">
+	                                        <label for="have_usa_dl" class="check-box-label">你在此之前是否工作过</label>
+	                                        <input id='have_usa_dl' data-bind=""
+	                                               class="mui-switch" type="checkbox"/>
+	                                    </div>
+                            	</div>
+                            </div>
+                            <!-- end 你在此之前是否工作过 -->
+                            
+                            <!-- 你是否就读过中学以上的学校 -->
+                            <div class="row">
+	                             <div class="col-xs-12">
+	                                  <div class="form-group">
+	                                        <label for="have_usa_dl" class="check-box-label">你是否就读过中学以上的学校</label>
+	                                        <input id='have_usa_dl' data-bind=""
+	                                               class="mui-switch" type="checkbox"/>
+	                                  </div>
+	                              </div>
+                            </div>
+                            <!-- end 你是否就读过中学以上的学校 -->
+                            
+                            <!-- 学校名称/学校地址 -->
+                            <div class="row">
+                            	<div class="col-xs-6">
+                                   <div class="form-group">
+                                       <label for="unit_post_code">学校名称:</label>
+                                       <div class='input-group'>
+                                            <input id="unit_post_code" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                       </div>
+                                   </div>
+                                </div>
+                                <div class="col-xs-6">
+                                   <div class="form-group">
+                                       <label for="unit_post_code">学校地址:</label>
+                                       <div class='input-group'>
+                                            <input id="unit_post_code" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                       </div>
+                                   </div>
+                                </div>
+                            </div>
+                            <!-- end 学校名称/学校地址 -->
+                            
+                            <!-- 城市/省份/邮编 -->
+                            <div class="row">
+                            	<div class="col-xs-4">
+                                   <div class="form-group">
+                                       <label for="unit_post_code">城市:</label>
+                                       <div class='input-group'>
+                                            <input id="unit_post_code" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                       </div>
+                                   </div>
+                                </div>
+                                <div class="col-xs-4">
+                                   <div class="form-group">
+                                       <label for="unit_post_code">省份:</label>
+                                       <div class='input-group'>
+                                            <input id="unit_post_code" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                       </div>
+                                   </div>
+                                </div>
+                                <div class="col-xs-4">
+                                   <div class="form-group">
+                                       <label for="unit_post_code">邮编:</label>
+                                       <div class='input-group'>
+                                            <input id="unit_post_code" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                       </div>
+                                   </div>
+                                </div>
+                            </div>
+                            <!-- end 城市/省份/邮编 -->
+                            
+                            <!-- 所学专业/参加学习日期/结束学习日期 -->
+                            <div class="row">
+                            	<div class="col-xs-4">
+                                   <div class="form-group">
+                                       <label for="unit_post_code">所学专业:</label>
+                                       <div class='input-group'>
+                                            <input id="unit_post_code" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                       </div>
+                                   </div>
+                                </div>
+                                <div class="col-xs-4">
+						            <div class="form-group">
+						                <label for="unit_post_code">参加学习日期:<span style="color: red">*</span></label>
+						                <div class='input-group'>
+						                    <input id="start_date" data-role="datepicker" data-bind="value:startdate"
+						                           style="width: 100%;"/>
+						                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+						                </div>
+						            </div>
+						        </div>
+						        <div class="col-xs-4">
+						            <div class="form-group">
+						                <label for="unit_post_code">结束学习日期:<span style="color: red">*</span></label>
+						                <div class='input-group'>
+						                    <input id="end_date" data-role="datepicker" data-bind="value:enddate" style="width: 100%;"/>
+						                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+						                </div>
+						            </div>
+						        </div>
+                            </div>
+                            <!-- end 所学专业/参加学习日期/结束学习日期 -->
+                            <!-- 你是否属于一个部族或部落 -->
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="has_never_educated" class="check-box-label">
-                                            	我没有高中（或等同）以上学历，包含高中（或等同）学历
-                                        </label>
-                                        <input id='has_never_educated' data-bind="checked:hasSchool"
+                                        <label for="other_relatives"
+                                               class="check-box-label">你是否属于一个部族或部落</label>
+                                        <input id='other_relatives' data-bind=""
                                                class="mui-switch" type="checkbox"/>
                                     </div>
                                 </div>
-                            </div>
-                            <div data-template="tpl_school" data-bind="source:customer.teachinfo"></div>
-                            <div class="row school" data-bind="visible:hasSchool">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="addSchoolARow">&nbsp;</label>
-                                        <button id="addSchoolARow" data-bind="click:addOne"
-                                                data-params="customer.teachinfo"
-                                                class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加一所学校
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li>工作信息
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="occupation">行业:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <select id="occupation" style="width: 100%;"
-                                                    data-role="dropdownlist"
-                                                    data-value-primitive="true"
-                                                    data-bind="value:customer.workinfo.jobstatus">
-                                                <option value="S">学生</option>
-                                                <option value="RT">退休</option>
-                                                <option value="N">待业</option>
-                                                <option value="A">农业</option>
-                                                <option value="AP">艺术家/演员</option>
-                                                <option value="B">商业</option>
-                                                <option value="CM">通讯</option>
-                                                <option value="CS">计算机科学</option>
-                                                <option value="C">烹饪/食品</option>
-                                                <option value="ED">教育</option>
-                                                <option value="EN">工程</option>
-                                                <option value="G">政府</option>
-                                                <option value="H">居家</option>
-                                                <option value="LP">法律</option>
-                                                <option value="MH">医疗/健康</option>
-                                                <option value="M">军事</option>
-                                                <option value="NS">自然科学</option>
-                                                <option value="PS">物理科学</option>
-                                                <option value="RV">宗教</option>
-                                                <option value="R">研究</option>
-                                                <option value="SS">社会科学</option>
-                                                <option value="O">其他</option>
-                                            </select>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div data-bind="visible:hasWorkDetail('学生退休待业')">
-                                <div class="row job">
-                                    <div class="col-xs-2">
-                                        <div class="form-group">
-                                            <label for="salary">月薪:<span style="color: red">*</span></label>
-                                            <div class='input-group'>
-                                                <input id="salary" class="k-textbox" style="width: 100%;"
-                                                       data-bind="value:customer.workinfo.monthmoney"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-5">
-                                        <div class="form-group">
-                                            <label for="job_cn">当前职务（中文）:<span style="color: red">*</span></label>
-                                            <div class='input-group'>
-                                                <input id="job_cn" class="k-textbox" style="width: 100%;"
-                                                       data-bind="value:customer.workinfo.nowjob"
-                                                       onchange="translateZhToEn(this,'job_en')"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-5">
-                                        <div class="form-group">
-                                            <label for="job_en"> 当前职务（英文），填写中文自动翻译:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="job_en" class="k-textbox" style="width: 100%;"
-                                                       data-bind="value:customer.workinfo.nowjoben"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row job">
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label for="other_primary_occupation_cn"> 职业描述（中文）:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="other_primary_occupation_cn" class="k-textbox" style="width: 100%;"
-                                                       onchange="translateZhToEn(this,'other_primary_occupation')"
-                                                       data-bind="value:customer.workinfo.jobdescription"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row job">
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label for="other_primary_occupation">职业描述（英文），填写中文自动翻译:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="other_primary_occupation" class="k-textbox" style="width: 100%;"
-                                                       data-bind="value:customer.workinfo.jobdescriptionen"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row job">
-                                    <div class="col-xs-4">
-                                        <div class="form-group">
-                                            <label for="job_nationality">当前工作国家:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="job_nationality" style="width: 100%;"
-                                                       data-role="dropdownlist"
-                                                       data-filter="startswith"
-                                                       data-suggest="true"
-                                                       data-auto-bind="true"
-                                                       data-value-primitive="true"
-                                                       data-text-field="text"
-                                                       data-value-field="value"
-                                                       data-bind="value:customer.workinfo.nowcountry,source:countries"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div class="form-group">
-                                            <label for="job_province_en"> 省份（拼音）:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="job_province_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                       data-bind="value:customer.workinfo.nowprevince"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div class="form-group">
-                                            <label for="job_city_en">城市（拼音）:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="job_city_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                       data-bind="value:customer.workinfo.nowcity"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row job">
-                                    <div class="col-xs-8">
-                                        <div class="form-group">
-                                            <label for="unit_name_cn">单位名称（中文）:</label>
-                                            <div class='input-group'>
-                                                <input id="unit_name_cn" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                       onchange="translateZhToEn(this,'unit_name_en')"
-                                                       data-bind="value:customer.workinfo.unitname"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div class="form-group">
-                                            <label for="unit_phone">单位电话:<span style="color: red">*</span></label>
-                                            <div class='input-group'>
-                                                <input id="unit_phone" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                       data-bind="value:customer.workinfo.unitphone"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row job">
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label for="unit_name_en">单位名称（英文），填写中文自动翻译:</label>
-                                            <div class='input-group'>
-                                                <input id="unit_name_en" class="k-textbox" style="width: 100%;"
-                                                       data-bind="value:customer.workinfo.unitnameen"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row job">
-                                    <div class="col-xs-8">
-                                        <div class="form-group">
-                                            <label for="unit_address_cn_1">公司地址的门牌号/房间/单元/楼宇（中文）:
-                                                <span style="color: red">*</span>
-                                            </label>
-                                            <div class='input-group'>
-                                                <input id="unit_address_cn_1"  class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                       onchange="translateZhToEn(this,'unit_address_en')"
-                                                       data-bind="value:customer.workinfo.unitaddresssmall"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div class="form-group">
-                                            <label for="unit_post_code">邮编:<span style="color: red">*</span></label>
-                                            <div class='input-group'>
-                                                <input id="unit_post_code" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                       data-bind="value:customer.workinfo.zipcode"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row job">
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label for="unit_address_cn_2">公司地址的街道/区/县（中文）:</label>
-                                            <div class='input-group'>
-                                                <input id="unit_address_cn_2" class="k-textbox" style="width: 100%;"
-                                                       onchange="translateZhToEn(this,'unit_address_en2')"
-                                                       data-bind="value:customer.workinfo.unitaddressbig"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row job">
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label for="unit_address_en">公司地址的门牌号/房间/单元/楼宇（英文），填写中文自动翻译:</label>
-                                            <div class='input-group'>
-                                                <input id="unit_address_en" class="k-textbox" style="width: 100%;"
-                                                       data-bind="value:customer.workinfo.unitaddresssmallen"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row job">
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label for="unit_address_en2">公司地址的街道/区/县（英文），填写中文自动翻译:</label>
-                                            <div class='input-group'>
-                                                <input id="unit_address_en2" class="k-textbox" style="width: 100%;"
-                                                       data-bind="value:customer.workinfo.unitaddressbigen"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row job">
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label for="unit_duty_cn">工作职责（中文）:</label>
-                                            <div class='input-group'>
-                                                <input id="unit_duty_cn" class="k-textbox" style="width: 100%;"
-                                                       onchange="translateZhToEn(this,'unit_duty_en')"
-                                                       data-bind="value:customer.workinfo.jobduty" />
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row job">
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label for="unit_duty_en">工作职责（英文），填写中文自动翻译:</label>
-                                            <div class='input-group'>
-                                                <input id="unit_duty_en" class="k-textbox" style="width: 100%;"
-                                                       data-bind="value:customer.workinfo.jobdutyen"/>
-                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li>过往工作信息
-                        <div class="container-fluid">
-                            <div data-template="tpl_org" data-bind="source:customer.oldworkslist"></div>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="addOrgRow">&nbsp;</label>
-                                        <button id="addOrgRow" data-bind="click:addOne" data-params="customer.oldworkslist"
-                                                class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加公司/单位
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="disabled">其他信息
-                        <div class="container-fluid">
+                            </div>	
+                            <!-- end 你是否属于一个部族或部落 -->
+                            
+                            <!-- 所说语言列表 -->
                             <div class="row">
                                 <div class="col-xs-10">
                                     <div class="form-group">
-                                        <label>我会说的语言种类</label>
+                                        <label>所说语言列表</label>
                                     </div>
                                 </div>
                                 <div class="col-xs-2">
@@ -1322,10 +908,13 @@
                                 </div>
                             </div>
                             <div data-template="tpl_lang" data-bind="source:customer.languagelist"></div>
+                            <!-- end 所说语言列表 -->
+                            
+                            <!-- 最近5年是否去过其它国家 -->
                             <div class="row">
                                 <div class="col-xs-10">
                                     <div class="form-group">
-                                        <label>过去十年曾进入的国家</label>
+                                        <label>最近5年是否去过其它国家</label>
                                     </div>
                                 </div>
                                 <div class="col-xs-2">
@@ -1339,10 +928,13 @@
                                 </div>
                             </div>
                             <div data-template="tpl_to_country" data-bind="source:customer.visitedcountrylist"></div>
-                            <div class="row">
+                        	<!-- end 最近5年是否去过其它国家 -->
+                        	
+                        	<!-- 你是否隶属过或捐助过或曾就职于任何专业、社会、慈善组织 -->
+                        	<div class="row">
                                 <div class="col-xs-10">
                                     <div class="form-group">
-                                        <label>现在和曾经所属/捐助/工作过的职业协会、社会团体和慈善机构</label>
+                                        <label>你是否隶属过或捐助过或曾就职于任何专业、社会、慈善组织</label>
                                     </div>
                                 </div>
                                 <div class="col-xs-2">
@@ -1356,10 +948,26 @@
                                 </div>
                             </div>
                             <div data-template="tpl_charitable" data-bind="source:customer.workedplacelist"></div>
+                        	<!-- end 你是否隶属过或捐助过或曾就职于任何专业、社会、慈善组织 -->
+                        	
+                        	<!-- 你是否掌握任何专业技能或接受过任何专业训练，如枪械、爆炸物、核能、生物或化学经验 -->
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="join_army" class="check-box-label">我曾经参军</label>
+                                        <label for="other_relatives"
+                                               class="check-box-label">你是否掌握任何专业技能或接受过任何专业训练，如枪械、爆炸物、核能、生物或化学经验</label>
+                                        <input id='other_relatives' data-bind=""
+                                               class="mui-switch" type="checkbox"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end 你是否掌握任何专业技能或接受过任何专业训练，如枪械、爆炸物、核能、生物或化学经验 --> 
+                        	
+                        	<!-- 你是否曾在军队中服役 -->
+                        	<div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="join_army" class="check-box-label">你是否曾在军队中服役</label>
                                         <input id='join_army' data-bind="checked:joinArmy" class="mui-switch"
                                                type="checkbox"/>
                                     </div>
@@ -1369,7 +977,7 @@
                                 <div class="row army">
                                     <div class="col-xs-6">
                                         <div class="form-group">
-                                            <label for="army_start_date">开始时间:<span style="color: red">*</span></label>
+                                            <label for="army_start_date">服役开始日期:<span style="color: red">*</span></label>
                                             <div class='input-group'>
                                                 <input id="army_start_date" data-role="datepicker"
                                                        data-bind="value:customer.army.startdate" style="width: 100%;"/>
@@ -1379,7 +987,7 @@
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
-                                            <label for="army_end_date">结束时间:<span style="color: red">*</span></label>
+                                            <label for="army_end_date">服役结束日期:<span style="color: red">*</span></label>
                                             <div class='input-group'>
                                                 <input id="army_end_date" data-role="datepicker"
                                                        data-bind="value:customer.army.enddate" style="width: 100%;"/>
@@ -1442,7 +1050,7 @@
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
-                                            <label for="army_good_at_cn">军事特长:<span style="color: red">*</span></label>
+                                            <label for="army_good_at_cn">军事专业:<span style="color: red">*</span></label>
                                             <div class='input-group'>
                                                 <input id="army_good_at_cn" class="k-textbox" style="width: 100%;"
                                                        data-bind="value:customer.army.armydo"/>
@@ -1452,69 +1060,177 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- end 你是否曾在军队中服役 -->
+                            
+                            <!-- 你是否服务、加入或参与过准军事部队、治安部队、反政府团体、游击队或叛乱组织 -->
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="other_relatives"
+                                               class="check-box-label">你是否服务、加入或参与过准军事部队、治安部队、反政府团体、游击队或叛乱组织</label>
+                                        <input id='other_relatives' data-bind=""
+                                               class="mui-switch" type="checkbox"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end 你是否服务、加入或参与过准军事部队、治安部队、反政府团体、游击队或叛乱组织 --> 
+                        </div>
+                    </li>
+                    
+                    <li>安全和背景信息
+                        <div class="container-fluid">
+                        	<!-- 不确定 -->
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="other_relatives"
+                                               class="check-box-label">不确定</label>
+                                        <input id='other_relatives' data-bind=""
+                                               class="mui-switch" type="checkbox"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end 不确定 --> 
+                        </div>
+                    </li>
+                    <li>地点信息
+                        <div class="container-fluid">
+                        	<!--  -->
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>提交申请的地点:</label>
+                                        <div class='input-group'>
+                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="" placeholder=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                 </div>
+                                 <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>目前的地点:</label>
+                                        <div class='input-group'>
+                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="" placeholder=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--  -->
+                        </div>
+                    </li>
+                    <li class="disabled">其他信息
+                        <div class="container-fluid">
+                        	<!-- 有人协助你填写这份申请吗 -->
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="has_immediate_relatives" class="check-box-label">
+                                        	有人协助你填写这份申请吗
+                                        </label>
+                                        <input id='has_immediate_relatives' class="mui-switch" type="checkbox"
+                                               data-bind=""/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" data-bind="">
+                            	<div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>制作者姓:</label>
+                                        <div class='input-group'>
+                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="" placeholder=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>制作者名:</label>
+                                        <div class='input-group'>
+                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="" placeholder=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>组织名称:</label>
+                                        <div class='input-group'>
+                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="" placeholder=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>详细地址:</label>
+                                        <div class='input-group'>
+                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="" placeholder=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3">
+                                    <div class="form-group">
+                                        <label>城市:</label>
+                                        <div class='input-group'>
+                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="" placeholder=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3">
+                                    <div class="form-group">
+                                        <label>省份:</label>
+                                        <div class='input-group'>
+                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="" placeholder=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3">
+                                    <div class="form-group">
+                                        <label>邮编:</label>
+                                        <div class='input-group'>
+                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="" placeholder=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3">
+                                    <div class="form-group">
+                                        <label>国家:</label>
+                                        <div class='input-group'>
+                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="" placeholder=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>与你的关系:</label>
+                                        <div class='input-group'>
+                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="" placeholder=""/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end 有人协助你填写这份申请吗 -->   
                         </div>
                     </li> 
                 </ul>
-            </div>
-        </div>
-        <div class="row" data-bind="visible:showSaveBtn">
-            <div class="col-xs-12">
-                <div class="form-group">
-                    <label>&nbsp;</label>
-                    <button id="next1" class="k-primary k-button col-xs-12">
-                        <i class="fa fa-save"></i> 下一步，上传相关材料照片
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="row" data-bind="visible:showToolBar">
-            <div class="col-xs-4">
-                <div class="form-group">
-                    <label>&nbsp;</label>
-                    <button id="agree" data-process="agree" class="k-button col-xs-12 white" style="background-color: #00a157" onclick="agreeOrRefuse('agree');">
-                        <i class="fa fa-check-circle-o"></i> 通过
-                    </button>
-                </div>
-            </div>
-            <div class="col-xs-4">
-                <div class="form-group">
-                    <label>&nbsp;</label>
-                    <button id="saveCustomerData" class="k-primary k-button col-xs-12"> 
-                        <i class="fa fa-save"></i>保存
-
-                    </button>
-                </div>
-            </div>
-            <!-- <button onclick="customersave();">jsdjifioasdfiosa</button> -->
-            <div class="col-xs-4">
-                <div class="form-group">
-                    <label>&nbsp;</label>
-                    <button id="refuse" data-process="refuse" class="k-button col-xs-12 white" style="background-color: #f43838" onclick="agreeOrRefuse('refuse');">
-                        <i class="fa fa-ban"></i> 拒绝
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-6">
-                <div class="form-group">
-                    <label>&nbsp;</label>
-                    <a href="http://7sbs1m.com1.z0.glb.clouddn.com/%E9%A9%B1%E5%8A%A8V2.2.0.1.rar" target="_blank">
-                        <button class="k-button col-xs-12">
-                            <i class="fa fa-cloud-download"></i> 扫描仪驱动下载
-                        </button>
-                    </a>
-                </div>
-            </div>
-            <div class="col-xs-6">
-                <div class="form-group">
-                    <label>&nbsp;</label>
-                    <a href="http://7sbs1m.com1.z0.glb.clouddn.com/SysWOW64.zip" target="_blank">
-                        <button class="k-button col-xs-12">
-                            <i class="fa fa-cloud-download"></i> IE扫描插件下载
-                        </button>
-                    </a>
-                </div>
             </div>
         </div>
     </div>
@@ -2270,6 +1986,8 @@
         </div>
     </div>
 </script>
+
+
 
 <!--引入 js 库文件-->
 <script src="/res/plugin/template.js"></script>
