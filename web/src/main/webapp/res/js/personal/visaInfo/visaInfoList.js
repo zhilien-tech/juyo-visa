@@ -49,7 +49,12 @@ var countries = new kendo.data.DataSource({
 			languagelist:[],
 			visitedcountrylist:[],
 			workedplacelist:[],
-			army:{}
+			army:{},
+			travel: {
+	            payer: "我自己",
+	            // 同行人员
+	            togethers: []
+	        },
     },
     keys = {
 		"customer.orthercountrylist":{},
@@ -200,25 +205,11 @@ kendo.bind($(document.body), viewModel);
 $("#pp_lost").change(function () {
 	viewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
 });
-/*$("#pp_lost").change(function () {
-    if ($(this).is(':checked')) {
-    	viewModel.add("customer.passportlose");
-    } else {
-    	viewModel.clear("customer.passportlose");
-    }
-});*/
 
 //曾用名
 $("#has_used_name").change(function () {
 	viewModel.set("customer.oldname", $(this).is(':checked') ? " " : "");
 });
-/*$("#has_used_name").change(function () {
-    if ($(this).is(':checked')) {
-    	viewModel.add("customer.oldname");
-    } else {
-    	viewModel.clear("customer.oldname");
-    }
-});*/
 
 //其他国家居民
 $("#has_pr").change(function () {
@@ -228,7 +219,15 @@ $("#has_pr").change(function () {
     	viewModel.clearAll("customer.orthercountrylist");
     }
 });
-
+//同行人员
+$("#has_other_travelers").change(function () {
+    var key = "customer.peerList";
+    if ($(this).is(':checked')) {
+    	viewModel.addOne(key);
+    } else {
+    	viewModel.clearAll(key);
+    }
+});
 
 
 
