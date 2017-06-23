@@ -93,12 +93,7 @@ keys = {
 };
 //护照类型
 var passportTypeEnum=[
-    {text:"外交护照",value:1},
-    {text:"公务护照",value:2},
-    {text:"旅游护照",value:3},
-    {text:"海员护照",value:4},
-    {text:"特区护照",value:5},
-    {text:"难民护照",value:6}
+    {text:"旅游护照",value:1}
   ];
 //数据绑定
 var viewModel = kendo.observable({
@@ -108,28 +103,6 @@ var viewModel = kendo.observable({
 	states:states
 });
 kendo.bind($(document.body), viewModel);
-//护照信息编辑保存
-$("#updatePassportSave").on("click",function(){
-	console.log(JSON.stringify(viewModel.customer));
-	$.ajax({
-		 type: "POST",
-		 url: "/visa/passportinfo/updatePassportSave",
-		 contentType:"application/json",
-		 data: JSON.stringify(viewModel.customer)+"",
-		 success: function (result){
-			 console.log(result);
-			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			 parent.layer.close(index);
-			 window.parent.successCallback('2');
-		 },
-		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-			 console.log(XMLHttpRequest);
-			 console.log(textStatus);
-			 console.log(errorThrown);
-            layer.msg('保存失败!',{time:2000});
-         }
-	});
-});
 //事件提示
 function successCallback(id){
 	grid.dataSource.read();
@@ -141,3 +114,22 @@ function successCallback(id){
 		layer.msg("删除成功",{time:2000});
 	}
 }
+//护照信息编辑保存
+$("#updatePassportSave").on("click",function(){
+	console.log(JSON.stringify(viewModel.customer));
+	$.ajax({
+		 type: "POST",
+		 url: "/visa/passportinfo/updatePassportSave",
+		 contentType:"application/json",
+		 data: JSON.stringify(viewModel.customer)+"",
+		 success: function (result){
+			 layer.msg("修改成功",{time:2000});
+		 },
+		 error: function(XMLHttpRequest, textStatus, errorThrown) {
+			 console.log(XMLHttpRequest);
+			 console.log(textStatus);
+			 console.log(errorThrown);
+             layer.msg('保存失败!',{time:2000});
+         }
+	});
+});

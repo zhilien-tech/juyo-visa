@@ -10,7 +10,7 @@
 .btn-primary:active.focus,.btn-primary.active.focus,
 .open > .dropdown-toggle.btn-primary.focus {color: #fff;background-color: #32a1e4;border-color: #2b82b7;}
 .marginBtn{margin-left:10px;}
-.container{width: 100%;padding: 15px 0 0 0;height:93.6% !important;overflow-y: auto;}
+.container{width:100%;padding: 15px 0 0 0;height:93.6% !important;overflow-y: auto;}
 /*日期插件style*/
 .k-gantt-toolbar .k-state-default, .k-grid .k-grouping-header, .k-grid-header, .k-grid-header-wrap, .k-grouping-header .k-group-indicator, .k-header, .k-pager-wrap, .k-pager-wrap .k-link, .k-pager-wrap .k-textbox {border-color: #c9c9c9;border: 1px;}
 .k-picker-wrap .k-input {height: 29px;padding: 0;}

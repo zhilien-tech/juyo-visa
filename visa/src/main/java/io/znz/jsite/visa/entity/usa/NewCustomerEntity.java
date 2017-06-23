@@ -1,5 +1,6 @@
 package io.znz.jsite.visa.entity.usa;
 
+import io.znz.jsite.visa.entity.communicathomeaddress.CommunicatHomeAddressEntity;
 import io.znz.jsite.visa.entity.customer.NewArmyEntity;
 import io.znz.jsite.visa.entity.customer.NewLanguageEntity;
 import io.znz.jsite.visa.entity.customer.NewOldnameEntity;
@@ -15,6 +16,9 @@ import io.znz.jsite.visa.entity.customer.NewUsainfoEntity;
 import io.znz.jsite.visa.entity.customer.NewVisitedcountryEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkedplaceEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkinfoEntity;
+import io.znz.jsite.visa.entity.othernationality.OtherNationalityEntity;
+import io.znz.jsite.visa.entity.socialinsurancenum.SocialInsuranceNum;
+import io.znz.jsite.visa.entity.taxpayerauthenticationcode.TaxpayerAuthenticationCodeEntity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -184,6 +188,9 @@ public class NewCustomerEntity implements Serializable {
 	@Column
 	@Comment("护照机读码")
 	private String passportreadnum;
+	@Column
+	@Comment("姓名电报码")
+	private String nameTelegramCode;
 
 	private NewPassportloseEntity passportlose;
 
@@ -216,4 +223,12 @@ public class NewCustomerEntity implements Serializable {
 	private List<NewWorkedplaceEntity> workedplacelist;
 
 	private NewArmyEntity army;
+	//是否有其他国籍
+	private List<OtherNationalityEntity> othernationality;
+	//美国社会保险号码
+	private SocialInsuranceNum socialinsurancenum;
+	//美国纳税人认证码
+	private TaxpayerAuthenticationCodeEntity taxpayerauthenticat;
+	//通信地址与家庭地址是否一致
+	private CommunicatHomeAddressEntity commhomeaddress;
 }
