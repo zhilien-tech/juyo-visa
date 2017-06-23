@@ -16,7 +16,7 @@ import org.nutz.dao.entity.annotation.Table;
 public class NewCustomerJpEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id(auto = true)
-	private Integer id;
+	private Long id;
 
 	@Column
 	@Comment("员工表id")
@@ -141,4 +141,12 @@ public class NewCustomerJpEntity implements Serializable {
 	private NewWorkinfoJpEntity workinfoJp;
 
 	private List<NewFinanceJpEntity> financeJpList;
+
+	private NewOldpassportJpEntity oldpassportJp;
+
+	private NewOldnameJpEntity oldnameJp;
+
+	private List<NewOrthercountryJpEntity> orthercountryJpList;
+
+	private List<NewRecentlyintojpJpEntity> recentlyintojpJpList;
 }

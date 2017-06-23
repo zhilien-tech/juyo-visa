@@ -19,7 +19,7 @@ public class NewCustomerOrderJpEntity implements Serializable {
 
 	@Column
 	@Comment("客户信息的id")
-	private Integer customer_jp_id;
+	private Long customer_jp_id;
 
 	@Column
 	@Comment("订单id")

@@ -93,7 +93,7 @@ function regCmd(command) {
                 case "shareall":
                 	if (!(data = select(e))) return;
                 	 var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
-                	$.getJSON("/visa/order/shareallothers?type=order&orderid=" + data.id, {}, function (resp) {
+                	$.getJSON("/visa/order/shareall?type=order&orderid=" + data.id, {}, function (resp) {
                 		if (resp.code === "SUCCESS") {
                 			if(index!=null){
         						
@@ -137,6 +137,7 @@ function regCmd(command) {
                 	break;
                 case "modify":
                     var data = grid.dataItem($(e.currentTarget).closest("tr"));
+                    
                     layer.open({
                         type: 2,
                         title: '编辑订单',
@@ -148,7 +149,10 @@ function regCmd(command) {
                 case "customerEdit":
                 	/*var data = grid.dataItem($(e.currentTarget).closest("tr"));*/
                 	/*var data = a.dataItem($(e.currentTarget).closest("tr"));*/
+                	var data1 = grid.dataItem($(e.currentTarget).closest("tr"));
                 	   if (!(data = select(e))) return;
+                	   alert(data.id);
+                       alert(data1.id);
                 	layer.open({
                 		type: 2,
                 		title: '编辑客户信息',

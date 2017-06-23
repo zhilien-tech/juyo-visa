@@ -62,13 +62,14 @@ public class KenDoTestSqlForm extends KenDoParamForm {
 			cnd.and(e1).or(e2);
 		}
 		if (!Util.isEmpty(keywords)) {
-			SqlExpressionGroup e1 = Cnd.exps("vno.ordernumber", "like", keywords);
-			SqlExpressionGroup e2 = Cnd.exps("vnc.chinesefullname", "like", keywords);
-			SqlExpressionGroup e3 = Cnd.exps("vcm.telephone", "like", keywords);
-			SqlExpressionGroup e4 = Cnd.exps("vcm.email", "like", keywords);
-			SqlExpressionGroup e5 = Cnd.exps("vcm.linkman", "like", keywords);
+			SqlExpressionGroup e1 = Cnd.exps("vno.ordernumber", "like", "%" + keywords + "%");
+			SqlExpressionGroup e2 = Cnd.exps("vnc.chinesefullname", "like", "%" + keywords + "%");
+			SqlExpressionGroup e3 = Cnd.exps("vcm.telephone", "like", "%" + keywords + "%");
+			SqlExpressionGroup e4 = Cnd.exps("vcm.email", "like", "%" + keywords + "%");
+			SqlExpressionGroup e5 = Cnd.exps("vcm.linkman", "like", "%" + keywords + "%");
+			SqlExpressionGroup e6 = Cnd.exps("vnc.phone", "like", "%" + keywords + "%");
 			//SqlExpressionGroup e6 = Cnd.exps("vo.id", "like", keywords);
-			cnd.and(e1).or(e2).or(e3).or(e4).or(e5);
+			cnd.and(e1).or(e2).or(e3).or(e4).or(e5).or(e6);
 		}
 		if (!Util.isEmpty(state) && state > 0) {
 			SqlExpressionGroup e1 = Cnd.exps("vno.status", "=", state);
