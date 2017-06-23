@@ -33,7 +33,7 @@ var statuslist=[
   ];
 //注册命令
 function regCmd(command) {
-    var select = function (e) {
+	var select = function (e) {
         var data = $(e.delegateTarget).data("kendoGrid").dataItem($(e.currentTarget).closest("tr"));
         if (!data) $.layer.alert("请先选择需要操作的数据行");
         return data;
@@ -47,22 +47,23 @@ function regCmd(command) {
             var data;
             switch (command) {
                 case "share":
+                	alert(111);
                     if (!(data = select(e))) return;
                     var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
-                    $.getJSON("/visa/order/share?type=customer&customerid=" + data.id, {}, function (resp) {
+                    $.getJSON("/visa/neworderjp/share?type=customer&customerid=" + data.id, {}, function (resp) {
                         if (resp.code === "SUCCESS") {
                 			if(index!=null){
         						
             					layer.close(index);
             					}
-                           /* $.layer.confirm('发送成功，打开预览？', {
+                            $.layer.confirm('发送成功，打开预览？', {
                                 btn: ['预览', '关闭']
                             }, function (index, layero) {
-                                window.open(resp.data);
+                                window.open("/m/delivery.html");
                             }, function (index) {
                                 $.layer.closeAll();
-                            });*/
-                        	layer.msg("分享成功",{time: 2000});
+                            });
+                        	//layer.msg("分享成功",{time: 2000});
                         } else {
                             $.layer.alert(resp.msg);
                         }
@@ -93,7 +94,7 @@ function regCmd(command) {
                 case "shareall":
                 	if (!(data = select(e))) return;
                 	 var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
-                	$.getJSON("/visa/order/shareallothers?type=order&orderid=" + data.id, {}, function (resp) {
+                	$.getJSON("/visa/neworderjp/shareall?type=order&orderid=" + data.id, {}, function (resp) {
                 		if (resp.code === "SUCCESS") {
                 			if(index!=null){
         						
@@ -135,6 +136,17 @@ function regCmd(command) {
                 		}
                 	});
                 	break;
+                case "customerEdit1":
+                	
+		              	if (!(data = select(e))) return;
+		              	layer.open({
+		              		type: 2,
+		              		title: '编辑客户信息',
+		              		area: ['950px', '600px'],
+		              		shadeClose: true,
+		              		content: '/japan/japancustomerEdit.html?cid=' + data.id + "&check=true"
+		              	});
+		              	break;
                 case "modify":
                     var data = grid.dataItem($(e.currentTarget).closest("tr"));
                     layer.open({
@@ -145,18 +157,7 @@ function regCmd(command) {
                         content: '/japan/japanEdit.html?cid=' + data.id + "&check=true"
                     });
                     break;
-                case "customerEdit":
-                	/*var data = grid.dataItem($(e.currentTarget).closest("tr"));*/
-                	/*var data = a.dataItem($(e.currentTarget).closest("tr"));*/
-                	   if (!(data = select(e))) return;
-                	layer.open({
-                		type: 2,
-                		title: '编辑客户信息',
-                		area: ['950px', '600px'],
-                		shadeClose: true,
-                		content: '/order/customerEdit.html?cid=' + data.id + "&check=true"
-                	});
-                	break;
+             
                 default:
                     $.layer.alert(command);
                     break;
@@ -193,7 +194,7 @@ function detailInit(e) {
                 read: {
                     /*type: "GET",*/
                     dataType: "json",
-                    url: "/visa/order/childList?type=customer&orderId=" + e.data.id ,
+                    url: "/visa/neworderjp/childList?type=customer&orderId=" + e.data.id ,
                 }
             }
         },
@@ -219,15 +220,15 @@ function detailInit(e) {
                 title: "操作", width: 300,
                 command: [
 
-                    {name: "customerEdit", imageClass: "base fa-pencil", text: "编辑"},
-                    {name: " ", imageClass: "base fa-send", text: "递送"},
+                    {name: "customerEdit1", imageClass: "base fa-pencil", text: "编辑"},
+                /*    {name: " ", imageClass: "base fa-send", text: "递送"},
                     {name: "share", imageClass: "base fa-share-alt", text: "分享"	
                     },//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
-                    {name: "notice", imageClass: "base fa-bell-o", text: "通知"},
-                    regCmd("customerEdit"),
-                    regCmd("share"),
-                    regCmd("notice"),
-                    regCmd(" "),
+                    {name: "notice", imageClass: "base fa-bell-o", text: "通知"},*/
+                    regCmd("customerEdit1"),
+                   /* regCmd("share"),
+                    regCmd("notice"),*/
+                /*    regCmd(" "),*/
                 ],
             },
         ]
@@ -249,7 +250,7 @@ var grid = $("#grid").kendoGrid({
         pageSizes: true,
         buttonCount: 5
     },
-   /* detailInit: detailInit,*/
+   detailInit: detailInit,
     sortable: {
         mode: "multiple",
     },
@@ -325,11 +326,11 @@ var grid = $("#grid").kendoGrid({
             command: [
                 {name: "modify", imageClass:false, text: " 编辑"},
                 {name: "shareall", imageClass:false, text: "递送"},
-                {name: "noticeall", imageClass:false, text: "分享"},
-                {name: "noticeall", imageClass:false, text: "下载"},
+                {name: "shareall", imageClass:false, text: "分享"},
+                {name: " ", imageClass:false, text: "下载"},
                 regCmd("modify"),
                 regCmd("shareall"),
-                regCmd("noticeall"),
+                regCmd(" "),
             ]
         }
     ],

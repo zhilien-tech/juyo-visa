@@ -457,14 +457,15 @@ public class OrderController extends BaseController {
 		CustomerManageEntity customerManage = dbDao.fetch(CustomerManageEntity.class, order.getCus_management_id());
 		//发送邮件前进行游客信息的注册
 		String phone = customerManage.getTelephone();
-
+		String result = null;
+		/*
 		String result = getMailContent(order, phone, null, customerManage);
 		if ("success".equalsIgnoreCase(result)) {
 			dbDao.update(NewOrderEntity.class, Chain.make("sharecountmany", order.getSharecountmany() + 1),
 					Cnd.where("id", "=", orderid));
 			//成功以后分享次数加1
 		}
-
+		*/
 		List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
 				Cnd.where("orderid", "=", orderid), null);
 
@@ -472,12 +473,14 @@ public class OrderController extends BaseController {
 			NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, newCustomerOrderEntity.getCustomerid());
 
 			phone = customer.getPhone();
+			if (!Util.isEmpty(phone)) {
 
-			result = getMailContent(order, phone, customer, null);
-			if ("success".equalsIgnoreCase(result)) {
-				//成功以后分享次数加1
-				dbDao.update(NewCustomerEntity.class, Chain.make("sharecount", customer.getSharecount() + 1),
-						Cnd.where("id", "=", customer.getId()));
+				result = getMailContent(order, phone, customer, null);
+				if ("success".equalsIgnoreCase(result)) {
+					//成功以后分享次数加1
+					dbDao.update(NewCustomerEntity.class, Chain.make("sharecount", customer.getSharecount() + 1),
+							Cnd.where("id", "=", customer.getId()));
+				}
 			}
 
 		}
@@ -502,13 +505,13 @@ public class OrderController extends BaseController {
 			pwd += a;
 
 		}
+		employeeEntity.setPassword(pwd);
 		byte[] salt = Digests.generateSalt(8);
 		employeeEntity.setSalt(Encodes.encodeHex(salt));
 		byte[] password = pwd.getBytes();
 		byte[] hashPassword = Digests.sha1(password, salt, 1024);
 		pwd = Encodes.encodeHex(hashPassword);
 
-		employeeEntity.setPassword(pwd);
 		List<EmployeeEntity> query = dbDao.query(EmployeeEntity.class,
 				Cnd.where("telephone", "=", phone).and("userType", "=", UserTypeEnum.TOURIST_IDENTITY.intKey()), null);
 		if (!Util.isEmpty(query) && query.size() > 0) {
@@ -528,7 +531,8 @@ public class OrderController extends BaseController {
 			email = customer.getEmail();
 		}
 		String html = tmp.toString().replace("${name}", name).replace("${oid}", order.getOrdernumber())
-				.replace("${href}", "http://www.baidu.com").replace("${logininfo}", "用户名:" + phone + "密码:" + pwd);
+				.replace("${href}", "http://www.baidu.com")
+				.replace("${logininfo}", "用户名:" + phone + "密码:" + employeeEntity.getPassword());
 		String result = mailService.send(email, html, "签证资料录入", MailService.Type.HTML);
 		return result;
 	}

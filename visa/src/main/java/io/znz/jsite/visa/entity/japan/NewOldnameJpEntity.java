@@ -1,10 +1,13 @@
 package io.znz.jsite.visa.entity.japan;
 
-import org.nutz.dao.entity.annotation.*;
-import lombok.Data;
-
 import java.io.Serializable;
 
+import lombok.Data;
+
+import org.nutz.dao.entity.annotation.Column;
+import org.nutz.dao.entity.annotation.Comment;
+import org.nutz.dao.entity.annotation.Id;
+import org.nutz.dao.entity.annotation.Table;
 
 @Data
 @Table("visa_new_oldname_jp")
@@ -12,26 +15,25 @@ public class NewOldnameJpEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id(auto = true)
 	private Integer id;
-	
+
 	@Column
-    @Comment("")
-	private Integer customerJpId;
-	
+	@Comment("")
+	private Long customer_jp_id;
+
 	@Column
-    @Comment("曾用姓")
+	@Comment("曾用姓")
 	private String oldxing;
-	
+
 	@Column
-    @Comment("曾用姓拼音")
+	@Comment("曾用姓拼音")
 	private String oldxingen;
-	
+
 	@Column
-    @Comment("曾用名")
+	@Comment("曾用名")
 	private String oldname;
-	
+
 	@Column
-    @Comment("曾用名拼音")
+	@Comment("曾用名拼音")
 	private String oldnameen;
-	
 
 }

@@ -26,7 +26,7 @@ public class NewOrderJpEntity implements Serializable {
 
 	@Column
 	@Comment("客户管理id")
-	private Integer customer_manager_id;
+	private Long customer_manager_id;
 
 	@Column
 	@Comment("订单类型")
