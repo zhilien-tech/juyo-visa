@@ -1,0 +1,15 @@
+a{}
+.container{padding: .6rem .6rem 0 .6rem;min-height:20rem;}
+.container a{border: solid 1px #e2e2e2;border-top: 0;padding: .6rem;display: block;width: 100%;text-decoration: none;background-color: #fafafa;}
+.container a:nth-child(1){border-top: solid 1px #e2e2e2;}
+/* .container a:active{background-color:#39aef5;color:#fff;}
+.container a:active span{color:#fff;} */
+.container a .nation{color: #636262;}
+.container a .state{color: #d0d0d0;float: right;}
+
+.header{background-color: #39aef5;height: 3.5rem;padding-top: 1rem;}
+.header a{margin-left:1rem;color:#fff;width: 4rem;text-decoration: none;}
+
+
+
+
