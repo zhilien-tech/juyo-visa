@@ -47,7 +47,6 @@ function regCmd(command) {
             var data;
             switch (command) {
                 case "share":
-                	alert(111);
                     if (!(data = select(e))) return;
                     var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
                     $.getJSON("/visa/neworderjp/share?type=customer&customerid=" + data.id, {}, function (resp) {
@@ -56,19 +55,17 @@ function regCmd(command) {
         						
             					layer.close(index);
             					}
-                            $.layer.confirm('发送成功，打开预览？', {
-                                btn: ['预览', '关闭']
-                            }, function (index, layero) {
-                                window.open("/m/delivery.html");
-                            }, function (index) {
-                                $.layer.closeAll();
-                            });
+                           
                         	//layer.msg("分享成功",{time: 2000});
                         } else {
                             $.layer.alert(resp.msg);
                         }
                     });
                     break;
+                case "delivery":
+                	if (!(data = select(e))) return;
+                	window.open("/delivery/deliveryJapan.html?oid="+data.id);
+                	break;
                 case "notice":
                 	if (!(data = select(e))) return;
                 	 var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
@@ -100,15 +97,15 @@ function regCmd(command) {
         						
             					layer.close(index);
             					}
-                			/*$.layer.confirm('发送成功，打开预览？', {
-                				btn: ['预览', '关闭']
-                			}, function (index, layero) {
-                				window.open(resp.data);
-                			}, function (index) {
-                				$.layer.closeAll();
-                			});*/
+                			layer.confirm('发送成功，打开预览？', {
+                                btn: ['预览', '关闭']
+                            }, function (index, layero) {
+                                window.open("/delivery/deliveryJapan.html?oid="+data.id);
+                            }, function (index) {
+                                $.layer.closeAll();
+                            });
                 			
-                			 layer.msg("分享成功",{time: 2000});
+                			// layer.msg("分享成功",{time: 2000});
                 		} else {
                 			$.layer.alert(resp.msg);
                 		}
@@ -157,6 +154,21 @@ function regCmd(command) {
                         content: '/japan/japanEdit.html?cid=' + data.id + "&check=true"
                     });
                     break;
+                case "download":
+                	 if (!(data = select(e))) return;
+                     $.fileDownload("/visa/neworderjp/export?orderid=" + data.id, {
+                         successCallback: function (url) {
+                             $.layer.alert('文件不存在 :' + url);
+                         },
+                         failCallback: function (html, url) {
+                             if (html.indexOf('<') >= 0) {
+                                 html = $(html).text();
+                             }
+                             var json = JSON.parse(html);
+                             $.layer.alert(json.msg);
+                         }
+                     });
+                     break;
              
                 default:
                     $.layer.alert(command);
@@ -325,12 +337,12 @@ var grid = $("#grid").kendoGrid({
             title: "操作", width: 280,
             command: [
                 {name: "modify", imageClass:false, text: " 编辑"},
-                {name: "shareall", imageClass:false, text: "递送"},
+                {name: "delivery", imageClass:false, text: "递送"},
                 {name: "shareall", imageClass:false, text: "分享"},
-                {name: " ", imageClass:false, text: "下载"},
+                {name: "download", imageClass:false, text: "下载"},
                 regCmd("modify"),
                 regCmd("shareall"),
-                regCmd(" "),
+                regCmd("download"),
             ]
         }
     ],

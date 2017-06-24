@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>递送信息-签手世界</title>
+    <link rel="stylesheet" href="/res/plugin/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.common.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.office365.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/res/css/colors.min.css"/>
+    <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <span id="helpBlock" class="help-block">请填写期望的面签预约时间</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="form-group">
+                <label>最早时间:<span style="color: red">*</span></label>
+                <input id="start" class="fill" data-role="datepicker"
+                       data-bind="value:data.earlydate,events:{change:onDateChange}"/>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="form-group">
+                <label>最晚时间:<span style="color: red">*</span></label>
+                <input id="end" data-role="datepicker" style="width: 100%;"
+                       data-bind="value:data.latterdate,events:{change:onDateChange}"/>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="form-group">
+                <label>面签时段:</label>
+                <select data-role="dropdownlist" data-bind="value:data.interviewtime" style="width: 100%;"   data-value-primitive="true">
+                    <option value="1">全天</option>
+                    <option value="2">上午</option>
+                    <option value="3">下午</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label>面签时间要求:</label>
+                <input class="k-textbox fill" data-bind="value:data.interviewtimerequest"
+                       placeholder="如面签时间有特别要求，请填写在这里，例如，某月某日不行"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label>选择护照递送方式:<span style="color: red">*</span></label>
+                <select data-role="dropdownlist" data-bind="value:data.visasendtype" style="width: 100%;"   data-value-primitive="true">
+                    <option value="1">代取</option>
+                    <option value="2">中信银行自取</option>
+                    <option value="3">使馆快递</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row" data-bind="visible:getDelivery(2)">
+        <div class="col-xs-4">
+            <div class="form-group">
+                <input id="city" class="fill" placeholder="选择省份"
+                       data-role="dropdownlist"
+                       data-filter="contains"
+                       data-suggest="true"
+                       data-auto-bind="true"
+                         data-value-primitive="true"
+                       data-bind="value:data.prevince,source:province,events:{change:onCityChange}"/>
+            </div>
+        </div>
+        <div class="col-xs-8">
+            <div class="form-group">
+                <input id="bank" class="fill" placeholder="请选择或者填写取件银行地址"
+                       data-role="dropdownlist"
+                       data-filter="contains"
+                       data-suggest="true"
+                       data-auto-bind="false"
+                         data-value-primitive="true"
+                       data-bind="value:data.detailplace,source:bank"/>
+            </div>
+        </div>
+    </div>
+    <div class="row" data-bind="visible:getDelivery(3)">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label>护照快递递送地址:<span style="color: red">*</span></label>
+                <input class="k-textbox" data-bind="value:data.fastmailaddress" style="width: 100%;" placeholder="请填写护照快递接收地址"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <button id="next" class="k-primary k-button col-xs-12" onclick="deliveryJpsave();">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="/res/plugin/template.js"></script>
+<script src="/res/plugin/jquery.min.js"></script>
+<script src="/res/plugin/layer/layer.js"></script>
+<script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
+<script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
+<script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
+<script src="/res/js/common.js"></script>
+
+<script src="/res/js/delivery/deliveryUSA.js"></script>
+</html>

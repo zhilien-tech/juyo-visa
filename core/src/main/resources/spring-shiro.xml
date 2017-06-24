@@ -92,6 +92,9 @@
             </map>
         </property>
         <property name="defaultFilterChainDefinitions">
+        	<!--
+        		anon 表示匿名访问（不需要认证与授权），authc 表示需要认证 
+        	 -->
             <value>
                 /res/** = anon
                 /swagger*=anon

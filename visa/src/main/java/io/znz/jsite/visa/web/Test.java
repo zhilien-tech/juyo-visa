@@ -6,8 +6,7 @@
 
 package io.znz.jsite.visa.web;
 
-import io.znz.jsite.util.security.Digests;
-import io.znz.jsite.util.security.Encodes;
+import io.znz.jsite.visa.enums.OrderJapanVisaType;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -23,14 +22,16 @@ public class Test {
 	private static final int SALT_SIZE = 8; //盐长度
 
 	public static void main(String[] args) {
-		//		byte[] salt = Digests.generateSalt(SALT_SIZE);
-		byte[] salt = Encodes.decodeHex("93219f213a6a0f27");
+		/*	//		byte[] salt = Digests.generateSalt(SALT_SIZE);
+			byte[] salt = Encodes.decodeHex("93219f213a6a0f27");
 
-		System.out.println(new String(salt));
-		Encodes.encodeHex(salt);
+			System.out.println(new String(salt));
+			Encodes.encodeHex(salt);
 
-		byte[] hashPassword = Digests.sha1("123456".getBytes(), salt, HASH_INTERATIONS);
-		String pwd = Encodes.encodeHex(hashPassword);
-		System.out.println(pwd);
+			byte[] hashPassword = Digests.sha1("123456".getBytes(), salt, HASH_INTERATIONS);
+			String pwd = Encodes.encodeHex(hashPassword);
+			System.out.println(pwd);*/
+		System.out.println(OrderJapanVisaType.get(1));
+		;
 	}
 }
