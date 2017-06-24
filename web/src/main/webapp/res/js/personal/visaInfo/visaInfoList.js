@@ -1,3 +1,45 @@
+//获取路径
+var curWwwPath = window.document.location.href;  
+var pathName =  window.document.location.pathname;  
+var pos = curWwwPath.indexOf(pathName);  
+var localhostPaht = curWwwPath.substring(0,pos);  
+var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+//页面加载时回显签证信息
+window.onload = function(){
+	 $.getJSON(localhostPaht +'/visa/visainfo/listvisainfo', function (resp) {
+		//alert(JSON.stringify(resp));
+     	viewModel.set("customer", $.extend(true, dafaults, resp));
+     });
+}
+//初始化页面组件
+$(function () {
+  //操作 编辑 按钮时
+	$(".editBtn").click(function(){
+		$(this).addClass("hide");//编辑 按钮隐藏
+		$(".cancelBtn").removeClass("hide");//取消 按钮显示
+		$(".saveBtn").removeClass("hide");//保存 按钮显示
+		$(".input-group .k-textbox").removeClass("k-state-disabled");//删除 不可编辑的边框颜色
+		$(".input-group input").removeAttr("disabled");//删除 不可编辑的属性
+	});
+	
+	//操作 取消 按钮时
+	$(".cancelBtn").click(function(){
+		$(this).addClass("hide");//取消 按钮隐藏
+		$(".saveBtn").addClass("hide");//保存 按钮隐藏
+		$(".editBtn").removeClass("hide");//编辑 按钮显示
+		$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
+		$(".input-group input").attr("disabled");//添加 不可编辑的属性
+	});
+	
+	//操作 保存 按钮时
+	$(".saveBtn").click(function(){
+		$(this).addClass("hide");//保存 按钮隐藏
+		$(".cancelBtn").addClass("hide");//取消 按钮隐藏
+		$(".editBtn").removeClass("hide");//编辑 按钮显示
+		$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
+		$(".input-group input").attr("disabled");//添加 不可编辑的属性
+	});
+});
 //客户来源
 var customersourceEnum=[
     {text:"线上",value:1},
@@ -10,9 +52,6 @@ function translateZhToEn(from, to) {
         $("#" + to).val(result.data).change();
     });
 }
-
-
-
 var countries = new kendo.data.DataSource({
         transport: {
             read: {
@@ -50,11 +89,57 @@ var countries = new kendo.data.DataSource({
 			visitedcountrylist:[],
 			workedplacelist:[],
 			army:{},
-			travel: {
+	        order:{},
+	        customermanage:{},
+	        trip:{},
+	        payPersion:{},
+	        payCompany:{},
+	        fastMail:{},
+	        peerList:{},
+	        travelpurpose:{},//赴美国旅行目的列表
+	        travelplan:{},//是否制定了具体旅行计划
+	        relationship:{},//与你的关系
+	        travel: {
 	            payer: "我自己",
-	            // 同行人员
-	            togethers: []
+	            // 同行人
+	            togethers:[]
 	        },
+	        trip:{
+	    		teamname: "",
+	        	intostate: "",
+	        	intocity: "",
+	        	usahotel: "",
+	        	linkaddress: "",
+	        	zipcode: "",
+	        	linkxing: "",
+	        	linkname: "",
+	        	linkxingen: "",
+	        	linknameen: "",
+	        	linkstate: "",
+	        	linkcity: "",
+	        	detailaddress: "",
+	        	phone: "",
+	        	email: "",
+	        	paypersion: "",
+	        	linkzipcode: "",
+	        	staytime: "",
+	        	orderid: "",
+	        	staytype: "",
+	        	linkrelation: "",
+	        	arrivedate: ""
+	    	},
+	    	fastMail:{
+	    		datasource: 0,
+	        	fastmailnum: "",
+	        	mailmethod: 0,
+	        	mailaddress: "",
+	        	linkpeople: "",
+	        	phone: "",
+	        	invoicecontent: "",
+	        	invoicehead: "",
+	        	remaker: "",
+	        	orderid: ""
+	    	}
     },
     keys = {
 		"customer.orthercountrylist":{},
@@ -63,11 +148,17 @@ var countries = new kendo.data.DataSource({
 		"customer.languagelist":{},
 		"customer.visitedcountrylist":{},
 		"customer.workedplacelist":{},
-		"customer.relation":{
-			
-		},
-		"customer.teachinfo":{}
-		
+		"customer.relation":{},
+		"customer.teachinfo":{},
+		"customer.peerList":{},
+		"customer.peerList":{
+			peerxing: "",
+	    	peerxingen: "",
+	    	peernameen: "",
+	    	peername: "",
+	    	tripid: "",
+	    	relationme: ""
+		}
 	};
 /*****************************************************
  * 数据绑定
@@ -77,6 +168,12 @@ var viewModel = kendo.observable({
     countries:countries,
     customersourceEnum:customersourceEnum,
     states:states,
+    hasTogether: function () {
+        var togethers = viewModel.get("customer.travel.togethers");
+        var state = false;
+        if (togethers) state = togethers.length > 0;
+        return state;
+    },
     addOne: function (e) {
         var key = $.isString(e) ? e : $(e.target).data('params');
         viewModel.get(key).push(keys[key]);
@@ -92,13 +189,12 @@ var viewModel = kendo.observable({
         var state = false;
         if (togethers) state = togethers.length > 0;
         return state;
-        /*viewModel.set("customer.ordernumber", $(this).is(':checked') ? " " : "");*/
     },
     clearAll: function (key) {
         var all = viewModel.get(key);
         if (all) all.splice(0, all.length);
     },
- // 支付人
+    // 支付人
     payType: function (type) {
         return viewModel.get("customer.trip.paypersion") === type;
     },
@@ -149,8 +245,6 @@ var viewModel = kendo.observable({
     //参过军
     joinArmy: function () {
         var state = viewModel.get("customer.army");
-    	/*var schools = viewModel.get("customer.army");
-        var state = schools ? schools.length > 0 : false;*/
         return state;
     },
     //工作信息详情
@@ -195,11 +289,16 @@ var viewModel = kendo.observable({
         var state = otherCountry ? otherCountry.length > 0 : false;
         return state;
     },
+    //赴美国旅行目的列表
+    travelPurposeEnable: function () {
+        return viewModel.get("customer.travelpurpose");
+    },
+    //是否制定了具体旅行计划
+    travelPlanEnable: function () {
+    	return viewModel.get("customer.travelplan");
+    }
 });
 kendo.bind($(document.body), viewModel);
-
-
-
 
 //丢过护照
 $("#pp_lost").change(function () {
@@ -228,22 +327,6 @@ $("#has_other_travelers").change(function () {
     	viewModel.clearAll(key);
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*****************************************************
  * 配偶信息
  ****************************************************/
@@ -313,20 +396,20 @@ $("#has_never_educated").change(function () {
 $("#join_army").change(function () {
 	viewModel.set("customer.army", $(this).is(':checked') ? " " : "");
 });
-/*$("#join_army").change(function () {
-    if ($(this).is(':checked')) {
-    	viewModel.add("customer.army");
-    } else {
-    	viewModel.clear("customer.army");
-    }
-});*/
 
+//赴美国旅行目的列表
+$("#travel_purpose").change(function () {
+	viewModel.set("customer.travelpurpose", $(this).is(':checked') ? " " : "");
+});
+//是否制定了具体旅行计划
+$("#if_formulate_plan").change(function () {
+	viewModel.set("customer.travelplan", $(this).is(':checked') ? " " : "");
+});
 
 
 
 
 //信息保存
-
 $("#saveCustomerData").on("click",function(){
 	console.log(JSON.stringify(viewModel.customer));
 	viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
@@ -347,84 +430,5 @@ $("#saveCustomerData").on("click",function(){
 			 console.log(errorThrown);
             layer.msg('保存失败!',{time:2000});
          }
-	});
-});
-
-
-/*$.ajax({
-	cache : false,
-	type : "POST",
-	url : '${base}/admin/airlinepolicy/add.html',
-	data : $('#addFileInfoForm').serialize(),// 你的formid
-	error : function(request) {
-		layer.msg('添加失败!');
-	},
-	success : function(data) {
-		layer.close(index);
-		 formValidator();  
-		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-	    parent.layer.close(index);
-	   window.parent.successCallback('1');
-	  
-	    
-	    
-	}
-});
-*/
-//通过或者拒绝的方法
-function agreeOrRefuse(flag){
-	var id=viewModel.get("customer.id");
-	$.ajax({
-		 type: "POST",
-		 url: "/visa/newcustomer/agreeOrRefuse?flag="+flag+"&customerid="+id,
-		 success: function (result){
-			 console.log(result);
-			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			 parent.layer.close(index);
-			 window.parent.successCallback('3');
-		 },
-		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-			 console.log(XMLHttpRequest);
-			 console.log(textStatus);
-			 console.log(errorThrown);
-            layer.msg('操作失败!',{time:2000});
-         }
-	});
-}
-
-$(function () {
-    //如果有传递ID就是修改
-    var oid = $.queryString("cid");
-    if (oid) {
-        $.getJSON("/visa/newcustomer/showDetail?customerid=" + oid, function (resp) {
-        	viewModel.set("customer", $.extend(true, dafaults, resp));
-        });
-    }
-    
-  //操作 编辑 按钮时
-	$(".editBtn").click(function(){
-		$(this).addClass("hide");//编辑 按钮隐藏
-		$(".cancelBtn").removeClass("hide");//取消 按钮显示
-		$(".saveBtn").removeClass("hide");//保存 按钮显示
-		$(".input-group .k-textbox").removeClass("k-state-disabled");//删除 不可编辑的边框颜色
-		$(".input-group input").removeAttr("disabled");//删除 不可编辑的属性
-	});
-	
-	//操作 取消 按钮时
-	$(".cancelBtn").click(function(){
-		$(this).addClass("hide");//取消 按钮隐藏
-		$(".saveBtn").addClass("hide");//保存 按钮隐藏
-		$(".editBtn").removeClass("hide");//编辑 按钮显示
-		$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
-		$(".input-group input").attr("disabled");//添加 不可编辑的属性
-	});
-	
-	//操作 保存 按钮时
-	$(".saveBtn").click(function(){
-		$(this).addClass("hide");//保存 按钮隐藏
-		$(".cancelBtn").addClass("hide");//取消 按钮隐藏
-		$(".editBtn").removeClass("hide");//编辑 按钮显示
-		$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
-		$(".input-group input").attr("disabled");//添加 不可编辑的属性
 	});
 });

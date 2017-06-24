@@ -1,6 +1,7 @@
 package io.znz.jsite.visa.entity.usa;
 
 import io.znz.jsite.visa.entity.communicathomeaddress.CommunicatHomeAddressEntity;
+import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
 import io.znz.jsite.visa.entity.customer.NewArmyEntity;
 import io.znz.jsite.visa.entity.customer.NewLanguageEntity;
 import io.znz.jsite.visa.entity.customer.NewOldnameEntity;
@@ -17,8 +18,11 @@ import io.znz.jsite.visa.entity.customer.NewVisitedcountryEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkedplaceEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkinfoEntity;
 import io.znz.jsite.visa.entity.othernationality.OtherNationalityEntity;
+import io.znz.jsite.visa.entity.relationship.RelationShipEntity;
 import io.znz.jsite.visa.entity.socialinsurancenum.SocialInsuranceNum;
 import io.znz.jsite.visa.entity.taxpayerauthenticationcode.TaxpayerAuthenticationCodeEntity;
+import io.znz.jsite.visa.entity.travelplan.TravelPlanEntity;
+import io.znz.jsite.visa.entity.travelpurpose.TravelPurposeEntity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -223,6 +227,25 @@ public class NewCustomerEntity implements Serializable {
 	private List<NewWorkedplaceEntity> workedplacelist;
 
 	private NewArmyEntity army;
+
+	//订单管理
+	private NewOrderEntity order;
+
+	/**
+	 * 保存订单涉及到的类
+	 */
+	private CustomerManageEntity customermanage;
+
+	private NewTrip trip;
+
+	private List<NewPeerPersionEntity> peerList;
+
+	private NewPayPersionEntity payPersion;
+
+	private NewPayCompanyEntity payCompany;
+
+	private NewFastMailEntity fastMail;
+
 	//是否有其他国籍
 	private List<OtherNationalityEntity> othernationality;
 	//美国社会保险号码
@@ -231,4 +254,11 @@ public class NewCustomerEntity implements Serializable {
 	private TaxpayerAuthenticationCodeEntity taxpayerauthenticat;
 	//通信地址与家庭地址是否一致
 	private CommunicatHomeAddressEntity commhomeaddress;
+	//赴美国旅行目的列表
+	private TravelPurposeEntity travelpurpose;
+	//是否制定了具体旅行计划
+	private TravelPlanEntity travelplan;
+	//与你的关系
+	private RelationShipEntity relationship;
+
 }
