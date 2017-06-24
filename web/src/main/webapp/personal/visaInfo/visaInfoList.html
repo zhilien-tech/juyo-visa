@@ -51,29 +51,28 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="pp_lost" class="check-box-label">赴美国旅行目的列表</label>
-                                        <input id='pp_lost' data-bind="checked:oldPassportEnable" class="mui-switch"
-                                               type="checkbox"/>
+                                        <label for="travel_purpose" class="check-box-label">赴美国旅行目的列表</label>
+                                        <input id='travel_purpose' data-bind="checked:travelPurposeEnable" class="mui-switch" type="checkbox"/>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row pp_lost" data-bind="visible:oldPassportEnable">
+                            <div class="row travel_purpose" data-bind="visible:travelPurposeEnable">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>赴美国旅行目的:</label>
+                                        <label for="uas_travel_purpose">赴美国旅行目的:</label>
                                         <div class='input-group'>
-                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="" placeholder=""/>
+                                            <input id="uas_travel_purpose" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.travelpurpose.travelPurpose"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>赴美国旅行具体目的:</label>
+                                        <label for="travel_specific_purpose">赴美国旅行具体目的:</label>
                                         <div class='input-group'>
-                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="" placeholder=""/>
+                                            <input id="travel_specific_purpose" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.travelpurpose.travelSpecificPurpose"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -84,41 +83,39 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="other_relatives"
-                                               class="check-box-label">是否制定了具体旅行计划</label>
-                                        <input id='other_relatives' data-bind="checked:customer.relation.indirect"
-                                               class="mui-switch" type="checkbox"/>
+                                        <label for="if_formulate_plan" class="check-box-label">是否制定了具体旅行计划</label>
+                                        <input id='if_formulate_plan' data-bind="checked:travelPlanEnable" class="mui-switch" type="checkbox"/>
                                     </div>
                                 </div>
                             </div>
                             <!-- end 是否制定了具体旅行计划 --> 
                             <!--预计抵达美国日期/预计停留时间/在美国停留地点的地址-->
-                            <div class="row">
+                            <div class="row if_formulate_plan" data-bind="visible:travelPlanEnable">
                                 <div class="col-xs-4">
                                     <div class="form-group">
-                                        <label for="last_name_cn">预计抵达美国日期:<span style="color: red">*</span></label>
+                                        <label for="arrivaledDate">预计抵达美国日期:</label>
                                         <div class='input-group'>
-                                             <input id="s_divorce_date" data-role="datepicker" style="width: 100%;"
-                                                       data-bind="value:customer.spouse.splitdate"/>
+                                             <input id="arrivaledDate" data-role="datepicker" style="width: 100%;"
+                                                       data-bind="value:customer.travelplan.arrivaledDate,events:{change:onDateChange}"/>
                                              <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-4">
                                     <div class="form-group">
-                                        <label for="last_name_en">预计停留时间:<span style="color: red">*</span></label>
+                                        <label for="pauseTime">预计停留时间:</label>
                                         <div class='input-group'>
-                                            <input id="s_divorce_date" data-role="datepicker" style="width: 100%;"
-                                                   data-bind="value:customer.spouse.splitdate"/>
+                                            <input id="pauseTime" data-role="datepicker" style="width: 100%;"
+                                                   data-bind="value:customer.travelplan.pauseTime"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-4">
                                     <div class="form-group">
-                                        <label for="last_name_cn">在美国停留地点的地址:<span style="color: red">*</span></label>
+                                        <label for="pausePlace">在美国停留地点的地址:</label>
                                         <div class='input-group'>
-                                            <input id="" type="text" data-bind="" class="k-textbox" style="width: 100%;"/>
+                                            <input id="pausePlace" type="text" data-bind="value:customer.travelplan.pausePlace" class="k-textbox" style="width: 100%;"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -130,13 +127,343 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="other_relatives"
-                                               class="check-box-label">支付旅行费用的个人或实体</label>
-                                        <input id='other_relatives' data-bind="checked:customer.relation.indirect"
-                                               class="mui-switch" type="checkbox"/>
+                                        <!--谁支付您的赴美费用: 公司/组织-->
+                                        <label for="who_pay">支付旅行费用的个人或实体:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <select id="who_pay" data-role="dropdownlist" style="width: 100%;"
+                                                    data-bind="value:customer.trip.paypersion">
+                                                <option>我自己</option>
+                                                <option>其他人</option>
+                                                <option>公司/组织</option>
+                                            </select>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <div data-bind="visible:payType('其他人')"><!-- data-bind="visible:payType('其他人')" -->
+                                <!--支付人姓-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="payer_last_name_cn">付费人姓:</label>
+                                            <div class='input-group'>
+                                                <input id="payer_last_name_cn" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.payPersion.xing"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="payer_last_name_en">拼音:</label>
+                                            <div class='input-group'>
+                                                <input id="payer_last_name_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                       data-bind="value:customer.payPersion.xingen"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--支付人名-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="payer_first_name_cn">付费人名:</label>
+                                            <div class='input-group'>
+                                                <input id="payer_first_name_cn" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.payPersion.name"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="payer_first_name_en">拼音:</label>
+                                            <div class='input-group'>
+                                                <input id="payer_first_name_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                       data-bind="value:customer.payPersion.nameen"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--支付人联系方式-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="payer_phone">付费人电话:</label>
+                                            <div class='input-group'>
+                                                <input id="payer_phone" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.payPersion.phone"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="payer_email">付费人邮箱:</label>
+                                            <div class='input-group'>
+                                                <input id="payer_email" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.payPersion.email"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费人和我的关系-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="payer_relation">付费人和我的关系:</label>
+                                            <div class='input-group'>
+                                                <select id="payer_relation" style="width: 100%;"
+                                                        data-role="dropdownlist"
+                                                        data-value-primitive="true"
+                                                        data-bind="value:customer.payPersion.relation">
+                                                    <option value="2">配偶</option>
+							                        <option value="8">子女</option>
+							                        <option value="0">父母</option>
+							                        <option value="1">亲戚</option>
+							                        <option value="3">朋友</option>
+							                        <option value="4">生意关联方</option>
+							                        <option value="7">其他</option>
+                                                </select>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-bind="visible:payType('公司/组织')"><!-- data-bind="visible:payType('公司/组织')" -->
+                                <!--付费公司名称(中文)-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="paying_company_name_cn">付费公司名称（中文）:<span
+                                                    style="color: red">*</span></label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_name_cn"
+                                                       onchange="translateZhToEn(this,'paying_company_name_en')"
+                                                       data-bind="value:customer.payCompany.comname"
+                                                       class="k-textbox" style="width: 100%;"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司名称(英文)-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="paying_company_name_en">
+                                                付费公司名称（英文），填写中文自动翻译:
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_name_en" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.payCompany.comnameen"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司和我关系（中文）-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="paying_company_relation_cn">
+                                                付费公司和我关系（中文）:
+                                                <span style="color: red">*</span></label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_relation_cn" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.payCompany.comrelation"
+                                                       onchange="translateZhToEn(this,'paying_company_relation_en')"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司和我关系(英文)-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="paying_company_relation_en">付费公司和我关系（英文），填写中文自动翻译:<span
+                                                    style="color: red">*</span></label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_relation_en" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.payCompany.comrelationen"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司省市区-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-4">
+                                        <div class="form-group">
+                                            <label for="paying_company_country">付费公司国家:<span style="color: red">*</span></label>
+                                            <div class='input-group'>
+                                                <select id="paying_company_country" style="width: 100%;"
+                                                        data-role="dropdownlist"
+                                                        data-filter="startswith"
+                                                        data-suggest="true"
+                                                        data-auto-bind="true"
+                                                        data-value-primitive="true"
+	                                                    data-text-field="text"
+	                                                    data-value-field="value"
+                                                        data-bind="source:countries,value:customer.payCompany.comcountry"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div class="form-group">
+                                            <label for="paying_company_province_en">
+                                                省份（拼音）:
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_province_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                       data-bind="value:customer.payCompany.comname"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div class="form-group">
+                                            <label for="paying_company_city_en">城市（拼音）:<span style="color: red">*</span></label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_city_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                       data-bind="value:customer.payCompany.comcity"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司联系地址（中文）-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="paying_company_address_cn_1">付费公司地址的门牌号/房间/单元/楼宇（中文）:<span
+                                                    style="color: red">*</span></label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_address_cn_1" class="k-textbox" style="width: 100%;"
+                                                       onchange="translateZhToEn(this,'paying_company_address_en')"
+                                                       data-bind="value:customer.payCompany.comdetailaddress"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司联系城市(中文)-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="paying_company_address_cn_2">
+                                                付费公司地址的街道/区/县（中文）:
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_address_cn_2" class="k-textbox" style="width: 100%;"
+                                                       onchange="translateZhToEn(this,'paying_company_address_en2')"
+                                                       data-bind="value:customer.payCompany.comaddress"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司联系地址（英文）-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="paying_company_address_en">
+                                                付费公司地址的门牌号/房间/单元/楼宇（英文），填写中文自动翻译:
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_address_en" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.payCompany.comdetailaddressen"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司联系城市(英文)-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="paying_company_address_en2">
+                                                付费公司地址的街道/区/县（英文），填写中文自动翻译:
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_address_en2" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.payCompany.comaddressen"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--付费公司联系方式-->
+                                <div class="row who_pay">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="paying_company_phone">
+                                                付费公司电话:
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_phone" class="k-textbox" style="width: 100%;"
+                                                       data-bind="value:customer.payCompany.comphone"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="paying_company_zip_code">
+                                                付费公司邮编:
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class='input-group'>
+                                                <input id="paying_company_zip_code" class="k-textbox" style="width: 100%;"
+                                                      data-bind="value:customer.payCompany.comzipcode"/>
+                                                <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
                             <!-- end 支付旅行费用的个人或实体 --> 
                             
                             <!-- 是否有其他人同行 -->
