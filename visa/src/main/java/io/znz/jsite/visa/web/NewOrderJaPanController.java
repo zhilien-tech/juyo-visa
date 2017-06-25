@@ -10,7 +10,10 @@ import io.znz.jsite.base.bean.ResultObject;
 import io.znz.jsite.core.service.MailService;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
+import io.znz.jsite.visa.bean.Flight;
+import io.znz.jsite.visa.bean.Scenic;
 import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
+import io.znz.jsite.visa.entity.delivery.NewDeliveryJapanEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerOrderJpEntity;
 import io.znz.jsite.visa.entity.japan.NewDateplanJpEntity;
@@ -24,12 +27,16 @@ import io.znz.jsite.visa.entity.user.EmployeeEntity;
 import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
 import io.znz.jsite.visa.enums.UserTypeEnum;
 import io.znz.jsite.visa.form.NewOrderJapanSqlForm;
+import io.znz.jsite.visa.newpdf.NewPdfService;
 import io.znz.jsite.visa.service.NewOrderJaPanService;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.nutz.dao.Chain;
@@ -46,6 +53,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.collect.Lists;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
 import com.uxuexi.core.db.util.DbSqlUtil;
@@ -70,7 +78,8 @@ public class NewOrderJaPanController {
 	/**nutz dao*/
 	@Autowired
 	protected Dao nutDao;
-
+	@Autowired
+	private NewPdfService newPdfService;
 	/**
 	 * 注入容器中的sqlManager对象，用于获取sql
 	 */
@@ -230,7 +239,16 @@ public class NewOrderJaPanController {
 			}
 		}
 		NewTripJpEntity tripJp = order.getTripJp();
+
 		if (!Util.isEmpty(tripJp)) {
+			Flight gofilght = tripJp.getGofilght();
+			Flight returnfilght = tripJp.getReturnfilght();
+			if (!Util.isEmpty(gofilght)) {
+				tripJp.setFlightnum(gofilght.getId() + "");
+			}
+			if (!Util.isEmpty(returnfilght)) {
+				tripJp.setReturnflightnum(returnfilght.getId() + "");
+			}
 			if (!Util.isEmpty(tripJp.getId()) && tripJp.getId() > 0) {
 				nutDao.update(tripJp);
 			} else {
@@ -244,6 +262,8 @@ public class NewOrderJaPanController {
 		if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
 
 			for (NewDateplanJpEntity newPeerPersionEntity : dateplanJpList) {
+				newPeerPersionEntity.setFlightnum(newPeerPersionEntity.getFlight().getId() + "");
+
 				if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
 					nutDao.update(newPeerPersionEntity);
 				} else {
@@ -257,6 +277,12 @@ public class NewOrderJaPanController {
 		if (!Util.isEmpty(tripplanJpList) && tripplanJpList.size() > 0) {
 
 			for (NewTripplanJpEntity newPeerPersionEntity : tripplanJpList) {
+				List<Scenic> scenics = newPeerPersionEntity.getScenics();
+				String viewid = "";
+				for (Scenic scenic : scenics) {
+					viewid += scenic.getId() + ",";
+				}
+				newPeerPersionEntity.setViewid(viewid);
 				if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
 					nutDao.update(newPeerPersionEntity);
 				} else {
@@ -288,13 +314,49 @@ public class NewOrderJaPanController {
 		List<NewTripJpEntity> newTrips = dbDao.query(NewTripJpEntity.class, Cnd.where("order_jp_id", "=", orderid),
 				null);
 		if (!Util.isEmpty(newTrips) && newTrips.size() > 0) {
-			order.setTripJp(newTrips.get(0));
+			NewTripJpEntity newTripJpEntity = newTrips.get(0);
+			String gofilght = newTripJpEntity.getFlightnum();
+			String returnfilght = newTripJpEntity.getReturnflightnum();
+			if (!Util.isEmpty(gofilght)) {
+				Flight fetch = dbDao.fetch(Flight.class, Long.valueOf(gofilght));
+				newTripJpEntity.setGofilght(fetch);
+			}
+			if (!Util.isEmpty(returnfilght)) {
+				Flight fetch = dbDao.fetch(Flight.class, Long.valueOf(returnfilght));
+				newTripJpEntity.setReturnfilght(fetch);
+				;
+			}
+			order.setTripJp(newTripJpEntity);
 			List<NewDateplanJpEntity> query = dbDao.query(NewDateplanJpEntity.class,
 					Cnd.where("trip_jp_id", "=", newTrips.get(0).getId()), null);
+			for (NewDateplanJpEntity newDateplanJpEntity : query) {
+				if (!Util.isEmpty(newDateplanJpEntity)) {
+					String flightstr = newDateplanJpEntity.getFlightnum();
+					if (!Util.isEmpty(flightstr)) {
+						Flight fetch = dbDao.fetch(Flight.class, Long.valueOf(flightstr));
+						newDateplanJpEntity.setFlight(fetch);
+					}
+				}
+			}
 			order.setDateplanJpList(query);
 		}
 		List<NewTripplanJpEntity> newPayPersionEntities = dbDao.query(NewTripplanJpEntity.class,
 				Cnd.where("order_jp_id", "=", orderid), null);
+		//给计划表中的每个对象相应的风景集合
+		for (int i = 0; i < newPayPersionEntities.size(); i++) {
+			NewTripplanJpEntity n = newPayPersionEntities.get(i);
+			String viewid = n.getViewid();
+			String view[] = viewid.split(",");
+			List<Scenic> slist = Lists.newArrayList();
+			for (int j = 0; j < view.length; j++) {
+				if (!Util.isEmpty(view[j])) {
+					Scenic fetch = dbDao.fetch(Scenic.class, Long.valueOf(view[j]));
+					slist.add(fetch);
+				}
+			}
+			n.setScenics(slist);
+		}
+
 		if (!Util.isEmpty(newPayPersionEntities) && newPayPersionEntities.size() > 0) {
 			order.setTripplanJpList(newPayPersionEntities);
 		}
@@ -519,4 +581,93 @@ public class NewOrderJaPanController {
 		return result;
 	}
 
+	/***
+	 * 
+	 *日本的递送回显
+	 * @param orderid
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+
+	@RequestMapping(value = "deliveryusa")
+	@ResponseBody
+	public Object deliveryusa(long orderid) {
+		NewDeliveryJapanEntity deliveryUSA = dbDao.fetch(NewDeliveryJapanEntity.class,
+				Cnd.where("order_jp_id", "=", orderid));
+		return deliveryUSA;
+	}
+
+	/***
+	 * 
+	 *日本的递送保存
+	 * @param orderid
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+
+	@RequestMapping(value = "deliveryJpsave")
+	@ResponseBody
+	public Object deliveryJpsave(@RequestBody NewDeliveryJapanEntity deliveryJapan, int orderid) {
+		deliveryJapan.setOrder_jp_id(orderid);
+		Integer id = deliveryJapan.getId();
+		if (!Util.isEmpty(id) && id > 0) {
+
+			dbDao.update(deliveryJapan, null);
+		} else {
+			dbDao.insert(deliveryJapan);
+		}
+		return ResultObject.success("添加成功");
+	}
+
+	/**
+	 * 导出日本所需资料的pdf
+	 *
+	 * @param oid
+	 */
+	@RequestMapping(value = "export")
+	@ResponseBody
+	public Object export(HttpServletResponse resp, long orderid) throws IOException {
+		NewOrderJpEntity order = dbDao.fetch(NewOrderJpEntity.class, orderid);
+		CustomerManageEntity customerManageEntity = dbDao.fetch(CustomerManageEntity.class,
+				Long.valueOf(order.getCustomer_manager_id()));
+		if (!Util.isEmpty(customerManageEntity)) {
+			order.setCustomermanage(customerManageEntity);
+		}
+		List<NewTripJpEntity> newTrips = dbDao.query(NewTripJpEntity.class, Cnd.where("order_jp_id", "=", orderid),
+				null);
+		if (!Util.isEmpty(newTrips) && newTrips.size() > 0) {
+			order.setTripJp(newTrips.get(0));
+			List<NewDateplanJpEntity> query = dbDao.query(NewDateplanJpEntity.class,
+					Cnd.where("trip_jp_id", "=", newTrips.get(0).getId()), null);
+			order.setDateplanJpList(query);
+		}
+		List<NewTripplanJpEntity> newPayPersionEntities = dbDao.query(NewTripplanJpEntity.class,
+				Cnd.where("order_jp_id", "=", orderid), null);
+		if (!Util.isEmpty(newPayPersionEntities) && newPayPersionEntities.size() > 0) {
+			order.setTripplanJpList(newPayPersionEntities);
+		}
+		List<NewFastmailJpEntity> newPayCompanyEntities = dbDao.query(NewFastmailJpEntity.class,
+				Cnd.where("order_jp_id", "=", orderid), null);
+		if (!Util.isEmpty(newPayCompanyEntities) && newPayCompanyEntities.size() > 0) {
+			order.setFastMail(newPayCompanyEntities.get(0));
+		}
+		List<NewCustomerJpEntity> customerJpList = Lists.newArrayList();
+		List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
+				Cnd.where("order_jp_id", "=", orderid), null);
+		for (NewCustomerOrderJpEntity newCustomerOrderJpEntity : query) {
+			NewCustomerJpEntity fetch = dbDao.fetch(NewCustomerJpEntity.class,
+					newCustomerOrderJpEntity.getCustomer_jp_id());
+			if (!Util.isEmpty(fetch)) {
+				customerJpList.add(fetch);
+			}
+		}
+		order.setCustomerJpList(customerJpList);
+		if (order == null) {
+			return ResultObject.fail("订单不存在!");
+		}
+		byte[] bytes = newPdfService.export(order).toByteArray();
+		String fileName = URLEncoder.encode(customerManageEntity.getLinkman() + "-" + orderid + ".zip", "UTF-8");
+		resp.setContentType("application/zip");
+		resp.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
+		IOUtils.write(bytes, resp.getOutputStream());
+		return ResultObject.fail("PDF生成失败!");
+	}
 }

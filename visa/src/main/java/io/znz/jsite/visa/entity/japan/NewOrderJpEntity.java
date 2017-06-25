@@ -106,4 +106,16 @@ public class NewOrderJpEntity implements Serializable {
 
 	private NewFastmailJpEntity fastMail;
 
+	//日本下载需要的东西
+	private String template;
+
+	public String getTemplate() {
+		if (template == null)
+			template = "newHasee";
+		return template;
+	}
+
+	//每个订单对应多个客户
+	private List<NewCustomerJpEntity> customerJpList;
+
 }

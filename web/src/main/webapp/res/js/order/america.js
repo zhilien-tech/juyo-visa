@@ -55,19 +55,23 @@ function regCmd(command) {
         						
             					layer.close(index);
             					}
-                           /* $.layer.confirm('发送成功，打开预览？', {
+                			layer.confirm('发送成功，打开预览？', {
                                 btn: ['预览', '关闭']
                             }, function (index, layero) {
-                                window.open(resp.data);
+                                window.open("/delivery/deliveryUSA.html?oid="+data.id);
                             }, function (index) {
                                 $.layer.closeAll();
-                            });*/
-                        	layer.msg("分享成功",{time: 2000});
+                            });
+                        	//layer.msg("分享成功",{time: 2000});
                         } else {
                             $.layer.alert(resp.msg);
                         }
                     });
                     break;
+                case "delivery":
+                	if (!(data = select(e))) return;
+                	window.open("/delivery/deliveryUSA.html?oid="+data.id);
+                	break;
                 case "notice":
                 	if (!(data = select(e))) return;
                 	 var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
@@ -222,16 +226,15 @@ function detailInit(e) {
             { 
                 title: "操作", width: 300,
                 command: [
-
                     {name: "customerEdit", imageClass:false, text: "编辑"},
-                    {name: " ", imageClass:false, text: "递送"},
+                    {name: "delivery", imageClass:false, text: "递送"},
                     {name: "share", imageClass:false, text: "分享"	
                     },//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
                     {name: "notice", imageClass:false, text: "通知"},
                     regCmd("customerEdit"),
                     regCmd("share"),
                     regCmd("notice"),
-                    regCmd(" "),
+                    regCmd("delivery"),
                 ],
             },
         ]

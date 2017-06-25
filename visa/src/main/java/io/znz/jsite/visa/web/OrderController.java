@@ -7,6 +7,7 @@ import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 import io.znz.jsite.visa.bean.Customer;
 import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
+import io.znz.jsite.visa.entity.delivery.NewDeliveryUSAEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerOrderEntity;
 import io.znz.jsite.visa.entity.usa.NewFastMailEntity;
@@ -768,6 +769,35 @@ public class OrderController extends BaseController {
 		}
 
 		return ResultObject.success(result);
+	}
+
+	@RequestMapping(value = "deliveryusa")
+	@ResponseBody
+	public Object deliveryusa(long customerid) {
+		NewDeliveryUSAEntity deliveryUSA = dbDao.fetch(NewDeliveryUSAEntity.class,
+				Cnd.where("customer_usa_id", "=", customerid));
+		return deliveryUSA;
+	}
+
+	/***
+	 * 
+	 *美国的递送保存
+	 * @param orderid
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+
+	@RequestMapping(value = "deliveryUSAsave")
+	@ResponseBody
+	public Object deliveryUSAsave(@RequestBody NewDeliveryUSAEntity deliveryJapan, int orderid) {
+		deliveryJapan.setCustomer_usa_id(orderid);
+		Integer id = deliveryJapan.getId();
+		if (!Util.isEmpty(id) && id > 0) {
+
+			dbDao.update(deliveryJapan, null);
+		} else {
+			dbDao.insert(deliveryJapan);
+		}
+		return ResultObject.success("添加成功");
 	}
 
 	private Customer contains(List<Customer> customers, Customer customer) {

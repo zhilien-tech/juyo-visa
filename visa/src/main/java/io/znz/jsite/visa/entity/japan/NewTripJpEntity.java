@@ -1,5 +1,7 @@
 package io.znz.jsite.visa.entity.japan;
 
+import io.znz.jsite.visa.bean.Flight;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -52,5 +54,8 @@ public class NewTripJpEntity implements Serializable {
 	@Column
 	@Comment("往返或多程")
 	private Integer oneormore;
+
+	private Flight gofilght;
+	private Flight returnfilght;
 
 }

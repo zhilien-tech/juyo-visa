@@ -63,7 +63,7 @@ public class LoginController extends BaseController {
 	/**
 	 * 真正登录的POST请求
 	 */
-	@RequestMapping(value = "auth", method = RequestMethod.POST)
+	@RequestMapping(value = "login", method = RequestMethod.POST)
 	public String auth(
 			@RequestParam String to,
 			@RequestParam(required = false) String login,
