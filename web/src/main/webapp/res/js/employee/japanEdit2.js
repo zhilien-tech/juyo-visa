@@ -5,37 +5,24 @@ var customersourceEnum=[
     {text:"直客",value:3},
     {text:"线下",value:4}
   ];
-function translateZhToEn(from, to) {
-    $.getJSON("/translate/google", {q: $(from).val()}, function (result) {
-        $("#" + to).val(result.data).change();
-    });
-}
-
-var countries = new kendo.data.DataSource({
-        transport: {
-            read: {
-                url: "/res/json/country.json",
-                dataType: "json"
-            }
-        }
-    }),
-    states = new kendo.data.DataSource({
-        transport: {
-            read: {
-                url: "/res/json/usa_states.json",
-                dataType: "json"
-            }
-        }
-    }),
-    dafaults = {
+var defaults = {
 		customermanage:{},
 		tripJp:{},
 		dateplanJpList:[],
 		tripplanJpList:[],
 		fastMail:{}
-    },
-    keys = {
-		"customer.dateplanJpList":{},
+}, 
+keys = {
+		"customer.dateplanJpList":{
+			startdate:"",
+			startcity:"",
+			arrivecity:"",
+			flightnum:"",
+			returndate:"",
+			returnstartcity:"",
+			returnarrivecity:"",
+			returnflightnum:""
+		},
 		"customer.tripplanJpList":{
 			daynum:"",
 			nowdate:"",
@@ -51,17 +38,70 @@ var countries = new kendo.data.DataSource({
 			dinner:""
 
 		}
-	};
-/*****************************************************
- * 数据绑定
- ****************************************************/
+},
+flights = new kendo.data.DataSource({
+    serverFiltering: true,
+    transport: {
+        read: {
+            dataType: "json",
+            url: "/visa/flight/json",
+        },
+        parameterMap: function (options, type) {
+            if (options.filter) {
+                return {filter: options.filter.filters[0].value};
+            }
+        },
+    }
+}), hotels = new kendo.data.DataSource({
+    serverFiltering: true,
+    transport: {
+        read: {
+            dataType: "json",
+            url: "/visa/hotel/json",
+        },
+        parameterMap: function (options, type) {
+            if (options.filter) {
+                return {filter: options.filter.filters[0].value};
+            }
+        },
+    }
+}), scenic = new kendo.data.DataSource({
+    serverFiltering: true,
+    transport: {
+        read: {
+            dataType: "json",
+            url: "/visa/scenic/json",
+        },
+        parameterMap: function (options, type) {
+            if (options.filter) {
+                return {filter: options.filter.filters[0].value};
+            }
+        },
+    }
+});
+
+
 var viewModel = kendo.observable({
-    customer: dafaults,
-    countries:countries,
-    customersourceEnum:customersourceEnum,
-    states:states,
+	 customersourceEnum:customersourceEnum,
+    flights: flights,
+    hotels: hotels,
+    scenic: scenic,
     addOne: function (e) {
-        var key = $.isString(e) ? e : $(e.target).data('params');
+    /*    var key = $.isString(e) ? e : $(e.target).data('params');
+        model.get(key).push({
+            lastName: "",
+            firstName: "",
+            passport: "",
+            main: false,
+            depositSource: "",
+            depositMethod: "",
+            depositSum: 0,
+            depositCount: 1,
+            receipt: false,
+            insurance: false,
+            outDistrict: false,
+        });*/
+    	var key = $.isString(e) ? e : $(e.target).data('params');
         viewModel.get(key).push(keys[key]);
     },
     delOne: function (e) {
@@ -69,21 +109,27 @@ var viewModel = kendo.observable({
         var all = viewModel.get(key);
         all.splice(all.indexOf(e.data), 1);
     },
-    clearAll: function (key) {
-        var all = viewModel.get(key);
-        if (all) all.splice(0, all.length);
-    }, 
-    add: function (key) {
-    	viewModel.set(key, keys[key]);
+    onDateChange: function (e) {
+        var target = e.sender.element.attr("id");
+        var start = $("#start").data("kendoDatePicker");
+        var end = $("#end").data("kendoDatePicker");
+        if (target === "start") {
+            end.min(start.value());
+        } else {
+            start.max(end.value());
+        }
     },
-    clear: function (key) {
-    	viewModel.set(key, undefined);
-    }
-    
+    onSpotChange: function (e) {
+        console.log(e);
+    },
+    getSpot: function (data) {
+        if (data.spot) {
+            return data.spot.split(",");
+        }
+    },
+    customer: defaults,
 });
 kendo.bind($(document.body), viewModel);
-
-
 $(function () {
     $("#cus_phone").kendoMultiSelect({
    		placeholder:"请选择手机号",
@@ -304,7 +350,8 @@ $(function () {
 //信息保存
 function orderJpsave(){
 		
-			 
+			 console.log(JSON.stringify(viewModel.customer));
+			 alert(111);
 			 $.ajax({
 				 type: "POST",
 				 url: "/visa/neworderjp/orderJpsave",
@@ -330,9 +377,9 @@ $(function () {
     var oid = $.queryString("cid");
     if (oid) {
         $.getJSON("/visa/neworderjp/showDetail?orderid=" + oid, function (resp) {
-        	viewModel.set("customer", $.extend(true, dafaults, resp));
-        	dafaults.customermanage.telephone=resp.customermanage.telephone;
-        	dafaults.customermanage.email=resp.customermanage.email;
+        	viewModel.set("customer", $.extend(true, defaults, resp));
+        	defaults.customermanage.telephone=resp.customermanage.telephone;
+        	defaults.customermanage.email=resp.customermanage.email;
         	var color = $("#cus_phone").data("kendoMultiSelect");
 			color.value(resp.customermanage.id);
         	var color = $("#cus_email").data("kendoMultiSelect");
@@ -345,6 +392,3 @@ $(function () {
     }
    
 });
-
-
-

@@ -28,28 +28,75 @@ var countries = new kendo.data.DataSource({
         }
     }),
     dafaults = {
-		customermanage:{},
-		tripJp:{},
-		dateplanJpList:[],
-		tripplanJpList:[],
-		fastMail:{}
+	visatype:0,
+	area:0,
+	paytype:0,
+        travel: {
+            payer: "我自己",
+            // 同行人
+            togethers: []
+        },
+        customermanage:{
+        	fullComName: "",
+        	customerSource: "",
+        	linkman: "",
+        	telephone: "",
+        	email: ""
+        },
+		trip:{
+			teamname: "",
+        	intostate: "",
+        	intocity: "",
+        	usahotel: "",
+        	linkaddress: "",
+        	zipcode: "",
+        	linkxing: "",
+        	linkname: "",
+        	linkxingen: "",
+        	linknameen: "",
+        	linkstate: "",
+        	linkcity: "",
+        	detailaddress: "",
+        	phone: "",
+        	email: "",
+        	paypersion: "",
+        	linkzipcode: "",
+        	staytime: "",
+        	orderid: "",
+        	staytype: "",
+        	linkrelation: "",
+        	arrivedate: ""
+		},
+		peerList:[],
+		fastMail:{
+			datasource: 0,
+        	fastmailnum: "",
+        	mailmethod: 0,
+        	mailaddress: "",
+        	linkpeople: "",
+        	phone: "",
+        	invoicecontent: "",
+        	invoicehead: "",
+        	remaker: "",
+        	orderid: ""
+		},
+		payPersion:{
+			
+		},
+		payCompany:{
+			
+		}
+		
+		
     },
     keys = {
-		"customer.dateplanJpList":{},
-		"customer.tripplanJpList":{
-			daynum:"",
-			nowdate:"",
-			city:"",
-			viewid:"",	
-			hotelid:"",
-			hometype:"",
-			homenum:"",
-			homeday:"",
-			intime:"",
-			outtime:"",
-			breakfast:"",
-			dinner:""
-
+		"customer.peerList":{
+			peerxing: "",
+	    	peerxingen: "",
+	    	peernameen: "",
+	    	peername: "",
+	    	tripid: "",
+	    	relationme: ""
 		}
 	};
 /*****************************************************
@@ -60,8 +107,25 @@ var viewModel = kendo.observable({
     countries:countries,
     customersourceEnum:customersourceEnum,
     states:states,
+    hasTogether: function () {
+        var togethers = viewModel.get("customer.travel.togethers");
+        var state = false;
+        if (togethers) state = togethers.length > 0;
+        return state;
+    },
     addOne: function (e) {
         var key = $.isString(e) ? e : $(e.target).data('params');
+        console.log(key);
+       /* viewModel.get(key).push(
+        		{
+	          		peerxing: "",
+	            	peerxingen: "",
+	            	peernameen: "",
+	            	peername: "",
+	            	tripid: "",
+	            	relationme: ""
+	          	}
+        );*/
         viewModel.get(key).push(keys[key]);
     },
     delOne: function (e) {
@@ -69,20 +133,45 @@ var viewModel = kendo.observable({
         var all = viewModel.get(key);
         all.splice(all.indexOf(e.data), 1);
     },
+    // 是否有同行人
+    hasTogether: function () {
+    	var togethers = viewModel.get("customer.peerList");
+        var state = false;
+        if (togethers) state = togethers.length > 0;
+        return state;
+        /*viewModel.set("customer.ordernumber", $(this).is(':checked') ? " " : "");*/
+    },
     clearAll: function (key) {
         var all = viewModel.get(key);
         if (all) all.splice(0, all.length);
-    }, 
-    add: function (key) {
-    	viewModel.set(key, keys[key]);
     },
-    clear: function (key) {
-    	viewModel.set(key, undefined);
-    }
+ // 支付人
+    payType: function (type) {
+        return viewModel.get("customer.trip.paypersion") === type;
+    },
     
 });
 kendo.bind($(document.body), viewModel);
+/*****************************************************
+ * 开始个人信息
+ ****************************************************/
 
+/*****************************************************
+ * 开始出行信息
+ ****************************************************/
+//是否参团
+$("#join_group").change(function () {
+	viewModel.set("customer.trip.teamname", $(this).is(':checked') ? " " : "");
+});
+//同行人
+$("#has_other_travelers").change(function () {
+    var key = "customer.peerList";
+    if ($(this).is(':checked')) {
+    	viewModel.addOne(key);
+    } else {
+    	viewModel.clearAll(key);
+    }
+});
 
 $(function () {
     $("#cus_phone").kendoMultiSelect({
@@ -132,6 +221,11 @@ $(function () {
     			error : function(xhr) {
     			}
     		});
+        	
+        	
+        	
+        	
+        	
         }
     });
     
@@ -187,11 +281,16 @@ $(function () {
     			error : function(xhr) {
     			}
     		});
+        	
+        	
+        	
+        	
+        	
         }
     });
 });
-
 //联系人
+
 $(function () {
 	$("#cus_linkman").kendoMultiSelect({
     	placeholder:"请选择联系人",
@@ -239,12 +338,18 @@ $(function () {
     			error : function(xhr) {
     			}
     		});
+        	
+        	
+        	
+        	
+        	
         }
     });
 });
 
 
 //公司全称
+
 $(function () {
 	$("#cus_fullComName").kendoMultiSelect({
     	placeholder:"请选择公司全称",
@@ -302,12 +407,14 @@ $(function () {
 });
 
 //信息保存
-function orderJpsave(){
+
+var validator = $("#orderForm").kendoValidator().data("kendoValidator");
+function ordersave(){
 		
 			 
 			 $.ajax({
 				 type: "POST",
-				 url: "/visa/neworderjp/orderJpsave",
+				 url: "/visa/order/orderSave",
 				 contentType: "application/json",
 				 dataType: "json",
 				 data: JSON.stringify(viewModel.customer),
@@ -329,7 +436,7 @@ $(function () {
     //如果有传递ID就是修改
     var oid = $.queryString("cid");
     if (oid) {
-        $.getJSON("/visa/neworderjp/showDetail?orderid=" + oid, function (resp) {
+        $.getJSON("/visa/order/showDetail?orderid=" + oid, function (resp) {
         	viewModel.set("customer", $.extend(true, dafaults, resp));
         	dafaults.customermanage.telephone=resp.customermanage.telephone;
         	dafaults.customermanage.email=resp.customermanage.email;
@@ -343,7 +450,12 @@ $(function () {
 			color.value(resp.customermanage.id);
         });
     }
-   
+    //折叠面板的显隐切换
+    /*$(document).on("click", ".k-link", function () {
+        $(this).find(".k-icon").toggleClass("k-i-arrow-60-down k-i-arrow-n");
+        $(this).next().toggle();
+    });*/
+    $("#sex").kendoDropDownList();//性别 状态 下拉框初始化
 });
 
 

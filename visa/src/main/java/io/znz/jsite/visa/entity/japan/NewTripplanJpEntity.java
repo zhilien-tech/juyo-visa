@@ -1,7 +1,10 @@
 package io.znz.jsite.visa.entity.japan;
 
+import io.znz.jsite.visa.bean.Scenic;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -35,7 +38,7 @@ public class NewTripplanJpEntity implements Serializable {
 
 	@Column
 	@Comment("景区id")
-	private Integer viewid;
+	private String viewid;
 
 	@Column
 	@Comment("酒店id")
@@ -68,5 +71,7 @@ public class NewTripplanJpEntity implements Serializable {
 	@Column
 	@Comment("晚餐")
 	private Integer dinner;
+
+	private List<Scenic> scenics;//景点
 
 }

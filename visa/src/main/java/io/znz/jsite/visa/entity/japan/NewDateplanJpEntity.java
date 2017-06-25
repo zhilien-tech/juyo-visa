@@ -1,5 +1,7 @@
 package io.znz.jsite.visa.entity.japan;
 
+import io.znz.jsite.visa.bean.Flight;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -7,6 +9,7 @@ import lombok.Data;
 
 import org.nutz.dao.entity.annotation.Column;
 import org.nutz.dao.entity.annotation.Comment;
+import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.Table;
 
 @Data
@@ -15,6 +18,7 @@ public class NewDateplanJpEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Column
 	@Comment("主键")
+	@Id
 	private Integer id;
 
 	@Column
@@ -52,5 +56,7 @@ public class NewDateplanJpEntity implements Serializable {
 	@Column
 	@Comment("返回航班号")
 	private String returnflightnum;
+
+	private Flight flight;
 
 }

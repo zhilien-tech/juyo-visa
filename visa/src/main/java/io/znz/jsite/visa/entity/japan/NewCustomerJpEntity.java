@@ -57,6 +57,9 @@ public class NewCustomerJpEntity implements Serializable {
 	@Column
 	@Comment("护照有效日期")
 	private Date passporteffectdate;
+	@Column
+	@Comment("出生日期")
+	private Date birthday;
 
 	@Column
 	@Comment("护照类别")
@@ -134,6 +137,9 @@ public class NewCustomerJpEntity implements Serializable {
 	@Comment("递送次数")
 	private Integer sendcount = 0;
 
+	//是否是主申请人
+	private boolean main = true;
+
 	@Column
 	@Comment("分享次数")
 	private Integer sharecount = 0;
@@ -149,4 +155,9 @@ public class NewCustomerJpEntity implements Serializable {
 	private List<NewOrthercountryJpEntity> orthercountryJpList;
 
 	private List<NewRecentlyintojpJpEntity> recentlyintojpJpList;
+
+	public boolean isMain() {
+		return this.main;
+	}
+
 }
