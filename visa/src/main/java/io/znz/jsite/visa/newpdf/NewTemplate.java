@@ -383,7 +383,7 @@ public abstract class NewTemplate {
 			map.put("topmostSubform[0].Page1[0].#area[21].T68[3]", df1.format(order.getTripJp().getReturndate()));
 			map.put("topmostSubform[0].Page1[0].T66[0]", (Days.daysBetween(dtEntry, dtDepart).getDays() + 1) + "天");
 
-			Flight flight = order.getTripJp().getFilght();
+			Flight flight = order.getTripJp().getGofilght();
 
 			map.put("topmostSubform[0].Page1[0].#area[15].#area[16].T68[0]", filter(flight.getToCity()));
 			map.put("topmostSubform[0].Page1[0].#area[15].#area[16].T68[1]", filter(flight.getLine()));

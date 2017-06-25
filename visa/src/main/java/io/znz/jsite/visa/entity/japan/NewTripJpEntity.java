@@ -55,6 +55,7 @@ public class NewTripJpEntity implements Serializable {
 	@Comment("往返或多程")
 	private Integer oneormore;
 
-	private Flight filght;
+	private Flight gofilght;
+	private Flight returnfilght;
 
 }

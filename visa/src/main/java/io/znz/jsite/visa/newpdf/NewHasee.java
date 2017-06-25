@@ -91,7 +91,7 @@ public class NewHasee extends NewTemplate {
 				throw new JSiteException("入境时间不能在当前时间之前!");
 			}
 			map.put("entryDate", df3.format(entry.getStartdate()));//入境日期
-			Flight entryFlight = entry.getFilght();
+			Flight entryFlight = entry.getGofilght();
 			map.put("entryFlight", entryFlight.getCompany() + ":" + entryFlight.getLine());//入境口岸/航班
 			NewTripJpEntity depart = order.getTripJp();
 			//Ticket depart = order.getDepart();
@@ -101,7 +101,7 @@ public class NewHasee extends NewTemplate {
 				throw new JSiteException("出境时间不能在入境时间之前!");
 			}
 			map.put("departDate", df3.format(depart.getReturndate()));//出境日期
-			Flight departFlight = depart.getFilght();
+			Flight departFlight = depart.getReturnfilght();
 			map.put("departFlight", departFlight.getCompany() + ":" + departFlight.getLine());//出境口岸/航班
 
 			map.put("stay", (diffDays(entry.getStartdate(), depart.getStartdate()) + 1) + "天");//停留周期
@@ -196,9 +196,14 @@ public class NewHasee extends NewTemplate {
 				table.addCell(cell);
 			}
 			//设置表体
-			for (int i = 0; i < trips.size(); i++) {
-				NewTripJpEntity trip = trips.get(i);
-				Flight flight = trip.getFilght();
+			for (int i = 0; i < 2; i++) {
+				NewTripJpEntity trip = trips.get(0);
+				Flight flight = null;
+				if (i == 0) {
+					flight = trip.getGofilght();
+				} else {
+					flight = trip.getReturnfilght();
+				}
 				//trip.getSeat()方式
 				String datas[] = { flight.getFrom(), flight.getLine(), "",
 						df6.format(trip.getStartdate()).toUpperCase(), df7.format(flight.getDeparture()),
@@ -218,7 +223,7 @@ public class NewHasee extends NewTemplate {
 				}
 			}
 			//添加一个空行
-			String datas[] = { trips.get(0).getFilght().getFrom(), "", "", "", "", "", "", "", "", "", };
+			String datas[] = { trips.get(0).getGofilght().getFrom(), "", "", "", "", "", "", "", "", "", };
 			for (int j = 0; j < datas.length; j++) {
 				String data = datas[j];
 				PdfPCell cell = new PdfPCell(new Paragraph(data, font));
