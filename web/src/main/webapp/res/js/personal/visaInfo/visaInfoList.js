@@ -103,43 +103,7 @@ var countries = new kendo.data.DataSource({
 	            payer: "我自己",
 	            // 同行人
 	            togethers:[]
-	        },
-	        trip:{
-	    		teamname: "",
-	        	intostate: "",
-	        	intocity: "",
-	        	usahotel: "",
-	        	linkaddress: "",
-	        	zipcode: "",
-	        	linkxing: "",
-	        	linkname: "",
-	        	linkxingen: "",
-	        	linknameen: "",
-	        	linkstate: "",
-	        	linkcity: "",
-	        	detailaddress: "",
-	        	phone: "",
-	        	email: "",
-	        	paypersion: "",
-	        	linkzipcode: "",
-	        	staytime: "",
-	        	orderid: "",
-	        	staytype: "",
-	        	linkrelation: "",
-	        	arrivedate: ""
-	    	},
-	    	fastMail:{
-	    		datasource: 0,
-	        	fastmailnum: "",
-	        	mailmethod: 0,
-	        	mailaddress: "",
-	        	linkpeople: "",
-	        	phone: "",
-	        	invoicecontent: "",
-	        	invoicehead: "",
-	        	remaker: "",
-	        	orderid: ""
-	    	}
+	        }
     },
     keys = {
 		"customer.orthercountrylist":{},
@@ -150,7 +114,6 @@ var countries = new kendo.data.DataSource({
 		"customer.workedplacelist":{},
 		"customer.relation":{},
 		"customer.teachinfo":{},
-		"customer.peerList":{},
 		"customer.peerList":{
 			peerxing: "",
 	    	peerxingen: "",
@@ -276,7 +239,6 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-    	//alert(111);
        return viewModel.get("customer.passportlose");
     },
     // 曾用名
@@ -296,6 +258,14 @@ var viewModel = kendo.observable({
     //是否制定了具体旅行计划
     travelPlanEnable: function () {
     	return viewModel.get("customer.travelplan");
+    },
+    //是否加入一个团队或组织旅行
+    joinTeamEnable: function () {
+    	return viewModel.get("customer.trip");
+    },
+    //你是否有其他亲属在美国
+    relationEnable:function(){
+    	return viewModel.get("customer.spouse");
     }
 });
 kendo.bind($(document.body), viewModel);
@@ -347,7 +317,7 @@ $("#has_immediate_relatives").change(function () {
     }
 });
 $("#other_relatives").change(function () {
-	viewModel.set("customer.relation.indirect", $(this).is(':checked'));
+	viewModel.set("customer.relation.indirect", $(this).is(':checked') ? " " : "");
 });
 /*****************************************************
  * 美国相关信息
@@ -377,7 +347,7 @@ $("#old_apply2").change(function () {
 });
 //本次签证和上次的一样
 $("#type_same_as_previous").change(function () {
-	viewModel.set("customer.usainfo.sameaslast", $(this).is(':checked'));
+	viewModel.set("customer.usainfo.sameaslast", $(this).is(':checked') ? " " : "");
 });
 /*****************************************************
  * 教育信息
@@ -405,8 +375,14 @@ $("#travel_purpose").change(function () {
 $("#if_formulate_plan").change(function () {
 	viewModel.set("customer.travelplan", $(this).is(':checked') ? " " : "");
 });
-
-
+//是否加入一个团队或组织旅行
+$("#join_group").change(function () {
+	viewModel.set("customer.trip", $(this).is(':checked') ? " " : "");
+});
+//是否加入一个团队或组织旅行
+$("#other_relatives_aa").change(function () {
+	viewModel.set("customer.spouse", $(this).is(':checked') ? " " : "");
+});
 
 
 //信息保存

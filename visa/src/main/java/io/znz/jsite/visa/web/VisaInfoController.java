@@ -51,6 +51,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.collect.Lists;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
 
@@ -241,13 +242,13 @@ public class VisaInfoController extends BaseController {
 		CustomerManageEntity customerManageEntity = dbDao.fetch(CustomerManageEntity.class,
 				order.getCus_management_id());
 		if (!Util.isEmpty(customerManageEntity)) {
-			order.setCustomermanage(customerManageEntity);
+			customer.setCustomermanage(customerManageEntity);
 		}
 		List<NewTrip> newTrips = dbDao.query(NewTrip.class, Cnd.where("orderid", "=", orderid), null);
+		List<NewPeerPersionEntity> query = null;
 		if (!Util.isEmpty(newTrips) && newTrips.size() > 0) {
 			order.setTrip(newTrips.get(0));
-			List<NewPeerPersionEntity> query = dbDao.query(NewPeerPersionEntity.class,
-					Cnd.where("tripid", "=", newTrips.get(0).getId()), null);
+			query = dbDao.query(NewPeerPersionEntity.class, Cnd.where("tripid", "=", newTrips.get(0).getId()), null);
 			order.setPeerList(query);
 		}
 		List<NewPayPersionEntity> newPayPersionEntities = dbDao.query(NewPayPersionEntity.class,
@@ -265,6 +266,16 @@ public class VisaInfoController extends BaseController {
 		if (!Util.isEmpty(newFastMailEntities) && newFastMailEntities.size() > 0) {
 			order.setFastMail(newFastMailEntities.get(0));
 		}
+		customer.setOrder(order);//订单管理
+		customer.setCustomermanage(customerManageEntity);
+		customer.setTrip(newTrips);
+		if (Util.isEmpty(query)) {
+			query = Lists.newArrayList();
+		}
+		customer.setPeerList(query);
+		customer.setPayPersion(newPayPersionEntities);
+		customer.setPayCompany(newPayCompanyEntities);
+		customer.setFastMail(newFastMailEntities);
 		return customer;
 	}
 }

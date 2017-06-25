@@ -236,15 +236,15 @@ public class NewCustomerEntity implements Serializable {
 	 */
 	private CustomerManageEntity customermanage;
 
-	private NewTrip trip;
+	private List<NewTrip> trip;
 
 	private List<NewPeerPersionEntity> peerList;
 
-	private NewPayPersionEntity payPersion;
+	private List<NewPayPersionEntity> payPersion;
 
-	private NewPayCompanyEntity payCompany;
+	private List<NewPayCompanyEntity> payCompany;
 
-	private NewFastMailEntity fastMail;
+	private List<NewFastMailEntity> fastMail;
 
 	//是否有其他国籍
 	private List<OtherNationalityEntity> othernationality;
