@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>补录信息-签手世界</title>
+    <title>日本 - 签证信息 - 我的资料 - 签手世界</title>
     <link rel="stylesheet" href="/res/plugin/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.common.min.css"/>
     <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.office365.min.css"/>
@@ -13,264 +13,50 @@
     <link rel="stylesheet" href="/res/css/colors.min.css"/>
     <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
     <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
-    <!-- <style type="text/css">
-    	.k-multiselect>.k-multiselect-wrap>.k-i-close {top: 50%;}
-    	.k-select span.k-i-close {left: -15px;}
+    <!-- <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/> -->
+    <style type="text/css">
     	.k-multiselect-wrap li{margin: 4px 0 1px 2px;padding: 10px 23px 10px 1px;line-height: 0;}
     	.k-multiselect-wrap .k-input {height: 1.54em;line-height: 1.54em;}
     	#objIDCard{display: none;}
     	.container-fluid.k-content{margin-top: 15px;}
     	.addIcon,.removeIcon{border: solid 1px #337ab7;font-size: 18px;position: relative;top: 25px;border-radius: 50%;padding: 2.5px 4.5px 2px 4.5px;}
-    </style> -->
+    	/*页面 搜索模块*/
+		.Search{height:30px;z-index: 1;border-bottom: solid 1px #e7eaec;padding: 8px 10px;}
+		.padding-Left-0{padding-left: 0;}
+		.btn{font-size: 12px;padding: 0px 15px;height: 28px;border-radius: 0;}
+		.btn-primary{background-color: #39aef5;border: solid 1px #349ad8;}
+		.btn-primary:hover{background-color: #32a1e4;border: solid 1px #2b82b7;}
+		.btn-primary:focus,.btn-primary.focus {color: #fff;background-color: #32a1e4;border-color: #2b82b7;}
+		.btn-primary:active:hover,.btn-primary.active:hover,.open > .dropdown-toggle.btn-primary:hover,
+		.btn-primary:active:focus,.btn-primary.active:focus,.open > .dropdown-toggle.btn-primary:focus,
+		.btn-primary:active.focus,.btn-primary.active.focus,
+		.open > .dropdown-toggle.btn-primary.focus {color: #fff;background-color: #32a1e4;border-color: #2b82b7;}
+		.marginBtn{margin-left:10px;}
+		@media (min-width:1000px){
+			.container {padding-left: 15%;padding-right: 15%;}
+			.container-width{padding-left: 15%;padding-right: 15%;}
+		}
+    </style>
 </head>
 <body>
+	
 <div>
-    <div class="container-fluid" style="padding-bottom: 15px;">
-        <ul id="panelbar" class="col-xs-12" data-role="panelbar" data-expand-mode="single">
-        	<li  class="k-state-active">
-                        <span class="k-link k-state-selected">客户信息</span>
+	<!--搜索条件 模块-->
+    <div class="Search">
+      <div  class="col-xs-12">
+        <input type="button" class="btn btn-primary input-sm pull-right marginBtn editBtn" value="编辑">
+      	<input type="button" class="btn btn-primary input-sm pull-right marginBtn cancelBtn hide" onclick=" " value="取消">
+      	<input id="updatePassportSave" type="button" class="btn btn-primary input-sm pull-right marginBtn saveBtn hide" value="保存">
+      </div>
+    </div>
+    <!--end 搜索条件 模块-->
+    <div class="container-fluid container-width" style="padding-bottom: 15px;">
+        <div class="row" style="margin-top:15px;">
+            <div class="col-xs-12">
+                <ul id="panelbar">
+                    <li class="k-state-active"> 
+                    	<span class="k-link k-state-selected">出行信息</span>
                         <div class="container-fluid">
-                            <!--公司全称/客户来源-->
-                              <div class="row">
-                                <div class="col-xs-8">
-                                    <div class="form-group">
-                                        <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="cus_fullComName" type="text" class="k-textbox" style="width: 100%;"
-                                              data-bind="value:customer.customermanage.fullComName"  />
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-4">
-                                    <div class="form-group">
-                                        <label for="last_name_en">客户来源:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <select id=""
-                                                    data-role="dropdownlist"
-                                                    data-filter="startswith"
-                                                    data-suggest="true"
-                                                    data-auto-bind="true"
-                                                    data-value-primitive="true"
-                                                    data-text-field="text"
-                                                    data-value-field="value"
-                                                    data-bind="value:customer.customermanage.customerSource,source:customersourceEnum"
-                                                    style="width: 100%;"></select>
-                                                    <!--   <input id="cus_source"  class="k-textbox"
-                                                   style="width: 100%;" name="customerSource"/> -->
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- end 公司全称/客户来源 -->
-                          <!--联系人/手机/邮箱-->
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <div class="form-group">
-                                        <label for="first_name_cn">联系人:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="cus_linkman" class="k-textbox" data-bind="value:customer.customermanage.linkman"
-                                                   style="width: 100%;" name="linkman"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-4">
-                                    <div class="form-group">
-                                        <label for="first_name_en">手机:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                           <input id="cus_phone" name="telephone" 
-                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                                           <!--  <select class="k-textbox" style="width: 100%;text-transform:uppercase;" id="cus_phone"></select> 
-                                           data-bind="value:customer.customermanage.telephone"
-                                           -->
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-4">
-                                    <div class="form-group">
-                                        <label for="first_name_en">邮箱:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                             <input id="cus_email" name="email" 
-                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                                                   <!-- <select class="k-textbox" style="width: 100%;text-transform:uppercase;" id="cus_email"></select> 
-                                                   data-bind="value:customer.customermanage.email"
-                                                   -->
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="has_pr" data-template="tpl_has_pr" data-bind="source:customer.otherCountry"></div>
-                      <!--       <div class="row has_pr" >data-bind="visible:otherCountryEnable"
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <button data-bind="click:addOne"
-                                                data-params="customer.otherCountry"
-                                                class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加
-                                        </button>
-                                    </div>
-                                </div>
-                            </div> -->
-                        </div>
-                    </li>
-			<li> 订单信息
-                       <div class="container-fluid">
-                            <!--人数/签证类型/领取/加急/行程-->
-                            <div class="row">
-                                <div class="col-xs-2">
-                                    <div class="form-group">
-                                        <label for="usa_arrival_date">人数:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
-                                            <input id="usa_arrival_date" style="width: 100%;" class="k-textbox"
-                                                   name="headcount" data-bind="value:customer.headnum"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-2">
-                                    <div class="form-group">
-                                        <label for="usa_times_stay_unit">签证类型:</label>
-                                        <div class='input-group'>
-                                            <select id="usa_times_stay_unit" style="width:100%;"
-                                                    data-role="dropdownlist"
-                                                    data-value-primitive="true"
-                                                    data-bind="value:customer.visatype"
-                                                     name="visatype">
-                                                <option value="0">单次</option>
-                                                <option value="1">一年单次</option>
-                                                <option value="2">东三县</option>
-                                                <option value="3">东六县</option>
-                                                <option value="4">冲绳</option>
-                                                <option value="5">普通三年</option>
-                                                <option value="6">普通五年</option>
-                                            </select>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-2">
-                                    <div class="form-group">
-                                        <label for="usa_times_stay_unit">领区:</label>
-                                        <div class='input-group'>
-                                            <select id="usa_times_stay_unit" style="width:100%;"
-                                                    data-role="dropdownlist"
-                                                    data-value-primitive="true"
-                                                     data-bind="value:customer.area"
-                                                     name="area">
-                                                <option value="0">东北</option>
-                                                <option value="1">华东</option>
-                                                <option value="2">华南</option>
-                                            </select>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-2">
-                                    <div class="form-group">
-                                        <label for="usa_times_stay_unit">加急:</label>
-                                        <div class='input-group'>
-                                            <input id="order_hurry"  value="false" data-bind="checked:customer.ishurry"
-                                               class="mui-switch" type="checkbox" name="ishurry" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-2">
-                                    <div class="form-group">
-                                        <label for="usa_times_stay_unit">行程:</label>
-                                        <div class='input-group'>
-                                            <select id="usa_times_stay_unit" style="width:100%;"
-                                                    data-role="dropdownlist"
-                                                    data-value-primitive="true"
-                                                     data-bind="value:customer.triptype"
-                                                    name="paytype">
-                                                <option value="0">代</option>
-                                                <option value="1">真</option>
-                                            </select>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--end人数/签证类型/领取/加急/行程-->
-                            
-                            <!--收款方式/金额/送签时间/出签时间-->
-                            <div class="row">
-                            	<div class="col-xs-2">
-                                    <div class="form-group">
-                                        <label for="usa_times_stay_unit">付款方式:</label>
-                                        <div class='input-group'>
-                                            <select id="usa_times_stay_unit" style="width:100%;"
-                                                    data-role="dropdownlist"
-                                                    data-value-primitive="true"
-                                                     data-bind="value:customer.paytype"
-                                                    name="paytype">
-                                                <option value="0">现金</option>
-                                                <option value="1">出签付</option>
-                                                <option value="2">微信</option>
-                                                <option value="3">支付宝</option>
-                                                <option value="4">月付</option>
-                                            </select>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-2">
-                                    <div class="form-group">
-                                        <label for="us_contact_last_name_cn">金额:</label>
-                                        <div class='input-group'>
-                                            <input id="us_contact_last_name_cn"
-                                                  data-bind="value:customer.money"
-                                                   class="k-textbox" style="width: 100%;" name="money"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-4">
-                                    <div class="form-group">
-                                        <label for="us_contact_last_name_en">送签时间:</label>
-                                        <div class='input-group'>
-                                            <input id="us_contact_last_name_en" data-role="datepicker" style="width: 100%;" data-bind="value:customer.senddate"
-                                                   name="sendtime"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-4">
-                                    <div class="form-group">
-                                        <label for="us_contact_last_name_en">出签时间:</label>
-                                        <div class='input-group'>
-                                            <input id="us_contact_last_name_en" data-role="datepicker" style="width: 100%;" data-bind="value:customer.outdate"
-                                                    name="outtime"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--end 收款方式/金额/送签时间/出签时间-->
-                            <!--备注-->
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="us_contact_first_name_cn">备注:</label>
-                                        <div class='input-group'>
-                                            <input id="us_contact_first_name_cn"
-                                                   data-bind="value:customer.remark"
-                                                   class="k-textbox" style="width: 100%;" name="remaker"/>
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--end 备注-->
-                        </div>
-                    </li> 
-            <li> 出行信息
-                       <div class="container-fluid">
-                            
                             <!--出行目的-->
                             <div class="row">
                                 <div class="col-xs-6">
@@ -288,14 +74,14 @@
                                         <label for="usa_times_stay_unit">往返/多程:</label>
                                         <div class='input-group'>
                                             <input id="order_hurry"  value="false" data-bind="checked:customer.tripJp.oneormore"
-                                               class="mui-switch wangFan_DuoCheng" type="checkbox" name="ishurry" />
+                                               class="mui-switch" type="checkbox" name="ishurry" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <!--end 出行目的-->
                             <!--出发日期/出发城市/抵达城市/航班号/+ -->
-                          <!--   <div class="row">
+                            <div class="row">
                             	<div class="col-xs-3">
                                     <div class="form-group">
                                         <label for="us_contact_last_name_en">出发日期:</label>
@@ -337,25 +123,9 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-1">
-                                    <a href="javascript:;" class="fa fa-plus addIcon"></a>圆圈加号
+                                    <a href="javascript:;" class="fa fa-plus addIcon"></a><!-- 圆圈加号 -->
                                 </div>
-    						</div> -->
-    						
-    						
-    						
-    						
-    						
-    						  <div>
-				                    <div data-bind="source:customer.dateplanJpList" data-template="tpl_temp"></div>
-				                    <div class="row">
-				                        <div class="col-xs-12">
-				                            <button data-bind="click:addOne" data-params="customer.dateplanJpList"
-				                                    class="k-button col-xs-12 k-button-icontext">
-				                                <span class="k-icon k-i-plus"></span>添加
-				                            </button>
-				                        </div>
-				                    </div>
-				                </div>
+    						</div>
     						<!--end 出发日期/出发城市/抵达城市/航班号/+ -->
     						<div>
     							<!-- 返回日期/出发城市/抵达城市/航班号 -->
@@ -394,18 +164,8 @@
 	                                    <div class="form-group">
 	                                        <label for="usa_city">航班号:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                           <!--  <input id="" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-	                                                   data-bind="value:customer.tripJp.flightnum"/> -->
-	                                                   <select id="usa_city"
-                                                       data-role="dropdownlist"
-                                                       data-filter="startswith"
-				                                       data-value-field="id"
-				                                       data-text-field="to"
-				                                       data-auto-bind="true"
-				                                       data-value-template="tpl_flight"
-				                                       data-template="tpl_flight"
-                                                       data-bind="value:customer.tripJp.gofilght,source:flights"
-                                                       style="width: 100%;"></select>
+	                                            <input id="" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+	                                                   data-bind="value:customer.tripJp.flightnum"/>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -449,19 +209,8 @@
 	                                    <div class="form-group">
 	                                        <label for="usa_city">航班号:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <!-- <input id="" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-	                                                   data-bind="value:customer.tripJp.returnflightnum"/> -->
-	                                                   
-	                                                   <select id="usa_city"
-                                                       data-role="dropdownlist"
-                                                       data-filter="startswith"
-				                                       data-value-field="id"
-				                                       data-text-field="to"
-				                                       data-auto-bind="true"
-				                                       data-value-template="tpl_flight"
-				                                       data-template="tpl_flight"
-                                                       data-bind="value:customer.tripJp.returnfilght,source:flights"
-                                                       style="width: 100%;"></select>
+	                                            <input id="" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+	                                                   data-bind="value:customer.tripJp.returnflightnum"/>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -472,21 +221,21 @@
                             
                         </div>
                     </li>
-            <li>
-                <span class="k-link">行程安排</span>
-                <div class="container-fluid">
-                    <div data-bind="source:customer.tripplanJpList" data-template="tpl_trip"></div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <button data-bind="click:addOne" data-params="customer.tripplanJpList"
-                                    class="k-button col-xs-12 k-button-icontext">
-                                <span class="k-icon k-i-plus"></span>添加行程
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li> 快递信息
+		            <li>
+		                <span class="k-link">行程安排</span>
+		                <div class="container-fluid">
+		                    <div data-bind="source:order.trips" data-template="tpl_trip"></div>
+		                    <div class="row">
+		                        <div class="col-xs-12">
+		                            <button data-bind="click:addOne" data-params="order.trips"
+		                                    class="k-button col-xs-12 k-button-icontext">
+		                                <span class="k-icon k-i-plus"></span>添加行程
+		                            </button>
+		                        </div>
+		                    </div>
+		                </div>
+		            </li>
+            		<li> 快递信息
                          <div class="container-fluid">
                             <!--资料来源/快递号/回邮方式-->
                             <div class="row">
@@ -615,38 +364,69 @@
                             </div>
                             <!--end 备注-->
                         </div>
+            		</li>
+            		<li> 工作信息
+                        <div class="container-fluid">
+                            <!--我的职业-->
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label>我的职业:<span class="red">*</span></label>
+                                        <div class='input-group'>
+                                            <input data-bind="value:customer.workinfoJp.myjob" class="k-textbox fill"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-8">
+                                    <div class="form-group">
+                                        <label for="unit_name_cn">单位名称:</label>
+                                        <div class='input-group'>
+                                            <input id="unit_name_cn" class="k-textbox fill uppercase" data-bind="value:customer.workinfoJp.unitname"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label for="unit_phone">单位电话:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="unit_phone" class="k-textbox fill" data-bind="value:customer.workinfoJp.unitphone"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="unit_address_cn_2">公司地址:</label>
+                                        <div class='input-group'>
+                                            <input id="unit_address_cn_2" class="k-textbox fill" data-bind="value:customer.workinfoJp.unitaddress"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </li>
-        </ul>
-       <div class="row" >
-            <div class="col-xs-12">
-                <div class="form-group">
-                    <label>&nbsp;</label>
-                    <button id="save" class="k-primary k-button col-xs-12" onclick="orderJpsave();">
-                        <i class="fa fa-save"></i> 保存
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-6">
-                <div class="form-group">
-                    <label>&nbsp;</label>
-                    <a href="http://7sbs1m.com1.z0.glb.clouddn.com/%E9%A9%B1%E5%8A%A8V2.2.0.1.rar" target="_blank">
-                        <button class="k-button col-xs-12">
-                            <i class="fa fa-cloud-download"></i> 扫描仪驱动下载
-                        </button>
-                    </a>
-                </div>
-            </div>
-            <div class="col-xs-6">
-                <div class="form-group">
-                    <label>&nbsp;</label>
-                    <a href="http://7sbs1m.com1.z0.glb.clouddn.com/SysWOW64.zip" target="_blank">
-                        <button class="k-button col-xs-12">
-                            <i class="fa fa-cloud-download"></i> IE扫描插件下载
-                        </button>
-                    </a>
-                </div>
+                    <li> 财务信息
+                        <div class="container-fluid">
+                            <div data-template="tpl_finance" data-bind="source:customer.financeJpList"></div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <button data-bind="click:addOne" data-params="customer.financeJpList" class="k-button col-xs-12 k-button-icontext">
+                                            <span class="k-icon k-i-plus"></span>添加
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -681,6 +461,9 @@
         </div>
     </div>
 </script>
+
+
+<!-- 行程安排 模板 -->
 <script id="tpl_trip" type="text/x-kendo-template">
     <div>
 		<div class="row">
@@ -697,7 +480,7 @@
             <div class="col-xs-4">
                 <div class="form-group">
                     <label>日期:</label>
-                    <input type="text" class="fill" data-role="datepicker" data-bind="value:nowdate"/>
+                    <input type="text" class="fill" data-role="datepicker" data-bind="value:date"/>
                 </div>
             </div>
 			<div class="col-xs-4">
@@ -718,7 +501,6 @@
                     <select class="fill"
                             data-role="multiselect"
                             data-auto-close="false"
-						
                             data-tag-mode="multiple"
                             data-value-field="id"
                             data-text-field="name"
@@ -737,43 +519,30 @@
                            data-value-field="id"
                            data-text-field="name"
                            data-value-template="tpl_hotel"
-                           data-bind="source:hotels,value:hotelid"/>
+                           data-bind="source:hotels,value:hotel"/>
                 </div>
             </div>
             <div class="col-xs-2">
                 <div class="form-group">
                     <label>房间类型:</label>
-                    <select class="fill" data-role="dropdownlist" data-value-primitive="true" data-bind="value:hometype">
-                        <option value="0">TWIN</option>
-                                                <option value="1">SGIN</option>
+                    <select class="fill" data-role="dropdownlist" data-value-primitive="true" data-bind="value:room">
+                        <option>TWN 1 室</option>
                     </select>
                 </div>
             </div>
 			<div class="col-xs-2">
                 <div class="form-group">
                     <label>间数:</label>
-                    <select class="fill" data-role="dropdownlist" data-value-primitive="true" data-bind="value:homenum">
-                         <option value="0">1</option>
-                                                <option value="1">2</option>
-                                                <option value="2">3</option>
-                                                <option value="3">4</option>
-                                                <option value="4">5</option>
-                                                <option value="5">6</option>
-                                                <option value="6">7</option>
+                    <select class="fill" data-role="dropdownlist" data-value-primitive="true" data-bind="value:room">
+                        <option>TWN 1 室</option>
                     </select>
                 </div>
             </div>
 			<div class="col-xs-2">
                 <div class="form-group">
                     <label>几晚:</label>
-                    <select class="fill" data-role="dropdownlist" data-value-primitive="true" data-bind="value:homeday">
-                          <option value="0">1</option>
-                                                <option value="1">2</option>
-                                                <option value="2">3</option>
-                                                <option value="3">4</option>
-                                                <option value="4">5</option>
-                                                <option value="5">6</option>
-                                                <option value="6">7</option>
+                    <select class="fill" data-role="dropdownlist" data-value-primitive="true" data-bind="value:room">
+                        <option>TWN 1 室</option>
                     </select>
                 </div>
             </div>
@@ -782,20 +551,20 @@
             <div class="col-xs-2">
                 <div class="form-group">
                     <label>入住时间:</label>
-                    <input type="text" class="fill" data-role="timepicker" data-bind="value:intime"/>
+                    <input type="text" class="fill" data-role="timepicker" data-bind="value:startTime"/>
                 </div>
             </div>
             <div class="col-xs-2">
                 <div class="form-group">
                     <label>退房时间:</label>
-                    <input type="text" class="fill" data-role="timepicker" data-bind="value:outtime"/>
+                    <input type="text" class="fill" data-role="timepicker" data-bind="value:endTime"/>
                 </div>
             </div>
             <div class="col-xs-2">
                 <div class="form-group">
                     <label>早餐:</label>
                     <select class="fill" data-role="dropdownlist" data-value-primitive="true" data-bind="value:breakfast">
-                        <option value="1">無</option>
+                        <option>無</option>
                     </select>
                 </div>
             </div>
@@ -803,14 +572,14 @@
                 <div class="form-group">
                     <label>晚餐:</label>
                     <select class="fill" data-role="dropdownlist" data-value-primitive="true" data-bind="value:dinner">
-                        <option value="1">無</option>
+                        <option>無</option>
                     </select>
                 </div>
             </div>
             <div class="col-xs-4">
                 <div class="form-group">
                     <label>操作:&nbsp;</label>
-                    <button data-bind="click:delOne" data-params="customer.tripplanJpList"
+                    <button data-bind="click:delOne" data-params="order.trips"
                             class="k-button col-xs-12 k-button-icontext">
                         <span class="k-icon k-i-close"></span>移除此行程
                     </button>
@@ -829,70 +598,44 @@
     #=data.name+"("+data.phone+")"#
     #}#
 </script>
-<!-- 出行信息模板 -->
-<script id="tpl_temp" type="text/x-kendo-template">
-    <div>
-		<div class="row">
-			
-            <div class="col-xs-4">
-                <div class="form-group">
-                    <label>出发日期:</label>
-                    <input type="text" class="fill" data-role="datepicker" data-bind="value:startdate"/>
-                </div>
-            </div>
-			<div class="col-xs-4">
-              <div class="form-group">
-                  <label for="traveler_city_name">出发城市:<span style="color: red">*</span></label>
-                  <div class='input-group'>
-                      <input id="traveler_city_name" style="width: 100%;" class="k-textbox"
-                             name="headcount" data-bind="value:startcity"/>
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                  </div>
-              </div>
-           </div>
-			<div class="col-xs-4">
-              <div class="form-group">
-                  <label for="traveler_city_name">抵达城市:<span style="color: red">*</span></label>
-                  <div class='input-group'>
-                      <input id="traveler_city_name" style="width: 100%;" class="k-textbox"
-                             name="headcount" data-bind="value:arrivecity"/>
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                  </div>
-              </div>
-           </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-8">
-                <div class="form-group">
-                    <label>航班号:</label>
+<!-- end 行程安排 模板 -->
+
+<!-- 财务信息 模板 -->
+<script id="tpl_finance" type="text/html">
+    <div class="row">
+        <div class="col-xs-5">
+            <div class="form-group">
+                <div class='input-group'>
                     <select class="fill"
-                            data-role="dropdownlist"
-                                                       data-filter="startswith"
-				                                       data-value-field="id"
-				                                       data-text-field="to"
-				                                       data-auto-bind="true"
-				                                       data-value-template="tpl_flight"
-				                                       data-template="tpl_flight"
-                                                       data-bind="value:flight,source:flights"
-                            >
+                            data-role="combobox"
+                            data-value-primitive="true"
+                            data-bind="value:business">
+                        <option value="银行流水账">银行流水账(万)</option>
+                        <option value="车产">车产(品牌)</option>
+                        <option value="房产">房产(平米)</option>
                     </select>
+                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                 </div>
             </div>
-			<div class="col-xs-4">
-                <div class="form-group">
-                    <label>操作:&nbsp;</label>
-                    <button data-bind="click:delOne" data-params="customer.dateplanJpList"
-                            class="k-button col-xs-12 k-button-icontext">
-                        <span class="k-icon k-i-close"></span>移除此行程
-                    </button>
-                </div>
-            </div>
-			
         </div>
-     
-        
+        <div class="col-xs-5">
+            <div class="form-group">
+                <div class='input-group'>
+                    <input class="k-textbox fill" data-bind="value:detail"/>
+                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="form-group">
+                <button data-bind="click:delOne" data-params="customer.financeJpList" class="k-button col-xs-12 k-button-icontext">
+                    <span class="k-icon k-i-close"></span>删除
+                </button>
+            </div>
+        </div>
     </div>
 </script>
+<!-- end 财务信息 模板 -->
 
 
 <!--引入 js 库文件-->
@@ -903,6 +646,16 @@
 <script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
 <script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
 <script src="/res/js/common.js"></script>
-<!-- <script src="/res/js/japanEdit.js"></script> -->
-<script src="/res/js/employee/japanEdit2.js"></script>
+<script type="text/javascript"><!--面板条 动画效果--> 
+    $(function () {
+       /*折叠板 效果初始化*/
+       $("#panelbar").kendoPanelBar({
+            expandMode: "single" //设置展开模式只能展开单个
+        });
+    });
+</script>
+<!-- <script src="/res/plugin/webtoolkit.md5.js"></script>
+<script src="/res/js/idcard.js"></script>
+<script src="/res/js/wintone.js?v=4"></script> -->
+<script src="/res/js/personal/visaInfo/JPvisaInfoList.js"></script>
 </html>

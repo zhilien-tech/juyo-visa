@@ -104,42 +104,8 @@ var countries = new kendo.data.DataSource({
 	            // 同行人
 	            togethers:[]
 	        },
-	        trip:{
-	    		teamname: "",
-	        	intostate: "",
-	        	intocity: "",
-	        	usahotel: "",
-	        	linkaddress: "",
-	        	zipcode: "",
-	        	linkxing: "",
-	        	linkname: "",
-	        	linkxingen: "",
-	        	linknameen: "",
-	        	linkstate: "",
-	        	linkcity: "",
-	        	detailaddress: "",
-	        	phone: "",
-	        	email: "",
-	        	paypersion: "",
-	        	linkzipcode: "",
-	        	staytime: "",
-	        	orderid: "",
-	        	staytype: "",
-	        	linkrelation: "",
-	        	arrivedate: ""
-	    	},
-	    	fastMail:{
-	    		datasource: 0,
-	        	fastmailnum: "",
-	        	mailmethod: 0,
-	        	mailaddress: "",
-	        	linkpeople: "",
-	        	phone: "",
-	        	invoicecontent: "",
-	        	invoicehead: "",
-	        	remaker: "",
-	        	orderid: ""
-	    	}
+	        placeinformation:{},//地点信息
+	        applicantproducer:{}//申请的制作者
     },
     keys = {
 		"customer.orthercountrylist":{},
@@ -150,7 +116,6 @@ var countries = new kendo.data.DataSource({
 		"customer.workedplacelist":{},
 		"customer.relation":{},
 		"customer.teachinfo":{},
-		"customer.peerList":{},
 		"customer.peerList":{
 			peerxing: "",
 	    	peerxingen: "",
@@ -276,7 +241,6 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-    	//alert(111);
        return viewModel.get("customer.passportlose");
     },
     // 曾用名
@@ -296,6 +260,18 @@ var viewModel = kendo.observable({
     //是否制定了具体旅行计划
     travelPlanEnable: function () {
     	return viewModel.get("customer.travelplan");
+    },
+    //是否加入一个团队或组织旅行
+    joinTeamEnable: function () {
+    	return viewModel.get("customer.trip");
+    },
+    //你是否有其他亲属在美国
+    relationEnable:function(){
+    	return viewModel.get("customer.spouse");
+    },
+    //申请的制作者
+    assistApplyEnable: function () {
+        return viewModel.get("customer.applicantproducer");
     }
 });
 kendo.bind($(document.body), viewModel);
@@ -347,7 +323,7 @@ $("#has_immediate_relatives").change(function () {
     }
 });
 $("#other_relatives").change(function () {
-	viewModel.set("customer.relation.indirect", $(this).is(':checked'));
+	viewModel.set("customer.relation.indirect", $(this).is(':checked') ? " " : "");
 });
 /*****************************************************
  * 美国相关信息
@@ -377,7 +353,7 @@ $("#old_apply2").change(function () {
 });
 //本次签证和上次的一样
 $("#type_same_as_previous").change(function () {
-	viewModel.set("customer.usainfo.sameaslast", $(this).is(':checked'));
+	viewModel.set("customer.usainfo.sameaslast", $(this).is(':checked') ? " " : "");
 });
 /*****************************************************
  * 教育信息
@@ -405,30 +381,33 @@ $("#travel_purpose").change(function () {
 $("#if_formulate_plan").change(function () {
 	viewModel.set("customer.travelplan", $(this).is(':checked') ? " " : "");
 });
+//是否加入一个团队或组织旅行
+$("#join_group").change(function () {
+	viewModel.set("customer.trip", $(this).is(':checked') ? " " : "");
+});
+//是否加入一个团队或组织旅行
+$("#other_relatives_aa").change(function () {
+	viewModel.set("customer.spouse", $(this).is(':checked') ? " " : "");
+});
+//申请的制作者
+$("#has_assist_apply").change(function () {
+	viewModel.set("customer.applicantproducer", $(this).is(':checked') ? " " : "");
+});
 
-
-
-
-//信息保存
-$("#saveCustomerData").on("click",function(){
+//签证信息保存
+$("#updatePassportSave").on("click",function(){
 	console.log(JSON.stringify(viewModel.customer));
 	viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
 	$.ajax({
 		 type: "POST",
-		 url: "/visa/newcustomer/customerSave",
+		 url: "/visa/visainfo/updatePassportSave",
 		 contentType:"application/json",
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){
-			 console.log(result);
-			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			 parent.layer.close(index);
-			 window.parent.successCallback('1');
+			layer.msg('保存成功',{time:2000});
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-			 console.log(XMLHttpRequest);
-			 console.log(textStatus);
-			 console.log(errorThrown);
-            layer.msg('保存失败!',{time:2000});
+            layer.msg('保存失败',{time:2000});
          }
 	});
 });
