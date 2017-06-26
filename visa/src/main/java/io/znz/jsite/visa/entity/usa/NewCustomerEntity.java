@@ -1,5 +1,6 @@
 package io.znz.jsite.visa.entity.usa;
 
+import io.znz.jsite.visa.entity.applicantproducer.ApplicantProducerEntity;
 import io.znz.jsite.visa.entity.communicathomeaddress.CommunicatHomeAddressEntity;
 import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
 import io.znz.jsite.visa.entity.customer.NewArmyEntity;
@@ -18,6 +19,7 @@ import io.znz.jsite.visa.entity.customer.NewVisitedcountryEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkedplaceEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkinfoEntity;
 import io.znz.jsite.visa.entity.othernationality.OtherNationalityEntity;
+import io.znz.jsite.visa.entity.placeinformation.PlaceInformationEntity;
 import io.znz.jsite.visa.entity.relationship.RelationShipEntity;
 import io.znz.jsite.visa.entity.socialinsurancenum.SocialInsuranceNum;
 import io.znz.jsite.visa.entity.taxpayerauthenticationcode.TaxpayerAuthenticationCodeEntity;
@@ -260,5 +262,8 @@ public class NewCustomerEntity implements Serializable {
 	private TravelPlanEntity travelplan;
 	//与你的关系
 	private RelationShipEntity relationship;
-
+	//地点信息
+	private PlaceInformationEntity placeinformation;
+	//申请的制作者
+	private ApplicantProducerEntity applicantproducer;
 }

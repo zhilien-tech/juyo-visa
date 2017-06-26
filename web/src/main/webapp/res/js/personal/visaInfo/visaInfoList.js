@@ -103,7 +103,9 @@ var countries = new kendo.data.DataSource({
 	            payer: "我自己",
 	            // 同行人
 	            togethers:[]
-	        }
+	        },
+	        placeinformation:{},//地点信息
+	        applicantproducer:{}//申请的制作者
     },
     keys = {
 		"customer.orthercountrylist":{},
@@ -266,6 +268,10 @@ var viewModel = kendo.observable({
     //你是否有其他亲属在美国
     relationEnable:function(){
     	return viewModel.get("customer.spouse");
+    },
+    //申请的制作者
+    assistApplyEnable: function () {
+        return viewModel.get("customer.applicantproducer");
     }
 });
 kendo.bind($(document.body), viewModel);
@@ -383,28 +389,25 @@ $("#join_group").change(function () {
 $("#other_relatives_aa").change(function () {
 	viewModel.set("customer.spouse", $(this).is(':checked') ? " " : "");
 });
+//申请的制作者
+$("#has_assist_apply").change(function () {
+	viewModel.set("customer.applicantproducer", $(this).is(':checked') ? " " : "");
+});
 
-
-//信息保存
-$("#saveCustomerData").on("click",function(){
+//签证信息保存
+$("#updatePassportSave").on("click",function(){
 	console.log(JSON.stringify(viewModel.customer));
 	viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
 	$.ajax({
 		 type: "POST",
-		 url: "/visa/newcustomer/customerSave",
+		 url: "/visa/visainfo/updatePassportSave",
 		 contentType:"application/json",
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){
-			 console.log(result);
-			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			 parent.layer.close(index);
-			 window.parent.successCallback('1');
+			layer.msg('保存成功',{time:2000});
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-			 console.log(XMLHttpRequest);
-			 console.log(textStatus);
-			 console.log(errorThrown);
-            layer.msg('保存失败!',{time:2000});
+            layer.msg('保存失败',{time:2000});
          }
 	});
 });

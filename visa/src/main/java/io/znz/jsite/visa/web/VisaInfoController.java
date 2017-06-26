@@ -7,8 +7,10 @@
 package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.BaseController;
+import io.znz.jsite.base.bean.ResultObject;
 import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.exception.JSiteException;
+import io.znz.jsite.visa.entity.applicantproducer.ApplicantProducerEntity;
 import io.znz.jsite.visa.entity.communicathomeaddress.CommunicatHomeAddressEntity;
 import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
 import io.znz.jsite.visa.entity.customer.NewArmyEntity;
@@ -26,6 +28,7 @@ import io.znz.jsite.visa.entity.customer.NewUsainfoEntity;
 import io.znz.jsite.visa.entity.customer.NewVisitedcountryEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkedplaceEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkinfoEntity;
+import io.znz.jsite.visa.entity.placeinformation.PlaceInformationEntity;
 import io.znz.jsite.visa.entity.relationship.RelationShipEntity;
 import io.znz.jsite.visa.entity.taxpayerauthenticationcode.TaxpayerAuthenticationCodeEntity;
 import io.znz.jsite.visa.entity.travelplan.TravelPlanEntity;
@@ -40,15 +43,19 @@ import io.znz.jsite.visa.entity.usa.NewPeerPersionEntity;
 import io.znz.jsite.visa.entity.usa.NewTrip;
 import io.znz.jsite.visa.enums.IsDadOrMumEnum;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
@@ -144,6 +151,22 @@ public class VisaInfoController extends BaseController {
 			customer.setRelationship(relationship.get(0));
 		} else {
 			customer.setRelationship(new RelationShipEntity());
+		}
+		//地点信息
+		List<PlaceInformationEntity> placeinformation = dbDao.query(PlaceInformationEntity.class,
+				Cnd.where("customerId", "=", customerId), null);
+		if (!Util.isEmpty(placeinformation) && placeinformation.size() > 0) {
+			customer.setPlaceinformation(placeinformation.get(0));
+		} else {
+			customer.setPlaceinformation(new PlaceInformationEntity());
+		}
+		//申请的制作者
+		List<ApplicantProducerEntity> applicantproducer = dbDao.query(ApplicantProducerEntity.class,
+				Cnd.where("customerId", "=", customerId), null);
+		if (!Util.isEmpty(applicantproducer) && applicantproducer.size() > 0) {
+			customer.setApplicantproducer(applicantproducer.get(0));
+		} else {
+			customer.setApplicantproducer(new ApplicantProducerEntity());
 		}
 		List<NewOrthercountryEntity> orthercountry = dbDao.query(NewOrthercountryEntity.class,
 				Cnd.where("customerid", "=", customerId), null);
@@ -277,5 +300,227 @@ public class VisaInfoController extends BaseController {
 		customer.setPayCompany(newPayCompanyEntities);
 		customer.setFastMail(newFastMailEntities);
 		return customer;
+	}
+
+	/**
+	 * 更新保存签证信息数据
+	 * @param customer
+	 * 
+	 */
+	@RequestMapping(value = "updatePassportSave", method = RequestMethod.POST)
+	@ResponseBody
+	public Object updatePassportSave(@RequestBody NewCustomerEntity customer) {
+		//申请的制作者
+		String producerXing = customer.getApplicantproducer().getProducerXing();
+		String producerMing = customer.getApplicantproducer().getProducerMing();
+		String xing = customer.getChinesexing();
+		String name = customer.getChinesename();
+		if (!Util.isEmpty(xing) && !Util.isEmpty(name)) {
+			customer.setChinesefullname(xing + name);
+		} else if (Util.isEmpty(xing) && !Util.isEmpty(name)) {
+			customer.setChinesefullname(name);
+
+		} else if (!Util.isEmpty(xing) && Util.isEmpty(name)) {
+			customer.setChinesefullname(xing);
+
+		}
+		List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
+				Cnd.where("customerid", "=", customer.getId()), null);
+		long orderid = query.get(0).getOrderid();
+		dbDao.update(NewOrderEntity.class, Chain.make("updatetime", new Date()), Cnd.where("id", "=", orderid));
+		if (!Util.isEmpty(customer.getId()) && customer.getId() > 0) {
+			customer.setUpdatetime(new Date());
+			try {
+				nutDao.update(customer);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			customer.setUpdatetime(new Date());
+			dbDao.insert(customer);
+		}
+		NewArmyEntity army = customer.getArmy();
+		if (!Util.isEmpty(army)) {
+			if (!Util.isEmpty(army.getId()) && army.getId() > 0) {
+				nutDao.update(army);
+			} else {
+				army.setCustomerid(customer.getId());
+				dbDao.insert(army);
+			}
+		}
+		NewParentsEntity father = customer.getFather();
+		if (!Util.isEmpty(father)) {
+			if (!Util.isEmpty(father.getId()) && father.getId() > 0) {
+				nutDao.update(father);
+			} else {
+				father.setCustomerid(customer.getId());
+				father.setDadormum(IsDadOrMumEnum.dad.intKey());
+				dbDao.insert(father);
+			}
+		}
+		List<NewLanguageEntity> languagelist = customer.getLanguagelist();
+		if (!Util.isEmpty(languagelist) && languagelist.size() > 0) {
+			for (NewLanguageEntity newLanguageEntity : languagelist) {
+				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+					nutDao.update(newLanguageEntity);
+				} else {
+					newLanguageEntity.setCustomerid(customer.getId());
+					dbDao.insert(newLanguageEntity);
+				}
+			}
+		}
+		NewParentsEntity mother = customer.getMother();
+		if (!Util.isEmpty(mother)) {
+			if (!Util.isEmpty(mother.getId()) && mother.getId() > 0) {
+				nutDao.update(mother);
+			} else {
+				mother.setCustomerid(customer.getId());
+				mother.setDadormum(IsDadOrMumEnum.mum.intKey());
+				dbDao.insert(mother);
+			}
+		}
+		NewOldnameEntity oldname = customer.getOldname();
+		if (!Util.isEmpty(oldname)) {
+			if (!Util.isEmpty(oldname.getId()) && oldname.getId() > 0) {
+				nutDao.update(oldname);
+			} else {
+				oldname.setCustomerid(customer.getId());
+				dbDao.insert(oldname);
+			}
+		}
+		List<NewOldworksEntity> oldworkslist = customer.getOldworkslist();
+		if (!Util.isEmpty(oldworkslist) && oldworkslist.size() > 0) {
+			for (NewOldworksEntity newLanguageEntity : oldworkslist) {
+				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+					nutDao.update(newLanguageEntity);
+				} else {
+					newLanguageEntity.setCustomerid(customer.getId());
+					dbDao.insert(newLanguageEntity);
+				}
+			}
+		}
+		List<NewOrthercountryEntity> orthercountrylist = customer.getOrthercountrylist();
+		if (!Util.isEmpty(orthercountrylist) && orthercountrylist.size() > 0) {
+			for (NewOrthercountryEntity newLanguageEntity : orthercountrylist) {
+				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+					nutDao.update(newLanguageEntity);
+				} else {
+					newLanguageEntity.setCustomerid(customer.getId());
+					dbDao.insert(newLanguageEntity);
+				}
+			}
+		}
+		NewPassportloseEntity passportlose = customer.getPassportlose();
+		if (!Util.isEmpty(passportlose)) {
+			if (!Util.isEmpty(passportlose.getId()) && passportlose.getId() > 0) {
+				nutDao.update(passportlose);
+			} else {
+				passportlose.setCustomerid(customer.getId());
+				dbDao.insert(passportlose);
+			}
+		}
+		NewWorkinfoEntity workinfo = customer.getWorkinfo();
+		if (!Util.isEmpty(workinfo)) {
+			if (!Util.isEmpty(workinfo.getId()) && workinfo.getId() > 0) {
+				nutDao.update(workinfo);
+			} else {
+				workinfo.setCustomerid(customer.getId());
+				dbDao.insert(workinfo);
+			}
+		}
+		List<NewWorkedplaceEntity> workedplacelist = customer.getWorkedplacelist();
+		if (!Util.isEmpty(workedplacelist) && workedplacelist.size() > 0) {
+			for (NewWorkedplaceEntity newLanguageEntity : workedplacelist) {
+				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+					nutDao.update(newLanguageEntity);
+				} else {
+					newLanguageEntity.setCustomerid(customer.getId());
+					dbDao.insert(newLanguageEntity);
+				}
+			}
+		}
+		List<NewVisitedcountryEntity> visitedcountrylist = customer.getVisitedcountrylist();
+		if (!Util.isEmpty(visitedcountrylist) && visitedcountrylist.size() > 0) {
+			for (NewVisitedcountryEntity newLanguageEntity : visitedcountrylist) {
+				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+					nutDao.update(newLanguageEntity);
+				} else {
+					newLanguageEntity.setCustomerid(customer.getId());
+					dbDao.insert(newLanguageEntity);
+				}
+			}
+		}
+		NewUsainfoEntity usainfo = customer.getUsainfo();
+		if (!Util.isEmpty(usainfo)) {
+			if (!Util.isEmpty(usainfo.getId()) && usainfo.getId() > 0) {
+				nutDao.update(usainfo);
+			} else {
+				usainfo.setCustomerid(customer.getId());
+				dbDao.insert(usainfo);
+			}
+		}
+		List<NewTeachinfoEntity> teachinfo = customer.getTeachinfo();
+		if (!Util.isEmpty(teachinfo) && teachinfo.size() > 0) {
+			for (NewTeachinfoEntity newLanguageEntity : teachinfo) {
+				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+					nutDao.update(newLanguageEntity);
+				} else {
+					newLanguageEntity.setCustomerid(customer.getId());
+					dbDao.insert(newLanguageEntity);
+				}
+			}
+		}
+		NewSpouseEntity spouse = customer.getSpouse();
+		if (!Util.isEmpty(spouse)) {
+			if (!Util.isEmpty(spouse.getId()) && spouse.getId() > 0) {
+				nutDao.update(spouse);
+			} else {
+				spouse.setCustomerid(customer.getId());
+				dbDao.insert(spouse);
+			}
+		}
+		List<NewRelationEntity> relation = customer.getRelation();
+		if (!Util.isEmpty(relation) && relation.size() > 0) {
+			for (NewRelationEntity newLanguageEntity : relation) {
+				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+					nutDao.update(newLanguageEntity);
+				} else {
+					newLanguageEntity.setCustomerid(customer.getId());
+					dbDao.insert(newLanguageEntity);
+				}
+			}
+		}
+		List<NewRecentlyintousaEntity> recentlyintousalist = customer.getRecentlyintousalist();
+		if (!Util.isEmpty(recentlyintousalist) && recentlyintousalist.size() > 0) {
+			for (NewRecentlyintousaEntity newLanguageEntity : recentlyintousalist) {
+				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+					nutDao.update(newLanguageEntity);
+				} else {
+					newLanguageEntity.setCustomerid(customer.getId());
+					dbDao.insert(newLanguageEntity);
+				}
+			}
+		}
+		//地点信息
+		PlaceInformationEntity placeinformation = customer.getPlaceinformation();
+		if (!Util.isEmpty(placeinformation)) {
+			if (!Util.isEmpty(placeinformation.getId()) && placeinformation.getId() > 0) {
+				nutDao.update(placeinformation);
+			} else {
+				placeinformation.setCustomerId(customer.getId());
+				dbDao.insert(placeinformation);
+			}
+		}
+		//申请的制作者
+		ApplicantProducerEntity applicantproducer = customer.getApplicantproducer();
+		if (!Util.isEmpty(applicantproducer)) {
+			if (!Util.isEmpty(applicantproducer.getId()) && applicantproducer.getId() > 0) {
+				nutDao.update(applicantproducer);
+			} else {
+				applicantproducer.setCustomerId(customer.getId());
+				dbDao.insert(applicantproducer);
+			}
+		}
+		return ResultObject.success("修改成功");
 	}
 }

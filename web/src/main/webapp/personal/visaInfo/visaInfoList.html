@@ -1435,20 +1435,20 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>提交申请的地点:</label>
+                                        <label for="applyPlace">提交申请的地点:</label>
                                         <div class='input-group'>
-                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="" placeholder=""/>
+                                            <input id="applyPlace" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.placeinformation.applyPlace" />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                  </div>
                                  <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>目前的地点:</label>
+                                        <label for="currentLocation">目前的地点:</label>
                                         <div class='input-group'>
-                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="" placeholder=""/>
+                                            <input id="currentLocation" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.placeinformation.currentLocation"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -1457,107 +1457,107 @@
                             <!--  -->
                         </div>
                     </li>
-                    <li class="disabled">其他信息
+                    <li class="disabled">申请的制作者
                         <div class="container-fluid">
                         	<!-- 有人协助你填写这份申请吗 -->
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="has_immediate_relatives" class="check-box-label">
+                                        <label for="has_assist_apply" class="check-box-label">
                                         	有人协助你填写这份申请吗
                                         </label>
-                                        <input id='has_immediate_relatives' class="mui-switch" type="checkbox"
-                                               data-bind=""/>
+                                        <input id='has_assist_apply' class="mui-switch" type="checkbox"
+                                               data-bind="checked:assistApplyEnable"/>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" data-bind="">
+                            <div class="row has_assist_apply" data-bind="visible:assistApplyEnable">
                             	<div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>制作者姓:</label>
+                                        <label for="producerName">制作者姓:</label>
                                         <div class='input-group'>
-                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="" placeholder=""/>
+                                            <input id="producerName" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.applicantproducer.producerName" placeholder="请输入制作者姓"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>制作者名:</label>
+                                        <label for="producerXing">制作者名:</label>
                                         <div class='input-group'>
-                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="" placeholder=""/>
+                                            <input id="producerXing" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.applicantproducer.producerXing" placeholder="请输入制作者名"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>组织名称:</label>
+                                        <label for="organizeName">组织名称:</label>
                                         <div class='input-group'>
-                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="" placeholder=""/>
+                                            <input id="organizeName" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.applicantproducer.organizeName" placeholder="请输入组织名称"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>详细地址:</label>
+                                        <label for="addressDetails">详细地址:</label>
                                         <div class='input-group'>
-                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="" placeholder=""/>
+                                            <input id="addressDetails" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.applicantproducer.addressDetails" placeholder="请输入详细地址"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-3">
                                     <div class="form-group">
-                                        <label>城市:</label>
+                                        <label for="city">城市:</label>
                                         <div class='input-group'>
-                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="" placeholder=""/>
+                                            <input id="city" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.applicantproducer.city" placeholder="请输入城市"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-3">
                                     <div class="form-group">
-                                        <label>省份:</label>
+                                        <label for="province">省份:</label>
                                         <div class='input-group'>
-                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="" placeholder=""/>
+                                            <input id="province" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.applicantproducer.province" placeholder="请输入省份"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-3">
                                     <div class="form-group">
-                                        <label>邮编:</label>
+                                        <label for="postCode">邮编:</label>
                                         <div class='input-group'>
-                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="" placeholder=""/>
+                                            <input id="postCode" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.applicantproducer.postCode" placeholder="请输入邮编"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-3">
                                     <div class="form-group">
-                                        <label>国家:</label>
+                                        <label for="country">国家:</label>
                                         <div class='input-group'>
-                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="" placeholder=""/>
+                                            <input id="country" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.applicantproducer.country" placeholder="请输入国家"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>与你的关系:</label>
+                                        <label for="relation">与你的关系:</label>
                                         <div class='input-group'>
-                                            <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="" placeholder=""/>
+                                            <input id="relation" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                   data-bind="value:customer.applicantproducer.relation" placeholder="请输入与你的关系"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
