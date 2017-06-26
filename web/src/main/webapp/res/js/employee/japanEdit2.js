@@ -395,12 +395,12 @@ $(function () {
     
     
     
-    $(".wangFan_DuoCheng").change(function(){
+    /*$(".wangFan_DuoCheng").change(function(){
     	if($(this).is(':checked')){
     		alert("1111");
     	}else{
     		alert("2222");
     	}
-    });
+    });*/
    
 });
