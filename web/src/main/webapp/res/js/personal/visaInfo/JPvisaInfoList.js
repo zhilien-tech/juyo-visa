@@ -1,160 +1,201 @@
-
-var defaults = {
-    entry: {},
-    depart: {},
-    trips: [],
-    financeJpList:[]/*财务信息~*/
-},keys = {
-        "customer.financeJpList": {}/*财务信息~*/
-},flights = new kendo.data.DataSource({
-    serverFiltering: true,
-    transport: {
-        read: {
-            dataType: "json",
-            url: "/visa/flight/json",
-        },
-        parameterMap: function (options, type) {
-            if (options.filter) {
-                return {filter: options.filter.filters[0].value};
+//重写startWith方法来兼容IE浏览器
+String.prototype.startsWith = function (str) {
+    if (str == null || str == "" || this.length == 0 || str.length > this.length)
+        return false;
+    if (this.substr(0, str.length) == str)
+        return true;
+    else
+        return false;
+    return true;
+}
+function translateZhToEn(from, to) {
+    $.getJSON("/translate/google", {q: $(from).val()}, function (result) {
+        $("#" + to).val(result.data).change();
+    });
+}
+var countries = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: "/res/json/country_japan.json",
+                dataType: "json"
             }
-        },
-    }
-}), hotels = new kendo.data.DataSource({
-    serverFiltering: true,
-    transport: {
-        read: {
-            dataType: "json",
-            url: "/visa/hotel/json",
-        },
-        parameterMap: function (options, type) {
-            if (options.filter) {
-                return {filter: options.filter.filters[0].value};
+        }
+    }),
+    states = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: "/res/json/usa_states.json",
+                dataType: "json"
             }
-        },
+        }
+    }),
+    dafaults = {
+	workinfoJp: {},
+	financeJpList:[],
+	oldpassportJp: {},
+	oldnameJp: {},
+	orthercountryJpList: [],
+	recentlyintojpJpList: []
+},
+    keys = {
+        "customer.financeJpList": {},
+        "customer.orthercountryJpList": {},
+        "customer.recentlyintojpJpList": {}
+       
+        
     }
-}), scenic = new kendo.data.DataSource({
-    serverFiltering: true,
-    transport: {
-        read: {
-            dataType: "json",
-            url: "/visa/scenic/json",
-        },
-        parameterMap: function (options, type) {
-            if (options.filter) {
-                return {filter: options.filter.filters[0].value};
-            }
-        },
-    }
-});
-
-
-var model = kendo.observable({
-    flights: flights,
-    hotels: hotels,
-    scenic: scenic,
-    addOne: function (e) {
-       var key = $.isString(e) ? e : $(e.target).data('params');
-        model.get(key).push({
-            lastName: "",
-            firstName: "",
-            passport: "",
-            main: false,
-            depositSource: "",
-            depositMethod: "",
-            depositSum: 0,
-            depositCount: 1,
-            receipt: false,
-            insurance: false,
-            outDistrict: false,
-        });
-    },
-    delOne: function (e) {
-        var key = $(e.target).data('params');
-        var all = model.get(key);
-        all.splice(all.indexOf(e.data), 1);
-    },
+/*****************************************************
+ * 数据绑定
+ ****************************************************/
+var viewModel = kendo.observable({
+    countries: countries,
+    states: states,
     onDateChange: function (e) {
         var target = e.sender.element.attr("id");
-        var start = $("#start").data("kendoDatePicker");
-        var end = $("#end").data("kendoDatePicker");
-        if (target === "start") {
+        var start = $("#signed_at").data("kendoDatePicker");
+        var end = $("#expire_at").data("kendoDatePicker");
+        if (target === "signed_at") {
             end.min(start.value());
         } else {
             start.max(end.value());
         }
     },
-    onSpotChange: function (e) {
-        console.log(e)
+    showSaveBtn: function () {
+        return !$.queryString("check");
     },
-    getSpot: function (data) {
-        if (data.spot) {
-            return data.spot.split(",")
-        }
+    showToolBar: function () {
+        return $.queryString("check");
     },
-    order: defaults,
+    addOne: function (e) {
+        var key = $.isString(e) ? e : $(e.target).data('params');
+        viewModel.get(key).push(keys[key]);
+    },
+    delOne: function (e) {
+        var key = $(e.target).data('params');
+        var all = viewModel.get(key);
+        all.splice(all.indexOf(e.data), 1);
+    },
+    clearAll: function (key) {
+        var all = viewModel.get(key);
+        if (all) all.splice(0, all.length);
+    },
+    add: function (key) {
+        viewModel.set(key, keys[key]);
+    },
+    clear: function (key) {
+        viewModel.set(key, undefined);
+    },
+    // 旧护照
+    oldPassportEnable: function () {
+        return viewModel.get("customer.oldpassportJp");
+    },
+    // 曾用名
+    oldNameEnable: function () {
+        return viewModel.get("customer.oldnameJp");
+    },
+    // 其他国家公民
+    otherCountryEnable: function () {
+        var otherCountry = viewModel.get("customer.orthercountryJpList");
+        var state = otherCountry ? otherCountry.length > 0 : false;
+        return state;
+    },
+    customer: dafaults,
 });
-kendo.bind($(document.body), model);
-var onSave = function (e) {
-    $("#next").unbind();
-    $.ajax({
-        type: "POST",
-        url: "/visa/order/save/patch",
-        contentType: "application/json",
-        dataType: "json",
-        data: JSON.stringify(model.order),
-        success: function (result) {
-            if (parent.refresh) parent.refresh();
-            if (result.code === "EXCEPTION" || result.code === "FAIL") {
-                $.layer.alert(result.msg);
-            } else {
-                $.layer.msg("操作成功", {}, function () {
-                    $.layer.closeAll();
-                });
-            }
-            $("#next").bind("click", onSave);
-        }
-    });
+kendo.bind($(document.body), viewModel);
+/*****************************************************
+ * 开始个人信息
+ ****************************************************/
+
+//丢过护照
+$("#pp_lost").change(function () {
+ /*   if ($(this).is(':checked')) {
+        viewModel.add("customer.oldnameJp");
+    } else {
+        viewModel.clear("customer.oldnameJp");
+    }*/
+	viewviewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
+});
+//曾用名
+$("#has_used_name").change(function () {
+   if ($(this).is(':checked')) {
+        viewModel.add("customer.oldName");
+    } else {
+        viewModel.clear("customer.oldName");
+    }
+	/*viewviewModel.set("customer.oldname", $(this).is(':checked') ? " " : "");*/
+});
+//其他国家居民
+$("#has_pr").change(function () {
+    if ($(this).is(':checked')) {
+        viewModel.addOne("customer.orthercountryJpList");
+    } else {
+        viewModel.clearAll("customer.orthercountryJpList");
+    }
+});
+
+
+
+
+
+
+//信息保存
+
+$("#saveCustomerData").on("click",function(){
+	console.log(JSON.stringify(viewModel.customer));
+	$.ajax({
+		 type: "POST",
+		 url: "/visa/newcustomerjp/customerSave",
+		 contentType:"application/json",
+		 data: JSON.stringify(viewModel.customer)+"",
+		 success: function (result){
+			 console.log(result);
+			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			 parent.layer.close(index);
+			 window.parent.successCallback('1');
+		 },
+		 error: function(XMLHttpRequest, textStatus, errorThrown) {
+			 console.log(XMLHttpRequest);
+			 console.log(textStatus);
+			 console.log(errorThrown);
+            layer.msg('保存失败!',{time:2000});
+         }
+	});
+});
+
+
+
+//通过或者拒绝的方法
+function agreeOrRefuse(flag){
+	var id=viewModel.get("customer.id");
+	$.ajax({
+		 type: "POST",
+		 url: "/visa/newcustomerjp/agreeOrRefuse?flag="+flag+"&customerid="+id,
+		 success: function (result){
+			 console.log(result);
+			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			 parent.layer.close(index);
+			 window.parent.successCallback('3');
+		 },
+		 error: function(XMLHttpRequest, textStatus, errorThrown) {
+			 console.log(XMLHttpRequest);
+			 console.log(textStatus);
+			 console.log(errorThrown);
+            layer.msg('操作失败!',{time:2000});
+         }
+	});
 }
+
 $(function () {
     //如果有传递ID就是修改
-    var oid = $.queryString("oid");
+    var oid = $.queryString("cid");
     if (oid) {
-        $.getJSON("/visa/order/show/" + oid, function (resp) {
-            model.set("order", $.extend(true, defaults, resp));
+        $.getJSON("/visa/newcustomerjp/showDetail?customerid=" + oid, function (resp) {
+        	viewModel.set("customer", $.extend(true, dafaults, resp));
         });
     }
-    $("#next").click(onSave);
     
-    
-    $("#sex").kendoDropDownList();//性别 状态 下拉框初始化
-	$("#birthDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//出生日期
-	$("#signedDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//签发日期
-	$("#validDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//有效期限
-	
-	//操作 编辑 按钮时
-	$(".editBtn").click(function(){
-		$(this).addClass("hide");//编辑 按钮隐藏
-		$(".cancelBtn").removeClass("hide");//取消 按钮显示
-		$(".saveBtn").removeClass("hide");//保存 按钮显示
-		$(".input-group .k-textbox").removeClass("k-state-disabled");//删除 不可编辑的边框颜色
-		$(".input-group input").removeAttr("disabled");//删除 不可编辑的属性
-	});
-	
-	//操作 取消 按钮时
-	$(".cancelBtn").click(function(){
-		$(this).addClass("hide");//取消 按钮隐藏
-		$(".saveBtn").addClass("hide");//保存 按钮隐藏
-		$(".editBtn").removeClass("hide");//编辑 按钮显示
-		$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
-		$(".input-group input").attr("disabled");//添加 不可编辑的属性
-	});
-	
-	//操作 保存 按钮时
-	$(".saveBtn").click(function(){
-		$(this).addClass("hide");//保存 按钮隐藏
-		$(".cancelBtn").addClass("hide");//取消 按钮隐藏
-		$(".editBtn").removeClass("hide");//编辑 按钮显示
-		$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
-		$(".input-group input").attr("disabled");//添加 不可编辑的属性
-	});
+    /*折叠板 效果初始化*/
+    $("#panelbar").kendoPanelBar({
+         expandMode: "single" //设置展开模式只能展开单个
+     });
 });
