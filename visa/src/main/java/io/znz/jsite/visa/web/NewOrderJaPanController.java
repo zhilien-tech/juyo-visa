@@ -208,7 +208,8 @@ public class NewOrderJaPanController {
 			String ordernum = format + "JP" + sum1;
 
 			order.setOrdernumber(ordernum);
-
+			//设置为日本
+			order.setCountrytype(1);
 			orderOld = dbDao.insert(order);
 			//根据人数插入多个申请人的数据
 			for (int i = orderOld.getHeadnum(); i > 0; i--) {
