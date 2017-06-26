@@ -197,7 +197,7 @@ $(function () {
 
 
 /*****************************************************
- * 加载订单数据   小灯泡
+ * 加载数据   小灯泡
  ****************************************************/
 $(function () {
    /* var data = {cid: $.queryString("cid")};
@@ -208,15 +208,13 @@ $(function () {
     }*/
     $(document).on('click', '.input-group-addon', function () {
         var tip = $(this);
-        var labelName=tip.parents('.form-group').find("label").text();//获取对应的字段名称
-        var inputValue=tip.siblings().val();//获取到 input 值
-        var dateValue=tip.siblings().find('input').val();//获取到 日历 值
-        //console.log();
-        tip.find("i").toggleClass("fa-pulse fa-spinner fa-lightbulb-o");//转圈的动画效果~
-        var node = tip.parent().find(":text,select");
         
+        var labelName=tip.parents('.form-group').find("label").text();//获取对应的字段名称
+        console.log(labelName);
+        
+        tip.find("i").toggleClass("fa-pulse fa-spinner fa-lightbulb-o");//变转圈圈效果~
+        var node = tip.parent().find(":text,select");
         $.each(node.data("bind").split(","), function (i, e) {
-        	console.log(e.startsWith("value:"));
             if (e.startsWith("value:")) {
                 var source = node.closest(".row").find("*[data-params]").data("params");
                 var bind = e.substring(e.indexOf("value:") + 6, e.length);
@@ -240,9 +238,15 @@ $(function () {
                     } else if (resp.data.msg) {
                         layer.tips(resp.data.msg, tip);
                     }
-                    tip.find("i").toggleClass("fa-pulse fa-spinner fa-lightbulb-o");
+                    tip.find("i").toggleClass("fa-pulse fa-spinner fa-lightbulb-o");//变灯泡效果~
                 });
             }
         });
+        /*--  --*/
+        if(tip.find("i").hasClass('fa-lightbulb-o')){
+        	alert("灯泡亮~~");
+        }else{
+        	alert("转圈圈~~");
+        }
     });
 });
