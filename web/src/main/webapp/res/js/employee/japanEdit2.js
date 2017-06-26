@@ -390,17 +390,15 @@ $(function () {
 			color.value(resp.customermanage.id);
         });
     }
-    
-    
-    
-    
-    
-    /*$(".wangFan_DuoCheng").change(function(){
+    /*  往返/多程 模块显示隐藏   */
+    $(".wangFan_DuoCheng").change(function(){
     	if($(this).is(':checked')){
-    		alert("1111");
+    		$('.WangFan').addClass('hide');
+    		$('.DuoCheng').removeClass('hide');
     	}else{
-    		alert("2222");
+    		$('.WangFan').removeClass('hide');
+    		$('.DuoCheng').addClass('hide');
     	}
-    });*/
+    });
    
 });
