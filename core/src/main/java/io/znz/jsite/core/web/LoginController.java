@@ -135,6 +135,9 @@ public class LoginController extends BaseController {
 				} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype
 						&& UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {//游客身份登录
 					return "redirect:" + to + "?auth=145";
+				} else if (UserLoginEnum.SUPERMAN.intKey() == 3 && UserLoginEnum.SUPERMAN.intKey() == userType) {
+					return "redirect:" + to + "?auth=0";
+
 				}
 			}
 		}
