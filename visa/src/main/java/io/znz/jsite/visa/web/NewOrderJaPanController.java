@@ -11,6 +11,7 @@ import io.znz.jsite.core.service.MailService;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 import io.znz.jsite.visa.bean.Flight;
+import io.znz.jsite.visa.bean.Hotel;
 import io.znz.jsite.visa.bean.Scenic;
 import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
 import io.znz.jsite.visa.entity.delivery.NewDeliveryJapanEntity;
@@ -54,6 +55,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
+import com.ibm.icu.util.Calendar;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
 import com.uxuexi.core.db.util.DbSqlUtil;
@@ -239,6 +241,9 @@ public class NewOrderJaPanController {
 				dbDao.insert(fastMail);
 			}
 		}
+		Date startdate = null;
+		Date enddate = null;
+		String arrivecity = null;
 		NewTripJpEntity tripJp = order.getTripJp();
 
 		if (!Util.isEmpty(tripJp)) {
@@ -257,7 +262,15 @@ public class NewOrderJaPanController {
 				tripJp.setOrder_jp_id(orderOld.getId());
 				tripJp = dbDao.insert(tripJp);
 			}
+
+			if (tripJp.getOneormore() == 0) {
+				startdate = tripJp.getStartdate();
+				enddate = tripJp.getReturndate();
+				arrivecity = tripJp.getArrivecity();
+			}
+
 		}
+		Integer oneormore = tripJp.getOneormore();
 
 		List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
 		if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
@@ -272,6 +285,11 @@ public class NewOrderJaPanController {
 
 					dbDao.insert(newPeerPersionEntity);
 				}
+			}
+			if (oneormore == 1) {
+				startdate = dateplanJpList.get(0).getStartdate();
+				enddate = dateplanJpList.get(dateplanJpList.size() - 1).getStartdate();
+				arrivecity = dateplanJpList.get(0).getArrivecity();
 			}
 		}
 		List<NewTripplanJpEntity> tripplanJpList = order.getTripplanJpList();
@@ -292,6 +310,53 @@ public class NewOrderJaPanController {
 					dbDao.insert(newPeerPersionEntity);
 				}
 			}
+		} else {
+			/*Calendar cNow = Calendar.getInstance();
+			 Calendar cReturnDate = Calendar.getInstance();
+			 cNow.setTime(startdate);
+			 cReturnDate.setTime(enddate);
+			 
+			 long todayMs = cNow.getTimeInMillis();
+			 long returnMs = cReturnDate.getTimeInMillis();
+			 long intervalMs = todayMs - returnMs;*/
+
+			Date nowdate = startdate;
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(nowdate);
+			int daynum = (int) ((enddate.getTime() - startdate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+			List<Hotel> hotellist = dbDao.query(Hotel.class, Cnd.where("city", "=", arrivecity), null);
+			List<Scenic> sceniclist = dbDao.query(Scenic.class, Cnd.where("city", "=", arrivecity), null);
+			for (int i = 0; i < daynum; i++) {
+				NewTripplanJpEntity t = new NewTripplanJpEntity();
+				Calendar cal1 = Calendar.getInstance();
+				cal1.setTime(nowdate);
+				t.setDaynum(i);
+				t.setCity(arrivecity);
+				t.setNowdate(nowdate);
+				if (i < hotellist.size()) {
+
+					t.setHotelid(hotellist.get(i).getId());
+				}
+				if (i < sceniclist.size()) {
+
+					t.setViewid(sceniclist.get(i).getId() + ",");
+				}
+
+				t.setHometype(0);
+				t.setHomenum(1);
+				t.setHomeday(1);
+				t.setIntime(nowdate);
+				cal1.set(Calendar.DAY_OF_MONTH, nowdate.getDate() + 1);
+				t.setOrder_jp_id(orderOld.getId());
+				t.setOuttime(cal1.getTime());
+				t.setBreakfast(1);
+				t.setDinner(1);
+
+				dbDao.insert(t);
+				cal.set(Calendar.DAY_OF_MONTH, nowdate.getDate() + 1);
+				nowdate = cal.getTime();
+			}
+
 		}
 		return ResultObject.success("添加成功");
 	}
@@ -671,4 +736,22 @@ public class NewOrderJaPanController {
 		IOUtils.write(bytes, resp.getOutputStream());
 		return ResultObject.fail("PDF生成失败!");
 	}
+
+	/*	
+		 //根据地点筛选航班
+		
+		@RequestMapping(value = "deliveryJpsave")
+		@ResponseBody
+		public Object deliveryJpsave() {
+			deliveryJapan.setOrder_jp_id(orderid);
+			Integer id = deliveryJapan.getId();
+			if (!Util.isEmpty(id) && id > 0) {
+
+				dbDao.update(deliveryJapan, null);
+			} else {
+				dbDao.insert(deliveryJapan);
+			}
+			return ResultObject.success("添加成功");
+		}*/
+
 }

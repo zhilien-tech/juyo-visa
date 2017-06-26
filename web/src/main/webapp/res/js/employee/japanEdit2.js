@@ -7,7 +7,9 @@ var customersourceEnum=[
   ];
 var defaults = {
 		customermanage:{},
-		tripJp:{},
+		tripJp:{
+			oneormore:0
+		},
 		dateplanJpList:[],
 		tripplanJpList:[],
 		fastMail:{}
@@ -44,7 +46,7 @@ flights = new kendo.data.DataSource({
     transport: {
         read: {
             dataType: "json",
-            url: "/visa/flight/json",
+            url: "/visa/flight/json?startcity="+$("#startcity").val()+"&endcity="+$("#endcity").val(),
         },
         parameterMap: function (options, type) {
             if (options.filter) {
