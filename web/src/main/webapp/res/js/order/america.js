@@ -226,12 +226,11 @@ function detailInit(e) {
             { 
                 title: "操作", width: 300,
                 command: [
-
-                    {name: "customerEdit", imageClass: "base fa-pencil", text: "编辑"},
-                    {name: "delivery", imageClass: "base fa-send", text: "递送"},
-                    {name: "share", imageClass: "base fa-share-alt", text: "分享"	
+                    {name: "customerEdit", imageClass:false, text: "编辑"},
+                    {name: "delivery", imageClass:false, text: "递送"},
+                    {name: "share", imageClass:false, text: "分享"	
                     },//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
-                    {name: "notice", imageClass: "base fa-bell-o", text: "通知"},
+                    {name: "notice", imageClass:false, text: "通知"},
                     regCmd("customerEdit"),
                     regCmd("share"),
                     regCmd("notice"),

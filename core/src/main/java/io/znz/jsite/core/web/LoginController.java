@@ -131,10 +131,10 @@ public class LoginController extends BaseController {
 			request.getSession().setAttribute("fetch", fetch);
 			if (username.equals(telephone) && newpass.equals(pwd)) {
 				if (UserLoginEnum.PERSONNEL.intKey() == logintype && UserLoginEnum.PERSONNEL.intKey() == userType) {//工作人员登录
-					return "redirect:" + to;
+					return "redirect:" + to + "?auth=23";
 				} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype
 						&& UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {//游客身份登录
-					return "redirect:" + to;
+					return "redirect:" + to + "?auth=145";
 				}
 			}
 		}
