@@ -4,7 +4,9 @@ var defaults = {
     depart: {},
     trips: [],
     financeJpList:[]/*财务信息~*/
-}, flights = new kendo.data.DataSource({
+},keys = {
+        "customer.financeJpList": {}/*财务信息~*/
+},flights = new kendo.data.DataSource({
     serverFiltering: true,
     transport: {
         read: {
@@ -43,9 +45,7 @@ var defaults = {
             }
         },
     }
-}),keys = {
-        "customer.financeJpList": {}/*财务信息~*/
-    };
+});
 
 
 var model = kendo.observable({
@@ -53,7 +53,7 @@ var model = kendo.observable({
     hotels: hotels,
     scenic: scenic,
     addOne: function (e) {
-        var key = $.isString(e) ? e : $(e.target).data('params');
+       var key = $.isString(e) ? e : $(e.target).data('params');
         model.get(key).push({
             lastName: "",
             firstName: "",

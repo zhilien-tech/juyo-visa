@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/res/css/colors.min.css"/>
     <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
     <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
-    <style type="text/css">
+    <!-- <style type="text/css">
     	.k-multiselect>.k-multiselect-wrap>.k-i-close {top: 50%;}
     	.k-select span.k-i-close {left: -15px;}
     	.k-multiselect-wrap li{margin: 4px 0 1px 2px;padding: 10px 23px 10px 1px;line-height: 0;}
@@ -21,7 +21,7 @@
     	#objIDCard{display: none;}
     	.container-fluid.k-content{margin-top: 15px;}
     	.addIcon,.removeIcon{border: solid 1px #337ab7;font-size: 18px;position: relative;top: 25px;border-radius: 50%;padding: 2.5px 4.5px 2px 4.5px;}
-    </style>
+    </style> -->
 </head>
 <body>
 <div>
@@ -288,7 +288,7 @@
                                         <label for="usa_times_stay_unit">往返/多程:</label>
                                         <div class='input-group'>
                                             <input id="order_hurry"  value="false" data-bind="checked:customer.tripJp.oneormore"
-                                               class="mui-switch" type="checkbox" name="ishurry" />
+                                               class="mui-switch wangFan_DuoCheng" type="checkbox" name="ishurry" />
                                         </div>
                                     </div>
                                 </div>
@@ -345,7 +345,7 @@
     						
     						
     						
-    						  <div class="container-fluid">
+    						  <div>
 				                    <div data-bind="source:customer.dateplanJpList" data-template="tpl_temp"></div>
 				                    <div class="row">
 				                        <div class="col-xs-12">
@@ -356,13 +356,6 @@
 				                        </div>
 				                    </div>
 				                </div>
-    						
-    						
-    						
-    						
-    						
-    						
-    						
     						<!--end 出发日期/出发城市/抵达城市/航班号/+ -->
     						<div>
     							<!-- 返回日期/出发城市/抵达城市/航班号 -->
@@ -403,7 +396,6 @@
 	                                        <div class='input-group'>
 	                                           <!--  <input id="" class="k-textbox" style="width: 100%;text-transform:uppercase;"
 	                                                   data-bind="value:customer.tripJp.flightnum"/> -->
-	                                                   
 	                                                   <select id="usa_city"
                                                        data-role="dropdownlist"
                                                        data-filter="startswith"
@@ -689,9 +681,6 @@
         </div>
     </div>
 </script>
-
-
-
 <script id="tpl_trip" type="text/x-kendo-template">
     <div>
 		<div class="row">
@@ -840,7 +829,6 @@
     #=data.name+"("+data.phone+")"#
     #}#
 </script>
-
 <!-- 出行信息模板 -->
 <script id="tpl_temp" type="text/x-kendo-template">
     <div>
@@ -874,7 +862,7 @@
            </div>
         </div>
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-8">
                 <div class="form-group">
                     <label>航班号:</label>
                     <select class="fill"
@@ -890,11 +878,7 @@
                     </select>
                 </div>
             </div>
-        </div>
-     
-        <div class="row">
-            
-            <div class="col-xs-4">
+			<div class="col-xs-4">
                 <div class="form-group">
                     <label>操作:&nbsp;</label>
                     <button data-bind="click:delOne" data-params="customer.dateplanJpList"
@@ -903,10 +887,12 @@
                     </button>
                 </div>
             </div>
+			
         </div>
+     
+        
     </div>
 </script>
-
 
 
 <!--引入 js 库文件-->
