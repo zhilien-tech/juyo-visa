@@ -111,6 +111,8 @@ public class LoginController extends BaseController {
 			}
 			return "redirect:" + login;
 		}*/
+		String kaptchaExpected = (String) request.getSession().getAttribute(
+				com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
 		EmployeeEntity fetch = dbDao.fetch(EmployeeEntity.class, Cnd.where("telephone", "=", username));
 		Integer userType = fetch.getUserType();//得到用户类型
 		String telephone = fetch.getTelephone();//得到数据库中用户名

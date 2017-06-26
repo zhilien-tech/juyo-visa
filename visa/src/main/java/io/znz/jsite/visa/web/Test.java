@@ -6,7 +6,7 @@
 
 package io.znz.jsite.visa.web;
 
-import io.znz.jsite.visa.enums.OrderJapanVisaType;
+import java.util.Date;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -31,7 +31,8 @@ public class Test {
 			byte[] hashPassword = Digests.sha1("123456".getBytes(), salt, HASH_INTERATIONS);
 			String pwd = Encodes.encodeHex(hashPassword);
 			System.out.println(pwd);*/
-		System.out.println(OrderJapanVisaType.get(1));
+		Date d = new Date();
+		System.out.println(d.getDate());
 		;
 	}
 }
