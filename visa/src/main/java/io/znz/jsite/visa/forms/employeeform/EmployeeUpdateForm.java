@@ -61,4 +61,8 @@ public class EmployeeUpdateForm extends ModForm {
 	private String res4;
 	//预留字段5
 	private String res5;
+	//新密码
+	private String newpass;
+	//新密码2
+	private String newpass2;
 }

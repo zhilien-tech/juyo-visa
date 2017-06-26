@@ -202,6 +202,10 @@ public class BasicInfoController extends BaseController {
 		return customer;
 	}
 
+	/**
+	 * 修改保存基本信息
+	 * @param customer
+	 */
 	@RequestMapping(value = "updateBaseInfoData", method = RequestMethod.POST)
 	@ResponseBody
 	public Object updateBaseInfoData(@RequestBody NewCustomerEntity customer) {
