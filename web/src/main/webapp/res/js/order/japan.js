@@ -343,6 +343,7 @@ var grid = $("#grid").kendoGrid({
                 regCmd("modify"),
                 regCmd("shareall"),
                 regCmd("download"),
+                regCmd("delivery"),
             ]
         }
     ],

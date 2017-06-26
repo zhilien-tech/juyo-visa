@@ -17,13 +17,16 @@ import io.znz.jsite.visa.entity.usa.NewPayPersionEntity;
 import io.znz.jsite.visa.entity.usa.NewPeerPersionEntity;
 import io.znz.jsite.visa.entity.usa.NewTrip;
 import io.znz.jsite.visa.entity.user.EmployeeEntity;
+import io.znz.jsite.visa.enums.InterviewTimeEnum;
 import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
+import io.znz.jsite.visa.enums.SendPassportEnum;
 import io.znz.jsite.visa.enums.UserTypeEnum;
 import io.znz.jsite.visa.form.KenDoTestSqlForm;
 import io.znz.jsite.visa.service.OrderService;
 import io.znz.jsite.visa.service.PdfService;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -394,6 +397,7 @@ public class OrderController extends BaseController {
 
 		EmployeeEntity employeeEntity = new EmployeeEntity();
 		employeeEntity.setTelephone(phone);
+		employeeEntity.setFullName(customer.getChinesexing() + customer.getChinesename());
 		employeeEntity.setUserType(UserTypeEnum.TOURIST_IDENTITY.intKey());
 		//生成六位数的随机密码
 		String pwd = "";
@@ -474,6 +478,7 @@ public class OrderController extends BaseController {
 			NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, newCustomerOrderEntity.getCustomerid());
 
 			phone = customer.getPhone();
+
 			if (!Util.isEmpty(phone)) {
 
 				result = getMailContent(order, phone, customer, null);
@@ -507,6 +512,7 @@ public class OrderController extends BaseController {
 
 		}
 		employeeEntity.setPassword(pwd);
+		employeeEntity.setFullName(customer.getChinesexing() + customer.getChinesename());
 		byte[] salt = Digests.generateSalt(8);
 		employeeEntity.setSalt(Encodes.encodeHex(salt));
 		byte[] password = pwd.getBytes();
@@ -695,10 +701,44 @@ public class OrderController extends BaseController {
 		}
 		//发送邮件前进行游客信息的注册
 		String phone = customer.getPhone();
+		NewDeliveryUSAEntity fetch = dbDao.fetch(NewDeliveryUSAEntity.class,
+				Cnd.where("customer_usa_id", "=", customerid));
+		String str = "";
+		if (!Util.isEmpty(fetch)) {
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
+			if (!Util.isEmpty(fetch.getEarlydate())) {
+				str += "最早时间:" + df.format(fetch.getEarlydate()) + ";";
+			}
+
+			if (!Util.isEmpty(fetch.getLatterdate())) {
+				str += "最晚时间:" + df.format(fetch.getLatterdate()) + ";";
+			}
+
+			if (!Util.isEmpty(fetch.getInterviewtime())) {
+				str += "面签时段:" + InterviewTimeEnum.get(fetch.getInterviewtime()) + ";";
+			}
+
+			if (!Util.isEmpty(fetch.getVisasendtype())) {
+				str += "护照递送方式:" + SendPassportEnum.get(fetch.getVisasendtype()) + ";";
+			}
+
+			if (!Util.isEmpty(fetch.getPrevince())) {
+				str += "   " + fetch.getPrevince() + "   ";
+			}
+
+			if (!Util.isEmpty(fetch.getDetailplace())) {
+				str += "   " + fetch.getDetailplace() + "   ";
+			}
+
+			if (!Util.isEmpty(fetch.getFastmailaddress())) {
+				str += "   " + fetch.getFastmailaddress() + "   ";
+			}
+
+		}
 		String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
 				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
-				.replace("${interview}", (new SimpleDateFormat("yyyy-MM-dd")).format(new Date()));
+				.replace("${interview}", str);
 		String result = mailService.send(customer.getEmail(), html, "签证信息通知", MailService.Type.HTML);
 		if ("success".equalsIgnoreCase(result)) {
 			//成功以后分享次数加1
@@ -741,7 +781,7 @@ public class OrderController extends BaseController {
 		}*/
 		//订单表联系人的发送
 
-		String html = tmp.toString().replace("${name}", customerManage.getLinkman())
+		/*String html = tmp.toString().replace("${name}", customerManage.getLinkman())
 				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
 				.replace("${interview}", (new SimpleDateFormat("yyyy-MM-dd")).format(new Date()));
 
@@ -751,15 +791,52 @@ public class OrderController extends BaseController {
 					Cnd.where("id", "=", orderid));
 			//成功以后分享次数加1
 		}
-
+		*/
 		//客户联系人的发送
 		for (NewCustomerOrderEntity newCustomerOrderEntity : query) {
 			NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, newCustomerOrderEntity.getCustomerid());
-			html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
-					.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
-					.replace("${interview}", (new SimpleDateFormat("yyyy-MM-dd")).format(new Date()));
 
-			result = mailService.send(customer.getEmail(), html, "签证信息通知", MailService.Type.HTML);
+			NewDeliveryUSAEntity fetch = dbDao.fetch(NewDeliveryUSAEntity.class,
+					Cnd.where("customer_usa_id", "=", customer.getId()));
+			String str = "";
+			if (!Util.isEmpty(fetch)) {
+				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+				if (!Util.isEmpty(fetch.getEarlydate())) {
+					str += "最早时间:" + df.format(fetch.getEarlydate()) + ";";
+				}
+
+				if (!Util.isEmpty(fetch.getLatterdate())) {
+					str += "最晚时间:" + df.format(fetch.getLatterdate()) + ";";
+				}
+
+				if (!Util.isEmpty(fetch.getInterviewtime())) {
+					str += "面签时段:" + InterviewTimeEnum.get(fetch.getInterviewtime()) + ";";
+				}
+
+				if (!Util.isEmpty(fetch.getVisasendtype())) {
+					str += "护照递送方式:" + SendPassportEnum.get(fetch.getVisasendtype()) + ";";
+				}
+
+				if (!Util.isEmpty(fetch.getPrevince())) {
+					str += "   " + fetch.getPrevince() + "   ";
+				}
+
+				if (!Util.isEmpty(fetch.getDetailplace())) {
+					str += "   " + fetch.getDetailplace() + "   ";
+				}
+
+				if (!Util.isEmpty(fetch.getFastmailaddress())) {
+					str += "   " + fetch.getFastmailaddress() + "   ";
+				}
+
+			}
+
+			String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
+					.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
+					.replace("${interview}", str);
+
+			String result = mailService.send(customer.getEmail(), html, "签证信息通知", MailService.Type.HTML);
 
 			if ("success".equalsIgnoreCase(result)) {
 				//成功以后分享次数加1
@@ -768,7 +845,7 @@ public class OrderController extends BaseController {
 			}
 		}
 
-		return ResultObject.success(result);
+		return ResultObject.success("通知成功");
 	}
 
 	@RequestMapping(value = "deliveryusa")

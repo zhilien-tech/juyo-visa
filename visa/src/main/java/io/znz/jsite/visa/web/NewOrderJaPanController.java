@@ -555,6 +555,7 @@ public class NewOrderJaPanController {
 				EmployeeEntity employeeEntity = new EmployeeEntity();
 				employeeEntity.setTelephone(phone);
 				employeeEntity.setUserType(UserTypeEnum.TOURIST_IDENTITY.intKey());
+				employeeEntity.setFullName(customer.getChinesexing() + customer.getChinesename());
 				//生成六位数的随机密码
 				String pwd = "";
 				for (int i = 0; i < 6; i++) {
@@ -562,13 +563,14 @@ public class NewOrderJaPanController {
 					pwd += a;
 
 				}
-				employeeEntity.setPassword(pwd);
+				String temp = pwd;
 				byte[] salt = Digests.generateSalt(8);
 				employeeEntity.setSalt(Encodes.encodeHex(salt));
 				byte[] password = pwd.getBytes();
 				byte[] hashPassword = Digests.sha1(password, salt, 1024);
 				pwd = Encodes.encodeHex(hashPassword);
 
+				employeeEntity.setPassword(pwd);
 				List<EmployeeEntity> query1 = dbDao
 						.query(EmployeeEntity.class,
 								Cnd.where("telephone", "=", phone).and("userType", "=",
@@ -578,12 +580,13 @@ public class NewOrderJaPanController {
 					nutDao.update(employeeEntity);
 				} else {
 
-					dbDao.insert(employeeEntity);
+					employeeEntity = dbDao.insert(employeeEntity);
 				}
-
+				order.setUserid(employeeEntity.getId());
+				dbDao.update(order, null);
 				String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
 						.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
-						.replace("${logininfo}", "用户名:" + phone + "密码:" + employeeEntity.getPassword());
+						.replace("${logininfo}", "用户名:" + phone + "密码:" + temp);
 				String result = mailService.send(customer.getEmail(), html, "签证资料录入", MailService.Type.HTML);
 
 				/*result = getMailContent(order, phone, customer, null);*/
