@@ -148,7 +148,8 @@ public class LoginController extends BaseController {
 	 * 登出
 	 */
 	@RequestMapping(value = "logout")
-	public String logout(@RequestParam(defaultValue = "/") String to, SessionStatus status) {
+	public String logout(@RequestParam(defaultValue = "/") String to, SessionStatus status, HttpServletRequest request) {
+		request.getSession().removeAttribute("fetch");//清除session
 		status.setComplete();
 		SecurityUtils.getSubject().logout();
 		return "redirect:" + to;

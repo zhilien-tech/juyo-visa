@@ -62,7 +62,7 @@ public class ModifyPasswordController {
 		EmployeeEntity one = dbDao.fetch(EmployeeEntity.class, userId);
 		String password = null;
 		if (!Util.isEmpty(one)) {
-			password = one.getPassword();//得到数据库中的原密码
+			password = one.getPassword();//得到数据库中的原密码 d01e28e0af7983d3123e18898f66294f9cf22da5
 		}
 		String oldpass = updateForm.getPassword();//得到页面传过来的原密码
 		String newpass1 = updateForm.getNewpass();//得到页面传来的新密码
@@ -71,7 +71,7 @@ public class ModifyPasswordController {
 		byte[] salt = Encodes.decodeHex(one.getSalt());
 		byte[] pwd1 = oldpass.getBytes();
 		byte[] hashPassword = Digests.sha1(pwd1, salt, HASH_INTERATIONS);
-		String pass1 = Encodes.encodeHex(hashPassword);//解析页面传来的原密码
+		String pass1 = Encodes.encodeHex(hashPassword);//解析页面传来的原密码 d01e28e0af7983d3123e18898f66294f9cf22da5
 		if (!Util.isEmpty(password)) {
 			if (password.equals(pass1)) {//判断数据库中的原密码和页面上传过来的原密码是否相等
 				if (!Util.isEmpty(newpass1) && !Util.isEmpty(newpass2)) {
@@ -79,8 +79,8 @@ public class ModifyPasswordController {
 						byte[] newsalt = Digests.generateSalt(SALT_SIZE);
 						one.setSalt(Encodes.encodeHex(newsalt));
 						byte[] newpass = newpass1.getBytes();
-						byte[] hashPassword2 = Digests.sha1(newpass, salt, HASH_INTERATIONS);
-						one.setPassword(Encodes.encodeHex(hashPassword2));
+						byte[] hashPassword2 = Digests.sha1(newpass, newsalt, HASH_INTERATIONS);
+						one.setPassword(Encodes.encodeHex(hashPassword2));//9b4b54aa67b6f495b0060b97078f64321f120959
 						dbDao.update(one, null);
 					}
 				}
