@@ -111,16 +111,18 @@ public class LoginController extends BaseController {
 			}
 			return "redirect:" + login;
 		}*/
+		String kaptchaExpected = (String) request.getSession().getAttribute(
+				com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
 		EmployeeEntity fetch = dbDao.fetch(EmployeeEntity.class, Cnd.where("telephone", "=", username));
 		Integer userType = fetch.getUserType();//得到用户类型
-		String telephone = fetch.getTelephone();
-		String pwd = fetch.getPassword();
-		String slt = fetch.getSalt();
+		String telephone = fetch.getTelephone();//得到数据库中用户名
+		String pwd = fetch.getPassword();//得到数据库中密码
+		String slt = fetch.getSalt();//得到数据库中盐值
 
 		byte[] salt = Encodes.decodeHex(slt);
-		byte[] password2 = password.getBytes();
+		byte[] password2 = password.getBytes();//页面传来的密码
 		byte[] hashPassword = Digests.sha1(password2, salt, HASH_INTERATIONS);
-		String newpass = Encodes.encodeHex(hashPassword);
+		String newpass = Encodes.encodeHex(hashPassword);//对页面传来的密码进行加密
 		System.out.println(newpass);
 		if (!username.equals(telephone)) {
 			model.addFlashAttribute("error", "用户名不正确，请重新输入！");
@@ -129,7 +131,7 @@ public class LoginController extends BaseController {
 		}
 		if (!Util.isEmpty(fetch)) {
 			request.getSession().setAttribute("fetch", fetch);
-			if (username.equals(telephone) && newpass.equals(pwd)) {
+			if (username.equals(telephone) && newpass.equals(pwd)) {//username为页面传来的用户名
 				if (UserLoginEnum.PERSONNEL.intKey() == logintype && UserLoginEnum.PERSONNEL.intKey() == userType) {//工作人员登录
 					return "redirect:" + to + "?auth=23";
 				} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype
