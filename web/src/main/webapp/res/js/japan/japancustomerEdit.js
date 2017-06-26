@@ -194,3 +194,55 @@ $(function () {
         });
     }
 });
+
+
+/*****************************************************
+ * 加载订单数据   小灯泡
+ ****************************************************/
+$(function () {
+   /* var data = {cid: $.queryString("cid")};
+    if (data.cid) {
+        $.getJSON("/visa/customer/show", data, function (result) {
+            bind(result);
+        });
+    }*/
+    $(document).on('click', '.input-group-addon', function () {
+        var tip = $(this);
+        var labelName=tip.parents('.form-group').find("label").text();//获取对应的字段名称
+        var inputValue=tip.siblings().val();//获取到 input 值
+        var dateValue=tip.siblings().find('input').val();//获取到 日历 值
+        //console.log();
+        tip.find("i").toggleClass("fa-pulse fa-spinner fa-lightbulb-o");//转圈的动画效果~
+        var node = tip.parent().find(":text,select");
+        
+        $.each(node.data("bind").split(","), function (i, e) {
+        	console.log(e.startsWith("value:"));
+            if (e.startsWith("value:")) {
+                var source = node.closest(".row").find("*[data-params]").data("params");
+                var bind = e.substring(e.indexOf("value:") + 6, e.length);
+                var key = (source ? source + "." + bind : bind) + ":" + node.val();
+                $.getJSON("visa/help/get", {key: key, cid: $.queryString("cid")}, function (resp) {
+                    if ($.queryString("check")) {
+                        layer.prompt({
+                            formType: 2,
+                            title: "问题描述",
+                            value: (resp.data) ? resp.data.msg : ''
+                        }, function (msg, index, elem) {
+                            var data = {
+                                "id.key": key, msg: msg,
+                                "id.cid": $.queryString("cid"),
+                            };
+                            $.post("visa/help/add", data, function (result) {
+                                layer.closeAll();
+                                layer.msg(result.msg);
+                            }, "JSON");
+                        });
+                    } else if (resp.data.msg) {
+                        layer.tips(resp.data.msg, tip);
+                    }
+                    tip.find("i").toggleClass("fa-pulse fa-spinner fa-lightbulb-o");
+                });
+            }
+        });
+    });
+});
