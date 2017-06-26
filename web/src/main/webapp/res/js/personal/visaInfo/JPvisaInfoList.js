@@ -1,3 +1,49 @@
+//获取路径
+var curWwwPath = window.document.location.href;  
+var pathName =  window.document.location.pathname;  
+var pos = curWwwPath.indexOf(pathName);  
+var localhostPaht = curWwwPath.substring(0,pos);  
+var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+//页面加载时回显基本信息
+window.onload = function(){
+	 $.getJSON(localhostPaht +'/visa/visainfo/listjpvisainfo', function (resp) {
+     	viewModel.set("customer", $.extend(true, dafaults, resp));
+     });
+}
+//初始化各个组件
+$(function(){
+	$("#sex").kendoDropDownList();//性别 状态 下拉框初始化
+	$("#birthDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//出生日期
+	$("#signedDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//签发日期
+	$("#validDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//有效期限
+	
+	//操作 编辑 按钮时
+	$(".editBtn").click(function(){
+		$(this).addClass("hide");//编辑 按钮隐藏
+		$(".cancelBtn").removeClass("hide");//取消 按钮显示
+		$(".saveBtn").removeClass("hide");//保存 按钮显示
+		$(".input-group .k-textbox").removeClass("k-state-disabled");//删除 不可编辑的边框颜色
+		$(".input-group input").removeAttr("disabled");//删除 不可编辑的属性
+	});
+	
+	//操作 取消 按钮时
+	$(".cancelBtn").click(function(){
+		$(this).addClass("hide");//取消 按钮隐藏
+		$(".saveBtn").addClass("hide");//保存 按钮隐藏
+		$(".editBtn").removeClass("hide");//编辑 按钮显示
+		$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
+		$(".input-group input").attr("disabled");//添加 不可编辑的属性
+	});
+	
+	//操作 保存 按钮时
+	$(".saveBtn").click(function(){
+		$(this).addClass("hide");//保存 按钮隐藏
+		$(".cancelBtn").addClass("hide");//取消 按钮隐藏
+		$(".editBtn").removeClass("hide");//编辑 按钮显示
+		$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
+		$(".input-group input").attr("disabled");//添加 不可编辑的属性
+	});
+});
 //重写startWith方法来兼容IE浏览器
 String.prototype.startsWith = function (str) {
     if (str == null || str == "" || this.length == 0 || str.length > this.length)
@@ -30,19 +76,17 @@ var countries = new kendo.data.DataSource({
         }
     }),
     dafaults = {
-	workinfoJp: {},
-	financeJpList:[],
-	oldpassportJp: {},
-	oldnameJp: {},
-	orthercountryJpList: [],
-	recentlyintojpJpList: []
-},
+		workinfoJp: {},//工作信息
+		financeJpList:[],//财务信息
+		oldpassportJp: {},
+		oldnameJp: {},
+		orthercountryJpList: [],
+		recentlyintojpJpList: []
+	},
     keys = {
         "customer.financeJpList": {},
         "customer.orthercountryJpList": {},
         "customer.recentlyintojpJpList": {}
-       
-        
     }
 /*****************************************************
  * 数据绑定
@@ -108,11 +152,6 @@ kendo.bind($(document.body), viewModel);
 
 //丢过护照
 $("#pp_lost").change(function () {
- /*   if ($(this).is(':checked')) {
-        viewModel.add("customer.oldnameJp");
-    } else {
-        viewModel.clear("customer.oldnameJp");
-    }*/
 	viewviewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
 });
 //曾用名
@@ -122,7 +161,6 @@ $("#has_used_name").change(function () {
     } else {
         viewModel.clear("customer.oldName");
     }
-	/*viewviewModel.set("customer.oldname", $(this).is(':checked') ? " " : "");*/
 });
 //其他国家居民
 $("#has_pr").change(function () {
@@ -132,70 +170,20 @@ $("#has_pr").change(function () {
         viewModel.clearAll("customer.orthercountryJpList");
     }
 });
-
-
-
-
-
-
-//信息保存
-
-$("#saveCustomerData").on("click",function(){
-	console.log(JSON.stringify(viewModel.customer));
+/**********************************************
+*编辑保存日本签证信息
+**********************************************/
+function updateVisaInfoJPSave(){
 	$.ajax({
 		 type: "POST",
-		 url: "/visa/newcustomerjp/customerSave",
+		 url: "/visa/visainfo/updateVisaInfoJPSave",
 		 contentType:"application/json",
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){
-			 console.log(result);
-			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			 parent.layer.close(index);
-			 window.parent.successCallback('1');
+			layer.msg("编辑保存成功",{time:2000});
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-			 console.log(XMLHttpRequest);
-			 console.log(textStatus);
-			 console.log(errorThrown);
-            layer.msg('保存失败!',{time:2000});
-         }
-	});
-});
-
-
-
-//通过或者拒绝的方法
-function agreeOrRefuse(flag){
-	var id=viewModel.get("customer.id");
-	$.ajax({
-		 type: "POST",
-		 url: "/visa/newcustomerjp/agreeOrRefuse?flag="+flag+"&customerid="+id,
-		 success: function (result){
-			 console.log(result);
-			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			 parent.layer.close(index);
-			 window.parent.successCallback('3');
-		 },
-		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-			 console.log(XMLHttpRequest);
-			 console.log(textStatus);
-			 console.log(errorThrown);
-            layer.msg('操作失败!',{time:2000});
+             layer.msg('编辑保存失败',{time:2000});
          }
 	});
 }
-
-$(function () {
-    //如果有传递ID就是修改
-    var oid = $.queryString("cid");
-    if (oid) {
-        $.getJSON("/visa/newcustomerjp/showDetail?customerid=" + oid, function (resp) {
-        	viewModel.set("customer", $.extend(true, dafaults, resp));
-        });
-    }
-    
-    /*折叠板 效果初始化*/
-    $("#panelbar").kendoPanelBar({
-         expandMode: "single" //设置展开模式只能展开单个
-     });
-});
