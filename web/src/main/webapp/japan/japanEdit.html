@@ -288,7 +288,7 @@
                                         <label for="usa_times_stay_unit">往返/多程:</label>
                                         <div class='input-group'>
                                             <input id="order_hurry"  value="false" data-bind="checked:customer.tripJp.oneormore"
-                                               class="mui-switch wangFan_DuoCheng" type="checkbox" name="ishurry" />
+                                               class="mui-switch DuoCheng_WangFan" type="checkbox" name="ishurry" onchange="DuoCheng_WangFan()" />
                                         </div>
                                     </div>
                                 </div>
@@ -345,7 +345,7 @@
     						
     						
     						
-    						  <div class="DuoCheng hide">
+    						<div class="DuoCheng hide">
 				                    <div data-bind="source:customer.dateplanJpList" data-template="tpl_temp"></div>
 				                    <div class="row">
 				                        <div class="col-xs-12">

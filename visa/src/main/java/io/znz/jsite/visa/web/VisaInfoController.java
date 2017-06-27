@@ -28,6 +28,9 @@ import io.znz.jsite.visa.entity.customer.NewUsainfoEntity;
 import io.znz.jsite.visa.entity.customer.NewVisitedcountryEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkedplaceEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkinfoEntity;
+import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
+import io.znz.jsite.visa.entity.japan.NewFinanceJpEntity;
+import io.znz.jsite.visa.entity.japan.NewWorkinfoJpEntity;
 import io.znz.jsite.visa.entity.placeinformation.PlaceInformationEntity;
 import io.znz.jsite.visa.entity.relationship.RelationShipEntity;
 import io.znz.jsite.visa.entity.taxpayerauthenticationcode.TaxpayerAuthenticationCodeEntity;
@@ -77,7 +80,7 @@ public class VisaInfoController extends BaseController {
 	protected Dao nutDao;
 
 	/**
-	 * 签证信息回显
+	 * 美国签证信息回显
 	 * @param request
 	 */
 	@RequestMapping(value = "listvisainfo")
@@ -303,9 +306,8 @@ public class VisaInfoController extends BaseController {
 	}
 
 	/**
-	 * 更新保存签证信息数据
+	 * 更新保存美国签证信息数据
 	 * @param customer
-	 * 
 	 */
 	@RequestMapping(value = "updatePassportSave", method = RequestMethod.POST)
 	@ResponseBody
@@ -519,6 +521,73 @@ public class VisaInfoController extends BaseController {
 			} else {
 				applicantproducer.setCustomerId(customer.getId());
 				dbDao.insert(applicantproducer);
+			}
+		}
+		return ResultObject.success("修改成功");
+	}
+
+	/**
+	 * 日本签证信息回显
+	 * @param request
+	 */
+	@RequestMapping(value = "listjpvisainfo")
+	@ResponseBody
+	public Object listjpvisainfo(HttpServletRequest request) {
+		//从session中取出当前登录用户信息
+		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute("fetch");
+		long userId = 0;
+		if (user == null) {
+			throw new JSiteException("请登录后再试!");
+		}
+		if (!Util.isEmpty(user)) {
+			userId = user.getId();
+		}
+
+		NewCustomerJpEntity customer = dbDao.fetch(NewCustomerJpEntity.class, Cnd.where("empid", "=", userId));
+		long customerId = 0;
+		if (!Util.isEmpty(customer)) {
+			customerId = customer.getId();//得到客户id
+		}
+		//工作信息
+		List<NewWorkinfoJpEntity> passportlose = dbDao.query(NewWorkinfoJpEntity.class,
+				Cnd.where("customer_jp_id", "=", customerId), null);
+		if (!Util.isEmpty(passportlose) && passportlose.size() > 0) {
+			customer.setWorkinfoJp(passportlose.get(0));
+		} else {
+			customer.setWorkinfoJp(new NewWorkinfoJpEntity());
+		}
+		//财务信息
+		List<NewFinanceJpEntity> orthercountry = dbDao.query(NewFinanceJpEntity.class,
+				Cnd.where("customer_jp_id", "=", customerId), null);
+		if (!Util.isEmpty(orthercountry) && orthercountry.size() > 0) {
+			customer.setFinanceJpList(orthercountry);
+		}
+		return customer;
+	}
+
+	@RequestMapping(value = "updateVisaInfoJPSave", method = RequestMethod.POST)
+	@ResponseBody
+	public Object updateVisaInfoJPSave(@RequestBody NewCustomerJpEntity customer) {
+		//工作信息
+		NewWorkinfoJpEntity workinfo = customer.getWorkinfoJp();
+		if (!Util.isEmpty(workinfo)) {
+			if (!Util.isEmpty(workinfo.getId()) && workinfo.getId() > 0) {
+				nutDao.update(workinfo);
+			} else {
+				workinfo.setCustomer_jp_id(customer.getId());
+				dbDao.insert(workinfo);
+			}
+		}
+		//财务信息
+		List<NewFinanceJpEntity> orthercountrylist = customer.getFinanceJpList();
+		if (!Util.isEmpty(orthercountrylist) && orthercountrylist.size() > 0) {
+			for (NewFinanceJpEntity newLanguageEntity : orthercountrylist) {
+				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+					nutDao.update(newLanguageEntity);
+				} else {
+					newLanguageEntity.setCustomer_jp_id(customer.getId());
+					dbDao.insert(newLanguageEntity);
+				}
 			}
 		}
 		return ResultObject.success("修改成功");
