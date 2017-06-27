@@ -71,8 +71,6 @@ $(function () {
 
 function deliveryJpsave(){
 		
-			 alert(JSON.stringify(model.data));
-			 alert($.queryString("oid"));
 			 $.ajax({
 				 type: "POST",
 				 url: "/visa/neworderjp/deliveryJpsave?orderid="+$.queryString("oid"),

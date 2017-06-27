@@ -353,7 +353,6 @@ $(function () {
 function orderJpsave(){
 		
 			 console.log(JSON.stringify(viewModel.customer));
-			 alert(111);
 			 $.ajax({
 				 type: "POST",
 				 url: "/visa/neworderjp/orderJpsave",

@@ -58,11 +58,8 @@ kendo.bind($(document.body), model);
 
 $(function () {
     //加载订单数据
-	alert($.queryString("oid"));
     if ($.queryString("oid")) {
-    	alert(111);
         $.getJSON("/visa/order/deliveryusa?customerid=" + $.queryString("oid"), function (result) {
-           alert(result);
         	model.set("data", result);
         });
     }
@@ -74,8 +71,6 @@ $(function () {
 
 function deliveryJpsave(){
 		
-			 alert(JSON.stringify(model.data));
-			 alert($.queryString("oid"));
 			 $.ajax({
 				 type: "POST",
 				 url: "/visa/order/deliveryUSAsave?orderid="+$.queryString("oid"),
