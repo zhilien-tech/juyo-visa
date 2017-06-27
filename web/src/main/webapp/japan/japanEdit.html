@@ -13,15 +13,16 @@
     <link rel="stylesheet" href="/res/css/colors.min.css"/>
     <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
     <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
-    <!-- <style type="text/css">
-    	.k-multiselect>.k-multiselect-wrap>.k-i-close {top: 50%;}
+    <style type="text/css">
+    	/*.k-multiselect>.k-multiselect-wrap>.k-i-close {top: 50%;}
     	.k-select span.k-i-close {left: -15px;}
     	.k-multiselect-wrap li{margin: 4px 0 1px 2px;padding: 10px 23px 10px 1px;line-height: 0;}
     	.k-multiselect-wrap .k-input {height: 1.54em;line-height: 1.54em;}
     	#objIDCard{display: none;}
     	.container-fluid.k-content{margin-top: 15px;}
-    	.addIcon,.removeIcon{border: solid 1px #337ab7;font-size: 18px;position: relative;top: 25px;border-radius: 50%;padding: 2.5px 4.5px 2px 4.5px;}
-    </style> -->
+    	.addIcon,.removeIcon{border: solid 1px #337ab7;font-size: 18px;position: relative;top: 25px;border-radius: 50%;padding: 2.5px 4.5px 2px 4.5px;}*/
+    	.closeIconLocation .row div.input-group .k-header .k-multiselect-wrap .k-i-close{top: 50%;}
+    </style>
 </head>
 <body>
 <div>
@@ -29,7 +30,7 @@
         <ul id="panelbar" class="col-xs-12" data-role="panelbar" data-expand-mode="single">
         	<li  class="k-state-active">
                         <span class="k-link k-state-selected">客户信息</span>
-                        <div class="container-fluid">
+                        <div class="container-fluid closeIconLocation">
                             <!--公司全称/客户来源-->
                               <div class="row">
                                 <div class="col-xs-8">
@@ -64,7 +65,7 @@
                                 </div>
                             </div>
                             <!-- end 公司全称/客户来源 -->
-                          <!--联系人/手机/邮箱-->
+                          	<!--联系人/手机/邮箱-->
                             <div class="row">
                                 <div class="col-xs-4">
                                     <div class="form-group">
@@ -82,10 +83,7 @@
                                         <div class='input-group'>
                                            <input id="cus_phone" name="telephone" 
                                                    class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                                           <!--  <select class="k-textbox" style="width: 100%;text-transform:uppercase;" id="cus_phone"></select> 
-                                           data-bind="value:customer.customermanage.telephone"
-                                           -->
-                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                           <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
@@ -104,17 +102,6 @@
                                 </div>
                             </div>
                             <div class="has_pr" data-template="tpl_has_pr" data-bind="source:customer.otherCountry"></div>
-                      <!--       <div class="row has_pr" >data-bind="visible:otherCountryEnable"
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <button data-bind="click:addOne"
-                                                data-params="customer.otherCountry"
-                                                class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加
-                                        </button>
-                                    </div>
-                                </div>
-                            </div> -->
                         </div>
                     </li>
 			<li> 订单信息
@@ -288,7 +275,7 @@
                                         <label for="usa_times_stay_unit">往返/多程:</label>
                                         <div class='input-group'>
                                             <input id="order_hurry"  value="false" data-bind="checked:customer.tripJp.oneormore"
-                                               class="mui-switch wangFan_DuoCheng" type="checkbox" name="ishurry" />
+                                               class="mui-switch DuoCheng_WangFan" type="checkbox" name="ishurry" />
                                         </div>
                                     </div>
                                 </div>
@@ -345,7 +332,7 @@
     						
     						
     						
-    						  <div class="DuoCheng hide">
+    						<div class="DuoCheng hide">
 				                    <div data-bind="source:customer.dateplanJpList" data-template="tpl_temp"></div>
 				                    <div class="row">
 				                        <div class="col-xs-12">
@@ -360,7 +347,7 @@
     						<div class="WangFan">
     							<!-- 返回日期/出发城市/抵达城市/航班号 -->
 	                            <div class="row">
-	                            	<div class="col-xs-3">
+	                            	<div class="col-xs-4">
 	                                    <div class="form-group">
 	                                        <label for="us_contact_last_name_en">出发日期:</label>
 	                                        <div class='input-group'>
@@ -370,7 +357,7 @@
 	                                        </div>
 	                                    </div>
 	                                </div>
-	                                <div class="col-xs-3">
+	                                <div class="col-xs-4">
 	                                    <div class="form-group">
 	                                        <label for="usa_city">出发城市:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
@@ -380,7 +367,7 @@
 	                                        </div>
 	                                    </div>
 	                                </div>
-	                                <div class="col-xs-3">
+	                                <div class="col-xs-4">
 	                                    <div class="form-group">
 	                                        <label for="usa_city">抵达城市:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
@@ -390,7 +377,7 @@
 	                                        </div>
 	                                    </div>
 	                                </div>
-	                                <div class="col-xs-3">
+	                                <div class="col-xs-12">
 	                                    <div class="form-group">
 	                                        <label for="usa_city">航班号:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
@@ -415,7 +402,7 @@
 	    						
 	    						<!-- 返回日期/出发城市/抵达城市/航班号 -->
 	                            <div class="row">
-	                            	<div class="col-xs-3">
+	                            	<div class="col-xs-4">
 	                                    <div class="form-group">
 	                                        <label for="us_contact_last_name_en">返回日期:</label>
 	                                        <div class='input-group'>
@@ -425,7 +412,7 @@
 	                                        </div>
 	                                    </div>
 	                                </div>
-	                                <div class="col-xs-3">
+	                                <div class="col-xs-4">
 	                                    <div class="form-group">
 	                                        <label for="usa_city">出发城市:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
@@ -435,7 +422,7 @@
 	                                        </div>
 	                                    </div>
 	                                </div>
-	                                <div class="col-xs-3">
+	                                <div class="col-xs-4">
 	                                    <div class="form-group">
 	                                        <label for="usa_city">抵达城市:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
@@ -445,7 +432,7 @@
 	                                        </div>
 	                                    </div>
 	                                </div>
-	                                <div class="col-xs-3">
+	                                <div class="col-xs-12">
 	                                    <div class="form-group">
 	                                        <label for="usa_city">航班号:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
@@ -902,7 +889,7 @@
 <script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
 <script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
 <script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
+<script src="/res/js/map.js"></script>
 <script src="/res/js/common.js"></script>
-<!-- <script src="/res/js/japanEdit.js"></script> -->
 <script src="/res/js/employee/japanEdit2.js"></script>
 </html>
