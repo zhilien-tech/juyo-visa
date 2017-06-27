@@ -143,6 +143,9 @@ public class NewCustomerJpEntity implements Serializable {
 	@Column
 	@Comment("分享次数")
 	private Integer sharecount = 0;
+	@Column
+	@Comment("错误信息")
+	private String errorinfo;
 
 	private NewWorkinfoJpEntity workinfoJp;
 
