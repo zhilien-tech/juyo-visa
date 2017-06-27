@@ -290,7 +290,6 @@ var grid = $("#grid").kendoGrid({
 }).data("kendoGrid");
 //页面刷新
 function successCallback(id){
-	alert(111);
 	//grid.GetJQuery().refresh();
 	grid.dataSource.read();
 	 /* if(id == '1'){
