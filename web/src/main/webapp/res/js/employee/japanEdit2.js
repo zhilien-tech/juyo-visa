@@ -380,6 +380,13 @@ $(function () {
     if (oid) {
         $.getJSON("/visa/neworderjp/showDetail?orderid=" + oid, function (resp) {
         	viewModel.set("customer", $.extend(true, defaults, resp));
+        	if(viewModel.get("customer.tripJp.oneormore")==1){
+        		$('.WangFan').addClass('hide');
+        		$('.DuoCheng').removeClass('hide');
+        	}else{
+        		$('.WangFan').removeClass('hide');
+        		$('.DuoCheng').addClass('hide');
+        	}
         	defaults.customermanage.telephone=resp.customermanage.telephone;
         	defaults.customermanage.email=resp.customermanage.email;
         	var color = $("#cus_phone").data("kendoMultiSelect");
@@ -393,7 +400,19 @@ $(function () {
         });
     }
     /*  往返/多程 模块显示隐藏   */
-    $(".wangFan_DuoCheng").change(function(){
+   
+});
+/*$(function(){
+	
+	if(viewModel.get("customer.tripJp.oneormore")==1){
+		$('.WangFan').addClass('hide');
+		$('.DuoCheng').removeClass('hide');
+	}else{
+		$('.WangFan').removeClass('hide');
+		$('.DuoCheng').addClass('hide');
+	}
+});*/
+   $(".wangFan_DuoCheng").change(function(){
     	if($(this).is(':checked')){
     		$('.WangFan').addClass('hide');
     		$('.DuoCheng').removeClass('hide');
@@ -402,5 +421,3 @@ $(function () {
     		$('.DuoCheng').addClass('hide');
     	}
     });
-   
-});
