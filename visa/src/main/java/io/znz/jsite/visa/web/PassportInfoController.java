@@ -10,6 +10,8 @@ import io.znz.jsite.base.BaseController;
 import io.znz.jsite.base.bean.ResultObject;
 import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.exception.JSiteException;
+import io.znz.jsite.visa.dto.NewCustomerJpDto;
+import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +43,7 @@ public class PassportInfoController extends BaseController {
 	protected Dao nutDao;
 
 	/**
-	 * 回显护照信息数据
+	 * 回显美国护照信息数据
 	 * @param request
 	 */
 	@RequestMapping(value = "listPassport")
@@ -61,7 +63,7 @@ public class PassportInfoController extends BaseController {
 	}
 
 	/**
-	 * 护照信息修改保存
+	 * 美国护照信息修改保存
 	 * 
 	 */
 	@SuppressWarnings("all")
@@ -70,5 +72,29 @@ public class PassportInfoController extends BaseController {
 	public Object updatePassportSave(@RequestBody NewCustomerEntity customer) {
 		dbDao.update(customer, null);
 		return ResultObject.success("修改成功");
+	}
+
+	/**
+	 * 日本护照信息回显
+	 * @param request
+	 */
+	@RequestMapping(value = "listJPPassport")
+	@ResponseBody
+	public Object listJPPassport(HttpServletRequest request) {
+		//根据当前登录用户id查询出个人信息
+		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute("fetch");
+		long userId = 0;
+		if (user == null) {
+			throw new JSiteException("请登录后再试!");
+		}
+		if (!Util.isEmpty(user)) {
+			userId = user.getId();
+		}
+		NewCustomerJpEntity customer = dbDao.fetch(NewCustomerJpEntity.class, Cnd.where("empid", "=", userId));
+		NewCustomerJpDto cusdto = new NewCustomerJpDto();
+		if (!Util.isEmpty(customer)) {
+			/*cusdto.setCountrynum(customer);*/
+		}
+		return customer;
 	}
 }
