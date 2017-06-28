@@ -28,7 +28,7 @@
         <div class="row">
             <div class="col-xs-12">
             <form id="orderForm">
-                <ul id="panelbars">
+                <ul id="panelbar">
                     <li  class="k-state-active">
                         <span class="k-link k-state-selected active">客户信息</span>
                         <div class="container-fluid">
@@ -311,7 +311,7 @@
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <label for="join_group"
-                                               class="check-box-label">您是否作为一个团队或组织去旅行</label>
+                                               class="check-box-label">您是否作为一个团队或组织去旅行:</label>
                                         <input id='join_group'  data-bind="value:customer.trip.teamname"
                                                class="mui-switch" type="checkbox"/>
                                     </div>
@@ -787,7 +787,7 @@
                                     <div class="col-xs-12">
                                         <div class="form-group">
                                             <label for="paying_company_address_cn_2">
-                                                付费公司地址的街道/区/县（中文）:
+                                                	付费公司地址的街道/区/县（中文）:
                                                 <span style="color: red">*</span>
                                             </label>
                                             <div class='input-group'>
@@ -804,7 +804,7 @@
                                     <div class="col-xs-12">
                                         <div class="form-group">
                                             <label for="paying_company_address_en">
-                                                付费公司地址的门牌号/房间/单元/楼宇（英文），填写中文自动翻译:
+                                                	付费公司地址的门牌号/房间/单元/楼宇（英文），填写中文自动翻译:
                                                 <span style="color: red">*</span>
                                             </label>
                                             <div class='input-group'>
@@ -820,7 +820,7 @@
                                     <div class="col-xs-12">
                                         <div class="form-group">
                                             <label for="paying_company_address_en2">
-                                                付费公司地址的街道/区/县（英文），填写中文自动翻译:
+                                                	付费公司地址的街道/区/县（英文），填写中文自动翻译:
                                                 <span style="color: red">*</span>
                                             </label>
                                             <div class='input-group'>
@@ -836,7 +836,7 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="paying_company_phone">
-                                                付费公司电话:
+                                                	付费公司电话:
                                                 <span style="color: red">*</span>
                                             </label>
                                             <div class='input-group'>
@@ -849,7 +849,7 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="paying_company_zip_code">
-                                                付费公司邮编:
+                                               	 付费公司邮编:
                                                 <span style="color: red">*</span>
                                             </label>
                                             <div class='input-group'>
@@ -865,7 +865,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="has_other_travelers" class="check-box-label">有同行人?</label>
+                                        <label for="has_other_travelers" class="check-box-label">有同行人:</label>
                                         <input id='has_other_travelers' data-bind="checked:hasTogether"
                                                class="mui-switch" type="checkbox"/>
                                     </div>
@@ -1283,7 +1283,7 @@
         </div>
         <div class="col-xs-6">
             <div class="form-group">
-                <label for="ir_del_#:data.uid#">操作&nbsp;</label>
+                <label for="ir_del_#:data.uid#">操作:&nbsp;</label>
                 <button id="ir_del_#:data.uid#" data-bind="click:delOne" data-params="customer.families"
                         class="k-button col-xs-12 k-button-icontext">
                     <span class="k-icon k-i-close"></span>不登记这名亲属
@@ -1296,7 +1296,7 @@
     <div class="row to_usa to_usa_row_#:data.uid#">
         <div class="col-xs-3">
             <div class="form-group">
-                <label for="to_usa_date_#:data.uid#">入境美国时间</label>
+                <label for="to_usa_date_#:data.uid#">入境美国时间:</label>
                 <div class='input-group'>
                     <input id='to_usa_date_#:data.uid#' style="width: 100%;" data-role="datepicker" />
                     <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
@@ -1305,7 +1305,7 @@
         </div>
         <div class="col-xs-3">
             <div class="form-group">
-                <label for="to_usa_date_stay_#:data.uid#">停留时间</label>
+                <label for="to_usa_date_stay_#:data.uid#">停留时间:</label>
                 <div class='input-group'>
                     <input id="to_usa_date_stay_#:data.uid#" style="width: 100%;"
                            data-role="numerictextbox" data-min="1" />
@@ -1332,7 +1332,7 @@
         </div>
         <div class="col-xs-3">
             <div class="form-group">
-                <label for="to_usa_del_#:data.uid#">操作&nbsp;</label>
+                <label for="to_usa_del_#:data.uid#">操作:&nbsp;</label>
                 <button id="to_usa_del_#:data.uid#" data-bind="click:delOne" data-params="customer.histories"
                         class="k-button col-xs-12 k-button-icontext">
                     <span class="k-icon k-i-close"></span>删除本次记录
@@ -1352,13 +1352,6 @@
 <script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
 <script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
 <script src="/res/js/common.js"></script>
-<script type="text/javascript"><!--面板条 动画效果--> 
-    $(function () {
-       $("#panelbars").kendoPanelBar({
-            expandMode: "single" //设置展开模式只能展开单个
-        });
-    });
-</script>
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
 <script src="/res/js/americaEdit.js"></script>

@@ -240,3 +240,9 @@ function getListforMap()
         }
     });
 /*});*/
+$(function(){
+	/*折叠板 效果初始化*/
+    $("#panelbar").kendoPanelBar({
+         expandMode: "single" //设置展开模式只能展开单个
+     });
+});
