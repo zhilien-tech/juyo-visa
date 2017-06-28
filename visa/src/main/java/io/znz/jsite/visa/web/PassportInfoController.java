@@ -90,11 +90,52 @@ public class PassportInfoController extends BaseController {
 		if (!Util.isEmpty(user)) {
 			userId = user.getId();
 		}
-		NewCustomerJpEntity customer = dbDao.fetch(NewCustomerJpEntity.class, Cnd.where("empid", "=", userId));
-		NewCustomerJpDto cusdto = new NewCustomerJpDto();
-		if (!Util.isEmpty(customer)) {
-			/*cusdto.setCountrynum(customer);*/
+		NewCustomerJpEntity cusdto = dbDao.fetch(NewCustomerJpEntity.class, Cnd.where("empid", "=", userId));
+		NewCustomerJpDto customer = new NewCustomerJpDto();
+		if (!Util.isEmpty(cusdto)) {
+			customer.setId(cusdto.getId());
+			customer.setCountrynum(cusdto.getCountrynum());//国家码
+			customer.setChinesefullname(cusdto.getChinesefullname());//姓名
+			customer.setPassport(cusdto.getPassport());//护照号
+			customer.setChinesexingen(cusdto.getChinesexingen());//中文姓拼音
+			customer.setGender(cusdto.getGender());//性别
+			customer.setBirthcountry(cusdto.getDocountry());//国籍
+			customer.setBirthprovince(cusdto.getBirthprovince());//出生地点（省份）
+			customer.setPassportsenddate(cusdto.getPassportsenddate());//签发日期
+			customer.setPassportsendprovice(cusdto.getPassportsendplace());//签发地点（省份）
+			customer.setPassporteffectdate(cusdto.getPassporteffectdate());//有效期至
+			customer.setVisaoffice(cusdto.getPassportsendoffice());//签发机关
+			customer.setPassportbooknum(cusdto.getPassportbooknum());//护照本号码
+			customer.setPassportreadnum(cusdto.getPassportreadnum());//护照机读码
 		}
 		return customer;
+	}
+
+	/**
+	 * 日本护照信息编辑保存
+	 * @param request
+	 */
+	@RequestMapping(value = "updateJPPassportSave")
+	@ResponseBody
+	public Object updateJPPassportSave(@RequestBody NewCustomerJpDto customer) {
+		NewCustomerJpEntity cus = new NewCustomerJpEntity();
+		if (!Util.isEmpty(customer)) {
+			cus.setId(customer.getId());
+			cus.setCountrynum(customer.getCountrynum());//国家码
+			cus.setChinesefullname(customer.getChinesefullname());//姓名
+			cus.setPassport(customer.getPassport());//护照号
+			cus.setChinesexingen(customer.getChinesexingen());//中文姓拼音
+			cus.setGender(customer.getGender());//性别
+			cus.setDocountry(customer.getBirthcountry());//国籍
+			cus.setBirthprovince(customer.getBirthprovince());//出生地点（省份）
+			cus.setPassportsenddate(customer.getPassportsenddate());//签发日期
+			cus.setPassportsendplace(customer.getPassportsendprovice());//签发地点（省份）
+			cus.setPassporteffectdate(customer.getPassporteffectdate());//有效期至
+			cus.setPassportsendoffice(customer.getVisaoffice());//签发机关
+			cus.setPassportbooknum(customer.getPassportbooknum());//护照本号码
+			cus.setPassportreadnum(customer.getPassportreadnum());//护照机读码
+			nutDao.updateIgnoreNull(cus);
+		}
+		return ResultObject.success("修改成功");
 	}
 }

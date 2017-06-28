@@ -10,7 +10,9 @@ import io.znz.jsite.base.BaseController;
 import io.znz.jsite.base.bean.ResultObject;
 import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.exception.JSiteException;
+import io.znz.jsite.visa.dto.NewCustomerJpDto;
 import io.znz.jsite.visa.entity.communicathomeaddress.CommunicatHomeAddressEntity;
+import io.znz.jsite.visa.entity.communicathomeaddress.CommunicatJPHomeAddressEntity;
 import io.znz.jsite.visa.entity.customer.NewArmyEntity;
 import io.znz.jsite.visa.entity.customer.NewLanguageEntity;
 import io.znz.jsite.visa.entity.customer.NewOldnameEntity;
@@ -26,7 +28,12 @@ import io.znz.jsite.visa.entity.customer.NewUsainfoEntity;
 import io.znz.jsite.visa.entity.customer.NewVisitedcountryEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkedplaceEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkinfoEntity;
+import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
+import io.znz.jsite.visa.entity.japan.NewOldnameJpEntity;
+import io.znz.jsite.visa.entity.japan.NewOldpassportJpEntity;
+import io.znz.jsite.visa.entity.japan.NewOrthercountryJpEntity;
 import io.znz.jsite.visa.entity.taxpayerauthenticationcode.TaxpayerAuthenticationCodeEntity;
+import io.znz.jsite.visa.entity.taxpayerauthenticationcode.TaxpayerJPAuthenticationCodeEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerOrderEntity;
 import io.znz.jsite.visa.entity.usa.NewOrderEntity;
@@ -409,6 +416,185 @@ public class BasicInfoController extends BaseController {
 					newLanguageEntity.setCustomerid(customer.getId());
 					dbDao.insert(newLanguageEntity);
 				}
+			}
+		}
+		return ResultObject.success("修改成功");
+	}
+
+	/**
+	 * 日本基本信息回显
+	 * @param request
+	 */
+	@RequestMapping(value = "basicJPInfoList")
+	@ResponseBody
+	public Object basicJPInfoList(HttpServletRequest request) {
+		//从session中取出当前登录用户信息
+		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute("fetch");
+		long userId = 0;
+		if (user == null) {
+			throw new JSiteException("请登录后再试!");
+		}
+		if (!Util.isEmpty(user)) {
+			userId = user.getId();
+		}
+		NewCustomerJpEntity cusdto = dbDao.fetch(NewCustomerJpEntity.class, Cnd.where("empid", "=", userId));
+		NewCustomerJpDto customer = new NewCustomerJpDto();
+		long customerId = 0;
+		if (!Util.isEmpty(cusdto)) {
+			customerId = cusdto.getId();//得到客户id
+		}
+		if (!Util.isEmpty(cusdto)) {
+			customer.setId(customerId);//主键
+			customer.setNameTelegramCode(cusdto.getNameTelegramCode());//姓名电报码
+			customer.setEmail(cusdto.getEmail());//电子邮箱
+			customer.setPassporttype(cusdto.getPassporttype());//护照类型
+			customer.setMarrystate(cusdto.getMarrystate());//婚姻状况
+			customer.setBirthday(cusdto.getBirthday());//出生日期
+			customer.setIdcard(cusdto.getIdcard());//身份证号
+			customer.setCountrynum(cusdto.getCountrynum());//国家码
+			customer.setChinesefullname(cusdto.getChinesefullname());//姓名
+			customer.setPassport(cusdto.getPassport());//护照号
+			customer.setChinesexingen(cusdto.getChinesexingen());//中文姓拼音
+			customer.setGender(cusdto.getGender());//性别
+			customer.setBirthcountry(cusdto.getDocountry());//国籍
+			customer.setBirthprovince(cusdto.getBirthprovince());//出生地点（省份）
+			customer.setPassportsenddate(cusdto.getPassportsenddate());//签发日期
+			customer.setPassportsendprovice(cusdto.getPassportsendplace());//签发地点（省份）
+			customer.setPassportsendcity(cusdto.getPassportsendcity());//签发地城市
+			customer.setPassporteffectdate(cusdto.getPassporteffectdate());//有效期至
+			customer.setVisaoffice(cusdto.getPassportsendoffice());//签发机关
+			customer.setPassportbooknum(cusdto.getPassportbooknum());//护照本号码
+			customer.setPassportreadnum(cusdto.getPassportreadnum());//护照机读码
+		}
+		//我有曾用名
+		List<NewOldnameJpEntity> father = dbDao.query(NewOldnameJpEntity.class,
+				Cnd.where("customer_jp_id", "=", customerId), null);
+		if (!Util.isEmpty(father) && father.size() > 0) {
+			customer.setOldname(father.get(0));
+		} else {
+			customer.setOldname(new NewOldnameJpEntity());
+		}
+		//是否是其它国家/地区的永久居民
+		List<NewOrthercountryJpEntity> orthercountrylist = dbDao.query(NewOrthercountryJpEntity.class,
+				Cnd.where("customer_jp_id", "=", customerId), null);
+		if (!Util.isEmpty(orthercountrylist) && orthercountrylist.size() > 0) {
+			customer.setOrthercountrylist(orthercountrylist);
+		}
+		//日本纳税人认证码
+		List<TaxpayerJPAuthenticationCodeEntity> taxpayerauthenticat = dbDao.query(
+				TaxpayerJPAuthenticationCodeEntity.class, Cnd.where("customerId", "=", customerId), null);
+		if (!Util.isEmpty(taxpayerauthenticat) && taxpayerauthenticat.size() > 0) {
+			customer.setTaxpayerauthenticat(taxpayerauthenticat.get(0));
+		} else {
+			customer.setTaxpayerauthenticat(new TaxpayerJPAuthenticationCodeEntity());
+		}
+		//日本通信地址与家庭地址是否一致
+		List<CommunicatJPHomeAddressEntity> commhomeaddress = dbDao.query(CommunicatJPHomeAddressEntity.class,
+				Cnd.where("customerId", "=", customerId), null);
+		if (!Util.isEmpty(commhomeaddress) && commhomeaddress.size() > 0) {
+			customer.setCommhomeaddress(commhomeaddress.get(0));
+		} else {
+			customer.setCommhomeaddress(new CommunicatJPHomeAddressEntity());
+		}
+		//护照是否遗失过或被偷过
+		List<NewOldpassportJpEntity> passportlose = dbDao.query(NewOldpassportJpEntity.class,
+				Cnd.where("customer_jp_id", "=", customerId), null);
+		if (!Util.isEmpty(passportlose) && passportlose.size() > 0) {
+			customer.setPassportlose(passportlose.get(0));
+		} else {
+			customer.setPassportlose(new NewOldpassportJpEntity());
+		}
+		return customer;
+	}
+
+	/**
+	 * 日本基本信息编辑保存
+	 * @param customer
+	 */
+	@RequestMapping(value = "updateBaseJPInfoData", method = RequestMethod.POST)
+	@ResponseBody
+	public Object updateBaseJPInfoData(@RequestBody NewCustomerJpDto customer, HttpServletRequest request) {
+		//从session中取出当前登录用户信息
+		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute("fetch");
+		long userId = 0;
+		if (user == null) {
+			throw new JSiteException("请登录后再试!");
+		}
+		if (!Util.isEmpty(user)) {
+			userId = user.getId();
+		}
+		NewCustomerJpEntity cus = new NewCustomerJpEntity();
+		if (!Util.isEmpty(customer)) {
+			cus.setId(customer.getId());//主键
+			cus.setNameTelegramCode(customer.getNameTelegramCode());//姓名电报码
+			cus.setEmail(customer.getEmail());//电子邮箱
+			cus.setPassporttype(customer.getPassporttype());//护照类型
+			cus.setMarrystate(customer.getMarrystate());//婚姻状况
+			cus.setBirthday(customer.getBirthday());//出生日期
+			cus.setIdcard(customer.getIdcard());//身份证号
+			cus.setCountrynum(customer.getCountrynum());//国家码
+			cus.setChinesefullname(customer.getChinesefullname());//姓名
+			cus.setPassport(customer.getPassport());//护照号
+			cus.setChinesexingen(customer.getChinesexingen());//中文姓拼音
+			cus.setGender(customer.getGender());//性别
+			cus.setDocountry(customer.getBirthcountry());//国籍
+			cus.setBirthprovince(customer.getBirthprovince());//出生地点（省份）
+			cus.setPassportsenddate(customer.getPassportsenddate());//签发日期
+			cus.setPassportsendplace(customer.getPassportsendprovice());//签发地点（省份）
+			cus.setPassportsendcity(customer.getPassportsendcity());//签发地城市
+			cus.setPassporteffectdate(customer.getPassporteffectdate());//有效期至
+			cus.setPassportsendoffice(customer.getVisaoffice());//签发机关
+			cus.setPassportbooknum(customer.getPassportbooknum());//护照本号码
+			cus.setPassportreadnum(customer.getPassportreadnum());//护照机读码
+			nutDao.updateIgnoreNull(cus);
+		}
+		//我有曾用名
+		NewOldnameJpEntity oldname = customer.getOldname();
+		if (!Util.isEmpty(oldname)) {
+			if (!Util.isEmpty(oldname.getId()) && oldname.getId() > 0) {
+				nutDao.updateIgnoreNull(oldname);
+			} else {
+				oldname.setCustomer_jp_id(customer.getId());
+				dbDao.insert(oldname);
+			}
+		}
+		//是否是其它国家/地区的永久居民
+		List<NewOrthercountryJpEntity> orthercountrylist = customer.getOrthercountrylist();
+		if (!Util.isEmpty(orthercountrylist) && orthercountrylist.size() > 0) {
+			for (NewOrthercountryJpEntity newLanguageEntity : orthercountrylist) {
+				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+					nutDao.updateIgnoreNull(newLanguageEntity);
+				} else {
+					newLanguageEntity.setCustomer_jp_id(customer.getId());
+					dbDao.insert(newLanguageEntity);
+				}
+			}
+		}
+		//日本纳税人认证码
+		TaxpayerJPAuthenticationCodeEntity taxpayerauthenticat = customer.getTaxpayerauthenticat();
+		if (!Util.isEmpty(taxpayerauthenticat) && taxpayerauthenticat.getId() > 0) {
+			nutDao.updateIgnoreNull(taxpayerauthenticat);
+		} else {
+			taxpayerauthenticat.setCustomerId(customer.getId());
+			dbDao.insert(taxpayerauthenticat);
+		}
+
+		//日本通信地址与家庭地址是否一致
+		CommunicatJPHomeAddressEntity commhomeaddress = customer.getCommhomeaddress();
+		if (!Util.isEmpty(commhomeaddress) && commhomeaddress.getId() > 0) {
+			nutDao.updateIgnoreNull(commhomeaddress);
+		} else {
+			commhomeaddress.setCustomerId(customer.getId());
+			dbDao.insert(commhomeaddress);
+		}
+		//护照是否遗失过或被偷过
+		NewOldpassportJpEntity passportlose = customer.getPassportlose();
+		if (!Util.isEmpty(passportlose)) {
+			if (!Util.isEmpty(passportlose.getId()) && passportlose.getId() > 0) {
+				nutDao.updateIgnoreNull(passportlose);
+			} else {
+				passportlose.setCustomer_jp_id(customer.getId());
+				dbDao.insert(passportlose);
 			}
 		}
 		return ResultObject.success("修改成功");

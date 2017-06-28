@@ -1,5 +1,8 @@
 package io.znz.jsite.visa.entity.japan;
 
+import io.znz.jsite.visa.entity.communicathomeaddress.CommunicatJPHomeAddressEntity;
+import io.znz.jsite.visa.entity.taxpayerauthenticationcode.TaxpayerJPAuthenticationCodeEntity;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -70,6 +73,10 @@ public class NewCustomerJpEntity implements Serializable {
 	private String passportsendplace;
 
 	@Column
+	@Comment("护照签发地城市")
+	private String passportsendcity;
+
+	@Column
 	@Comment("护照签发机关")
 	private String passportsendoffice;
 
@@ -136,15 +143,9 @@ public class NewCustomerJpEntity implements Serializable {
 	@Column
 	@Comment("递送次数")
 	private Integer sendcount = 0;
-	/*@Column
+	@Column
 	@Comment("国家码")
 	private String countrynum;
-	@Column
-	@Comment("出生日期")
-	private Date birthdate;
-	@Column
-	@Comment("签发机关")
-	private String visaoffice;
 	@Column
 	@Comment("护照本号码")
 	private String passportbooknum;
@@ -153,7 +154,7 @@ public class NewCustomerJpEntity implements Serializable {
 	private String passportreadnum;
 	@Column
 	@Comment("姓名电报码")
-	private String nameTelegramCode;*/
+	private String nameTelegramCode;
 
 	//是否是主申请人
 	private boolean main = true;
@@ -178,4 +179,8 @@ public class NewCustomerJpEntity implements Serializable {
 		return this.main;
 	}
 
+	//日本纳税人认证码
+	private TaxpayerJPAuthenticationCodeEntity taxpayerauthenticat;
+	//日本通信地址与家庭地址是否一致
+	private CommunicatJPHomeAddressEntity commhomeaddress;
 }
