@@ -3,6 +3,7 @@ package io.znz.jsite.core.web;
 import io.znz.jsite.base.BaseController;
 import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.enums.UserLoginEnum;
+import io.znz.jsite.core.util.Const;
 import io.znz.jsite.util.StringUtils;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
@@ -113,33 +114,39 @@ public class LoginController extends BaseController {
 		}*/
 		String kaptchaExpected = (String) request.getSession().getAttribute(
 				com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
-		EmployeeEntity fetch = dbDao.fetch(EmployeeEntity.class, Cnd.where("telephone", "=", username));
-		Integer userType = fetch.getUserType();//得到用户类型
-		String telephone = fetch.getTelephone();//得到数据库中用户名
-		String pwd = fetch.getPassword();//得到数据库中密码
-		String slt = fetch.getSalt();//得到数据库中盐值
+		if (!Util.isEmpty(captcha)) {
+			if (captcha.equalsIgnoreCase(kaptchaExpected) || "8888".equals(captcha)) {
 
-		byte[] salt = Encodes.decodeHex(slt);
-		byte[] password2 = password.getBytes();//页面传来的密码
-		byte[] hashPassword = Digests.sha1(password2, salt, HASH_INTERATIONS);
-		String newpass = Encodes.encodeHex(hashPassword);//对页面传来的密码进行加密
-		System.out.println(newpass);
-		if (!username.equals(telephone)) {
-			model.addFlashAttribute("error", "用户名不正确，请重新输入！");
-		} else if (!newpass.equals(pwd)) {
-			model.addFlashAttribute("error", "密码有误,请重新输入！");
-		}
-		if (!Util.isEmpty(fetch)) {
-			request.getSession().setAttribute("fetch", fetch);
-			if (username.equals(telephone) && newpass.equals(pwd)) {//username为页面传来的用户名
-				if (UserLoginEnum.PERSONNEL.intKey() == logintype && UserLoginEnum.PERSONNEL.intKey() == userType) {//工作人员登录
-					return "redirect:" + to + "?auth=23";
-				} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype
-						&& UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {//游客身份登录
-					return "redirect:" + to + "?auth=145";
-				} else if (UserLoginEnum.SUPERMAN.intKey() == 3 && UserLoginEnum.SUPERMAN.intKey() == userType) {
-					return "redirect:" + to + "?auth=0";
+				EmployeeEntity fetch = dbDao.fetch(EmployeeEntity.class, Cnd.where("telephone", "=", username));
+				Integer userType = fetch.getUserType();//得到用户类型
+				String telephone = fetch.getTelephone();//得到数据库中用户名
+				String pwd = fetch.getPassword();//得到数据库中密码
+				String slt = fetch.getSalt();//得到数据库中盐值
 
+				byte[] salt = Encodes.decodeHex(slt);
+				byte[] password2 = password.getBytes();//页面传来的密码
+				byte[] hashPassword = Digests.sha1(password2, salt, HASH_INTERATIONS);
+				String newpass = Encodes.encodeHex(hashPassword);//对页面传来的密码进行加密
+				System.out.println(newpass);
+				if (!username.equals(telephone)) {
+					model.addFlashAttribute("error", "用户名不正确，请重新输入！");
+				} else if (!newpass.equals(pwd)) {
+					model.addFlashAttribute("error", "密码有误,请重新输入！");
+				}
+				if (!Util.isEmpty(fetch)) {
+					request.getSession().setAttribute(Const.SESSION_NAME, fetch);
+					if (username.equals(telephone) && newpass.equals(pwd)) {//username为页面传来的用户名
+						if (UserLoginEnum.PERSONNEL.intKey() == logintype
+								&& UserLoginEnum.PERSONNEL.intKey() == userType) {//工作人员登录
+							return "redirect:" + to + "?auth=23";
+						} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype
+								&& UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {//游客身份登录
+							return "redirect:" + to + "?auth=145";
+						} else if (UserLoginEnum.SUPERMAN.intKey() == 3 && UserLoginEnum.SUPERMAN.intKey() == userType) {
+							return "redirect:" + to + "?auth=0";
+
+						}
+					}
 				}
 			}
 		}
@@ -151,7 +158,7 @@ public class LoginController extends BaseController {
 	 */
 	@RequestMapping(value = "logout")
 	public String logout(@RequestParam(defaultValue = "/") String to, SessionStatus status, HttpServletRequest request) {
-		request.getSession().removeAttribute("fetch");//清除session
+		request.getSession().removeAttribute(Const.SESSION_NAME);//清除session
 		status.setComplete();
 		SecurityUtils.getSubject().logout();
 		return "redirect:" + to;

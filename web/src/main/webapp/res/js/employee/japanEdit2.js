@@ -340,11 +340,6 @@ $(function () {
     			error : function(xhr) {
     			}
     		});
-        	
-        	
-        	
-        	
-        	
         }
     });
 });
@@ -353,6 +348,7 @@ $(function () {
 function orderJpsave(){
 		
 			 console.log(JSON.stringify(viewModel.customer));
+
 			 $.ajax({
 				 type: "POST",
 				 url: "/visa/neworderjp/orderJpsave",
@@ -411,7 +407,7 @@ $(function () {
 		$('.DuoCheng').addClass('hide');
 	}
 });*/
-   $(".wangFan_DuoCheng").change(function(){
+   $("#DuoCheng_WangFan").change(function(){
     	if($(this).is(':checked')){
     		$('.WangFan').addClass('hide');
     		$('.DuoCheng').removeClass('hide');

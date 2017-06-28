@@ -196,7 +196,9 @@ function getListforMap()
         
         tip.find("i").toggleClass("fa-pulse fa-spinner fa-lightbulb-o");//变转圈圈效果~
         var node = tip.parent().find(":text,select");
+
       /*  $.each(node.data("bind").split(","), function (i, e) {
+       *  refs/remotes/origin/master
             if (e.startsWith("value:")) {
                 var source = node.closest(".row").find("*[data-params]").data("params");
                 var bind = e.substring(e.indexOf("value:") + 6, e.length);
@@ -225,15 +227,16 @@ function getListforMap()
             }
         });*/
         /*--  --*/
+        var key=labelName.substring(0,labelName.indexOf(":"));
         if(tip.find("i").hasClass('fa-lightbulb-o')){
-        	map.remove(labelName);
+        	map.remove(key);
         	console.log(JSON.stringify(map));
-        	alert("灯泡亮~~");
+        	/*alert("灯泡亮~~");*/
         }else{
-        	map.put(labelName,"1");
+        	map.put(key,"1");
         	/*map[labelName]=1;*/
         	console.log(JSON.stringify(map));
-        	alert("转圈圈~~");
+        	/*alert("转圈圈~~");*/
         }
     });
 /*});*/

@@ -331,6 +331,8 @@ $("#join_army").change(function () {
 $("#saveCustomerData").on("click",function(){
 	console.log(JSON.stringify(viewModel.customer));
 	viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
+	 viewModel.set("customer.errorinfo",JSON.stringify(map));
+	 map.clear();
 	$.ajax({
 		 type: "POST",
 		 url: "/visa/newcustomer/customerSave",

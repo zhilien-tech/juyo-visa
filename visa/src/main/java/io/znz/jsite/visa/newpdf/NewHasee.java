@@ -91,7 +91,7 @@ public class NewHasee extends NewTemplate {
 				throw new JSiteException("入境时间不能在当前时间之前!");
 			}
 			map.put("entryDate", df3.format(entry.getStartdate()));//入境日期
-			Flight entryFlight = entry.getGofilght();
+			Flight entryFlight = dbdao.fetch(Flight.class, Long.valueOf(entry.getFlightnum()));
 			map.put("entryFlight", entryFlight.getCompany() + ":" + entryFlight.getLine());//入境口岸/航班
 			NewTripJpEntity depart = order.getTripJp();
 			//Ticket depart = order.getDepart();
@@ -101,7 +101,7 @@ public class NewHasee extends NewTemplate {
 				throw new JSiteException("出境时间不能在入境时间之前!");
 			}
 			map.put("departDate", df3.format(depart.getReturndate()));//出境日期
-			Flight departFlight = depart.getReturnfilght();
+			Flight departFlight = dbdao.fetch(Flight.class, Long.valueOf(entry.getReturnflightnum()));
 			map.put("departFlight", departFlight.getCompany() + ":" + departFlight.getLine());//出境口岸/航班
 
 			map.put("stay", (diffDays(entry.getStartdate(), depart.getStartdate()) + 1) + "天");//停留周期
@@ -200,9 +200,10 @@ public class NewHasee extends NewTemplate {
 				NewTripJpEntity trip = trips.get(0);
 				Flight flight = null;
 				if (i == 0) {
-					flight = trip.getGofilght();
+
+					flight = dbdao.fetch(Flight.class, Long.valueOf(trip.getFlightnum()));
 				} else {
-					flight = trip.getReturnfilght();
+					flight = dbdao.fetch(Flight.class, Long.valueOf(trip.getReturnflightnum()));
 				}
 				//trip.getSeat()方式
 				String datas[] = { flight.getFrom(), flight.getLine(), "",
@@ -222,8 +223,9 @@ public class NewHasee extends NewTemplate {
 					table.addCell(cell);
 				}
 			}
-			//添加一个空行
-			String datas[] = { trips.get(0).getGofilght().getFrom(), "", "", "", "", "", "", "", "", "", };
+			//添加一个空行dbdao.fetch(Flight.class, Long.valueOf(trips.get(0).getFlightnum()));
+			Flight flight1 = dbdao.fetch(Flight.class, Long.valueOf(trips.get(0).getFlightnum()));
+			String datas[] = { flight1.getFrom(), "", "", "", "", "", "", "", "", "", };
 			for (int j = 0; j < datas.length; j++) {
 				String data = datas[j];
 				PdfPCell cell = new PdfPCell(new Paragraph(data, font));
@@ -379,9 +381,11 @@ public class NewHasee extends NewTemplate {
 				/*for (Scenic scenic : trip.getViewid()) {
 					scenics.append(scenic.getNameJP()).append("、");
 				}*/
-				Scenic scenic = this.dbdao.fetch(Scenic.class, Long.valueOf(trip.getViewid()));
+				String viewid = trip.getViewid();
+				String[] split = viewid.split(",");
+				Scenic scenic = this.dbdao.fetch(Scenic.class, Long.valueOf(split[0]));
 				scenics.append(scenic.getNameJP()).append("、");
-				Hotel h = this.dbdao.fetch(Hotel.class, Long.valueOf(trip.getViewid()));
+				Hotel h = this.dbdao.fetch(Hotel.class, Long.valueOf(trip.getHotelid()));
 				StringBuilder hotel = new StringBuilder(h.getNameJP()).append("\n").append(h.getAddressJP())
 						.append("\n").append(h.getPhone());
 				String datas[] = { String.valueOf(i + 1), format(trip.getNowdate(), df9), scenics.toString(),

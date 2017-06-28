@@ -246,6 +246,13 @@ public class NewCustomerJpController {
 		if ("agree".equals(flag)) {
 			dbDao.update(NewCustomerJpEntity.class, Chain.make("status", OrderVisaApproStatusEnum.agree.intKey()),
 					Cnd.where("id", "=", newCustomer.getId()));
+
+			List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
+					Cnd.where("customer_jp_id", "=", customerid), null);
+			long orderid = query.get(0).getOrder_jp_id();
+			dbDao.update(NewOrderJpEntity.class,
+					Chain.make("updatetime", new Date()).add("status", OrderVisaApproStatusEnum.waitingSend.intKey()),
+					Cnd.where("id", "=", orderid));
 		} else if ("refuse".equals(flag)) {
 			dbDao.update(NewCustomerJpEntity.class, Chain.make("status", OrderVisaApproStatusEnum.refuse.intKey()),
 					Cnd.where("id", "=", newCustomer.getId()));
