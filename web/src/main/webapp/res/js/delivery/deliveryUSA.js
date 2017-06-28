@@ -73,7 +73,7 @@ function deliveryJpsave(){
 		
 			 $.ajax({
 				 type: "POST",
-				 url: "/visa/order/deliveryUSAsave?orderid="+$.queryString("oid"),
+				 url: "/visa/order/deliveryUSAsave?customerid="+$.queryString("oid"),
 				 contentType: "application/json",
 				 dataType: "json",
 				 data: JSON.stringify(model.data),

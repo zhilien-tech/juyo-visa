@@ -9,8 +9,6 @@
         <module>core</module>
         <module>web</module>
         <module>visa</module>
-        <module>meeting</module>
-        <module>brand</module>
     </modules>
     <name>JSite Maven Webapp</name>
     <url>http://maven.apache.org</url>

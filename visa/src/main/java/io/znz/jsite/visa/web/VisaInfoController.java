@@ -30,7 +30,9 @@ import io.znz.jsite.visa.entity.customer.NewVisitedcountryEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkedplaceEntity;
 import io.znz.jsite.visa.entity.customer.NewWorkinfoEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
+import io.znz.jsite.visa.entity.japan.NewCustomerOrderJpEntity;
 import io.znz.jsite.visa.entity.japan.NewFinanceJpEntity;
+import io.znz.jsite.visa.entity.japan.NewOrderJpEntity;
 import io.znz.jsite.visa.entity.japan.NewWorkinfoJpEntity;
 import io.znz.jsite.visa.entity.placeinformation.PlaceInformationEntity;
 import io.znz.jsite.visa.entity.relationship.RelationShipEntity;
@@ -46,6 +48,7 @@ import io.znz.jsite.visa.entity.usa.NewPayPersionEntity;
 import io.znz.jsite.visa.entity.usa.NewPeerPersionEntity;
 import io.znz.jsite.visa.entity.usa.NewTrip;
 import io.znz.jsite.visa.enums.IsDadOrMumEnum;
+import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
 
 import java.util.Date;
 import java.util.List;
@@ -330,7 +333,9 @@ public class VisaInfoController extends BaseController {
 		List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
 				Cnd.where("customerid", "=", customer.getId()), null);
 		long orderid = query.get(0).getOrderid();
-		dbDao.update(NewOrderEntity.class, Chain.make("updatetime", new Date()), Cnd.where("id", "=", orderid));
+		dbDao.update(NewOrderEntity.class,
+				Chain.make("updatetime", new Date()).add("status", OrderVisaApproStatusEnum.firstReview.intKey()),
+				Cnd.where("id", "=", orderid));
 		if (!Util.isEmpty(customer.getId()) && customer.getId() > 0) {
 			customer.setUpdatetime(new Date());
 			try {
@@ -566,9 +571,23 @@ public class VisaInfoController extends BaseController {
 		return customer;
 	}
 
+	/***
+	 * 日本签证信息修改保存
+	 *
+	 * @param customer
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	@RequestMapping(value = "updateVisaInfoJPSave", method = RequestMethod.POST)
 	@ResponseBody
 	public Object updateVisaInfoJPSave(@RequestBody NewCustomerJpEntity customer) {
+
+		List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
+				Cnd.where("customer_jp_id", "=", customer.getId()), null);
+		long orderid = query.get(0).getOrder_jp_id();
+		dbDao.update(NewOrderJpEntity.class,
+				Chain.make("updatetime", new Date()).add("status", OrderVisaApproStatusEnum.firstReview.intKey()),
+				Cnd.where("id", "=", orderid));
+
 		//工作信息
 		NewWorkinfoJpEntity workinfo = customer.getWorkinfoJp();
 		if (!Util.isEmpty(workinfo)) {

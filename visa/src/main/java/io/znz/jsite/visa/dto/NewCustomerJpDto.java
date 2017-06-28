@@ -6,12 +6,14 @@
 
 package io.znz.jsite.visa.dto;
 
+import io.znz.jsite.visa.entity.communicathomeaddress.CommunicatJPHomeAddressEntity;
 import io.znz.jsite.visa.entity.japan.NewFinanceJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOldnameJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOldpassportJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrthercountryJpEntity;
 import io.znz.jsite.visa.entity.japan.NewRecentlyintojpJpEntity;
 import io.znz.jsite.visa.entity.japan.NewWorkinfoJpEntity;
+import io.znz.jsite.visa.entity.taxpayerauthenticationcode.TaxpayerJPAuthenticationCodeEntity;
 
 import java.util.Date;
 import java.util.List;
@@ -52,7 +54,9 @@ public class NewCustomerJpDto {
 	private Date birthday;
 	//护照类别
 	private Integer passporttype;
-	//护照签发地点
+	//护照签发城市
+	private String passportsendcity;
+	//护照签发省份
 	private String passportsendprovice;
 	//护照签发机关
 	private String passportsendoffice;
@@ -107,19 +111,24 @@ public class NewCustomerJpDto {
 	//姓名电报码
 	private String nameTelegramCode;
 
-	private NewWorkinfoJpEntity workinfoJp;
+	private NewWorkinfoJpEntity workinfo;
 
 	private List<NewFinanceJpEntity> financeJpList;
 
-	private NewOldpassportJpEntity oldpassportJp;
+	private NewOldpassportJpEntity passportlose;
 
-	private NewOldnameJpEntity oldnameJp;
+	private NewOldnameJpEntity oldname;
 
-	private List<NewOrthercountryJpEntity> orthercountryJpList;
+	private List<NewOrthercountryJpEntity> orthercountrylist;
 
 	private List<NewRecentlyintojpJpEntity> recentlyintojpJpList;
 
 	public boolean isMain() {
 		return this.main;
 	}
+
+	//日本纳税人认证码
+	private TaxpayerJPAuthenticationCodeEntity taxpayerauthenticat;
+	//日本通信地址与家庭地址是否一致
+	private CommunicatJPHomeAddressEntity commhomeaddress;
 }

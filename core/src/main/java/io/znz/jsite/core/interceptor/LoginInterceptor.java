@@ -35,9 +35,12 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 		HttpSession session = request.getSession();
 		Object attribute = session.getAttribute(Const.SESSION_NAME);
-		/*if (Util.isEmpty(attribute)) {
-			String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-					+ request.getServletPath();
+		/*String nowurl = request.getRequestURL().toString();
+		String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+		if (nowurl.equals(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/")) {
+			return true;
+		}
+		if (Util.isEmpty(attribute)) {
 			response.sendRedirect(url);
 			return false;
 		}*/

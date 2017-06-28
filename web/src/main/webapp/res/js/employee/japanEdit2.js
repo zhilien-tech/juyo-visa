@@ -407,7 +407,7 @@ $(function () {
 		$('.DuoCheng').addClass('hide');
 	}
 });*/
-   $(".wangFan_DuoCheng").change(function(){
+   $("#DuoCheng_WangFan").change(function(){
     	if($(this).is(':checked')){
     		$('.WangFan').addClass('hide');
     		$('.DuoCheng').removeClass('hide');

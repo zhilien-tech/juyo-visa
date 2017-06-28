@@ -26,13 +26,19 @@ public class Hotel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@org.nutz.dao.entity.annotation.Id
 	private Integer id;
+	@org.nutz.dao.entity.annotation.Column
 	private String name;
+	@org.nutz.dao.entity.annotation.Column
 	private String address;
 	@Column(name = "name_jp")
+	@org.nutz.dao.entity.annotation.Column("name_jp")
 	private String nameJP;
 	@Column(name = "address_jp")
+	@org.nutz.dao.entity.annotation.Column("address_jp")
 	private String addressJP;
+	@org.nutz.dao.entity.annotation.Column
 	private String phone;
+	@org.nutz.dao.entity.annotation.Column
 	private String city;
 
 	public Integer getId() {

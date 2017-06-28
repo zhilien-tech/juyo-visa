@@ -2,6 +2,7 @@ package io.znz.jsite.visa.newpdf;
 
 import io.znz.jsite.exception.JSiteException;
 import io.znz.jsite.util.DateUtils;
+import io.znz.jsite.util.SpringUtil;
 import io.znz.jsite.util.StringUtils;
 import io.znz.jsite.visa.bean.Flight;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
@@ -53,12 +54,13 @@ import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.uxuexi.core.common.util.Util;
+import com.uxuexi.core.db.dao.IDbDao;
 
 /**
  * Created by Chaly on 2017/5/2.
  */
 public abstract class NewTemplate {
-
+	private IDbDao dbdao = SpringUtil.getBean("dbDao");
 	private static final Map<String, String> defaultApplyMap = new HashMap<String, String>();
 
 	protected static final SimpleDateFormat df0 = new SimpleDateFormat("dd/MM/yyyy");
@@ -383,7 +385,7 @@ public abstract class NewTemplate {
 			map.put("topmostSubform[0].Page1[0].#area[21].T68[3]", df1.format(order.getTripJp().getReturndate()));
 			map.put("topmostSubform[0].Page1[0].T66[0]", (Days.daysBetween(dtEntry, dtDepart).getDays() + 1) + "天");
 
-			Flight flight = order.getTripJp().getGofilght();
+			Flight flight = dbdao.fetch(Flight.class, Long.valueOf(order.getTripJp().getFlightnum()));
 
 			map.put("topmostSubform[0].Page1[0].#area[15].#area[16].T68[0]", filter(flight.getToCity()));
 			map.put("topmostSubform[0].Page1[0].#area[15].#area[16].T68[1]", filter(flight.getLine()));
