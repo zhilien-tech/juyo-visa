@@ -155,8 +155,6 @@ function regCmd(command) {
                 	/*var data = a.dataItem($(e.currentTarget).closest("tr"));*/
                 	var data1 = grid.dataItem($(e.currentTarget).closest("tr"));
                 	   if (!(data = select(e))) return;
-                	   alert(data.id);
-                       alert(data1.id);
                 	layer.open({
                 		type: 2,
                 		title: '编辑客户信息',

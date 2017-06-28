@@ -136,6 +136,24 @@ public class NewCustomerJpEntity implements Serializable {
 	@Column
 	@Comment("递送次数")
 	private Integer sendcount = 0;
+	/*@Column
+	@Comment("国家码")
+	private String countrynum;
+	@Column
+	@Comment("出生日期")
+	private Date birthdate;
+	@Column
+	@Comment("签发机关")
+	private String visaoffice;
+	@Column
+	@Comment("护照本号码")
+	private String passportbooknum;
+	@Column
+	@Comment("护照机读码")
+	private String passportreadnum;
+	@Column
+	@Comment("姓名电报码")
+	private String nameTelegramCode;*/
 
 	//是否是主申请人
 	private boolean main = true;
@@ -143,6 +161,9 @@ public class NewCustomerJpEntity implements Serializable {
 	@Column
 	@Comment("分享次数")
 	private Integer sharecount = 0;
+	@Column
+	@Comment("错误信息")
+	private String errorinfo;
 
 	private NewWorkinfoJpEntity workinfoJp;
 

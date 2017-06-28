@@ -142,6 +142,8 @@ $("#has_pr").change(function () {
 
 $("#saveCustomerData").on("click",function(){
 	console.log(JSON.stringify(viewModel.customer));
+	 viewModel.set("customer.errorinfo",JSON.stringify(map));
+	 map.clear();
 	$.ajax({
 		 type: "POST",
 		 url: "/visa/newcustomerjp/customerSave",

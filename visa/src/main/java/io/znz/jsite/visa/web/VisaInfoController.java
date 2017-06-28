@@ -9,6 +9,7 @@ package io.znz.jsite.visa.web;
 import io.znz.jsite.base.BaseController;
 import io.znz.jsite.base.bean.ResultObject;
 import io.znz.jsite.core.entity.EmployeeEntity;
+import io.znz.jsite.core.util.Const;
 import io.znz.jsite.exception.JSiteException;
 import io.znz.jsite.visa.entity.applicantproducer.ApplicantProducerEntity;
 import io.znz.jsite.visa.entity.communicathomeaddress.CommunicatHomeAddressEntity;
@@ -87,7 +88,7 @@ public class VisaInfoController extends BaseController {
 	@ResponseBody
 	public Object listvisainfo(HttpServletRequest request) {
 		//从session中取出当前登录用户信息
-		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute("fetch");
+		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute(Const.SESSION_NAME);
 		long userId = 0;
 		if (user == null) {
 			throw new JSiteException("请登录后再试!");
@@ -534,7 +535,7 @@ public class VisaInfoController extends BaseController {
 	@ResponseBody
 	public Object listjpvisainfo(HttpServletRequest request) {
 		//从session中取出当前登录用户信息
-		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute("fetch");
+		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute(Const.SESSION_NAME);
 		long userId = 0;
 		if (user == null) {
 			throw new JSiteException("请登录后再试!");

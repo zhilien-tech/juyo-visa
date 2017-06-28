@@ -3,6 +3,7 @@ package io.znz.jsite.core.web;
 import io.znz.jsite.base.BaseController;
 import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.enums.UserLoginEnum;
+import io.znz.jsite.core.util.Const;
 import io.znz.jsite.util.StringUtils;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
@@ -130,7 +131,7 @@ public class LoginController extends BaseController {
 			model.addFlashAttribute("error", "密码有误,请重新输入！");
 		}
 		if (!Util.isEmpty(fetch)) {
-			request.getSession().setAttribute("fetch", fetch);
+			request.getSession().setAttribute(Const.SESSION_NAME, fetch);
 			if (username.equals(telephone) && newpass.equals(pwd)) {//username为页面传来的用户名
 				if (UserLoginEnum.PERSONNEL.intKey() == logintype && UserLoginEnum.PERSONNEL.intKey() == userType) {//工作人员登录
 					return "redirect:" + to + "?auth=23";
@@ -151,7 +152,7 @@ public class LoginController extends BaseController {
 	 */
 	@RequestMapping(value = "logout")
 	public String logout(@RequestParam(defaultValue = "/") String to, SessionStatus status, HttpServletRequest request) {
-		request.getSession().removeAttribute("fetch");//清除session
+		request.getSession().removeAttribute(Const.SESSION_NAME);//清除session
 		status.setComplete();
 		SecurityUtils.getSubject().logout();
 		return "redirect:" + to;

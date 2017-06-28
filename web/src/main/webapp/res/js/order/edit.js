@@ -104,7 +104,6 @@ var onSave = function (e) {
                 	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                 	//$.layer.closeAll();
                 	parent.layer.close(index);
-                	alert(222);
                 	window.parent.successCallback('3');
                 	 //alert(parent.$("#na").val());
                 });

@@ -197,6 +197,11 @@ public class NewCustomerEntity implements Serializable {
 	@Column
 	@Comment("姓名电报码")
 	private String nameTelegramCode;
+	
+	
+	@Column
+	@Comment("错误信息")
+	private String errorinfo;
 
 	private NewPassportloseEntity passportlose;
 

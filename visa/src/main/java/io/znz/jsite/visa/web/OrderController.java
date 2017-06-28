@@ -200,7 +200,7 @@ public class OrderController extends BaseController {
 				//根据人数插入多个申请人的数据
 				for (int i = a; i > 0; i--) {
 					NewCustomerEntity c = new NewCustomerEntity();
-					c.setStatus(OrderVisaApproStatusEnum.writeInfo.intKey());
+					/*c.setStatus(OrderVisaApproStatusEnum.writeInfo.intKey());*/
 					c.setCreatetime(new Date());
 					c.setUpdatetime(new Date());
 					NewCustomerEntity insert = dbDao.insert(c);
@@ -261,7 +261,7 @@ public class OrderController extends BaseController {
 				NewCustomerEntity c = new NewCustomerEntity();
 				c.setCreatetime(new Date());
 				c.setUpdatetime(new Date());
-				c.setStatus(OrderVisaApproStatusEnum.writeInfo.intKey());
+				/*c.setStatus(OrderVisaApproStatusEnum.writeInfo.intKey());*/
 				NewCustomerEntity insert = dbDao.insert(c);
 				NewCustomerOrderEntity customerOrderEntity = new NewCustomerOrderEntity();
 				customerOrderEntity.setCustomerid(insert.getId());
