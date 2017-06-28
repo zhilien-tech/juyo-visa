@@ -6,10 +6,10 @@
 
 package io.znz.jsite.visa.web;
 
+import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
-import io.znz.jsite.visa.entity.user.EmployeeEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -64,7 +64,7 @@ public class NewVisaProgressController {
 		//日本
 		List<NewCustomerJpEntity> japanlist = dbDao.query(NewCustomerJpEntity.class,
 				Cnd.where("empid", "=", user.getId()).orderBy("createtime", "desc"), null);
-		Map<String, Integer> map = Maps.newHashMap();
+		/*Map<String, Integer> map = Maps.newHashMap();
 		if (!Util.isEmpty(japanlist) && !Util.isEmpty(usalist)) {
 			map.put("usa", usalist.get(0).getId());
 			map.put("japan", Integer.valueOf(japanlist.get(0).getId() + ""));
@@ -74,6 +74,18 @@ public class NewVisaProgressController {
 
 		} else if (!Util.isEmpty(japanlist) && Util.isEmpty(usalist)) {
 			map.put("japan", Integer.valueOf(japanlist.get(0).getId() + ""));
+
+		}*/
+		Map<String, Object> map = Maps.newHashMap();
+		if (!Util.isEmpty(japanlist) && !Util.isEmpty(usalist)) {
+			map.put("usa", usalist.get(0));
+			map.put("japan", japanlist.get(0));
+
+		} else if (Util.isEmpty(japanlist) && !Util.isEmpty(usalist)) {
+			map.put("usa", usalist.get(0));
+
+		} else if (!Util.isEmpty(japanlist) && Util.isEmpty(usalist)) {
+			map.put("japan", japanlist.get(0));
 
 		}
 

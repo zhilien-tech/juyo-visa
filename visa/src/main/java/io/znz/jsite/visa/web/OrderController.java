@@ -439,7 +439,7 @@ public class OrderController extends BaseController {
 			dbDao.update(
 					NewCustomerEntity.class,
 					Chain.make("sharecount", customer.getSharecount() + 1)
-							.add("status", OrderVisaApproStatusEnum.shared.intKey())
+							.add("status", OrderVisaApproStatusEnum.writeInfo.intKey())
 							.add("empid", employeeEntity.getId()), Cnd.where("id", "=", customer.getId()));
 
 			return ResultObject.success(result);
@@ -482,11 +482,7 @@ public class OrderController extends BaseController {
 			if (!Util.isEmpty(phone)) {
 
 				result = getMailContent(order, phone, customer, null);
-				if ("success".equalsIgnoreCase(result)) {
-					//成功以后分享次数加1
-					dbDao.update(NewCustomerEntity.class, Chain.make("sharecount", customer.getSharecount() + 1),
-							Cnd.where("id", "=", customer.getId()));
-				}
+
 			}
 
 		}
@@ -541,6 +537,19 @@ public class OrderController extends BaseController {
 				.replace("${href}", "http://www.baidu.com")
 				.replace("${logininfo}", "用户名:" + phone + "密码:" + employeeEntity.getPassword());
 		String result = mailService.send(email, html, "签证资料录入", MailService.Type.HTML);
+
+		if ("success".equalsIgnoreCase(result)) {
+			//成功以后分享次数加1
+			dbDao.update(
+					NewCustomerEntity.class,
+					Chain.make("sharecount", customer.getSharecount() + 1)
+							.add("status", OrderVisaApproStatusEnum.writeInfo.intKey())
+							.add("empid", employeeEntity.getId()), Cnd.where("id", "=", customer.getId()));
+			dbDao.update(
+					NewOrderEntity.class,
+					Chain.make("sharecountmany", order.getSharecountmany() + 1).add("status",
+							OrderVisaApproStatusEnum.shared.intKey()), Cnd.where("id", "=", order.getId()));
+		}
 		return result;
 	}
 
@@ -865,13 +874,23 @@ public class OrderController extends BaseController {
 
 	@RequestMapping(value = "deliveryUSAsave")
 	@ResponseBody
-	public Object deliveryUSAsave(@RequestBody NewDeliveryUSAEntity deliveryJapan, int orderid) {
-		deliveryJapan.setCustomer_usa_id(orderid);
+	public Object deliveryUSAsave(@RequestBody NewDeliveryUSAEntity deliveryJapan, int customerid) {
+		deliveryJapan.setCustomer_usa_id(customerid);
 		Integer id = deliveryJapan.getId();
 		if (!Util.isEmpty(id) && id > 0) {
 
 			dbDao.update(deliveryJapan, null);
 		} else {
+
+			dbDao.update(NewCustomerEntity.class,
+					Chain.make("updatetime", new Date()).add("status", OrderVisaApproStatusEnum.readySubmit.intKey()),
+					Cnd.where("id", "=", customerid));
+			List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
+					Cnd.where("customerid", "=", customerid), null);
+			long orderid = query.get(0).getOrderid();
+			dbDao.update(NewOrderEntity.class,
+					Chain.make("updatetime", new Date()).add("status", OrderVisaApproStatusEnum.DS.intKey()),
+					Cnd.where("id", "=", orderid));
 			dbDao.insert(deliveryJapan);
 		}
 		return ResultObject.success("添加成功");

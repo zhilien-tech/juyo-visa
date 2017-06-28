@@ -19,9 +19,15 @@ import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerOrderJpEntity;
 import io.znz.jsite.visa.entity.japan.NewDateplanJpEntity;
 import io.znz.jsite.visa.entity.japan.NewFastmailJpEntity;
+import io.znz.jsite.visa.entity.japan.NewFinanceJpEntity;
+import io.znz.jsite.visa.entity.japan.NewOldnameJpEntity;
+import io.znz.jsite.visa.entity.japan.NewOldpassportJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrderJpEntity;
+import io.znz.jsite.visa.entity.japan.NewOrthercountryJpEntity;
+import io.znz.jsite.visa.entity.japan.NewRecentlyintojpJpEntity;
 import io.znz.jsite.visa.entity.japan.NewTripJpEntity;
 import io.znz.jsite.visa.entity.japan.NewTripplanJpEntity;
+import io.znz.jsite.visa.entity.japan.NewWorkinfoJpEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
 import io.znz.jsite.visa.entity.usa.NewOrderEntity;
 import io.znz.jsite.visa.entity.user.EmployeeEntity;
@@ -33,6 +39,8 @@ import io.znz.jsite.visa.service.NewOrderJaPanService;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -390,11 +398,11 @@ public class NewOrderJaPanController {
 			if (!Util.isEmpty(returnfilght)) {
 				Flight fetch = dbDao.fetch(Flight.class, Long.valueOf(returnfilght));
 				newTripJpEntity.setReturnfilght(fetch);
-				;
 			}
 			order.setTripJp(newTripJpEntity);
 			List<NewDateplanJpEntity> query = dbDao.query(NewDateplanJpEntity.class,
 					Cnd.where("trip_jp_id", "=", newTrips.get(0).getId()), null);
+
 			for (NewDateplanJpEntity newDateplanJpEntity : query) {
 				if (!Util.isEmpty(newDateplanJpEntity)) {
 					String flightstr = newDateplanJpEntity.getFlightnum();
@@ -402,10 +410,13 @@ public class NewOrderJaPanController {
 						Flight fetch = dbDao.fetch(Flight.class, Long.valueOf(flightstr));
 						newDateplanJpEntity.setFlight(fetch);
 					}
+
 				}
 			}
 			order.setDateplanJpList(query);
 		}
+		DateFormat df = new SimpleDateFormat("HH:mm");
+		DateFormat df1 = new SimpleDateFormat("yyyy:MM:dd HH:mm");
 		List<NewTripplanJpEntity> newPayPersionEntities = dbDao.query(NewTripplanJpEntity.class,
 				Cnd.where("order_jp_id", "=", orderid), null);
 		//给计划表中的每个对象相应的风景集合
@@ -421,6 +432,28 @@ public class NewOrderJaPanController {
 				}
 			}
 			n.setScenics(slist);
+			if (!Util.isEmpty(n.getIntime())) {
+
+				try {
+					n.setIntime(df.parse(df1.format(n.getIntime())));
+				} catch (ParseException e) {
+
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+
+				}
+			}
+			if (!Util.isEmpty(n.getOuttime())) {
+
+				try {
+					n.setOuttime(df.parse(df1.format(n.getOuttime())));
+				} catch (ParseException e) {
+
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+
+				}
+			}
 		}
 
 		if (!Util.isEmpty(newPayPersionEntities) && newPayPersionEntities.size() > 0) {
@@ -507,7 +540,7 @@ public class NewOrderJaPanController {
 			dbDao.update(
 					NewCustomerJpEntity.class,
 					Chain.make("sharecount", customer.getSharecount() + 1)
-							.add("status", OrderVisaApproStatusEnum.shared.intKey())
+							.add("status", OrderVisaApproStatusEnum.writeInfo.intKey())
 							.add("empid", employeeEntity.getId()), Cnd.where("id", "=", customer.getId()));
 
 			return ResultObject.success(result);
@@ -592,8 +625,16 @@ public class NewOrderJaPanController {
 				/*result = getMailContent(order, phone, customer, null);*/
 				if ("success".equalsIgnoreCase(result)) {
 					//成功以后分享次数加1
-					dbDao.update(NewCustomerEntity.class, Chain.make("sharecount", customer.getSharecount() + 1),
-							Cnd.where("id", "=", customer.getId()));
+					dbDao.update(
+							NewCustomerEntity.class,
+							Chain.make("sharecount", customer.getSharecount() + 1)
+									.add("status", OrderVisaApproStatusEnum.writeInfo.intKey())
+									.add("empid", employeeEntity.getId()), Cnd.where("id", "=", customer.getId()));
+
+					dbDao.update(
+							NewOrderJpEntity.class,
+							Chain.make("sharenum", order.getSharenum() + 1).add("status",
+									OrderVisaApproStatusEnum.shared.intKey()), Cnd.where("id", "=", order.getId()));
 				}
 			}
 
@@ -681,6 +722,23 @@ public class NewOrderJaPanController {
 
 			dbDao.update(deliveryJapan, null);
 		} else {
+
+			dbDao.update(NewOrderJpEntity.class,
+					Chain.make("updatetime", new Date()).add("status", OrderVisaApproStatusEnum.DS.intKey()),
+					Cnd.where("id", "=", orderid));
+			List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
+					Cnd.where("order_jp_id", "=", orderid), null);
+
+			for (NewCustomerOrderJpEntity newCustomerOrderJpEntity : query) {
+				long customerid = newCustomerOrderJpEntity.getOrder_jp_id();
+
+				dbDao.update(
+						NewCustomerJpEntity.class,
+						Chain.make("updatetime", new Date()).add("status",
+								OrderVisaApproStatusEnum.readySubmit.intKey()), Cnd.where("id", "=", customerid));
+
+			}
+
 			dbDao.insert(deliveryJapan);
 		}
 		return ResultObject.success("添加成功");
@@ -722,10 +780,52 @@ public class NewOrderJaPanController {
 		List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
 				Cnd.where("order_jp_id", "=", orderid), null);
 		for (NewCustomerOrderJpEntity newCustomerOrderJpEntity : query) {
-			NewCustomerJpEntity fetch = dbDao.fetch(NewCustomerJpEntity.class,
+			NewCustomerJpEntity customer = dbDao.fetch(NewCustomerJpEntity.class,
 					newCustomerOrderJpEntity.getCustomer_jp_id());
-			if (!Util.isEmpty(fetch)) {
-				customerJpList.add(fetch);
+
+			List<NewWorkinfoJpEntity> passportlose = dbDao.query(NewWorkinfoJpEntity.class,
+					Cnd.where("customer_jp_id", "=", customer.getId()), null);
+			if (!Util.isEmpty(passportlose) && passportlose.size() > 0) {
+				customer.setWorkinfoJp(passportlose.get(0));
+			} else {
+				customer.setWorkinfoJp(new NewWorkinfoJpEntity());
+
+			}
+			List<NewOldpassportJpEntity> oldname = dbDao.query(NewOldpassportJpEntity.class,
+					Cnd.where("customer_jp_id", "=", customer.getId()), null);
+			if (!Util.isEmpty(oldname) && oldname.size() > 0) {
+				customer.setOldpassportJp(oldname.get(0));
+			} else {
+				customer.setOldpassportJp(new NewOldpassportJpEntity());
+			}
+			List<NewFinanceJpEntity> orthercountry = dbDao.query(NewFinanceJpEntity.class,
+					Cnd.where("customer_jp_id", "=", customer.getId()), null);
+			if (!Util.isEmpty(orthercountry) && orthercountry.size() > 0) {
+				customer.setFinanceJpList(orthercountry);
+			}
+			List<NewOldnameJpEntity> father = dbDao.query(NewOldnameJpEntity.class,
+					Cnd.where("customer_jp_id", "=", customer.getId()), null);
+			if (!Util.isEmpty(father) && father.size() > 0) {
+				customer.setOldnameJp(father.get(0));
+			} else {
+				customer.setOldnameJp(new NewOldnameJpEntity());
+
+			}
+
+			List<NewOrthercountryJpEntity> relation = dbDao.query(NewOrthercountryJpEntity.class,
+					Cnd.where("customer_jp_id", "=", customer.getId()), null);
+			if (!Util.isEmpty(relation) && relation.size() > 0) {
+				customer.setOrthercountryJpList(relation);
+			}
+
+			List<NewRecentlyintojpJpEntity> teachinfo = dbDao.query(NewRecentlyintojpJpEntity.class,
+					Cnd.where("customer_jp_id", "=", customer.getId()), null);
+			if (!Util.isEmpty(teachinfo) && teachinfo.size() > 0) {
+				customer.setRecentlyintojpJpList(teachinfo);
+			}
+
+			if (!Util.isEmpty(customer)) {
+				customerJpList.add(customer);
 			}
 		}
 		order.setCustomerJpList(customerJpList);

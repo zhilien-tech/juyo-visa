@@ -14,7 +14,7 @@ var genderlist=[
                  ];
 //状态listorder
 var statuslist=[
-    {text:"下单",value:0},
+    {text:"下单",value:15},
     {text:"已分享",value:1},
     {text:"资料填写",value:2},
     {text:"初审",value:3},
