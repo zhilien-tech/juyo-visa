@@ -455,10 +455,23 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="other_relatives"
+                                        <label for="join_group"
                                                class="check-box-label">是否加入一个团队或组织旅行</label>
-                                        <input id='other_relatives' data-bind="checked:customer.relation.indirect"
+                                        <input id='join_group'  data-bind="value:customer.trip[0].teamname"
                                                class="mui-switch" type="checkbox"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row join_group"  data-bind="visible:customer.trip[0].teamname" ><!-- data-bind="visible:customer.travel.team" -->
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="join_group_name">团队名称:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <input id="join_group_name" class="k-textbox" style="width: 100%;"
+                                                     data-bind="value:customer.trip[0].teamname"
+                                                   placeholder="需填写参加的团队名称"/>
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -684,7 +697,7 @@
                                         <label for="us_contact_address">美国联系地址:</label>
                                         <div class='input-group'>
                                             <input id="us_contact_address" class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.trip.detailaddress"/>
+                                                   data-bind="value:customer.trip[0].detailaddress"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -699,7 +712,7 @@
                                         <label for="us_contact_phone">电话号码:<span style="color: red">*</span></label>
                                         <div class='input-group'>
                                             <input id="us_contact_phone" class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.trip.phone"/>
+                                                   data-bind="value:customer.trip[0].phone"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -709,7 +722,7 @@
                                         <label for="us_contact_zip_code">电子邮件:<span style="color: red">*</span></label>
                                         <div class='input-group'>
                                             <input id="us_contact_zip_code" class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.trip.linkzipcode"/>
+                                                   data-bind="value:customer.trip[0].linkzipcode"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -1099,7 +1112,7 @@
                                        <label for="school_name_cn">学校名称:</label>
                                        <div class='input-group'>
                                             <input id="school_name_cn" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="value:customer.teachinfo.schoolname"/>
+                                                   data-bind="value:customer.teachinfo[0].schoolname"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                        </div>
                                    </div>
@@ -1109,7 +1122,7 @@
                                        <label for="school_address_cn_1">学校地址:</label>
                                        <div class='input-group'>
                                             <input id="school_address_cn_1" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="value:customer.teachinfo.schooladdresssmall"/>
+                                                   data-bind="value:customer.teachinfo[0].schooladdresssmall"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                        </div>
                                    </div>
@@ -1124,7 +1137,7 @@
                                        <label for="school_city_en">城市:</label>
                                        <div class='input-group'>
                                             <input id="school_city_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="value:customer.teachinfo.city"/>
+                                                   data-bind="value:customer.teachinfo[0].city"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                        </div>
                                    </div>
@@ -1134,7 +1147,7 @@
                                        <label for="school_province_en">省份:</label>
                                        <div class='input-group'>
                                             <input id="school_province_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="value:customer.teachinfo.prevince"/>
+                                                   data-bind="value:customer.teachinfo[0].prevince"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                        </div>
                                    </div>
@@ -1144,7 +1157,7 @@
                                        <label for="school_zip_code">邮编:</label>
                                        <div class='input-group'>
                                             <input id="school_zip_code" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="value:customer.teachinfo.zipcode"/>
+                                                   data-bind="value:customer.teachinfo[0].zipcode"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                        </div>
                                    </div>
@@ -1159,7 +1172,7 @@
                                        <label for="school_specialty_cn">所学专业:</label>
                                        <div class='input-group'>
                                             <input id="school_specialty_cn" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-                                                   data-bind="value:customer.teachinfo.major"/>
+                                                   data-bind="value:customer.teachinfo[0].major"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                        </div>
                                    </div>
@@ -1168,7 +1181,7 @@
 						            <div class="form-group">
 						                <label for="start_date">参加学习日期:<span style="color: red">*</span></label>
 						                <div class='input-group'>
-						                    <input id="start_date" data-role="datepicker" data-bind="value:customer.teachinfo.startdate"
+						                    <input id="start_date" data-role="datepicker" data-bind="value:customer.teachinfo[0].startdate"
 						                           style="width: 100%;"/>
 						                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 						                </div>
@@ -1178,7 +1191,7 @@
 						            <div class="form-group">
 						                <label for="end_date">结束学习日期:<span style="color: red">*</span></label>
 						                <div class='input-group'>
-						                    <input id="end_date" data-role="datepicker" data-bind="value:customer.teachinfo.enddate" style="width: 100%;"/>
+						                    <input id="end_date" data-role="datepicker" data-bind="value:customer.teachinfo[0].enddate" style="width: 100%;"/>
 						                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 						                </div>
 						            </div>
