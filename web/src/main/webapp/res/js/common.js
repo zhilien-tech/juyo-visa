@@ -58,6 +58,7 @@ $(function () {
         tip.find("i").toggleClass("fa-pulse fa-spinner fa-lightbulb-o");//变转圈圈效果~
         var node = tip.parent().find(":text,select");
         $.each(node.data("bind").split(","), function (i, e) {
+        	console.log(e);
             if (e.startsWith("value:")) {
                 var source = node.closest(".row").find("*[data-params]").data("params");
                 var bind = e.substring(e.indexOf("value:") + 6, e.length);

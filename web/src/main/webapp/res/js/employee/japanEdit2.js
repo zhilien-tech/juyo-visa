@@ -340,11 +340,6 @@ $(function () {
     			error : function(xhr) {
     			}
     		});
-        	
-        	
-        	
-        	
-        	
         }
     });
 });

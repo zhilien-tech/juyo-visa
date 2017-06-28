@@ -99,10 +99,16 @@
                 <div class="form-group">
                     <label for="last_name_cn">性别:</label>
                     <div class='input-group'>
-                       <select id="gender" style="width: 100%;"
+                       <!-- <select id="gender" style="width: 100%;"
                                data-role="dropdownlist"
                                data-value-primitive="true"
-                               data-bind="value:customer.gender" >
+                               data-bind="value:customer.gender"
+                               aria-disabled="true" >
+                               <option value="1">男</option>
+                               <option value="0">女</option>
+                       </select> 2017/06/27/15:26-->
+                       <select id="gender" style="width: 100%;"
+                               data-bind="value:customer.gender">
                                <option value="1">男</option>
                                <option value="0">女</option>
                        </select>
@@ -219,7 +225,6 @@
 </body>
 <!-- 引入JS文件 -->
 <script src="/res/plugin/jquery.min.js"></script>
-<!-- <script src="/res/plugin/template.js"></script> -->
 <script src="/res/plugin/layer/layer.js"></script>
 <script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
 <script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
