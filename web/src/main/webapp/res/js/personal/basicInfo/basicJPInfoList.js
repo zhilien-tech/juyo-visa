@@ -4,15 +4,20 @@ var pathName =  window.document.location.pathname;
 var pos = curWwwPath.indexOf(pathName);  
 var localhostPaht = curWwwPath.substring(0,pos);  
 var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
-//页面加载时回显签证信息
+//页面加载时回显基本信息
 window.onload = function(){
-	 $.getJSON(localhostPaht +'/visa/visainfo/listvisainfo', function (resp) {
+	 $.getJSON(localhostPaht +'/visa/basicinfo/basicJPInfoList', function (resp) {
      	viewModel.set("customer", $.extend(true, dafaults, resp));
      });
 }
-//初始化页面组件
-$(function () {
-  //操作 编辑 按钮时
+//初始化各个组件
+$(function(){
+	$("#sex").kendoDropDownList();//性别 状态 下拉框初始化
+	$("#birthDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//出生日期
+	$("#signedDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//签发日期
+	$("#validDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//有效期限
+	
+	//操作 编辑 按钮时
 	$(".editBtn").click(function(){
 		$(this).addClass("hide");//编辑 按钮隐藏
 		$(".cancelBtn").removeClass("hide");//取消 按钮显示
@@ -39,6 +44,7 @@ $(function () {
 		$(".input-group input").attr("disabled");//添加 不可编辑的属性
 	});
 });
+/*------------------------------------------------container---------------------------------------------------*/
 //客户来源
 var customersourceEnum=[
     {text:"线上",value:1},
@@ -68,46 +74,30 @@ var countries = new kendo.data.DataSource({
         }
     }),
     dafaults = {
-			visatype:0,
-			area:0,
-			paytype:0,
 			passportlose:{},
 			oldname:{},
+			authenticatorcode:{},
+			communicahomeaddress:{},
 			orthercountrylist:[],
 			father:{},
 			mother:{},
 			relation:[],
-			spouse:{
-				marrystatus:0
-			},
+			spouse:{},
 			usainfo:{},
 			teachinfo:[],
 			recentlyintousalist:[],
-			workinfo:{
-				jobstatus:'S'
-			},
+			workinfo:{},
 			oldworkslist:[],
 			languagelist:[],
 			visitedcountrylist:[],
 			workedplacelist:[],
 			army:{},
-	        order:{},
-	        customermanage:{},
-	        trip:{},
-	        payPersion:{},
-	        payCompany:{},
-	        fastMail:{},
-	        peerList:{},
-	        travelpurpose:{},//赴美国旅行目的列表
-	        travelplan:{},//是否制定了具体旅行计划
-	        relationship:{},//与你的关系
-	        travel: {
-	            payer: "我自己",
-	            // 同行人
-	            togethers:[]
-	        },
-	        placeinformation:{},//地点信息
-	        applicantproducer:{}//申请的制作者
+			othernationality:[],
+			socialinsurancenum:{},
+			taxpayerauthenticat:{},
+			commhomeaddress:{},
+			financeJpList:[],
+			recentlyintojpJpList: []
     },
     keys = {
 		"customer.orthercountrylist":{},
@@ -116,33 +106,32 @@ var countries = new kendo.data.DataSource({
 		"customer.languagelist":{},
 		"customer.visitedcountrylist":{},
 		"customer.workedplacelist":{},
-		"customer.relation":{},
+		"customer.relation":{
+			xing:""
+		},
 		"customer.teachinfo":{},
-		"customer.peerList":{
-			peerxing: "",
-	    	peerxingen: "",
-	    	peernameen: "",
-	    	peername: "",
-	    	tripid: "",
-	    	relationme: ""
-		}
-	};
+		"customer.othernationality":{},
+		"customer.socialinsurancenum":{},
+		"customer.financeJpList":{},
+		"customer.recentlyintojpJpList":{}
+	}
+;
+//护照类型
+var passportTypeEnum=[
+    {text:"旅游护照",value:1}
+  ];
 /*****************************************************
  * 数据绑定
  ****************************************************/
 var viewModel = kendo.observable({
     customer: dafaults,
     countries:countries,
+    passportTypeEnum:passportTypeEnum,
     customersourceEnum:customersourceEnum,
     states:states,
-    hasTogether: function () {
-        var togethers = viewModel.get("customer.travel.togethers");
-        var state = false;
-        if (togethers) state = togethers.length > 0;
-        return state;
-    },
     addOne: function (e) {
         var key = $.isString(e) ? e : $(e.target).data('params');
+        console.log(key);
         viewModel.get(key).push(keys[key]);
     },
     delOne: function (e) {
@@ -179,6 +168,7 @@ var viewModel = kendo.observable({
     //是否有直系亲属在美国
     hasFamilyInUSA: function () {
         var families = viewModel.get("customer.relation");
+        console.log(families);
         var state = families ? families.length > 0 : false;
         return state;
     },
@@ -207,11 +197,6 @@ var viewModel = kendo.observable({
     hasSchool: function () {
         var schools = viewModel.get("customer.teachinfo");
         var state = schools ? schools.length > 0 : false;
-        return state;
-    },
-    //参过军
-    joinArmy: function () {
-        var state = viewModel.get("customer.army");
         return state;
     },
     //工作信息详情
@@ -243,7 +228,7 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-       return viewModel.get("customer.passportlose");
+        return viewModel.get("customer.passportlose");
     },
     // 曾用名
     oldNameEnable: function () {
@@ -255,54 +240,31 @@ var viewModel = kendo.observable({
         var state = otherCountry ? otherCountry.length > 0 : false;
         return state;
     },
-    //赴美国旅行目的列表
-    travelPurposeEnable: function () {
-        return viewModel.get("customer.travelpurpose");
+    //美国纳税人认证码
+    usaAuthenticatorCode:function(){
+    	return viewModel.get("customer.authenticatorcode");
     },
-    //是否制定了具体旅行计划
-    travelPlanEnable: function () {
-    	return viewModel.get("customer.travelplan");
-    },
-    //是否加入一个团队或组织旅行
-    joinTeamEnable: function () {
-    	return viewModel.get("customer.trip");
-    },
-    //你是否有其他亲属在美国
-    relationEnable:function(){
-    	return viewModel.get("customer.spouse");
-    },
-    //申请的制作者
-    assistApplyEnable: function () {
-        return viewModel.get("customer.applicantproducer");
+    //通信地址与家庭地址是否一致
+    usaCommunicaHomeAddress:function(){
+    	return viewModel.get("customer.communicahomeaddress");
     }
 });
-kendo.bind($(document.body), viewModel);
+kendo.bind($(document.body), viewModel);//数据绑定结束
 
 //丢过护照
 $("#pp_lost").change(function () {
 	viewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
 });
-
 //曾用名
 $("#has_used_name").change(function () {
 	viewModel.set("customer.oldname", $(this).is(':checked') ? " " : "");
 });
-
 //其他国家居民
 $("#has_pr").change(function () {
     if ($(this).is(':checked')) {
     	viewModel.addOne("customer.orthercountrylist");
     } else {
     	viewModel.clearAll("customer.orthercountrylist");
-    }
-});
-//同行人员
-$("#has_other_travelers").change(function () {
-    var key = "customer.peerList";
-    if ($(this).is(':checked')) {
-    	viewModel.addOne(key);
-    } else {
-    	viewModel.clearAll(key);
     }
 });
 /*****************************************************
@@ -314,102 +276,29 @@ $("#same_as_home").change(function () {
     viewModel.set("customer.spouse.spouselinkaddress", value);
     viewModel.set("customer.spouse.spouselinkaddressen", value);
 });
-/*****************************************************
- * 亲属信息
- ****************************************************/
-$("#has_immediate_relatives").change(function () {
-    if ($(this).is(':checked')) {
-    	viewModel.addOne("customer.relation");
-    } else {
-    	viewModel.clearAll("customer.relation");
-    }
+//美国纳税人认证码
+$("#usa_authenticator_code").change(function () {
+	viewModel.set("customer.authenticatorcode", $(this).is(':checked') ? " " : "");
 });
-$("#other_relatives").change(function () {
-	viewModel.set("customer.relation.indirect", $(this).is(':checked') ? " " : "");
+//通信地址与家庭地址是否一致
+$("#communica_home_address").change(function () {
+	viewModel.set("customer.communicahomeaddress", $(this).is(':checked') ? " " : "");
 });
-/*****************************************************
- * 美国相关信息
- ****************************************************/
-
-//最近5次进入美国的信息
-$("#has_usa_aboard").change(function () {
-    if ($(this).is(':checked')) {
-    	viewModel.addOne("customer.recentlyintousalist");
-    } else {
-    	viewModel.clearAll("customer.recentlyintousalist");
-    }
-});
-//美国驾照
-$("#have_usa_dl").change(function () {
-	viewModel.set("customer.usainfo.usadriveport", $(this).is(':checked') ? " " : "");
-});
-//申请移民过
-$("#old_apply").change(function () {
-    var value = $(this).is(':checked') ? " " : "";
-    viewModel.set("customer.usainfo.instruction", value);
-    viewModel.set("customer.usainfo.instructionen", value);
-});
-//申请过美国签证
-$("#old_apply2").change(function () {
-	viewModel.set("customer.usainfo.visaport", $(this).is(':checked') ? " " : "");
-});
-//本次签证和上次的一样
-$("#type_same_as_previous").change(function () {
-	viewModel.set("customer.usainfo.sameaslast", $(this).is(':checked') ? " " : "");
-});
-/*****************************************************
- * 教育信息
- ****************************************************/
-$("#has_never_educated").change(function () {
-    if ($(this).is(':checked')) {
-    	viewModel.addOne("customer.teachinfo");
-    } else {
-    	viewModel.clearAll("customer.teachinfo");
-    }
-});
-/*****************************************************
- * 其他信息
- ****************************************************/
-/*我曾参军*/
-$("#join_army").change(function () {
-	viewModel.set("customer.army", $(this).is(':checked') ? " " : "");
-});
-
-//赴美国旅行目的列表
-$("#travel_purpose").change(function () {
-	viewModel.set("customer.travelpurpose", $(this).is(':checked') ? " " : "");
-});
-//是否制定了具体旅行计划
-$("#if_formulate_plan").change(function () {
-	viewModel.set("customer.travelplan", $(this).is(':checked') ? " " : "");
-});
-//是否加入一个团队或组织旅行
-$("#join_group").change(function () {
-	viewModel.set("customer.trip", $(this).is(':checked') ? " " : "");
-});
-//是否加入一个团队或组织旅行
-$("#other_relatives_aa").change(function () {
-	viewModel.set("customer.spouse", $(this).is(':checked') ? " " : "");
-});
-//申请的制作者
-$("#has_assist_apply").change(function () {
-	viewModel.set("customer.applicantproducer", $(this).is(':checked') ? " " : "");
-});
-
-//签证信息保存
-$("#updatePassportSave").on("click",function(){
-	console.log(JSON.stringify(viewModel.customer));
-	viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
+/*------------------------------------------------end container---------------------------------------------------*/
+/**********************************************
+*编辑保存日本基本信息
+**********************************************/
+function updateBaseJPInfoData(){
 	$.ajax({
 		 type: "POST",
-		 url: "/visa/visainfo/updatePassportSave",
+		 url: "/visa/basicinfo/updateBaseJPInfoData",
 		 contentType:"application/json",
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){
-			layer.msg('保存成功',{time:2000});
+			layer.msg("编辑保存成功",{time:2000});
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-            layer.msg('保存失败',{time:2000});
+             layer.msg('编辑保存失败',{time:2000});
          }
 	});
-});
+}

@@ -115,11 +115,11 @@ function successCallback(id){
 	}
 }
 //护照信息编辑保存
-$("#updatePassportSave").on("click",function(){
+$("#updateJPPassportSave").on("click",function(){
 	console.log(JSON.stringify(viewModel.customer));
 	$.ajax({
 		 type: "POST",
-		 url: "/visa/passportinfo/updatePassportSave",
+		 url: "/visa/passportinfo/updateJPPassportSave",
 		 contentType:"application/json",
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){
