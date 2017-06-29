@@ -10,14 +10,20 @@ $(function(){
 			 console.log(result);
 			japan=result.japan;
 			usa=result.usa;
+			$("#usa").hide();
+			$("#japan").hide();
 			if(japan!=null&&japan!=''){
-				$("#usa").hide();
+				alert(111);
+				$("#japan").show();
+				
 				if(japan.status!=13){
 					$("#japanstatus").text("未完成");
 				}
 			}
 			if(usa!=null&&usa!=''){
-				$("#japan").hide();
+				alert(222);
+				$("#usa").show();
+				
 				if(usa.status!=13){
 					$("#usastatus").text("未完成");
 				}
