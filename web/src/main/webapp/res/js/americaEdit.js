@@ -222,14 +222,8 @@ $(function () {
     			}
     		});
         	
-        	
-        	
-        	
-        	
         }
     });
-    
-    
     
 });
 
@@ -281,11 +275,6 @@ $(function () {
     			error : function(xhr) {
     			}
     		});
-        	
-        	
-        	
-        	
-        	
         }
     });
 });
@@ -338,11 +327,6 @@ $(function () {
     			error : function(xhr) {
     			}
     		});
-        	
-        	
-        	
-        	
-        	
         }
     });
 });
@@ -397,20 +381,13 @@ $(function () {
     			error : function(xhr) {
     			}
     		});
-        	
-        	
-        	
-        	
-        	
         }
     });
 });
 
 //信息保存
-
 var validator = $("#orderForm").kendoValidator().data("kendoValidator");
 function ordersave(){
-		
 			 
 			 $.ajax({
 				 type: "POST",

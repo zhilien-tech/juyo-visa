@@ -7,6 +7,7 @@ var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 //页面加载时回显基本信息
 window.onload = function(){
 	 $.getJSON(localhostPaht +'/visa/basicinfo/basicJPInfoList', function (resp) {
+		 console.log(JSON.stringify(resp));
      	viewModel.set("customer", $.extend(true, dafaults, resp));
      });
 }

@@ -332,7 +332,7 @@ public class VisaInfoController extends BaseController {
 		}
 		List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
 				Cnd.where("customerid", "=", customer.getId()), null);
-		long orderid = query.get(0).getOrderid();
+		int orderid = query.get(0).getOrderid();
 		dbDao.update(NewOrderEntity.class,
 				Chain.make("updatetime", new Date()).add("status", OrderVisaApproStatusEnum.firstReview.intKey()),
 				Cnd.where("id", "=", orderid));
@@ -434,6 +434,31 @@ public class VisaInfoController extends BaseController {
 			} else {
 				workinfo.setCustomerid(customer.getId());
 				dbDao.insert(workinfo);
+			}
+		}
+
+		List<NewTrip> trip = customer.getTrip();
+		Integer tripid = null;
+		if (!Util.isEmpty(trip) && trip.size() > 0) {
+			for (NewTrip newTrip : trip) {
+				tripid = newTrip.getId();
+				if (!Util.isEmpty(newTrip.getId()) && newTrip.getId() > 0) {
+					nutDao.update(newTrip);
+				} else {
+					newTrip.setOrderid(orderid);
+					dbDao.insert(newTrip);
+				}
+			}
+		}
+		//同行人员
+		List<NewPeerPersionEntity> peerList = customer.getPeerList();
+		List<NewPeerPersionEntity> query2 = dbDao.query(NewPeerPersionEntity.class, Cnd.where("tripid", "=", tripid),
+				null);
+		dbDao.delete(query2);
+		if (!Util.isEmpty(peerList) && peerList.size() > 0) {
+			for (NewPeerPersionEntity newPeerPersionEntity : peerList) {
+				newPeerPersionEntity.setTripid(tripid);
+				dbDao.insert(newPeerPersionEntity);
 			}
 		}
 		List<NewWorkedplaceEntity> workedplacelist = customer.getWorkedplacelist();
@@ -600,14 +625,13 @@ public class VisaInfoController extends BaseController {
 		}
 		//财务信息
 		List<NewFinanceJpEntity> orthercountrylist = customer.getFinanceJpList();
+		List<NewFinanceJpEntity> query2 = dbDao.query(NewFinanceJpEntity.class,
+				Cnd.where("customer_jp_id", "=", customer.getId()), null);
+		dbDao.delete(query2);
 		if (!Util.isEmpty(orthercountrylist) && orthercountrylist.size() > 0) {
 			for (NewFinanceJpEntity newLanguageEntity : orthercountrylist) {
-				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
-					nutDao.update(newLanguageEntity);
-				} else {
-					newLanguageEntity.setCustomer_jp_id(customer.getId());
-					dbDao.insert(newLanguageEntity);
-				}
+				newLanguageEntity.setCustomer_jp_id(customer.getId());
+				dbDao.insert(newLanguageEntity);
 			}
 		}
 		return ResultObject.success("修改成功");
