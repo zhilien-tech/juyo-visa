@@ -357,7 +357,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="pp_lost" class="check-box-label">我丢失过护照</label>
+                                        <label for="pp_lost" class="check-box-label">我丢失过护照:</label>
                                         <input id='pp_lost' data-bind="checked:oldPassportEnable" class="mui-switch"
                                                type="checkbox"/>
                                     </div>
@@ -419,7 +419,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="has_used_name" class="check-box-label">我有曾用名</label>
+                                        <label for="has_used_name" class="check-box-label">我有曾用名:</label>
                                         <input id='has_used_name' data-bind="checked:oldNameEnable" class="mui-switch" type="checkbox"/>
                                     </div>
                                 </div>
@@ -472,7 +472,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="has_pr" class="check-box-label">我是其他国家／地区永久居民</label>
+                                        <label for="has_pr" class="check-box-label">我是其他国家／地区永久居民:</label>
                                         <input id='has_pr' data-bind="checked:otherCountryEnable"
                                                class="mui-switch" type="checkbox"/>
                                     </div>
@@ -490,6 +490,331 @@
                                     </div>
                                 </div>
                             </div>
+                        	
+                        	<!--类型/国家码-->
+				            <div class="row">
+				             <div class="col-xs-6">
+				                <div class="form-group">
+				                    <label for="last_name_cn">类型:</label>
+				                    <!-- <div class='input-group'>
+				                       <select id="passporttype" style="width: 100%;"
+				                               data-role="dropdownlist"
+				                               data-filter="startswith"
+				                               data-suggest="true"
+				                               data-auto-bind="true"
+				                               data-value-primitive="true"
+				                               data-text-field="text"
+				                               data-value-field="value"
+				                               data-bind="value:customer.passporttype,source:passportTypeEnum" >
+				                       </select>
+				                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div> -->
+				                    <div class='input-group'>
+				                      <input id="passportType" type="text" data-bind="" value="旅游护照" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-6">
+				                <div class="form-group">
+				                    <label for="last_name_cn">国家码:</label>
+				                    <div class='input-group'>
+				                      <input id="countryCode" type="text" data-bind="value:customer.countrynum" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				            </div>
+				            <!--end 类型/国家码-->
+				            
+				            <!--签发机关/护照本号码-->
+				            <div class="row">
+				             <div class="col-xs-6">
+				                <div class="form-group">
+				                    <label for="last_name_cn">签发机关:</label>
+				                    <div class='input-group'>
+				                      <input id="signOrganization" type="text" data-bind="value:customer.visaoffice" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-6">
+				                <div class="form-group">
+				                    <label for="last_name_cn">护照本号码:</label>
+				                    <div class='input-group'>
+				                      <input id="passportBookNum" type="text" data-bind="value:customer.passportbooknum" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				            </div>
+				            <!--end 签发机关/护照本号码-->
+				            
+				            <!--护照机读码-->
+				            <div class="row">
+				             <div class="col-xs-6">
+				                <div class="form-group">
+				                    <label for="last_name_cn">护照机读码:</label>
+				                    <div class='input-group'>
+				                      <input id="passportCode" type="text" data-bind="value:customer.passportreadnum" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-6">
+				                <div class="form-group">
+				                    <label for="last_name_cn">姓名电报码:</label>
+				                    <div class='input-group'>
+				                      <input id="nameTelegramCode" type="text" data-bind="value:customer.nameTelegramCode" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				            </div>
+				            <!--出生日期/出生地点/国籍/身份证号码-->
+				            <div class="row">
+				             <div class="col-xs-4">
+				                <div class="form-group">
+				                    <label for="last_name_cn">出生日期:</label>
+				                    <div class='input-group'>
+				                       <input id="birthDate" style="width: 100%;" data-role="datepicker" data-bind="value:customer.birthdate,events:{change:onDateChange}"/>
+				                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-4">
+				                <div class="form-group">
+				                    <label for="last_name_cn">出生地点（省份）:</label>
+				                    <div class='input-group'>
+				                      <input id="" type="text" data-bind="value:customer.birthprovince" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-4">
+				                <div class="form-group">
+				                    <label for="last_name_cn">国籍:</label>
+				                    <div class='input-group'>
+				                      <input id="" type="text" data-bind="value:customer.birthcountry,source:countries" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				            </div>
+				            <!--end 出生日期/出生地点/国籍/身份证号码-->
+				            
+				            <!--是否有其他国籍-->
+				           	<div class="row">
+				             <div class="col-xs-12">
+				                <div class="form-group">
+				                   <label for="other_nationality" class="check-box-label">是否有其他国籍:</label>
+				                   <input id='other_nationality' data-bind="" class="mui-switch" type="checkbox"/>
+				                </div>
+				             </div>
+				           	</div>
+				           	<!--END 是否有其他国籍-->
+				           	
+				           	<!--美国社会保险号码-->
+				            <div class="row">
+				             <div class="col-xs-12">
+				                <div class="form-group">
+				                   <label for="usa_insurance_number" class="check-box-label">美国社会保险号码:</label>
+				                   <input id='usa_insurance_number' data-bind="" class="mui-switch" type="checkbox"/>
+				                </div>
+				             </div>
+				            </div>
+				            <!--end 美国社会保险号码-->
+				            
+				            <!-- 美国纳税人认证码-->
+				            <div class="row">
+				             <div class="col-xs-12">
+				                <div class="form-group">
+				                   <label for="usa_authenticator_code" class="check-box-label">美国纳税人认证码:</label>
+				                   <input id='usa_authenticator_code' data-bind="checked:usaAuthenticatorCode" class="mui-switch" type="checkbox"/>
+				                </div>
+				             </div>
+				           </div>
+				           <!-- 美国纳税人认证码 显示/隐藏 -->
+				           <div class="row usa_authenticator_code" data-bind="visible:usaAuthenticatorCode">
+				           	 <div class="col-xs-4">
+				                <div class="form-group">
+				                    <label for="authenticator_address">家庭地址:</label>
+				                    <div class='input-group'>
+				                      <input id="authenticator_address" type="text" data-bind="value:customer.taxpayerauthenticat.homeAddress" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-4">
+				                <div class="form-group">
+				                    <label for="authenticator_city">城市:</label>
+				                    <div class='input-group'>
+				                      <input id="authenticator_city" type="text" data-bind="value:customer.taxpayerauthenticat.city" class="k-textbox" style="width: 100%;" />
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-4">
+				                <div class="form-group">
+				                    <label for="authenticator_province">省份:</label>
+				                    <div class='input-group'>
+				                      <input id="authenticator_province" type="text" data-bind="value:customer.taxpayerauthenticat.province" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-6">
+				                <div class="form-group">
+				                    <label for="authenticator_post_code">邮编:</label>
+				                    <div class='input-group'>
+				                      <input id="authenticator_post_code" type="text" data-bind="value:customer.taxpayerauthenticat.postCode" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-6">
+				                <div class="form-group">
+				                    <label for="authenticator_country">国家:</label>
+				                    <div class='input-group'>
+				                      <input id="authenticator_country" type="text" data-bind="value:customer.taxpayerauthenticat.country" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				           </div>
+				           <div class="ir row" data-template="tpl_ir" data-bind=""></div>
+				           <!-- end 美国纳税人认证码-->
+				           
+				           <!--通信地址与家庭地址是否一致-->
+				           <div class="row">
+				             <div class="col-xs-12">
+				                <div class="form-group">
+				                   <label for="communica_home_address" class="check-box-label">通信地址与家庭地址是否一致:</label>
+				                   <input id='communica_home_address' data-bind="checked:usaCommunicaHomeAddress" class="mui-switch" type="checkbox"/>
+				                </div>
+				             </div>
+				           </div>
+				           <div class="row communica_home_address" data-bind="visible:usaCommunicaHomeAddress"><!-- 护照是否遗失过或被偷过 隐藏/显示 -->
+				           	 <div class="col-xs-4">
+				                <div class="form-group">
+				                    <label for="mainPhoneNum">主要电话号码:</label>
+				                    <div class='input-group'>
+				                      <input id="mainPhoneNum" type="text" data-bind="value:customer.commhomeaddress.mainPhoneNum" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-4">
+				                <div class="form-group">
+				                    <label for="minorPhoneNum">次要电话号码:</label>
+				                    <div class='input-group'>
+				                      <input id="minorPhoneNum" type="text" data-bind="value:customer.commhomeaddress.minorPhoneNum" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-4">
+				                <div class="form-group">
+				                    <label for="workPhoneNum">工作电话号码:</label>
+				                    <div class='input-group'>
+				                      <input id="workPhoneNum" type="text" data-bind="value:customer.commhomeaddress.workPhoneNum" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-4">
+				                <div class="form-group">
+				                    <label for="email">电子邮箱:</label>
+				                    <div class='input-group'>
+				                      <input id="email" type="text" data-bind="value:customer.email" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-4">
+				                <div class="form-group">
+				                    <label for="passportType">护照类型:</label>
+				                    <div class='input-group'>
+				                       <select id="passporttype" style="width: 100%;"
+				                               data-role="dropdownlist"
+				                               data-filter="startswith"
+				                               data-suggest="true"
+				                               data-auto-bind="true"
+				                               data-value-primitive="true"
+				                               data-text-field="text"
+				                               data-value-field="value"
+				                               data-bind="value:customer.passporttype,source:passportTypeEnum" >
+				                       </select>
+				                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-4">
+				                <div class="form-group">
+				                    <label for="passportNumber">护照号码:</label>
+				                    <div class='input-group'>
+				                      <input id="passportNumber" type="text" data-bind="value:customer.passport" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-4">
+				                <div class="form-group">
+				                    <label for="passportBookNum">护照本号码:</label>
+				                    <div class='input-group'>
+				                      <input id="passportBookNum" type="text" data-bind="value:customer.commhomeaddress.passportBookNum" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-4">
+				                <div class="form-group">
+				                    <label for="issuingCountry">签发国家:</label>
+				                    <div class='input-group'>
+				                      <input id="issuingCountry" type="text" data-bind="value:customer.commhomeaddress.issuingCountry" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-4">
+				                <div class="form-group">
+				                    <label for="issuingCity">签发地城市:</label>
+				                    <div class='input-group'>
+				                      <input id="issuingCity" type="text" data-bind="value:customer.passportsendcity" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-4">
+				                <div class="form-group">
+				                    <label for="issuingProvince">签发地省份:</label>
+				                    <div class='input-group'>
+				                      <input id="issuingProvince" type="text" data-bind="value:customer.passportsendprovice" class="k-textbox" style="width: 100%;"/>
+				                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-4">
+				                 <div class="form-group">
+				                    <label for="signedDate">签发日期:</label>
+				                    <div class='input-group'>
+				                       <input id="signedDate" style="width: 100%;" data-role="datepicker" data-bind="value:customer.passportsenddate,events:{change:onDateChange}"/>
+				                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				             <div class="col-xs-4">
+				                <div class="form-group">
+				                    <label for="validDate">有效期限:</label>
+				                    <div class='input-group'>
+				                       <input id="validDate" style="width: 100%;" data-role="datepicker" data-bind="value:customer.passporteffectdate,events:{change:onDateChange}"/>
+				                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+				                    </div>
+				                </div>
+				             </div>
+				           </div>
+				           <div class="ir row" data-template="tpl_ir" data-bind=""></div>
+				           <!--end 通信地址与家庭地址是否一致-->
                         </div>
                     </li>
                     <li>父亲信息
@@ -918,7 +1243,7 @@
                                     <div class="col-xs-12">
                                         <div class="form-group">
                                             <label for="same_as_home"
-                                                   class="check-box-label">配偶地址和我的地址不同</label>
+                                                   class="check-box-label">配偶地址和我的地址不同:</label>
                                             <input id='same_as_home' data-bind="checked:sameAsMe" class="mui-switch"
                                                    type="checkbox"/>
                                         </div>
@@ -1015,7 +1340,7 @@
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <label for="has_immediate_relatives" class="check-box-label">
-                                        	我有直系亲属在美国（配偶，未婚妻，未婚夫，子女，兄弟姐妹)
+                                        	我有直系亲属在美国（配偶，未婚妻，未婚夫，子女，兄弟姐妹):
                                         </label>
                                         <input id='has_immediate_relatives' class="mui-switch" type="checkbox"
                                                data-bind="checked:hasFamilyInUSA"/>
@@ -1037,7 +1362,7 @@
                                 <div class="col-xs-12">
                                     <div class="form-group" style="padding-top: 15px;">
                                         <label for="other_relatives"
-                                               class="check-box-label">我有<strong>非直系</strong>亲属在美国</label>
+                                               class="check-box-label">我有<strong>非直系</strong>亲属在美国:</label>
                                         <input id='other_relatives' data-bind="checked:customer.relation.indirect"
                                                class="mui-switch" type="checkbox"/>
                                     </div>
@@ -1051,7 +1376,7 @@
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <label for="has_usa_aboard"
-                                               class="check-box-label">最近5次入境美国的信息</label>
+                                               class="check-box-label">最近5次入境美国的信息:</label>
                                         <input id='has_usa_aboard' data-bind="checked:hasHistory" class="mui-switch"
                                                type="checkbox"/>
                                     </div>
@@ -1072,7 +1397,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group" style="padding-top: 15px;">
-                                        <label for="have_usa_dl" class="check-box-label">持有美国驾照?</label>
+                                        <label for="have_usa_dl" class="check-box-label">持有美国驾照:</label>
                                         <input id='have_usa_dl' data-bind="checked:hasDriving"
                                                class="mui-switch" type="checkbox"/>
                                     </div>
@@ -1152,7 +1477,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="old_apply2" class="check-box-label">曾申请过国美国签证？</label>
+                                        <label for="old_apply2" class="check-box-label">曾申请过国美国签证:</label>
                                         <input id='old_apply2' data-bind="checked:hasOldVisa"
                                                class="mui-switch" type="checkbox"/>
                                     </div>
@@ -1173,7 +1498,7 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="type_same_as_previous" class="check-box-label">
-                                                本次申请的签证类型和上次一样
+                                               	 本次申请的签证类型和上次一样:
                                             </label>
                                             <input id='type_same_as_previous'
                                                    data-bind="checked:customer.usainfo.sameaslast"
@@ -1230,7 +1555,7 @@
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <label for="has_never_educated" class="check-box-label">
-                                            	我没有高中（或等同）以上学历，包含高中（或等同）学历
+                                            	我没有高中（或等同）以上学历，包含高中（或等同）学历:
                                         </label>
                                         <input id='has_never_educated' data-bind="checked:hasSchool"
                                                class="mui-switch" type="checkbox"/>
@@ -1547,7 +1872,7 @@
                             <div class="row">
                                 <div class="col-xs-10">
                                     <div class="form-group">
-                                        <label>我会说的语言种类</label>
+                                        <label>我会说的语言种类:</label>
                                     </div>
                                 </div>
                                 <div class="col-xs-2">
@@ -1564,7 +1889,7 @@
                             <div class="row">
                                 <div class="col-xs-10">
                                     <div class="form-group">
-                                        <label>过去十年曾进入的国家</label>
+                                        <label>过去十年曾进入的国家:</label>
                                     </div>
                                 </div>
                                 <div class="col-xs-2">
@@ -1581,7 +1906,7 @@
                             <div class="row">
                                 <div class="col-xs-10">
                                     <div class="form-group">
-                                        <label>现在和曾经所属/捐助/工作过的职业协会、社会团体和慈善机构</label>
+                                        <label>现在和曾经所属/捐助/工作过的职业协会、社会团体和慈善机构:</label>
                                     </div>
                                 </div>
                                 <div class="col-xs-2">
@@ -1598,7 +1923,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="join_army" class="check-box-label">我曾经参军</label>
+                                        <label for="join_army" class="check-box-label">我曾经参军:</label>
                                         <input id='join_army' data-bind="checked:joinArmy" class="mui-switch"
                                                type="checkbox"/>
                                     </div>

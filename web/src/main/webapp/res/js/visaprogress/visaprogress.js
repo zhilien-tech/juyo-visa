@@ -18,7 +18,7 @@ $(function(){
 			}
 			if(usa!=null&&usa!=''){
 				$("#japan").hide();
-				if(japan.status!=13){
+				if(usa.status!=13){
 					$("#usastatus").text("未完成");
 				}
 			}

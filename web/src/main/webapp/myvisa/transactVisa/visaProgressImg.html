@@ -6,12 +6,17 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>办理中签证</title>
     <link rel="stylesheet" href="/res/plugin/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.common.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.office365.min.css"/>
+    <link rel="stylesheet" href="/res/css/colors.min.css"/>
+    <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
     <link rel="stylesheet" href="/res/plugin/font-awesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/res/plugin/flag-icon/css/flag-icon.min.css"/>
     <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/><!--修改的style-->
  	<link rel="stylesheet" href="/res/plugin/h+/css/myvisa.css"/><!--本页面style-->
+ 	<link rel="stylesheet" href="/res/plugin/h+/css/visaProgress.css"/><!--本页的样式-->
  	<style>
- 		iframe{min-height:600px;border:0;}
+ 	
  	</style>
 </head>
 <body>
@@ -20,7 +25,66 @@
 			<i class="fa fa-chevron-left"></i><span>&nbsp;返回</span>
 		</a>
 	</header>
-	<iframe width="100%" src="../../schedule/visaProgress.html"></iframe>
+	<div class="progress" id="div1">
+		<ul>
+			<li>
+			  <div class="progress-left">
+				<a href="JavaScript:void(0);" onclick="window.location.href='/personal/passportInfo/passportInfoList.html'" id="writeResource">资料填写</a>
+				<span class="fa fa-long-arrow-down"></span>
+			  </div>
+			</li>
+			<li>
+			  <div class="progress-left">
+				<a href="javascript:;" id="approvel">初审通过/拒绝</a>
+				<span class="fa fa-long-arrow-down"></span>
+			  </div>
+			  <div class="progress-right" id="reason">
+			  	<label>原因<a href="JavaScript:void(0);" onclick="reasion();">点击查看</a></label>
+			  </div>
+			</li>
+			<li>
+			  <div class="progress-left">
+				<a href="javascript:;">准备提交使馆</a>
+				<span class="fa fa-long-arrow-down"></span>
+			  </div>
+			  <div class="progress-right">
+			  	<label>预计&nbsp;&nbsp;2017-02-02&nbsp;提交使馆</label>
+			  </div>
+			</li>
+			<li>
+			  <div class="progress-left">
+				<a href="javascript:;">已提交使馆</a>
+				<span class="fa fa-long-arrow-down"></span>
+			  </div>
+			  <div class="progress-right">
+			    <label>预计&nbsp;&nbsp;3-5个工作日&nbsp;返回结果</label>
+			  </div>
+			</li>
+			<li>
+			  <div class="progress-left">
+				<a href="javascript:;">约签</a>
+				<span class="fa fa-long-arrow-down"></span>
+			  </div>
+			  <div class="progress-right">
+			  	<label>时间&nbsp;&nbsp;<a href="javascript:;">改签时间申请</a></label>
+			  </div>
+			</li>
+			<li>
+			  <div class="progress-left">
+				<a href="javascript:;">通过/拒签</a>
+				<span class="fa fa-long-arrow-down"></span>
+			  </div>
+			  <div class="progress-right">
+			  	<label>原因，<a href="javascript:;">点击查看</a></label>
+			  </div>
+			</li>
+			<li>
+			  <div class="progress-left">
+				<a href="javascript:;">完成</a>
+			  </div>
+			</li>
+		</ul>
+	</div>
 </body>
 
 <!-- 引入JS文件 -->
