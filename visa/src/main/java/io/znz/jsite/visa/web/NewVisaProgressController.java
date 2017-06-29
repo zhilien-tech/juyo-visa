@@ -10,6 +10,8 @@ import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
+import io.znz.jsite.visa.entity.usa.NewCustomerOrderEntity;
+import io.znz.jsite.visa.entity.usa.NewOrderEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -90,6 +92,23 @@ public class NewVisaProgressController {
 		}
 
 		return map;
+	}
+
+	/**
+	 * 查询订单号
+	 */
+	@RequestMapping(value = "ordernumber")
+	@ResponseBody
+	public Object ordernumber(long customerid) {
+		List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
+				Cnd.where("customerid", "=", customerid), null);
+
+		if (!Util.isEmpty(query) && query.size() > 0) {
+			long orderid = query.get(0).getOrderid();
+			NewOrderEntity newOrder = dbDao.fetch(NewOrderEntity.class, orderid);
+			return newOrder;
+		}
+		return "";
 	}
 
 }

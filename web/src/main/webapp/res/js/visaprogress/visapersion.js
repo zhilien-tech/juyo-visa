@@ -1,6 +1,7 @@
 var country;
 $(function(){
-	 country=JSON.parse($.queryString("country"));
+	 country=JSON.parse(unescape($.queryString("country")));
+	 /*alert(unescape($.queryString("country")));*/
 	 if(country.status!=13){
 			$("#status").text("未完成");
 		}
@@ -11,5 +12,5 @@ $(function(){
 
 
 function intoprogressImg(){
-	window.location.href="/myvisa/transactVisa/visaProgressImg.html?country="+JSON.stringify(country);
+	window.location.href="/myvisa/transactVisa/visaProgressImg.html?country="+escape(JSON.stringify(country));
 }
