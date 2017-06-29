@@ -52,11 +52,11 @@
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <label for="travel_purpose" class="check-box-label">赴美国旅行目的列表:</label>
-                                        <input id='travel_purpose' data-bind="checked:travelPurposeEnables" class="mui-switch" type="checkbox"/>
+                                        <input id='travel_purpose' data-bind="checked:travelPurposeEnable" class="mui-switch" type="checkbox"/>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row travel_purpose" data-bind="visible:travelPurposeEnables">
+                            <div class="row travel_purpose" data-bind="visible:travelPurposeEnable">
                                 <div class="col-xs-6">
                                     <div class="form-group">
                                         <label for="uas_travel_purpose">赴美国旅行目的:</label>
@@ -84,13 +84,13 @@
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <label for="if_formulate_plan" class="check-box-label">是否制定了具体旅行计划:</label>
-                                        <input id='if_formulate_plan' data-bind="checked:travelPlanEnables" class="mui-switch" type="checkbox"/>
+                                        <input id='if_formulate_plan' data-bind="checked:travelPlanEnable" class="mui-switch" type="checkbox"/>
                                     </div>
                                 </div>
                             </div>
                             <!-- end 是否制定了具体旅行计划 --> 
                             <!--预计抵达美国日期/预计停留时间/在美国停留地点的地址-->
-                            <div class="row if_formulate_plan" data-bind="visible:travelPlanEnables">
+                            <div class="row if_formulate_plan" data-bind="visible:travelPlanEnable">
                                 <div class="col-xs-4">
                                     <div class="form-group">
                                         <label for="arrivaledDate">预计抵达美国日期:</label>
@@ -1453,11 +1453,11 @@
                                         	有人协助你填写这份申请吗:
                                         </label>
                                         <input id='has_assist_apply' class="mui-switch" type="checkbox"
-                                               data-bind="checked:assistApplyEnables"/>
+                                               data-bind="checked:assistApplyEnable"/>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row has_assist_apply" data-bind="visible:assistApplyEnables">
+                            <div class="row has_assist_apply" data-bind="visible:assistApplyEnable">
                             	<div class="col-xs-6">
                                     <div class="form-group">
                                         <label for="producerName">制作者姓:</label>
