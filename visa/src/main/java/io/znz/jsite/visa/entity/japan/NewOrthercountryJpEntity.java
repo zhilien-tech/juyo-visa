@@ -14,6 +14,7 @@ import org.nutz.dao.entity.annotation.Table;
 public class NewOrthercountryJpEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id(auto = true)
+	@Column
 	private Integer id;
 
 	@Column
