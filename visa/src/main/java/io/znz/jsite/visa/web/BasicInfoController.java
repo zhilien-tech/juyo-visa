@@ -430,7 +430,7 @@ public class BasicInfoController extends BaseController {
 	@ResponseBody
 	public Object basicJPInfoList(HttpServletRequest request) {
 		//从session中取出当前登录用户信息
-		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute("fetch");
+		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute(Const.SESSION_NAME);
 		long userId = 0;
 		if (user == null) {
 			throw new JSiteException("请登录后再试!");
@@ -516,7 +516,7 @@ public class BasicInfoController extends BaseController {
 	@ResponseBody
 	public Object updateBaseJPInfoData(@RequestBody NewCustomerJpDto customer, HttpServletRequest request) {
 		//从session中取出当前登录用户信息
-		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute("fetch");
+		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute(Const.SESSION_NAME);
 		long userId = 0;
 		if (user == null) {
 			throw new JSiteException("请登录后再试!");
@@ -559,16 +559,19 @@ public class BasicInfoController extends BaseController {
 				dbDao.insert(oldname);
 			}
 		}
+		List<NewOrthercountryJpEntity> query = dbDao.query(NewOrthercountryJpEntity.class,
+				Cnd.where("customer_jp_id", "=", customer.getId()), null);
 		//是否是其它国家/地区的永久居民
 		List<NewOrthercountryJpEntity> orthercountrylist = customer.getOrthercountrylist();
+		dbDao.delete(query);
 		if (!Util.isEmpty(orthercountrylist) && orthercountrylist.size() > 0) {
 			for (NewOrthercountryJpEntity newLanguageEntity : orthercountrylist) {
-				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
-					nutDao.updateIgnoreNull(newLanguageEntity);
-				} else {
-					newLanguageEntity.setCustomer_jp_id(customer.getId());
-					dbDao.insert(newLanguageEntity);
-				}
+				//if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+				//nutDao.update(newLanguageEntity);
+				//} else {
+				newLanguageEntity.setCustomer_jp_id(customer.getId());
+				dbDao.insert(newLanguageEntity);
+				//}
 			}
 		}
 		//日本纳税人认证码

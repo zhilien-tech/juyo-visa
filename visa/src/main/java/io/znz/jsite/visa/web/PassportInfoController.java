@@ -83,7 +83,7 @@ public class PassportInfoController extends BaseController {
 	@ResponseBody
 	public Object listJPPassport(HttpServletRequest request) {
 		//根据当前登录用户id查询出个人信息
-		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute("fetch");
+		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute(Const.SESSION_NAME);
 		long userId = 0;
 		if (user == null) {
 			throw new JSiteException("请登录后再试!");
