@@ -751,8 +751,16 @@ public class OrderController extends BaseController {
 		String result = mailService.send(customer.getEmail(), html, "签证信息通知", MailService.Type.HTML);
 		if ("success".equalsIgnoreCase(result)) {
 			//成功以后分享次数加1
-			dbDao.update(NewCustomerEntity.class, Chain.make("noticecount", customer.getSharecount() + 1),
+			dbDao.update(
+					NewCustomerEntity.class,
+					Chain.make("noticecount", customer.getSharecount() + 1)
+							.add("status", OrderVisaApproStatusEnum.yueVisa.intKey()).add("updatetime", new Date()),
 					Cnd.where("id", "=", customer.getId()));
+			dbDao.update(
+					NewOrderEntity.class,
+					Chain.make("sharecountmany", order.getSharecountmany() + 1)
+							.add("status", OrderVisaApproStatusEnum.yueVisa.intKey()).add("updatetime", new Date()),
+					Cnd.where("id", "=", orderid));
 
 			return ResultObject.success(result);
 		} else {
@@ -801,6 +809,12 @@ public class OrderController extends BaseController {
 			//成功以后分享次数加1
 		}
 		*/
+
+		dbDao.update(
+				NewOrderEntity.class,
+				Chain.make("sharecountmany", order.getSharecountmany() + 1)
+						.add("status", OrderVisaApproStatusEnum.yueVisa.intKey()).add("updatetime", new Date()),
+				Cnd.where("id", "=", orderid));
 		//客户联系人的发送
 		for (NewCustomerOrderEntity newCustomerOrderEntity : query) {
 			NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, newCustomerOrderEntity.getCustomerid());
@@ -849,7 +863,13 @@ public class OrderController extends BaseController {
 
 			if ("success".equalsIgnoreCase(result)) {
 				//成功以后分享次数加1
-				dbDao.update(NewCustomerEntity.class, Chain.make("noticecount", customer.getSharecount() + 1),
+				/*dbDao.update(NewCustomerEntity.class, Chain.make("noticecount", customer.getSharecount() + 1),
+						Cnd.where("id", "=", customer.getId()));
+				*/
+				dbDao.update(
+						NewCustomerEntity.class,
+						Chain.make("noticecount", customer.getSharecount() + 1)
+								.add("status", OrderVisaApproStatusEnum.yueVisa.intKey()).add("updatetime", new Date()),
 						Cnd.where("id", "=", customer.getId()));
 			}
 		}
