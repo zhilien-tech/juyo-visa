@@ -73,7 +73,7 @@ public class BasicInfoController extends BaseController {
 	protected Dao nutDao;
 
 	/**
-	 * 回显基本信息数据
+	 * 回显美国基本信息数据
 	 * @param request
 	 */
 	@RequestMapping(value = "listBasicinfo")
@@ -211,7 +211,7 @@ public class BasicInfoController extends BaseController {
 	}
 
 	/**
-	 * 修改保存基本信息
+	 * 美国基本信息修改保存
 	 * @param customer
 	 */
 	@RequestMapping(value = "updateBaseInfoData", method = RequestMethod.POST)
@@ -317,15 +317,15 @@ public class BasicInfoController extends BaseController {
 				}
 			}
 		}
+		//是否是其它国家/地区的永久居民
 		List<NewOrthercountryEntity> orthercountrylist = customer.getOrthercountrylist();
+		List<NewOrthercountryEntity> query2 = dbDao.query(NewOrthercountryEntity.class,
+				Cnd.where("customerid", "=", customer.getId()), null);
+		dbDao.delete(query2);
 		if (!Util.isEmpty(orthercountrylist) && orthercountrylist.size() > 0) {
 			for (NewOrthercountryEntity newLanguageEntity : orthercountrylist) {
-				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
-					nutDao.update(newLanguageEntity);
-				} else {
-					newLanguageEntity.setCustomerid(customer.getId());
-					dbDao.insert(newLanguageEntity);
-				}
+				newLanguageEntity.setCustomerid(customer.getId());
+				dbDao.insert(newLanguageEntity);
 			}
 		}
 		NewPassportloseEntity passportlose = customer.getPassportlose();
@@ -559,19 +559,15 @@ public class BasicInfoController extends BaseController {
 				dbDao.insert(oldname);
 			}
 		}
-		List<NewOrthercountryJpEntity> query = dbDao.query(NewOrthercountryJpEntity.class,
-				Cnd.where("customer_jp_id", "=", customer.getId()), null);
 		//是否是其它国家/地区的永久居民
 		List<NewOrthercountryJpEntity> orthercountrylist = customer.getOrthercountrylist();
+		List<NewOrthercountryJpEntity> query = dbDao.query(NewOrthercountryJpEntity.class,
+				Cnd.where("customer_jp_id", "=", customer.getId()), null);
 		dbDao.delete(query);
 		if (!Util.isEmpty(orthercountrylist) && orthercountrylist.size() > 0) {
 			for (NewOrthercountryJpEntity newLanguageEntity : orthercountrylist) {
-				//if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
-				//nutDao.update(newLanguageEntity);
-				//} else {
 				newLanguageEntity.setCustomer_jp_id(customer.getId());
 				dbDao.insert(newLanguageEntity);
-				//}
 			}
 		}
 		//日本纳税人认证码
