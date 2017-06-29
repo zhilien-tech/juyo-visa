@@ -66,12 +66,14 @@
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level">
-                        <li><a class="J_menuItem" href="personal/passportInfo/passportInfoList.html">护照信息</a></li>
-                        <li><a class="J_menuItem" href="personal/basicInfo/basicInfoList.html">基本信息</a></li>
-                        <li><a class="J_menuItem" href="personal/visaInfo/visaInfoList.html">签证信息</a></li>
-                        <li><a class="J_menuItem" href="personal/passportInfo/passportJPInfoList.html">日本护照信息</a></li>
-                        <li><a class="J_menuItem" href="personal/basicInfo/basicJPInfoList.html">日本基本信息</a></li>
-						<li><a class="J_menuItem" href="personal/visaInfo/JPvisaInfoList.html">日本签证信息</a></li>
+                    	<!-- 美国我的资料 -->
+                        <li><a class="J_menuItem" href="personal/passportInfo/passportInfoList.html" id="11">护照信息</a></li>
+                        <li><a class="J_menuItem" href="personal/basicInfo/basicInfoList.html" id="12">基本信息</a></li>
+                        <li><a class="J_menuItem" href="personal/visaInfo/visaInfoList.html" id="13">签证信息</a></li>
+                        <!-- 日本我的资料 -->
+                        <li><a class="J_menuItem" href="personal/passportInfo/passportJPInfoList.html" id="14">护照信息</a></li>
+                        <li><a class="J_menuItem" href="personal/basicInfo/basicJPInfoList.html" id="15">基本信息</a></li>
+						<li><a class="J_menuItem" href="personal/visaInfo/JPvisaInfoList.html" id="16">签证信息</a></li>
                         <!-- <li><a class="J_menuItem" href="">证照信息</a></li>
                         <li><a class="J_menuItem" href="">常用联系人</a></li> -->
                         <li><a class="J_menuItem" href="personal/modifyPassword/modifyPassword.html">修改密码</a></li>
@@ -661,10 +663,9 @@
     }
     $(function () {
     	var flag=$.queryString("auth");
-    	for(var i=0;i<flag.length;i++){
-    		
-    			$("#"+flag.charAt(i)).hide();
-    		
+    	var num=flag.split(",");
+    	for(var i=0;i<num.length;i++){
+    		$("#"+num[i]).hide();
     	}
         $.getJSON("/sys/user/curr",function(result){
             $("#name").html(result.name);

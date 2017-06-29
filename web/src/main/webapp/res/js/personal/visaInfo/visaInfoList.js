@@ -5,13 +5,17 @@ var pos = curWwwPath.indexOf(pathName);
 var localhostPaht = curWwwPath.substring(0,pos);  
 var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 //页面加载时回显签证信息
-window.onload = function(){
+/*window.onload = function(){
 	 $.getJSON(localhostPaht +'/visa/visainfo/listvisainfo', function (resp) {
      	viewModel.set("customer", $.extend(true, dafaults, resp));
      });
-}
+}*/
 //初始化页面组件
 $(function () {
+	//页面加载时回显签证信息
+	$.getJSON(localhostPaht +'/visa/visainfo/listvisainfo', function (resp) {
+     	viewModel.set("customer", $.extend(true, dafaults, resp));
+    });
   //操作 编辑 按钮时
 	$(".editBtn").click(function(){
 		$(this).addClass("hide");//编辑 按钮隐藏
@@ -118,6 +122,7 @@ var countries = new kendo.data.DataSource({
 		"customer.workedplacelist":{},
 		"customer.relation":{},
 		"customer.teachinfo":{},
+		
 		"customer.peerList":{
 			peerxing: "",
 	    	peerxingen: "",
@@ -385,7 +390,7 @@ $("#if_formulate_plan").change(function () {
 });
 //是否加入一个团队或组织旅行
 $("#join_group").change(function () {
-	viewModel.set("customer.trip", $(this).is(':checked') ? " " : "");
+	viewModel.set("customer.trip.teamname", $(this).is(':checked') ? " " : "");
 });
 //是否加入一个团队或组织旅行
 $("#other_relatives_aa").change(function () {
