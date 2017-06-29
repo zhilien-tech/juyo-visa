@@ -5,13 +5,16 @@ var pos = curWwwPath.indexOf(pathName);
 var localhostPaht = curWwwPath.substring(0,pos);  
 var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 //页面加载时回显签证信息
-window.onload = function(){
+/*window.onload = function(){
 	 $.getJSON(localhostPaht +'/visa/visainfo/listvisainfo', function (resp) {
      	viewModel.set("customer", $.extend(true, dafaults, resp));
      });
-}
+}*/
 //初始化页面组件
 $(function () {
+	$.getJSON(localhostPaht +'/visa/visainfo/listvisainfo', function (resp) {
+     	viewModel.set("customer", $.extend(true, dafaults, resp));
+     });
   //操作 编辑 按钮时
 	$(".editBtn").click(function(){
 		$(this).addClass("hide");//编辑 按钮隐藏
@@ -163,7 +166,9 @@ var viewModel = kendo.observable({
     },
     // 支付人
     payType: function (type) {
+    	console.log(type);
         return viewModel.get("customer.trip.paypersion") === type;
+        
     },
     // 婚姻状态
     spouseState: function (state) {
