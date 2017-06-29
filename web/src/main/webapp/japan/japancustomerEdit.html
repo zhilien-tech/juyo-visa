@@ -315,7 +315,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="pp_lost" class="check-box-label">我有过旧护照</label>
+                                        <label for="pp_lost" class="check-box-label">我有过旧护照:</label>
                                         <input id='pp_lost' data-bind="checked:oldPassportEnable" class="mui-switch" type="checkbox"/>
                                     </div>
                                 </div>
@@ -376,7 +376,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="has_used_name" class="check-box-label">我有曾用名</label>
+                                        <label for="has_used_name" class="check-box-label">我有曾用名:</label>
                                         <input id='has_used_name' data-bind="checked:oldNameEnable" class="mui-switch"
                                                type="checkbox"/>
                                     </div>
@@ -430,7 +430,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="has_pr" class="check-box-label">我是其他国家／地区永久居民</label>
+                                        <label for="has_pr" class="check-box-label">我是其他国家／地区永久居民:</label>
                                         <input id='has_pr' data-bind="checked:otherCountryEnable"
                                                class="mui-switch" type="checkbox"/>
                                     </div>
@@ -452,7 +452,7 @@
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <label for="has_usa_aboard"
-                                               class="check-box-label">最近5次入境日本的信息</label>
+                                               class="check-box-label">最近5次入境日本的信息:</label>
                                         <input id='has_usa_aboard' data-bind="checked:hasHistory"
                                                class="mui-switch" type="checkbox"/>
                                     </div>
@@ -664,7 +664,7 @@
     <div class="row to_usa to_usa_row_#:data.uid#">
         <div class="col-xs-3">
             <div class="form-group">
-                <label for="to_usa_date_#:data.uid#">入境时间</label>
+                <label for="to_usa_date_#:data.uid#">入境时间:</label>
                 <div class='input-group'>
                     <input id='to_usa_date_#:data.uid#' style="width: 100%;" data-role="datepicker" data-bind="value:intousadate"/>
                     <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
@@ -673,7 +673,7 @@
         </div>
         <div class="col-xs-3">
             <div class="form-group">
-                <label for="to_usa_date_stay_#:data.uid#">停留时间</label>
+                <label for="to_usa_date_stay_#:data.uid#">停留时间:</label>
                 <div class='input-group'>
                     <input id="to_usa_date_stay_#:data.uid#" style="width: 100%;"
                            data-role="numerictextbox" data-min="1" data-bind="value:stayday"/>
@@ -700,7 +700,7 @@
         </div>
         <div class="col-xs-3">
             <div class="form-group">
-                <label for="to_usa_del_#:data.uid#">操作&nbsp;</label>
+                <label for="to_usa_del_#:data.uid#">操作:&nbsp;</label>
                 <button id="to_usa_del_#:data.uid#" data-bind="click:delOne" data-params="customer.recentlyintojpJpList"
                         class="k-button col-xs-12 k-button-icontext">
                     <span class="k-icon k-i-close"></span>删除本次记录
@@ -723,11 +723,4 @@
 <script src="/res/js/idcard.js"></script>
 <script src="/res/js/japan/japancustomerEdit.js"></script>
 <script src="/res/js/wintone.js?v=4"></script>
-<script type="text/javascript"><!--面板条 动画效果--> 
-    $(function () {
-       $("#panelbar").kendoPanelBar({
-            expandMode: "single" //设置展开模式只能展开单个
-        });
-    });
-</script>
 </html>

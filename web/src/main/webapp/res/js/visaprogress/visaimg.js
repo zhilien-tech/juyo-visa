@@ -199,7 +199,7 @@ function timeapply(){
          value: '',
          title: '时间申请',
      }, function (value, index, elem) {
-    	 alert(value+"=="+index+"=="+elem);
+    	// alert(value+"=="+index+"=="+elem);value为输入的值
     	 $.layer.closeAll();
      });
 }

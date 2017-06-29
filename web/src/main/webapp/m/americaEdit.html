@@ -862,7 +862,7 @@
                                 </div>
                             </div>
                             <!--同行人-->
-                            <div class="row">
+                           <!--  <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <label for="has_other_travelers" class="check-box-label">有同行人:</label>
@@ -881,7 +881,32 @@
                                         </button>
                                     </div>
                                 </div>
+                            </div> -->
+                            
+                            
+                             <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="has_other_travelers" class="check-box-label">有同行人?</label>
+                                        <input id='has_other_travelers' data-bind="checked:hasTogether"
+                                               class="mui-switch" type="checkbox"/>
+                                    </div>
+                                </div>
                             </div>
+                            <div data-template="tpl_traveler" data-bind="source:customer.peerList"></div>
+                            <div class="row traveler" data-bind="visible:hasTogether">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <button data-bind="click:addOne" data-params="customer.peerList"
+                                                class="k-button col-xs-12 k-button-icontext">
+                                            <span class="k-icon k-i-plus"></span>添加一名同行人
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            
                         </div>
                     </li>
                     <li> 快递信息
@@ -1109,7 +1134,9 @@
     </div>
 </script>
 <script id="tpl_traveler" type="text/html">
-    <!--姓-->
+    
+
+  <!--姓-->
     <div class="row traveler traveler_row_#:data.uid#">
         <div class="col-xs-6">
             <div class="form-group">
@@ -1163,7 +1190,7 @@
                             data-role="dropdownlist"
                             data-value-primitive="true"
                             data-bind="value:relationme">
-                        <option value="2">配偶</option>
+                         <option value="2">配偶</option>
                         <option value="8">子女</option>
                         <option value="0">父母</option>
                         <option value="1">亲戚</option>
@@ -1185,6 +1212,7 @@
             </div>
         </div>
     </div>
+
 </script>
 <script id="tpl_ir" type="text/html">
     <!--姓-->

@@ -133,6 +133,12 @@ public class NewCustomerController {
 			}
 		}
 		List<NewLanguageEntity> languagelist = customer.getLanguagelist();
+		List<NewLanguageEntity> list1 = dbDao.query(NewLanguageEntity.class,
+				Cnd.where("customerid", "=", customer.getId()), null);
+		if (!Util.isEmpty(list1) && list1.size() > 0) {
+
+			dbDao.delete(list1);
+		}
 		if (!Util.isEmpty(languagelist) && languagelist.size() > 0) {
 			for (NewLanguageEntity newLanguageEntity : languagelist) {
 				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {

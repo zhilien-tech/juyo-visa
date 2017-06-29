@@ -168,7 +168,9 @@ var viewModel = kendo.observable({
     },
     // 支付人
     payType: function (type) {
+    	console.log(type);
         return viewModel.get("customer.trip.paypersion") === type;
+        
     },
     // 婚姻状态
     spouseState: function (state) {
