@@ -1,5 +1,5 @@
-.progress{min-width: 20rem;width: 37%; min-height: 600px;margin: 0 auto;border: 0;background-color: #fff;box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0);}
-.progress ul{padding-left: 0;padding-top: 25px;}
+.progress{min-width: 20rem;width: 37%; min-height: 640px;margin: 0 auto;border: 0;background-color: #fff;box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0);}
+.progress ul{padding-left: 0;}
 .progress ul li{width:100%;}
 .progress ul li .progress-left{min-width: 100px;width:40%;display: inline-block;}
 .progress ul li .progress-left a{width:100%;text-align: center;display: block;line-height:40px;border-radius:55%;border: solid 2px #cecdcd;font-size: 13px;color: #999;}
@@ -8,3 +8,24 @@
 .progress ul li .progress-right{display: inline-block;width: 55%;float: right;line-height: 50px;}
 .progress ul li .progress-right label{font-weight: 400;word-break: keep-all;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;color: #777;}
 .a-active{background: #39aef5;color: #fff !important;border: solid 2px #39a1e0 !important;}
+#ordernum{line-height:60px;font-size: 14px;color: #777777;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
