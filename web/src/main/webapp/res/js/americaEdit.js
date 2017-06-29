@@ -114,19 +114,10 @@ var viewModel = kendo.observable({
         return state;
     },
     addOne: function (e) {
-        var key = $.isString(e) ? e : $(e.target).data('params');
-        console.log(key);
-       /* viewModel.get(key).push(
-        		{
-	          		peerxing: "",
-	            	peerxingen: "",
-	            	peernameen: "",
-	            	peername: "",
-	            	tripid: "",
-	            	relationme: ""
-	          	}
-        );*/
-        viewModel.get(key).push(keys[key]);
+    	 var key = $.isString(e) ? e : $(e.target).data('params');
+         console.log(key);
+         console.log(keys[key]);
+         viewModel.get(key).push(keys[key]);
     },
     delOne: function (e) {
         var key = $(e.target).data('params');

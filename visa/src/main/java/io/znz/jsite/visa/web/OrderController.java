@@ -316,15 +316,22 @@ public class OrderController extends BaseController {
 			}
 		}
 		List<NewPeerPersionEntity> peerList = order.getPeerList();
+		long orderid = orderOld.getId();
+		List<NewPeerPersionEntity> list1 = dbDao.query(NewPeerPersionEntity.class,
+				Cnd.where("tripid", "=", trip.getId()), null);
+		if (!Util.isEmpty(list1) && list1.size() > 0) {
+
+			dbDao.delete(list1);
+		}
 		if (!Util.isEmpty(peerList) && peerList.size() > 0) {
 
 			for (NewPeerPersionEntity newPeerPersionEntity : peerList) {
-				if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
-					nutDao.update(newPeerPersionEntity);
-				} else {
-					newPeerPersionEntity.setTripid(trip.getId());
-					dbDao.insert(newPeerPersionEntity);
-				}
+				/*	if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
+						nutDao.update(newPeerPersionEntity);
+					} else {*/
+				newPeerPersionEntity.setTripid(trip.getId());
+				dbDao.insert(newPeerPersionEntity);
+				/*	}*/
 			}
 			//List<NewPeerPersionEntity> insert = dbDao.insert(peerList);
 		}
