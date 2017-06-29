@@ -30,12 +30,12 @@ $(function(){
 
 
 function intopersion(country){
+	
 	if(country=='japan'){
 		
-		window.location.href="/myvisa/transactVisa/visaNationPersonal.html?country="+JSON.stringify(japan);
+		window.location.href="/myvisa/transactVisa/visaNationPersonal.html?country="+escape(JSON.stringify(japan));
 	}
 	if(country=='usa'){
-		
-		window.location.href="/myvisa/transactVisa/visaNationPersonal.html?country="+JSON.stringify(usa);
+		window.location.href="/myvisa/transactVisa/visaNationPersonal.html?country="+escape(JSON.stringify(usa));
 	}
 }

@@ -28,6 +28,9 @@
 	<div class="progress" id="div1">
 		<ul>
 			<li>
+				<span id="ordernum">订单号:</span>
+			</li>
+			<li>
 			  <div class="progress-left">
 				<a href="JavaScript:void(0);" onclick="window.location.href='/personal/passportInfo/passportInfoList.html'" id="writeResource">资料填写</a>
 				<span class="fa fa-long-arrow-down"></span>
@@ -35,7 +38,7 @@
 			</li>
 			<li>
 			  <div class="progress-left">
-				<a href="javascript:;" id="approvel">初审通过/拒绝</a>
+				<a href="javascript:;" id="approvel">初审</a>
 				<span class="fa fa-long-arrow-down"></span>
 			  </div>
 			  <div class="progress-right" id="reason">
@@ -44,7 +47,7 @@
 			</li>
 			<li>
 			  <div class="progress-left">
-				<a href="javascript:;">准备提交使馆</a>
+				<a href="javascript:;" id="readysubmit">准备提交使馆</a>
 				<span class="fa fa-long-arrow-down"></span>
 			  </div>
 			  <div class="progress-right">
@@ -53,7 +56,7 @@
 			</li>
 			<li>
 			  <div class="progress-left">
-				<a href="javascript:;">已提交使馆</a>
+				<a href="javascript:;" id="alreadysubmit">已提交使馆</a>
 				<span class="fa fa-long-arrow-down"></span>
 			  </div>
 			  <div class="progress-right">
@@ -62,11 +65,11 @@
 			</li>
 			<li>
 			  <div class="progress-left">
-				<a href="javascript:;">约签</a>
+				<a href="javascript:;" id="yueVisa">约签</a>
 				<span class="fa fa-long-arrow-down"></span>
 			  </div>
 			  <div class="progress-right">
-			  	<label>时间&nbsp;&nbsp;<a href="javascript:;">改签时间申请</a></label>
+			  	<label>时间&nbsp;&nbsp;<a href="JavaScript:void(0);" onclick="timeapply();">改签时间申请</a></label>
 			  </div>
 			</li>
 			<li>
