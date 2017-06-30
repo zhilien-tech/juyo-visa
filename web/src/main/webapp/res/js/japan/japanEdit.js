@@ -5,6 +5,15 @@ var customersourceEnum=[
     {text:"直客",value:3},
     {text:"线下",value:4}
   ];
+//出发城市
+var startcity=[
+                        {text:"北京",value:1},
+                        {text:"东京",value:2},
+                        {text:"名古屋",value:3},
+                        {text:"大阪",value:4},
+                        {text:"札幌",value:5},
+                        {text:"那霸",value:6}
+                        ];
 function translateZhToEn(from, to) {
     $.getJSON("/translate/google", {q: $(from).val()}, function (result) {
         $("#" + to).val(result.data).change();

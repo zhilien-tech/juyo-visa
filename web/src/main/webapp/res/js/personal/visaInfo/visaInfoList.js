@@ -16,6 +16,10 @@ $(function () {
 	$.getJSON(localhostPaht +'/visa/visainfo/listvisainfo', function (resp) {
      	viewModel.set("customer", $.extend(true, dafaults, resp));
     });
+	//折叠板 效果初始化
+    $("#panelbar").kendoPanelBar({
+         expandMode: "single" //设置展开模式只能展开单个
+     });
   //操作 编辑 按钮时
 	$(".editBtn").click(function(){
 		$(this).addClass("hide");//编辑 按钮隐藏
@@ -168,7 +172,6 @@ var viewModel = kendo.observable({
     },
     // 支付人
     payType: function (type) {
-    	console.log(type);
         return viewModel.get("customer.trip.paypersion") === type;
         
     },
@@ -272,7 +275,7 @@ var viewModel = kendo.observable({
     },
     //是否加入一个团队或组织旅行
     joinTeamEnable: function () {
-    	return viewModel.get("customer.trip");
+    	return viewModel.get("customer.trip.teamname");
     },
     //你是否有其他亲属在美国
     relationEnable:function(){
@@ -331,6 +334,7 @@ $("#has_immediate_relatives").change(function () {
     	viewModel.clearAll("customer.relation");
     }
 });
+//我有非直系亲属在美国
 $("#other_relatives").change(function () {
 	viewModel.set("customer.relation.indirect", $(this).is(':checked') ? " " : "");
 });
@@ -393,10 +397,6 @@ $("#if_formulate_plan").change(function () {
 //是否加入一个团队或组织旅行
 $("#join_group").change(function () {
 	viewModel.set("customer.trip.teamname", $(this).is(':checked') ? " " : "");
-});
-//是否加入一个团队或组织旅行
-$("#other_relatives_aa").change(function () {
-	viewModel.set("customer.spouse", $(this).is(':checked') ? " " : "");
 });
 //申请的制作者
 $("#has_assist_apply").change(function () {
