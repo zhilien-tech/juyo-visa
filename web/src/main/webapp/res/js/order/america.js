@@ -241,7 +241,7 @@ function detailInit(e) {
 
 //初始化上部的表格布局
 var grid = $("#grid").kendoGrid({
-    height: "100%",
+    height: "93%",
     selectable: "row",
     sortable: true,
     resizable: true,

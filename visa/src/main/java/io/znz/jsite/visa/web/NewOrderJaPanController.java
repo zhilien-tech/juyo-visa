@@ -281,19 +281,24 @@ public class NewOrderJaPanController {
 		Integer oneormore = tripJp.getOneormore();
 
 		List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
+		List<NewDateplanJpEntity> list1 = dbDao.query(NewDateplanJpEntity.class,
+				Cnd.where("trip_jp_id", "=", tripJp.getId()), null);
+		if (!Util.isEmpty(list1) && list1.size() > 0) {
 
+			dbDao.delete(list1);
+		}
 		if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
 
 			for (NewDateplanJpEntity newPeerPersionEntity : dateplanJpList) {
 				newPeerPersionEntity.setFlightnum(newPeerPersionEntity.getFlight().getId() + "");
 
-				if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
+				/*if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
 					nutDao.update(newPeerPersionEntity);
-				} else {
-					newPeerPersionEntity.setTrip_jp_id(tripJp.getId());
+				} else {*/
+				newPeerPersionEntity.setTrip_jp_id(tripJp.getId());
 
-					dbDao.insert(newPeerPersionEntity);
-				}
+				dbDao.insert(newPeerPersionEntity);
+				//}
 			}
 			if (oneormore == 1) {
 				startdate = dateplanJpList.get(0).getStartdate();
@@ -303,7 +308,12 @@ public class NewOrderJaPanController {
 		}
 		List<NewTripplanJpEntity> tripplanJpList = order.getTripplanJpList();
 		if (!Util.isEmpty(tripplanJpList) && tripplanJpList.size() > 0) {
+			List<NewTripplanJpEntity> list2 = dbDao.query(NewTripplanJpEntity.class,
+					Cnd.where("order_jp_id", "=", orderOld.getId()), null);
+			if (!Util.isEmpty(list2) && list2.size() > 0) {
 
+				dbDao.delete(list2);
+			}
 			for (NewTripplanJpEntity newPeerPersionEntity : tripplanJpList) {
 				List<Scenic> scenics = newPeerPersionEntity.getScenics();
 				String viewid = "";
@@ -311,13 +321,13 @@ public class NewOrderJaPanController {
 					viewid += scenic.getId() + ",";
 				}
 				newPeerPersionEntity.setViewid(viewid);
-				if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
-					nutDao.update(newPeerPersionEntity);
-				} else {
-					newPeerPersionEntity.setOrder_jp_id(orderOld.getId());
+				/*	if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
+						nutDao.update(newPeerPersionEntity);
+					} else {*/
+				newPeerPersionEntity.setOrder_jp_id(orderOld.getId());
 
-					dbDao.insert(newPeerPersionEntity);
-				}
+				dbDao.insert(newPeerPersionEntity);
+				//}
 			}
 		} else {
 			/*Calendar cNow = Calendar.getInstance();
@@ -339,7 +349,7 @@ public class NewOrderJaPanController {
 				NewTripplanJpEntity t = new NewTripplanJpEntity();
 				Calendar cal1 = Calendar.getInstance();
 				cal1.setTime(nowdate);
-				t.setDaynum(i);
+				t.setDaynum(i + 1);
 				t.setCity(arrivecity);
 				t.setNowdate(nowdate);
 				if (i < hotellist.size()) {

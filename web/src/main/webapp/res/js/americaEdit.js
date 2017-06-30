@@ -87,7 +87,6 @@ var countries = new kendo.data.DataSource({
 			
 		}
 		
-		
     },
     keys = {
 		"customer.peerList":{
@@ -107,12 +106,12 @@ var viewModel = kendo.observable({
     countries:countries,
     customersourceEnum:customersourceEnum,
     states:states,
-    hasTogether: function () {
+    /*hasTogether: function () {
         var togethers = viewModel.get("customer.travel.togethers");
         var state = false;
         if (togethers) state = togethers.length > 0;
         return state;
-    },
+    },*/
     addOne: function (e) {
     	 var key = $.isString(e) ? e : $(e.target).data('params');
          console.log(key);
@@ -126,11 +125,16 @@ var viewModel = kendo.observable({
     },
     // 是否有同行人
     hasTogether: function () {
-    	var togethers = viewModel.get("customer.peerList");
+    	/*var togethers = viewModel.get("customer.peerList");
         var state = false;
         if (togethers) state = togethers.length > 0;
-        return state;
+        return state;*/
         /*viewModel.set("customer.ordernumber", $(this).is(':checked') ? " " : "");*/
+    	
+    	var togethers = viewModel.get("customer.peerList");
+        var state = togethers ? togethers.length > 0 : false;
+        return state;
+        
     },
     clearAll: function (key) {
         var all = viewModel.get(key);
