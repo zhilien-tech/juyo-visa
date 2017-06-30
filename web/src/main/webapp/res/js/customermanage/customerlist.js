@@ -72,7 +72,7 @@ var customersourceEnum=[
 //初始化上部的表格布局
 var grid = $("#grid").kendoGrid({
     pageSize: 20,
-    height: "100%",
+    height: "93%",
     sortable: true,
     editable: true,
     resizable: true,
