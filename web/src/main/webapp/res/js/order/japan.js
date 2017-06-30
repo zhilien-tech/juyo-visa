@@ -14,23 +14,23 @@ var genderlist=[
                  ];
 //状态listorder
 var statuslist=[
-    {text:"下单",value:0},
-    {text:"已分享",value:1},
-    {text:"资料填写",value:2},
-    {text:"初审",value:3},
-    {text:"初审通过",value:4},
-    {text:"初审拒绝",value:5},
-    {text:"代送",value:6},
-    {text:"DS-160",value:7},
-    {text:"准备提交使馆",value:8},
-    {text:"已提交使馆",value:9},
-    {text:"约签",value:10},
-    {text:"返回",value:11},
-    {text:"拒签",value:12},
-    {text:"完成",value:13},
-    {text:"EVUS",value:14}
-    
-  ];
+                {text:"下单",value:15},
+                {text:"已分享",value:1},
+                {text:"资料填写",value:2},
+                {text:"初审",value:3},
+                {text:"初审通过",value:4},
+                {text:"初审拒绝",value:5},
+                {text:"代送",value:6},
+                {text:"DS-160",value:7},
+                {text:"准备提交使馆",value:8},
+                {text:"已提交使馆",value:9},
+                {text:"约签",value:10},
+                {text:"返回",value:11},
+                {text:"拒签",value:12},
+                {text:"完成",value:13},
+                {text:"EVUS",value:14}
+                
+              ];
 //注册命令
 function regCmd(command) {
 	var select = function (e) {

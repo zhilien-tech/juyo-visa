@@ -637,11 +637,13 @@ public class NewOrderJaPanController {
 				if ("success".equalsIgnoreCase(result)) {
 					//成功以后分享次数加1
 					dbDao.update(
-							NewCustomerEntity.class,
+							NewCustomerJpEntity.class,
 							Chain.make("sharecount", customer.getSharecount() + 1)
 									.add("status", OrderVisaApproStatusEnum.writeInfo.intKey())
 									.add("empid", employeeEntity.getId()), Cnd.where("id", "=", customer.getId()));
-
+					if (Util.isEmpty(order.getSharenum())) {
+						order.setSharenum(0);
+					}
 					dbDao.update(
 							NewOrderJpEntity.class,
 							Chain.make("sharenum", order.getSharenum() + 1).add("status",
@@ -714,6 +716,7 @@ public class NewOrderJaPanController {
 	public Object deliveryusa(long orderid) {
 		NewDeliveryJapanEntity deliveryUSA = dbDao.fetch(NewDeliveryJapanEntity.class,
 				Cnd.where("order_jp_id", "=", orderid));
+
 		return deliveryUSA;
 	}
 
@@ -730,7 +733,21 @@ public class NewOrderJaPanController {
 		deliveryJapan.setOrder_jp_id(orderid);
 		Integer id = deliveryJapan.getId();
 		if (!Util.isEmpty(id) && id > 0) {
+			dbDao.update(NewOrderJpEntity.class,
+					Chain.make("updatetime", new Date()).add("status", OrderVisaApproStatusEnum.DS.intKey()),
+					Cnd.where("id", "=", orderid));
+			List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
+					Cnd.where("order_jp_id", "=", orderid), null);
 
+			for (NewCustomerOrderJpEntity newCustomerOrderJpEntity : query) {
+				long customerid = newCustomerOrderJpEntity.getCustomer_jp_id();
+
+				dbDao.update(
+						NewCustomerJpEntity.class,
+						Chain.make("updatetime", new Date()).add("status",
+								OrderVisaApproStatusEnum.readySubmit.intKey()), Cnd.where("id", "=", customerid));
+
+			}
 			dbDao.update(deliveryJapan, null);
 		} else {
 
@@ -741,7 +758,7 @@ public class NewOrderJaPanController {
 					Cnd.where("order_jp_id", "=", orderid), null);
 
 			for (NewCustomerOrderJpEntity newCustomerOrderJpEntity : query) {
-				long customerid = newCustomerOrderJpEntity.getOrder_jp_id();
+				long customerid = newCustomerOrderJpEntity.getCustomer_jp_id();
 
 				dbDao.update(
 						NewCustomerJpEntity.class,
