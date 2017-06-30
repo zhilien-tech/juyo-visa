@@ -139,7 +139,7 @@ $(function(){
 			$("#reason").hide();
 			$("#approvel").text("初审通过");
 		}
-		if(a!=0&&a!=5){
+		if(a>=8){
 			$("#readysubmit").addClass("a-active");
 			
 		}
