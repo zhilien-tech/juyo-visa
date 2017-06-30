@@ -10,9 +10,11 @@ import io.znz.jsite.util.StringUtils;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 
+import java.net.URLEncoder;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+import javaxt.utils.Base64;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
@@ -76,7 +78,7 @@ public class LoginController extends BaseController {
 	/**
 	 * 真正登录的POST请求
 	 */
-	@RequestMapping(value = "login", method = RequestMethod.POST)
+	@RequestMapping(value = "auth", method = RequestMethod.POST)
 	public String auth(
 			@RequestParam String to,
 			@RequestParam(required = false) String login,
@@ -178,12 +180,17 @@ public class LoginController extends BaseController {
 					if (username.equals(telephone) && newpass.equals(pwd)) {//username为页面传来的用户名
 						if (UserLoginEnum.PERSONNEL.intKey() == logintype
 								&& UserLoginEnum.PERSONNEL.intKey() == userType) {//工作人员登录
-							return "redirect:" + to + "?auth=2,3," + str;
+							String str1 = "";
+							str1 = Base64.encodeBytes(fetch.getFullName().getBytes());
+
+							return "redirect:" + to + "?auth=2,3," + str + "&username=" + str1;
 						} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype
 								&& UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {//游客身份登录
-							return "redirect:" + to + "?auth=1,4,5," + str;
+							return "redirect:" + to + "?auth=1,4,5," + str + "&username="
+									+ URLEncoder.encode(fetch.getFullName());
 						} else if (UserLoginEnum.SUPERMAN.intKey() == 3 && UserLoginEnum.SUPERMAN.intKey() == userType) {
-							return "redirect:" + to + "?auth=0," + str;
+							return "redirect:" + to + "?auth=0," + str + "&username="
+									+ URLEncoder.encode(fetch.getFullName());
 						}
 					}
 				}

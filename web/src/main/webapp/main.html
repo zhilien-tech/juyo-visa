@@ -29,8 +29,9 @@
                         <span><img alt="image" class="img-circle" src="res/plugin/h+/img/profile_small.jpg"/></span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear">
-                                <span class="block m-t-xs"><strong class="font-bold" id="name">iChaly</strong></span>
-                                <span class="text-muted text-xs block" id="role">普通用户</span>
+                                <!-- <span class="block m-t-xs"><strong class="font-bold" id="name">iChaly</strong></span>
+                                <span class="text-muted text-xs block" id="role">普通用户</span> -->
+                                <a href="JavaScript:void(0);" onclick="window.location.href='/personal/passportInfo/passportInfoList.html'" id="userId"></a>
                             </span>
                         </a>
                     </div>
@@ -667,6 +668,9 @@
     	for(var i=0;i<num.length;i++){
     		$("#"+num[i]).hide();
     	}
+    	//显示登录人姓名
+    	var username=$.queryString("username");
+    	$("#userId").text(decodeURI(username).replace(/\+/g,' '));
         $.getJSON("/sys/user/curr",function(result){
             $("#name").html(result.name);
             $("#role").html(result.role);
