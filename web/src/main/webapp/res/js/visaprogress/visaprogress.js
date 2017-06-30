@@ -13,7 +13,6 @@ $(function(){
 			$("#usa").hide();
 			$("#japan").hide();
 			if(japan!=null&&japan!=''){
-				alert(111);
 				$("#japan").show();
 				
 				if(japan.status!=13){
@@ -21,9 +20,7 @@ $(function(){
 				}
 			}
 			if(usa!=null&&usa!=''){
-				alert(222);
 				$("#usa").show();
-				
 				if(usa.status!=13){
 					$("#usastatus").text("未完成");
 				}

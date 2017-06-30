@@ -28,7 +28,11 @@ var countries = new kendo.data.DataSource({
         }
     }),
     dafaults = {
-			passportlose:{},
+			birthcountry:"CHIN",
+			nowcountry:"CHIN",
+			passportlose:{
+				sendcountry:"CHIN"
+			},
 			oldname:{},
 			orthercountrylist:[],
 			father:{},
