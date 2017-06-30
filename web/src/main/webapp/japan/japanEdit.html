@@ -353,8 +353,20 @@
 	                                    <div class="form-group">
 	                                        <label for="usa_city">出发城市:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="startcity" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-	                                                   data-bind="value:customer.tripJp.startcity"/>
+	                                        
+	                                        	 <select id=""
+                                                    data-role="dropdownlist"
+                                                    data-filter="startswith"
+                                                    data-suggest="true"
+                                                    data-auto-bind="true"
+                                                    data-value-primitive="true"
+                                                    data-text-field="text"
+                                                    data-value-field="text"
+                                                    data-bind="value:customer.tripJp.startcity,source:startcitynew"
+                                                    style="width: 100%;"></select>
+	                                        
+	                                           <!--  <input id="startcity" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+	                                                   data-bind="value:customer.tripJp.startcity"/> -->
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -363,8 +375,18 @@
 	                                    <div class="form-group">
 	                                        <label for="usa_city">抵达城市:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="endcity" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-	                                                   data-bind="value:customer.tripJp.arrivecity"/>
+	                                        	 	 <select id=""
+                                                    data-role="dropdownlist"
+                                                    data-filter="startswith"
+                                                    data-suggest="true"
+                                                    data-auto-bind="true"
+                                                    data-value-primitive="true"
+                                                    data-text-field="text"
+                                                    data-value-field="text"
+                                                    data-bind="value:customer.tripJp.arrivecity,source:startcitynew"
+                                                    style="width: 100%;"></select>
+	                                            <!-- <input id="endcity" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+	                                                   data-bind="value:customer.tripJp.arrivecity"/> -->
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -406,8 +428,18 @@
 	                                    <div class="form-group">
 	                                        <label for="usa_city">出发城市:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-	                                                   data-bind="value:customer.tripJp.returnstartcity"/>
+	                                         <select id=""
+                                                    data-role="dropdownlist"
+                                                    data-filter="startswith"
+                                                    data-suggest="true"
+                                                    data-auto-bind="true"
+                                                    data-value-primitive="true"
+                                                    data-text-field="text"
+                                                    data-value-field="text"
+                                                    data-bind="value:customer.tripJp.returnstartcity,source:startcitynew"
+                                                    style="width: 100%;"></select>
+	                                           <!--  <input id="" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+	                                                   data-bind="value:customer.tripJp.returnstartcity"/> -->
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -416,8 +448,19 @@
 	                                    <div class="form-group">
 	                                        <label for="usa_city">抵达城市:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="" class="k-textbox" style="width: 100%;text-transform:uppercase;"
-	                                                   data-bind="value:customer.tripJp.returnarrivecity"/>
+	                                        	  <select id=""
+                                                    data-role="dropdownlist"
+                                                    data-filter="startswith"
+                                                    data-suggest="true"
+                                                    data-auto-bind="true"
+                                                    data-value-primitive="true"
+                                                    data-text-field="text"
+                                                    data-value-field="text"
+                                                    data-bind="value:customer.tripJp.returnarrivecity,source:startcitynew"
+                                                    style="width: 100%;"></select>
+	                                        		
+	                                            <!-- <input id="" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+	                                                   data-bind="value:customer.tripJp.returnarrivecity"/> -->
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -820,8 +863,17 @@
               <div class="form-group">
                   <label for="traveler_city_name">出发城市:<span style="color: red">*</span></label>
                   <div class='input-group'>
-                      <input id="traveler_city_name" style="width: 100%;" class="k-textbox"
-                             name="headcount" data-bind="value:startcity"/>
+ 								<select id=""
+                                                    data-role="dropdownlist"
+                                                    data-filter="startswith"
+                                                    data-suggest="true"
+                                                    data-auto-bind="true"
+                                                    data-value-primitive="true"
+                                                    data-text-field="text"
+                                                    data-value-field="text"
+                                                    data-bind="value:startcity,source:startcitynew"
+                                                    style="width: 100%;"></select>
+                    
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                   </div>
               </div>
@@ -830,8 +882,19 @@
               <div class="form-group">
                   <label for="traveler_city_name">抵达城市:<span style="color: red">*</span></label>
                   <div class='input-group'>
-                      <input id="traveler_city_name" style="width: 100%;" class="k-textbox"
-                             name="headcount" data-bind="value:arrivecity"/>
+
+						<select id=""
+                                                    data-role="dropdownlist"
+                                                    data-filter="startswith"
+                                                    data-suggest="true"
+                                                    data-auto-bind="true"
+                                                    data-value-primitive="true"
+                                                    data-text-field="text"
+                                                    data-value-field="text"
+                                                    data-bind="value:arrivecity,source:startcitynew"
+                                                    style="width: 100%;"></select>
+
+                
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                   </div>
               </div>

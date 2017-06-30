@@ -718,9 +718,16 @@
 <script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
 <script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
 <script src="/res/js/common.js"></script>
-
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
 <script src="/res/js/japan/japancustomerEdit.js"></script>
 <script src="/res/js/wintone.js?v=4"></script>
+<script type="text/javascript">
+$(function(){
+	//折叠板 效果初始化
+    $("#panelbar").kendoPanelBar({
+         expandMode: "single" //设置展开模式只能展开单个
+     });
+});
+</script>
 </html>
