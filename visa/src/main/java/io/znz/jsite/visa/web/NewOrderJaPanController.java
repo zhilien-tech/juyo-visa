@@ -281,6 +281,7 @@ public class NewOrderJaPanController {
 		Integer oneormore = tripJp.getOneormore();
 
 		List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
+
 		if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
 
 			for (NewDateplanJpEntity newPeerPersionEntity : dateplanJpList) {

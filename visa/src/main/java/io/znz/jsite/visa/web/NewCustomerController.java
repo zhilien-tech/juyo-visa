@@ -141,13 +141,13 @@ public class NewCustomerController {
 		}
 		if (!Util.isEmpty(languagelist) && languagelist.size() > 0) {
 			for (NewLanguageEntity newLanguageEntity : languagelist) {
-				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+				/*if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
 					nutDao.update(newLanguageEntity);
 				} else {
-
-					newLanguageEntity.setCustomerid(customer.getId());
-					dbDao.insert(newLanguageEntity);
-				}
+				*/
+				newLanguageEntity.setCustomerid(customer.getId());
+				dbDao.insert(newLanguageEntity);
+				//}
 			}
 		}
 		NewParentsEntity mother = customer.getMother();
@@ -172,27 +172,41 @@ public class NewCustomerController {
 			}
 		}
 		List<NewOldworksEntity> oldworkslist = customer.getOldworkslist();
+
+		List<NewOldworksEntity> list2 = dbDao.query(NewOldworksEntity.class,
+				Cnd.where("customerid", "=", customer.getId()), null);
+		if (!Util.isEmpty(list2) && list2.size() > 0) {
+
+			dbDao.delete(list2);
+		}
 		if (!Util.isEmpty(oldworkslist) && oldworkslist.size() > 0) {
 			for (NewOldworksEntity newLanguageEntity : oldworkslist) {
-				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+				/*if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
 					nutDao.update(newLanguageEntity);
 				} else {
-
-					newLanguageEntity.setCustomerid(customer.getId());
-					dbDao.insert(newLanguageEntity);
-				}
+				*/
+				newLanguageEntity.setCustomerid(customer.getId());
+				dbDao.insert(newLanguageEntity);
+				//				}
 			}
 		}
 		List<NewOrthercountryEntity> orthercountrylist = customer.getOrthercountrylist();
+
+		List<NewOrthercountryEntity> list3 = dbDao.query(NewOrthercountryEntity.class,
+				Cnd.where("customerid", "=", customer.getId()), null);
+		if (!Util.isEmpty(list3) && list3.size() > 0) {
+
+			dbDao.delete(list3);
+		}
 		if (!Util.isEmpty(orthercountrylist) && orthercountrylist.size() > 0) {
 			for (NewOrthercountryEntity newLanguageEntity : orthercountrylist) {
-				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+				/*if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
 					nutDao.update(newLanguageEntity);
-				} else {
+				} else {*/
 
-					newLanguageEntity.setCustomerid(customer.getId());
-					dbDao.insert(newLanguageEntity);
-				}
+				newLanguageEntity.setCustomerid(customer.getId());
+				dbDao.insert(newLanguageEntity);
+				//}
 			}
 		}
 		NewPassportloseEntity passportlose = customer.getPassportlose();
@@ -216,27 +230,40 @@ public class NewCustomerController {
 			}
 		}
 		List<NewWorkedplaceEntity> workedplacelist = customer.getWorkedplacelist();
+
+		List<NewWorkedplaceEntity> list4 = dbDao.query(NewWorkedplaceEntity.class,
+				Cnd.where("customerid", "=", customer.getId()), null);
+		if (!Util.isEmpty(list4) && list4.size() > 0) {
+
+			dbDao.delete(list4);
+		}
 		if (!Util.isEmpty(workedplacelist) && workedplacelist.size() > 0) {
 			for (NewWorkedplaceEntity newLanguageEntity : workedplacelist) {
-				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+				/*if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
 					nutDao.update(newLanguageEntity);
 				} else {
-
-					newLanguageEntity.setCustomerid(customer.getId());
-					dbDao.insert(newLanguageEntity);
-				}
+				*/
+				newLanguageEntity.setCustomerid(customer.getId());
+				dbDao.insert(newLanguageEntity);
+				//}
 			}
 		}
 		List<NewVisitedcountryEntity> visitedcountrylist = customer.getVisitedcountrylist();
+		List<NewVisitedcountryEntity> list5 = dbDao.query(NewVisitedcountryEntity.class,
+				Cnd.where("customerid", "=", customer.getId()), null);
+		if (!Util.isEmpty(list5) && list5.size() > 0) {
+
+			dbDao.delete(list5);
+		}
 		if (!Util.isEmpty(visitedcountrylist) && visitedcountrylist.size() > 0) {
 			for (NewVisitedcountryEntity newLanguageEntity : visitedcountrylist) {
-				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+				/*if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
 					nutDao.update(newLanguageEntity);
 				} else {
-
-					newLanguageEntity.setCustomerid(customer.getId());
-					dbDao.insert(newLanguageEntity);
-				}
+				*/
+				newLanguageEntity.setCustomerid(customer.getId());
+				dbDao.insert(newLanguageEntity);
+				//}
 			}
 		}
 		NewUsainfoEntity usainfo = customer.getUsainfo();
@@ -250,15 +277,22 @@ public class NewCustomerController {
 			}
 		}
 		List<NewTeachinfoEntity> teachinfo = customer.getTeachinfo();
+		List<NewTeachinfoEntity> list6 = dbDao.query(NewTeachinfoEntity.class,
+				Cnd.where("customerid", "=", customer.getId()), null);
+		if (!Util.isEmpty(list6) && list6.size() > 0) {
+
+			dbDao.delete(list6);
+		}
+
 		if (!Util.isEmpty(teachinfo) && teachinfo.size() > 0) {
 			for (NewTeachinfoEntity newLanguageEntity : teachinfo) {
-				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
-					nutDao.update(newLanguageEntity);
-				} else {
-
-					newLanguageEntity.setCustomerid(customer.getId());
-					dbDao.insert(newLanguageEntity);
-				}
+				/*	if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+						nutDao.update(newLanguageEntity);
+					} else {
+				*/
+				newLanguageEntity.setCustomerid(customer.getId());
+				dbDao.insert(newLanguageEntity);
+				//}
 			}
 		}
 		NewSpouseEntity spouse = customer.getSpouse();
@@ -272,27 +306,42 @@ public class NewCustomerController {
 			}
 		}
 		List<NewRelationEntity> relation = customer.getRelation();
+
+		List<NewRelationEntity> list7 = dbDao.query(NewRelationEntity.class,
+				Cnd.where("customerid", "=", customer.getId()), null);
+		if (!Util.isEmpty(list7) && list7.size() > 0) {
+
+			dbDao.delete(list7);
+		}
+
 		if (!Util.isEmpty(relation) && relation.size() > 0) {
 			for (NewRelationEntity newLanguageEntity : relation) {
-				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+				/*if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
 					nutDao.update(newLanguageEntity);
-				} else {
+				} else {*/
 
-					newLanguageEntity.setCustomerid(customer.getId());
-					dbDao.insert(newLanguageEntity);
-				}
+				newLanguageEntity.setCustomerid(customer.getId());
+				dbDao.insert(newLanguageEntity);
+				//}
 			}
 		}
 		List<NewRecentlyintousaEntity> recentlyintousalist = customer.getRecentlyintousalist();
+		List<NewRecentlyintousaEntity> list8 = dbDao.query(NewRecentlyintousaEntity.class,
+				Cnd.where("customerid", "=", customer.getId()), null);
+		if (!Util.isEmpty(list8) && list8.size() > 0) {
+
+			dbDao.delete(list8);
+		}
+
 		if (!Util.isEmpty(recentlyintousalist) && recentlyintousalist.size() > 0) {
 			for (NewRecentlyintousaEntity newLanguageEntity : recentlyintousalist) {
-				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+				/*if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
 					nutDao.update(newLanguageEntity);
 				} else {
-
-					newLanguageEntity.setCustomerid(customer.getId());
-					dbDao.insert(newLanguageEntity);
-				}
+				*/
+				newLanguageEntity.setCustomerid(customer.getId());
+				dbDao.insert(newLanguageEntity);
+				//}
 			}
 		}
 
