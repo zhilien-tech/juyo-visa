@@ -329,10 +329,10 @@ $("#join_army").change(function () {
 //信息保存
 
 $("#saveCustomerData").on("click",function(){
-	console.log(JSON.stringify(viewModel.customer));
 	viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
 	 viewModel.set("customer.errorinfo",JSON.stringify(map));
 	 map.clear();
+	 console.log(JSON.stringify(viewModel.customer));
 	$.ajax({
 		 type: "POST",
 		 url: "/visa/newcustomer/customerSave",

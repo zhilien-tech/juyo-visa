@@ -87,6 +87,7 @@ public class NewCustomerJpController {
 				Cnd.where("customer_jp_id", "=", customer.getId()), null);
 		long orderid = query.get(0).getOrder_jp_id();
 		dbDao.update(NewOrderJpEntity.class, Chain.make("updatetime", new Date()), Cnd.where("id", "=", orderid));
+		NewCustomerJpEntity newcustomer = customer;
 		if (!Util.isEmpty(customer.getId()) && customer.getId() > 0) {
 			customer.setUpdatetime(new Date());
 
@@ -99,7 +100,7 @@ public class NewCustomerJpController {
 			}
 		} else {
 			customer.setUpdatetime(new Date());
-			dbDao.insert(customer);
+			newcustomer = dbDao.insert(customer);
 		}
 		NewWorkinfoJpEntity army = customer.getWorkinfoJp();
 		if (!Util.isEmpty(army)) {
@@ -134,40 +135,59 @@ public class NewCustomerJpController {
 		}
 
 		List<NewRecentlyintojpJpEntity> oldworkslist = customer.getRecentlyintojpJpList();
+		List<NewRecentlyintojpJpEntity> list1 = dbDao.query(NewRecentlyintojpJpEntity.class,
+				Cnd.where("customer_jp_id", "=", customer.getId()), null);
+		if (!Util.isEmpty(list1) && list1.size() > 0) {
+
+			dbDao.delete(list1);
+		}
 		if (!Util.isEmpty(oldworkslist) && oldworkslist.size() > 0) {
 			for (NewRecentlyintojpJpEntity newLanguageEntity : oldworkslist) {
-				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+				/*if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
 					nutDao.update(newLanguageEntity);
 				} else {
-
-					newLanguageEntity.setCustomer_jp_id(customer.getId());
-					dbDao.insert(newLanguageEntity);
-				}
+				*/
+				newLanguageEntity.setCustomer_jp_id(customer.getId());
+				dbDao.insert(newLanguageEntity);
+				//}
 			}
 		}
 		List<NewFinanceJpEntity> orthercountrylist = customer.getFinanceJpList();
+		List<NewFinanceJpEntity> list2 = dbDao.query(NewFinanceJpEntity.class,
+				Cnd.where("customer_jp_id", "=", customer.getId()), null);
+		if (!Util.isEmpty(list2) && list2.size() > 0) {
+
+			dbDao.delete(list2);
+		}
 		if (!Util.isEmpty(orthercountrylist) && orthercountrylist.size() > 0) {
 			for (NewFinanceJpEntity newLanguageEntity : orthercountrylist) {
-				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
-					nutDao.update(newLanguageEntity);
-				} else {
-
-					newLanguageEntity.setCustomer_jp_id(customer.getId());
-					dbDao.insert(newLanguageEntity);
-				}
+				/*	if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+						nutDao.update(newLanguageEntity);
+					} else {
+				*/
+				newLanguageEntity.setCustomer_jp_id(customer.getId());
+				dbDao.insert(newLanguageEntity);
+				//	}
 			}
 		}
 
 		List<NewOrthercountryJpEntity> workedplacelist = customer.getOrthercountryJpList();
+
+		List<NewOrthercountryJpEntity> list3 = dbDao.query(NewOrthercountryJpEntity.class,
+				Cnd.where("customer_jp_id", "=", customer.getId()), null);
+		if (!Util.isEmpty(list3) && list3.size() > 0) {
+
+			dbDao.delete(list3);
+		}
 		if (!Util.isEmpty(workedplacelist) && workedplacelist.size() > 0) {
 			for (NewOrthercountryJpEntity newLanguageEntity : workedplacelist) {
-				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+				/*if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
 					nutDao.update(newLanguageEntity);
 				} else {
-
-					newLanguageEntity.setCustomer_jp_id(customer.getId());
-					dbDao.insert(newLanguageEntity);
-				}
+				*/
+				newLanguageEntity.setCustomer_jp_id(customer.getId());
+				dbDao.insert(newLanguageEntity);
+				//}
 			}
 		}
 
