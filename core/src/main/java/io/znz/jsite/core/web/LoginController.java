@@ -170,7 +170,7 @@ public class LoginController extends BaseController {
 				} else if (Util.isEmpty(usacreatetime) && !Util.isEmpty(jpcreatetime)) {
 					str += "11,12,13,";
 				} else {
-					str += "14,15,16," + "11,12,13";
+
 				}
 
 				if (!Util.isEmpty(fetch)) {
