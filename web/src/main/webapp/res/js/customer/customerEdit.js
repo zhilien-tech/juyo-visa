@@ -384,11 +384,6 @@ function agreeOrRefuse(flag){
 	 viewModel.set("customer.errorinfo",JSON.stringify(map));*/
 	 var error=JSON.stringify(map);
 	 map.clear();
-	 
-	
-	
-	
-	
 	var id=viewModel.get("customer.id");
 	$.ajax({
 		 type: "POST",
