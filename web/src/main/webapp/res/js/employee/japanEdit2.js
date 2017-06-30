@@ -1,3 +1,4 @@
+
 //客户来源
 var customersourceEnum=[
     {text:"线上",value:1},
@@ -46,7 +47,7 @@ flights = new kendo.data.DataSource({
     transport: {
         read: {
             dataType: "json",
-            url: "/visa/flight/json?startcity="+$("#startcity").val()+"&endcity="+$("#endcity").val(),
+            url: "/visa/flight/json",
         },
         parameterMap: function (options, type) {
             if (options.filter) {
@@ -89,20 +90,6 @@ var viewModel = kendo.observable({
     hotels: hotels,
     scenic: scenic,
     addOne: function (e) {
-    /*    var key = $.isString(e) ? e : $(e.target).data('params');
-        model.get(key).push({
-            lastName: "",
-            firstName: "",
-            passport: "",
-            main: false,
-            depositSource: "",
-            depositMethod: "",
-            depositSum: 0,
-            depositCount: 1,
-            receipt: false,
-            insurance: false,
-            outDistrict: false,
-        });*/
     	var key = $.isString(e) ? e : $(e.target).data('params');
         viewModel.get(key).push(keys[key]);
     },
@@ -374,7 +361,9 @@ $(function () {
     var oid = $.queryString("cid");
     if (oid) {
         $.getJSON("/visa/neworderjp/showDetail?orderid=" + oid, function (resp) {
+        	console.log(JSON.stringify(resp));
         	viewModel.set("customer", $.extend(true, defaults, resp));
+        	
         	if(viewModel.get("customer.tripJp.oneormore")==1){
         		$('.WangFan').addClass('hide');
         		$('.DuoCheng').removeClass('hide');
@@ -394,7 +383,6 @@ $(function () {
 			color.value(resp.customermanage.id);
         });
     }
-    /*  往返/多程 模块显示隐藏   */
    
 });
 /*$(function(){
@@ -409,10 +397,13 @@ $(function () {
 });*/
    $("#DuoCheng_WangFan").change(function(){
     	if($(this).is(':checked')){
+    		viewModel.set("customer.tripJp.oneormore", true);
     		$('.WangFan').addClass('hide');
     		$('.DuoCheng').removeClass('hide');
     	}else{
+    		viewModel.set("customer.tripJp.oneormore", false);
     		$('.WangFan').removeClass('hide');
     		$('.DuoCheng').addClass('hide');
     	}
     });
+
