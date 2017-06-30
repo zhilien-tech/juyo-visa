@@ -36,9 +36,9 @@ function intopersion(country){
 	
 	if(country=='japan'){
 		
-		window.location.href="/myvisa/transactVisa/visaNationPersonal.html?country="+escape(JSON.stringify(japan));
+		window.location.href="/myvisa/transactVisa/visaNationPersonal.html?country="+escape(JSON.stringify(japan))+"&countrystatus=1";
 	}
 	if(country=='usa'){
-		window.location.href="/myvisa/transactVisa/visaNationPersonal.html?country="+escape(JSON.stringify(usa));
+		window.location.href="/myvisa/transactVisa/visaNationPersonal.html?country="+escape(JSON.stringify(usa))+"&countrystatus=0";
 	}
 }

@@ -106,9 +106,11 @@
 
 
 var country;
+var countrystatus;
 $(function(){
 	 //country=JSON.parse($.queryString("country"));
     country = JSON.parse(unescape($.queryString("country")));
+    countrystatus=$.queryString("countrystatus");
 //    alert(unescape($.queryString("country")));
     if(country!=null&&country!=''){
 		//alert($.queryString("country"));S
@@ -119,7 +121,7 @@ $(function(){
 		//获取ordernum
 		$.ajax({
 			 type: "POST",
-			 url: "/visa/progress/ordernumber?customerid="+customerid,
+			 url: "/visa/progress/ordernumber?customerid="+customerid+"&countrystatus="+countrystatus,
 			 contentType: "application/json",
 			 dataType: "json",
 			 success: function (result) {
@@ -140,6 +142,8 @@ $(function(){
 			$("#approvel").text("初审通过");
 		}
 		if(a>=8){
+			$("#reason").hide();
+			$("#approvel").text("初审通过");
 			$("#readysubmit").addClass("a-active");
 			
 		}
