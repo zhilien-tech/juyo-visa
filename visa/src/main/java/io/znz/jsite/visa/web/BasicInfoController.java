@@ -321,7 +321,9 @@ public class BasicInfoController extends BaseController {
 		List<NewOrthercountryEntity> orthercountrylist = customer.getOrthercountrylist();
 		List<NewOrthercountryEntity> query2 = dbDao.query(NewOrthercountryEntity.class,
 				Cnd.where("customerid", "=", customer.getId()), null);
-		dbDao.delete(query2);
+		if (!Util.isEmpty(query2)) {
+			dbDao.delete(query2);
+		}
 		if (!Util.isEmpty(orthercountrylist) && orthercountrylist.size() > 0) {
 			for (NewOrthercountryEntity newLanguageEntity : orthercountrylist) {
 				newLanguageEntity.setCustomerid(customer.getId());
@@ -563,7 +565,9 @@ public class BasicInfoController extends BaseController {
 		List<NewOrthercountryJpEntity> orthercountrylist = customer.getOrthercountrylist();
 		List<NewOrthercountryJpEntity> query = dbDao.query(NewOrthercountryJpEntity.class,
 				Cnd.where("customer_jp_id", "=", customer.getId()), null);
-		dbDao.delete(query);
+		if (!Util.isEmpty(query)) {
+			dbDao.delete(query);
+		}
 		if (!Util.isEmpty(orthercountrylist) && orthercountrylist.size() > 0) {
 			for (NewOrthercountryJpEntity newLanguageEntity : orthercountrylist) {
 				newLanguageEntity.setCustomer_jp_id(customer.getId());

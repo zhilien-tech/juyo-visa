@@ -2,11 +2,15 @@ package io.znz.jsite.core.web;
 
 import io.znz.jsite.base.BaseController;
 import io.znz.jsite.core.entity.EmployeeEntity;
+import io.znz.jsite.core.entity.NewCustomerEntity;
+import io.znz.jsite.core.entity.NewCustomerJpEntity;
 import io.znz.jsite.core.enums.UserLoginEnum;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.util.StringUtils;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
+
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,6 +20,10 @@ import org.apache.shiro.web.util.SavedRequest;
 import org.apache.shiro.web.util.WebUtils;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
+import org.nutz.dao.SqlManager;
+import org.nutz.dao.Sqls;
+import org.nutz.dao.sql.Sql;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -27,6 +35,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
+import com.uxuexi.core.db.util.DbSqlUtil;
 
 /**
  * 登录controller
@@ -42,6 +51,9 @@ public class LoginController extends BaseController {
 
 	@Autowired
 	protected Dao nutDao;
+
+	@Inject
+	private SqlManager sqlManager;
 
 	public static final int HASH_INTERATIONS = 1024;
 
@@ -116,8 +128,8 @@ public class LoginController extends BaseController {
 				com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
 		if (!Util.isEmpty(captcha)) {
 			if (captcha.equalsIgnoreCase(kaptchaExpected) || "8888".equals(captcha)) {
-
 				EmployeeEntity fetch = dbDao.fetch(EmployeeEntity.class, Cnd.where("telephone", "=", username));
+				Integer userId = fetch.getId();//得到当前登录用户id
 				Integer userType = fetch.getUserType();//得到用户类型
 				String telephone = fetch.getTelephone();//得到数据库中用户名
 				String pwd = fetch.getPassword();//得到数据库中密码
@@ -127,24 +139,51 @@ public class LoginController extends BaseController {
 				byte[] password2 = password.getBytes();//页面传来的密码
 				byte[] hashPassword = Digests.sha1(password2, salt, HASH_INTERATIONS);
 				String newpass = Encodes.encodeHex(hashPassword);//对页面传来的密码进行加密
-				System.out.println(newpass);
 				if (!username.equals(telephone)) {
 					model.addFlashAttribute("error", "用户名不正确，请重新输入！");
 				} else if (!newpass.equals(pwd)) {
 					model.addFlashAttribute("error", "密码有误,请重新输入！");
 				}
+
+				//根据当前登录用户id查询美国客户的单子
+				Sql sql = Sqls
+						.create("SELECT *, MAX(vnc.createtime) AS 'maxcreatime' FROM visa_new_customer vnc where vnc.empid="
+								+ userId);
+				NewCustomerEntity usaCustomerInfo = DbSqlUtil.fetchEntity(dbDao, NewCustomerEntity.class, sql);
+
+				Sql sqljp = Sqls
+						.create("SELECT *, MAX(vncj.createtime) AS 'maxcreatime' FROM visa_new_customer_jp vncj where vncj.empid="
+								+ userId);
+				NewCustomerJpEntity jpCustomerInfo = DbSqlUtil.fetchEntity(dbDao, NewCustomerJpEntity.class, sqljp);
+
+				Date usacreatetime = usaCustomerInfo.getCreatetime();
+				Date jpcreatetime = jpCustomerInfo.getCreatetime();
+				String str = "";
+				if (!Util.isEmpty(usacreatetime) && !Util.isEmpty(jpcreatetime)) {
+					if (usaCustomerInfo.getCreatetime().getTime() > jpCustomerInfo.getCreatetime().getTime()) {
+						str += "14,15,16,";
+					} else {
+						str += "11,12,13,";
+					}
+				} else if (!Util.isEmpty(usacreatetime) && Util.isEmpty(jpcreatetime)) {
+					str += "14,15,16,";
+				} else if (Util.isEmpty(usacreatetime) && !Util.isEmpty(jpcreatetime)) {
+					str += "11,12,13,";
+				} else {
+					str += "14,15,16," + "11,12,13";
+				}
+
 				if (!Util.isEmpty(fetch)) {
 					request.getSession().setAttribute(Const.SESSION_NAME, fetch);
 					if (username.equals(telephone) && newpass.equals(pwd)) {//username为页面传来的用户名
 						if (UserLoginEnum.PERSONNEL.intKey() == logintype
 								&& UserLoginEnum.PERSONNEL.intKey() == userType) {//工作人员登录
-							return "redirect:" + to + "?auth=23";
+							return "redirect:" + to + "?auth=2,3," + str;
 						} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype
 								&& UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {//游客身份登录
-							return "redirect:" + to + "?auth=145";
+							return "redirect:" + to + "?auth=1,4,5," + str;
 						} else if (UserLoginEnum.SUPERMAN.intKey() == 3 && UserLoginEnum.SUPERMAN.intKey() == userType) {
-							return "redirect:" + to + "?auth=0";
-
+							return "redirect:" + to + "?auth=0," + str;
 						}
 					}
 				}

@@ -366,15 +366,17 @@ public class VisaInfoController extends BaseController {
 				dbDao.insert(father);
 			}
 		}
+		//所说语言列表
 		List<NewLanguageEntity> languagelist = customer.getLanguagelist();
+		List<NewLanguageEntity> query3 = dbDao.query(NewLanguageEntity.class,
+				Cnd.where("customerid", "=", customer.getId()), null);
+		if (!Util.isEmpty(query3)) {
+			dbDao.delete(query3);
+		}
 		if (!Util.isEmpty(languagelist) && languagelist.size() > 0) {
 			for (NewLanguageEntity newLanguageEntity : languagelist) {
-				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
-					nutDao.update(newLanguageEntity);
-				} else {
-					newLanguageEntity.setCustomerid(customer.getId());
-					dbDao.insert(newLanguageEntity);
-				}
+				newLanguageEntity.setCustomerid(customer.getId());
+				dbDao.insert(newLanguageEntity);
 			}
 		}
 		NewParentsEntity mother = customer.getMother();
@@ -454,33 +456,39 @@ public class VisaInfoController extends BaseController {
 		List<NewPeerPersionEntity> peerList = customer.getPeerList();
 		List<NewPeerPersionEntity> query2 = dbDao.query(NewPeerPersionEntity.class, Cnd.where("tripid", "=", tripid),
 				null);
-		dbDao.delete(query2);
+		if (!Util.isEmpty(query2)) {
+			dbDao.delete(query2);
+		}
 		if (!Util.isEmpty(peerList) && peerList.size() > 0) {
 			for (NewPeerPersionEntity newPeerPersionEntity : peerList) {
 				newPeerPersionEntity.setTripid(tripid);
 				dbDao.insert(newPeerPersionEntity);
 			}
 		}
+		//你是否隶属过或捐助过或曾就职于任何专业、社会、慈善组织
 		List<NewWorkedplaceEntity> workedplacelist = customer.getWorkedplacelist();
+		List<NewWorkedplaceEntity> query5 = dbDao.query(NewWorkedplaceEntity.class,
+				Cnd.where("customerid", "=", customer.getId()), null);
+		if (!Util.isEmpty(query5)) {
+			dbDao.delete(query5);
+		}
 		if (!Util.isEmpty(workedplacelist) && workedplacelist.size() > 0) {
 			for (NewWorkedplaceEntity newLanguageEntity : workedplacelist) {
-				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
-					nutDao.update(newLanguageEntity);
-				} else {
-					newLanguageEntity.setCustomerid(customer.getId());
-					dbDao.insert(newLanguageEntity);
-				}
+				newLanguageEntity.setCustomerid(customer.getId());
+				dbDao.insert(newLanguageEntity);
 			}
 		}
+		//最近5年是否去过其它国家
 		List<NewVisitedcountryEntity> visitedcountrylist = customer.getVisitedcountrylist();
+		List<NewVisitedcountryEntity> query4 = dbDao.query(NewVisitedcountryEntity.class,
+				Cnd.where("customerid", "=", customer.getId()), null);
+		if (!Util.isEmpty(query4)) {
+			dbDao.delete(query4);
+		}
 		if (!Util.isEmpty(visitedcountrylist) && visitedcountrylist.size() > 0) {
 			for (NewVisitedcountryEntity newLanguageEntity : visitedcountrylist) {
-				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
-					nutDao.update(newLanguageEntity);
-				} else {
-					newLanguageEntity.setCustomerid(customer.getId());
-					dbDao.insert(newLanguageEntity);
-				}
+				newLanguageEntity.setCustomerid(customer.getId());
+				dbDao.insert(newLanguageEntity);
 			}
 		}
 		NewUsainfoEntity usainfo = customer.getUsainfo();
@@ -627,7 +635,9 @@ public class VisaInfoController extends BaseController {
 		List<NewFinanceJpEntity> orthercountrylist = customer.getFinanceJpList();
 		List<NewFinanceJpEntity> query2 = dbDao.query(NewFinanceJpEntity.class,
 				Cnd.where("customer_jp_id", "=", customer.getId()), null);
-		dbDao.delete(query2);
+		if (!Util.isEmpty(query2)) {
+			dbDao.delete(query2);
+		}
 		if (!Util.isEmpty(orthercountrylist) && orthercountrylist.size() > 0) {
 			for (NewFinanceJpEntity newLanguageEntity : orthercountrylist) {
 				newLanguageEntity.setCustomer_jp_id(customer.getId());
@@ -636,4 +646,5 @@ public class VisaInfoController extends BaseController {
 		}
 		return ResultObject.success("修改成功");
 	}
+
 }
