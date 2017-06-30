@@ -11,8 +11,6 @@ function translateZhToEn(from, to) {
     });
 }
 
-
-
 var countries = new kendo.data.DataSource({
         transport: {
             read: {
