@@ -379,29 +379,12 @@ $("#saveCustomerData").on("click",function(){
 //通过或者拒绝的方法
 function agreeOrRefuse(flag){
 	
-	
+/*	
 	viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
-	 viewModel.set("customer.errorinfo",JSON.stringify(map));
+	 viewModel.set("customer.errorinfo",JSON.stringify(map));*/
+	 var error=JSON.stringify(map);
 	 map.clear();
-	 console.log(JSON.stringify(viewModel.customer));
-	$.ajax({
-		 type: "POST",
-		 url: "/visa/newcustomer/customerSave",
-		 contentType:"application/json",
-		 data: JSON.stringify(viewModel.customer)+"",
-		 success: function (result){
-			 console.log(result);
-			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			 parent.layer.close(index);
-			 window.parent.successCallback('1');
-		 },
-		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-			 console.log(XMLHttpRequest);
-			 console.log(textStatus);
-			 console.log(errorThrown);
-            layer.msg('保存失败!',{time:2000});
-         }
-	});
+	 
 	
 	
 	
@@ -409,7 +392,7 @@ function agreeOrRefuse(flag){
 	var id=viewModel.get("customer.id");
 	$.ajax({
 		 type: "POST",
-		 url: "/visa/newcustomer/agreeOrRefuse?flag="+flag+"&customerid="+id,
+		 url: "/visa/newcustomer/agreeOrRefuse?flag="+flag+"&customerid="+id+"&error="+error,
 		 success: function (result){
 			 console.log(result);
 			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引

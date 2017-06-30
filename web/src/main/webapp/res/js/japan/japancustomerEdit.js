@@ -171,26 +171,9 @@ function agreeOrRefuse(flag){
 	
 	
 	
-	 viewModel.set("customer.errorinfo",JSON.stringify(map));
+	/* viewModel.set("customer.errorinfo",JSON.stringify(map));*/
+	 var error=JSON.stringify(map);
 	 map.clear();
-	$.ajax({
-		 type: "POST",
-		 url: "/visa/newcustomerjp/customerSave",
-		 contentType:"application/json",
-		 data: JSON.stringify(viewModel.customer)+"",
-		 success: function (result){
-			 console.log(result);
-			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			 parent.layer.close(index);
-			 window.parent.successCallback('1');
-		 },
-		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-			 console.log(XMLHttpRequest);
-			 console.log(textStatus);
-			 console.log(errorThrown);
-            layer.msg('保存失败!',{time:2000});
-         }
-	});
 	
 	
 	
@@ -198,7 +181,7 @@ function agreeOrRefuse(flag){
 	var id=viewModel.get("customer.id");
 	$.ajax({
 		 type: "POST",
-		 url: "/visa/newcustomerjp/agreeOrRefuse?flag="+flag+"&customerid="+id,
+		 url: "/visa/newcustomerjp/agreeOrRefuse?flag="+flag+"&customerid="+id+"&error="+error,
 		 success: function (result){
 			 console.log(result);
 			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引

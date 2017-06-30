@@ -260,8 +260,12 @@ public class NewCustomerJpController {
 
 	@RequestMapping(value = "agreeOrRefuse")
 	@ResponseBody
-	public Object agreeOrRefuse(String flag, long customerid) {
+	public Object agreeOrRefuse(String flag, long customerid, String error) {
+
 		NewCustomerJpEntity newCustomer = dbDao.fetch(NewCustomerJpEntity.class, customerid);
+		if (!Util.isEmpty(error)) {
+			dbDao.update(NewCustomerJpEntity.class, Chain.make("errorinfo", error), Cnd.where("id", "=", customerid));
+		}
 
 		if ("agree".equals(flag)) {
 			dbDao.update(NewCustomerJpEntity.class, Chain.make("status", OrderVisaApproStatusEnum.agree.intKey()),
