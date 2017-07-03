@@ -207,3 +207,9 @@ function timeapply(){
     	 $.layer.closeAll();
      });
 }
+
+
+
+function jump(){
+	window.location.href='/myvisa/transactVisa/visaNationPersonal.html?country='+escape(JSON.stringify(country));
+}

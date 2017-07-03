@@ -97,13 +97,13 @@ function regCmd(command) {
         						
             					layer.close(index);
             					}
-                			layer.confirm('发送成功，打开预览？', {
+                		/*	layer.confirm('发送成功，打开预览？', {
                                 btn: ['预览', '关闭']
                             }, function (index, layero) {
                                 window.open("/delivery/deliveryJapan.html?oid="+data.id);
                             }, function (index) {
                                 $.layer.closeAll();
-                            });
+                            });*/
                 			
                 			// layer.msg("分享成功",{time: 2000});
                 		} else {
