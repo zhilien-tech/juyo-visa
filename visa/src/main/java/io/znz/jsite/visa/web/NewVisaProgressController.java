@@ -9,6 +9,8 @@ package io.znz.jsite.visa.web;
 import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
+import io.znz.jsite.visa.entity.japan.NewCustomerOrderJpEntity;
+import io.znz.jsite.visa.entity.japan.NewOrderJpEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerOrderEntity;
 import io.znz.jsite.visa.entity.usa.NewOrderEntity;
@@ -99,14 +101,27 @@ public class NewVisaProgressController {
 	 */
 	@RequestMapping(value = "ordernumber")
 	@ResponseBody
-	public Object ordernumber(long customerid) {
-		List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
-				Cnd.where("customerid", "=", customerid), null);
+	public Object ordernumber(long customerid, int countrystatus) {
+		if (countrystatus == 0) {
 
-		if (!Util.isEmpty(query) && query.size() > 0) {
-			long orderid = query.get(0).getOrderid();
-			NewOrderEntity newOrder = dbDao.fetch(NewOrderEntity.class, orderid);
-			return newOrder;
+			List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
+					Cnd.where("customerid", "=", customerid), null);
+
+			if (!Util.isEmpty(query) && query.size() > 0) {
+				long orderid = query.get(0).getOrderid();
+				NewOrderEntity newOrder = dbDao.fetch(NewOrderEntity.class, orderid);
+				return newOrder;
+			}
+		} else if (countrystatus == 1) {
+			List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
+					Cnd.where("customer_jp_id", "=", customerid), null);
+
+			if (!Util.isEmpty(query) && query.size() > 0) {
+				long orderid = query.get(0).getOrder_jp_id();
+				NewOrderJpEntity newOrder = dbDao.fetch(NewOrderJpEntity.class, orderid);
+				return newOrder;
+			}
+
 		}
 		return "";
 	}

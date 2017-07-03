@@ -177,6 +177,10 @@ public class LoginController extends BaseController {
 
 				if (!Util.isEmpty(fetch)) {
 					request.getSession().setAttribute(Const.SESSION_NAME, fetch);
+					if (Util.isEmpty(fetch.getFullName())) {
+						fetch.setFullName("无");
+
+					}
 					if (username.equals(telephone) && newpass.equals(pwd)) {//username为页面传来的用户名
 						if (UserLoginEnum.PERSONNEL.intKey() == logintype
 								&& UserLoginEnum.PERSONNEL.intKey() == userType) {//工作人员登录

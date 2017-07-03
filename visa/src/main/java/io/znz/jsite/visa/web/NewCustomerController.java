@@ -360,8 +360,12 @@ public class NewCustomerController {
 
 	@RequestMapping(value = "showDetail")
 	@ResponseBody
-	public Object showDetail(long customerid) {
+	public Object showDetail(long customerid, String error) {
 		NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, customerid);
+
+		if (!Util.isEmpty(error)) {
+			dbDao.update(NewCustomerEntity.class, Chain.make("errorinfo", error), Cnd.where("id", "=", customerid));
+		}
 
 		List<NewPassportloseEntity> passportlose = dbDao.query(NewPassportloseEntity.class,
 				Cnd.where("customerid", "=", customer.getId()), null);
@@ -473,9 +477,11 @@ public class NewCustomerController {
 
 	@RequestMapping(value = "agreeOrRefuse")
 	@ResponseBody
-	public Object agreeOrRefuse(String flag, long customerid) {
+	public Object agreeOrRefuse(String flag, long customerid, String error) {
 		NewCustomerEntity newCustomer = dbDao.fetch(NewCustomerEntity.class, customerid);
-
+		if (!Util.isEmpty(error)) {
+			dbDao.update(NewCustomerEntity.class, Chain.make("errorinfo", error), Cnd.where("id", "=", customerid));
+		}
 		if ("agree".equals(flag)) {
 			dbDao.update(NewCustomerEntity.class, Chain.make("status", OrderVisaApproStatusEnum.agree.intKey()),
 					Cnd.where("id", "=", newCustomer.getId()));

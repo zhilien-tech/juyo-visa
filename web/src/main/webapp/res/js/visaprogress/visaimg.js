@@ -106,9 +106,11 @@
 
 
 var country;
+var countrystatus;
 $(function(){
 	 //country=JSON.parse($.queryString("country"));
     country = JSON.parse(unescape($.queryString("country")));
+    countrystatus=$.queryString("countrystatus");
 //    alert(unescape($.queryString("country")));
     if(country!=null&&country!=''){
 		//alert($.queryString("country"));S
@@ -119,7 +121,7 @@ $(function(){
 		//获取ordernum
 		$.ajax({
 			 type: "POST",
-			 url: "/visa/progress/ordernumber?customerid="+customerid,
+			 url: "/visa/progress/ordernumber?customerid="+customerid+"&countrystatus="+countrystatus,
 			 contentType: "application/json",
 			 dataType: "json",
 			 success: function (result) {
@@ -139,7 +141,9 @@ $(function(){
 			$("#reason").hide();
 			$("#approvel").text("初审通过");
 		}
-		if(a!=0&&a!=5){
+		if(a>=8){
+			$("#reason").hide();
+			$("#approvel").text("初审通过");
 			$("#readysubmit").addClass("a-active");
 			
 		}
@@ -202,4 +206,10 @@ function timeapply(){
     	// alert(value+"=="+index+"=="+elem);value为输入的值
     	 $.layer.closeAll();
      });
+}
+
+
+
+function jump(){
+	window.location.href='/myvisa/transactVisa/visaNationPersonal.html?country='+escape(JSON.stringify(country));
 }

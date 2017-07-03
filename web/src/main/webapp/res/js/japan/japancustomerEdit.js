@@ -168,10 +168,20 @@ $("#saveCustomerData").on("click",function(){
 
 //通过或者拒绝的方法
 function agreeOrRefuse(flag){
+	
+	
+	
+	/* viewModel.set("customer.errorinfo",JSON.stringify(map));*/
+	 var error=JSON.stringify(map);
+	 map.clear();
+	
+	
+	
+	
 	var id=viewModel.get("customer.id");
 	$.ajax({
 		 type: "POST",
-		 url: "/visa/newcustomerjp/agreeOrRefuse?flag="+flag+"&customerid="+id,
+		 url: "/visa/newcustomerjp/agreeOrRefuse?flag="+flag+"&customerid="+id+"&error="+error,
 		 success: function (result){
 			 console.log(result);
 			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
