@@ -89,6 +89,7 @@ function regCmd(command) {
                                 $.layer.closeAll();
                             });*/
                 			layer.msg("通知成功",{time: 2000});
+                			grid.dataSource.read();
                 		} else {
                 			$.layer.alert(resp.msg);
                 		}
@@ -112,6 +113,7 @@ function regCmd(command) {
                 			});*/
                 			
                 			 layer.msg("分享成功",{time: 2000});
+                			 grid.dataSource.read();
                 		} else {
                 			$.layer.alert(resp.msg);
                 		}
@@ -134,6 +136,7 @@ function regCmd(command) {
                 				$.layer.closeAll();
                 			});*/
                 			layer.msg("通知成功",{time: 2000});
+                			grid.dataSource.read();
                 		} else {
                 			$.layer.alert(resp.msg);
                 		}

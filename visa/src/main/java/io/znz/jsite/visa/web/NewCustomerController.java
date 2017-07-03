@@ -477,9 +477,11 @@ public class NewCustomerController {
 
 	@RequestMapping(value = "agreeOrRefuse")
 	@ResponseBody
-	public Object agreeOrRefuse(String flag, long customerid) {
+	public Object agreeOrRefuse(String flag, long customerid, String error) {
 		NewCustomerEntity newCustomer = dbDao.fetch(NewCustomerEntity.class, customerid);
-
+		if (!Util.isEmpty(error)) {
+			dbDao.update(NewCustomerEntity.class, Chain.make("errorinfo", error), Cnd.where("id", "=", customerid));
+		}
 		if ("agree".equals(flag)) {
 			dbDao.update(NewCustomerEntity.class, Chain.make("status", OrderVisaApproStatusEnum.agree.intKey()),
 					Cnd.where("id", "=", newCustomer.getId()));
