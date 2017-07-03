@@ -62,7 +62,7 @@ function regCmd(command) {
                             }, function (index) {
                                 $.layer.closeAll();
                             });*/
-                        	//layer.msg("分享成功",{time: 2000});
+                        	layer.msg("分享成功",{time: 2000});
                         } else {
                             $.layer.alert(resp.msg);
                         }
