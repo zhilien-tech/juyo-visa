@@ -19,7 +19,8 @@ var startcity=[
 var defaults = {
 		customermanage:{},
 		tripJp:{
-			oneormore:0
+			oneormore:0,
+			trippurpose:"旅游"
 		},
 		dateplanJpList:[],
 		tripplanJpList:[],
@@ -131,6 +132,14 @@ var viewModel = kendo.observable({
 });
 kendo.bind($(document.body), viewModel);
 $(function () {
+	
+	/*var df=new SimpleDateFormat();
+	df.applyPattern("HH:mm");
+	var date=new Date();
+	var str=df.format(date);*/
+	
+	
+	
     $("#cus_phone").kendoMultiSelect({
    		placeholder:"请选择手机号",
         dataTextField: "telephone",
@@ -392,6 +401,19 @@ $(function () {
 			color.value(resp.customermanage.id);
 			var color = $("#cus_linkman").data("kendoMultiSelect");
 			color.value(resp.customermanage.id);
+			
+			
+			
+			//时间格式
+			/*var intimename=document.getEelementsByName("intimename");
+			for(var i in intimername){
+				alert(i);
+			}*/
+			
+		/*	$("[name='intimename']").each(function(){
+				var mm = $(this).val();
+			});*/
+			
         });
     }
    
