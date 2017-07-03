@@ -58,6 +58,7 @@ import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -140,6 +141,7 @@ public class NewOrderJaPanController {
 	 */
 	@RequestMapping(value = "orderJpsave")
 	@ResponseBody
+	@Transactional
 	public Object orderJpsave(@RequestBody NewOrderJpEntity order) {
 		CustomerManageEntity customermanage = order.getCustomermanage();
 		if (!Util.isEmpty(customermanage)) {
@@ -222,18 +224,21 @@ public class NewOrderJaPanController {
 			order.setCountrytype(1);
 			orderOld = dbDao.insert(order);
 			//根据人数插入多个申请人的数据
-			for (int i = orderOld.getHeadnum(); i > 0; i--) {
-				NewCustomerJpEntity c = new NewCustomerJpEntity();
-				c.setCreatetime(new Date());
-				c.setUpdatetime(new Date());
-				NewCustomerJpEntity insert = dbDao.insert(c);
-				NewCustomerOrderJpEntity customerOrderEntity = new NewCustomerOrderJpEntity();
-				customerOrderEntity.setCustomer_jp_id(insert.getId());
-				customerOrderEntity.setOrder_jp_id(orderOld.getId());
+			if (!Util.isEmpty(orderOld.getHeadnum())) {
 
-				customerOrderEntity.setCreatetime(new Date());
-				customerOrderEntity.setUpdatetime(new Date());
-				dbDao.insert(customerOrderEntity);
+				for (int i = orderOld.getHeadnum(); i > 0; i--) {
+					NewCustomerJpEntity c = new NewCustomerJpEntity();
+					c.setCreatetime(new Date());
+					c.setUpdatetime(new Date());
+					NewCustomerJpEntity insert = dbDao.insert(c);
+					NewCustomerOrderJpEntity customerOrderEntity = new NewCustomerOrderJpEntity();
+					customerOrderEntity.setCustomer_jp_id(insert.getId());
+					customerOrderEntity.setOrder_jp_id(orderOld.getId());
+
+					customerOrderEntity.setCreatetime(new Date());
+					customerOrderEntity.setUpdatetime(new Date());
+					dbDao.insert(customerOrderEntity);
+				}
 			}
 
 			//	dbDao.update(NewOrderJpEntity.class, Chain.make("ordernumber", ordernum), Cnd.where("id", "=", orderOld.getId()));
