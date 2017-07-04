@@ -23,7 +23,22 @@ var defaults = {
 		},
 		dateplanJpList:[],
 		tripplanJpList:[],
-		fastMail:{}
+		fastMail:{},
+		customers: [
+		            {
+		                lastName: "",
+		                firstName: "",
+		                passport: "",
+		                main: true,
+		                depositSource: "",
+		                depositMethod: "",
+		                depositSum: 0,
+		                depositCount: 1,
+		                receipt: false,
+		                insurance: false,
+		                outDistrict: false,
+		            }
+		        ]
 }, 
 keys = {
 		"customer.dateplanJpList":{
@@ -102,12 +117,40 @@ var viewModel = kendo.observable({
     scenic: scenic,
     addOne: function (e) {
     	var key = $.isString(e) ? e : $(e.target).data('params');
-        viewModel.get(key).push(keys[key]);
+        //viewModel.get(key).push(keys[key]);
+    	viewModel.get(key).push({
+             lastName: "",
+             firstName: "",
+             passport: "",
+             main: false,
+             depositSource: "",
+             depositMethod: "",
+             depositSum: 0,
+             depositCount: 1,
+             receipt: false,
+             insurance: false,
+             outDistrict: false,
+         });
     },
     delOne: function (e) {
         var key = $(e.target).data('params');
         var all = viewModel.get(key);
         all.splice(all.indexOf(e.data), 1);
+    },
+    
+    delOneApplicant: function (e) {
+        var key = $(e.target).data('params');
+        var all = viewModel.get(key);
+        if (all.length == 1) {
+            $.layer.alert("至少要有一个申请人");
+            return;
+        }
+        all.splice(all.indexOf(e.data), 1);
+        if (all.length == 1) {//如果剩一个申请人则置为主申请人
+            var item = all.pop();
+            item.main = true;
+            all.unshift(item);
+        }
     },
     onDateChange: function (e) {
         var target = e.sender.element.attr("id");
@@ -126,6 +169,17 @@ var viewModel = kendo.observable({
         if (data.spot) {
             return data.spot.split(",");
         }
+    },
+    master: function () {
+        var result = [];
+        $.each(viewModel.customer.customers, function (index, item) {
+            if(item.main){
+                var data = {text: item.lastName + item.firstName};
+                data.value = $.hashCode(data.text);
+                result.push(data);
+            }
+        });
+        return result;
     },
     customer: defaults,
 });
@@ -181,8 +235,25 @@ $(function () {
         }
     });
     
-   
+    //折叠面板的显隐切换
+    $(document).on("click", ".span-Title", function () {
+        $(this).find(".k-icon").toggleClass("k-i-arrow-60-down k-i-arrow-n");
+        $(this).addClass("k-state-selected");
+        //$(this).next().toggle();
+        $(this).next().addClass('div-context');//显示 主申请人的 样式
+        //$(this).next().css('border',"solid 1px red");
+        $(this).parents('.k-panelbar').siblings().find('.k-link').removeClass('k-state-selected');
+        $(this).parents('.k-panelbar').siblings().find('.container-fluid').hide();
+        
+    });
     
+    /*$(document).on("click",".k-header",function(){
+    	$('.k-content').removeClass("div-context");
+    });*/
+    $(".k-header").click(function(){
+    	$('.k-content').removeClass("div-context");
+    	$(this).parent().siblings().find('.span-Title').removeClass('k-state-selected');
+    });
 });
 
 $(function () {
@@ -372,7 +443,7 @@ $(function () {
     var oid = $.queryString("cid");
     if (oid) {
         $.getJSON("/visa/neworderjp/showDetail?orderid=" + oid, function (resp) {
-        	console.log(JSON.stringify(resp));
+        	//console.log(JSON.stringify(resp));
         	viewModel.set("customer", $.extend(true, defaults, resp));
         	
         	if(viewModel.get("customer.tripJp.oneormore")==1){

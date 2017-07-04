@@ -422,12 +422,6 @@ $(function () {
 			color.value(resp.customermanage.id);
         });
     }
-    //折叠面板的显隐切换
-    /*$(document).on("click", ".k-link", function () {
-        $(this).find(".k-icon").toggleClass("k-i-arrow-60-down k-i-arrow-n");
-        $(this).next().toggle();
-    });*/
-   
 });
 
 

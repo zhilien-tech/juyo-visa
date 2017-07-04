@@ -23,6 +23,9 @@
     	.addIcon,.removeIcon{border: solid 1px #337ab7;font-size: 18px;position: relative;top: 25px;border-radius: 50%;padding: 2.5px 4.5px 2px 4.5px;}*/
     	.closeIconLocation .row div.input-group .k-header .k-multiselect-wrap .k-i-close{top: 50%;}
     	.closeIconLocation .row div .form-group .input-group .k-header .k-floatwrap ul li .k-select .k-icon{left:-15px;}
+    	.none{display: none !important;}
+    	.div-context {display: block !important;}
+    	.show{display: block !important;}
     </style>
 </head>
 <body>
@@ -254,7 +257,7 @@
             <li> 出行信息
                        <div class="container-fluid">
                             
-                  <!--           出行目的 -->
+                 	   <!--出行目的 -->
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
@@ -505,6 +508,22 @@
                     </div>
                 </div>
             </li>
+            
+	 		<ul class="col-xs-12 k-widget k-reset k-header k-panelbar" data-template="tpl_customer" data-bind="source:customer.customers"></ul>
+			<div class="row">
+			        <div class="col-xs-12 show" style="padding-bottom:15px;">
+			            <div class="form-group">
+			                <button data-bind="click:addOne" data-params="customer.customers"
+			                        class="k-button col-xs-12 k-button-icontext">
+			                    <span class="k-icon k-i-plus"></span>添加一名申请人
+			                </button>
+			            </div>
+			        </div>
+			</div>
+			<form ></form>
+            
+	        
+	            
             <li> 快递信息
                          <div class="container-fluid">
                            <!--  资料来源/快递号/回邮方式 -->
@@ -554,8 +573,7 @@
                                     </div>
                                 </div>
                             </div>
-                          <!--   end 资料来源/快递号/回邮方式
-                            回邮地址 -->
+                          <!--   end 资料来源/快递号/回邮方式/回邮地址 -->
                             <div class="row join_group">
                                 <div class="col-xs-12">
                                     <div class="form-group">
@@ -569,8 +587,7 @@
                                     </div>
                                 </div>
                             </div>
-                       <!--      end 回邮地址
-                            联系人/电话 -->
+                       <!--      end 回邮地址/联系人/电话 -->
                             <div class="row">
                             	<div class="col-xs-6">
                                     <div class="form-group">
@@ -593,8 +610,7 @@
                                     </div>
                                 </div>
                             </div>
-                        <!--     end 联系人/电话
-                            发票项目内容/发票抬头 -->
+                        <!--     end 联系人/电话/发票项目内容/发票抬头 -->
                             <div class="row">
                             	<div class="col-xs-6">
                                     <div class="form-group">
@@ -635,6 +651,7 @@
                            <!--  end 备注 -->
                         </div>
                     </li> 
+
         </ul>
         <div class="row" >
             <div class="col-xs-12">
@@ -848,7 +865,7 @@
     #=data.name+"("+data.phone+")"#
     #}#
 </script>
-<!-- 出行信息模板 -->
+<!-- 出行信息 模板 -->
 <script id="tpl_temp" type="text/x-kendo-template">
     <div>
 		<div class="row">
@@ -932,7 +949,84 @@
         
     </div>
 </script>
-
+<!-- 主申请人 模板 -->
+<script id="tpl_customer" type="text/html">
+<li class="k-item k-state-default k-first k-last k-state-highlight">
+    <span class="k-link span-Title">#:data.main?'主申请人':'副申请人'#(#:data.lastName+data.firstName#)<span class="k-icon k-i-arrow-60-down k-panelbar-collapse"></span></span>
+    <div class="container-fluid k-content" style="padding-top: 15px;padding-bottom: 15px;">
+        <div class="row">
+            <div class="col-xs-3">
+                <div class="form-group">
+                    <label>姓:<span style="color: red">*</span></label>
+                    <input type="text" class="k-textbox fill" data-bind="value:lastName"/>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="form-group">
+                    <label>名:<span style="color: red">*</span></label>
+                    <input type="text" class="k-textbox fill" data-bind="value:firstName"/>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <label>统一联系人:<span style="color: red">*</span></label>
+                    <div class="input-group"> 
+						<input id="order_hurry"  value="false" data-bind="" class="mui-switch" type="checkbox" name="ishurry" />
+					</div>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <label>主申请人:</label>
+                    <div class="onoffswitch">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main_#:data.uid#" data-bind="checked:main">
+                        <label class="onoffswitch-label" for="main_#:data.uid#">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" data-bind="invisible:main">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label>关联的主申请人:</label>
+                    <input class="fill" data-role="dropdownlist"
+                            data-value-primitive="true"
+                            data-value-field="value"
+                            data-text-field="text"
+                            data-bind="value:home,source:master"/>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label>与主申请人关系:</label>
+                    <select class="fill" data-role="dropdownlist"
+                            data-value-primitive="true"
+                            data-bind="value:relation">
+                        <option>配偶</option>
+                        <option>子女</option>
+                        <option>父母</option>
+                        <option>亲戚</option>
+                        <option>朋友</option>
+                        <option>其他</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <button data-bind="click:delOneApplicant" class="k-button col-xs-12 k-button-icontext" data-params="customer.customers">
+                        <span class="k-icon k-i-close"></span>移除这个申请人
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>
+</script>
 
 <!--引入 js 库文件-->
 <script src="/res/plugin/template.js"></script>
