@@ -248,17 +248,14 @@ $(function () {
     $(document).on("click", ".span-Title", function () {
         $(this).find(".k-icon").toggleClass("k-i-arrow-60-down k-i-arrow-n");
         $(this).addClass("k-state-selected");
-        //$(this).next().toggle();
-        $(this).next().addClass('div-context');//显示 主申请人的 样式
+        $(this).next().toggle();
+        //$(this).next().addClass('div-context');//显示 主申请人的 样式
         //$(this).next().css('border',"solid 1px red");
         $(this).parents('.k-panelbar').siblings().find('.k-link').removeClass('k-state-selected');
         $(this).parents('.k-panelbar').siblings().find('.container-fluid').hide();
         
     });
     
-    /*$(document).on("click",".k-header",function(){
-    	$('.k-content').removeClass("div-context");
-    });*/
     $(".k-header").click(function(){
     	$('.k-content').removeClass("div-context");
     	$(this).parent().siblings().find('.span-Title').removeClass('k-state-selected');

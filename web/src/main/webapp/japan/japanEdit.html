@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/res/css/colors.min.css"/>
     <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
     <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
+    <link rel="stylesheet" href="/res/plugin/switch.css"/>
     <style type="text/css">
     	/*.k-multiselect>.k-multiselect-wrap>.k-i-close {top: 50%;}
     	.k-select span.k-i-close {left: -15px;}
@@ -511,7 +512,7 @@
             
 	 		<ul class="col-xs-12 k-widget k-reset k-header k-panelbar" data-template="tpl_customer" data-bind="source:customer.customers"></ul>
 			<div class="row">
-			        <div class="col-xs-12 show" style="padding-bottom:15px;">
+			        <div class="col-xs-12 show" style="padding-top:15px;padding-bottom: 15px;">
 			            <div class="form-group">
 			                <button data-bind="click:addOne" data-params="customer.customers"
 			                        class="k-button col-xs-12 k-button-icontext">
@@ -967,12 +968,16 @@
                     <input type="text" class="k-textbox fill" data-bind="value:firstName"/>
                 </div>
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-2">
                 <div class="form-group">
                     <label>统一联系人:<span style="color: red">*</span></label>
-                    <div class="input-group"> 
-						<input id="order_hurry"  value="false" data-bind="" class="mui-switch" type="checkbox" name="ishurry" />
-					</div>
+                   <div class="onoffswitch">
+                        <input type="checkbox" name="" class="onoffswitch-checkbox" id="" data-bind="">
+                        <label class="onoffswitch-label" for="">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
                 </div>
             </div>
             <div class="col-xs-2">
