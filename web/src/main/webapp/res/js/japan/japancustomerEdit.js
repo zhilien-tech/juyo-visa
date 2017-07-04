@@ -35,7 +35,22 @@ var countries = new kendo.data.DataSource({
 	oldpassportJp: {},
 	oldnameJp: {},
 	orthercountryJpList: [],
-	recentlyintojpJpList: []
+	recentlyintojpJpList: [],
+	customers: [
+	            {
+	                lastName: "",
+	                firstName: "",
+	                passport: "",
+	                main: true,
+	                depositSource: "",
+	                depositMethod: "",
+	                depositSum: 0,
+	                depositCount: 1,
+	                receipt: false,
+	                insurance: false,
+	                outDistrict: false,
+	            }
+	        ]
 },
     keys = {
         "customer.financeJpList": {},
@@ -98,6 +113,17 @@ var viewModel = kendo.observable({
         var otherCountry = viewModel.get("customer.orthercountryJpList");
         var state = otherCountry ? otherCountry.length > 0 : false;
         return state;
+    },
+    master: function () {
+        var result = [];
+        $.each(viewModel.customer.customers, function (index, item) {
+            if(item.main){
+                var data = {text: item.lastName + item.firstName};
+                data.value = $.hashCode(data.text);
+                result.push(data);
+            }
+        });
+        return result;
     },
     customer: dafaults,
 });

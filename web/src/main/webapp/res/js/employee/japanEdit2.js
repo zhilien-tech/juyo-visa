@@ -25,6 +25,7 @@ var defaults = {
 		dateplanJpList:[],
 		tripplanJpList:[],
 		fastMail:{},
+		customerresourceJp:{},
 		customers: [
 		            {
 		                lastName: "",
@@ -227,7 +228,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    		/*		viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -295,7 +296,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				/*viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -348,7 +349,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    			/*	viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -401,8 +402,8 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
-    				viewModel.set("customer.customermanage.id",data.id);
+    				/*viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				*/viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
     				var color = $("#cus_phone").data("kendoMultiSelect");
@@ -469,8 +470,8 @@ $(function () {
 			color.value(resp.customermanage.id);
 			var color = $("#cus_linkman").data("kendoMultiSelect");
 			color.value(resp.customermanage.id);
-			
-			
+			//客户来源加载显示判断
+			 comsource();
 			
 			//时间格式
 			/*var intimename=document.getEelementsByName("intimename");
@@ -484,6 +485,8 @@ $(function () {
 			
         });
     }
+    
+    comsource();
    
 });
 /*$(function(){
@@ -501,10 +504,126 @@ $(function () {
     		viewModel.set("customer.tripJp.oneormore", true);
     		$('.WangFan').addClass('hide');
     		$('.DuoCheng').removeClass('hide');
+    		
+    		$.ajax({
+   			 type: "POST",
+   			 url: "/visa/neworderjp/autothree",
+   			 contentType: "application/json",
+   			 dataType: "json",
+   			 data: JSON.stringify(viewModel.customer),
+   			 success: function (result) {
+   					viewModel.set("customer", $.extend(true, defaults, result));
+   		        	
+   		        	if(viewModel.get("customer.tripJp.oneormore")==1){
+   		        		$('.WangFan').addClass('hide');
+   		        		$('.DuoCheng').removeClass('hide');
+   		        	}else{
+   		        		$('.WangFan').removeClass('hide');
+   		        		$('.DuoCheng').addClass('hide');
+   		        	}
+   		        	defaults.customermanage.telephone=resp.customermanage.telephone;
+   		        	defaults.customermanage.email=resp.customermanage.email;
+   		        	var color = $("#cus_phone").data("kendoMultiSelect");
+   					color.value(resp.customermanage.id);
+   		        	var color = $("#cus_email").data("kendoMultiSelect");
+   					color.value(resp.customermanage.id);
+   					var color = $("#cus_fullComName").data("kendoMultiSelect");
+   					color.value(resp.customermanage.id);
+   					var color = $("#cus_linkman").data("kendoMultiSelect");
+   					color.value(resp.customermanage.id);
+   					
+   			 }
+   		 });
+    		
+    		
+    		
+    		
     	}else{
     		viewModel.set("customer.tripJp.oneormore", false);
     		$('.WangFan').removeClass('hide');
     		$('.DuoCheng').addClass('hide');
+    		
+    		
+    		$.ajax({
+      			 type: "POST",
+      			 url: "/visa/neworderjp/autothree",
+      			 contentType: "application/json",
+      			 dataType: "json",
+      			 data: JSON.stringify(viewModel.customer),
+      			 success: function (result) {
+      					viewModel.set("customer", $.extend(true, defaults, result));
+      		        	
+      		        	if(viewModel.get("customer.tripJp.oneormore")==1){
+      		        		$('.WangFan').addClass('hide');
+      		        		$('.DuoCheng').removeClass('hide');
+      		        	}else{
+      		        		$('.WangFan').removeClass('hide');
+      		        		$('.DuoCheng').addClass('hide');
+      		        	}
+      		        	defaults.customermanage.telephone=resp.customermanage.telephone;
+      		        	defaults.customermanage.email=resp.customermanage.email;
+      		        	var color = $("#cus_phone").data("kendoMultiSelect");
+      					color.value(resp.customermanage.id);
+      		        	var color = $("#cus_email").data("kendoMultiSelect");
+      					color.value(resp.customermanage.id);
+      					var color = $("#cus_fullComName").data("kendoMultiSelect");
+      					color.value(resp.customermanage.id);
+      					var color = $("#cus_linkman").data("kendoMultiSelect");
+      					color.value(resp.customermanage.id);
+      					
+      			 }
+      		 });
+       		
+    		
+    		
+    		
     	}
     });
 
+   	function autogenerate(){
+	   	 $.ajax({
+			 type: "POST",
+			 url: "/visa/neworderjp/autogenerate",
+			 contentType: "application/json",
+			 dataType: "json",
+			 data: JSON.stringify(viewModel.customer),
+			 success: function (result) {
+					viewModel.set("customer", $.extend(true, defaults, result));
+		        	
+		        	if(viewModel.get("customer.tripJp.oneormore")==1){
+		        		$('.WangFan').addClass('hide');
+		        		$('.DuoCheng').removeClass('hide');
+		        	}else{
+		        		$('.WangFan').removeClass('hide');
+		        		$('.DuoCheng').addClass('hide');
+		        	}
+		        	defaults.customermanage.telephone=resp.customermanage.telephone;
+		        	defaults.customermanage.email=resp.customermanage.email;
+		        	var color = $("#cus_phone").data("kendoMultiSelect");
+					color.value(resp.customermanage.id);
+		        	var color = $("#cus_email").data("kendoMultiSelect");
+					color.value(resp.customermanage.id);
+					var color = $("#cus_fullComName").data("kendoMultiSelect");
+					color.value(resp.customermanage.id);
+					var color = $("#cus_linkman").data("kendoMultiSelect");
+					color.value(resp.customermanage.id);
+					
+			 }
+		 });
+
+   	}
+   	
+   	
+   	function comsource(){
+   		var flag=$("#customerSource").val();
+   		if(flag==3){
+   			$("#select").hide();
+   			$("#selectno").show();
+   		}else{
+   			$("#select").show();
+   			$("#selectno").hide();
+   			
+   		}
+   	}
+   	
+   	
