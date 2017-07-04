@@ -17,6 +17,7 @@ import io.znz.jsite.visa.entity.japan.NewOrthercountryJpEntity;
 import io.znz.jsite.visa.entity.japan.NewRecentlyintojpJpEntity;
 import io.znz.jsite.visa.entity.japan.NewWorkinfoJpEntity;
 import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
+import io.znz.jsite.visa.service.NewCustomerJpService;
 
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,7 @@ import org.nutz.dao.Dao;
 import org.nutz.dao.SqlManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -59,6 +61,9 @@ public class NewCustomerJpController {
 	@Autowired
 	protected SqlManager sqlManager;
 
+	@Autowired
+	private NewCustomerJpService newCustomerJpService;
+
 	/*****
 	 * 
 	 * 客户管理修改所用
@@ -71,127 +76,10 @@ public class NewCustomerJpController {
 	 */
 	@RequestMapping(value = "customerSave", method = RequestMethod.POST)
 	@ResponseBody
+	@Transactional
 	public Object customerSave(@RequestBody NewCustomerJpEntity customer) {
-		String xing = customer.getChinesexing();
-		String name = customer.getChinesename();
-		if (!Util.isEmpty(xing) && !Util.isEmpty(name)) {
-			customer.setChinesefullname(xing + name);
-		} else if (Util.isEmpty(xing) && !Util.isEmpty(name)) {
-			customer.setChinesefullname(name);
+		return newCustomerJpService.save(customer);
 
-		} else if (!Util.isEmpty(xing) && Util.isEmpty(name)) {
-			customer.setChinesefullname(xing);
-
-		}
-		List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
-				Cnd.where("customer_jp_id", "=", customer.getId()), null);
-		long orderid = query.get(0).getOrder_jp_id();
-		dbDao.update(NewOrderJpEntity.class, Chain.make("updatetime", new Date()), Cnd.where("id", "=", orderid));
-		NewCustomerJpEntity newcustomer = customer;
-		if (!Util.isEmpty(customer.getId()) && customer.getId() > 0) {
-			customer.setUpdatetime(new Date());
-
-			try {
-				nutDao.update(customer);
-			} catch (Exception e) {
-
-				e.printStackTrace();
-
-			}
-		} else {
-			customer.setUpdatetime(new Date());
-			newcustomer = dbDao.insert(customer);
-		}
-		NewWorkinfoJpEntity army = customer.getWorkinfoJp();
-		if (!Util.isEmpty(army)) {
-			if (!Util.isEmpty(army.getId()) && army.getId() > 0) {
-				nutDao.update(army);
-			} else {
-
-				army.setCustomer_jp_id(customer.getId());
-				dbDao.insert(army);
-			}
-		}
-		NewOldpassportJpEntity father = customer.getOldpassportJp();
-		if (!Util.isEmpty(father)) {
-			if (!Util.isEmpty(father.getId()) && father.getId() > 0) {
-				nutDao.update(father);
-			} else {
-
-				father.setCustomer_jp_id(customer.getId());
-				dbDao.insert(father);
-			}
-		}
-
-		NewOldnameJpEntity mother = customer.getOldnameJp();
-		if (!Util.isEmpty(mother)) {
-			if (!Util.isEmpty(mother.getId()) && mother.getId() > 0) {
-				nutDao.update(mother);
-			} else {
-
-				mother.setCustomer_jp_id(customer.getId());
-				dbDao.insert(mother);
-			}
-		}
-
-		List<NewRecentlyintojpJpEntity> oldworkslist = customer.getRecentlyintojpJpList();
-		List<NewRecentlyintojpJpEntity> list1 = dbDao.query(NewRecentlyintojpJpEntity.class,
-				Cnd.where("customer_jp_id", "=", customer.getId()), null);
-		if (!Util.isEmpty(list1) && list1.size() > 0) {
-
-			dbDao.delete(list1);
-		}
-		if (!Util.isEmpty(oldworkslist) && oldworkslist.size() > 0) {
-			for (NewRecentlyintojpJpEntity newLanguageEntity : oldworkslist) {
-				/*if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
-					nutDao.update(newLanguageEntity);
-				} else {
-				*/
-				newLanguageEntity.setCustomer_jp_id(customer.getId());
-				dbDao.insert(newLanguageEntity);
-				//}
-			}
-		}
-		List<NewFinanceJpEntity> orthercountrylist = customer.getFinanceJpList();
-		List<NewFinanceJpEntity> list2 = dbDao.query(NewFinanceJpEntity.class,
-				Cnd.where("customer_jp_id", "=", customer.getId()), null);
-		if (!Util.isEmpty(list2) && list2.size() > 0) {
-
-			dbDao.delete(list2);
-		}
-		if (!Util.isEmpty(orthercountrylist) && orthercountrylist.size() > 0) {
-			for (NewFinanceJpEntity newLanguageEntity : orthercountrylist) {
-				/*	if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
-						nutDao.update(newLanguageEntity);
-					} else {
-				*/
-				newLanguageEntity.setCustomer_jp_id(customer.getId());
-				dbDao.insert(newLanguageEntity);
-				//	}
-			}
-		}
-
-		List<NewOrthercountryJpEntity> workedplacelist = customer.getOrthercountryJpList();
-
-		List<NewOrthercountryJpEntity> list3 = dbDao.query(NewOrthercountryJpEntity.class,
-				Cnd.where("customer_jp_id", "=", customer.getId()), null);
-		if (!Util.isEmpty(list3) && list3.size() > 0) {
-
-			dbDao.delete(list3);
-		}
-		if (!Util.isEmpty(workedplacelist) && workedplacelist.size() > 0) {
-			for (NewOrthercountryJpEntity newLanguageEntity : workedplacelist) {
-				/*if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
-					nutDao.update(newLanguageEntity);
-				} else {
-				*/
-				newLanguageEntity.setCustomer_jp_id(customer.getId());
-				dbDao.insert(newLanguageEntity);
-				//}
-			}
-		}
-
-		return ResultObject.success("修改成功");
 	}
 
 	/***

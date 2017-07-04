@@ -56,7 +56,7 @@ function regCmd(command) {
             					layer.close(index);
             					}
                            
-                        	//layer.msg("分享成功",{time: 2000});
+                        	layer.msg("分享成功",{time: 2000});
                         } else {
                             $.layer.alert(resp.msg);
                         }
@@ -105,7 +105,7 @@ function regCmd(command) {
                                 $.layer.closeAll();
                             });*/
                 			
-                			// layer.msg("分享成功",{time: 2000});
+                			 layer.msg("分享成功",{time: 2000});
                 		} else {
                 			$.layer.alert(resp.msg);
                 		}

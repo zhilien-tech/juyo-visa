@@ -130,6 +130,7 @@ $(function(){
 		 });
 		
 		
+		$("#reason").hide();
 		if(a!=0){
 //			alert($("#writeResource"));
 			$("#writeResource").addClass("a-active");
@@ -138,16 +139,15 @@ $(function(){
 			$("#approvel").addClass("a-active");
 		}
 		if(a==4){
-			$("#reason").hide();
 			$("#approvel").text("初审通过");
 		}
 		if(a>=8){
-			$("#reason").hide();
 			$("#approvel").text("初审通过");
 			$("#readysubmit").addClass("a-active");
 			
 		}
 		if(a==5){
+			$("#reason").show();
 			$("#approvel").text("初审拒绝");
 		}
 		if(a==10){
@@ -211,5 +211,5 @@ function timeapply(){
 
 
 function jump(){
-	window.location.href='/myvisa/transactVisa/visaNationPersonal.html?country='+escape(JSON.stringify(country));
+	window.location.href='/myvisa/transactVisa/visaNationPersonal.html?country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
 }
