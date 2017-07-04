@@ -95,6 +95,9 @@ public class NewOrderJpEntity implements Serializable {
 	@Column
 	@Comment("递送次数")
 	private Integer sendnum;
+	@Column
+	@Comment("客户来源")
+	private Integer customerSource;
 
 	private CustomerManageEntity customermanage;
 
@@ -117,5 +120,7 @@ public class NewOrderJpEntity implements Serializable {
 
 	//每个订单对应多个客户
 	private List<NewCustomerJpEntity> customerJpList;
+
+	private NewCustomerresourceJpEntity customerresourceJp;
 
 }
