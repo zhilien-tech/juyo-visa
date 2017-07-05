@@ -542,6 +542,26 @@ public class VisaInfoController extends BaseController {
 				}
 			}
 		}
+		//赴美国旅行目的列表
+		TravelPurposeEntity travelpurpose = customer.getTravelpurpose();
+		if (!Util.isEmpty(travelpurpose)) {
+			if (!Util.isEmpty(travelpurpose.getId()) && travelpurpose.getId() > 0) {
+				nutDao.update(travelpurpose);
+			} else {
+				travelpurpose.setCustomerId(customer.getId());
+				dbDao.insert(travelpurpose);
+			}
+		}
+		//是否制定了具体旅行计划
+		TravelPlanEntity travelplan = customer.getTravelplan();
+		if (!Util.isEmpty(travelplan)) {
+			if (!Util.isEmpty(travelplan.getId()) && travelplan.getId() > 0) {
+				nutDao.update(travelplan);
+			} else {
+				travelplan.setCustomerId(customer.getId());
+				dbDao.insert(travelplan);
+			}
+		}
 		//地点信息
 		PlaceInformationEntity placeinformation = customer.getPlaceinformation();
 		if (!Util.isEmpty(placeinformation)) {

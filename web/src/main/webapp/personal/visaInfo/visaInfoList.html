@@ -21,6 +21,7 @@
     <div class="Search">
       <div  class="col-xs-12">
         <input type="button" class="btn btn-primary input-sm pull-right marginBtn editBtn" value="编辑">
+        <a id="back" href="javascript:window.history.go(-1);"><i class="fa fa-chevron-left"></i><span>&nbsp;返回</span></a>
       	<input type="button" class="btn btn-primary input-sm pull-right marginBtn cancelBtn hide" onclick=" " value="取消">
       	<input id="updatePassportSave" type="button" class="btn btn-primary input-sm pull-right marginBtn saveBtn hide" value="保存">
       </div>
@@ -1557,9 +1558,18 @@
                 </ul>
             </div>
         </div>
+        <!-- 签证进度跳进来时需要展示【保存】按钮 -->
+	    <div class="row">
+	        <div class="col-xs-12">
+	            <div class="form-group">
+	                <button id="nextStepBtn" class="k-primary k-button col-xs-12">
+	                                            保存
+	                </button>
+	            </div>
+        	</div>
+    	</div>
     </div>
 </div>
-
 </body>
 <!--引入 js 模板片段-->
 <script id="tpl_traveler" type="text/html">

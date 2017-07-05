@@ -22,6 +22,7 @@
 	<!--搜索条件 模块-->
     <div class="Search">
       <div  class="col-xs-12">
+      	<a id="back" href="javascript:window.history.go(-1);"><i class="fa fa-chevron-left"></i><span>&nbsp;返回</span></a>
         <input type="button" class="btn btn-primary input-sm pull-right marginBtn editBtn" value="编辑">
       	<input type="button" class="btn btn-primary input-sm pull-right marginBtn cancelBtn hide" onclick=" " value="取消">
       	<input id="updatePassportSave" type="button" class="btn btn-primary input-sm pull-right marginBtn saveBtn hide" value="保存">
@@ -35,7 +36,7 @@
              <div class="col-xs-6">
                 <div class="form-group">
                     <label for="last_name_cn">类型:</label>
-                    <!-- <div class='input-group'>
+                    <div class='input-group'>
                        <select id="passporttype" style="width: 100%;"
                                data-role="dropdownlist"
                                data-filter="startswith"
@@ -47,11 +48,11 @@
                                data-bind="value:customer.passporttype,source:passportTypeEnum" >
                        </select>
                        <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                    </div> -->
-                    <div class='input-group'>
-                      <input id="passportType" type="text" data-bind="" value="旅游护照" class="k-textbox k-state-disabled" style="width: 100%;" disabled />
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
+                    <!-- <div class='input-group'>
+                      <input id="passportType" type="text" data-bind="value:customer.passporttype" class="k-textbox k-state-disabled" style="width: 100%;" disabled />
+                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    </div> -->
                 </div>
              </div>
              <div class="col-xs-6">
@@ -220,6 +221,16 @@
              </div>
            </div>
            <!--end 护照本号码/护照机读码-->
+        </div>
+        <!-- 签证进度跳进来时需要展示【下一步】按钮 -->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <button id="nextStepBtn" class="k-primary k-button col-xs-12">
+                                                下一步
+                    </button>
+                </div>
+            </div>
         </div>
 	</div>
 </body>
