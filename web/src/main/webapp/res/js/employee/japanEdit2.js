@@ -6,12 +6,20 @@ var customersourceEnum=[
     {text:"直客",value:3},
     {text:"线下",value:4}
   ];
-var proposers=[
-                        {text:"线上",value:1},
-                        {text:"OTS",value:2},
-                        {text:"直客",value:3},
-                        {text:"线下",value:4}
-                        ];
+var proposers=new kendo.data.DataSource({
+    serverFiltering: true,
+    transport: {
+        read: {
+            dataType: "json",
+            url: "/visa/neworderjp/porposerdatasource",
+        },
+        parameterMap: function (options, type) {
+            if (options.filter) {
+                return {filter: options.filter.filters[0].value};
+            }
+        },
+    }
+});
 
 //出发城市
 var startcity=[

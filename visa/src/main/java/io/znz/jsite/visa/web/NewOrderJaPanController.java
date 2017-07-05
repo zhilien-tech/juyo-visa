@@ -356,7 +356,13 @@ public class NewOrderJaPanController {
 						nutDao.update(newPeerPersionEntity);
 					} else {*/
 				newPeerPersionEntity.setOrder_jp_id(orderOld.getId());
-				dbDao.insert(newPeerPersionEntity);
+				Integer relation = newPeerPersionEntity.getRelation();
+				newPeerPersionEntity = dbDao.insert(newPeerPersionEntity);
+				if (!Util.isEmpty(relation) && relation == 1) {
+					newPeerPersionEntity.setRelationproposer(newPeerPersionEntity.getId());
+
+				}
+				nutDao.update(newPeerPersionEntity);
 				/*	}*/
 			}
 			//List<NewPeerPersionEntity> insert = dbDao.insert(peerList);
@@ -622,8 +628,10 @@ public class NewOrderJaPanController {
 			order.setFastMail(newPayCompanyEntities.get(0));
 		}
 		//============================
-		List<NewProposerInfoJpEntity> proposerInfoJpList = dbDao.query(NewProposerInfoJpEntity.class,
-				Cnd.where("order_jp_id", "=", orderid), null);
+		String string = sqlManager.get("neworderjapan_porposerorder");
+		Sql sql = Sqls.create(string);
+		sql.setParam("orderid", orderid);
+		List<NewProposerInfoJpEntity> proposerInfoJpList = DbSqlUtil.query(dbDao, NewProposerInfoJpEntity.class, sql);
 		if (!Util.isEmpty(proposerInfoJpList) && proposerInfoJpList.size() > 0) {
 			order.setProposerInfoJpList(proposerInfoJpList);
 		}
@@ -1190,5 +1198,13 @@ public class NewOrderJaPanController {
 		}
 		order.setProposerInfoJpList(proposerInfoJpList);
 		return order;
+	}
+
+	@RequestMapping(value = "porposerdatasource")
+	@ResponseBody
+	public Object porposerdatasource() {
+		List<NewProposerInfoJpEntity> query = dbDao.query(NewProposerInfoJpEntity.class,
+				Cnd.where("ismainproposer", "=", 1), null);
+		return query;
 	}
 }
