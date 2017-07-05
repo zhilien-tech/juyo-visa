@@ -485,6 +485,7 @@ $(function () {
         		$('.WangFan').removeClass('hide');
         		$('.DuoCheng').addClass('hide');
         	}
+        	console.log("resp.customermanage.telephone的值："+resp.customermanage.telephone);
         	defaults.customermanage.telephone=resp.customermanage.telephone;
         	defaults.customermanage.email=resp.customermanage.email;
         	var color = $("#cus_phone").data("kendoMultiSelect");
@@ -637,13 +638,16 @@ $(function () {
    	
    	function comsource(){
    		var flag=$("#customerSource").val();
-   		if(flag==3){
+   		if(flag==3){//直客 
    			$("#select").hide();
    			$("#selectno").show();
-   		}else{
+   			$('.companyFullName').addClass('hide');//隐藏 默认显示的 其他状态下的 公司全称
+   			$('.ZKcompanyFullName').removeClass('hide');//显示   默认显示的  直客  公司全称
+   		}else{//其他
    			$("#select").show();
    			$("#selectno").hide();
-   			
+   			$('.companyFullName').removeClass('hide');//显示 默认显示的 其他状态下的 公司全称
+   			$('.ZKcompanyFullName').addClass('hide');//隐藏   默认显示的  直客  公司全称
    		}
    	}
    	
