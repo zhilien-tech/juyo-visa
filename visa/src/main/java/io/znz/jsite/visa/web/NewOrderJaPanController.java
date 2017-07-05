@@ -242,17 +242,32 @@ public class NewOrderJaPanController {
 		if (!Util.isEmpty(customerSource) && customerSource > 0) {
 			if (customerSource == OrderJapancustomersourceEnum.zhike.intKey()) {
 				NewCustomerresourceJpEntity customerresourceJp = order.getCustomerresourceJp();
-				if (!Util.isEmpty(customerresourceJp)) {
-					if (!Util.isEmpty(customerresourceJp.getId()) && customerresourceJp.getId() > 0) {
-						nutDao.update(customerresourceJp);
-					} else {
+				List<NewCustomerresourceJpEntity> customerresource = dbDao.query(NewCustomerresourceJpEntity.class,
+						Cnd.where("order_jp_id", "=", orderOld.getId()), null);
 
-						customerresourceJp.setOrder_jp_id(orderOld.getId());
-						dbDao.insert(customerresourceJp);
-					}
+				if (!Util.isEmpty(customerresource) && customerresource.size() > 0) {
+					customerresourceJp.setId(customerresource.get(0).getId());
+					customerresourceJp.setOrder_jp_id(orderOld.getId());
+					nutDao.update(customerresourceJp);
+
+				} else {
+
+					dbDao.insert(customerresourceJp);
 				}
+				/*	if (!Util.isEmpty(customerresourceJp)) {
+						if (!Util.isEmpty(customerresourceJp.getId()) && customerresourceJp.getId() > 0) {
+							nutDao.update(customerresourceJp);
+						} else {
+
+							customerresourceJp.setOrder_jp_id(orderOld.getId());
+							dbDao.insert(customerresourceJp);
+						}
+					}*/
 			} else {
-				if (!Util.isEmpty(customermanage)) {
+				if (customerSource == OrderJapancustomersourceEnum.zhike.intKey()) {
+
+				} else {
+
 					orderOld.setCustomer_manager_id(Long.valueOf(customermanage.getId()));
 					dbDao.update(orderOld, null);
 					Chain chain = Chain.make("updateTime", new Date());
@@ -262,6 +277,24 @@ public class NewOrderJaPanController {
 					chain.add("telephone", customermanage.getTelephone());
 					chain.add("email", customermanage.getEmail());
 					dbDao.update(CustomerManageEntity.class, chain, Cnd.where("id", "=", customermanage.getId()));
+					//在客户来源不是直客的状态下也存在这个表中，以便用于列表展示
+
+					NewCustomerresourceJpEntity customerresourceJp = new NewCustomerresourceJpEntity();
+					List<NewCustomerresourceJpEntity> customerresource = dbDao.query(NewCustomerresourceJpEntity.class,
+							Cnd.where("order_jp_id", "=", orderOld.getId()), null);
+					customerresourceJp.setEmail(customermanage.getEmail());
+					customerresourceJp.setFullComName(customermanage.getFullComName());
+					customerresourceJp.setLinkman(customermanage.getLinkman());
+					customerresourceJp.setTelephone(customermanage.getTelephone());
+					customerresourceJp.setOrder_jp_id(orderOld.getId());
+					if (!Util.isEmpty(customerresource) && customerresource.size() > 0) {
+						customerresourceJp.setId(customerresource.get(0).getId());
+						nutDao.update(customerresourceJp);
+
+					} else {
+
+						dbDao.insert(customerresourceJp);
+					}
 				}
 
 			}
@@ -462,6 +495,8 @@ public class NewOrderJaPanController {
 						Long.valueOf(order.getCustomer_manager_id()));
 				if (!Util.isEmpty(customerManageEntity)) {
 					order.setCustomermanage(customerManageEntity);
+					NewCustomerresourceJpEntity customerresourceJp = new NewCustomerresourceJpEntity();
+					order.setCustomerresourceJp(customerresourceJp);
 				}
 
 				//}
