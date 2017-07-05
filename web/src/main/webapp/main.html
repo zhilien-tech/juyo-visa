@@ -236,7 +236,7 @@
             <a href="/" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
         </div>
         <div class="row J_mainContent" id="content-main">
-            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" frameborder="0" src="home.html"
+            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" frameborder="0" src=""
                     data-id="home.html" seamless></iframe>
         </div>
         <div class="footer">
@@ -671,7 +671,14 @@
     	}
     	//显示登录人姓名
     	var username=$.queryString("username");
-    	$("#userId").text(decodeURI(username).replace(/\+/g,' '));
+    	var logintype=$.queryString("logintype");
+    	$("#userId").text(decodeURIComponent(username));
+    	if(logintype != "" && logintype != null && logintype == 1){//1表示进入日本的签证状态
+        	$('.J_iframe').attr('src','/order/america.html'); 
+        }else{
+        	$('.J_iframe').attr('src','/myvisa/transactVisa/visaNationList.html'); 
+        }
+    	
         $.getJSON("/sys/user/curr",function(result){
             $("#name").html(result.name);
             $("#role").html(result.role);

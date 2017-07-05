@@ -12,6 +12,24 @@ window.onload = function(){
 }
 //初始化各个组件
 $(function(){
+	//折叠板 效果初始化
+    $("#panelbar").kendoPanelBar({
+         expandMode: "single" //设置展开模式只能展开单个
+    });
+	
+    var aa = $.queryString("typeId");//得到签证进度在填写资料时跳转页面传来的参数
+	if(aa == null || aa == "" || aa == undefined){//表示不是从签证进度跳转而来
+		$("#nextStepBtn").hide();//隐藏下一步按钮
+		$("#back").hide();//隐藏返回按钮
+		$(".input-group input").attr("k-state-disabled");
+		$(".input-group input").addClass("k-state-disabled");
+	}else if(aa == 1){
+		//隐藏编辑按钮
+		$(".editBtn").hide();
+		$(".input-group input").removeAttr("disabled"); //去掉所有input框的不可编辑属性
+		$(".input-group input").removeClass("k-state-disabled");//去掉不可编辑样式
+	}
+    
 	$("#sex").kendoDropDownList();//性别 状态 下拉框初始化
 	$("#birthDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//出生日期
 	$("#signedDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//签发日期
@@ -180,10 +198,25 @@ function updateVisaInfoJPSave(){
 		 contentType:"application/json",
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){
-			layer.msg("编辑保存成功",{time:2000});
+			layer.msg("保存成功",{time:2000});
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-             layer.msg('编辑保存失败',{time:2000});
+             layer.msg('保存失败',{time:2000});
          }
 	});
 }
+//点击保存时
+$("#nextStepBtn").click(function(){
+	$.ajax({
+		 type: "POST",
+		 url: "/visa/visainfo/updateVisaInfoJPSave",
+		 contentType:"application/json",
+		 data: JSON.stringify(viewModel.customer)+"",
+		 success: function (result){
+			layer.msg("保存成功",{time:2000});
+		 },
+		 error: function(XMLHttpRequest, textStatus, errorThrown) {
+             layer.msg('保存失败',{time:2000});
+         }
+	});
+});
