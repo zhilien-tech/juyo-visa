@@ -26,6 +26,7 @@ var defaults = {
 		tripplanJpList:[],
 		fastMail:{},
 		customerresourceJp:{},
+		proposerInfoJpList:[]/*,
 		customers: [
 		            {
 		                lastName: "",
@@ -40,7 +41,7 @@ var defaults = {
 		                insurance: false,
 		                outDistrict: false,
 		            }
-		        ]
+		        ]*/
 }, 
 keys = {
 		"customer.dateplanJpList":{
@@ -67,6 +68,9 @@ keys = {
 			breakfast:"",
 			dinner:""
 
+		},
+		"customer.proposerInfoJpList":{
+			
 		}
 },
 flights = new kendo.data.DataSource({
@@ -542,16 +546,16 @@ $(function () {
    		        		$('.WangFan').removeClass('hide');
    		        		$('.DuoCheng').addClass('hide');
    		        	}
-   		        	defaults.customermanage.telephone=resp.customermanage.telephone;
-   		        	defaults.customermanage.email=resp.customermanage.email;
+   		        	defaults.customermanage.telephone=result.customermanage.telephone;
+   		        	defaults.customermanage.email=result.customermanage.email;
    		        	var color = $("#cus_phone").data("kendoMultiSelect");
-   					color.value(resp.customermanage.id);
+   					color.value(result.customermanage.id);
    		        	var color = $("#cus_email").data("kendoMultiSelect");
-   					color.value(resp.customermanage.id);
+   					color.value(result.customermanage.id);
    					var color = $("#cus_fullComName").data("kendoMultiSelect");
-   					color.value(resp.customermanage.id);
+   					color.value(result.customermanage.id);
    					var color = $("#cus_linkman").data("kendoMultiSelect");
-   					color.value(resp.customermanage.id);
+   					color.value(result.customermanage.id);
    					
    			 }
    		 });	
@@ -577,16 +581,16 @@ $(function () {
       		        		$('.WangFan').removeClass('hide');
       		        		$('.DuoCheng').addClass('hide');
       		        	}
-      		        	defaults.customermanage.telephone=resp.customermanage.telephone;
-      		        	defaults.customermanage.email=resp.customermanage.email;
+      		        	defaults.customermanage.telephone=result.customermanage.telephone;
+      		        	defaults.customermanage.email=result.customermanage.email;
       		        	var color = $("#cus_phone").data("kendoMultiSelect");
-      					color.value(resp.customermanage.id);
+      					color.value(result.customermanage.id);
       		        	var color = $("#cus_email").data("kendoMultiSelect");
-      					color.value(resp.customermanage.id);
+      					color.value(result.customermanage.id);
       					var color = $("#cus_fullComName").data("kendoMultiSelect");
-      					color.value(resp.customermanage.id);
+      					color.value(result.customermanage.id);
       					var color = $("#cus_linkman").data("kendoMultiSelect");
-      					color.value(resp.customermanage.id);
+      					color.value(result.customermanage.id);
       					
       			 }
       		 });
@@ -614,17 +618,63 @@ $(function () {
 		        		$('.WangFan').removeClass('hide');
 		        		$('.DuoCheng').addClass('hide');
 		        	}
-		        	defaults.customermanage.telephone=resp.customermanage.telephone;
-		        	defaults.customermanage.email=resp.customermanage.email;
+		        	defaults.customermanage.telephone=result.customermanage.telephone;
+		        	defaults.customermanage.email=result.customermanage.email;
 		        	var color = $("#cus_phone").data("kendoMultiSelect");
-					color.value(resp.customermanage.id);
+					color.value(result.customermanage.id);
 		        	var color = $("#cus_email").data("kendoMultiSelect");
-					color.value(resp.customermanage.id);
+					color.value(result.customermanage.id);
 					var color = $("#cus_fullComName").data("kendoMultiSelect");
-					color.value(resp.customermanage.id);
+					color.value(result.customermanage.id);
 					var color = $("#cus_linkman").data("kendoMultiSelect");
-					color.value(resp.customermanage.id);
+
+					color.value(result.customermanage.id);
+					
 			 }
 		 });
-
+   	}
+   	
+   	
+   	function comsource(){
+   		var flag=$("#customerSource").val();
+   		if(flag==3){
+   			$("#select").hide();
+   			$("#selectno").show();
+   		}else{
+   			$("#select").show();
+   			$("#selectno").hide();
+   			
+   		}
+   	}
+   	
+   	function addporposer(){
+   		$.ajax({
+  			 type: "POST",
+  			 url: "/visa/neworderjp/autoporposer",
+  			 contentType: "application/json",
+  			 dataType: "json",
+  			 data: JSON.stringify(viewModel.customer),
+  			 success: function (result) {
+  					viewModel.set("customer", $.extend(true, defaults, result));
+  		        	
+  		        	if(viewModel.get("customer.tripJp.oneormore")==1){
+  		        		$('.WangFan').addClass('hide');
+  		        		$('.DuoCheng').removeClass('hide');
+  		        	}else{
+  		        		$('.WangFan').removeClass('hide');
+  		        		$('.DuoCheng').addClass('hide');
+  		        	}
+  		        	defaults.customermanage.telephone=result.customermanage.telephone;
+  		        	defaults.customermanage.email=result.customermanage.email;
+  		        	var color = $("#cus_phone").data("kendoMultiSelect");
+  					color.value(result.customermanage.id);
+  		        	var color = $("#cus_email").data("kendoMultiSelect");
+  					color.value(result.customermanage.id);
+  					var color = $("#cus_fullComName").data("kendoMultiSelect");
+  					color.value(result.customermanage.id);
+  					var color = $("#cus_linkman").data("kendoMultiSelect");
+  					color.value(result.customermanage.id);
+  					
+  			 }
+  		 });
    	}

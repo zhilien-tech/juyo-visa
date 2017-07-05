@@ -565,15 +565,21 @@
                 </div>
             </li>
             
-	 		<ul class="col-xs-12 k-widget k-reset k-header k-panelbar" data-template="tpl_customer" data-bind="source:customer.customers"></ul>
+	 		<ul class="col-xs-12 k-widget k-reset k-header k-panelbar" data-template="tpl_customer" data-bind="source:customer.proposerInfoJpList"></ul>
 			<div class="row">
 			        <div class="col-xs-12 show" style="padding-top:15px;padding-bottom: 15px;">
 			            <div class="form-group">
-			                <button data-bind="click:addOne" data-params="customer.customers"
+			                <button data-bind="click:addOne" data-params="customer.proposerInfoJpList"
 			                        class="k-button col-xs-12 k-button-icontext">
 			                    <span class="k-icon k-i-plus"></span>添加一名申请人
 			                </button>
+			        	  <button onclick="addporposer();"
+			                        >
+			                    添加
+			                </button>
 			            </div>
+			        </div>
+			        <div>
 			        </div>
 			</div>
 			<form ></form>
@@ -1010,26 +1016,26 @@
 <!-- 主申请人 模板 -->
 <script id="tpl_customer" type="text/html">
 <li class="k-item k-state-default k-first k-last k-state-highlight">
-    <span class="k-link span-Title">#:data.main?'主申请人':'副申请人'#(#:data.lastName+data.firstName#)<span class="k-icon k-i-arrow-60-down k-panelbar-collapse"></span></span>
+    <span class="k-link span-Title">#:data.ismainproposer?'主申请人':'副申请人'#(#:data.xing+data.name#)<span class="k-icon k-i-arrow-60-down k-panelbar-collapse"></span></span>
     <div class="container-fluid k-content" style="padding-top: 15px;padding-bottom: 15px;">
         <div class="row">
             <div class="col-xs-3">
                 <div class="form-group">
                     <label>姓:<span style="color: red">*</span></label>
-                    <input type="text" class="k-textbox fill" data-bind="value:lastName"/>
+                    <input type="text" class="k-textbox fill" data-bind="value:xing"/>
                 </div>
             </div>
             <div class="col-xs-3">
                 <div class="form-group">
                     <label>名:<span style="color: red">*</span></label>
-                    <input type="text" class="k-textbox fill" data-bind="value:firstName"/>
+                    <input type="text" class="k-textbox fill" data-bind="value:name"/>
                 </div>
             </div>
             <div class="col-xs-2">
                 <div class="form-group">
                     <label>统一联系人:<span style="color: red">*</span></label>
                    <div class="onoffswitch">
-                        <input type="checkbox" name="" class="onoffswitch-checkbox" id="" data-bind="">
+                        <input type="checkbox" name="" class="onoffswitch-checkbox" id="" data-bind="value:istogetherlinkman">
                         <label class="onoffswitch-label" for="">
                             <span class="onoffswitch-inner"></span>
                             <span class="onoffswitch-switch"></span>
@@ -1041,7 +1047,7 @@
                 <div class="form-group">
                     <label>主申请人:</label>
                     <div class="onoffswitch">
-                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main_#:data.uid#" data-bind="checked:main">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main_#:data.uid#" data-bind="checked:ismainproposer">
                         <label class="onoffswitch-label" for="main_#:data.uid#">
                             <span class="onoffswitch-inner"></span>
                             <span class="onoffswitch-switch"></span>
@@ -1050,7 +1056,7 @@
                 </div>
             </div>
         </div>
-        <div class="row" data-bind="invisible:main">
+        <div class="row" data-bind="invisible:ismainproposer">
             <div class="col-xs-6">
                 <div class="form-group">
                     <label>关联的主申请人:</label>
@@ -1058,7 +1064,7 @@
                             data-value-primitive="true"
                             data-value-field="value"
                             data-text-field="text"
-                            data-bind="value:home,source:master"/>
+                            data-bind="value:home,source:relationproposer"/>
                 </div>
             </div>
             <div class="col-xs-6">
@@ -1067,12 +1073,12 @@
                     <select class="fill" data-role="dropdownlist"
                             data-value-primitive="true"
                             data-bind="value:relation">
-                        <option>配偶</option>
-                        <option>子女</option>
-                        <option>父母</option>
-                        <option>亲戚</option>
-                        <option>朋友</option>
-                        <option>其他</option>
+                        <option value="1">配偶</option>
+                        <option value="2">子女</option>
+                        <option value="3">父母</option>
+                        <option value="4">亲戚</option>
+                        <option value="5">朋友</option>
+                        <option value="6">其他</option>
                     </select>
                 </div>
             </div>
@@ -1080,7 +1086,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="form-group">
-                    <button data-bind="click:delOneApplicant" class="k-button col-xs-12 k-button-icontext" data-params="customer.customers">
+                    <button data-bind="click:delOneApplicant" class="k-button col-xs-12 k-button-icontext" data-params="customer.proposerInfoJpList">
                         <span class="k-icon k-i-close"></span>移除这个申请人
                     </button>
                 </div>

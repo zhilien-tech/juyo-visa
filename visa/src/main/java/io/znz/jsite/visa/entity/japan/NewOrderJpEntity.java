@@ -123,4 +123,6 @@ public class NewOrderJpEntity implements Serializable {
 
 	private NewCustomerresourceJpEntity customerresourceJp;
 
+	private List<NewProposerInfoJpEntity> proposerInfoJpList;
+
 }
