@@ -485,7 +485,6 @@ $(function () {
         		$('.WangFan').removeClass('hide');
         		$('.DuoCheng').addClass('hide');
         	}
-        	console.log("resp.customermanage.telephone的值："+resp.customermanage.telephone);
         	defaults.customermanage.telephone=resp.customermanage.telephone;
         	defaults.customermanage.email=resp.customermanage.email;
         	var color = $("#cus_phone").data("kendoMultiSelect");
@@ -512,7 +511,8 @@ $(function () {
         });
     }
     
-    comsource();
+    comsource();//客户来源 状态 模块加载
+    addporposer();//主申请人 模块加载
    
 });
 /*$(function(){
@@ -659,7 +659,7 @@ $(function () {
   			 dataType: "json",
   			 data: JSON.stringify(viewModel.customer),
   			 success: function (result) {
-  				 console.log(JSON.stringify(result));
+  				 //console.log(JSON.stringify(result));
   					viewModel.set("customer", $.extend(true, defaults, result));
   		        	
   		        	if(viewModel.get("customer.tripJp.oneormore")==1){
