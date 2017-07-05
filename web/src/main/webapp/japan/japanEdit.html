@@ -29,8 +29,7 @@
         	<li  class="k-state-active">
                         <span class="k-link k-state-selected">客户信息</span>
                         <div class="container-fluid closeIconLocation">
-                            <!--公司全称/客户来源-->
-                            
+                            <!--客户来源/公司全称-->
                             <div class="row">
                             	  <div class="col-xs-4">
                                     <div class="form-group">
@@ -52,23 +51,34 @@
                                         </div>
                                     </div>
                                 </div>
+                                
+                                <div class="col-xs-8 companyFullName">
+		                            <div class="form-group">
+		                                 <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
+		                                 <div class='input-group'>
+		                                    <input id="cus_fullComName" type="text" class="k-textbox" style="width: 100%;"
+		                                           data-bind="value:customer.customermanage.fullComName"  />
+		                                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+		                                 </div>
+		                            </div>
+		                        </div>
+		                        
+
+		                        <div class="col-xs-8 hide ZKcompanyFullName">
+		                            <div class="form-group">
+		                                <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
+		                                <div class='input-group'>
+		                                   <input id="cus_fullComName" type="text" class="k-textbox" style="width: 100%;"
+		                                          data-bind="value:customer.customerresourceJp.fullComName"  />
+		                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+		                                </div>
+		                            </div>
+		                        </div>
                             </div>
+                            <!-- end 客户来源/公司全称 -->
+                            
                             <!-- 选择框 -->
                             <div id="select">
-		                            <div class="row">
-		                                <div class="col-xs-8">
-		                                    <div class="form-group">
-		                                        <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
-		                                        <div class='input-group'>
-		                                            <input id="cus_fullComName" type="text" class="k-textbox" style="width: 100%;"
-		                                              data-bind="value:customer.customermanage.fullComName"  />
-		                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-		                                        </div>
-		                                    </div>
-		                                </div>
-		                              
-		                            </div>
-		                            <!-- end 公司全称/客户来源 -->
 		                          	<!--联系人/手机/邮箱-->
 		                            <div class="row">
 		                                <div class="col-xs-4">
@@ -105,27 +115,10 @@
 		                                    </div>
 		                                </div>
 		                            </div>
-                            		
-                            
-                            
                             </div>
                              
                              <!-- ===============================输入框开始======================== -->
  								<div id="selectno">
- 									 <div class="row">
-		                                <div class="col-xs-8">
-		                                    <div class="form-group">
-		                                        <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
-		                                        <div class='input-group'>
-		                                            <input id="cus_fullComName" type="text" class="k-textbox" style="width: 100%;"
-		                                              data-bind="value:customer.customerresourceJp.fullComName"  />
-		                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-		                                        </div>
-		                                    </div>
-		                                </div>
-		                              
-		                            </div>
-		                            <!-- end 公司全称/客户来源 -->
 		                          	<!--联系人/手机/邮箱-->
 		                            <div class="row">
 		                                <div class="col-xs-4">
@@ -673,7 +666,7 @@
                                     </div>
                                 </div>
                             </div>
-                        <!--     end 联系人/电话/发票项目内容/发票抬头 -->
+                           <!-- end 联系人/电话/发票项目内容/发票抬头 -->
                             <div class="row">
                             	<div class="col-xs-6">
                                     <div class="form-group">
@@ -696,7 +689,7 @@
                                     </div>
                                 </div>
                             </div>
-                         <!--    end 联系人/电话 -->
+                         	<!-- end 联系人/电话 -->
                             
                             <!-- 备注 -->
                             <div class="row">
@@ -705,7 +698,7 @@
                                         <label for="us_contact_address">备注:</label>
                                         <div class='input-group'>
                                             <input id="us_contact_address" class="k-textbox" style="width: 100%;"
-                                                    data-bind="value:customer.fastMail.remaker"/>
+                                                   data-bind="value:customer.fastMail.remaker"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -783,7 +776,7 @@
 <script id="tpl_trip" type="text/x-kendo-template">
     <div>
 		<div class="row">
-			<div class="col-xs-4">
+			<div class="col-xs-2">
                <div class="form-group">
                     <label for="traveler_last_daynum_cn">第几天:<span style="color: red">*</span></label>
                     <div class='input-group'>
@@ -793,13 +786,13 @@
                     </div>
               	</div>
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-2">
                 <div class="form-group">
                     <label>日期:</label>
                     <input type="text" class="fill" data-role="datepicker" data-bind="value:nowdate"/>
                 </div>
             </div>
-			<div class="col-xs-4">
+			<div class="col-xs-2">
               <div class="form-group">
                   <label for="traveler_city_name">城市:<span style="color: red">*</span></label>
                   <div class='input-group'>
@@ -809,9 +802,7 @@
                   </div>
               </div>
            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
+		   <div class="col-xs-6">
                 <div class="form-group">
                     <label>景区:</label>
                     <select class="fill"
@@ -883,7 +874,7 @@
                 <div class="form-group">
                     <label>操作:&nbsp;</label>
                     <button data-bind="click:delOne" data-params="customer.tripplanJpList"
-                            class="k-button col-xs-12 k-button-icontext">
+                            class="k-button col-xs-12 k-button-icontext" style="margin-bottom: 15px;">
                         <span class="k-icon k-i-close"></span>移除此行程
                     </button>
                 </div>
@@ -905,7 +896,6 @@
 <script id="tpl_temp" type="text/x-kendo-template">
     <div>
 		<div class="row">
-			
             <div class="col-xs-4">
                 <div class="form-group">
                     <label>出发日期:</label>

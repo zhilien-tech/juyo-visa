@@ -186,6 +186,24 @@ var viewModel = kendo.observable({
     customer: defaults,
 });
 kendo.bind($(document.body), viewModel);
+
+
+	function comsource(){
+		var flag=$("#customerSource").val();
+		if(flag==3){//直客
+			$("#select").hide();
+			$("#selectno").show();
+			$(".companyFullName").hide();
+			$('.ZKcompanyFullName').removeClass("hide");// 显示 直客状态下的  公司全称
+		}else{//其他的...
+			$("#select").show();
+			$("#selectno").hide();
+			$(".companyFullName").show();
+			$('.ZKcompanyFullName').addClass("hide");// 隐藏 直客状态下的  公司全称
+		}
+	}
+
+
 $(function () {
 	
 	/*var df=new SimpleDateFormat();
@@ -228,7 +246,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    		/*		viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
+    				/*viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -313,6 +331,7 @@ $(function () {
     		});
         }
     });
+	
 });
 
 //联系人
@@ -349,8 +368,9 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    			/*	viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
+    				/*viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
     				viewModel.set("customer.customermanage.id",data.id);
+    				console.log("~~~~~~~~~~~"+viewModel.set("customer.customermanage.id",data.id));
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
     				var color = $("#cus_phone").data("kendoMultiSelect");
@@ -364,6 +384,7 @@ $(function () {
     			}
     		});
         }
+       
     });
 });
 
@@ -533,11 +554,7 @@ $(function () {
    					color.value(resp.customermanage.id);
    					
    			 }
-   		 });
-    		
-    		
-    		
-    		
+   		 });	
     	}else{
     		viewModel.set("customer.tripJp.oneormore", false);
     		$('.WangFan').removeClass('hide');
@@ -607,23 +624,7 @@ $(function () {
 					color.value(resp.customermanage.id);
 					var color = $("#cus_linkman").data("kendoMultiSelect");
 					color.value(resp.customermanage.id);
-					
 			 }
 		 });
 
    	}
-   	
-   	
-   	function comsource(){
-   		var flag=$("#customerSource").val();
-   		if(flag==3){
-   			$("#select").hide();
-   			$("#selectno").show();
-   		}else{
-   			$("#select").show();
-   			$("#selectno").hide();
-   			
-   		}
-   	}
-   	
-   	
