@@ -87,7 +87,7 @@ states = new kendo.data.DataSource({
     }
 }),
 dafaults = {
-		passporttype:"1",//护照类型
+		passporttype:1,
 		passportlose:{},
 		oldname:{},
 		orthercountrylist:[],
