@@ -6,6 +6,12 @@ var customersourceEnum=[
     {text:"直客",value:3},
     {text:"线下",value:4}
   ];
+var proposers=[
+                        {text:"线上",value:1},
+                        {text:"OTS",value:2},
+                        {text:"直客",value:3},
+                        {text:"线下",value:4}
+                        ];
 
 //出发城市
 var startcity=[
@@ -118,6 +124,7 @@ flights = new kendo.data.DataSource({
 var viewModel = kendo.observable({
 	 customersourceEnum:customersourceEnum,
 	 startcitynew:startcity,
+	 proposers:proposers,
     flights: flights,
     hotels: hotels,
     scenic: scenic,
@@ -190,13 +197,29 @@ var viewModel = kendo.observable({
     customer: defaults,
 });
 kendo.bind($(document.body), viewModel);
+
+
+	function comsource(){
+		var flag=$("#customerSource").val();
+		if(flag==3){//直客
+			$("#select").hide();
+			$("#selectno").show();
+			$(".companyFullName").hide();
+			$('.ZKcompanyFullName').removeClass("hide");// 显示 直客状态下的  公司全称
+		}else{//其他的...
+			$("#select").show();
+			$("#selectno").hide();
+			$(".companyFullName").show();
+			$('.ZKcompanyFullName').addClass("hide");// 隐藏 直客状态下的  公司全称
+		}
+	}
+
+
 $(function () {
-	
 	/*var df=new SimpleDateFormat();
 	df.applyPattern("HH:mm");
 	var date=new Date();
 	var str=df.format(date);*/
-	
 	
 	
     $("#cus_phone").kendoMultiSelect({
@@ -232,7 +255,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    		/*		viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
+    				/*viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -317,6 +340,7 @@ $(function () {
     		});
         }
     });
+	
 });
 
 //联系人
@@ -353,8 +377,9 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    			/*	viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
+    				/*viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
     				viewModel.set("customer.customermanage.id",data.id);
+    				console.log("~~~~~~~~~~~"+viewModel.set("customer.customermanage.id",data.id));
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
     				var color = $("#cus_phone").data("kendoMultiSelect");
@@ -368,6 +393,7 @@ $(function () {
     			}
     		});
         }
+       
     });
 });
 
@@ -490,7 +516,8 @@ $(function () {
         });
     }
     
-    comsource();
+    comsource();//客户来源 状态 模块加载
+    addporposer();//主申请人 模块加载
    
 });
 /*$(function(){
@@ -537,11 +564,7 @@ $(function () {
    					color.value(result.customermanage.id);
    					
    			 }
-   		 });
-    		
-    		
-    		
-    		
+   		 });	
     	}else{
     		viewModel.set("customer.tripJp.oneormore", false);
     		$('.WangFan').removeClass('hide');
@@ -610,23 +633,26 @@ $(function () {
 					var color = $("#cus_fullComName").data("kendoMultiSelect");
 					color.value(result.customermanage.id);
 					var color = $("#cus_linkman").data("kendoMultiSelect");
+
 					color.value(result.customermanage.id);
 					
 			 }
 		 });
-
    	}
    	
    	
    	function comsource(){
    		var flag=$("#customerSource").val();
-   		if(flag==3){
+   		if(flag==3){//直客 
    			$("#select").hide();
    			$("#selectno").show();
-   		}else{
+   			$('.companyFullName').addClass('hide');//隐藏 默认显示的 其他状态下的 公司全称
+   			$('.ZKcompanyFullName').removeClass('hide');//显示   默认显示的  直客  公司全称
+   		}else{//其他
    			$("#select").show();
    			$("#selectno").hide();
-   			
+   			$('.companyFullName').removeClass('hide');//显示 默认显示的 其他状态下的 公司全称
+   			$('.ZKcompanyFullName').addClass('hide');//隐藏   默认显示的  直客  公司全称
    		}
    	}
    	
@@ -638,7 +664,7 @@ $(function () {
   			 dataType: "json",
   			 data: JSON.stringify(viewModel.customer),
   			 success: function (result) {
-  				 console.log(JSON.stringify(result));
+  				 //console.log(JSON.stringify(result));
   					viewModel.set("customer", $.extend(true, defaults, result));
   		        	
   		        	if(viewModel.get("customer.tripJp.oneormore")==1){
@@ -661,5 +687,4 @@ $(function () {
   					
   			 }
   		 });
-   		
    	}
