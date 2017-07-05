@@ -25,6 +25,7 @@ import io.znz.jsite.visa.entity.japan.NewOldnameJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOldpassportJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrderJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrthercountryJpEntity;
+import io.znz.jsite.visa.entity.japan.NewProposerInfoJpEntity;
 import io.znz.jsite.visa.entity.japan.NewRecentlyintojpJpEntity;
 import io.znz.jsite.visa.entity.japan.NewTripJpEntity;
 import io.znz.jsite.visa.entity.japan.NewTripplanJpEntity;
@@ -305,7 +306,28 @@ public class NewOrderJaPanController {
 
 		}
 		Integer oneormore = tripJp.getOneormore();
+		//================================
+		List<NewProposerInfoJpEntity> proposerInfoJpList = order.getProposerInfoJpList();
+		long orderid = orderOld.getId();
+		List<NewProposerInfoJpEntity> list8 = dbDao.query(NewProposerInfoJpEntity.class,
+				Cnd.where("order_jp_id", "=", orderOld.getId()), null);
+		if (!Util.isEmpty(list8) && list8.size() > 0) {
 
+			dbDao.delete(list8);
+		}
+		if (!Util.isEmpty(proposerInfoJpList) && proposerInfoJpList.size() > 0) {
+
+			for (NewProposerInfoJpEntity newPeerPersionEntity : proposerInfoJpList) {
+				/*	if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
+						nutDao.update(newPeerPersionEntity);
+					} else {*/
+				newPeerPersionEntity.setOrder_jp_id(orderOld.getId());
+				dbDao.insert(newPeerPersionEntity);
+				/*	}*/
+			}
+			//List<NewPeerPersionEntity> insert = dbDao.insert(peerList);
+		}
+		//================================
 		List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
 		List<NewDateplanJpEntity> list1 = dbDao.query(NewDateplanJpEntity.class,
 				Cnd.where("trip_jp_id", "=", tripJp.getId()), null);
@@ -518,6 +540,12 @@ public class NewOrderJaPanController {
 				Cnd.where("order_jp_id", "=", orderid), null);
 		if (!Util.isEmpty(newPayCompanyEntities) && newPayCompanyEntities.size() > 0) {
 			order.setFastMail(newPayCompanyEntities.get(0));
+		}
+		//============================
+		List<NewProposerInfoJpEntity> proposerInfoJpList = dbDao.query(NewProposerInfoJpEntity.class,
+				Cnd.where("order_jp_id", "=", orderid), null);
+		if (!Util.isEmpty(proposerInfoJpList) && proposerInfoJpList.size() > 0) {
+			order.setProposerInfoJpList(proposerInfoJpList);
 		}
 		return order;
 	}
@@ -1064,6 +1092,22 @@ public class NewOrderJaPanController {
 
 		}
 
+		return order;
+	}
+
+	@RequestMapping(value = "autoporposer")
+	@ResponseBody
+	public Object autoporposer(@RequestBody NewOrderJpEntity order) {
+
+		List<NewProposerInfoJpEntity> proposerInfoJpList = Lists.newArrayList();
+		Integer headnum = order.getHeadnum();
+		if (!Util.isEmpty(headnum) && headnum > 0) {
+			for (int i = 0; i < headnum; i++) {
+				NewProposerInfoJpEntity np = new NewProposerInfoJpEntity();
+				proposerInfoJpList.add(np);
+			}
+		}
+		order.setProposerInfoJpList(proposerInfoJpList);
 		return order;
 	}
 }
