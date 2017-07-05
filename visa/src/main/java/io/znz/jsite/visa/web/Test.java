@@ -6,8 +6,6 @@
 
 package io.znz.jsite.visa.web;
 
-import java.util.Date;
-
 /**
  * TODO(这里用一句话描述这个类的作用)
  * <p>
@@ -22,17 +20,8 @@ public class Test {
 	private static final int SALT_SIZE = 8; //盐长度
 
 	public static void main(String[] args) {
-		/*	//		byte[] salt = Digests.generateSalt(SALT_SIZE);
-			byte[] salt = Encodes.decodeHex("93219f213a6a0f27");
-
-			System.out.println(new String(salt));
-			Encodes.encodeHex(salt);
-
-			byte[] hashPassword = Digests.sha1("123456".getBytes(), salt, HASH_INTERATIONS);
-			String pwd = Encodes.encodeHex(hashPassword);
-			System.out.println(pwd);*/
-		Date d = new Date();
-		System.out.println(d.getDate());
-		;
+		int a = 5;
+		int b = (int) Math.ceil(a / 2.0);
+		System.out.println(b);
 	}
 }

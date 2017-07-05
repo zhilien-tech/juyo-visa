@@ -24,7 +24,24 @@ var defaults = {
 		},
 		dateplanJpList:[],
 		tripplanJpList:[],
-		fastMail:{}
+		fastMail:{},
+		customerresourceJp:{},
+		proposerInfoJpList:[]/*,
+		customers: [
+		            {
+		                lastName: "",
+		                firstName: "",
+		                passport: "",
+		                main: true,
+		                depositSource: "",
+		                depositMethod: "",
+		                depositSum: 0,
+		                depositCount: 1,
+		                receipt: false,
+		                insurance: false,
+		                outDistrict: false,
+		            }
+		        ]*/
 }, 
 keys = {
 		"customer.dateplanJpList":{
@@ -51,6 +68,9 @@ keys = {
 			breakfast:"",
 			dinner:""
 
+		},
+		"customer.proposerInfoJpList":{
+			
 		}
 },
 flights = new kendo.data.DataSource({
@@ -103,12 +123,40 @@ var viewModel = kendo.observable({
     scenic: scenic,
     addOne: function (e) {
     	var key = $.isString(e) ? e : $(e.target).data('params');
-        viewModel.get(key).push(keys[key]);
+        //viewModel.get(key).push(keys[key]);
+    	viewModel.get(key).push({
+             lastName: "",
+             firstName: "",
+             passport: "",
+             main: false,
+             depositSource: "",
+             depositMethod: "",
+             depositSum: 0,
+             depositCount: 1,
+             receipt: false,
+             insurance: false,
+             outDistrict: false,
+         });
     },
     delOne: function (e) {
         var key = $(e.target).data('params');
         var all = viewModel.get(key);
         all.splice(all.indexOf(e.data), 1);
+    },
+    
+    delOneApplicant: function (e) {
+        var key = $(e.target).data('params');
+        var all = viewModel.get(key);
+        if (all.length == 1) {
+            $.layer.alert("至少要有一个申请人");
+            return;
+        }
+        all.splice(all.indexOf(e.data), 1);
+        if (all.length == 1) {//如果剩一个申请人则置为主申请人
+            var item = all.pop();
+            item.main = true;
+            all.unshift(item);
+        }
     },
     onDateChange: function (e) {
         var target = e.sender.element.attr("id");
@@ -127,6 +175,17 @@ var viewModel = kendo.observable({
         if (data.spot) {
             return data.spot.split(",");
         }
+    },
+    master: function () {
+        var result = [];
+        $.each(viewModel.customer.customers, function (index, item) {
+            if(item.main){
+                var data = {text: item.lastName + item.firstName};
+                data.value = $.hashCode(data.text);
+                result.push(data);
+            }
+        });
+        return result;
     },
     customer: defaults,
 });
@@ -173,7 +232,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    		/*		viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -190,8 +249,22 @@ $(function () {
         }
     });
     
-   
+    //折叠面板的显隐切换
+    $(document).on("click", ".span-Title", function () {
+        $(this).find(".k-icon").toggleClass("k-i-arrow-60-down k-i-arrow-n");
+        $(this).addClass("k-state-selected");
+        $(this).next().toggle();
+        //$(this).next().addClass('div-context');//显示 主申请人的 样式
+        //$(this).next().css('border',"solid 1px red");
+        $(this).parents('.k-panelbar').siblings().find('.k-link').removeClass('k-state-selected');
+        $(this).parents('.k-panelbar').siblings().find('.container-fluid').hide();
+        
+    });
     
+    $(".k-header").click(function(){
+    	$('.k-content').removeClass("div-context");
+    	$(this).parent().siblings().find('.span-Title').removeClass('k-state-selected');
+    });
 });
 
 $(function () {
@@ -227,7 +300,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				/*viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -280,7 +353,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    			/*	viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -333,8 +406,8 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
-    				viewModel.set("customer.customermanage.id",data.id);
+    				/*viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				*/viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
     				var color = $("#cus_phone").data("kendoMultiSelect");
@@ -381,7 +454,7 @@ $(function () {
     var oid = $.queryString("cid");
     if (oid) {
         $.getJSON("/visa/neworderjp/showDetail?orderid=" + oid, function (resp) {
-        	console.log(JSON.stringify(resp));
+        	//console.log(JSON.stringify(resp));
         	viewModel.set("customer", $.extend(true, defaults, resp));
         	
         	if(viewModel.get("customer.tripJp.oneormore")==1){
@@ -401,8 +474,8 @@ $(function () {
 			color.value(resp.customermanage.id);
 			var color = $("#cus_linkman").data("kendoMultiSelect");
 			color.value(resp.customermanage.id);
-			
-			
+			//客户来源加载显示判断
+			 comsource();
 			
 			//时间格式
 			/*var intimename=document.getEelementsByName("intimename");
@@ -416,6 +489,8 @@ $(function () {
 			
         });
     }
+    
+    comsource();
    
 });
 /*$(function(){
@@ -433,10 +508,158 @@ $(function () {
     		viewModel.set("customer.tripJp.oneormore", true);
     		$('.WangFan').addClass('hide');
     		$('.DuoCheng').removeClass('hide');
+    		
+    		$.ajax({
+   			 type: "POST",
+   			 url: "/visa/neworderjp/autothree",
+   			 contentType: "application/json",
+   			 dataType: "json",
+   			 data: JSON.stringify(viewModel.customer),
+   			 success: function (result) {
+   					viewModel.set("customer", $.extend(true, defaults, result));
+   		        	
+   		        	if(viewModel.get("customer.tripJp.oneormore")==1){
+   		        		$('.WangFan').addClass('hide');
+   		        		$('.DuoCheng').removeClass('hide');
+   		        	}else{
+   		        		$('.WangFan').removeClass('hide');
+   		        		$('.DuoCheng').addClass('hide');
+   		        	}
+   		        	defaults.customermanage.telephone=result.customermanage.telephone;
+   		        	defaults.customermanage.email=result.customermanage.email;
+   		        	var color = $("#cus_phone").data("kendoMultiSelect");
+   					color.value(result.customermanage.id);
+   		        	var color = $("#cus_email").data("kendoMultiSelect");
+   					color.value(result.customermanage.id);
+   					var color = $("#cus_fullComName").data("kendoMultiSelect");
+   					color.value(result.customermanage.id);
+   					var color = $("#cus_linkman").data("kendoMultiSelect");
+   					color.value(result.customermanage.id);
+   					
+   			 }
+   		 });
+    		
+    		
+    		
+    		
     	}else{
     		viewModel.set("customer.tripJp.oneormore", false);
     		$('.WangFan').removeClass('hide');
     		$('.DuoCheng').addClass('hide');
+    		
+    		
+    		$.ajax({
+      			 type: "POST",
+      			 url: "/visa/neworderjp/autothree",
+      			 contentType: "application/json",
+      			 dataType: "json",
+      			 data: JSON.stringify(viewModel.customer),
+      			 success: function (result) {
+      					viewModel.set("customer", $.extend(true, defaults, result));
+      		        	
+      		        	if(viewModel.get("customer.tripJp.oneormore")==1){
+      		        		$('.WangFan').addClass('hide');
+      		        		$('.DuoCheng').removeClass('hide');
+      		        	}else{
+      		        		$('.WangFan').removeClass('hide');
+      		        		$('.DuoCheng').addClass('hide');
+      		        	}
+      		        	defaults.customermanage.telephone=result.customermanage.telephone;
+      		        	defaults.customermanage.email=result.customermanage.email;
+      		        	var color = $("#cus_phone").data("kendoMultiSelect");
+      					color.value(result.customermanage.id);
+      		        	var color = $("#cus_email").data("kendoMultiSelect");
+      					color.value(result.customermanage.id);
+      					var color = $("#cus_fullComName").data("kendoMultiSelect");
+      					color.value(result.customermanage.id);
+      					var color = $("#cus_linkman").data("kendoMultiSelect");
+      					color.value(result.customermanage.id);
+      					
+      			 }
+      		 });
+       		
+    		
+    		
+    		
     	}
     });
 
+   	function autogenerate(){
+	   	 $.ajax({
+			 type: "POST",
+			 url: "/visa/neworderjp/autogenerate",
+			 contentType: "application/json",
+			 dataType: "json",
+			 data: JSON.stringify(viewModel.customer),
+			 success: function (result) {
+					viewModel.set("customer", $.extend(true, defaults, result));
+		        	
+		        	if(viewModel.get("customer.tripJp.oneormore")==1){
+		        		$('.WangFan').addClass('hide');
+		        		$('.DuoCheng').removeClass('hide');
+		        	}else{
+		        		$('.WangFan').removeClass('hide');
+		        		$('.DuoCheng').addClass('hide');
+		        	}
+		        	defaults.customermanage.telephone=result.customermanage.telephone;
+		        	defaults.customermanage.email=result.customermanage.email;
+		        	var color = $("#cus_phone").data("kendoMultiSelect");
+					color.value(result.customermanage.id);
+		        	var color = $("#cus_email").data("kendoMultiSelect");
+					color.value(result.customermanage.id);
+					var color = $("#cus_fullComName").data("kendoMultiSelect");
+					color.value(result.customermanage.id);
+					var color = $("#cus_linkman").data("kendoMultiSelect");
+					color.value(result.customermanage.id);
+					
+			 }
+		 });
+
+   	}
+   	
+   	
+   	function comsource(){
+   		var flag=$("#customerSource").val();
+   		if(flag==3){
+   			$("#select").hide();
+   			$("#selectno").show();
+   		}else{
+   			$("#select").show();
+   			$("#selectno").hide();
+   			
+   		}
+   	}
+   	
+   	function addporposer(){
+   		$.ajax({
+  			 type: "POST",
+  			 url: "/visa/neworderjp/autoporposer",
+  			 contentType: "application/json",
+  			 dataType: "json",
+  			 data: JSON.stringify(viewModel.customer),
+  			 success: function (result) {
+  				 console.log(JSON.stringify(result));
+  					viewModel.set("customer", $.extend(true, defaults, result));
+  		        	
+  		        	if(viewModel.get("customer.tripJp.oneormore")==1){
+  		        		$('.WangFan').addClass('hide');
+  		        		$('.DuoCheng').removeClass('hide');
+  		        	}else{
+  		        		$('.WangFan').removeClass('hide');
+  		        		$('.DuoCheng').addClass('hide');
+  		        	}
+  		        	defaults.customermanage.telephone=result.customermanage.telephone;
+  		        	defaults.customermanage.email=result.customermanage.email;
+  		        	var color = $("#cus_phone").data("kendoMultiSelect");
+  					color.value(result.customermanage.id);
+  		        	var color = $("#cus_email").data("kendoMultiSelect");
+  					color.value(result.customermanage.id);
+  					var color = $("#cus_fullComName").data("kendoMultiSelect");
+  					color.value(result.customermanage.id);
+  					var color = $("#cus_linkman").data("kendoMultiSelect");
+  					color.value(result.customermanage.id);
+  					
+  			 }
+  		 });
+   		
+   	}

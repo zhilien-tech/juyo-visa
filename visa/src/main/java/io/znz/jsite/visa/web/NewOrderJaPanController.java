@@ -17,6 +17,7 @@ import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
 import io.znz.jsite.visa.entity.delivery.NewDeliveryJapanEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerOrderJpEntity;
+import io.znz.jsite.visa.entity.japan.NewCustomerresourceJpEntity;
 import io.znz.jsite.visa.entity.japan.NewDateplanJpEntity;
 import io.znz.jsite.visa.entity.japan.NewFastmailJpEntity;
 import io.znz.jsite.visa.entity.japan.NewFinanceJpEntity;
@@ -24,6 +25,7 @@ import io.znz.jsite.visa.entity.japan.NewOldnameJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOldpassportJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrderJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrthercountryJpEntity;
+import io.znz.jsite.visa.entity.japan.NewProposerInfoJpEntity;
 import io.znz.jsite.visa.entity.japan.NewRecentlyintojpJpEntity;
 import io.znz.jsite.visa.entity.japan.NewTripJpEntity;
 import io.znz.jsite.visa.entity.japan.NewTripplanJpEntity;
@@ -31,6 +33,7 @@ import io.znz.jsite.visa.entity.japan.NewWorkinfoJpEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
 import io.znz.jsite.visa.entity.usa.NewOrderEntity;
 import io.znz.jsite.visa.entity.user.EmployeeEntity;
+import io.znz.jsite.visa.enums.OrderJapancustomersourceEnum;
 import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
 import io.znz.jsite.visa.enums.UserTypeEnum;
 import io.znz.jsite.visa.form.NewOrderJapanSqlForm;
@@ -143,17 +146,7 @@ public class NewOrderJaPanController {
 	@ResponseBody
 	@Transactional
 	public Object orderJpsave(@RequestBody NewOrderJpEntity order) {
-		CustomerManageEntity customermanage = order.getCustomermanage();
-		if (!Util.isEmpty(customermanage)) {
-			order.setCustomer_manager_id(Long.valueOf(customermanage.getId()));
-			Chain chain = Chain.make("updateTime", new Date());
-			chain.add("fullComName", customermanage.getFullComName());
-			chain.add("customerSource", customermanage.getCustomerSource());
-			chain.add("linkman", customermanage.getLinkman());
-			chain.add("telephone", customermanage.getTelephone());
-			chain.add("email", customermanage.getEmail());
-			dbDao.update(CustomerManageEntity.class, chain, Cnd.where("id", "=", customermanage.getId()));
-		}
+
 		//根据他们的id是否存在判断是更新还是删除
 		NewOrderJpEntity orderOld = order;
 		if (!Util.isEmpty(order.getId()) && order.getId() > 0) {
@@ -244,6 +237,36 @@ public class NewOrderJaPanController {
 			//	dbDao.update(NewOrderJpEntity.class, Chain.make("ordernumber", ordernum), Cnd.where("id", "=", orderOld.getId()));
 		}
 
+		CustomerManageEntity customermanage = order.getCustomermanage();
+		int customerSource = order.getCustomerSource();
+		if (!Util.isEmpty(customerSource) && customerSource > 0) {
+			if (customerSource == OrderJapancustomersourceEnum.zhike.intKey()) {
+				NewCustomerresourceJpEntity customerresourceJp = order.getCustomerresourceJp();
+				if (!Util.isEmpty(customerresourceJp)) {
+					if (!Util.isEmpty(customerresourceJp.getId()) && customerresourceJp.getId() > 0) {
+						nutDao.update(customerresourceJp);
+					} else {
+
+						customerresourceJp.setOrder_jp_id(orderOld.getId());
+						dbDao.insert(customerresourceJp);
+					}
+				}
+			} else {
+				if (!Util.isEmpty(customermanage)) {
+					orderOld.setCustomer_manager_id(Long.valueOf(customermanage.getId()));
+					dbDao.update(orderOld, null);
+					Chain chain = Chain.make("updateTime", new Date());
+					chain.add("fullComName", customermanage.getFullComName());
+					chain.add("customerSource", customerSource);
+					chain.add("linkman", customermanage.getLinkman());
+					chain.add("telephone", customermanage.getTelephone());
+					chain.add("email", customermanage.getEmail());
+					dbDao.update(CustomerManageEntity.class, chain, Cnd.where("id", "=", customermanage.getId()));
+				}
+
+			}
+		}
+
 		NewFastmailJpEntity fastMail = order.getFastMail();
 		if (!Util.isEmpty(fastMail)) {
 			if (!Util.isEmpty(fastMail.getId()) && fastMail.getId() > 0) {
@@ -260,23 +283,23 @@ public class NewOrderJaPanController {
 		NewTripJpEntity tripJp = order.getTripJp();
 
 		if (!Util.isEmpty(tripJp)) {
-			Flight gofilght = tripJp.getGofilght();
-			Flight returnfilght = tripJp.getReturnfilght();
-			if (!Util.isEmpty(gofilght)) {
-				tripJp.setFlightnum(gofilght.getId() + "");
-			}
-			if (!Util.isEmpty(returnfilght)) {
-				tripJp.setReturnflightnum(returnfilght.getId() + "");
-			}
-			if (!Util.isEmpty(tripJp.getId()) && tripJp.getId() > 0) {
-				nutDao.update(tripJp);
-			} else {
-
-				tripJp.setOrder_jp_id(orderOld.getId());
-				tripJp = dbDao.insert(tripJp);
-			}
 
 			if (tripJp.getOneormore() == 0) {
+				Flight gofilght = tripJp.getGofilght();
+				Flight returnfilght = tripJp.getReturnfilght();
+				if (!Util.isEmpty(gofilght)) {
+					tripJp.setFlightnum(gofilght.getId() + "");
+				}
+				if (!Util.isEmpty(returnfilght)) {
+					tripJp.setReturnflightnum(returnfilght.getId() + "");
+				}
+				if (!Util.isEmpty(tripJp.getId()) && tripJp.getId() > 0) {
+					nutDao.update(tripJp);
+				} else {
+
+					tripJp.setOrder_jp_id(orderOld.getId());
+					tripJp = dbDao.insert(tripJp);
+				}
 				startdate = tripJp.getStartdate();
 				enddate = tripJp.getReturndate();
 				arrivecity = tripJp.getArrivecity();
@@ -284,7 +307,28 @@ public class NewOrderJaPanController {
 
 		}
 		Integer oneormore = tripJp.getOneormore();
+		//================================
+		List<NewProposerInfoJpEntity> proposerInfoJpList = order.getProposerInfoJpList();
+		long orderid = orderOld.getId();
+		List<NewProposerInfoJpEntity> list8 = dbDao.query(NewProposerInfoJpEntity.class,
+				Cnd.where("order_jp_id", "=", orderOld.getId()), null);
+		if (!Util.isEmpty(list8) && list8.size() > 0) {
 
+			dbDao.delete(list8);
+		}
+		if (!Util.isEmpty(proposerInfoJpList) && proposerInfoJpList.size() > 0) {
+
+			for (NewProposerInfoJpEntity newPeerPersionEntity : proposerInfoJpList) {
+				/*	if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
+						nutDao.update(newPeerPersionEntity);
+					} else {*/
+				newPeerPersionEntity.setOrder_jp_id(orderOld.getId());
+				dbDao.insert(newPeerPersionEntity);
+				/*	}*/
+			}
+			//List<NewPeerPersionEntity> insert = dbDao.insert(peerList);
+		}
+		//================================
 		List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
 		List<NewDateplanJpEntity> list1 = dbDao.query(NewDateplanJpEntity.class,
 				Cnd.where("trip_jp_id", "=", tripJp.getId()), null);
@@ -294,18 +338,18 @@ public class NewOrderJaPanController {
 		}
 		if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
 
-			for (NewDateplanJpEntity newPeerPersionEntity : dateplanJpList) {
-				newPeerPersionEntity.setFlightnum(newPeerPersionEntity.getFlight().getId() + "");
-
-				/*if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
-					nutDao.update(newPeerPersionEntity);
-				} else {*/
-				newPeerPersionEntity.setTrip_jp_id(tripJp.getId());
-
-				dbDao.insert(newPeerPersionEntity);
-				//}
-			}
 			if (oneormore == 1) {
+				for (NewDateplanJpEntity newPeerPersionEntity : dateplanJpList) {
+					newPeerPersionEntity.setFlightnum(newPeerPersionEntity.getFlight().getId() + "");
+
+					/*if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
+					nutDao.update(newPeerPersionEntity);
+					} else {*/
+					newPeerPersionEntity.setTrip_jp_id(tripJp.getId());
+
+					dbDao.insert(newPeerPersionEntity);
+					//}
+				}
 				startdate = dateplanJpList.get(0).getStartdate();
 				enddate = dateplanJpList.get(dateplanJpList.size() - 1).getStartdate();
 				arrivecity = dateplanJpList.get(0).getArrivecity();
@@ -396,11 +440,35 @@ public class NewOrderJaPanController {
 	@ResponseBody
 	public Object showDetail(long orderid) {
 		NewOrderJpEntity order = dbDao.fetch(NewOrderJpEntity.class, orderid);
-		CustomerManageEntity customerManageEntity = dbDao.fetch(CustomerManageEntity.class,
-				Long.valueOf(order.getCustomer_manager_id()));
-		if (!Util.isEmpty(customerManageEntity)) {
-			order.setCustomermanage(customerManageEntity);
+
+		int customerSource = order.getCustomerSource();
+		if (!Util.isEmpty(customerSource) && customerSource > 0) {
+			if (customerSource == OrderJapancustomersourceEnum.zhike.intKey()) {
+				List<NewCustomerresourceJpEntity> customerresourceJp = dbDao.query(NewCustomerresourceJpEntity.class,
+						Cnd.where("order_jp_id", "=", orderid), null);
+				if (!Util.isEmpty(customerresourceJp) && customerresourceJp.size() > 0) {
+					order.setCustomerresourceJp(customerresourceJp.get(0));
+					CustomerManageEntity customerManageEntity = new CustomerManageEntity();
+					customerManageEntity.setTelephone(customerresourceJp.get(0).getTelephone());
+					customerManageEntity.setLinkman(customerresourceJp.get(0).getLinkman());
+					customerManageEntity.setEmail(customerresourceJp.get(0).getEmail());
+					customerManageEntity.setFullComName(customerresourceJp.get(0).getFullComName());
+					order.setCustomermanage(customerManageEntity);
+				}
+			} else {
+				//if (!Util.isEmpty(customermanage)) {
+
+				CustomerManageEntity customerManageEntity = dbDao.fetch(CustomerManageEntity.class,
+						Long.valueOf(order.getCustomer_manager_id()));
+				if (!Util.isEmpty(customerManageEntity)) {
+					order.setCustomermanage(customerManageEntity);
+				}
+
+				//}
+
+			}
 		}
+
 		List<NewTripJpEntity> newTrips = dbDao.query(NewTripJpEntity.class, Cnd.where("order_jp_id", "=", orderid),
 				null);
 		if (!Util.isEmpty(newTrips) && newTrips.size() > 0) {
@@ -479,6 +547,12 @@ public class NewOrderJaPanController {
 				Cnd.where("order_jp_id", "=", orderid), null);
 		if (!Util.isEmpty(newPayCompanyEntities) && newPayCompanyEntities.size() > 0) {
 			order.setFastMail(newPayCompanyEntities.get(0));
+		}
+		//============================
+		List<NewProposerInfoJpEntity> proposerInfoJpList = dbDao.query(NewProposerInfoJpEntity.class,
+				Cnd.where("order_jp_id", "=", orderid), null);
+		if (!Util.isEmpty(proposerInfoJpList) && proposerInfoJpList.size() > 0) {
+			order.setProposerInfoJpList(proposerInfoJpList);
 		}
 		return order;
 	}
@@ -873,6 +947,117 @@ public class NewOrderJaPanController {
 		return ResultObject.fail("PDF生成失败!");
 	}
 
+	@RequestMapping(value = "autogenerate")
+	@ResponseBody
+	public Object autogenerate(@RequestBody NewOrderJpEntity order) {
+		if (!Util.isEmpty(order.getId()) && order.getId() > 0) {
+
+		} else {
+			Date startdate = null;
+			Date enddate = null;
+			String arrivecity = null;
+			NewTripJpEntity tripJp = order.getTripJp();
+			List<NewTripplanJpEntity> tripplanJpList = order.getTripplanJpList();
+			List<NewTripplanJpEntity> tripplanJpListnew = Lists.newArrayList();
+
+			if (!Util.isEmpty(tripJp)) {
+
+				if (tripJp.getOneormore() == 0) {
+					startdate = tripJp.getStartdate();
+					enddate = tripJp.getReturndate();
+					arrivecity = tripJp.getArrivecity();
+					tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+				}
+
+			}
+			Integer oneormore = tripJp.getOneormore();
+
+			List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
+			if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
+
+				if (oneormore == 1) {
+					for (int i = 0; i < dateplanJpList.size(); i++) {
+						if (i < dateplanJpList.size() - 1) {
+
+							startdate = dateplanJpList.get(i).getStartdate();
+							enddate = dateplanJpList.get(i + 1).getStartdate();
+							arrivecity = dateplanJpList.get(i).getArrivecity();
+							tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+						}
+					}
+				}
+			}
+			/*	if (!Util.isEmpty(tripplanJpList) && tripplanJpList.size() > 0) {
+				
+			} else {
+				Calendar cNow = Calendar.getInstance();
+				 Calendar cReturnDate = Calendar.getInstance();
+				 cNow.setTime(startdate);
+				 cReturnDate.setTime(enddate);
+				 
+				 long todayMs = cNow.getTimeInMillis();
+				 long returnMs = cReturnDate.getTimeInMillis();
+				 long intervalMs = todayMs - returnMs;*/
+
+			order.setTripplanJpList(tripplanJpListnew);
+		}
+		return order;
+	}
+
+	private void tripplan(NewOrderJpEntity order, Date startdate, Date enddate, String arrivecity,
+			List<NewTripplanJpEntity> tripplanJpListnew) {
+		Date nowdate = startdate;
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(nowdate);
+		int daynum = (int) ((enddate.getTime() - startdate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+		List<Hotel> hotellist = dbDao.query(Hotel.class, Cnd.where("city", "=", arrivecity), null);
+		List<Scenic> sceniclist = dbDao.query(Scenic.class, Cnd.where("city", "=", arrivecity), null);
+
+		for (int i = 0; i < daynum; i++) {
+			NewTripplanJpEntity t = new NewTripplanJpEntity();
+			Calendar cal1 = Calendar.getInstance();
+			cal1.setTime(nowdate);
+			t.setDaynum(i + 1);
+			t.setCity(arrivecity);
+			t.setNowdate(nowdate);
+			if (i < hotellist.size()) {
+
+				t.setHotelid(hotellist.get(0).getId());
+			}
+			if (i < sceniclist.size()) {
+
+				t.setViewid(sceniclist.get(i).getId() + ",");
+			}
+			String view[] = t.getViewid().split(",");
+			List<Scenic> slist = Lists.newArrayList();
+			for (int j = 0; j < view.length; j++) {
+				if (!Util.isEmpty(view[j])) {
+					Scenic fetch = dbDao.fetch(Scenic.class, Long.valueOf(view[j]));
+					slist.add(fetch);
+				}
+			}
+			t.setScenics(slist);
+			t.setHometype(0);
+			if (!Util.isEmpty(order.getHeadnum())) {
+				int home = (int) Math.ceil(order.getHeadnum() / 2.0);
+				t.setHomenum(home);
+			} else {
+				t.setHomenum(1);
+
+			}
+			t.setHomeday(1);
+			t.setIntime(nowdate);
+			cal1.set(Calendar.DAY_OF_MONTH, nowdate.getDate() + 1);
+			/*t.setOrder_jp_id(orderOld.getId());*/
+			t.setOuttime(cal1.getTime());
+			t.setBreakfast(1);
+			t.setDinner(1);
+			tripplanJpListnew.add(t);
+			cal.set(Calendar.DAY_OF_MONTH, nowdate.getDate() + 1);
+			nowdate = cal.getTime();
+		}
+	}
+
 	/*	
 		 //根据地点筛选航班
 		
@@ -890,4 +1075,47 @@ public class NewOrderJaPanController {
 			return ResultObject.success("添加成功");
 		}*/
 
+	@RequestMapping(value = "autothree")
+	@ResponseBody
+	public Object autothree(@RequestBody NewOrderJpEntity order) {
+
+		NewTripJpEntity tripJp = order.getTripJp();
+		if (!Util.isEmpty(tripJp)) {
+			Integer oneormore = tripJp.getOneormore();
+			if (!Util.isEmpty(oneormore)) {
+
+				List<NewDateplanJpEntity> dateplanJpList = Lists.newArrayList();
+				if (oneormore == 1) {
+					for (int i = 0; i < 3; i++) {
+						NewDateplanJpEntity n = new NewDateplanJpEntity();
+						dateplanJpList.add(n);
+					}
+				} else if (oneormore == 0) {
+					dateplanJpList.clear();
+				}
+				order.setDateplanJpList(dateplanJpList);
+
+			}
+
+		}
+
+		return order;
+	}
+
+	@RequestMapping(value = "autoporposer")
+	@ResponseBody
+	public Object autoporposer(@RequestBody NewOrderJpEntity order) {
+
+		List<NewProposerInfoJpEntity> proposerInfoJpList = Lists.newArrayList();
+		Integer headnum = order.getHeadnum();
+		if (!Util.isEmpty(headnum) && headnum > 0) {
+			for (int i = 0; i < headnum; i++) {
+				NewProposerInfoJpEntity np = new NewProposerInfoJpEntity();
+				np.setRelation(1);
+				proposerInfoJpList.add(np);
+			}
+		}
+		order.setProposerInfoJpList(proposerInfoJpList);
+		return order;
+	}
 }

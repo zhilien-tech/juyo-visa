@@ -470,53 +470,8 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- 与主申请人之间的关系 -->
-                        
-                        <!-- 	 <div class="col-xs-2">
-				                <div class="form-group">
-				                    <label>主申请人:</label>
-				                    <div class="onoffswitch">
-				                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main_#:data.uid#" data-bind="checked:main">
-				                        <label class="onoffswitch-label" for="main_#:data.uid#">
-				                            <span class="onoffswitch-inner"></span>
-				                            <span class="onoffswitch-switch"></span>
-				                        </label>
-				                    </div>
-				                </div>
-				            </div>
-                        
-		                         <div class="row" data-bind="invisible:main">
-						           	 	<div class="col-xs-6">
-							                <div class="form-group">
-							                    <label>关联的主申请人:</label>
-							                    <input class="fill" data-role="dropdownlist"
-							                            data-value-primitive="true"
-							                            data-value-field="value"
-							                            data-text-field="text"
-							                            data-bind="value:home,source:master"/>
-							                </div>
-						            </div>
-						            <div class="col-xs-6">
-						                <div class="form-group">
-						                    <label>与主申请人关系:</label>
-						                    <select class="fill" data-role="dropdownlist"
-						                            data-value-primitive="true"
-						                            data-bind="value:relation">
-						                        <option>配偶</option>
-						                        <option>子女</option>
-						                        <option>父母</option>
-						                        <option>亲戚</option>
-						                        <option>朋友</option>
-						                        <option>其他</option>
-						                    </select>
-						                </div>
-						            </div>
-						        </div> -->
-                        <!-- 与主申请人之间的关系end -->
-                        
-                        
                     </li>
+                    <li> </li>
                     <li>工作信息
                         <div class="container-fluid">
                             <!--我的职业-->
@@ -579,6 +534,19 @@
                         </div>
                     </li>
                 </ul>
+                
+           <!--      <ul class="col-xs-12 k-widget k-reset k-header k-panelbar" data-template="tpl_customer" data-bind="source:customer.customers"></ul>
+			    <div class="row">
+			        <div class="col-xs-12" style="padding-top: 15px;">
+			            <div class="form-group">
+			                <button data-bind="click:addOne" data-params="customer.customers"
+			                        class="k-button col-xs-12 k-button-icontext">
+			                    <span class="k-icon k-i-plus"></span>添加一名申请人
+			                </button>
+			            </div>
+			        </div>
+			    </div> -->
+			    <form ></form>
             </div>
         </div>
         <div class="row" data-bind="visible:showSaveBtn">
@@ -755,6 +723,149 @@
         </div>
     </div>
 </script>
+<script id="tpl_customer" type="text/html">
+<li class="k-item k-state-default k-first k-last k-state-highlight k-state-active">
+    <span class="k-link k-header k-state-selected">#:data.main?'主申请人':'副申请人'#(#:data.lastName+data.firstName#)<span class="k-icon k-i-arrow-60-down k-panelbar-collapse"></span></span>
+    <div class="container-fluid k-content" style="display:#:data.id?'none':'block'#;padding-top: 15px;padding-bottom: 15px;">
+        <div class="row">
+            <div class="col-xs-3">
+                <div class="form-group">
+                    <label>姓:<span style="color: red">*</span></label>
+                    <input type="text" class="k-textbox fill" data-bind="value:lastName"/>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="form-group">
+                    <label>名:<span style="color: red">*</span></label>
+                    <input type="text" class="k-textbox fill" data-bind="value:firstName"/>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <label>护照号:<span style="color: red">*</span></label>
+                    <input type="text" class="k-textbox fill" data-bind="value:passport"/>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <label>主申请人:</label>
+                    <div class="onoffswitch">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main_#:data.uid#" data-bind="checked:main">
+                        <label class="onoffswitch-label" for="main_#:data.uid#">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" data-bind="invisible:main">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label>关联的主申请人:</label>
+                    <input class="fill" data-role="dropdownlist"
+                            data-value-primitive="true"
+                            data-value-field="value"
+                            data-text-field="text"
+                            data-bind="value:home,source:master"/>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label>与主申请人关系:</label>
+                    <select class="fill" data-role="dropdownlist"
+                            data-value-primitive="true"
+                            data-bind="value:relation">
+                        <option>配偶</option>
+                        <option>子女</option>
+                        <option>父母</option>
+                        <option>亲戚</option>
+                        <option>朋友</option>
+                        <option>其他</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <label>押金来源:</label>
+                    <select class="fill" data-role="dropdownlist" data-value-primitive="true" data-bind="value:depositSource">
+                        <option>宁波银行</option>
+                        <option>招商银行</option>
+                        <option>工商银行</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <label>押金方式:</label>
+                    <select class="fill" data-role="dropdownlist" data-value-primitive="true" data-bind="value:depositMethod">
+                        <option>线上</option>
+                        <option>线下</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <label>金额:</label>
+                    <input class="fill" data-role="numerictextbox" data-format="c0" data-min="0" data-bind="value:depositSum"/>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label>笔数:</label>
+                    <input class="fill" data-role="numerictextbox" data-format="n0" data-min="1" data-bind="value:depositCount"/>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <label>有收据:</label>
+                    <div class="onoffswitch">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="receipt_#:data.uid#" data-bind="checked:receipt">
+                        <label class="onoffswitch-label" for="receipt_#:data.uid#">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <label>保险:</label>
+                    <div class="onoffswitch">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="insurance_#:data.uid#" data-bind="checked:insurance">
+                        <label class="onoffswitch-label" for="insurance_#:data.uid#">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <label>外领区:</label>
+                    <div class="onoffswitch">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="outDistrict_#:data.uid#" data-bind="checked:outDistrict">
+                        <label class="onoffswitch-label" for="outDistrict_#:data.uid#">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <button data-bind="click:delOne" class="k-button col-xs-12 k-button-icontext" data-params="customer.customers">
+                        <span class="k-icon k-i-close"></span>移除这个申请人
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>
+</script>
+
 
 <!--引入 js 库文件-->
 <script src="/res/plugin/template.js"></script>

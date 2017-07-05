@@ -334,7 +334,7 @@ $("#saveCustomerData").on("click",function(){
 	viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
 	 viewModel.set("customer.errorinfo",JSON.stringify(map));
 	 map.clear();
-	 console.log(JSON.stringify(viewModel.customer));
+	 //console.log(JSON.stringify(viewModel.customer));
 	$.ajax({
 		 type: "POST",
 		 url: "/visa/newcustomer/customerSave",
@@ -409,6 +409,54 @@ $(function () {
     if (oid) {
         $.getJSON("/visa/newcustomer/showDetail?customerid=" + oid, function (resp) {
         	viewModel.set("customer", $.extend(true, dafaults, resp));
+        	//console.log(JSON.stringify(viewModel.customer.errorinfo));
+        	
+        	
+        	
+        	   var reason=viewModel.get("customer.errorinfo");
+        	    //alert(reason);
+        	    //console.log("reason====="+reason);
+        		var map=new Map();
+        		map=eval("("+reason+")");
+        		var reasonnew="";
+        		
+        		for (var key in map) {
+        			var a = map[key];
+        			for (var k in a){ 
+        				var b=1;
+        				for(var i in a[k]){
+        					if(b%2!=0){
+        						reasonnew=(a[k])[i];//label 名称
+        						//console.log(reasonnew);
+        						
+        						$("label").each(function(i){ 
+        						    var str = $(this).text();
+        						    //console.log(str);
+        						    strVal = str.substring(-1,0);
+        						    //console.log(strVal);
+        						    
+        						}); 
+        					}
+        					b++;
+        				}
+        			} 
+        		}
+        	
+        	
+        	
         });
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+ 
+	
+	
+	
 });
