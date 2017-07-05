@@ -6,6 +6,12 @@ var customersourceEnum=[
     {text:"直客",value:3},
     {text:"线下",value:4}
   ];
+var proposers=[
+                        {text:"线上",value:1},
+                        {text:"OTS",value:2},
+                        {text:"直客",value:3},
+                        {text:"线下",value:4}
+                        ];
 
 //出发城市
 var startcity=[
@@ -118,6 +124,7 @@ flights = new kendo.data.DataSource({
 var viewModel = kendo.observable({
 	 customersourceEnum:customersourceEnum,
 	 startcitynew:startcity,
+	 proposers:proposers,
     flights: flights,
     hotels: hotels,
     scenic: scenic,
@@ -209,12 +216,10 @@ kendo.bind($(document.body), viewModel);
 
 
 $(function () {
-	
 	/*var df=new SimpleDateFormat();
 	df.applyPattern("HH:mm");
 	var date=new Date();
 	var str=df.format(date);*/
-	
 	
 	
     $("#cus_phone").kendoMultiSelect({
