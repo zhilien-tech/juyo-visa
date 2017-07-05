@@ -24,6 +24,7 @@
 	<!--搜索条件 模块-->
     <div class="Search">
       <div  class="col-xs-12">
+      	<a id="back" href="javascript:window.history.go(-1);"><i class="fa fa-chevron-left"></i><span>&nbsp;返回</span></a>
         <input type="button" class="btn btn-primary input-sm pull-right marginBtn editBtn" value="编辑">
       	<input type="button" class="btn btn-primary input-sm pull-right marginBtn cancelBtn hide" value="取消">
       	<input type="button" class="btn btn-primary input-sm pull-right marginBtn saveBtn hide" onclick="updateBaseJPInfoData();" value="保存">
@@ -857,8 +858,17 @@
               </div>
           </div>
         </div>
+        <!-- 签证进度跳进来时需要展示【下一步】按钮 -->
+       <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <button id="nextStepBtn" class="k-primary k-button col-xs-12">
+                                                下一步
+                    </button>
+                </div>
+            </div>
+        </div>
       </div>
-	</div>
 </body>
 <script id="tpl_has_pr" type="text/text">
     <div class="row has_pr">

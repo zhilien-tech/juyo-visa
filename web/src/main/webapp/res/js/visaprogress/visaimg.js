@@ -111,6 +111,11 @@ $(function(){
 	 //country=JSON.parse($.queryString("country"));
     country = JSON.parse(unescape($.queryString("country")));
     countrystatus=$.queryString("countrystatus");
+    if(countrystatus != "" && countrystatus != null && countrystatus == 1){//1表示进入日本的签证状态
+    	$('#writeResource').attr('href','/personal/passportInfo/passportJPInfoList.html?typeId=1'); 
+    }else{
+    	$('#writeResource').attr('href','/personal/passportInfo/passportInfoList.html?typeId=1'); 
+    }
 //    alert(unescape($.queryString("country")));
     if(country!=null&&country!=''){
 		//alert($.queryString("country"));S

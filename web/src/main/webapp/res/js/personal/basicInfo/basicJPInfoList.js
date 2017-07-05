@@ -13,37 +13,57 @@ window.onload = function(){
 }
 //初始化各个组件
 $(function(){
-	$("#sex").kendoDropDownList();//性别 状态 下拉框初始化
-	$("#birthDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//出生日期
-	$("#signedDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//签发日期
-	$("#validDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//有效期限
-	
-	//操作 编辑 按钮时
-	$(".editBtn").click(function(){
-		$(this).addClass("hide");//编辑 按钮隐藏
-		$(".cancelBtn").removeClass("hide");//取消 按钮显示
-		$(".saveBtn").removeClass("hide");//保存 按钮显示
-		$(".input-group .k-textbox").removeClass("k-state-disabled");//删除 不可编辑的边框颜色
-		$(".input-group input").removeAttr("disabled");//删除 不可编辑的属性
-	});
-	
-	//操作 取消 按钮时
-	$(".cancelBtn").click(function(){
-		$(this).addClass("hide");//取消 按钮隐藏
-		$(".saveBtn").addClass("hide");//保存 按钮隐藏
-		$(".editBtn").removeClass("hide");//编辑 按钮显示
-		$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
-		$(".input-group input").attr("disabled");//添加 不可编辑的属性
-	});
-	
-	//操作 保存 按钮时
-	$(".saveBtn").click(function(){
-		$(this).addClass("hide");//保存 按钮隐藏
-		$(".cancelBtn").addClass("hide");//取消 按钮隐藏
-		$(".editBtn").removeClass("hide");//编辑 按钮显示
-		$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
-		$(".input-group input").attr("disabled");//添加 不可编辑的属性
-	});
+	var aa = $.queryString("typeId");//得到签证进度在填写资料时跳转页面传来的参数
+	if(aa == null || aa == "" || aa == undefined){//表示不是从签证进度跳转而来
+		$("#nextStepBtn").hide();//隐藏下一步按钮
+		$("#back").hide();//隐藏返回按钮
+		$("#sex").kendoDropDownList({enable:false});//性别 状态 下拉框初始化不可编辑
+		$("#birthDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//出生日期
+		$("#birthDate").data("kendoDatePicker").enable(false);//出生日期 不可编辑
+		$("#signedDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//签发日期
+		$("#signedDate").data("kendoDatePicker").enable(false);//签发日期 不可编辑
+		$("#validDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//有效期限
+		$("#validDate").data("kendoDatePicker").enable(false);//有效期限不可编辑
+		//操作 编辑 按钮时
+		$(".editBtn").click(function(){
+			$(this).addClass("hide");//编辑 按钮隐藏
+			$(".cancelBtn").removeClass("hide");//取消 按钮显示
+			$(".saveBtn").removeClass("hide");//保存 按钮显示
+			$("#sex").data("kendoDropDownList").enable(true);//性别 状态 下拉框初始化可编辑
+			$(".input-group .k-textbox").removeClass("k-state-disabled");//删除 不可编辑的边框颜色
+			$(".input-group input").removeAttr("disabled");//删除 不可编辑的属性
+			$("#birthDate").data("kendoDatePicker").enable(true);//出生日期 不可编辑
+			$("#signedDate").data("kendoDatePicker").enable(true);//签发日期 不可编辑
+			$("#validDate").data("kendoDatePicker").enable(true);//有效期限不可编辑
+		});
+		
+		//操作 取消 按钮时
+		$(".cancelBtn").click(function(){
+			$(this).addClass("hide");//取消 按钮隐藏
+			$(".saveBtn").addClass("hide");//保存 按钮隐藏
+			$(".editBtn").removeClass("hide");//编辑 按钮显示
+			$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
+			$(".input-group input").attr("disabled");//添加 不可编辑的属性
+			$("#sex").data("kendoDropDownList").enable(false);//性别 状态 下拉框初始化不可编辑
+		});
+		
+		//操作 保存 按钮时
+		$(".saveBtn").click(function(){
+			$(this).addClass("hide");//保存 按钮隐藏
+			$(".cancelBtn").addClass("hide");//取消 按钮隐藏
+			$(".editBtn").removeClass("hide");//编辑 按钮显示
+			$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
+			$(".input-group input").attr("disabled");//添加 不可编辑的属性
+		});
+	}else if(aa == 1){
+		//隐藏编辑按钮
+		$(".editBtn").hide();
+		$("#birthDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//出生日期
+		$("#signedDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//签发日期
+		$("#validDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//有效期限
+		$(".input-group input").removeAttr("disabled"); //去掉所有input框的不可编辑属性
+		$(".input-group input").removeClass("k-state-disabled");//去掉不可编辑样式
+	}
 });
 /*------------------------------------------------container---------------------------------------------------*/
 //客户来源
@@ -296,10 +316,26 @@ function updateBaseJPInfoData(){
 		 contentType:"application/json",
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){
-			layer.msg("编辑保存成功",{time:2000});
+			layer.msg("保存成功",{time:2000});
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-             layer.msg('编辑保存失败',{time:2000});
+             layer.msg('保存失败',{time:2000});
          }
 	});
 }
+//点击下一步时跳转至日本签证信息
+$("#nextStepBtn").click(function(){
+	$.ajax({
+		 type: "POST",
+		 url: "/visa/basicinfo/updateBaseJPInfoData",
+		 contentType:"application/json",
+		 data: JSON.stringify(viewModel.customer)+"",
+		 success: function (result){
+			layer.msg("操作成功",{time:2000});
+			window.location.href='/personal/visaInfo/JPvisaInfoList.html?typeId=1';
+		 },
+		 error: function(XMLHttpRequest, textStatus, errorThrown) {
+             layer.msg('操作失败',{time:2000});
+         }
+	});
+});
