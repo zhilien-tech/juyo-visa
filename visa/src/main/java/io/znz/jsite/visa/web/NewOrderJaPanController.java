@@ -253,10 +253,11 @@ public class NewOrderJaPanController {
 				}
 			} else {
 				if (!Util.isEmpty(customermanage)) {
-					order.setCustomer_manager_id(Long.valueOf(customermanage.getId()));
+					orderOld.setCustomer_manager_id(Long.valueOf(customermanage.getId()));
+					dbDao.update(orderOld, null);
 					Chain chain = Chain.make("updateTime", new Date());
 					chain.add("fullComName", customermanage.getFullComName());
-					chain.add("customerSource", OrderJapancustomersourceEnum.get(customerSource));
+					chain.add("customerSource", customerSource);
 					chain.add("linkman", customermanage.getLinkman());
 					chain.add("telephone", customermanage.getTelephone());
 					chain.add("email", customermanage.getEmail());
@@ -447,6 +448,12 @@ public class NewOrderJaPanController {
 						Cnd.where("order_jp_id", "=", orderid), null);
 				if (!Util.isEmpty(customerresourceJp) && customerresourceJp.size() > 0) {
 					order.setCustomerresourceJp(customerresourceJp.get(0));
+					CustomerManageEntity customerManageEntity = new CustomerManageEntity();
+					customerManageEntity.setTelephone(customerresourceJp.get(0).getTelephone());
+					customerManageEntity.setLinkman(customerresourceJp.get(0).getLinkman());
+					customerManageEntity.setEmail(customerresourceJp.get(0).getEmail());
+					customerManageEntity.setFullComName(customerresourceJp.get(0).getFullComName());
+					order.setCustomermanage(customerManageEntity);
 				}
 			} else {
 				//if (!Util.isEmpty(customermanage)) {
@@ -1104,6 +1111,7 @@ public class NewOrderJaPanController {
 		if (!Util.isEmpty(headnum) && headnum > 0) {
 			for (int i = 0; i < headnum; i++) {
 				NewProposerInfoJpEntity np = new NewProposerInfoJpEntity();
+				np.setRelation(1);
 				proposerInfoJpList.add(np);
 			}
 		}

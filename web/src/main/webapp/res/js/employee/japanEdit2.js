@@ -638,6 +638,7 @@ $(function () {
   			 dataType: "json",
   			 data: JSON.stringify(viewModel.customer),
   			 success: function (result) {
+  				 console.log(JSON.stringify(result));
   					viewModel.set("customer", $.extend(true, defaults, result));
   		        	
   		        	if(viewModel.get("customer.tripJp.oneormore")==1){
