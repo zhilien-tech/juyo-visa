@@ -565,87 +565,7 @@
                 </div>
             </li>
             
-	 		<ul class="col-xs-12 k-widget k-reset k-header k-panelbar" data-template="tpl_customer" data-bind="source:customer.proposerInfoJpList">
-	 			<li class="k-item k-state-default k-first k-last k-state-highlight">
-				    <span class="k-link span-Title">主申请人<span class="k-icon k-i-arrow-60-down k-panelbar-collapse"></span></span>
-				    <div class="container-fluid k-content" style="padding-top: 15px;padding-bottom: 15px;">
-				        <div class="row">
-				            <div class="col-xs-3">
-				                <div class="form-group">
-				                    <label>姓:<span style="color: red">*</span></label>
-				                    <input type="text" class="k-textbox fill" data-bind="value:xing"/>
-				                </div>
-				            </div>
-				            <div class="col-xs-3">
-				                <div class="form-group">
-				                    <label>名:<span style="color: red">*</span></label>
-				                    <input type="text" class="k-textbox fill" data-bind="value:name"/>
-				                </div>
-				            </div>
-				            <div class="col-xs-2">
-				                <div class="form-group">
-				                    <label>统一联系人:<span style="color: red">*</span></label>
-				                   <div class="onoffswitch">
-				                        <input type="checkbox" name="" class="onoffswitch-checkbox" id="" data-bind="value:istogetherlinkman">
-				                        <label class="onoffswitch-label" for="">
-				                            <span class="onoffswitch-inner"></span>
-				                            <span class="onoffswitch-switch"></span>
-				                        </label>
-				                    </div>
-				                </div>
-				            </div>
-				            <div class="col-xs-2">
-				                <div class="form-group">
-				                    <label>主申请人:</label>
-				                    <div class="onoffswitch">
-				                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main_#:data.uid#" data-bind="checked:ismainproposer">
-				                        <label class="onoffswitch-label" for="main_#:data.uid#">
-				                            <span class="onoffswitch-inner"></span>
-				                            <span class="onoffswitch-switch"></span>
-				                        </label>
-				                    </div>
-				                </div>
-				            </div>
-				        </div>
-				        <div class="row" data-bind="invisible:ismainproposer">
-				            <div class="col-xs-6">
-				                <div class="form-group">
-				                    <label>关联的主申请人:</label>
-				                    <input class="fill" data-role="dropdownlist"
-				                            data-value-primitive="true"
-				                            data-value-field="value"
-				                            data-text-field="text"
-				                            data-bind="value:home,source:relationproposer"/>
-				                </div>
-				            </div>
-				            <div class="col-xs-6">
-				                <div class="form-group">
-				                    <label>与主申请人关系:</label>
-				                    <select class="fill" data-role="dropdownlist"
-				                            data-value-primitive="true"
-				                            data-bind="value:relation">
-				                        <option value="1">配偶</option>
-				                        <option value="2">子女</option>
-				                        <option value="3">父母</option>
-				                        <option value="4">亲戚</option>
-				                        <option value="5">朋友</option>
-				                        <option value="6">其他</option>
-				                    </select>
-				                </div>
-				            </div>
-				        </div>
-				        <div class="row">
-				            <div class="col-xs-12">
-				                <div class="form-group">
-				                    <button data-bind="click:delOneApplicant" class="k-button col-xs-12 k-button-icontext" data-params="customer.proposerInfoJpList">
-				                        <span class="k-icon k-i-close"></span>移除这个申请人
-				                    </button>
-				                </div>
-				            </div>
-				        </div>
-				    </div>
-				</li>
-	 		</ul>
+	 		<!-- <ul class="col-xs-12 k-widget k-reset k-header k-panelbar" data-template="tpl_customer" data-bind="source:customer.proposerInfoJpList"></ul>
 			<div class="row">
 			        <div class="col-xs-12 show" style="padding-top:15px;padding-bottom: 15px;">
 			            <div class="form-group">
@@ -659,9 +579,27 @@
 			        <div>
 			        </div>
 			</div>
+			<form ></form> -->
+			<li>
+				<span class="k-link span-Title" onclick="mainApplicant()">
+					主申请人
+					<span class="k-icon k-i-arrow-60-down k-panelbar-collapse"></span>
+				</span>
+			</li>
+	        <ul class="col-xs-12 k-widget k-reset k-header k-panelbar" data-template="tpl_customer" data-bind="source:customer.proposerInfoJpList"></ul>
+			<div class="row">
+			        <div class="col-xs-12 show" style="padding-top:15px;padding-bottom: 15px;">
+			            <div class="form-group">
+			                <button data-bind="click:addOne" data-params="customer.proposerInfoJpList"
+			                        class="k-button col-xs-12 k-button-icontext">
+			                    <span class="k-icon k-i-plus"></span>添加一名申请人
+			                </button>
+			            </div>
+			        </div>
+			        <div>
+			        </div>
+			</div>
 			<form ></form>
-            
-	        
 	            
             <li> 快递信息
                          <div class="container-fluid">
@@ -786,8 +724,7 @@
                            <!--  end 备注 -->
                         </div>
                     </li> 
-
-        </ul>
+		</ul>
         <div class="row" >
             <div class="col-xs-12">
                 <div class="form-group">

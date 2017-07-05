@@ -679,7 +679,11 @@ $(function () {
   					color.value(result.customermanage.id);
   					var color = $("#cus_linkman").data("kendoMultiSelect");
   					color.value(result.customermanage.id);
-  					
   			 }
   		 });
+   	}
+
+   	function mainApplicant(){
+   		$(this).addClass('hide');
+   		addporposer();
    	}
