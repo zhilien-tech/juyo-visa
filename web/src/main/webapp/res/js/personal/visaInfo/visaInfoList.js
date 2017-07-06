@@ -141,7 +141,6 @@ var countries = new kendo.data.DataSource({
 		"customer.workedplacelist":{},
 		"customer.relation":{},
 		"customer.teachinfo":{},
-		
 		"customer.peerList":{
 			peerxing: "",
 	    	peerxingen: "",
@@ -187,7 +186,10 @@ var viewModel = kendo.observable({
     },
     // 支付人
     payType: function (type) {
-        return viewModel.get("customer.trip.paypersion") == type;
+    	//console.log('______viewModel.get("customer.trip.paypersion")的值：'+viewModel.get("customer.trip.paypersion"));
+    	//console.log("______type的值："+type);
+    	var val=viewModel.get("customer.trip.paypersion");
+        return  val== type;
     },
     // 婚姻状态
     spouseState: function (state) {
