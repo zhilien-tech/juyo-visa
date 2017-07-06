@@ -13,3 +13,9 @@ select * from visa_new_order_jp
 where date(createtime)=date(now())
 $condition
 order by createtime desc
+/*neworderjapan_porposerorder*/
+
+
+SELECT * FROM `visa_new_proposer_info_jp` a
+where a.order_jp_id=@orderid
+ORDER BY a.relationproposer asc,a.ismainproposer desc,a.xing

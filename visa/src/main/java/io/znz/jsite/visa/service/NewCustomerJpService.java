@@ -14,6 +14,7 @@ import io.znz.jsite.visa.entity.japan.NewOldnameJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOldpassportJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrderJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrthercountryJpEntity;
+import io.znz.jsite.visa.entity.japan.NewProposerInfoJpEntity;
 import io.znz.jsite.visa.entity.japan.NewRecentlyintojpJpEntity;
 import io.znz.jsite.visa.entity.japan.NewWorkinfoJpEntity;
 
@@ -71,6 +72,24 @@ public class NewCustomerJpService {
 		List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
 				Cnd.where("customer_jp_id", "=", customer.getId()), null);
 		long orderid = query.get(0).getOrder_jp_id();
+		//===============更改申请人表的信息=================
+		List<NewProposerInfoJpEntity> proposerlist = dbDao.query(NewProposerInfoJpEntity.class,
+				Cnd.where("customer_jp_id", "=", customer.getId()), null);
+		if (!Util.isEmpty(proposerlist) && proposerlist.get(0).getId() > 0) {
+			NewProposerInfoJpEntity newProposerInfoJpEntity = proposerlist.get(0);
+			newProposerInfoJpEntity.setXing(xing);
+			newProposerInfoJpEntity.setName(name);
+			if (Util.isEmpty(xing)) {
+				xing = "";
+			}
+			if (Util.isEmpty(name)) {
+				name = "";
+			}
+			newProposerInfoJpEntity.setFullname(xing + name);
+			dbDao.update(newProposerInfoJpEntity, null);
+		}
+		//================更改申请人表的信息结束================
+
 		dbDao.update(NewOrderJpEntity.class, Chain.make("updatetime", new Date()), Cnd.where("id", "=", orderid));
 		NewCustomerJpEntity newcustomer = customer;
 		if (!Util.isEmpty(customer.getId()) && customer.getId() > 0) {

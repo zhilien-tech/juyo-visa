@@ -1047,7 +1047,7 @@
                 <div class="form-group">
                     <label>统一联系人:</label>
                     <div class="onoffswitch">
-                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main1_#:data.uid#" data-bind="checked:istogetherlinkman">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main1_#:data.uid#" data-bind="checked:istogetherlinkman" onclick="togetherlinkman();">
                         <label class="onoffswitch-label" for="main1_#:data.uid#">
                             <span class="onoffswitch-inner"></span>
                             <span class="onoffswitch-switch"></span>
@@ -1077,8 +1077,8 @@
                            data-suggest="true"
                            data-auto-bind="true"
                             data-value-primitive="true"
-                            data-value-field="value"
-                            data-text-field="text"
+                            data-value-field="id"
+                            data-text-field="fullname"
                             data-bind="value:relationproposer,source:proposers"/>
                 </div>
             </div>
