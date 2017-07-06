@@ -203,6 +203,62 @@ var viewModel = kendo.observable({
         return result;
     },
     customer: defaults,
+    aaa:function(e){
+    	 /* console.log(e.data.id);
+    	  console.log(e.data.istogetherlinkman);*/
+    	  //$("#main1_"+e.data.id).is(':checked')
+   		if(!e.data.istogetherlinkman){
+   			
+   			var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
+   			alert(111);
+   			
+   			console.log(JSON.stringify(proposerInfoJpList));
+   			var porposernow;
+   			for(var i=0;i<proposerInfoJpList.length;i++){
+   				var proposer=proposerInfoJpList[i];
+   				//alert(proposer.istogetherlinkman);
+   				if(proposer.istogetherlinkman==1&&proposer.id!=e.data.id){
+   					porposernow=proposer;
+   				}
+   				//console.log(JSON.stringify(proposer));
+   			}
+   			if(porposernow!=null&&porposernow!=''){
+   				
+   				layer.confirm("原来的统一联系人为："+porposernow.fullname+"，您确认修改吗？", {
+   					btn: ["是","否"], //按钮
+   					shade: false //不显示遮罩
+   				}, function(index){
+   					for(var i=0;i<proposerInfoJpList.length;i++){
+   		   				var proposer=proposerInfoJpList[i];
+   		   				//alert(proposer.istogetherlinkman);
+   		   				if(proposer.id==porposernow.id){
+   		   				proposer.istogetherlinkman=false;
+   		   				}
+   		   				//console.log(JSON.stringify(proposer));
+   		   			}
+   					viewModel.set("customer.proposerInfoJpList",proposerInfoJpList);
+   					console.log(JSON.stringify(proposerInfoJpList));
+   					layer.close(index);
+   				},function(){
+   					for(var i=0;i<proposerInfoJpList.length;i++){
+   		   				var proposer=proposerInfoJpList[i];
+   		   				//alert(proposer.istogetherlinkman);
+   		   				if(proposer.id==e.data.id){
+   		   				proposer.istogetherlinkman=false;
+   		   				}
+   		   				//console.log(JSON.stringify(proposer));
+   		   			}
+   					viewModel.set("customer.proposerInfoJpList",proposerInfoJpList);
+   					console.log(JSON.stringify(proposerInfoJpList));
+   					
+   				});
+   				
+   			}
+   			
+   		}
+    	  
+    	  
+    }
 });
 kendo.bind($(document.body), viewModel);
 
