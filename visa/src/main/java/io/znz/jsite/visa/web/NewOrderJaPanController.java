@@ -158,6 +158,7 @@ public class NewOrderJaPanController {
 
 				//根据人数插入多个申请人的数据
 				for (int i = a; i > 0; i--) {
+					List<NewProposerInfoJpEntity> proposerInfoJpList1 = order.getProposerInfoJpList();
 					NewCustomerJpEntity c = new NewCustomerJpEntity();
 					c.setCreatetime(new Date());
 					c.setUpdatetime(new Date());
@@ -168,15 +169,34 @@ public class NewOrderJaPanController {
 					customerOrderEntity.setCreatetime(new Date());
 					customerOrderEntity.setUpdatetime(new Date());
 					dbDao.insert(customerOrderEntity);
+					NewProposerInfoJpEntity n = new NewProposerInfoJpEntity();
+					n.setCustomer_jp_id(insert.getId());
+					n.setOrder_jp_id(orderOld.getId());
+					proposerInfoJpList1.add(n);
+					order.setProposerInfoJpList(proposerInfoJpList1);
 				}
 			} else if (a < 0) {
 				int n = -a;
 				List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
-						Cnd.where("orderJpId", "=", order.getId()).orderBy("updatetime", "asc"), null);
+						Cnd.where("order_jp_id", "=", order.getId()).orderBy("updatetime", "asc"), null);
 				for (int i = 0; i < n; i++) {
 					NewCustomerOrderJpEntity c = query.get(i);
 					dbDao.delete(c);
 					dbDao.delete(NewCustomerJpEntity.class, c.getCustomer_jp_id());
+					List<NewProposerInfoJpEntity> query2 = dbDao.query(NewProposerInfoJpEntity.class,
+							Cnd.where("customer_jp_id", "=", c.getCustomer_jp_id()), null);
+					dbDao.delete(query2);
+					List<NewProposerInfoJpEntity> proposerInfoJpList1 = order.getProposerInfoJpList();
+					/*	for (NewProposerInfoJpEntity newProposerInfoJpEntity : query2) {
+							for (NewProposerInfoJpEntity newProposerInfoJpEntity1 : proposerInfoJpList1) {
+
+								if (newProposerInfoJpEntity1.getId() == newProposerInfoJpEntity.getId()) {
+									proposerInfoJpList1.remove(newProposerInfoJpEntity1);
+								}
+							}
+						}*/
+					proposerInfoJpList1.removeAll(query2);
+					order.setProposerInfoJpList(proposerInfoJpList1);
 
 				}
 			}
@@ -367,6 +387,9 @@ public class NewOrderJaPanController {
 				for (int j = 0; j < proposerInfoJpList.size(); j++) {
 
 					if (proposerInfoJpList.get(j).getId() == list8.get(i).getId()) {
+						flag = false;
+					}
+					if (Util.isEmpty(proposerInfoJpList.get(j).getId())) {
 						flag = false;
 					}
 
@@ -1277,9 +1300,13 @@ public class NewOrderJaPanController {
 
 	@RequestMapping(value = "porposerdatasource")
 	@ResponseBody
-	public Object porposerdatasource(long orderid) {
-		List<NewProposerInfoJpEntity> query = dbDao.query(NewProposerInfoJpEntity.class,
-				Cnd.where("ismainproposer", "=", 1).and("order_jp_id", "=", orderid), null);
-		return query;
+	public Object porposerdatasource(String orderid) {
+		if (!Util.isEmpty(orderid)) {
+			long orderId = Long.valueOf(orderid);
+			List<NewProposerInfoJpEntity> query = dbDao.query(NewProposerInfoJpEntity.class,
+					Cnd.where("ismainproposer", "=", 1).and("order_jp_id", "=", orderId), null);
+			return query;
+		}
+		return null;
 	}
 }
