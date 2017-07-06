@@ -18,5 +18,4 @@ order by createtime desc
 
 SELECT * FROM `visa_new_proposer_info_jp` a
 where a.order_jp_id=@orderid
-
-ORDER BY a.relationproposer asc,a.ismainproposer desc
+ORDER BY a.relationproposer asc,a.ismainproposer desc,a.xing

@@ -11,7 +11,7 @@ var proposers=new kendo.data.DataSource({
     transport: {
         read: {
             dataType: "json",
-            url: "/visa/neworderjp/porposerdatasource",
+            url: "/visa/neworderjp/porposerdatasource?orderid="+$.queryString("cid"),
         },
         parameterMap: function (options, type) {
             if (options.filter) {
@@ -697,6 +697,42 @@ $(function () {
      		 });
    			 $(".mainApplicant").hide();//隐藏 span标签的 主申请人
    		}
+   		
+   		
+   	}
+   	
+   	
+   	function togetherlinkman(){
+   		alert($(this).is(':checked'));
+   		if(true){
+   			
+   			var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
+   			/*console.log(JSON.stringify(proposerInfoJpList));*/
+   			var porposernow;
+   			for(var i=0;i<proposerInfoJpList.length;i++){
+   				var proposer=proposerInfoJpList[i];
+   				//alert(proposer.istogetherlinkman);
+   				if(proposer.istogetherlinkman==1){
+   					porposernow=proposer;
+   				}
+   				//console.log(JSON.stringify(proposer));
+   			}
+   			if(porposernow!=null&&porposernow!=''){
+   				
+   				layer.confirm("原来的统一联系人为："+porposernow.fullname+"，您确认修改吗？", {
+   					btn: ["是","否"], //按钮
+   					shade: false //不显示遮罩
+   				}, function(){
+   					alert(111);
+   				},function(){
+   					alert(222);
+   					
+   				});
+   				
+   			}
+   			
+   		}
+   		
    		
    		
    	}
