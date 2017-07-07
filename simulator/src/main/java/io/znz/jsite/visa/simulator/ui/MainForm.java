@@ -59,14 +59,18 @@ import com.jgoodies.forms.factories.Borders;
  */
 public class MainForm extends JPanel {
 
+	//	private static final String TASK_FETCH_URI = "visa/simulator/fetch";
+	private static final String TASK_FETCH_URI = "visa/customer/fetch";
+
 	private static final String HISTORY = "history";
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss.SSS]");
 	private long startTime = 0;
 
 	public MainForm() {
 		initComponents();
-		pyFile.setText(System.getProperty("user.dir") + "/conf/ds160.py");
-		host.setText("59.110.155.140");
+		pyFile.setText(System.getProperty("user.dir") + "/doc/ds160.py");
+		host.setText("127.0.0.1");
+		port.setText("8080");
 	}
 
 	//拼接 url 地址
@@ -183,7 +187,7 @@ public class MainForm extends JPanel {
 			@Override
 			public void run() {
 				try {
-					String json = HttpClientUtil.get(getBaseUrl() + "visa/customer/fetch");
+					String json = HttpClientUtil.get(getBaseUrl() + TASK_FETCH_URI);
 					ResultObject<Map, Object> ro = JSON.parseObject(json, ResultObject.class);
 					if (ro.getCode() == ResultObject.ResultCode.SUCCESS) {
 						final String oid = String.valueOf(ro.getAttributes().get("oid"));
@@ -427,7 +431,6 @@ public class MainForm extends JPanel {
 					GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 
 			//---- port ----
-			port.setText("80");
 			port.setToolTipText("\u9ed8\u8ba480\u7aef\u53e3\u53ef\u4e0d\u586b");
 			panel1.add(port, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
 					GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));

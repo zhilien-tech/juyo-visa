@@ -6,13 +6,7 @@
 package io.znz.jsite.visa.simulator.dto;
 
 import io.znz.jsite.util.StringUtils;
-import io.znz.jsite.visa.bean.Army;
-import io.znz.jsite.visa.bean.OldName;
 import io.znz.jsite.visa.bean.Option;
-import io.znz.jsite.visa.bean.Passport;
-import io.znz.jsite.visa.bean.Spouse;
-import io.znz.jsite.visa.bean.Travel;
-import io.znz.jsite.visa.bean.Usa;
 import io.znz.jsite.visa.bean.helper.Relation;
 import io.znz.jsite.visa.bean.helper.State;
 
@@ -108,28 +102,14 @@ public class CustomerDto {
 
 	/*---------------------------------------------------------*/
 
-	private Spouse spouse;
-	private Army army;
-	private Usa usa;
-	private Passport oldPassport;
-	private Travel travel;
-	private OldName oldName;
+	private SpouseDto spouse;
+	private ArmyDto army;
+	private UsaDto usa;
+	private PassportDto oldPassport;
+	private TravelDto travel;
+	private OldNameDto oldName;
 
 	/*---------------------------------------------------------*/
-
-	private String reason;
-	private String files;
-
-	private boolean main;
-	private Relation relation;
-	private int home;//所属的主申请人的哈市code
-	private boolean receipt;
-	private String depositSource;//押金来源
-	private String depositMethod;//押金方式
-	private double depositSum;//押金金额
-	private int depositCount = 1;//押金笔数
-	private boolean insurance;
-	private boolean outDistrict;
 
 	//这些信息都在对应的表中关联着
 	private FamilyDto father;
@@ -283,23 +263,12 @@ public class CustomerDto {
 		return histories;
 	}
 
-	public int getHome() {
-		if (home == 0) {
-			home = (lastName + firstName).hashCode();
-		}
-		return home;
-	}
-
 	public String getBirthCityCN() {
 		String citys[] = { "北京", "上海", "重庆", "天津" };
 		if (birthCityCN == null || StringUtils.containsAny(birthCityCN, citys)) {
 			birthCityCN = "";
 		}
 		return birthCityCN;
-	}
-
-	public void setHome(int home) {
-		this.home = home;
 	}
 
 	public Long getId() {
@@ -626,140 +595,52 @@ public class CustomerDto {
 		this.friendInUSA = friendInUSA;
 	}
 
-	public Spouse getSpouse() {
+	public SpouseDto getSpouse() {
 		return spouse;
 	}
 
-	public void setSpouse(Spouse spouse) {
+	public void setSpouse(SpouseDto spouse) {
 		this.spouse = spouse;
 	}
 
-	public Army getArmy() {
+	public ArmyDto getArmy() {
 		return army;
 	}
 
-	public void setArmy(Army army) {
+	public void setArmy(ArmyDto army) {
 		this.army = army;
 	}
 
-	public Usa getUsa() {
+	public UsaDto getUsa() {
 		return usa;
 	}
 
-	public void setUsa(Usa usa) {
+	public void setUsa(UsaDto usa) {
 		this.usa = usa;
 	}
 
-	public Passport getOldPassport() {
+	public PassportDto getOldPassport() {
 		return oldPassport;
 	}
 
-	public void setOldPassport(Passport oldPassport) {
+	public void setOldPassport(PassportDto oldPassport) {
 		this.oldPassport = oldPassport;
 	}
 
-	public OldName getOldName() {
+	public OldNameDto getOldName() {
 		return oldName;
 	}
 
-	public void setOldName(OldName oldName) {
+	public void setOldName(OldNameDto oldName) {
 		this.oldName = oldName;
 	}
 
-	public Travel getTravel() {
+	public TravelDto getTravel() {
 		return travel;
 	}
 
-	public void setTravel(Travel travel) {
+	public void setTravel(TravelDto travel) {
 		this.travel = travel;
-	}
-
-	public String getReason() {
-		return reason;
-	}
-
-	public void setReason(String reason) {
-		this.reason = reason;
-	}
-
-	public String getFiles() {
-		return files;
-	}
-
-	public void setFiles(String files) {
-		this.files = files;
-	}
-
-	public boolean isMain() {
-		return main;
-	}
-
-	public void setMain(boolean main) {
-		this.main = main;
-	}
-
-	public Relation getRelation() {
-		return relation;
-	}
-
-	public void setRelation(Relation relation) {
-		this.relation = relation;
-	}
-
-	public boolean isReceipt() {
-		return receipt;
-	}
-
-	public void setReceipt(boolean receipt) {
-		this.receipt = receipt;
-	}
-
-	public String getDepositSource() {
-		return depositSource;
-	}
-
-	public void setDepositSource(String depositSource) {
-		this.depositSource = depositSource;
-	}
-
-	public String getDepositMethod() {
-		return depositMethod;
-	}
-
-	public void setDepositMethod(String depositMethod) {
-		this.depositMethod = depositMethod;
-	}
-
-	public double getDepositSum() {
-		return depositSum;
-	}
-
-	public void setDepositSum(double depositSum) {
-		this.depositSum = depositSum;
-	}
-
-	public int getDepositCount() {
-		return depositCount;
-	}
-
-	public void setDepositCount(int depositCount) {
-		this.depositCount = depositCount;
-	}
-
-	public boolean isInsurance() {
-		return insurance;
-	}
-
-	public void setInsurance(boolean insurance) {
-		this.insurance = insurance;
-	}
-
-	public boolean isOutDistrict() {
-		return outDistrict;
-	}
-
-	public void setOutDistrict(boolean outDistrict) {
-		this.outDistrict = outDistrict;
 	}
 
 	public void setFather(FamilyDto father) {

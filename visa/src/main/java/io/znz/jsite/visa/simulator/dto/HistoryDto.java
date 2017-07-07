@@ -7,7 +7,6 @@
 package io.znz.jsite.visa.simulator.dto;
 
 import io.znz.jsite.visa.bean.helper.Period;
-import io.znz.jsite.visa.bean.helper.Range;
 
 import java.util.Date;
 
@@ -21,7 +20,7 @@ public class HistoryDto {
 	private Date arrivalDate;
 	private int stay;//停留周期数
 	private Period period;//停留周期
-	private Range destination;//目的地的国家
+	private String destination;//目的地的国家
 	private String remark;
 
 	public Integer getId() {
@@ -56,11 +55,11 @@ public class HistoryDto {
 		this.period = period;
 	}
 
-	public Range getDestination() {
+	public String getDestination() {
 		return destination;
 	}
 
-	public void setDestination(Range destination) {
+	public void setDestination(String destination) {
 		this.destination = destination;
 	}
 
