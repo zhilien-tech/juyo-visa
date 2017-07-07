@@ -13,13 +13,17 @@ import io.znz.jsite.util.DateUtils;
 import io.znz.jsite.util.StringUtils;
 import io.znz.jsite.visa.bean.Option;
 import io.znz.jsite.visa.bean.helper.Gender;
+import io.znz.jsite.visa.bean.helper.Marital;
+import io.znz.jsite.visa.bean.helper.Payer;
 import io.znz.jsite.visa.bean.helper.Period;
 import io.znz.jsite.visa.bean.helper.Relation;
+import io.znz.jsite.visa.bean.helper.UsaStatus;
 import io.znz.jsite.visa.entity.customer.NewArmyEntity;
 import io.znz.jsite.visa.entity.customer.NewLanguageEntity;
 import io.znz.jsite.visa.entity.customer.NewOldnameEntity;
 import io.znz.jsite.visa.entity.customer.NewOldworksEntity;
 import io.znz.jsite.visa.entity.customer.NewOrthercountryEntity;
+import io.znz.jsite.visa.entity.customer.NewParentsEntity;
 import io.znz.jsite.visa.entity.customer.NewPassportloseEntity;
 import io.znz.jsite.visa.entity.customer.NewRecentlyintousaEntity;
 import io.znz.jsite.visa.entity.customer.NewRelationEntity;
@@ -36,6 +40,8 @@ import io.znz.jsite.visa.entity.usa.NewPayPersionEntity;
 import io.znz.jsite.visa.entity.usa.NewPeerPersionEntity;
 import io.znz.jsite.visa.entity.usa.NewTrip;
 import io.znz.jsite.visa.enums.GenderEnum;
+import io.znz.jsite.visa.enums.IsDadOrMumEnum;
+import io.znz.jsite.visa.enums.IsusaEnum;
 import io.znz.jsite.visa.enums.LanguageEnum;
 import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
 import io.znz.jsite.visa.enums.OrderVisaUsaRelationEnum;
@@ -562,7 +568,9 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 		}
 
 		//15 Travel info
-		NewTrip travel = dbDao.fetch(NewTrip.class, Cnd.where("customerid", "=", customerId));
+		NewCustomerOrderEntity map = dbDao
+				.fetch(NewCustomerOrderEntity.class, Cnd.where("customerid", "=", customerId));
+		NewTrip travel = dbDao.fetch(NewTrip.class, Cnd.where("orderid", "=", map.getOrderid()));
 		if (!Util.isEmpty(travel)) {
 			TravelDto trDto = new TravelDto();
 			trDto.setAddress(travel.getDetailaddress());
@@ -594,8 +602,7 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 			trDto.setZipCode(travel.getZipcode());
 
 			//支付公司信息
-			NewCustomerOrderEntity map = dbDao.fetch(NewCustomerOrderEntity.class,
-					Cnd.where("customerid", "=", customerId));
+
 			NewPayCompanyEntity company = dbDao.fetch(NewPayCompanyEntity.class,
 					Cnd.where("orderid", "=", map.getOrderid()));
 			if (!Util.isEmpty(company)) {
@@ -624,6 +631,7 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 			if (!Util.isEmpty(payer)) {
 				//TODO
 				//				trDto.setPayer(payer);
+				trDto.setPayer(Payer.SELF);
 				trDto.setPayerEmail(payer.getEmail());
 				trDto.setPayerFirstName(payer.getName());
 				trDto.setPayerFirstNameEN(payer.getNameen());
@@ -631,7 +639,7 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				trDto.setPayerLastNameEN(payer.getXingen());
 				trDto.setPayerPhone(payer.getPhone());
 				//TODO
-				//				trDto.setPayerRelation(payer.getRelation());
+				trDto.setPayerRelation(Relation.BUSINESS);
 			}
 
 			//查询同行人
@@ -667,6 +675,41 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 			oldName.setOldLastName(oldNameEntity.getOldxing());
 			oldName.setOldLastNameEN(oldNameEntity.getOldxingen());
 			c.setOldName(oldName);
+		}
+
+		//17 父亲
+		NewParentsEntity fatherEntity = dbDao.fetch(NewParentsEntity.class, Cnd.where("customerid", "=", customerId)
+				.and("dadormum", "=", IsDadOrMumEnum.dad.intKey()));
+		if (!Util.isEmpty(fatherEntity)) {
+			FamilyDto father = new FamilyDto();
+
+			father.setFirstName(fatherEntity.getName());
+			father.setFirstNameEN(fatherEntity.getNameen());
+			father.setLastName(fatherEntity.getXing());
+			father.setLastNameEN(fatherEntity.getXingen());
+
+			father.setId(fatherEntity.getId());
+			father.setInUsa(fatherEntity.getStayusa() == IsusaEnum.yes.intKey());
+			father.setRelation(Relation.FATHER);
+			c.setFather(father);
+		}
+
+		//18 母亲
+		NewParentsEntity mumEntity = dbDao.fetch(NewParentsEntity.class,
+				Cnd.where("customerid", "=", customerId).and("dadormum", "=", IsDadOrMumEnum.mum.intKey()));
+
+		if (!Util.isEmpty(mumEntity)) {
+			FamilyDto mum = new FamilyDto();
+
+			mum.setFirstName(fatherEntity.getName());
+			mum.setFirstNameEN(fatherEntity.getNameen());
+			mum.setLastName(fatherEntity.getXing());
+			mum.setLastNameEN(fatherEntity.getXingen());
+
+			mum.setId(fatherEntity.getId());
+			mum.setInUsa(fatherEntity.getStayusa() == IsusaEnum.yes.intKey());
+			mum.setRelation(Relation.MOTHER);
+			c.setMother(mum);
 		}
 		return c;
 	}
@@ -1028,9 +1071,13 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 					validator(map,
 							"ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl" + decimalFormat.format(i)
 									+ "_tbxPREV_US_VISIT_LOS", String.valueOf(h.getStay()));
-					validator(map,
-							"ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl" + decimalFormat.format(i)
-									+ "_ddlPREV_US_VISIT_LOS_CD", h.getPeriod().getValue());
+
+					Period hPeriod = h.getPeriod();
+					if (!Util.isEmpty(hPeriod)) {
+						validator(map,
+								"ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl" + decimalFormat.format(i)
+										+ "_ddlPREV_US_VISIT_LOS_CD", hPeriod.getValue());
+					}
 					list.add(new Object());
 				}
 			}
@@ -1167,10 +1214,20 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 							+ "_tbxUS_REL_SURNAME", f.getLastNameEN());
 					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl" + decimalFormat.format(i)
 							+ "_tbxUS_REL_GIVEN_NAME", f.getFirstNameEN());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl" + decimalFormat.format(i)
-							+ "_ddlUS_REL_TYPE", f.getRelation().getValue());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl" + decimalFormat.format(i)
-							+ "_ddlUS_REL_STATUS", f.getUsaStatus().getValue());
+
+					Relation fRelation = f.getRelation();
+					if (!Util.isEmpty(fRelation)) {
+						validator(map,
+								"ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl" + decimalFormat.format(i)
+										+ "_ddlUS_REL_TYPE", fRelation.getValue());
+					}
+
+					UsaStatus fUsaStatus = f.getUsaStatus();
+					if (!Util.isEmpty(fUsaStatus)) {
+						validator(map,
+								"ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl" + decimalFormat.format(i)
+										+ "_ddlUS_REL_STATUS", fUsaStatus.getValue());
+					}
 				}
 			}
 		}
@@ -1198,8 +1255,11 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 			//配偶信息，当ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_MARITAL_STATUS 为S之外的值时，有如下情况
 			SpouseDto spouse = customer.getSpouse();
 			if (!Util.isEmpty(spouse)) {
-				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_MARITAL_STATUS", spouse.getState()
-						.getValue());
+
+				Marital spState = spouse.getState();
+				if (!Util.isEmpty(spState)) {
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_MARITAL_STATUS", spState.getValue());
+				}
 
 				//已婚M
 				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxSpouseSurname", spouse.getLastNameEN());

@@ -59,8 +59,8 @@ import com.jgoodies.forms.factories.Borders;
  */
 public class MainForm extends JPanel {
 
-	//	private static final String TASK_FETCH_URI = "visa/simulator/fetch";
-	private static final String TASK_FETCH_URI = "visa/customer/fetch";
+	private static final String TASK_FETCH_URI = "visa/simulator/fetch";
+	//	private static final String TASK_FETCH_URI = "visa/customer/fetch";
 
 	private static final String HISTORY = "history";
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss.SSS]");
