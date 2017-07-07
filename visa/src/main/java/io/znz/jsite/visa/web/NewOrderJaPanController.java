@@ -1301,12 +1301,13 @@ public class NewOrderJaPanController {
 	@RequestMapping(value = "porposerdatasource")
 	@ResponseBody
 	public Object porposerdatasource(String orderid) {
-		if (!Util.isEmpty(orderid)) {
-			long orderId = Long.valueOf(orderid);
-			List<NewProposerInfoJpEntity> query = dbDao.query(NewProposerInfoJpEntity.class,
-					Cnd.where("ismainproposer", "=", 1).and("order_jp_id", "=", orderId), null);
-			return query;
+		if ("" == orderid || null == orderid || "null".equals(orderid)) {
+			orderid = 0 + "";
 		}
-		return null;
+		long orderId = Long.valueOf(orderid);
+		List<NewProposerInfoJpEntity> query = dbDao.query(NewProposerInfoJpEntity.class,
+				Cnd.where("ismainproposer", "=", 1).and("order_jp_id", "=", orderId), null);
+		return query;
+		/*	return query;*/
 	}
 }
