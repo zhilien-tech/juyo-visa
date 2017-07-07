@@ -125,6 +125,7 @@ var grid = $("#grid").kendoGrid({
         {
         	title: '序号',
         	field: 'serialnumber',
+        	width:75,
         	template: "<span class='row-number'></span>" 
         },
         

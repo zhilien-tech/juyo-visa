@@ -729,6 +729,7 @@ $(function () {
    	function addporposer(){
    		var renShu=$('#usa_arrival_date').val();
    		if(renShu!=""){//人数 不等于null时
+   			$('.mainApplicant').siblings('li').find('.k-content').css("display","none");
    			$.ajax({
      			 type: "POST",
      			 url: "/visa/neworderjp/autoporposer",

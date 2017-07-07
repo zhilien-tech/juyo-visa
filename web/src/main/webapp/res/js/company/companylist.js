@@ -23,14 +23,17 @@ function regCmd(command) {
             switch (command) {
                 case "edit":
                 	var data = grid.dataItem($(e.currentTarget).closest("tr"));
-                    if (!(data = select(e))) return;
-                    layer.open({
-                        type: 2,
-                        title: '基本资料',
-                        maxmin: true, //开启最大化最小化按钮
-                        area: ['750px', '500px'],
-                        content: '/employee/updateEmployee.html?uid=' + data.id
-                    });
+                    if (!(data = select(e))){
+                    	return;
+                    }else{
+                    	layer.open({
+                    		type: 2,
+                    		title: '编辑',
+                    		maxmin: true, //开启最大化最小化按钮
+                    		area: ['1000px', '450px'],
+                    		content: '/company/updateCompany.html?comId=' + data.id+'&adminId='+data.adminid
+                    	});
+                    }
                     break;
                 default:
                     $.layer.alert(command);
@@ -39,8 +42,8 @@ function regCmd(command) {
         }
     };
 }
-//添加员工
-function addUser(){
+//添加公司资料
+function addCompany(){
   layer.open({
 	    type: 2,
 	    title:false,
@@ -48,15 +51,16 @@ function addUser(){
 	    fix: false,
 	    maxmin: true,
 	    shadeClose: false,
-	    title: '基本资料',
-	    area: ['750px', '500px'],
-	    content: '/employee/addEmployee.html',
+	    title: '添加',
+	    area: ['1000px', '450px'],
+	    content: '/company/addCompany.html',
 	    end: function(){//添加完页面点击返回的时候自动加载表格数据
 	    	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
 	    }
 	 });
 }
+
 //初始化上部的表格布局
 var grid = $("#grid").kendoGrid({
     pageSize: 20,
@@ -82,13 +86,14 @@ var grid = $("#grid").kendoGrid({
             read: {
                 type: "POST",
                 dataType: "json",
-                url: "/visa/employeemanage/employeelist",
+                url: "/visa/company/companylist",
                 contentType: 'application/json;charset=UTF-8',
             },
             parameterMap: function (options, type) {
-            	var parameter = {
+            		var parameter = {
                         pageNumber : options.page,    //当前页
                         pageSize : options.pageSize,//每页显示个数
+                        keyword:$("#keyword").val(),//检索条件
                     };
                return kendo.stringify(parameter);
             }
@@ -111,31 +116,38 @@ var grid = $("#grid").kendoGrid({
     columns: [
         {
         	title: '序号',
-        	field: 'id',
-        	width:75,
+        	field: 'serialnumber',
         	template: "<span class='row-number'></span>" 
         },
         {
-        	title: '姓名',
-        	field: 'fullname',
+        	title: '公司名称',
+        	field: 'comname'
+        	//template: '#= data.fullcomname#'
         },
         {
-        	title: '电话',
-        	field: 'telephone'
+        	title: ' 联系人', 
+        	field: 'connect'
         },
         {
-        	title: '部门',
-        	field: 'department'
+        	title: '联系电话',
+        	field: 'mobile' 
+        	//template: '#= data.linkman#'
         },
         {
-        	title: '职位',
-        	field: 'job'
+        	title: '邮箱',
+        	field: 'email'
+        	//template: '#= data.telephone#'
+        },
+        {
+        	title: '座机号码',
+        	field: 'landline'
+        	//template: '#= data.email#'
         },
         {
             title: "操作", width: 98,
             command: [
                 {name: "edit", imageClass:false, text: "编辑"},
-                regCmd("edit"),
+                regCmd("edit")
             ]
         }
     ],
@@ -148,6 +160,7 @@ var grid = $("#grid").kendoGrid({
 	    });  
     },
 }).data("kendoGrid");
+
 
 //注册全局刷新以方便其他页面调用刷新
 parent.refresh = function () {
@@ -166,4 +179,14 @@ function successCallback(id){
 	}else if(id == '4'){
 		layer.msg("初始化密码成功",{time:2000});
 	}
+}
+//列表页检索
+$("#searchBtn").on('click', function () {
+	grid.dataSource.read();
+})
+//搜索回车事件
+function onkeyEnter(){
+	 if(event.keyCode==13){
+		 $("#searchBtn").click();
+	 }
 }

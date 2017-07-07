@@ -23,6 +23,7 @@
     	.mainApplicant span{background-color: #ccc;}
     	.mainApplicant span:hover{background-color: #ccc;}
     	.k-state-hover{background-color: #ccc !important;}
+    	.addApplicantBtn span.k-link span.k-icon{display:none;}
     </style>
 </head>
 <body>
@@ -588,19 +589,18 @@
 					主申请人<span class="k-icon  k-panelbar-expand k-i-arrow-s"></span>
 			</p>
 	        <ul class="col-xs-12 k-widget k-reset k-header k-panelbar" data-template="tpl_customer" data-bind="source:customer.proposerInfoJpList"></ul>
-			<div class="row">
-			        <div class="col-xs-12 show" style="padding-top:15px;padding-bottom: 15px;">
-			            <div class="form-group">
-			               <!--  <button data-bind="click:addOne" data-params="customer.proposerInfoJpList"
+			<div class="row addApplicantBtn">
+			        <!--<div class="col-xs-12 show" style="padding-top:15px;padding-bottom: 15px;">
+			             <div class="form-group">
+			                <button data-bind="click:addOne" data-params="customer.proposerInfoJpList"
 			                        class="k-button col-xs-12 k-button-icontext">
 			                    <span class="k-icon k-i-plus"></span>添加一名申请人
-			                </button> -->
+			                </button>
 			            </div>
-			        </div>
-<!-- 			        <div>
-			        </div>
- -->			</div>
-		<!-- 	<form ></form> -->
+			        </div> -->
+			        <div class="col-xs-12 show"></div>
+			</div>
+		 	<form ></form> 
 	            
             <li> 快递信息
                          <div class="container-fluid">
@@ -1101,7 +1101,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-xs-12">
                 <div class="form-group">
                     <button data-bind="click:delOneApplicant" class="k-button col-xs-12 k-button-icontext" data-params="customer.proposerInfoJpList">
@@ -1109,7 +1109,7 @@
                     </button>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </li>
 </script>
