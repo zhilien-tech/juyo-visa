@@ -32,7 +32,7 @@ function regCmd(command) {
                     		type: 2,
                     		title: '编辑',
                     		maxmin: true, //开启最大化最小化按钮
-                    		area: ['1000px', '600px'],
+                    		area: ['850px', '500px'],
                     		content: '/function/updateFunction.html?funId=' + data.id
                     	});
                     }
@@ -54,7 +54,7 @@ function addFunction(){
 	    maxmin: true,
 	    shadeClose: false,
 	    title: '添加',
-	    area: ['1000px', '600px'],
+	    area: ['850px', '500px'],
 	    content: '/function/addFunction.html',
 	    end: function(){//添加完页面点击返回的时候自动加载表格数据
 	    	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
