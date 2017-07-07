@@ -1199,12 +1199,12 @@ public class NewOrderJaPanController {
 		int daynum = (int) ((enddate.getTime() - startdate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
 		List<Hotel> hotellist = dbDao.query(Hotel.class, Cnd.where("city", "=", arrivecity), null);
 		List<Scenic> sceniclist = dbDao.query(Scenic.class, Cnd.where("city", "=", arrivecity), null);
-
+		int daynumnew = 1;
 		for (int i = 0; i < daynum; i++) {
 			NewTripplanJpEntity t = new NewTripplanJpEntity();
-			Calendar cal1 = Calendar.getInstance();
-			cal1.setTime(nowdate);
-			t.setDaynum(i + 1);
+			//Calendar cal1 = Calendar.getInstance();
+			cal.setTime(nowdate);
+			t.setDaynum(daynumnew);
 			t.setCity(arrivecity);
 			t.setNowdate(nowdate);
 			if (i < hotellist.size()) {
@@ -1233,13 +1233,15 @@ public class NewOrderJaPanController {
 
 			}
 			t.setHomeday(1);
-			t.setIntime(nowdate);
-			cal1.set(Calendar.DAY_OF_MONTH, nowdate.getDate() + 1);
+			//t.setIntime(nowdate);
+			//cal1.set(Calendar.DAY_OF_MONTH, nowdate.getDate() + 1);
 			/*t.setOrder_jp_id(orderOld.getId());*/
-			t.setOuttime(cal1.getTime());
+			//t.setOuttime(cal1.getTime());
 			t.setBreakfast(1);
 			t.setDinner(1);
 			tripplanJpListnew.add(t);
+
+			daynumnew++;
 			cal.set(Calendar.DAY_OF_MONTH, nowdate.getDate() + 1);
 			nowdate = cal.getTime();
 		}
