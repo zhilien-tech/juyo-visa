@@ -189,7 +189,7 @@ public class LoginController extends BaseController {
 					if (username.equals(telephone) && newpass.equals(pwd)) {//username为页面传来的用户名
 						if (UserLoginEnum.PERSONNEL.intKey() == logintype
 								&& UserLoginEnum.PERSONNEL.intKey() == userType) {//工作人员登录
-							return "redirect:" + to + "?auth=2,3,6,7" + str + "&username=" + fullname + "&logintype="
+							return "redirect:" + to + "?auth=2,3,6,7," + str + "&username=" + fullname + "&logintype="
 									+ logintype;
 						} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype
 								&& UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {//游客身份登录
