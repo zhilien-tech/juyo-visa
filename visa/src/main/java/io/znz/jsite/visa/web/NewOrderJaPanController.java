@@ -367,6 +367,14 @@ public class NewOrderJaPanController {
 				startdate = tripJp.getStartdate();
 				enddate = tripJp.getReturndate();
 				arrivecity = tripJp.getArrivecity();
+			} else {
+				if (!Util.isEmpty(tripJp.getId()) && tripJp.getId() > 0) {
+					nutDao.update(tripJp);
+				} else {
+
+					tripJp.setOrder_jp_id(orderOld.getId());
+					tripJp = dbDao.insert(tripJp);
+				}
 			}
 
 		}
