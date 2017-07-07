@@ -546,7 +546,11 @@ $(function () {
         $.getJSON("/visa/neworderjp/showDetail?orderid=" + oid, function (resp) {
         	//console.log(JSON.stringify(resp));
         	viewModel.set("customer", $.extend(true, defaults, resp));
-        	
+        	var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
+        	if(proposerInfoJpList.length>0){
+        		
+        		$(".mainApplicant").hide();
+        	}
         	if(viewModel.get("customer.tripJp.oneormore")==1){
         		$('.WangFan').addClass('hide');
         		$('.DuoCheng').removeClass('hide');
