@@ -11,9 +11,13 @@ import io.znz.jsite.visa.entity.function.FunctionEntity;
 import io.znz.jsite.visa.forms.function.FunctionSqlForm;
 
 import java.util.Date;
+import java.util.List;
 
+import org.nutz.dao.Cnd;
 import org.nutz.dao.pager.Pager;
 import org.springframework.stereotype.Service;
+
+import com.uxuexi.core.common.util.Util;
 
 /**
  * 功能管理
@@ -39,6 +43,10 @@ public class FunctionService extends NutzBaseService<FunctionEntity> {
 	 */
 	public Object addfunction(FunctionEntity addForm) {
 		addForm.setCreateTime(new Date());
+		Integer parentId = addForm.getParentId();
+		if (Util.isEmpty(parentId)) {
+			addForm.setParentId(0);
+		}
 		return dbDao.insert(addForm);
 	}
 
@@ -57,7 +65,16 @@ public class FunctionService extends NutzBaseService<FunctionEntity> {
 	public Object updateFunctionSave(FunctionEntity updateForm) {
 		//修改功能信息
 		FunctionEntity function = this.fetch(updateForm.getId());
-		function.setUpdateTime(new Date());
+		updateForm.setUpdateTime(new Date());
 		return nutDao.updateIgnoreNull(updateForm);
+	}
+
+	/**
+	 * 查询上级功能
+	 */
+	public Object selectparentname() {
+		List<FunctionEntity> query = dbDao.query(FunctionEntity.class, Cnd.where("parentId", "=", 0), null);
+		return query;
+
 	}
 }

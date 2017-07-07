@@ -88,4 +88,13 @@ public class FunctionCotroller extends BaseController {
 		return null;
 	}
 
+	/**
+	 * 查询上级功能
+	 * @param updateForm
+	 */
+	@RequestMapping(value = "selectparentname", method = RequestMethod.POST)
+	@ResponseBody
+	public Object selectparentname() {
+		return functionService.selectparentname();
+	}
 }

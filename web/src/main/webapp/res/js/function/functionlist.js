@@ -122,8 +122,8 @@ var grid = $("#grid").kendoGrid({
         	template: "<span class='row-number'></span>" 
         },
         {
-        	title: '上级功能',
-        	field: 'parentid'
+        	title: '功能名称',
+        	field: 'funname'
         	//template: '#= data.fullcomname#'
         },
         {

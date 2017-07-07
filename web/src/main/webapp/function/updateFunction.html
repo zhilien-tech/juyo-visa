@@ -30,7 +30,10 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">上级功能:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="parentId" name="parentId" type="text" placeholder="请输入公司名称" class="k-textbox" style="width: 100%;"/>
+	                                           <!--  <input id="parentId" name="parentId" type="text" placeholder="请输入公司名称" class="k-textbox" style="width: 100%;"/> -->
+	                                           <select id="parentId" name="parentId" class="k-textbox" style="width: 100%;">
+	                                            	<option value="">--请选择--</option>
+	                                            </select>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -132,6 +135,7 @@
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
 <script src="/res/js/projectpath/projectpath.js"></script>
+<script src="/res/js/function/updatefunction.js"></script>
 <script type="text/javascript">
 //回显数据
 function GetQueryString(name)
