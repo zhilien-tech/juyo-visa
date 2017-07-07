@@ -398,6 +398,38 @@ public class VisaInfoController extends BaseController {
 				dbDao.insert(oldname);
 			}
 		}
+		//支付人公司/组织
+		//NewPayCompanyEntity payCompany = customer.getOrder().getPayCompany();
+		List<NewPayCompanyEntity> payCompany = customer.getPayCompany();
+		/*if (!Util.isEmpty(payCompany)) {
+			if (!Util.isEmpty(payCompany.getId()) && payCompany.getId() > 0) {
+				nutDao.update(payCompany);
+			} else {
+				payCompany.setOrderid(orderid);
+				dbDao.insert(payCompany);
+			}
+		}*/
+		if (!Util.isEmpty(payCompany) && payCompany.size() > 0) {
+			for (NewPayCompanyEntity newPayCompanyEntity : payCompany) {
+				if (!Util.isEmpty(newPayCompanyEntity.getId()) && newPayCompanyEntity.getId() > 0) {
+					nutDao.update(newPayCompanyEntity);
+				} else {
+					newPayCompanyEntity.setOrderid(orderid);
+					dbDao.insert(newPayCompanyEntity);
+				}
+			}
+		}
+		//支付人---其他人
+		NewPayPersionEntity payPersion = customer.getOrder().getPayPersion();
+		if (!Util.isEmpty(payPersion)) {
+			if (!Util.isEmpty(payPersion.getId()) && payPersion.getId() > 0) {
+				nutDao.update(payPersion);
+			} else {
+				payPersion.setOrderid(orderid);
+				dbDao.insert(payPersion);
+			}
+		}
+
 		List<NewOldworksEntity> oldworkslist = customer.getOldworkslist();
 		if (!Util.isEmpty(oldworkslist) && oldworkslist.size() > 0) {
 			for (NewOldworksEntity newLanguageEntity : oldworkslist) {

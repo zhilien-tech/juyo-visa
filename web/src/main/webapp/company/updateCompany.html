@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>公司管理编辑</title>
+    <link rel="stylesheet" href="/res/plugin/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.common.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.office365.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/res/css/colors.min.css"/>
+    <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
+    <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/><!--修改的样式-->
+    <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
+</head>
+<body>
+<div>
+    <div class="container-fluid" style="padding-top: 15px;">
+        <div class="row">
+        	<form id="updateForm" method="post">
+	            <div class="col-xs-12 padding-0">
+	                <ul id="panelbar">
+	                    <li>
+	                        <div class="container-fluid">
+	                        <input id="comId" name="id" type="hidden" value="" />
+	                            <div class="row">
+	                                <div class="col-xs-12">
+	                                    <div class="form-group">
+	                                        <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                            <input id="comNameId" name="comName" type="text"  class="k-textbox" style="width: 100%;"/>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+								<div class="row">
+	                                <div class="col-xs-6">
+	                                    <div class="form-group">
+	                                        <label for="last_name_cn">用户名:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                        	<input id="adminId" name="adminId" type="hidden" value="">
+	                                            <input id="adminNameId" name="adminName" type="text" class="k-textbox" style="width: 100%;"/>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="col-xs-6">
+	                                    <div class="form-group">
+	                                        <label for="last_name_cn">联系人:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                            <input id="connectId" name="connect" required pattern="^[1][34578][0-9]{9}$" validationMessage="手机号码格式错误" type="text" class="k-textbox" style="width: 100%;"/>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+								<div class="row">
+	                                <div class="col-xs-6">
+	                                    <div class="form-group">
+	                                        <label for="last_name_cn">联系电话:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                            <input id="mobileId" name="mobile" type="text" class="k-textbox" style="width: 100%;"/>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="col-xs-6">
+	                                    <div class="form-group">
+	                                        <label for="last_name_cn">联系邮箱:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                            <input id="emailId" name="email" required pattern="^[1][34578][0-9]{9}$" validationMessage="手机号码格式错误" type="text" class="k-textbox" style="width: 100%;"/>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+								<div class="row">
+	                                <div class="col-xs-6">
+	                                    <div class="form-group">
+	                                        <label for="last_name_cn">座机电话:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                            <input id="landLineId" name="landLine" type="text" class="k-textbox" style="width: 100%;"/>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="col-xs-6">
+	                                    <div class="form-group">
+	                                        <label for="last_name_cn">地址:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                            <input id="addressId" name="address" required pattern="^[1][34578][0-9]{9}$" validationMessage="手机号码格式错误" type="text" class="k-textbox" style="width: 100%;"/>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+								<div class="row">
+		                            <label class="col-sm-3 text-right padding">上传营业执照：</label>
+		                            <div class="col-sm-8 padding">
+		                              <input type="hidden" id="webupload_picture" name="license" value=""/>
+								        <div class="wu-example" id="uploader_00" style="width:300px;height:200px;">
+								        	<div id="imgUrlMessage" name="imgUrlMessage"></div> 
+								        </div>
+		                            </div>
+	                            </div>
+	                        </div>
+	                    </li>
+	                </ul>
+	            </div>
+	         </form>
+        </div>
+        <div class="row" data-bind="visible:showToolBar">
+        	<div class="col-xs-6">
+                <div class="form-group">
+                    <button id="deleteFlagId" class="k-red k-button col-xs-12"><i class="fa fa-save"></i> 删除</button>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <button id="updateCompanySave" class="k-primary k-button col-xs-12">
+                        <i class="fa fa-save"></i> 保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<!--引入 js 库文件-->
+<script src="/res/plugin/template.js"></script>
+<script src="/res/plugin/jquery.min.js"></script>
+<script src="/res/plugin/layer/layer.js"></script>
+<script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
+<script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
+<script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
+<script src="/res/js/common.js"></script>
+<script src="/res/plugin/webtoolkit.md5.js"></script>
+<script src="/res/js/idcard.js"></script>
+<script src="/res/js/projectpath/projectpath.js"></script>
+<script type="text/javascript">
+//回显数据
+function GetQueryString(name)
+{
+     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+     var r = window.location.search.substr(1).match(reg);
+     if(r!=null)return  unescape(r[2]); return null;
+}
+// 调用方法
+var comId = GetQueryString("comId");
+var adminId = GetQueryString("adminId");
+$("#comId").val(comId);
+$("#adminId").val(adminId);
+$.ajax({
+	type : "POST",
+	url : localhostPaht +'/visa/company/updatecompany',
+	data : {
+		comId:comId,
+		adminId:adminId
+	},
+	success : function(data) {
+		var data=JSON.parse(data);
+		$('#comNameId').val(data.comName);
+		$('#adminNameId').val(data.adminName);
+		$('#connectId').val(data.connect);
+		$('#mobileId').val(data.mobile);
+		$('#emailId').val(data.email);
+		$('#landLineId').val(data.landLine);
+		$('#addressId').val(data.address);
+	},
+	error : function(request) {
+		layer.msg('添加失败');
+	}
+});
+//更新保存
+$("#updateCompanySave").click(function(){
+	$.ajax({
+		type : "POST",
+		url : localhostPaht +'/visa/company/updateCompanySave',
+		data : $('#updateForm').serialize(),// 你的formid
+		success : function(data) {
+			layer.load(1, {
+				 shade: [0.1,'#fff'] //0.1透明度的白色背景
+			});
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+		    parent.layer.close(index);
+		    window.parent.successCallback('2');
+		},
+		error : function(request) {
+			layer.msg('添加失败');
+		}
+	});
+});
+//删除数据
+$("#deleteFlagId").click(function(){
+	var comId =  $("#comId").val();
+	layer.confirm("您确认删除信息吗？", {
+	    btn: ["是","否"], //按钮
+	    shade: false //不显示遮罩
+	}, function(){
+		// 点击确定之后
+		var url = localhostPaht +'/visa/company/deleteCompany';
+		$.ajax({
+			type : 'POST',
+			data : {
+				comId : comId
+			},
+			url : url,
+			success : function(data) {
+				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			    parent.layer.close(index);
+			    window.parent.successCallback('3');
+			},
+			error : function(xhr) {
+				layer.msg("操作失败", "", 3000);
+			}
+		});
+	}, function(){
+	    // 取消之后不用处理
+	});
+});
+</script>
+</html>

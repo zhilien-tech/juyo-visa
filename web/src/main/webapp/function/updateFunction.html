@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>公司管理编辑</title>
+    <link rel="stylesheet" href="/res/plugin/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.common.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.office365.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/res/css/colors.min.css"/>
+    <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
+    <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/><!--修改的样式-->
+    <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
+</head>
+<body>
+<div>
+    <div class="container-fluid" style="padding-top: 15px;">
+        <div class="row">
+        	<form id="updateForm" method="post">
+	            <div class="col-xs-12 padding-0">
+	                <ul id="panelbar">
+	                    <li>
+	                        <div class="container-fluid">
+	                        <input id="funId" name="id" type="hidden" value="" />
+	                            <div class="row">
+	                                <div class="col-xs-12">
+	                                    <div class="form-group">
+	                                        <label for="last_name_cn">上级功能:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                           <!--  <input id="parentId" name="parentId" type="text" placeholder="请输入公司名称" class="k-textbox" style="width: 100%;"/> -->
+	                                           <select id="parentId" name="parentId" class="k-textbox" style="width: 100%;">
+	                                            	<option value="">--请选择--</option>
+	                                            </select>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+								<div class="row">
+	                                <div class="col-xs-12">
+	                                    <div class="form-group">
+	                                        <label for="last_name_cn">访问地止:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                            <input id="urlId" name="url" type="text" placeholder="请输入联系人" class="k-textbox" style="width: 100%;"/>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+								<div class="row">
+	                                <div class="col-xs-12">
+	                                    <div class="form-group">
+	                                        <label for="last_name_cn">功能名称:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                            <input id="funNameId" name="funName" type="text" placeholder="请输入联系人" class="k-textbox" style="width: 100%;"/>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                             </div>
+	                             <div class="row">
+	                                <div class="col-xs-12">
+	                                    <div class="form-group">
+	                                        <label for="last_name_cn">功能等级:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                            <input id="levelId" name="level" required pattern="^[1][34578][0-9]{9}$" validationMessage="手机号码格式错误" type="text" placeholder="请输入手机号" class="k-textbox" style="width: 100%;"/>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+								<div class="row">
+	                                <div class="col-xs-12">
+	                                    <div class="form-group">
+	                                        <label for="last_name_cn">序号:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                            <input id="sortId" name="sort" type="text" placeholder="请输入联系人" class="k-textbox" style="width: 100%;"/>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+								<div class="row">
+	                                <div class="col-xs-12">
+	                                    <div class="form-group">
+	                                        <label for="last_name_cn">功能图标样式:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                            <input id="portraitId" name="portrait" type="text" placeholder="请输入联系人" class="k-textbox" style="width: 100%;"/>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            <div class="row">
+	                                <div class="col-xs-12">
+	                                    <div class="form-group">
+	                                        <label for="last_name_cn">备注:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                            <textarea id="remarkId" name="remark" class="form-control inpImpWid" class="k-textbox" style="width: 100%;"></textarea>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </li>
+	                </ul>
+	            </div>
+	         </form>
+        </div>
+        <div class="row" data-bind="visible:showToolBar">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <button id="updateFunctionSave" class="k-primary k-button col-xs-12">
+                        <i class="fa fa-save"></i> 保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<!--引入 js 库文件-->
+<script src="/res/plugin/template.js"></script>
+<script src="/res/plugin/jquery.min.js"></script>
+<script src="/res/plugin/layer/layer.js"></script>
+<script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
+<script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
+<script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
+<script src="/res/js/common.js"></script>
+<script src="/res/plugin/webtoolkit.md5.js"></script>
+<script src="/res/js/idcard.js"></script>
+<script src="/res/js/projectpath/projectpath.js"></script>
+<script src="/res/js/function/updatefunction.js"></script>
+<script type="text/javascript">
+//回显数据
+function GetQueryString(name)
+{
+     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+     var r = window.location.search.substr(1).match(reg);
+     if(r!=null)return  unescape(r[2]); return null;
+}
+// 调用方法
+var funId = GetQueryString("funId");
+$("#funId").val(funId);
+$.ajax({
+	type : "POST",
+	url : localhostPaht +'/visa/function/updatefunction',
+	data : {
+		funId:funId
+	},
+	success : function(data) {
+		var data=JSON.parse(data);
+		$('#parentId').val(data.parentId);
+		$('#urlId').val(data.url);
+		$('#funNameId').val(data.funName);
+		$('#levelId').val(data.level);
+		$('#sortId').val(data.sort);
+		$('#portraitId').val(data.portrait);
+		$('#remarkId').val(data.remark);
+	},
+	error : function(request) {
+		layer.msg('添加失败');
+	}
+});
+//更新保存
+$("#updateFunctionSave").click(function(){
+	$.ajax({
+		type : "POST",
+		url : localhostPaht +'/visa/function/updateFunctionSave',
+		data : $('#updateForm').serialize(),// 你的formid
+		success : function(data) {
+			layer.load(1, {
+				 shade: [0.1,'#fff'] //0.1透明度的白色背景
+			});
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+		    parent.layer.close(index);
+		    window.parent.successCallback('2');
+		},
+		error : function(request) {
+			layer.msg('添加失败');
+		}
+	});
+});
+</script>
+</html>
