@@ -59,7 +59,7 @@ public class CompanyService extends NutzBaseService<CompanyEntity> {
 		byte[] password = INIT_PASSWORD.getBytes();
 		byte[] hashPassword = Digests.sha1(password, salt, HASH_INTERATIONS);
 		empForm.setPassword(Encodes.encodeHex(hashPassword));//初始密码
-		empForm.setStatus(1);
+		empForm.setStatus(0);
 		empForm.setCreateTime(new Date());
 		empForm.setUserType(1);
 		empForm.setTelephone(addForm.getAdminName());
@@ -90,6 +90,8 @@ public class CompanyService extends NutzBaseService<CompanyEntity> {
 	 * @param updateForm
 	 */
 	public Object updateCompanySave(CompanyEntity updateForm) {
+		long id = updateForm.getAdminId();
+
 		//修改管理员用户名
 		EmployeeEntity userEntity = dbDao.fetch(EmployeeEntity.class, updateForm.getAdminId());
 		userEntity.setTelephone(updateForm.getAdminName());
