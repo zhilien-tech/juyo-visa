@@ -141,7 +141,6 @@ var countries = new kendo.data.DataSource({
 		"customer.workedplacelist":{},
 		"customer.relation":{},
 		"customer.teachinfo":{},
-		
 		"customer.peerList":{
 			peerxing: "",
 	    	peerxingen: "",
@@ -187,7 +186,7 @@ var viewModel = kendo.observable({
     },
     // 支付人
     payType: function (type) {
-        return viewModel.get("customer.trip.paypersion") == type;
+        return  viewModel.get("customer.trip[0].paypersion")== type;
     },
     // 婚姻状态
     spouseState: function (state) {

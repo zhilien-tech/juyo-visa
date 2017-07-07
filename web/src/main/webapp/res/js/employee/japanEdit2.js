@@ -210,9 +210,7 @@ var viewModel = kendo.observable({
    		if(!e.data.istogetherlinkman){
    			
    			var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
-   			alert(111);
-   			
-   			console.log(JSON.stringify(proposerInfoJpList));
+   			///console.log(JSON.stringify(proposerInfoJpList));
    			var porposernow;
    			for(var i=0;i<proposerInfoJpList.length;i++){
    				var proposer=proposerInfoJpList[i];
@@ -228,6 +226,7 @@ var viewModel = kendo.observable({
    					btn: ["是","否"], //按钮
    					shade: false //不显示遮罩
    				}, function(index){
+   					
    					for(var i=0;i<proposerInfoJpList.length;i++){
    		   				var proposer=proposerInfoJpList[i];
    		   				//alert(proposer.istogetherlinkman);
@@ -238,7 +237,7 @@ var viewModel = kendo.observable({
    		   				//console.log(JSON.stringify(proposer));
    		   			}
    					viewModel.set("customer.proposerInfoJpList",proposerInfoJpList);
-   					console.log(JSON.stringify(proposerInfoJpList));
+   					///console.log(JSON.stringify(proposerInfoJpList));
    					layer.close(index);
    				},function(){
    					for(var i=0;i<proposerInfoJpList.length;i++){
@@ -247,11 +246,12 @@ var viewModel = kendo.observable({
    		   				if(proposer.id==e.data.id){
    		   				//proposer.istogetherlinkman=false;
    		   			viewModel.set("customer.proposerInfoJpList["+i+"].istogetherlinkman",false);
+
    		   				}
    		   				//console.log(JSON.stringify(proposer));
    		   			}
    					viewModel.set("customer.proposerInfoJpList",proposerInfoJpList);
-   					console.log(JSON.stringify(proposerInfoJpList));
+   					///console.log(JSON.stringify(proposerInfoJpList));
    					
    				});
    				
