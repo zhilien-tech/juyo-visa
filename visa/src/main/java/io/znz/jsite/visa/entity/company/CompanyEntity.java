@@ -29,7 +29,7 @@ public class CompanyEntity {
 	private Integer id;
 	@Column
 	@Comment("管理员账号id")
-	private Integer adminId;
+	private long adminId;
 	@Column
 	@Comment("管理员姓名")
 	private String adminName;
