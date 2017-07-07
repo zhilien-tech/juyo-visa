@@ -232,7 +232,8 @@ var viewModel = kendo.observable({
    		   				var proposer=proposerInfoJpList[i];
    		   				//alert(proposer.istogetherlinkman);
    		   				if(proposer.id==porposernow.id){
-   		   				proposer.istogetherlinkman=false;
+   		   			//	proposer.istogetherlinkman=false;
+   		   			viewModel.set("customer.proposerInfoJpList["+i+"].istogetherlinkman",false);
    		   				}
    		   				//console.log(JSON.stringify(proposer));
    		   			}
@@ -244,7 +245,8 @@ var viewModel = kendo.observable({
    		   				var proposer=proposerInfoJpList[i];
    		   				//alert(proposer.istogetherlinkman);
    		   				if(proposer.id==e.data.id){
-   		   				proposer.istogetherlinkman=false;
+   		   				//proposer.istogetherlinkman=false;
+   		   			viewModel.set("customer.proposerInfoJpList["+i+"].istogetherlinkman",false);
    		   				}
    		   				//console.log(JSON.stringify(proposer));
    		   			}
