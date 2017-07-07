@@ -221,8 +221,8 @@ function detailInit(e) {
 	          }
       },
         columns: [
-            {field: 'chinesefullname',title: '姓名'},
-            {field: 'phone', title: '电话'},
+            {field: 'chinesefullname',title: '姓名',width:100},
+            {field: 'phone', title: '电话',width:100},
             {field: 'passport', title: '护照号'},
             {field: 'gender', title: '性别', width: 60,values:genderlist},
             {field: 'sendtime', title: '送签时间',format: "{0: yyyy-MM-dd}"},
@@ -317,10 +317,11 @@ var grid = $("#grid").kendoGrid({
       {
 	    field: 'rowNumber',
       	title: '序号',
-      	template: "<span class='row-number'></span>" 
+      	template: "<span class='row-number'></span>",
+      	width:75
       },
         {
-            field: 'ordernumber', title: ' 订单号', width: 100,
+            field: 'ordernumber', title: ' 订单号', width: 130,
             template: "<span class='ellipsis' title='#=ordernumber#'>#=ordernumber#</span>",
             editor: function (container, options) {
                 container.hide().prev().hide();
@@ -330,11 +331,11 @@ var grid = $("#grid").kendoGrid({
         {field: 'telephone', title: '电话',template: "<span class='ellipsis' title='#=data.telephone#'>#=data.telephone#</span>"},
         {field: 'senddate', title: '送签时间',format: "{0: yyyy-MM-dd }",template: "<span class='ellipsis' title='#=data.senddate#'>#=data.senddate?kendo.toString(data.senddate, 'yyyy-MM-dd'):''#</span>"},
         {field: 'outdate', title: '出签时间',format: "{0: yyyy-MM-dd }",template: "<span class='ellipsis' title='#=data.outdate#'>#=data.outdate?kendo.toString(data.outdate, 'yyyy-MM-dd'):''#</span>"},
-        {field: 'headnum', title: '人数', values: ["美国", "日本"], width: 80,},
+        {field: 'headnum', title: '人数', values: ["美国", "日本"], width: 75,},
         {field: 'countrytype', title: '国家', width: 80,values:countrylist},
         {field: 'status', title: '状态',values:statuslist, width: 80,},
         {
-            title: "操作", width: 300,
+            title: "操作", width: 295,
             command: [
                 {name: "modify", imageClass:false, text: " 编辑"},
                 {name: "delivery", imageClass:false, text: "递送"},

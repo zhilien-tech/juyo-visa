@@ -7,7 +7,7 @@ $(function(){
 		 contentType: "application/json",
 		 dataType: "json",
 		 success: function (result) {
-			 console.log(result);
+			// console.log(result);
 			japan=result.japan;
 			usa=result.usa;
 			$("#usa").hide();

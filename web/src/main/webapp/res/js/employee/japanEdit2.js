@@ -6,12 +6,20 @@ var customersourceEnum=[
     {text:"直客",value:3},
     {text:"线下",value:4}
   ];
-var proposers=[
-                        {text:"线上",value:1},
-                        {text:"OTS",value:2},
-                        {text:"直客",value:3},
-                        {text:"线下",value:4}
-                        ];
+var proposers=new kendo.data.DataSource({
+    serverFiltering: true,
+    transport: {
+        read: {
+            dataType: "json",
+            url: "/visa/neworderjp/porposerdatasource?orderid="+$.queryString("cid"),
+        },
+        parameterMap: function (options, type) {
+            if (options.filter) {
+                return {filter: options.filter.filters[0].value};
+            }
+        },
+    }
+});
 
 //出发城市
 var startcity=[
@@ -195,6 +203,64 @@ var viewModel = kendo.observable({
         return result;
     },
     customer: defaults,
+    aaa:function(e){
+    	 /* console.log(e.data.id);
+    	  console.log(e.data.istogetherlinkman);*/
+    	  //$("#main1_"+e.data.id).is(':checked')
+   		if(!e.data.istogetherlinkman){
+   			
+   			var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
+   			///console.log(JSON.stringify(proposerInfoJpList));
+   			var porposernow;
+   			for(var i=0;i<proposerInfoJpList.length;i++){
+   				var proposer=proposerInfoJpList[i];
+   				//alert(proposer.istogetherlinkman);
+   				if(proposer.istogetherlinkman==1&&proposer.id!=e.data.id){
+   					porposernow=proposer;
+   				}
+   				//console.log(JSON.stringify(proposer));
+   			}
+   			if(porposernow!=null&&porposernow!=''){
+   				
+   				layer.confirm("原来的统一联系人为："+porposernow.fullname+"，您确认修改吗？", {
+   					btn: ["是","否"], //按钮
+   					shade: false //不显示遮罩
+   				}, function(index){
+   					
+   					for(var i=0;i<proposerInfoJpList.length;i++){
+   		   				var proposer=proposerInfoJpList[i];
+   		   				//alert(proposer.istogetherlinkman);
+   		   				if(proposer.id==porposernow.id){
+   		   			//	proposer.istogetherlinkman=false;
+   		   			viewModel.set("customer.proposerInfoJpList["+i+"].istogetherlinkman",false);
+   		   				}
+   		   				//console.log(JSON.stringify(proposer));
+   		   			}
+   					viewModel.set("customer.proposerInfoJpList",proposerInfoJpList);
+   					///console.log(JSON.stringify(proposerInfoJpList));
+   					layer.close(index);
+   				},function(){
+   					for(var i=0;i<proposerInfoJpList.length;i++){
+   		   				var proposer=proposerInfoJpList[i];
+   		   				//alert(proposer.istogetherlinkman);
+   		   				if(proposer.id==e.data.id){
+   		   				//proposer.istogetherlinkman=false;
+   		   			viewModel.set("customer.proposerInfoJpList["+i+"].istogetherlinkman",false);
+
+   		   				}
+   		   				//console.log(JSON.stringify(proposer));
+   		   			}
+   					viewModel.set("customer.proposerInfoJpList",proposerInfoJpList);
+   					///console.log(JSON.stringify(proposerInfoJpList));
+   					
+   				});
+   				
+   			}
+   			
+   		}
+    	  
+    	  
+    }
 });
 kendo.bind($(document.body), viewModel);
 
@@ -482,7 +548,11 @@ $(function () {
         $.getJSON("/visa/neworderjp/showDetail?orderid=" + oid, function (resp) {
         	//console.log(JSON.stringify(resp));
         	viewModel.set("customer", $.extend(true, defaults, resp));
-        	
+        	var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
+        	if(proposerInfoJpList.length>0){
+        		
+        		$(".mainApplicant").hide();
+        	}
         	if(viewModel.get("customer.tripJp.oneormore")==1){
         		$('.WangFan').addClass('hide');
         		$('.DuoCheng').removeClass('hide');
@@ -517,7 +587,6 @@ $(function () {
     }
     
     comsource();//客户来源 状态 模块加载
-    addporposer();//主申请人 模块加载
    
 });
 /*$(function(){
@@ -656,35 +725,76 @@ $(function () {
    		}
    	}
    	
+ 
    	function addporposer(){
-   		$.ajax({
-  			 type: "POST",
-  			 url: "/visa/neworderjp/autoporposer",
-  			 contentType: "application/json",
-  			 dataType: "json",
-  			 data: JSON.stringify(viewModel.customer),
-  			 success: function (result) {
-  				 //console.log(JSON.stringify(result));
-  					viewModel.set("customer", $.extend(true, defaults, result));
-  		        	
-  		        	if(viewModel.get("customer.tripJp.oneormore")==1){
-  		        		$('.WangFan').addClass('hide');
-  		        		$('.DuoCheng').removeClass('hide');
-  		        	}else{
-  		        		$('.WangFan').removeClass('hide');
-  		        		$('.DuoCheng').addClass('hide');
-  		        	}
-  		        	defaults.customermanage.telephone=result.customermanage.telephone;
-  		        	defaults.customermanage.email=result.customermanage.email;
-  		        	var color = $("#cus_phone").data("kendoMultiSelect");
-  					color.value(result.customermanage.id);
-  		        	var color = $("#cus_email").data("kendoMultiSelect");
-  					color.value(result.customermanage.id);
-  					var color = $("#cus_fullComName").data("kendoMultiSelect");
-  					color.value(result.customermanage.id);
-  					var color = $("#cus_linkman").data("kendoMultiSelect");
-  					color.value(result.customermanage.id);
-  					
-  			 }
-  		 });
+   		var renShu=$('#usa_arrival_date').val();
+   		if(renShu!=""){//人数 不等于null时
+   			$.ajax({
+     			 type: "POST",
+     			 url: "/visa/neworderjp/autoporposer",
+     			 contentType: "application/json",
+     			 dataType: "json",
+     			 data: JSON.stringify(viewModel.customer),
+     			 success: function (result) {
+     				    //console.log(JSON.stringify(result));
+     					viewModel.set("customer", $.extend(true, defaults, result));
+     		        	if(viewModel.get("customer.tripJp.oneormore")==1){
+     		        		$('.WangFan').addClass('hide');
+     		        		$('.DuoCheng').removeClass('hide');
+     		        	}else{
+     		        		$('.WangFan').removeClass('hide');
+     		        		$('.DuoCheng').addClass('hide');
+     		        	}
+     		        	defaults.customermanage.telephone=result.customermanage.telephone;
+     		        	defaults.customermanage.email=result.customermanage.email;
+     		        	var color = $("#cus_phone").data("kendoMultiSelect");
+     					color.value(result.customermanage.id);
+     		        	var color = $("#cus_email").data("kendoMultiSelect");
+     					color.value(result.customermanage.id);
+     					var color = $("#cus_fullComName").data("kendoMultiSelect");
+     					color.value(result.customermanage.id);
+     					var color = $("#cus_linkman").data("kendoMultiSelect");
+     					color.value(result.customermanage.id);
+     			 }
+     		 });
+   			 $(".mainApplicant").hide();//隐藏 span标签的 主申请人
+   		}
+   		
+   		
+   	}
+   	
+   	
+   	function togetherlinkman(){
+   		alert($(this).is(':checked'));
+   		if(true){
+   			
+   			var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
+   			/*console.log(JSON.stringify(proposerInfoJpList));*/
+   			var porposernow;
+   			for(var i=0;i<proposerInfoJpList.length;i++){
+   				var proposer=proposerInfoJpList[i];
+   				//alert(proposer.istogetherlinkman);
+   				if(proposer.istogetherlinkman==1){
+   					porposernow=proposer;
+   				}
+   				//console.log(JSON.stringify(proposer));
+   			}
+   			if(porposernow!=null&&porposernow!=''){
+   				
+   				layer.confirm("原来的统一联系人为："+porposernow.fullname+"，您确认修改吗？", {
+   					btn: ["是","否"], //按钮
+   					shade: false //不显示遮罩
+   				}, function(){
+   					alert(111);
+   				},function(){
+   					alert(222);
+   					
+   				});
+   				
+   			}
+   			
+   		}
+   		
+   		
+   		
    	}

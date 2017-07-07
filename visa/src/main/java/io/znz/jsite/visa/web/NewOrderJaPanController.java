@@ -158,6 +158,7 @@ public class NewOrderJaPanController {
 
 				//根据人数插入多个申请人的数据
 				for (int i = a; i > 0; i--) {
+					List<NewProposerInfoJpEntity> proposerInfoJpList1 = order.getProposerInfoJpList();
 					NewCustomerJpEntity c = new NewCustomerJpEntity();
 					c.setCreatetime(new Date());
 					c.setUpdatetime(new Date());
@@ -168,15 +169,34 @@ public class NewOrderJaPanController {
 					customerOrderEntity.setCreatetime(new Date());
 					customerOrderEntity.setUpdatetime(new Date());
 					dbDao.insert(customerOrderEntity);
+					NewProposerInfoJpEntity n = new NewProposerInfoJpEntity();
+					n.setCustomer_jp_id(insert.getId());
+					n.setOrder_jp_id(orderOld.getId());
+					proposerInfoJpList1.add(n);
+					order.setProposerInfoJpList(proposerInfoJpList1);
 				}
 			} else if (a < 0) {
 				int n = -a;
 				List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
-						Cnd.where("orderJpId", "=", order.getId()).orderBy("updatetime", "asc"), null);
+						Cnd.where("order_jp_id", "=", order.getId()).orderBy("updatetime", "asc"), null);
 				for (int i = 0; i < n; i++) {
 					NewCustomerOrderJpEntity c = query.get(i);
 					dbDao.delete(c);
 					dbDao.delete(NewCustomerJpEntity.class, c.getCustomer_jp_id());
+					List<NewProposerInfoJpEntity> query2 = dbDao.query(NewProposerInfoJpEntity.class,
+							Cnd.where("customer_jp_id", "=", c.getCustomer_jp_id()), null);
+					dbDao.delete(query2);
+					List<NewProposerInfoJpEntity> proposerInfoJpList1 = order.getProposerInfoJpList();
+					/*	for (NewProposerInfoJpEntity newProposerInfoJpEntity : query2) {
+							for (NewProposerInfoJpEntity newProposerInfoJpEntity1 : proposerInfoJpList1) {
+
+								if (newProposerInfoJpEntity1.getId() == newProposerInfoJpEntity.getId()) {
+									proposerInfoJpList1.remove(newProposerInfoJpEntity1);
+								}
+							}
+						}*/
+					proposerInfoJpList1.removeAll(query2);
+					order.setProposerInfoJpList(proposerInfoJpList1);
 
 				}
 			}
@@ -217,13 +237,24 @@ public class NewOrderJaPanController {
 			order.setCountrytype(1);
 			orderOld = dbDao.insert(order);
 			//根据人数插入多个申请人的数据
+			List<NewProposerInfoJpEntity> proposerInfoJpList = order.getProposerInfoJpList();
 			if (!Util.isEmpty(orderOld.getHeadnum())) {
 
 				for (int i = orderOld.getHeadnum(); i > 0; i--) {
 					NewCustomerJpEntity c = new NewCustomerJpEntity();
 					c.setCreatetime(new Date());
 					c.setUpdatetime(new Date());
+					String xing = proposerInfoJpList.get(i - 1).getXing();
+					String name = proposerInfoJpList.get(i - 1).getName();
+					if (!Util.isEmpty(xing)) {
+						c.setChinesexing(xing);
+					}
+					if (!Util.isEmpty(name)) {
+						c.setChinesexing(name);
+					}
 					NewCustomerJpEntity insert = dbDao.insert(c);
+					proposerInfoJpList.get(i - 1).setCustomer_jp_id(insert.getId());
+
 					NewCustomerOrderJpEntity customerOrderEntity = new NewCustomerOrderJpEntity();
 					customerOrderEntity.setCustomer_jp_id(insert.getId());
 					customerOrderEntity.setOrder_jp_id(orderOld.getId());
@@ -345,18 +376,91 @@ public class NewOrderJaPanController {
 		long orderid = orderOld.getId();
 		List<NewProposerInfoJpEntity> list8 = dbDao.query(NewProposerInfoJpEntity.class,
 				Cnd.where("order_jp_id", "=", orderOld.getId()), null);
-		if (!Util.isEmpty(list8) && list8.size() > 0) {
+		/*if (!Util.isEmpty(list8) && list8.size() > 0) {
 
 			dbDao.delete(list8);
-		}
+		}*/
 		if (!Util.isEmpty(proposerInfoJpList) && proposerInfoJpList.size() > 0) {
+			for (int i = 0; i < list8.size(); i++) {
+
+				boolean flag = true;
+				for (int j = 0; j < proposerInfoJpList.size(); j++) {
+
+					if (proposerInfoJpList.get(j).getId() == list8.get(i).getId()) {
+						flag = false;
+					}
+					if (Util.isEmpty(proposerInfoJpList.get(j).getId())) {
+						flag = false;
+					}
+
+				}
+
+				if (flag) {
+					dbDao.delete(list8.get(i));
+				}
+			}
 
 			for (NewProposerInfoJpEntity newPeerPersionEntity : proposerInfoJpList) {
 				/*	if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
 						nutDao.update(newPeerPersionEntity);
 					} else {*/
-				newPeerPersionEntity.setOrder_jp_id(orderOld.getId());
-				dbDao.insert(newPeerPersionEntity);
+				if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
+					boolean relation = newPeerPersionEntity.isIsmainproposer();
+					newPeerPersionEntity.setOrder_jp_id(orderOld.getId());
+					String xing = newPeerPersionEntity.getXing();
+					String name = newPeerPersionEntity.getName();
+					if (Util.isEmpty(xing)) {
+						xing = "";
+					}
+					if (Util.isEmpty(name)) {
+						name = "";
+					}
+					newPeerPersionEntity.setFullname(xing + name);
+					if (!Util.isEmpty(newPeerPersionEntity.getCustomer_jp_id())
+							&& newPeerPersionEntity.getCustomer_jp_id() > 0) {
+						NewCustomerJpEntity customer = dbDao.fetch(NewCustomerJpEntity.class,
+								newPeerPersionEntity.getCustomer_jp_id());
+						customer.setChinesexing(xing);
+						customer.setChinesename(name);
+						customer.setChinesefullname(xing + name);
+						nutDao.update(customer);
+					}
+
+					if (!Util.isEmpty(relation) && relation == true) {
+						newPeerPersionEntity.setRelationproposer(newPeerPersionEntity.getId());
+
+					}
+					nutDao.update(newPeerPersionEntity);
+				} else {
+
+					newPeerPersionEntity.setOrder_jp_id(orderOld.getId());
+					String xing = newPeerPersionEntity.getXing();
+					String name = newPeerPersionEntity.getName();
+					if (Util.isEmpty(xing)) {
+						xing = "";
+					}
+					if (Util.isEmpty(name)) {
+						name = "";
+					}
+					newPeerPersionEntity.setFullname(xing + name);
+					if (!Util.isEmpty(newPeerPersionEntity.getCustomer_jp_id())
+							&& newPeerPersionEntity.getCustomer_jp_id() > 0) {
+						NewCustomerJpEntity customer = dbDao.fetch(NewCustomerJpEntity.class,
+								newPeerPersionEntity.getCustomer_jp_id());
+						customer.setChinesexing(xing);
+						customer.setChinesename(name);
+						customer.setChinesefullname(xing + name);
+						nutDao.update(customer);
+					}
+					newPeerPersionEntity = dbDao.insert(newPeerPersionEntity);
+					boolean relation = newPeerPersionEntity.isIsmainproposer();
+					if (!Util.isEmpty(relation) && relation == true) {
+						newPeerPersionEntity.setRelationproposer(newPeerPersionEntity.getId());
+
+					}
+					nutDao.update(newPeerPersionEntity);
+				}
+
 				/*	}*/
 			}
 			//List<NewPeerPersionEntity> insert = dbDao.insert(peerList);
@@ -622,8 +726,10 @@ public class NewOrderJaPanController {
 			order.setFastMail(newPayCompanyEntities.get(0));
 		}
 		//============================
-		List<NewProposerInfoJpEntity> proposerInfoJpList = dbDao.query(NewProposerInfoJpEntity.class,
-				Cnd.where("order_jp_id", "=", orderid), null);
+		String string = sqlManager.get("neworderjapan_porposerorder");
+		Sql sql = Sqls.create(string);
+		sql.setParam("orderid", orderid);
+		List<NewProposerInfoJpEntity> proposerInfoJpList = DbSqlUtil.query(dbDao, NewProposerInfoJpEntity.class, sql);
 		if (!Util.isEmpty(proposerInfoJpList) && proposerInfoJpList.size() > 0) {
 			order.setProposerInfoJpList(proposerInfoJpList);
 		}
@@ -1190,5 +1296,17 @@ public class NewOrderJaPanController {
 		}
 		order.setProposerInfoJpList(proposerInfoJpList);
 		return order;
+	}
+
+	@RequestMapping(value = "porposerdatasource")
+	@ResponseBody
+	public Object porposerdatasource(String orderid) {
+		if (!Util.isEmpty(orderid)) {
+			long orderId = Long.valueOf(orderid);
+			List<NewProposerInfoJpEntity> query = dbDao.query(NewProposerInfoJpEntity.class,
+					Cnd.where("ismainproposer", "=", 1).and("order_jp_id", "=", orderId), null);
+			return query;
+		}
+		return null;
 	}
 }

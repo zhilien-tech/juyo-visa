@@ -28,7 +28,7 @@
     </div>
     <!--end 搜索条件 模块-->
     <div class="container-fluid container-width" style="padding-bottom: 15px;">
-        <div class="row" style="margin-top:15px;">
+        <div class="row" style="margin-top:15px;margin-bottom:15px;">
             <div class="col-xs-12">
                 <ul id="panelbar">
                     <li class="k-state-active">
@@ -134,7 +134,7 @@
                                             		data-role="dropdownlist" 
                                             		style="width: 100%;"
                                             		data-value-primitive="true"
-                                                    data-bind="value:customer.trip.paypersion">
+                                                    data-bind="value:customer.trip[0].paypersion">
                                                 <option>我自己</option>
                                                 <option>其他人</option>
                                                 <option>公司/组织</option>
