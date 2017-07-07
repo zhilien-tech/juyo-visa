@@ -69,6 +69,9 @@ public class CompanyService extends NutzBaseService<CompanyEntity> {
 		//#########################添加公司信息###############################//
 		addForm.setCreateTime(new Date());
 		addForm.setAdminId(empId);
+		if (Util.isEmpty(addForm.getDeletestatus())) {
+			addForm.setDeletestatus(0);
+		}
 		CompanyEntity companyAdd = dbDao.insert(addForm);
 		Integer comId = companyAdd.getId();//得到公司id
 		return JsonResult.success("添加成功");

@@ -30,7 +30,7 @@ function regCmd(command) {
                     		type: 2,
                     		title: '编辑',
                     		maxmin: true, //开启最大化最小化按钮
-                    		area: ['1000px', '600px'],
+                    		area: ['1000px', '450px'],
                     		content: '/company/updateCompany.html?comId=' + data.id+'&adminId='+data.adminid
                     	});
                     }
@@ -52,7 +52,7 @@ function addCompany(){
 	    maxmin: true,
 	    shadeClose: false,
 	    title: '添加',
-	    area: ['1000px', '600px'],
+	    area: ['1000px', '450px'],
 	    content: '/company/addCompany.html',
 	    end: function(){//添加完页面点击返回的时候自动加载表格数据
 	    	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
