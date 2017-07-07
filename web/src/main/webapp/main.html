@@ -38,22 +38,19 @@
                     <div class="logo-element">JST</div>
                 </li>
                 <!--菜单列表-->
-                <!-- <li id="1">
+                <li id="1">
                     <a href="#">
                         <i class="fa fa-building"></i>
                         <span class="nav-label">公司管理</span>
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level">
-                        <li><a class="J_menuItem" href="company/companylist.html">公司管理</a></li>
                         <li><a class="J_menuItem" href="custmanagement/customerlist.html">客户管理</a></li>
                         <li><a class="J_menuItem" href="employee/employeelist.html">员工管理</a></li>
                     </ul>
-                </li> -->
-                 <li><a class="J_menuItem fa fa-building" href="company/companylist.html">公司管理</a></li>
-                 <li><a class="J_menuItem fa fa-user" href="custmanagement/customerlist.html">客户管理</a></li>
-                 <li><a class="J_menuItem fa fa-group" href="employee/employeelist.html">员工管理</a></li>
-                 <li><a class="J_menuItem fa fa-group" href="function/functionlist.html">功能管理</a></li>
+                </li>
+                 <li id="6"><a class="J_menuItem fa fa-building" href="company/companylist.html">公司管理</a></li>
+                 <li id="7"><a class="J_menuItem fa fa-group" href="function/functionlist.html">功能管理</a></li>
                 <li id="2">
                     <a href="#">
                         <i class="fa fa-building"></i>
@@ -678,6 +675,8 @@
     	$("#userId").text(decodeURIComponent(username));
     	if(logintype != "" && logintype != null && logintype == 1){//1表示进入日本的签证状态
         	$('.J_iframe').attr('src','/order/america.html'); 
+        }else if(logintype == 4){
+        	$('.J_iframe').attr('src','/company/companylist.html'); 
         }else{
         	$('.J_iframe').attr('src','/myvisa/transactVisa/visaNationList.html'); 
         }
