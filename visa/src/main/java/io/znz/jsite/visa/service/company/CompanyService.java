@@ -90,8 +90,6 @@ public class CompanyService extends NutzBaseService<CompanyEntity> {
 	 * @param updateForm
 	 */
 	public Object updateCompanySave(CompanyEntity updateForm) {
-		long id = updateForm.getAdminId();
-
 		//修改管理员用户名
 		EmployeeEntity userEntity = dbDao.fetch(EmployeeEntity.class, updateForm.getAdminId());
 		userEntity.setTelephone(updateForm.getAdminName());
