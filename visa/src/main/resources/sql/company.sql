@@ -1,0 +1,21 @@
+/*company_list*/
+SELECT
+	vc.id,
+	vc.adminId,
+	vc.adminName,
+	vc.comName,
+	vc.comType,
+	vc.remark,
+	vc.connect,
+	vc.mobile,
+	vc.email,
+	vc.landLine,
+	vc.address,
+	vc.license,
+	vc.empId,
+	vc.createTime,
+	vc.updateTime,
+	vc.deletestatus
+FROM
+	visa_new_company vc
+$condition

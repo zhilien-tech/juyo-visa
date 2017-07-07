@@ -12,52 +12,71 @@ window.onload = function(){
 }
 //初始化各个组件
 $(function(){
-	$("#sex").kendoDropDownList({enable:false});//性别 状态 下拉框初始化
-	$("#marital_status").kendoDropDownList({enable:false});//婚姻状况 下拉框初始化
-	$("#birthDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//出生日期
-	$("#signedDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//签发日期
-	$("#validDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//有效期限
-	$("#birthDate").data("kendoDatePicker").enable(false);//出生日期 不可编辑
-	$("#passporttype").kendoDropDownList({enable:false});//护照类型 不可编辑
-	
-	//操作 编辑 按钮时
-	$(".editBtn").click(function(){
-		$(this).addClass("hide");//编辑 按钮隐藏
-		$(".cancelBtn").removeClass("hide");//取消 按钮显示
-		$(".saveBtn").removeClass("hide");//保存 按钮显示
-		$(".input-group .k-textbox").removeClass("k-state-disabled");//删除 不可编辑的边框颜色
-		$(".input-group input").removeAttr("disabled");//删除 不可编辑的属性
-		$("#sex").data("kendoDropDownList").enable(true);//性别 状态为 可编辑
-		$("#marital_status").data("kendoDropDownList").enable(true);//婚姻状况 状态为 可编辑
-		$("#birthDate").data("kendoDatePicker").enable(true);//出生日期 可编辑
-		$("#passporttype").data("kendoDropDownList").enable(true);//护照类型 可编辑
-	});
-	
-	//操作 取消 按钮时
-	$(".cancelBtn").click(function(){
-		$(this).addClass("hide");//取消 按钮隐藏
-		$(".saveBtn").addClass("hide");//保存 按钮隐藏
-		$(".editBtn").removeClass("hide");//编辑 按钮显示
-		$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
-		$(".input-group input").attr("disabled");//添加 不可编辑的属性
-		$("#sex").kendoDropDownList({enable:false});//性别 不可编辑
-		$("#marital_status").kendoDropDownList({enable:false});//婚姻状况 状态为 不可编辑
+	var aa = $.queryString("typeId");//得到签证进度在填写资料时跳转页面传来的参数
+	if(aa == null || aa == "" || aa == undefined){//表示不是从签证进度跳转而来
+		$("#nextStepBtn").hide();//隐藏下一步按钮
+		$("#back").hide();//隐藏返回按钮
+		$("#sex").kendoDropDownList({enable:false});//性别 状态 下拉框初始化
+		$("#marital_status").kendoDropDownList({enable:false});//婚姻状况 下拉框初始化
+		$("#birthDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//出生日期
+		$("#signedDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//签发日期
+		$("#validDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//有效期限
 		$("#birthDate").data("kendoDatePicker").enable(false);//出生日期 不可编辑
 		$("#passporttype").kendoDropDownList({enable:false});//护照类型 不可编辑
-	});
-	
-	//操作 保存 按钮时
-	$(".saveBtn").click(function(){
-		$(this).addClass("hide");//保存 按钮隐藏
-		$(".cancelBtn").addClass("hide");//取消 按钮隐藏
-		$(".editBtn").removeClass("hide");//编辑 按钮显示
-		$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
-		$(".input-group input").attr("disabled");//添加 不可编辑的属性
-		$("#sex").kendoDropDownList({enable:false});//性别 状态为 不可编辑
-		$("#marital_status").kendoDropDownList({enable:false});//婚姻状况 不可编辑
-		$("#birthDate").data("kendoDatePicker").enable(false);//出生日期 不可编辑
-		$("#passporttype").kendoDropDownList({enable:false});//护照类型 不可编辑
-	});
+		$("#s_birthday").data("kendoDatePicker").enable(false);//结婚日期 不可编辑
+		//操作 编辑 按钮时
+		$(".editBtn").click(function(){
+			$(this).addClass("hide");//编辑 按钮隐藏
+			$(".cancelBtn").removeClass("hide");//取消 按钮显示
+			$(".saveBtn").removeClass("hide");//保存 按钮显示
+			$(".input-group .k-textbox").removeClass("k-state-disabled");//删除 不可编辑的边框颜色
+			$(".input-group input").removeAttr("disabled");//删除 不可编辑的属性
+			$("#sex").data("kendoDropDownList").enable(true);//性别 状态为 可编辑
+			$("#marital_status").data("kendoDropDownList").enable(true);//婚姻状况 状态为 可编辑
+			$("#birthDate").data("kendoDatePicker").enable(true);//出生日期 可编辑
+			$("#passporttype").data("kendoDropDownList").enable(true);//护照类型 可编辑
+			$("#s_marriage_date").data("kendoDatePicker").enable(true);//结婚日期可编辑
+			$("#s_birthday").data("kendoDatePicker").enable(true);//结婚日期 不可编辑
+		});
+		
+		//操作 取消 按钮时
+		$(".cancelBtn").click(function(){
+			$(this).addClass("hide");//取消 按钮隐藏
+			$(".saveBtn").addClass("hide");//保存 按钮隐藏
+			$(".editBtn").removeClass("hide");//编辑 按钮显示
+			$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
+			$(".input-group input").attr("disabled");//添加 不可编辑的属性
+			$("#sex").kendoDropDownList({enable:false});//性别 不可编辑
+			$("#marital_status").kendoDropDownList({enable:false});//婚姻状况 状态为 不可编辑
+			$("#birthDate").data("kendoDatePicker").enable(false);//出生日期 不可编辑
+			$("#s_marriage_date").data("kendoDatePicker").enable(false);//结婚日期 不可编辑
+			$("#s_birthday").data("kendoDatePicker").enable(false);//结婚日期 不可编辑
+			$("#passporttype").kendoDropDownList({enable:false});//护照类型 不可编辑
+		});
+		
+		//操作 保存 按钮时
+		$(".saveBtn").click(function(){
+			$(this).addClass("hide");//保存 按钮隐藏
+			$(".cancelBtn").addClass("hide");//取消 按钮隐藏
+			$(".editBtn").removeClass("hide");//编辑 按钮显示
+			$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
+			$(".input-group input").attr("disabled");//添加 不可编辑的属性
+			$("#sex").kendoDropDownList({enable:false});//性别 状态为 不可编辑
+			$("#marital_status").kendoDropDownList({enable:false});//婚姻状况 不可编辑
+			$("#birthDate").data("kendoDatePicker").enable(false);//出生日期 不可编辑
+			$("#passporttype").kendoDropDownList({enable:false});//护照类型 不可编辑
+		});
+	}else if(aa == 1){//表示从签证进度跳转至此页面
+		$("#sex").kendoDropDownList({enable:true});//性别 状态 下拉框初始化
+		$("#marital_status").kendoDropDownList({enable:true});//婚姻状况 下拉框初始化
+		$("#birthDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//出生日期
+		$("#signedDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//签发日期
+		$("#validDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//有效期限
+		//隐藏编辑按钮
+		$(".editBtn").hide();
+		$(".input-group input").removeAttr("disabled"); //去掉所有input框的不可编辑属性
+		$(".input-group input").removeClass("k-state-disabled");//去掉不可编辑样式
+	}
 });
 /*------------------------------------------------container---------------------------------------------------*/
 //客户来源
@@ -308,10 +327,26 @@ function saveBaseInfoData(){
 		 contentType:"application/json",
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){
-			layer.msg("编辑保存成功",{time:2000});
+			layer.msg("保存成功",{time:2000});
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-             layer.msg('编辑保存失败',{time:2000});
+             layer.msg('保存失败',{time:2000});
          }
 	});
 }
+//点击下一步时跳转至签证信息
+$("#nextStepBtn").click(function(){
+	$.ajax({
+		 type: "POST",
+		 url: "/visa/basicinfo/updateBaseInfoData",
+		 contentType:"application/json",
+		 data: JSON.stringify(viewModel.customer)+"",
+		 success: function (result){
+			layer.msg("操作成功",{time:2000});
+			window.location.href='/personal/visaInfo/visaInfoList.html?typeId=1';
+		 },
+		 error: function(XMLHttpRequest, textStatus, errorThrown) {
+             layer.msg('操作失败',{time:2000});
+         }
+	});
+});

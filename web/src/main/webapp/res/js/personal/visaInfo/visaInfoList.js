@@ -19,33 +19,44 @@ $(function () {
 	//折叠板 效果初始化
     $("#panelbar").kendoPanelBar({
          expandMode: "single" //设置展开模式只能展开单个
-     });
-  //操作 编辑 按钮时
-	$(".editBtn").click(function(){
-		$(this).addClass("hide");//编辑 按钮隐藏
-		$(".cancelBtn").removeClass("hide");//取消 按钮显示
-		$(".saveBtn").removeClass("hide");//保存 按钮显示
-		$(".input-group .k-textbox").removeClass("k-state-disabled");//删除 不可编辑的边框颜色
-		$(".input-group input").removeAttr("disabled");//删除 不可编辑的属性
-	});
-	
-	//操作 取消 按钮时
-	$(".cancelBtn").click(function(){
-		$(this).addClass("hide");//取消 按钮隐藏
-		$(".saveBtn").addClass("hide");//保存 按钮隐藏
-		$(".editBtn").removeClass("hide");//编辑 按钮显示
-		$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
-		$(".input-group input").attr("disabled");//添加 不可编辑的属性
-	});
-	
-	//操作 保存 按钮时
-	$(".saveBtn").click(function(){
-		$(this).addClass("hide");//保存 按钮隐藏
-		$(".cancelBtn").addClass("hide");//取消 按钮隐藏
-		$(".editBtn").removeClass("hide");//编辑 按钮显示
-		$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
-		$(".input-group input").attr("disabled");//添加 不可编辑的属性
-	});
+    });
+    
+	var aa = $.queryString("typeId");//得到签证进度在填写资料时跳转页面传来的参数
+	if(aa == null || aa == "" || aa == undefined){//表示不是从签证进度跳转而来
+		$("#nextStepBtn").hide();//隐藏下一步按钮
+		$("#back").hide();//隐藏返回按钮
+		//操作 编辑 按钮时
+		$(".editBtn").click(function(){
+			$(this).addClass("hide");//编辑 按钮隐藏
+			$(".cancelBtn").removeClass("hide");//取消 按钮显示
+			$(".saveBtn").removeClass("hide");//保存 按钮显示
+			$(".input-group .k-textbox").removeClass("k-state-disabled");//删除 不可编辑的边框颜色
+			$(".input-group input").removeAttr("disabled");//删除 不可编辑的属性
+		});
+		
+		//操作 取消 按钮时
+		$(".cancelBtn").click(function(){
+			$(this).addClass("hide");//取消 按钮隐藏
+			$(".saveBtn").addClass("hide");//保存 按钮隐藏
+			$(".editBtn").removeClass("hide");//编辑 按钮显示
+			$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
+			$(".input-group input").attr("disabled");//添加 不可编辑的属性
+		});
+		
+		//操作 保存 按钮时
+		$(".saveBtn").click(function(){
+			$(this).addClass("hide");//保存 按钮隐藏
+			$(".cancelBtn").addClass("hide");//取消 按钮隐藏
+			$(".editBtn").removeClass("hide");//编辑 按钮显示
+			$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
+			$(".input-group input").attr("disabled");//添加 不可编辑的属性
+		});
+	}else if(aa == 1){//表示从签证进度跳转至此页面
+		//隐藏编辑按钮
+		$(".editBtn").hide();
+		$(".input-group input").removeAttr("disabled"); //去掉所有input框的不可编辑属性
+		$(".input-group input").removeClass("k-state-disabled");//去掉不可编辑样式
+	}
 });
 //客户来源
 var customersourceEnum=[
@@ -101,12 +112,16 @@ var countries = new kendo.data.DataSource({
 			army:{},
 	        order:{},
 	        customermanage:{},
-	        trip:{},
+	        trip:{
+	        	paypersion:"我自己"
+	        },
 	        payPersion:{},
 	        payCompany:{},
 	        fastMail:{},
 	        peerList:{},
-	        travelpurpose:{},//赴美国旅行目的列表
+	        travelpurpose:{
+	        	travelPurpose:"旅游"
+	        },//赴美国旅行目的列表
 	        travelplan:{},//是否制定了具体旅行计划
 	        relationship:{},//与你的关系
 	        travel: {
@@ -126,7 +141,6 @@ var countries = new kendo.data.DataSource({
 		"customer.workedplacelist":{},
 		"customer.relation":{},
 		"customer.teachinfo":{},
-		
 		"customer.peerList":{
 			peerxing: "",
 	    	peerxingen: "",
@@ -172,8 +186,7 @@ var viewModel = kendo.observable({
     },
     // 支付人
     payType: function (type) {
-        return viewModel.get("customer.trip.paypersion") === type;
-        
+        return  viewModel.get("customer.trip[0].paypersion")== type;
     },
     // 婚姻状态
     spouseState: function (state) {
@@ -417,6 +430,21 @@ $("#updatePassportSave").on("click",function(){
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
             layer.msg('保存失败',{time:2000});
+         }
+	});
+});
+//点击保存时
+$("#nextStepBtn").click(function(){
+	$.ajax({
+		 type: "POST",
+		 url: "/visa/visainfo/updateVisaInfoJPSave",
+		 contentType:"application/json",
+		 data: JSON.stringify(viewModel.customer)+"",
+		 success: function (result){
+			layer.msg("保存成功",{time:2000});
+		 },
+		 error: function(XMLHttpRequest, textStatus, errorThrown) {
+             layer.msg('保存失败',{time:2000});
          }
 	});
 });

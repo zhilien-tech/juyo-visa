@@ -10,11 +10,10 @@ import io.znz.jsite.util.StringUtils;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 
-import java.net.URLEncoder;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
-import javaxt.utils.Base64;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
@@ -136,6 +135,7 @@ public class LoginController extends BaseController {
 				String telephone = fetch.getTelephone();//得到数据库中用户名
 				String pwd = fetch.getPassword();//得到数据库中密码
 				String slt = fetch.getSalt();//得到数据库中盐值
+				String username1 = fetch.getFullName();//得到用户姓名				
 
 				byte[] salt = Encodes.decodeHex(slt);
 				byte[] password2 = password.getBytes();//页面传来的密码
@@ -179,22 +179,28 @@ public class LoginController extends BaseController {
 					request.getSession().setAttribute(Const.SESSION_NAME, fetch);
 					if (Util.isEmpty(fetch.getFullName())) {
 						fetch.setFullName("无");
-
+					}
+					String fullname = "";
+					try {
+						fullname = new String(username1.getBytes("iso-8859-1"), "gbk");
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
 					}
 					if (username.equals(telephone) && newpass.equals(pwd)) {//username为页面传来的用户名
 						if (UserLoginEnum.PERSONNEL.intKey() == logintype
 								&& UserLoginEnum.PERSONNEL.intKey() == userType) {//工作人员登录
-							String str1 = "";
-							str1 = Base64.encodeBytes(fetch.getFullName().getBytes());
-
-							return "redirect:" + to + "?auth=2,3," + str + "&username=" + str1;
+							return "redirect:" + to + "?auth=2,3,6,7," + str + "&username=" + fullname + "&logintype="
+									+ logintype;
 						} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype
 								&& UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {//游客身份登录
-							return "redirect:" + to + "?auth=1,4,5," + str + "&username="
-									+ URLEncoder.encode(fetch.getFullName());
+							return "redirect:" + to + "?auth=1,4,5,6,7," + str + "&username=" + fullname
+									+ "&logintype=" + logintype;
 						} else if (UserLoginEnum.SUPERMAN.intKey() == 3 && UserLoginEnum.SUPERMAN.intKey() == userType) {
-							return "redirect:" + to + "?auth=0," + str + "&username="
-									+ URLEncoder.encode(fetch.getFullName());
+							return "redirect:" + to + "?auth=0," + str + "&username=" + fullname + "&logintype="
+									+ logintype;
+						} else if (UserLoginEnum.ADMIN.intKey() == 4 && UserLoginEnum.ADMIN.intKey() == userType) {
+							return "redirect:" + to + "?auth=1,2,3,4,5," + str + "&username=" + fullname
+									+ "&logintype=" + 4;
 						}
 					}
 				}

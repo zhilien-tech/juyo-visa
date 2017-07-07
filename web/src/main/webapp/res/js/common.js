@@ -192,28 +192,20 @@ function getListforMap()
         var tip = $(this);
         
         var labelName=tip.parents('.form-group').find("label").text();//获取对应的字段名称
-        console.log(labelName);
-        
-        tip.find("i").toggleClass("fa-pulse fa-spinner fa-lightbulb-o");//变转圈圈效果~
+        //tip.find("i").toggleClass("fa-pulse fa-spinner fa-lightbulb-o");//变转圈圈效果~
+        tip.toggleClass("yellow");//灯泡变为黄色
         var node = tip.parent().find(":text,select");
 
-  
         var key=labelName.substring(0,labelName.indexOf(":"));
-        if(tip.find("i").hasClass('fa-lightbulb-o')){
-        	map.remove(key);
-        	console.log(JSON.stringify(map));
-//        	alert("灯泡亮~~");
-        }else{
+        //if(tip.find("i").hasClass('fa-lightbulb-o')){
+        if(tip.hasClass('yellow')){//变黄
         	map.put(key,"1");
         	map[labelName]=1;
-        	console.log(JSON.stringify(map));
-//        	alert("转圈圈~~");
+        	//console.log(JSON.stringify(map));
+        }else{//变灰
+        	map.remove(key);
+        	//console.log(JSON.stringify(map));
+        	
         }
     });
 /*});*/
-/*$(function(){
-	折叠板 效果初始化
-    $("#panelbar").kendoPanelBar({
-         expandMode: "single" //设置展开模式只能展开单个
-     });
-});*/

@@ -16,19 +16,19 @@
     <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/>
 </head>
 <body>
-	
 <div>
 	<!--搜索条件 模块-->
     <div class="Search">
       <div  class="col-xs-12">
         <input type="button" class="btn btn-primary input-sm pull-right marginBtn editBtn" value="编辑">
+        <a id="back" href="javascript:window.history.go(-1);"><i class="fa fa-chevron-left"></i><span>&nbsp;返回</span></a>
       	<input type="button" class="btn btn-primary input-sm pull-right marginBtn cancelBtn hide" onclick=" " value="取消">
       	<input id="updatePassportSave" type="button" class="btn btn-primary input-sm pull-right marginBtn saveBtn hide" value="保存">
       </div>
     </div>
     <!--end 搜索条件 模块-->
     <div class="container-fluid container-width" style="padding-bottom: 15px;">
-        <div class="row" style="margin-top:15px;">
+        <div class="row" style="margin-top:15px;margin-bottom:15px;">
             <div class="col-xs-12">
                 <ul id="panelbar">
                     <li class="k-state-active">
@@ -134,7 +134,7 @@
                                             		data-role="dropdownlist" 
                                             		style="width: 100%;"
                                             		data-value-primitive="true"
-                                                    data-bind="value:customer.trip.paypersion">
+                                                    data-bind="value:customer.trip[0].paypersion">
                                                 <option>我自己</option>
                                                 <option>其他人</option>
                                                 <option>公司/组织</option>
@@ -1558,9 +1558,18 @@
                 </ul>
             </div>
         </div>
+        <!-- 签证进度跳进来时需要展示【保存】按钮 -->
+	    <div class="row">
+	        <div class="col-xs-12">
+	            <div class="form-group">
+	                <button id="nextStepBtn" class="k-primary k-button col-xs-12">
+	                                            保存
+	                </button>
+	            </div>
+        	</div>
+    	</div>
     </div>
 </div>
-
 </body>
 <!--引入 js 模板片段-->
 <script id="tpl_traveler" type="text/html">
@@ -2330,12 +2339,4 @@
 <script src="/res/js/idcard.js"></script>
 <script src="/res/js/wintone.js?v=4"></script>
 <script src="/res/js/personal/visaInfo/visaInfoList.js"></script>
-<script type="text/javascript">
-$(function(){
-	//折叠板 效果初始化
-    $("#panelbar").kendoPanelBar({
-         expandMode: "single" //设置展开模式只能展开单个
-     });
-});
-</script>
 </html>

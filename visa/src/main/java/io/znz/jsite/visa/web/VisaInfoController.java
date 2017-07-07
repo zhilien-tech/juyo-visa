@@ -398,6 +398,38 @@ public class VisaInfoController extends BaseController {
 				dbDao.insert(oldname);
 			}
 		}
+		//支付人公司/组织
+		//NewPayCompanyEntity payCompany = customer.getOrder().getPayCompany();
+		List<NewPayCompanyEntity> payCompany = customer.getPayCompany();
+		/*if (!Util.isEmpty(payCompany)) {
+			if (!Util.isEmpty(payCompany.getId()) && payCompany.getId() > 0) {
+				nutDao.update(payCompany);
+			} else {
+				payCompany.setOrderid(orderid);
+				dbDao.insert(payCompany);
+			}
+		}*/
+		if (!Util.isEmpty(payCompany) && payCompany.size() > 0) {
+			for (NewPayCompanyEntity newPayCompanyEntity : payCompany) {
+				if (!Util.isEmpty(newPayCompanyEntity.getId()) && newPayCompanyEntity.getId() > 0) {
+					nutDao.update(newPayCompanyEntity);
+				} else {
+					newPayCompanyEntity.setOrderid(orderid);
+					dbDao.insert(newPayCompanyEntity);
+				}
+			}
+		}
+		//支付人---其他人
+		NewPayPersionEntity payPersion = customer.getOrder().getPayPersion();
+		if (!Util.isEmpty(payPersion)) {
+			if (!Util.isEmpty(payPersion.getId()) && payPersion.getId() > 0) {
+				nutDao.update(payPersion);
+			} else {
+				payPersion.setOrderid(orderid);
+				dbDao.insert(payPersion);
+			}
+		}
+
 		List<NewOldworksEntity> oldworkslist = customer.getOldworkslist();
 		if (!Util.isEmpty(oldworkslist) && oldworkslist.size() > 0) {
 			for (NewOldworksEntity newLanguageEntity : oldworkslist) {
@@ -540,6 +572,26 @@ public class VisaInfoController extends BaseController {
 					newLanguageEntity.setCustomerid(customer.getId());
 					dbDao.insert(newLanguageEntity);
 				}
+			}
+		}
+		//赴美国旅行目的列表
+		TravelPurposeEntity travelpurpose = customer.getTravelpurpose();
+		if (!Util.isEmpty(travelpurpose)) {
+			if (!Util.isEmpty(travelpurpose.getId()) && travelpurpose.getId() > 0) {
+				nutDao.update(travelpurpose);
+			} else {
+				travelpurpose.setCustomerId(customer.getId());
+				dbDao.insert(travelpurpose);
+			}
+		}
+		//是否制定了具体旅行计划
+		TravelPlanEntity travelplan = customer.getTravelplan();
+		if (!Util.isEmpty(travelplan)) {
+			if (!Util.isEmpty(travelplan.getId()) && travelplan.getId() > 0) {
+				nutDao.update(travelplan);
+			} else {
+				travelplan.setCustomerId(customer.getId());
+				dbDao.insert(travelplan);
 			}
 		}
 		//地点信息
