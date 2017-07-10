@@ -1,107 +1,19 @@
-/*function Map() {
+//根据拒绝原因判断是哪个页面的，每个页面一个数组
+//日本
+var firstAllJP=[];
+var secondAllJP=[];
+var thirdAllJP=[];
+var firstPartJP=[];
+var secondPartJP=[];
+var thirdPartJP=[];
+//美国
+var firstAll=[];
+var secondAll=[];
+var thirdAll=[];
+var firstPart=[];
+var secondPart=[];
+var thirdPart=[];
 
-    this.elements = new Array();
-
-    this.size = function() {
-        return this.elements.length;
-    }
-
-    this.isEmpty = function() {
-        return (this.elements.length < 1);
-    }
-
-    this.clear = function() {
-        this.elements = new Array();
-    }
-
-    this.put = function(_key, _value) {
-        if (!this.containsKey(_key))
-            this.elements.push({
-                key : _key,
-                value : _value
-            });
-    }
-
-    this.remove = function(_key) {
-        var bln = false;
-
-        try {
-            for (i = 0; i < this.elements.length; i++) {
-                if (this.elements[i].key == _key) {
-                    this.elements.splice(i, 1);
-                    return true;
-                }
-            }
-        } catch (e) {
-            bln = false;
-        }
-        return bln;
-    }
-
-    this.get = function(_key) {
-        try {
-            for (i = 0; i < this.elements.length; i++) {
-                if (this.elements[i].key == _key) {
-                    return this.elements[i].value;
-                }
-            }
-        } catch (e) {
-            return null;
-        }
-    }
-
-    this.element = function(_index) {
-        if (_index < 0 || _index >= this.elements.length) {
-            return null;
-        }
-        return this.elements[_index];
-    }
-
-    this.containsKey = function(_key) {
-        var bln = false;
-        try {
-            for (i = 0; i < this.elements.length; i++) {
-                if (this.elements[i].key == _key) {
-                    bln = true;
-                }
-            }
-        } catch (e) {
-            bln = false;
-        }
-        return bln;
-    }
-
-    this.containsValue = function(_value) {
-        var bln = false;
-        try {
-            for (i = 0; i < this.elements.length; i++) {
-                if (this.elements[i].value == _value) {
-                    bln = true;
-                }
-            }
-        } catch (e) {
-            bln = false;
-        }
-        return bln;
-    }
-
-    this.values = function() {
-        var arr = new Array();
-        for (i = 0; i < this.elements.length; i++) {
-            arr.push(this.elements[i].value);
-        }
-        return arr;
-    }
-
-    this.keys = function() {
-        var arr = new Array();
-        for (i = 0; i < this.elements.length; i++) {
-            arr.push(this.elements[i].key);
-        }
-        return arr;
-    }
-}
-*/
 
 
 
@@ -176,19 +88,97 @@ function reasion(){
 	var reasonnew="";
 	for (var key in map) {  
 		var a = map[key];
-		for (var k in a) {  
-//			alert(k+'---'+JSON.stringify(a[k]));
-			var b=1;
-			for(var i in a[k]){
-//				alert(i);
-				if(b%2!=0){
+//		alert(JSON.stringify(a));
+		console.log(JSON.stringify(a));
+		for(var i=0;i<a.length;i++){
+//			alert(a[i].key);
+			reasonnew+=a[i].key+",";
+			//日本
+			if(countrystatus==0){
+				
+					//产生第一个页面的新数组
+					for(var m=0;m<firstAll.length;m++){
+						if(a[i].key==firstAll[m]){
+							firstPart.push(firstAll[m]);
+						}
+					}
 					
-//					alert("=="+(a[k])[i]);
-					reasonnew+=(a[k])[i]+",";
+					
+					
+					
+					//产生第二个页面的新数组
+					for(var m=0;m<secondAll.length;m++){
+						if(a[i].key==secondAll[m]){
+							secondPart.push(secondAll[m]);
+						}
+					}
+					
+					
+					
+					
+					//产生第三个页面的新数组
+					for(var m=0;m<thirdAll.length;m++){
+						if(a[i].key==thirdAll[m]){
+							thirdPart.push(thirdAll[m]);
+						}
+					}
+					
+					
+					if(firstPart.length>0){
+						window.location.href='/personal/basicInfo/basicInfoList.html?firstPart='+escape(JSON.stringify(firstPart))+"&secondPart="+escape(JSON.stringify(secondPart))+"&thirdPart="+escape(JSON.stringify(thirdPart));
+					}else if(secondPart.length>0){
+						window.location.href='/personal/passportInfo/passportInfoList.html?firstPart='+escape(JSON.stringify(firstPart))+"&secondPart="+escape(JSON.stringify(secondPart))+"&thirdPart="+escape(JSON.stringify(thirdPart));
+					}else if(thirdPart.length>0){
+						window.location.href='/personal/visaInfo/visaInfoList.html?firstPart='+escape(JSON.stringify(firstPart))+"&secondPart="+escape(JSON.stringify(secondPart))+"&thirdPart="+escape(JSON.stringify(thirdPart));
+					}
 				}
-				b++;
+			
+				//美国
+				if(countrystatus==0){
+					
+					//产生第一个页面的新数组
+					for(var m=0;m<firstAllJP.length;m++){
+						if(a[i].key==firstAllJP[m]){
+							firstPartJP.push(firstAllJP[m]);
+						}
+					}
+					
+					
+					
+					
+					//产生第二个页面的新数组
+					for(var m=0;m<secondAllJP.length;m++){
+						if(a[i].key==secondAllJP[m]){
+							secondPartJP.push(secondAllJP[m]);
+						}
+					}
+					
+					
+					
+					
+					//产生第三个页面的新数组
+					for(var m=0;m<thirdAllJP.length;m++){
+						if(a[i].key==thirdAllJP[m]){
+							thirdPartJP.push(thirdAllJP[m]);
+						}
+					}
+					
+					
+					
+					if(firstPartJP.length>0){
+						window.location.href='/personal/basicInfo/basicJPInfoList.html?firstPart='+escape(JSON.stringify(firstPart))+"&secondPart="+escape(JSON.stringify(secondPart))+"&thirdPart="+escape(JSON.stringify(thirdPart));
+					}else if(secondPartJP.length>0){
+						window.location.href='/personal/passportInfo/passportJPInfoList.html?firstPart='+escape(JSON.stringify(firstPart))+"&secondPart="+escape(JSON.stringify(secondPart))+"&thirdPart="+escape(JSON.stringify(thirdPart));
+					}else if(thirdPartJP.length>0){
+						window.location.href='/personal/visaInfo/JPvisaInfoList.html?firstPart='+escape(JSON.stringify(firstPart))+"&secondPart="+escape(JSON.stringify(secondPart))+"&thirdPart="+escape(JSON.stringify(thirdPart));
+					}
+				}
+		
+			
+				
 			}
-		} 
+		
+	
 	}
 	reasonnew+="有问题！请修改！";
 	 $.layer.prompt({
