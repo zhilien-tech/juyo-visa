@@ -2,7 +2,7 @@
 .progress ul{padding-left: 0;}
 .progress ul li{width:100%;}
 .progress ul li .progress-left{min-width: 100px;width:40%;display: inline-block;}
-.progress ul li .progress-left a{width:100%;text-align: center;display: block;line-height:40px;border-radius:55%;border: solid 2px #cecdcd;font-size: 13px;color: #999;}
+.progress ul li .progress-left a{cursor: default;width:100%;text-align: center;display: block;line-height:40px;border-radius:55%;border: solid 2px #cecdcd;font-size: 13px;color: #999;}
 .progress ul li .progress-left a:hover{border:solid 2px #d4d4d4;color:rgba(51, 122, 183, 0.79);}
 .progress ul li .progress-left span{font-size: 34px;color: #d2d1d1;text-align: center;width: 100%;margin: 5px 0;}
 .progress ul li .progress-right{display: inline-block;width: 55%;float: right;line-height: 50px;}

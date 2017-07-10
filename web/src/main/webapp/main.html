@@ -52,8 +52,8 @@
                         <li><a class="J_menuItem" href="employee/employeelist.html">员工管理</a></li>
                     </ul>
                 </li>
-                 <li id="6"><a class="J_menuItem fa fa-building" href="company/companylist.html">公司管理</a></li>
-                 <li id="7"><a class="J_menuItem fa fa-group" href="function/functionlist.html">功能管理</a></li>
+                <li id="6"><a class="J_menuItem" href="company/companylist.html"><i class="fa fa-building"></i>&nbsp<span class="nav-label">公司管理</span></a></li>
+                <li id="7"><a class="J_menuItem" href="function/functionlist.html"><i class="fa fa-group"></i><span class="nav-label">功能管理</span></a></li>
                 <li id="2">
                     <a href="#">
                         <i class="fa fa-building"></i>
@@ -122,7 +122,7 @@
     </nav>
     <!--右侧部分开始-->
     <div id="page-wrapper" class="gray-bg dashbard-1">
-       <!--  <div class="row border-bottom">
+       <!--<div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
                     <a class="navbar-minimalize minimalize-styl-2 btn btn-primary"><i class="fa fa-bars"></i></a>
@@ -689,6 +689,8 @@
             $("#name").html(result.name);
             $("#role").html(result.role);
         });
+        
+        /*菜单栏 高亮设置*/
     });
 </script>
 </body>

@@ -7,8 +7,8 @@ a{}
 .container a .nation{color: #636262;}
 .container a .state{color: #d0d0d0;float: right;}
 
-.header{background-color: #39aef5;height: 3.5rem;padding-top: 1rem;}
-.header a{margin-left:1rem;color:#fff;width: 4rem;text-decoration: none;}
+.header{background-color: #fff;height: 3.5rem;padding-top: 1rem;border-bottom:solid 1px #e7eaec;}
+.header a{margin-left:1rem;color:#337ab7;width: 4rem;text-decoration: none;}
 
 
 

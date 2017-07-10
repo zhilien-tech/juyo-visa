@@ -120,7 +120,7 @@ var grid = $("#grid").kendoGrid({
         	field: 'fullname',
         },
         {
-        	title: '电话',
+        	title: '用户名/手机号',
         	field: 'telephone'
         },
         {
