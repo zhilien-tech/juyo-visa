@@ -70,7 +70,7 @@
     <mvc:default-servlet-handler/>
 
     <!-- 自动扫描且只扫描@Controller -->
-    <context:component-scan base-package="io.znz.jsite.**.web" use-default-filters="false">
+    <context:component-scan base-package="io.znz.jsite" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
         <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
     </context:component-scan>

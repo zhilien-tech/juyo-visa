@@ -12,6 +12,8 @@ import logging
 import json
 from pprint import pprint
 
+#函数定义  begin 
+#等待id为elm_id的元素可见
 def _wait_for_elm_by_id(elm_id,timeout = 3600):
     _check_alert_to_close()
     logging.info("Waiting element shown, id: " + elm_id)
@@ -19,6 +21,7 @@ def _wait_for_elm_by_id(elm_id,timeout = 3600):
         EC.visibility_of_element_located((By.ID, elm_id)                )
     )
 
+#点击确认关闭alert弹出框
 def _check_alert_to_close():
     try:
         alert = driver.switch_to_alert()
@@ -27,17 +30,25 @@ def _check_alert_to_close():
     except:
         pass
 
+#填写id为elmId的输入框，如果输入框已经有值则忽略
 def _textInput(elmId,val,timeout=3600,duplicate_substr=None):
+	
+	#从json数据读取用来填充的值
     val = ''
     if duplicate_substr != None:
         val = data_json[elmId + duplicate_substr]
     else:
         val = data_json[elmId]
+        
     _check_alert_to_close()
+    
+    #等待该id的元素就绪(页面存在)
     logging.info("Waiting Input id: " + elmId)
     elm_ipt_x = WebDriverWait(driver, timeout).until(
         EC.presence_of_element_located((By.ID, elmId))
     )
+    
+    #获取input框原来的value值
     elm_ipt_val = elm_ipt_x.get_attribute("value");
     if elm_ipt_val == "":
         elm_ipt_x.send_keys(val)
@@ -45,6 +56,7 @@ def _textInput(elmId,val,timeout=3600,duplicate_substr=None):
         logging.info(elmId + " value is not empty,ignore sendkeys")
     logging.info("\"" + elmId + "\"" + ":" + "\"" + val + "\",")
 
+#点击id为elmId的按钮
 def _button(elmId,timeout=3600):
     _check_alert_to_close()
     logging.info("Waiting Button id: " + elmId)
@@ -54,6 +66,7 @@ def _button(elmId,timeout=3600):
     elm_btn_x.click()
     logging.info("Click Button id: " + elmId)
 
+#勾选checkbox
 def _checkbox(elmId,val,timeout=3600):
     val = data_json[elmId]
     _check_alert_to_close()
@@ -61,6 +74,8 @@ def _checkbox(elmId,val,timeout=3600):
     elm_ipt_x = WebDriverWait(driver, timeout).until(
         EC.presence_of_element_located((By.ID, elmId))
     )
+    
+    #如果没有选中，而且欲填值为true，则(click)勾选上
     if not elm_ipt_x.is_selected():
         if val:
             elm_ipt_x.click()
@@ -69,7 +84,9 @@ def _checkbox(elmId,val,timeout=3600):
     else:
         logging.info("\"" + elmId + "\"" + ":" + "False,")
 
+#勾选单选组
 def _radiobox(elmId1,elmId2,isSelectId1,timeout=3600):
+	#是否选中第一个
     isSelectId1 = data_json[elmId1]
     _check_alert_to_close()
     logging.info("Waiting Radiobox id: " + elmId1 + ",timeout:" + str(timeout))
@@ -87,6 +104,7 @@ def _radiobox(elmId1,elmId2,isSelectId1,timeout=3600):
     else:
         logging.info("\"" + elmId1 + "\"" + ":" + "False,")
 
+#下拉列表选中
 def _select(elmId,val,timeout=3600,duplicate_substr=None):
     _check_alert_to_close()
     val = ""
@@ -94,27 +112,34 @@ def _select(elmId,val,timeout=3600,duplicate_substr=None):
         val = data_json[elmId + duplicate_substr]
     else:
         val = data_json[elmId]
+        
+    #等待下拉列表可被点击
     logging.info("Waiting Select id: " + elmId)
     elm_sel_x = Select(WebDriverWait(driver, timeout).until(
         EC.element_to_be_clickable((By.ID, elmId))
     )
     )
+    
+    #等待下拉列表的option选项就绪(xpath查找)
     opt_xpath = '//*[@id="' + elmId + '"]/option[@value="' + val + '"]'
     logging.info("Waiting Value: " + opt_xpath + " under Select id:" + elmId)
     elm_opt_x = WebDriverWait(driver, timeout).until(
         EC.presence_of_element_located((By.XPATH, opt_xpath))
     )
-
+	
+	#选中
     elm_sel_x.select_by_value(val)
     logging.info("\"" + elmId + "\"" + ":" + "\"" + val + "\",")
 
+#函数定义  end
+#主流程开始
 # Main Process Start
 if not sys.platform.startswith('win'):
     import coloredlogs
     coloredlogs.install(level='INFO')
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 
-#import JSON data file
+#import JSON data file,从文件加载json数据，命令行的第二个参数为完整文件名
 data_json = None
 file_name = sys.argv[1]
 logging.info("Import json data from file : %s",file_name)
@@ -122,19 +147,14 @@ with open(file_name) as data_file:
     data_json = json.load(data_file)
 #pprint(data_json)
 
-# Create a new instance of the Firefox driver
-
-# Create a desired capabilities object as a starting point.
-#capabilities = DesiredCapabilities.FIREFOX.copy()
-#capabilities['marionette'] = True
-
-#driver = webdriver.Firefox("./",capabilities=capabilities)
+# 打开火狐浏览器并且跳转到美国签证网站
 driver = webdriver.Firefox("./")
 #driver.implicitly_wait(3600)
 driver._is_remote = False
 driver.get("https://ceac.state.gov/GenNIV/Default.aspx")
 
 # Page 1: input region select and wait human to input the code
+# 第一页,默认选择地区为CHINA BEIJING,并且等待人工填写验证码
 _select("ctl00_SiteContentPlaceHolder_ucLocation_ddlLocation","BEJ")
 logging.info("Load Page Title :%s",driver.title)
 logging.info("***SCRIPT***WAIT HUMAN INPUT VCODE***")
@@ -145,33 +165,44 @@ finally:
     #driver.quit()
 
 # Page 2: input the secrect question
+# 第二页，输入安全提示问题,填写'Mother Name' |-_-|
 element = _wait_for_elm_by_id("ctl00_SiteContentPlaceHolder_btnContinue")
 logging.info("Load Page Title :%s",driver.title)
 answer = "Mother Name"
 _textInput("ctl00_SiteContentPlaceHolder_txtAnswer",answer)
 
+#点击继续
 _button("ctl00_SiteContentPlaceHolder_btnContinue")
 
 # Page 3: input the personal info 1
+# 第三页    输入个人信息1
 # Make sure page has been complete loaded
 element = _wait_for_elm_by_id("ctl00_SiteContentPlaceHolder_UpdateButton3")
 logging.info("Load Page Title :%s",driver.title)
+#姓SURNAME
 answer = "Alan"
 _textInput("ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_SURNAME",answer)
-#Text Input
+#名GIVEN_NAME
 answer = "Liu"
 _textInput("ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_GIVEN_NAME",answer)
+
+#Full Name in Native Alphabet用母语填写你的全姓名称
 answer = "Alan Liu"
 _textInput("ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_FULL_NAME_NATIVE",answer)
-#Checkbox
+
+#用母语填写全称姓名的时候，名字是生僻字电脑打不出的时候才选Does Not Apply/Technology Not Available
 answer = True
 _checkbox("ctl00_SiteContentPlaceHolder_FormView1_cbxAPP_FULL_NAME_NATIVE_NA",answer)
-#Radiobox
+
+#是否使用曾用名
 answer = data_json["ctl00_SiteContentPlaceHolder_FormView1_rblOtherNames_0"]
 _radiobox("ctl00_SiteContentPlaceHolder_FormView1_rblOtherNames_0","ctl00_SiteContentPlaceHolder_FormView1_rblOtherNames_1",answer)
+#如果选择了使用曾用名，则需要填写曾用名
 if answer:
     elm_ipt_x = _wait_for_elm_by_id("ctl00_SiteContentPlaceHolder_FormView1_DListAlias_ctl00_tbxSURNAME")
     time.sleep(3)
+    #从json读取曾用名(多个)，每有一个则需要点击add another 添加
+    #每增加一个，id号的变化从100开始 加1，这里通过字符串拼接的方式实现，其实可以转为数字做数学运算再变为字符串
     data = data_json["ctl00_SiteContentPlaceHolder_FormView1_DListAlias_ctl_InsertButtonAlias"]
     for idx,val in enumerate(data):
         elm_idx_str = 0
@@ -188,23 +219,29 @@ if answer:
         if idx != 0:
             elm_id = "ctl00_SiteContentPlaceHolder_FormView1_DListAlias_ctl" + elm_addlink_idx_str + "_InsertButtonAlias"
             _button(elm_id)
+            
+        #填写当前曾用姓    
         elm_id = "ctl00_SiteContentPlaceHolder_FormView1_DListAlias_ctl" + elm_idx_str + "_tbxSURNAME"
         _textInput(elm_id,val)
+        #填写当前曾用名    
         elm_id = "ctl00_SiteContentPlaceHolder_FormView1_DListAlias_ctl" + elm_idx_str + "_tbxGIVEN_NAME"
         _textInput(elm_id,val)
-#Radiobox
+        
+#是否使用姓名电码，如果使用的话则需要填写
 answer = data_json["ctl00_SiteContentPlaceHolder_FormView1_rblTelecodeQuestion_0"]
-
 _radiobox("ctl00_SiteContentPlaceHolder_FormView1_rblTelecodeQuestion_0","ctl00_SiteContentPlaceHolder_FormView1_rblTelecodeQuestion_1",answer)
 if answer:
     _textInput("ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_TelecodeSURNAME",answer)
     _textInput("ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_TelecodeGIVEN_NAME",answer)
-#Radiobox
+    
+#选择性别
 answer = data_json["ctl00_SiteContentPlaceHolder_FormView1_rblAPP_GENDER_0"]
 _radiobox("ctl00_SiteContentPlaceHolder_FormView1_rblAPP_GENDER_0","ctl00_SiteContentPlaceHolder_FormView1_rblAPP_GENDER_1",answer)
-#Select
+
+#选择婚姻状况  Marital Status
 maritalStatus = data_json["ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_MARITAL_STATUS"] # M,S,D,W
 _select("ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_MARITAL_STATUS",maritalStatus)
+
 #Select
 answer = "28"
 _select("ctl00_SiteContentPlaceHolder_FormView1_ddlDOBDay",answer,duplicate_substr="_1")
