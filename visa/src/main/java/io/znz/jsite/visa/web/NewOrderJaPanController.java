@@ -103,6 +103,8 @@ public class NewOrderJaPanController {
 	/**
 	 * 列表查看订单信息
 	 */
+	private int daynum = 1;
+
 	@RequestMapping(value = "list")
 	@ResponseBody
 	public Object list(@RequestBody NewOrderJapanSqlForm form) {
@@ -584,6 +586,7 @@ public class NewOrderJaPanController {
 					enddate1 = tripJp1.getReturndate();
 					arrivecity1 = tripJp1.getArrivecity();
 					tripplan(orderOld, startdate1, enddate1, arrivecity1, tripplanJpListnew1);
+					this.daynum = 1;
 				}
 
 			}
@@ -591,17 +594,23 @@ public class NewOrderJaPanController {
 
 			List<NewDateplanJpEntity> dateplanJpList1 = orderOld.getDateplanJpList();
 			if (!Util.isEmpty(dateplanJpList1) && dateplanJpList1.size() > 0) {
-
+				//this.daynum = (int) ((dateplanJpList1.get(0).getStartdate().getTime() - dateplanJpList1.get(0).getReturndate().getTime()) / (24 * 60 * 60 * 1000)) + 1;
 				if (oneormore1 == 1) {
 					for (int i = 0; i < dateplanJpList1.size(); i++) {
 						if (i < dateplanJpList1.size() - 1) {
-
 							startdate1 = dateplanJpList1.get(i).getStartdate();
 							enddate1 = dateplanJpList1.get(i + 1).getStartdate();
+							if (i < dateplanJpList1.size() - 2) {
+								Calendar cal = Calendar.getInstance();
+								cal.setTime(enddate1);
+								cal.add(Calendar.DATE, -1);
+								enddate1 = cal.getTime();
+							}
 							arrivecity1 = dateplanJpList1.get(i).getArrivecity();
 							tripplan(orderOld, startdate1, enddate1, arrivecity1, tripplanJpListnew1);
 						}
 					}
+					this.daynum = 1;
 				}
 			}
 			for (NewTripplanJpEntity newDateplanJpEntity : tripplanJpListnew1) {
@@ -1154,6 +1163,7 @@ public class NewOrderJaPanController {
 					enddate = tripJp.getReturndate();
 					arrivecity = tripJp.getArrivecity();
 					tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+					this.daynum = 1;
 				}
 
 			}
@@ -1169,9 +1179,16 @@ public class NewOrderJaPanController {
 							startdate = dateplanJpList.get(i).getStartdate();
 							enddate = dateplanJpList.get(i + 1).getStartdate();
 							arrivecity = dateplanJpList.get(i).getArrivecity();
+							if (i < dateplanJpList.size() - 2) {
+								Calendar cal = Calendar.getInstance();
+								cal.setTime(enddate);
+								cal.add(Calendar.DATE, -1);
+								enddate = cal.getTime();
+							}
 							tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
 						}
 					}
+					this.daynum = 1;
 				}
 			}
 			/*	if (!Util.isEmpty(tripplanJpList) && tripplanJpList.size() > 0) {
@@ -1194,17 +1211,18 @@ public class NewOrderJaPanController {
 	private void tripplan(NewOrderJpEntity order, Date startdate, Date enddate, String arrivecity,
 			List<NewTripplanJpEntity> tripplanJpListnew) {
 		Date nowdate = startdate;
+		DateFormat df = new SimpleDateFormat("yyyyMMdd");
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(nowdate);
 		int daynum = (int) ((enddate.getTime() - startdate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
 		List<Hotel> hotellist = dbDao.query(Hotel.class, Cnd.where("city", "=", arrivecity), null);
 		List<Scenic> sceniclist = dbDao.query(Scenic.class, Cnd.where("city", "=", arrivecity), null);
-
+		int daynumnew = 1;
 		for (int i = 0; i < daynum; i++) {
 			NewTripplanJpEntity t = new NewTripplanJpEntity();
-			Calendar cal1 = Calendar.getInstance();
-			cal1.setTime(nowdate);
-			t.setDaynum(i + 1);
+			//Calendar cal1 = Calendar.getInstance();
+			cal.setTime(nowdate);
+			t.setDaynum(this.daynum);
 			t.setCity(arrivecity);
 			t.setNowdate(nowdate);
 			if (i < hotellist.size()) {
@@ -1233,14 +1251,17 @@ public class NewOrderJaPanController {
 
 			}
 			t.setHomeday(1);
-			t.setIntime(nowdate);
-			cal1.set(Calendar.DAY_OF_MONTH, nowdate.getDate() + 1);
+			//t.setIntime(nowdate);
+			//cal1.set(Calendar.DAY_OF_MONTH, nowdate.getDate() + 1);
 			/*t.setOrder_jp_id(orderOld.getId());*/
-			t.setOuttime(cal1.getTime());
+			//t.setOuttime(cal1.getTime());
 			t.setBreakfast(1);
 			t.setDinner(1);
 			tripplanJpListnew.add(t);
-			cal.set(Calendar.DAY_OF_MONTH, nowdate.getDate() + 1);
+
+			daynumnew++;
+			this.daynum++;
+			cal.add(Calendar.DATE, 1);
 			nowdate = cal.getTime();
 		}
 	}
