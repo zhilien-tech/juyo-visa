@@ -85,8 +85,8 @@ var countries = new kendo.data.DataSource({
 		},
 		payCompany:{
 			
-		}
-		
+		},
+		customerresource:{}
     },
     keys = {
 		"customer.peerList":{
@@ -167,6 +167,24 @@ $("#has_other_travelers").change(function () {
     	viewModel.clearAll(key);
     }
 });
+
+
+
+function comsource(){
+	var flag=$("#customerSource").val();
+	if(flag==3){//直客 
+		$("#select").hide();
+		$("#selectno").show();
+		$('.companyFullName').addClass('hide');//隐藏 默认显示的 其他状态下的 公司全称
+		$('.ZKcompanyFullName').removeClass('hide');//显示   默认显示的  直客  公司全称
+	}else{//其他
+		$("#select").show();
+		$("#selectno").hide();
+		$('.companyFullName').removeClass('hide');//显示 默认显示的 其他状态下的 公司全称
+		$('.ZKcompanyFullName').addClass('hide');//隐藏   默认显示的  直客  公司全称
+	}
+}
+
 
 $(function () {
     $("#cus_phone").kendoMultiSelect({
@@ -421,8 +439,25 @@ $(function () {
 			var color = $("#cus_linkman").data("kendoMultiSelect");
 			color.value(resp.customermanage.id);
         });
+        comsource();
     }
+    
+    comsource();
 });
 
-
+	
+	function comsource(){
+		var flag=$("#customerSource").val();
+		if(flag==3){//直客 
+			$("#select").hide();
+			$("#selectno").show();
+			$('.companyFullName').addClass('hide');//隐藏 默认显示的 其他状态下的 公司全称
+			$('.ZKcompanyFullName').removeClass('hide');//显示   默认显示的  直客  公司全称
+		}else{//其他
+			$("#select").show();
+			$("#selectno").hide();
+			$('.companyFullName').removeClass('hide');//显示 默认显示的 其他状态下的 公司全称
+			$('.ZKcompanyFullName').addClass('hide');//隐藏   默认显示的  直客  公司全称
+		}
+	}
 

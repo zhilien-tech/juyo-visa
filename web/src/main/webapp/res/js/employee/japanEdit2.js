@@ -6,6 +6,9 @@ var customersourceEnum=[
     {text:"直客",value:3},
     {text:"线下",value:4}
   ];
+var proposersnew=[
+                       
+                        ];
 var proposers=new kendo.data.DataSource({
     serverFiltering: true,
     transport: {
@@ -132,7 +135,7 @@ flights = new kendo.data.DataSource({
 var viewModel = kendo.observable({
 	 customersourceEnum:customersourceEnum,
 	 startcitynew:startcity,
-	 proposers:proposers,
+	 proposers:proposersnew,
     flights: flights,
     hotels: hotels,
     scenic: scenic,
@@ -260,6 +263,28 @@ var viewModel = kendo.observable({
    		}
     	  
     	  
+    },
+    changeismainproposer:function(e){
+    	console.log(e.data.id);
+    	console.log(e.data);
+    	console.log(e.data.fullname);
+    	var person=new Object();
+    	person.text=e.data.fullname;
+    	person.value=e.data.id;
+    	if(!e.data.ismainproposer){
+    			
+    			proposersnew.push(person);
+    			alert(JSON.stringify(proposersnew));
+    			viewModel.set("proposers",proposersnew);
+    	}else{
+    		for(var i=0;i<proposersnew.length;i++){
+    			alert(e.data.fullname);
+    			if(proposersnew[i].text+""==e.data.fullname+""){
+    				proposersnew.splice(i, 1, person);
+    			}
+    		}
+    		viewModel.set("proposers",proposersnew);
+    	}
     }
 });
 kendo.bind($(document.body), viewModel);
@@ -548,6 +573,24 @@ $(function () {
         $.getJSON("/visa/neworderjp/showDetail?orderid=" + oid, function (resp) {
         	//console.log(JSON.stringify(resp));
         	viewModel.set("customer", $.extend(true, defaults, resp));
+        	console.log();
+        	
+        	var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
+        	for(var i=0;i<proposerInfoJpList.length;i++){
+        		var ismain=proposerInfoJpList[i].ismainproposer;
+        		if(ismain){
+        			var person=new Object();
+        	    	person.text=proposerInfoJpList[i].fullname;
+        	    	person.value=proposerInfoJpList[i].id;
+        	    	
+        	    	
+        	    	proposersnew.push(person);
+        			alert(JSON.stringify(proposersnew));
+        			viewModel.set("proposers",proposersnew);
+        		}
+        	}
+        	
+        	
         	var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
         	if(proposerInfoJpList.length>0){
         		

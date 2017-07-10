@@ -1059,7 +1059,7 @@
                 <div class="form-group">
                     <label>主申请人:</label>
                     <div class="onoffswitch">
-                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main_#:data.uid#" data-bind="checked:ismainproposer">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main_#:data.uid#" data-bind="checked:ismainproposer,click:changeismainproposer">
                         <label class="onoffswitch-label" for="main_#:data.uid#">
                             <span class="onoffswitch-inner"></span>
                             <span class="onoffswitch-switch"></span>
@@ -1077,8 +1077,8 @@
                            data-suggest="true"
                            data-auto-bind="true"
                             data-value-primitive="true"
-                            data-value-field="id"
-                            data-text-field="fullname"
+                            data-value-field="value"
+                            data-text-field="text"
                             data-bind="value:relationproposer,source:proposers"/>
                 </div>
             </div>
