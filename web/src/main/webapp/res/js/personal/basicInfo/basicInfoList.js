@@ -77,6 +77,25 @@ $(function(){
 		$(".input-group input").removeAttr("disabled"); //去掉所有input框的不可编辑属性
 		$(".input-group input").removeClass("k-state-disabled");//去掉不可编辑样式
 	}
+	
+	
+	
+	var firstPart = JSON.parse(unescape($.queryString("firstPart")));//获取 错误 信息
+	$('label').each(function(){
+		var labelText=$(this).text();//获取 页面上所有的字段 名称
+		labelText = labelText.split(":");
+		labelText.pop();
+		labelText = labelText.join(":");//截取 :之前的信息
+	});
+	for(var i=0;i<firstPart.length;i++){
+		if(labelText==firstPart[i]){
+			$(this).next();
+		}
+	}
+	
+	
+	
+	
 });
 /*------------------------------------------------container---------------------------------------------------*/
 //客户来源
