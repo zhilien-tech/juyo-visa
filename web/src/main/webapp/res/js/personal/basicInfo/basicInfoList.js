@@ -78,24 +78,23 @@ $(function(){
 		$(".input-group input").removeClass("k-state-disabled");//去掉不可编辑样式
 	}
 	
-	
-	
-	var firstPart = JSON.parse(unescape($.queryString("firstPart")));//获取 错误 信息
+	/*-------------------------小灯泡 效果--------------------------*/
+	var firstPart = JSON.parse(unescape($.queryString("secondPart")));//获取 错误 信息
 	$('label').each(function(){
-		var labelText=$(this).text();//获取 页面上所有的字段 名称
-		labelText = labelText.split(":");
-		labelText.pop();
-		labelText = labelText.join(":");//截取 :之前的信息
-	});
-	for(var i=0;i<firstPart.length;i++){
-		if(labelText==firstPart[i]){
-			$(this).next();
-		}
-	}
-	
-	
-	
-	
+			var labelText=$(this).text();//获取 页面上所有的字段 名称
+			labelText = labelText.split(":");
+			labelText.pop();
+			labelText = labelText.join(":");//截取 :之前的信息
+			
+			for(var i=0;i<firstPart.length;i++){
+				//console.log(labelText+"==="+firstPart[i]);
+				if(labelText==firstPart[i]){
+					$(this).next().find('input').css('border-color','#f17474');
+					$(this).next().find('i').css('color','#fff8a0');
+				}
+			}
+	});	 
+	/*-------------------------end 小灯泡 效果--------------------------*/
 });
 /*------------------------------------------------container---------------------------------------------------*/
 //客户来源
