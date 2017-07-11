@@ -220,7 +220,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -273,7 +273,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -326,7 +326,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -380,7 +380,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -399,9 +399,9 @@ $(function () {
 });
 
 //信息保存
-var validator = $("#orderForm").kendoValidator().data("kendoValidator");
+//var validator = $("#orderForm").kendoValidator().data("kendoValidator");
 function ordersave(){
-			 
+	 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 			 $.ajax({
 				 type: "POST",
 				 url: "/visa/order/orderSave",
@@ -409,6 +409,11 @@ function ordersave(){
 				 dataType: "json",
 				 data: JSON.stringify(viewModel.customer),
 				 success: function (result) {
+					 if(indexnew!=null){
+							
+							layer.close(index);
+							}
+					 
 					 console.log(result.code);
 					 if(result.code=="SUCCESS"){
 						 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引

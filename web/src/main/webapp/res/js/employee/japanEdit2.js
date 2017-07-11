@@ -269,23 +269,75 @@ var viewModel = kendo.observable({
     	console.log(e.data);
     	console.log(e.data.fullname);
     	var person=new Object();
-    	person.text=e.data.fullname;
+    	person.text=e.data.xing+e.data.name;
     	person.value=e.data.id;
     	if(!e.data.ismainproposer){
-    			
+	    		for(var i=0;i<proposersnew.length;i++){
+					if(proposersnew[i].value+""==(e.data.id)+""){
+						proposersnew.splice(i, 1);
+					}
+				}
     			proposersnew.push(person);
-    			alert(JSON.stringify(proposersnew));
     			viewModel.set("proposers",proposersnew);
     	}else{
     		for(var i=0;i<proposersnew.length;i++){
-    			alert(e.data.fullname);
-    			if(proposersnew[i].text+""==e.data.fullname+""){
-    				proposersnew.splice(i, 1, person);
-    			}
+    			alert(e.data.xing+e.data.name);
+    			/*if(proposersnew[i].text+""==(e.data.xing+e.data.name)+""){
+    				proposersnew.splice(i, 1);
+    			}*/
+    			if(proposersnew[i].value+""==(e.data.id)+""){
+					proposersnew.splice(i, 1);
+				}
     		}
     		viewModel.set("proposers",proposersnew);
     	}
-    }
+    },
+    updateData:function(e){
+    	
+	    	var person=new Object();
+	    	person.text=(e.data.xing+''+e.data.name);
+	    	person.value=e.data.id;
+//	    	alert(e.data.ismainproposer);
+	    	if(e.data.ismainproposer){
+	    		for(var i=0;i<proposersnew.length;i++){
+					if(proposersnew[i].value+""==(e.data.id)+""){
+						proposersnew.splice(i, 1);
+					}
+				}
+				proposersnew.push(person);
+				viewModel.set("proposers",proposersnew);
+			}else{
+				for(var i=0;i<proposersnew.length;i++){
+					if(proposersnew[i].value+""==(e.data.id)+""){
+						proposersnew.splice(i, 1);
+					}
+				}
+				viewModel.set("proposers",proposersnew);
+			}
+    },
+    updateData1:function(e){
+    	
+    	var person=new Object();
+    	person.text=(e.data.xing+''+e.data.name);
+    	person.value=e.data.id;
+//    	alert(e.data.ismainproposer);
+    	if(e.data.ismainproposer){
+    		for(var i=0;i<proposersnew.length;i++){
+				if(proposersnew[i].value+""==(e.data.id)+""){
+					proposersnew.splice(i, 1);
+				}
+			}
+			proposersnew.push(person);
+			viewModel.set("proposers",proposersnew);
+		}else{
+			for(var i=0;i<proposersnew.length;i++){
+				if(proposersnew[i].value+""==(e.data.id)+""){
+					proposersnew.splice(i, 1);
+				}
+			}
+			viewModel.set("proposers",proposersnew);
+		}
+}
 });
 kendo.bind($(document.body), viewModel);
 
@@ -346,7 +398,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				/*viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -414,7 +466,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				/*viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -468,7 +520,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				/*viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				console.log("~~~~~~~~~~~"+viewModel.set("customer.customermanage.id",data.id));
     				//电话
@@ -523,8 +575,8 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				/*viewModel.set("customer.customermanage.customerSource",data.customerSource);
-    				*/viewModel.set("customer.customermanage.id",data.id);
+    				viewModel.set("customer.customerSource",data.customerSource);
+    				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
     				var color = $("#cus_phone").data("kendoMultiSelect");
@@ -540,29 +592,38 @@ $(function () {
         }
     });
 });
-
+//var validatable = $("#japancustomer").kendoValidator().data("kendoValidator");
 //信息保存
 function orderJpsave(){
-		
-			 console.log(JSON.stringify(viewModel.customer));
-
-			 $.ajax({
-				 type: "POST",
-				 url: "/visa/neworderjp/orderJpsave",
-				 contentType: "application/json",
-				 dataType: "json",
-				 data: JSON.stringify(viewModel.customer),
-				 success: function (result) {
-					 console.log(result.code);
-					 if(result.code=="SUCCESS"){
-						 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-						 //$.layer.closeAll();
-						 parent.layer.close(index);
-						 window.parent.successCallback('1');
-						 
+			//if(validatable.validate()){
+				 console.log(JSON.stringify(viewModel.customer));
+				 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+					
+				 $.ajax({
+					 type: "POST",
+					 url: "/visa/neworderjp/orderJpsave",
+					 contentType: "application/json",
+					 dataType: "json",
+					 data: JSON.stringify(viewModel.customer),
+					 success: function (result) {
+						 console.log(result.code);
+						 alert(result);
+						 if(result.code=="SUCCESS"){
+							 if(indexnew!=null){
+									
+									layer.close(index);
+									}
+							 
+							 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+							 //$.layer.closeAll();
+							 parent.layer.close(index);
+							 window.parent.successCallback('1');
+							 
+						 }
 					 }
-				 }
-			 });
+				 });
+		//	}
+			
 	 
 }
 
@@ -585,7 +646,7 @@ $(function () {
         	    	
         	    	
         	    	proposersnew.push(person);
-        			alert(JSON.stringify(proposersnew));
+//        			alert(JSON.stringify(proposersnew));
         			viewModel.set("proposers",proposersnew);
         		}
         	}
@@ -842,3 +903,7 @@ $(function () {
    		
    		
    	}
+   	
+function updateDatasource(){
+	
+}

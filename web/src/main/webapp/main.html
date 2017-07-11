@@ -647,7 +647,8 @@
 <script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
 <script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
 <script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
-
+<script src="/res/plugin/jquery.base64.js"></script>
+<script src="/res/plugin/jquery.querystring.js"></script>
 <script src="/res/js/common.js"></script>
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
@@ -675,8 +676,9 @@
     	}
     	//显示登录人姓名
     	var username=$.queryString("username");
+    	  var j = JSON.parse($.base64.atob(decodeURI(username),true));
     	var logintype=$.queryString("logintype");
-    	$("#userId").text(decodeURIComponent(username));
+    	$("#userId").text(j);
     	if(logintype != "" && logintype != null && logintype == 1){//1表示进入日本的签证状态
         	$('.J_iframe').attr('src','/order/america.html'); 
         }else if(logintype == 4){

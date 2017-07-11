@@ -146,14 +146,14 @@ function reasion(){
 						console.log(JSON.stringify(firstPart));
 						return;
 					}else if(secondPart.length>0){
-						console.log("基本信息_________firstPart的值为："+firstPart)
+						console.log("基本信息_________secondPart的值为："+firstPart)
 						window.location.href='/personal/passportInfo/passportInfoList.html?firstPart='
 											  +escape(JSON.stringify(firstPart))+"&secondPart="
 											  +escape(JSON.stringify(secondPart))+"&thirdPart="
 											  +escape(JSON.stringify(thirdPart));
 						return;
 					}else if(thirdPart.length>0){
-						console.log("签证信息_________firstPart的值为："+firstPart)
+						console.log("签证信息_________thirdPart的值为："+firstPart)
 						window.location.href='/personal/visaInfo/visaInfoList.html?firstPart='
 											  +escape(JSON.stringify(firstPart))+"&secondPart="
 											  +escape(JSON.stringify(secondPart))+"&thirdPart="
