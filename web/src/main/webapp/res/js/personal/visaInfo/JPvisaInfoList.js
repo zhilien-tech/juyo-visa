@@ -74,10 +74,11 @@ $(function(){
 			for(var i=0;i<firstPart.length;i++){
 				if(labelText==firstPart[i]){
 					$(this).next().find('input').css('border-color','#f17474');
-					$(this).next().find('i').css('color','#fff8a0');
+					$(this).next().find('.k-state-default').css('border-color','#f17474');//select(span)
+					$(this).next().find('.input-group-addon').addClass('yellow');//小灯泡
 				}
 			}
-	});	 
+	});
 	/*-------------------------end 小灯泡 效果--------------------------*/
 	
 	

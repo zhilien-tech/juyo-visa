@@ -1,3 +1,12 @@
+/**
+ * 
+ * 
+ * 日本 二级 编辑页面 js
+ * 
+ * 
+ */
+
+
 
 //客户来源
 var customersourceEnum=[
@@ -518,9 +527,7 @@ $(function () {
 
 //信息保存
 function orderJpsave(){
-		
-			 console.log(JSON.stringify(viewModel.customer));
-
+		     ///console.log(JSON.stringify(viewModel.customer));
 			 $.ajax({
 				 type: "POST",
 				 url: "/visa/neworderjp/orderJpsave",
@@ -548,6 +555,20 @@ $(function () {
         $.getJSON("/visa/neworderjp/showDetail?orderid=" + oid, function (resp) {
         	//console.log(JSON.stringify(resp));
         	viewModel.set("customer", $.extend(true, defaults, resp));
+        	/*----小灯泡 回显----*/
+        	var reason=viewModel.get("customer.errorinfo");
+        	var map=new Map();
+        	map=eval("("+reason+")");
+        	console.log("map的值为："+map);
+        	for (var key in map){
+        		var a = map[key];//获取到 错误信息 数据
+        		for(var i=0;i<a.length;i++){
+        			var reasonnew=a[i].key+",";//获取到  错误信息 字段名称
+        			console.log("reasonnew的值为："+reasonnew);
+        		}
+        	}
+        	
+        	/*----end 小灯泡 回显----*/
         	var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
         	if(proposerInfoJpList.length>0){
         		

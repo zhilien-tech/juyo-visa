@@ -98,6 +98,7 @@ $(function(){
 function reasion(){
 	var reason=country.errorinfo;
 	var map=new Map();
+	
 	map=eval("("+reason+")");
 	//alert(JSON.stringify(map));
 	///console.log(JSON.stringify(map));
@@ -112,6 +113,7 @@ function reasion(){
 			
 			//美国
 			if(countrystatus==0){
+				
 					//产生第一个页面的新数组      ___护照信息 页面
 					for(var m=0;m<firstAll.length;m++){
 						if(a[i].key==firstAll[m]){
@@ -134,22 +136,26 @@ function reasion(){
 					}
 					
 					if(firstPart.length>0){
-						window.location.href='/personal/passportInfo/passportInfoList.html?firstPart='
-											  +escape(JSON.stringify(firstPart))+"&secondPart="
-											  +escape(JSON.stringify(secondPart))+"&thirdPart="
-											  +escape(JSON.stringify(thirdPart));
-						console.log(JSON.stringify(firstPart));
+							window.location.href='/personal/passportInfo/passportInfoList.html?firstPart='
+								  +escape(JSON.stringify(firstPart))+"&secondPart="
+								  +escape(JSON.stringify(secondPart))+"&thirdPart="
+								  +escape(JSON.stringify(thirdPart))+"&typeId=1";
+							
+						
+						///console.log(JSON.stringify(firstPart));
 					}else if(secondPart.length>0){
-						console.log("_____________________"+secondPart);
-						window.location.href='/personal/basicInfo/basicInfoList.html?firstPart='
-											  +escape(JSON.stringify(firstPart))+"&secondPart="
-											  +escape(JSON.stringify(secondPart))+"&thirdPart="
-											  +escape(JSON.stringify(thirdPart));
+						///console.log("_____________________"+secondPart);
+							window.location.href='/personal/basicInfo/basicInfoList.html?firstPart='
+								  +escape(JSON.stringify(firstPart))+"&secondPart="
+								  +escape(JSON.stringify(secondPart))+"&thirdPart="
+								  +escape(JSON.stringify(thirdPart))+"&typeId=1";
+						
 					}else if(thirdPart.length>0){
-						window.location.href='/personal/visaInfo/visaInfoList.html?firstPart='
-											  +escape(JSON.stringify(firstPart))+"&secondPart="
-											  +escape(JSON.stringify(secondPart))+"&thirdPart="
-											  +escape(JSON.stringify(thirdPart));
+							window.location.href='/personal/visaInfo/visaInfoList.html?firstPart='
+												  +escape(JSON.stringify(firstPart))+"&secondPart="
+												  +escape(JSON.stringify(secondPart))+"&thirdPart="
+												  +escape(JSON.stringify(thirdPart))+"&typeId=1";
+						
 					}
 				}
 			
@@ -178,21 +184,21 @@ function reasion(){
 					}
 					
 					if(firstPartJP.length>0){
-						console.log("qq________"+firstPartJP);
+						///console.log("_______"+firstPartJP);
 						window.location.href='/personal/passportInfo/passportInfoList.html?firstPart='
 											  +escape(JSON.stringify(firstPartJP))+"&secondPart="
 											  +escape(JSON.stringify(secondPartJP))+"&thirdPart="
-											  +escape(JSON.stringify(thirdPartJP));
+											  +escape(JSON.stringify(thirdPartJP))+"&typeId=1";
 					}else if(secondPartJP.length>0){
 						window.location.href='/personal/basicInfo/basicJPInfoList.html?firstPart='
 											  +escape(JSON.stringify(firstPartJP))+"&secondPart="
 											  +escape(JSON.stringify(secondPartJP))+"&thirdPart="
-											  +escape(JSON.stringify(thirdPartJP));
+											  +escape(JSON.stringify(thirdPartJP))+"&typeId=1";
 					}else if(thirdPartJP.length>0){
 						window.location.href='/personal/visaInfo/JPvisaInfoList.html?firstPart='
 							                  +escape(JSON.stringify(firstPartJP))+"&secondPart="
 							                  +escape(JSON.stringify(secondPartJP))+"&thirdPart="
-							                  +escape(JSON.stringify(thirdPartJP));
+							                  +escape(JSON.stringify(thirdPartJP))+"&typeId=1";
 					}
 				}
 		

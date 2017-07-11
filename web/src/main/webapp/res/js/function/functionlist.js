@@ -68,7 +68,7 @@ var grid = $("#grid").kendoGrid({
     pageSize: 20,
     height: "93%",
     sortable: true,
-    editable: true,
+    editable: false,
     resizable: true,
     filterable: true,
     selectable: "row",

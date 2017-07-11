@@ -80,6 +80,7 @@ $(function(){
 	
 	/*-------------------------小灯泡 效果--------------------------*/
 	var firstPart = JSON.parse(unescape($.queryString("secondPart")));//获取 错误 信息
+	
 	$('label').each(function(){
 			var labelText=$(this).text();//获取 页面上所有的字段 名称
 			labelText = labelText.split(":");
@@ -90,10 +91,11 @@ $(function(){
 				//console.log(labelText+"==="+firstPart[i]);
 				if(labelText==firstPart[i]){
 					$(this).next().find('input').css('border-color','#f17474');
-					$(this).next().find('i').css('color','#fff8a0');
+					$(this).next().find('.k-state-default').css('border-color','#f17474');//select(span)
+					$(this).next().find('.input-group-addon').addClass('yellow');//小灯泡
 				}
 			}
-	});	 
+	});
 	/*-------------------------end 小灯泡 效果--------------------------*/
 });
 /*------------------------------------------------container---------------------------------------------------*/
