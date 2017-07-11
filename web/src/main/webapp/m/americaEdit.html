@@ -46,7 +46,7 @@
                                 </div>
                             </div>
                             <!--公司全称/客户来源-->
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-xs-8">
                                     <div class="form-group">
                                         <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
@@ -71,15 +71,15 @@
                                                     data-value-field="value"
                                                     data-bind="value:customer.customermanage.customerSource,source:customersourceEnum"
                                                     style="width: 100%;"></select>
-                                                    <!--   <input id="cus_source"  class="k-textbox"
-                                                   style="width: 100%;" name="customerSource"/> -->
+                                                      <input id="cus_source"  class="k-textbox"
+                                                   style="width: 100%;" name="customerSource"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- end 公司全称/客户来源 -->
-                            <!--联系人/手机/邮箱-->
+                            end 公司全称/客户来源
+                            联系人/手机/邮箱
                             <div class="row">
                                 <div class="col-xs-4">
                                     <div class="form-group">
@@ -97,9 +97,9 @@
                                         <div class='input-group'>
                                            <input id="cus_phone" name="telephone" 
                                                    class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                                           <!--  <select class="k-textbox" style="width: 100%;text-transform:uppercase;" id="cus_phone"></select> 
+                                            <select class="k-textbox" style="width: 100%;text-transform:uppercase;" id="cus_phone"></select> 
                                            data-bind="value:customer.customermanage.telephone"
-                                           -->
+                                          
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -110,14 +110,168 @@
                                         <div class='input-group'>
                                              <input id="cus_email" name="email" 
                                                    class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                                                   <!-- <select class="k-textbox" style="width: 100%;text-transform:uppercase;" id="cus_email"></select> 
+                                                   <select class="k-textbox" style="width: 100%;text-transform:uppercase;" id="cus_email"></select> 
                                                    data-bind="value:customer.customermanage.email"
-                                                   -->
+                                                  
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
+                            </div> -->
+                            
+                               <!--客户来源/公司全称-->
+                            <div class="row">
+                            	  <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label for="last_name_en">客户来源:<span style="color: red">*</span></label>
+                                        <div class='input-group'>
+                                            <select id="customerSource"
+                                                    data-role="dropdownlist"
+                                                    data-filter="startswith"
+                                                    data-suggest="true"
+                                                    data-auto-bind="true"
+                                                    data-value-primitive="true"
+                                                    data-text-field="text"
+                                                    data-value-field="value"
+                                                    data-bind="value:customer.customerSource,source:customersourceEnum"
+                                                    style="width: 100%;" onchange="comsource();"></select>
+                                                    <!--   <input id="cus_source"  class="k-textbox"
+                                                   style="width: 100%;" name="customerSource"/> -->
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-xs-8 companyFullName">
+		                            <div class="form-group">
+		                                 <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
+		                                 <div class='input-group'>
+		                                    <input id="cus_fullComName" type="text" class="k-textbox" style="width: 100%;"
+		                                           data-bind="value:customer.customermanage.fullComName"  />
+		                                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+		                                 </div>
+		                            </div>
+		                        </div>
+		                        
+
+		                        <div class="col-xs-8 hide ZKcompanyFullName">
+		                            <div class="form-group">
+		                                <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
+		                                <div class='input-group'>
+		                                   <input id="cus_fullComName" type="text" class="k-textbox" style="width: 100%;"
+		                                          data-bind="value:customer.customerresource.fullComName"  />
+		                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+		                                </div>
+		                            </div>
+		                        </div>
                             </div>
+                            <!-- end 客户来源/公司全称 -->
+                            
+                            <!-- 选择框 -->
+                            <div id="select">
+		                          	<!--联系人/手机/邮箱-->
+		                            <div class="row">
+		                                <div class="col-xs-4">
+		                                    <div class="form-group">
+		                                        <label for="first_name_cn">联系人:<span style="color: red">*</span></label>
+		                                        <div class='input-group'>
+		                                            <input id="cus_linkman" class="k-textbox" data-bind="value:customer.customermanage.linkman"
+		                                                   style="width: 100%;" name="linkman"/>
+		                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                                <div class="col-xs-4">
+		                                    <div class="form-group">
+		                                        <label for="first_name_en">手机:<span style="color: red">*</span></label>
+		                                        <div class='input-group'>
+		                                           <input id="cus_phone" name="telephone" 
+		                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
+		                                           <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                                <div class="col-xs-4">
+		                                    <div class="form-group">
+		                                        <label for="first_name_en">邮箱:<span style="color: red">*</span></label>
+		                                        <div class='input-group'>
+		                                             <input id="cus_email" name="email" 
+		                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
+		                                                   <!-- <select class="k-textbox" style="width: 100%;text-transform:uppercase;" id="cus_email"></select> 
+		                                                   data-bind="value:customer.customermanage.email"
+		                                                   -->
+		                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                            </div>
+                            </div>
+                             
+                             <!-- ===============================输入框开始======================== -->
+ 								<div id="selectno">
+		                          	<!--联系人/手机/邮箱-->
+		                            <div class="row">
+		                                <div class="col-xs-4">
+		                                    <div class="form-group">
+		                                        <label for="first_name_cn">联系人:<span style="color: red">*</span></label>
+		                                        <div class='input-group'>
+		                                            <input id="cus_linkman1" class="k-textbox" data-bind="value:customer.customerresource.linkman"
+		                                                   style="width: 100%;" name="linkman"/>
+		                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                                <div class="col-xs-4">
+		                                    <div class="form-group">
+		                                        <label for="first_name_en1">手机:<span style="color: red">*</span></label>
+		                                        <div class='input-group'>
+		                                           <input id="cus_phone1" name="telephone" data-bind="value:customer.customerresource.telephone"
+		                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
+		                                           <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                                <div class="col-xs-4">
+		                                    <div class="form-group">
+		                                        <label for="first_name_en">邮箱:<span style="color: red">*</span></label>
+		                                        <div class='input-group'>
+		                                             <input id="cus_email1" name="email" data-bind="value:customer.customerresource.email"
+		                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
+		                                                   <!-- <select class="k-textbox" style="width: 100%;text-transform:uppercase;" id="cus_email"></select> 
+		                                                   data-bind="value:customer.customerresourceJp.email"
+		                                                   -->
+		                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                            </div>
+                            		
+ 								
+ 								</div>
+                             <!-- ===============================输入框结束======================== -->
+                     
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
                             <div class="has_pr" data-template="tpl_has_pr" data-bind="source:customer.otherCountry"></div>
                       <!-- <div class="row has_pr" >data-bind="visible:otherCountryEnable"
                                 <div class="col-xs-12">

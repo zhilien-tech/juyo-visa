@@ -103,7 +103,9 @@ public class NewOrderJaPanController {
 	/**
 	 * 列表查看订单信息
 	 */
-	private int daynum = 1;
+	private int daynum = 1;//出行的天数
+
+	private int daytotal = 0;
 
 	@RequestMapping(value = "list")
 	@ResponseBody
@@ -396,7 +398,7 @@ public class NewOrderJaPanController {
 				boolean flag = true;
 				for (int j = 0; j < proposerInfoJpList.size(); j++) {
 
-					if (proposerInfoJpList.get(j).getId() == list8.get(i).getId()) {
+					if (proposerInfoJpList.get(j).getId().intValue() == list8.get(i).getId().intValue()) {
 						flag = false;
 					}
 					if (Util.isEmpty(proposerInfoJpList.get(j).getId())) {
@@ -584,6 +586,7 @@ public class NewOrderJaPanController {
 				if (tripJp1.getOneormore() == 0) {
 					startdate1 = tripJp1.getStartdate();
 					enddate1 = tripJp1.getReturndate();
+					this.daytotal = (int) ((enddate1.getTime() - startdate1.getTime()) / (24 * 60 * 60 * 1000)) + 1;
 					arrivecity1 = tripJp1.getArrivecity();
 					tripplan(orderOld, startdate1, enddate1, arrivecity1, tripplanJpListnew1);
 					this.daynum = 1;
@@ -596,6 +599,8 @@ public class NewOrderJaPanController {
 			if (!Util.isEmpty(dateplanJpList1) && dateplanJpList1.size() > 0) {
 				//this.daynum = (int) ((dateplanJpList1.get(0).getStartdate().getTime() - dateplanJpList1.get(0).getReturndate().getTime()) / (24 * 60 * 60 * 1000)) + 1;
 				if (oneormore1 == 1) {
+					this.daytotal = (int) ((dateplanJpList1.get(dateplanJpList1.size() - 1).getStartdate().getTime() - dateplanJpList1
+							.get(0).getStartdate().getTime()) / (24 * 60 * 60 * 1000)) + 1;
 					for (int i = 0; i < dateplanJpList1.size(); i++) {
 						if (i < dateplanJpList1.size() - 1) {
 							startdate1 = dateplanJpList1.get(i).getStartdate();
@@ -863,70 +868,194 @@ public class NewOrderJaPanController {
 		*/
 		List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
 				Cnd.where("order_jp_id", "=", orderid), null);
-
+		String nullEmail = "";
+		List<NewCustomerJpEntity> customerList = Lists.newArrayList();
+		boolean togetherLinkman = false;
+		long togetherLinkmanId = 0;
 		for (NewCustomerOrderJpEntity newCustomerOrderEntity : query) {
 			NewCustomerJpEntity customer = dbDao.fetch(NewCustomerJpEntity.class,
 					newCustomerOrderEntity.getCustomer_jp_id());
 
-			phone = customer.getPhone();
-			if (!Util.isEmpty(phone)) {
+			customerList.add(customer);
 
-				EmployeeEntity employeeEntity = new EmployeeEntity();
-				employeeEntity.setTelephone(phone);
-				employeeEntity.setUserType(UserTypeEnum.TOURIST_IDENTITY.intKey());
-				employeeEntity.setFullName(customer.getChinesexing() + customer.getChinesename());
-				//生成六位数的随机密码
-				String pwd = "";
-				for (int i = 0; i < 6; i++) {
-					int a = (int) (Math.random() * 10);
-					pwd += a;
-
+		}
+		List<NewProposerInfoJpEntity> proposerInfoJpList = dbDao.query(NewProposerInfoJpEntity.class,
+				Cnd.where("order_jp_id", "=", orderid), null);
+		for (NewProposerInfoJpEntity newProposerInfoJpEntity : proposerInfoJpList) {
+			boolean istogetherlinkman = newProposerInfoJpEntity.isIstogetherlinkman();
+			if (istogetherlinkman) {
+				togetherLinkman = true;
+				togetherLinkmanId = newProposerInfoJpEntity.getCustomer_jp_id();
+			}
+		}
+		List<NewCustomerJpEntity> customerNew = Lists.newArrayList();
+		//for (NewCustomerJpEntity customer : customerList) {
+		if (togetherLinkman) {
+			if (togetherLinkmanId > 0) {
+				NewCustomerJpEntity customerLinkMan = dbDao.fetch(NewCustomerJpEntity.class, togetherLinkmanId);
+				if (Util.isEmpty(customerLinkMan.getEmail())) {
+					nullEmail += "统一联系人" + customerLinkMan.getChinesexing() + customerLinkMan.getChinesename()
+							+ "邮箱为空,";
 				}
-				String temp = pwd;
-				byte[] salt = Digests.generateSalt(8);
-				employeeEntity.setSalt(Encodes.encodeHex(salt));
-				byte[] password = pwd.getBytes();
-				byte[] hashPassword = Digests.sha1(password, salt, 1024);
-				pwd = Encodes.encodeHex(hashPassword);
+				if (Util.isEmpty(customerLinkMan.getPhone())) {
 
-				employeeEntity.setPassword(pwd);
-				List<EmployeeEntity> query1 = dbDao
-						.query(EmployeeEntity.class,
+					nullEmail += "手机为空。";
+				}
+				customerNew.add(customerLinkMan);
+			}
+		} else {
+			for (NewCustomerJpEntity newProposerInfoJpEntity : customerList) {
+				if (Util.isEmpty(newProposerInfoJpEntity.getEmail())) {
+					nullEmail += newProposerInfoJpEntity.getChinesexing() + newProposerInfoJpEntity.getChinesename()
+							+ "邮箱为空,";
+				}
+				if (Util.isEmpty(newProposerInfoJpEntity.getPhone())) {
+
+					nullEmail += "手机为空。";
+				}
+			}
+		}
+		//}
+
+		if (Util.isEmpty(nullEmail)) {
+
+			//给统一联系人发所有人的信息
+			if (togetherLinkman) {
+				String customerinfo = "";
+				NewCustomerJpEntity customerLinkMan = dbDao.fetch(NewCustomerJpEntity.class, togetherLinkmanId);
+				for (NewCustomerJpEntity customer : customerList) {
+					phone = customer.getPhone();
+					if (!Util.isEmpty(phone)) {
+
+						EmployeeEntity employeeEntity = new EmployeeEntity();
+						employeeEntity.setTelephone(phone);
+						employeeEntity.setUserType(UserTypeEnum.TOURIST_IDENTITY.intKey());
+						employeeEntity.setFullName(customer.getChinesexing() + customer.getChinesename());
+						//生成六位数的随机密码
+						String pwd = "";
+						for (int i = 0; i < 6; i++) {
+							int a = (int) (Math.random() * 10);
+							pwd += a;
+
+						}
+						String temp = pwd;
+						byte[] salt = Digests.generateSalt(8);
+						employeeEntity.setSalt(Encodes.encodeHex(salt));
+						byte[] password = pwd.getBytes();
+						byte[] hashPassword = Digests.sha1(password, salt, 1024);
+						pwd = Encodes.encodeHex(hashPassword);
+
+						employeeEntity.setPassword(pwd);
+						List<EmployeeEntity> query1 = dbDao.query(
+								EmployeeEntity.class,
 								Cnd.where("telephone", "=", phone).and("userType", "=",
 										UserTypeEnum.TOURIST_IDENTITY.intKey()), null);
-				if (!Util.isEmpty(query1) && query1.size() > 0) {
-					employeeEntity.setId(query1.get(0).getId());
-					nutDao.update(employeeEntity);
-				} else {
+						if (!Util.isEmpty(query1) && query1.size() > 0) {
+							employeeEntity.setId(query1.get(0).getId());
+							nutDao.update(employeeEntity);
+						} else {
 
-					employeeEntity = dbDao.insert(employeeEntity);
-				}
-				order.setUserid(employeeEntity.getId());
-				dbDao.update(order, null);
-				String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
-						.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
-						.replace("${logininfo}", "用户名:" + phone + "密码:" + temp);
-				String result = mailService.send(customer.getEmail(), html, "签证资料录入", MailService.Type.HTML);
+							employeeEntity = dbDao.insert(employeeEntity);
+						}
+						order.setUserid(employeeEntity.getId());
+						dbDao.update(order, null);
 
-				/*result = getMailContent(order, phone, customer, null);*/
-				if ("success".equalsIgnoreCase(result)) {
-					//成功以后分享次数加1
-					dbDao.update(
-							NewCustomerJpEntity.class,
-							Chain.make("sharecount", customer.getSharecount() + 1)
-									.add("status", OrderVisaApproStatusEnum.writeInfo.intKey())
-									.add("empid", employeeEntity.getId()), Cnd.where("id", "=", customer.getId()));
-					if (Util.isEmpty(order.getSharenum())) {
-						order.setSharenum(0);
+						customerinfo += "用户名:" + phone + "密码:" + temp + "<br\\>";
+						/*result = getMailContent(order, phone, customer, null);*/
+						//if ("success".equalsIgnoreCase(result)) {
+						//成功以后分享次数加1
+						dbDao.update(
+								NewCustomerJpEntity.class,
+								Chain.make("sharecount", customer.getSharecount() + 1)
+										.add("status", OrderVisaApproStatusEnum.writeInfo.intKey())
+										.add("empid", employeeEntity.getId()), Cnd.where("id", "=", customer.getId()));
+						if (Util.isEmpty(order.getSharenum())) {
+							order.setSharenum(0);
+						}
+						dbDao.update(
+								NewOrderJpEntity.class,
+								Chain.make("sharenum", order.getSharenum() + 1).add("status",
+										OrderVisaApproStatusEnum.shared.intKey()), Cnd.where("id", "=", order.getId()));
+						//}
 					}
-					dbDao.update(
-							NewOrderJpEntity.class,
-							Chain.make("sharenum", order.getSharenum() + 1).add("status",
-									OrderVisaApproStatusEnum.shared.intKey()), Cnd.where("id", "=", order.getId()));
+				}
+
+				String html = tmp.toString()
+						.replace("${name}", customerLinkMan.getChinesexing() + customerLinkMan.getChinesename())
+						.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://218.244.148.21:9004/")
+						.replace("${logininfo}", customerinfo);
+				String result = mailService.send(customerLinkMan.getEmail(), html, "签证资料录入", MailService.Type.HTML);
+			} else {
+
+				for (NewCustomerJpEntity customer : customerList) {
+					phone = customer.getPhone();
+					if (!Util.isEmpty(phone)) {
+
+						EmployeeEntity employeeEntity = new EmployeeEntity();
+						employeeEntity.setTelephone(phone);
+						employeeEntity.setUserType(UserTypeEnum.TOURIST_IDENTITY.intKey());
+						employeeEntity.setFullName(customer.getChinesexing() + customer.getChinesename());
+						//生成六位数的随机密码
+						String pwd = "";
+						for (int i = 0; i < 6; i++) {
+							int a = (int) (Math.random() * 10);
+							pwd += a;
+
+						}
+						String temp = pwd;
+						byte[] salt = Digests.generateSalt(8);
+						employeeEntity.setSalt(Encodes.encodeHex(salt));
+						byte[] password = pwd.getBytes();
+						byte[] hashPassword = Digests.sha1(password, salt, 1024);
+						pwd = Encodes.encodeHex(hashPassword);
+
+						employeeEntity.setPassword(pwd);
+						List<EmployeeEntity> query1 = dbDao.query(
+								EmployeeEntity.class,
+								Cnd.where("telephone", "=", phone).and("userType", "=",
+										UserTypeEnum.TOURIST_IDENTITY.intKey()), null);
+						if (!Util.isEmpty(query1) && query1.size() > 0) {
+							employeeEntity.setId(query1.get(0).getId());
+							nutDao.update(employeeEntity);
+						} else {
+
+							employeeEntity = dbDao.insert(employeeEntity);
+						}
+						order.setUserid(employeeEntity.getId());
+						dbDao.update(order, null);
+						String html = tmp.toString()
+								.replace("${name}", customer.getChinesexing() + customer.getChinesename())
+								.replace("${oid}", order.getOrdernumber())
+								.replace("${href}", "http://218.244.148.21:9004/")
+								.replace("${logininfo}", "用户名:" + phone + "密码:" + temp);
+						String result = mailService.send(customer.getEmail(), html, "签证资料录入", MailService.Type.HTML);
+
+						/*result = getMailContent(order, phone, customer, null);*/
+						if ("success".equalsIgnoreCase(result)) {
+							//成功以后分享次数加1
+							dbDao.update(
+									NewCustomerJpEntity.class,
+									Chain.make("sharecount", customer.getSharecount() + 1)
+											.add("status", OrderVisaApproStatusEnum.writeInfo.intKey())
+											.add("empid", employeeEntity.getId()),
+									Cnd.where("id", "=", customer.getId()));
+							if (Util.isEmpty(order.getSharenum())) {
+								order.setSharenum(0);
+							}
+							dbDao.update(
+									NewOrderJpEntity.class,
+									Chain.make("sharenum", order.getSharenum() + 1).add("status",
+											OrderVisaApproStatusEnum.shared.intKey()),
+									Cnd.where("id", "=", order.getId()));
+						}
+					}
 				}
 			}
 
+		} else {
+			return ResultObject.fail(nullEmail);
 		}
+
 		return ResultObject.success("发送成功");
 	}
 
@@ -1162,6 +1291,7 @@ public class NewOrderJaPanController {
 					startdate = tripJp.getStartdate();
 					enddate = tripJp.getReturndate();
 					arrivecity = tripJp.getArrivecity();
+					this.daytotal = (int) ((enddate.getTime() - startdate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
 					tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
 					this.daynum = 1;
 				}
@@ -1173,6 +1303,8 @@ public class NewOrderJaPanController {
 			if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
 
 				if (oneormore == 1) {
+					this.daytotal = (int) ((dateplanJpList.get(dateplanJpList.size() - 1).getStartdate().getTime() - dateplanJpList
+							.get(0).getStartdate().getTime()) / (24 * 60 * 60 * 1000)) + 1;
 					for (int i = 0; i < dateplanJpList.size(); i++) {
 						if (i < dateplanJpList.size() - 1) {
 
@@ -1225,13 +1357,47 @@ public class NewOrderJaPanController {
 			t.setDaynum(this.daynum);
 			t.setCity(arrivecity);
 			t.setNowdate(nowdate);
-			if (i < hotellist.size()) {
+			if (this.daynum == this.daytotal) {
+				t.setHometype(-1);
+			} else {
 
-				t.setHotelid(hotellist.get(0).getId());
+				if (i < hotellist.size()) {
+
+					t.setHotelid(hotellist.get(0).getId());
+				}
+				t.setHometype(0);
+				if (!Util.isEmpty(order.getHeadnum())) {
+					int home = (int) Math.ceil(order.getHeadnum() / 2.0);
+					t.setHomenum(home);
+				} else {
+					t.setHomenum(1);
+
+				}
+				t.setHomeday(1);
 			}
-			if (i < sceniclist.size()) {
 
-				t.setViewid(sceniclist.get(i).getId() + ",");
+			if (i < sceniclist.size()) {
+				if (sceniclist.size() / 4 >= this.daynum) {
+					int start = 0;
+					if (this.daynum > 1) {
+						start = (this.daynum - 1) * 4;
+					}
+					//					int start = (this.daynum - 1) * 4 - 1;
+					int end = this.daynum * 4 - 1;
+					String str = "";
+					for (int j = start; j <= end; j++) {
+						str += sceniclist.get(j).getId() + ",";
+					}
+					t.setViewid(str);
+				} else {
+					int start = 0;
+					int end = 3;
+					String str = "";
+					for (int j = start; j <= end; j++) {
+						str += sceniclist.get(j).getId() + ",";
+					}
+					t.setViewid(str);
+				}
 			}
 			String view[] = t.getViewid().split(",");
 			List<Scenic> slist = Lists.newArrayList();
@@ -1242,15 +1408,7 @@ public class NewOrderJaPanController {
 				}
 			}
 			t.setScenics(slist);
-			t.setHometype(0);
-			if (!Util.isEmpty(order.getHeadnum())) {
-				int home = (int) Math.ceil(order.getHeadnum() / 2.0);
-				t.setHomenum(home);
-			} else {
-				t.setHomenum(1);
 
-			}
-			t.setHomeday(1);
 			//t.setIntime(nowdate);
 			//cal1.set(Calendar.DAY_OF_MONTH, nowdate.getDate() + 1);
 			/*t.setOrder_jp_id(orderOld.getId());*/

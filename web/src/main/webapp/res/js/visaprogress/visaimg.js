@@ -149,13 +149,13 @@ function reasion(){
 								  +escape(JSON.stringify(firstPart))+"&secondPart="
 								  +escape(JSON.stringify(secondPart))+"&thirdPart="
 								  +escape(JSON.stringify(thirdPart))+"&typeId=1";
-						
+	
 					}else if(thirdPart.length>0){
+
 							window.location.href='/personal/visaInfo/visaInfoList.html?firstPart='
 												  +escape(JSON.stringify(firstPart))+"&secondPart="
 												  +escape(JSON.stringify(secondPart))+"&thirdPart="
-												  +escape(JSON.stringify(thirdPart))+"&typeId=1";
-						
+												  +escape(JSON.stringify(thirdPart))+"&typeId=1";3
 					}
 				}
 			
