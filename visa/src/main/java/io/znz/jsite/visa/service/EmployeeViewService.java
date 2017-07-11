@@ -11,7 +11,9 @@ import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 import io.znz.jsite.visa.entity.user.EmployeeEntity;
 import io.znz.jsite.visa.entity.user.SysUserEntity;
+import io.znz.jsite.visa.entity.userjobmap.UserJobMapEntity;
 import io.znz.jsite.visa.enums.UserDeleteStatusEnum;
+import io.znz.jsite.visa.enums.UserJobStatusEnum;
 import io.znz.jsite.visa.enums.UserStatusEnum;
 import io.znz.jsite.visa.enums.UserTypeEnum;
 import io.znz.jsite.visa.forms.employeeform.EmployeeAddForm;
@@ -46,6 +48,7 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 	 * @param addForm
 	 */
 	public Object addUserData(EmployeeAddForm addForm) {
+		//添加用户数据
 		addForm.setCreateTime(new Date());
 		addForm.setStatus(UserDeleteStatusEnum.NO.intKey());//未删除
 		addForm.setUserType(UserTypeEnum.PERSONNEL.intKey());//工作人员身份
@@ -57,6 +60,13 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 		byte[] hashPassword = Digests.sha1(password, salt, HASH_INTERATIONS);
 		addForm.setPassword(Encodes.encodeHex(hashPassword));
 		EmployeeEntity userdto = FormUtil.add(dbDao, addForm, EmployeeEntity.class);
+		Integer userId = userdto.getId();//得到用户id
+		//##########################添加用户就职表数据##########################//
+		UserJobMapEntity userjob = new UserJobMapEntity();
+		userjob.setEmpId(userId);
+		userjob.setStatus(UserJobStatusEnum.JOB.intKey());//在职
+		userjob.setHireDate(new Date());
+		dbDao.insert(userjob);
 		return userdto;
 	}
 

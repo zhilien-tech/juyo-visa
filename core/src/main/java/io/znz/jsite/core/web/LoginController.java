@@ -4,6 +4,8 @@ import io.znz.jsite.base.BaseController;
 import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.entity.NewCustomerEntity;
 import io.znz.jsite.core.entity.NewCustomerJpEntity;
+import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
+import io.znz.jsite.core.entity.userjob.UserJobMapEntity;
 import io.znz.jsite.core.enums.UserLoginEnum;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.util.StringUtils;
@@ -146,6 +148,17 @@ public class LoginController extends BaseController {
 				} else if (!newpass.equals(pwd)) {
 					model.addFlashAttribute("error", "密码有误,请重新输入！");
 				}
+
+				//********************************根据登录用户的id查询出用户就职表的数据********************************//
+				UserJobMapEntity userJob = dbDao.fetch(UserJobMapEntity.class, userId);
+				Long comJobId = null;
+				CompanyJobEntity comJob = null;
+				if (!Util.isEmpty(userJob)) {
+					comJobId = userJob.getComJobId();//得到公司职位id
+					dbDao.fetch(CompanyJobEntity.class, comJobId);
+				}
+				//********************************根据公司职位id查询出公司职位表的数据********************************//
+				request.getSession().setAttribute(Const.USER_COMPANY_KEY, comJob);
 
 				//根据当前登录用户id查询美国客户的单子
 				Sql sql = Sqls

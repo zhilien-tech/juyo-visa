@@ -42,5 +42,7 @@ public class Const {
 	 */
 
 	public static final String SESSION_NAME = "newusersession";
+	//当前登录公司session
+	public static final String USER_COMPANY_KEY = "newcompanysession";
 
 }
