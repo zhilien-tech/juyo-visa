@@ -301,19 +301,12 @@ $(function () {
     			error : function(xhr) {
     			}
     		});
-        	
-        	
-        	
-        	
-        	
         }
     });
 });
 
 //信息保存
 function orderJpsave(){
-		
-			 
 			 $.ajax({
 				 type: "POST",
 				 url: "/visa/neworderjp/orderJpsave",
