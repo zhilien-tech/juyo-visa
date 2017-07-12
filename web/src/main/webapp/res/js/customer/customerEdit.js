@@ -320,8 +320,12 @@ $("#saveCustomerData").on("click",function(){
 	if(validatable.validate()){
 		 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 	viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
-	 viewModel.set("customer.errorinfo",JSON.stringify(map));
-	 map.clear();
+	/*var error=JSON.stringify(map);
+	if(error.length>15){
+		
+		viewModel.set("customer.errorinfo",JSON.stringify(map));
+		map.clear();
+	}*/
 	 //console.log(JSON.stringify(viewModel.customer));
 	$.ajax({
 		 type: "POST",
@@ -431,10 +435,10 @@ $(function () {
         		
         		/*----小灯泡 回显----*/
             	var reason=viewModel.get("customer.errorinfo");
-            	var map=new Map();
-            	map=eval("("+reason+")");
-            	for (var key in map){
-            		var a = map[key];//获取到 错误信息 数据
+            	var map1=new Map();
+            	map1=eval("("+reason+")");
+            	for (var key in map1){
+            		var a = map1[key];//获取到 错误信息 数据
             		for(var i=0;i<a.length;i++){
             			var reasonnew=a[i].key;//获取到  错误信息 字段名称
             			

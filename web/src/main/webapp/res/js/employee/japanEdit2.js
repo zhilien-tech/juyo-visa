@@ -290,7 +290,6 @@ var viewModel = kendo.observable({
     			viewModel.set("proposers",proposersnew);
     	}else{
     		for(var i=0;i<proposersnew.length;i++){
-    			alert(e.data.xing+e.data.name);
     			/*if(proposersnew[i].text+""==(e.data.xing+e.data.name)+""){
     				proposersnew.splice(i, 1);
     			}*/
@@ -616,7 +615,6 @@ function orderJpsave(){
 					 data: JSON.stringify(viewModel.customer),
 					 success: function (result) {
 						 console.log(result.code);
-						 alert(result);
 						 if(result.code=="SUCCESS"){
 							 if(indexnew!=null){
 									
@@ -892,7 +890,6 @@ $(function () {
    	
    	
    	function togetherlinkman(){
-   		alert($(this).is(':checked'));
    		if(true){
    			
    			var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");

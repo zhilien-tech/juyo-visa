@@ -169,8 +169,12 @@ var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
 $("#saveCustomerData").on("click",function(){
 	if(validatable.validate()){
 		console.log(JSON.stringify(viewModel.customer));
-		 viewModel.set("customer.errorinfo",JSON.stringify(map));
-		 map.clear();
+		/*var error=JSON.stringify(map);
+		if(error.length>15){
+			
+			viewModel.set("customer.errorinfo",JSON.stringify(map));
+			map.clear();
+		}*/
 		 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 		$.ajax({
 			 type: "POST",
@@ -237,6 +241,35 @@ $(function () {
     if (oid) {
         $.getJSON("/visa/newcustomerjp/showDetail?customerid=" + oid, function (resp) {
         	viewModel.set("customer", $.extend(true, dafaults, resp));
+        	
+        	var reason=viewModel.get("customer.errorinfo");
+        	var map=new Map();
+        	map=eval("("+reason+")");
+        	for (var key in map){
+        		var a = map[key];//获取到 错误信息 数据
+        		for(var i=0;i<a.length;i++){
+        			var reasonnew=a[i].key;//获取到  错误信息 字段名称
+        			
+        			$('label').each(function(){
+        				var labelText=$(this).text();//获取 页面上所有的字段 名称
+        				labelText = labelText.split(":");
+        				labelText.pop();
+        				labelText = labelText.join(":");//截取 :之前的信息
+        				for(var i=0;i<reasonnew.length;i++){
+        					///console.log("labelText的值：==="+labelText);
+        					///console.log("reasonnew[i]的值：==="+reasonnew);
+        					if(labelText==reasonnew){
+        						///console.log("labelText的值：==="+labelText);
+            					///console.log("reasonnew[i]的值：==="+reasonnew);
+        						$(this).next().find('input').css('border-color','#f17474');///input
+        						$(this).next().find('.k-state-default').css('border-color','#f17474');//data(span)
+        						$(this).next().find('.k-dropdown').css('border-color','#f17474');//select(span)
+        						$(this).next().find('.input-group-addon').addClass('yellow');//小灯泡
+        					}
+        				}
+        			});
+        		}
+        	}
         });
     }
 });

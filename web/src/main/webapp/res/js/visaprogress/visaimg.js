@@ -39,9 +39,9 @@ $(function(){
     country = JSON.parse(unescape($.queryString("country")));
     countrystatus=$.queryString("countrystatus");
     if(countrystatus != "" && countrystatus != null && countrystatus == 1){//1表示进入日本的签证状态
-    	$('#writeResource').attr('href','/personal/passportInfo/passportJPInfoList.html?typeId=1'); 
+    	$('#writeResource').attr('href','/personal/passportInfo/passportJPInfoList.html?typeId=1&country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus); 
     }else{
-    	$('#writeResource').attr('href','/personal/passportInfo/passportInfoList.html?typeId=1'); 
+    	$('#writeResource').attr('href','/personal/passportInfo/passportInfoList.html?typeId=1&country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus); 
     }
     //alert(unescape($.queryString("country")));
     if(country!=null&&country!=''){
@@ -98,16 +98,17 @@ $(function(){
 function reasion(){
 	var reason=country.errorinfo;
 	var map=new Map();
-	
+	alert(111);
 	map=eval("("+reason+")");
 	//alert(JSON.stringify(map));
-	///console.log(JSON.stringify(map));
+
+console.log(JSON.stringify(map));
 	var reasonnew="";
 	for (var key in map) {  
 		var a = map[key];//获取到 错误信息 数据
 		//alert(JSON.stringify(a));
 		for(var i=0;i<a.length;i++){
-			//alert(a[i].key);
+//			alert(a[i].key);
 			reasonnew+=a[i].key+",";//获取到  错误信息 字段名称
 			
 			
@@ -139,7 +140,7 @@ function reasion(){
 							window.location.href='/personal/passportInfo/passportInfoList.html?firstPart='
 								  +escape(JSON.stringify(firstPart))+"&secondPart="
 								  +escape(JSON.stringify(secondPart))+"&thirdPart="
-								  +escape(JSON.stringify(thirdPart))+"&typeId=1";
+								  +escape(JSON.stringify(thirdPart))+"&typeId=1&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
 							
 						
 						///console.log(JSON.stringify(firstPart));
@@ -148,14 +149,14 @@ function reasion(){
 							window.location.href='/personal/basicInfo/basicInfoList.html?firstPart='
 								  +escape(JSON.stringify(firstPart))+"&secondPart="
 								  +escape(JSON.stringify(secondPart))+"&thirdPart="
-								  +escape(JSON.stringify(thirdPart))+"&typeId=1";
+								  +escape(JSON.stringify(thirdPart))+"&typeId=1&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
 	
 					}else if(thirdPart.length>0){
 
 							window.location.href='/personal/visaInfo/visaInfoList.html?firstPart='
 												  +escape(JSON.stringify(firstPart))+"&secondPart="
 												  +escape(JSON.stringify(secondPart))+"&thirdPart="
-												  +escape(JSON.stringify(thirdPart))+"&typeId=1";3
+												  +escape(JSON.stringify(thirdPart))+"&typeId=1&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
 					}
 				}
 			
@@ -185,20 +186,20 @@ function reasion(){
 					
 					if(firstPartJP.length>0){
 						///console.log("_______"+firstPartJP);
-						window.location.href='/personal/passportInfo/passportInfoList.html?firstPart='
-											  +escape(JSON.stringify(firstPartJP))+"&secondPart="
-											  +escape(JSON.stringify(secondPartJP))+"&thirdPart="
-											  +escape(JSON.stringify(thirdPartJP))+"&typeId=1";
+						window.location.href='/personal/passportInfo/passportJPInfoList.html?firstPartJP='
+											  +escape(JSON.stringify(firstPartJP))+"&secondPartJP="
+											  +escape(JSON.stringify(secondPartJP))+"&thirdPartJP="
+											  +escape(JSON.stringify(thirdPartJP))+"&typeId=1&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
 					}else if(secondPartJP.length>0){
-						window.location.href='/personal/basicInfo/basicJPInfoList.html?firstPart='
-											  +escape(JSON.stringify(firstPartJP))+"&secondPart="
-											  +escape(JSON.stringify(secondPartJP))+"&thirdPart="
-											  +escape(JSON.stringify(thirdPartJP))+"&typeId=1";
+						window.location.href='/personal/basicInfo/basicJPInfoList.html?firstPartJP='
+											  +escape(JSON.stringify(firstPartJP))+"&secondPartJP="
+											  +escape(JSON.stringify(secondPartJP))+"&thirdPartJP="
+											  +escape(JSON.stringify(thirdPartJP))+"&typeId=1&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
 					}else if(thirdPartJP.length>0){
-						window.location.href='/personal/visaInfo/JPvisaInfoList.html?firstPart='
-							                  +escape(JSON.stringify(firstPartJP))+"&secondPart="
-							                  +escape(JSON.stringify(secondPartJP))+"&thirdPart="
-							                  +escape(JSON.stringify(thirdPartJP))+"&typeId=1";
+						window.location.href='/personal/visaInfo/JPvisaInfoList.html?firstPartJP='
+							                  +escape(JSON.stringify(firstPartJP))+"&secondPartJP="
+							                  +escape(JSON.stringify(secondPartJP))+"&thirdPartJP="
+							                  +escape(JSON.stringify(thirdPartJP))+"&typeId=1&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
 					}
 				}
 		
@@ -208,7 +209,7 @@ function reasion(){
 		
 	
 	}
-	reasonnew+="有问题！请修改！";
+/*	reasonnew+="有问题！请修改！";
 	 $.layer.prompt({
          formType: 2,
          value: reasonnew,
@@ -216,7 +217,7 @@ function reasion(){
      }, function (value, index, elem) {
 //         
     	 $.layer.closeAll();
-     });
+     });*/
 }
 
 

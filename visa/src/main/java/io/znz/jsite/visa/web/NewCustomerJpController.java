@@ -156,6 +156,7 @@ public class NewCustomerJpController {
 		}
 
 		if ("agree".equals(flag)) {
+			dbDao.update(NewCustomerJpEntity.class, Chain.make("errorinfo", ""), Cnd.where("id", "=", customerid));
 			dbDao.update(NewCustomerJpEntity.class, Chain.make("status", OrderVisaApproStatusEnum.agree.intKey()),
 					Cnd.where("id", "=", newCustomer.getId()));
 
