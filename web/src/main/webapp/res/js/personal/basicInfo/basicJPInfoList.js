@@ -278,11 +278,17 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-        return viewModel.get("customer.passportlose");
+    	var oldPassportEnable = viewModel.get("customer.passportlose");
+        var state = oldPassportEnable ? oldPassportEnable.length > 0 : false;
+        return state;
+        //return viewModel.get("customer.passportlose");
     },
     // 曾用名
     oldNameEnable: function () {
-        return viewModel.get("customer.oldname");
+    	var oldNameEnable = viewModel.get("customer.oldname");
+        var state = oldNameEnable ? oldNameEnable.length > 0 : false;
+        return state;
+        ///return viewModel.get("customer.oldname");
     },
     // 其他国家公民
     otherCountryEnable: function () {
@@ -292,11 +298,17 @@ var viewModel = kendo.observable({
     },
     //美国纳税人认证码
     usaAuthenticatorCode:function(){
-    	return viewModel.get("customer.authenticatorcode");
+    	var usaAuthenticatorCode = viewModel.get("customer.authenticatorcode");
+        var state = usaAuthenticatorCode ? usaAuthenticatorCode.length > 0 : false;
+        return state;
+    	///return viewModel.get("customer.authenticatorcode");
     },
     //通信地址与家庭地址是否一致
     usaCommunicaHomeAddress:function(){
-    	return viewModel.get("customer.communicahomeaddress");
+    	var usaCommunicaHomeAddress = viewModel.get("customer.communicahomeaddress");
+        var state = usaCommunicaHomeAddress ? usaCommunicaHomeAddress.length > 0 : false;
+        return state;
+    	///return viewModel.get("customer.communicahomeaddress");
     }
 });
 kendo.bind($(document.body), viewModel);//数据绑定结束

@@ -145,9 +145,9 @@ var viewModel = kendo.observable({
     },
     //参过军
     joinArmy: function () {
-        var state = viewModel.get("customer.army");
-    	/*var schools = viewModel.get("customer.army");
-        var state = schools ? schools.length > 0 : false;*/
+        ///var state = viewModel.get("customer.army");
+    	var joinArmy = viewModel.get("customer.army");
+        var state = joinArmy ? joinArmy.length > 0 : false;
         return state;
     },
     //工作信息详情
@@ -179,12 +179,17 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-    	//alert(111);
-       return viewModel.get("customer.passportlose");
+    	var oldPassportEnable = viewModel.get("customer.passportlose");
+    	var state = oldPassportEnable ? oldPassportEnable.length > 0 : false;
+        return state;
+       ///return viewModel.get("customer.passportlose");
     },
     // 曾用名
     oldNameEnable: function () {
-        return viewModel.get("customer.oldname");
+    	var oldNameEnable = viewModel.get("customer.oldname");
+    	var state = oldNameEnable ? oldNameEnable.length > 0 : false;
+        return state;
+        ///return viewModel.get("customer.oldname");
     },
     // 其他国家公民
     otherCountryEnable: function () {
