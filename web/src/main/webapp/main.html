@@ -16,7 +16,8 @@
 			.colo{color:#fff;}
 			.content-tabs .roll-left {left: 50px;border-left: solid 1px #eeeeee;}
 			nav.page-tabs { margin-left: 90px;}
-			.skin-1 .navbar-minimalize {z-index: 2;float: none;margin: 6px;position: absolute;}
+			.skin-1 .navbar-minimalize {z-index: 2;float: none;margin: 6px;position: absolute;}	
+			.slimScrollDiv >* {overflow: inherit;}/*在左菜单隐藏只显示 图标时，滑动图标 显示二级菜单title*/
 		</style>
 	</head>
 <body class="fixed-sidebar full-height-layout gray-bg skin-1" style="overflow:hidden">
@@ -641,14 +642,11 @@
 <script src="/res/plugin/layer/layer.js?v=3.0.2"></script>
 <script src="/res/plugin/pace/pace.min.js?v=0.5.1"></script>
 
-
-
-
-
 <script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
 <script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
 <script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
-
+<script src="/res/plugin/jquery.base64.js"></script>
+<script src="/res/plugin/jquery.querystring.js"></script>
 <script src="/res/js/common.js"></script>
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
@@ -676,8 +674,9 @@
     	}
     	//显示登录人姓名
     	var username=$.queryString("username");
+    	  var j = JSON.parse($.base64.atob(decodeURI(username),true));
     	var logintype=$.queryString("logintype");
-    	$("#userId").text(decodeURIComponent(username));
+    	$("#userId").text(j);
     	if(logintype != "" && logintype != null && logintype == 1){//1表示进入日本的签证状态
         	$('.J_iframe').attr('src','/order/america.html'); 
         }else if(logintype == 4){
@@ -690,8 +689,6 @@
             $("#name").html(result.name);
             $("#role").html(result.role);
         });
-        
-        /*菜单栏 高亮设置*/
     });
 </script>
 </body>

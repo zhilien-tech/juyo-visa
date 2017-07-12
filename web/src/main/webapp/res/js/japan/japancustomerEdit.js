@@ -165,31 +165,39 @@ $("#has_pr").change(function () {
 
 
 //信息保存
-
+var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
 $("#saveCustomerData").on("click",function(){
-	console.log(JSON.stringify(viewModel.customer));
-	 viewModel.set("customer.errorinfo",JSON.stringify(map));
-	 map.clear();
-	$.ajax({
-		 type: "POST",
-		 url: "/visa/newcustomerjp/customerSave",
-		 contentType:"application/json",
-		 data: JSON.stringify(viewModel.customer)+"",
-		 success: function (result){
-			 console.log(result);
-			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			 parent.layer.close(index);
-			 window.parent.successCallback('1');
-		 },
-		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-			 console.log(XMLHttpRequest);
-			 console.log(textStatus);
-			 console.log(errorThrown);
-            layer.msg('保存失败!',{time:2000});
-         }
-	});
+	if(validatable.validate()){
+		console.log(JSON.stringify(viewModel.customer));
+		 viewModel.set("customer.errorinfo",JSON.stringify(map));
+		 map.clear();
+		 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+		$.ajax({
+			 type: "POST",
+			 url: "/visa/newcustomerjp/customerSave",
+			 contentType:"application/json",
+			 data: JSON.stringify(viewModel.customer)+"",
+			 success: function (result){
+				 if(indexnew!=null){
+						
+						layer.close(index);
+						}
+				 
+				 console.log(result);
+				 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				 parent.layer.close(index);
+				 window.parent.successCallback('1');
+			 },
+			 error: function(XMLHttpRequest, textStatus, errorThrown) {
+				 console.log(XMLHttpRequest);
+				 console.log(textStatus);
+				 console.log(errorThrown);
+	            layer.msg('保存失败!',{time:2000});
+	         }
+		});
+	}
+	
 });
-
 
 
 //通过或者拒绝的方法

@@ -233,20 +233,6 @@ $("#has_pr").change(function () {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*****************************************************
  * 配偶信息
  ****************************************************/
@@ -329,8 +315,10 @@ $("#join_army").change(function () {
 
 
 //信息保存
-
+var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
 $("#saveCustomerData").on("click",function(){
+	if(validatable.validate()){
+		 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 	viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
 	 viewModel.set("customer.errorinfo",JSON.stringify(map));
 	 map.clear();
@@ -341,18 +329,29 @@ $("#saveCustomerData").on("click",function(){
 		 contentType:"application/json",
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){
+			 if(indexnew!=null){
+					
+					layer.close(index);
+					}
+			 
 			 console.log(result);
 			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			 parent.layer.close(index);
 			 window.parent.successCallback('1');
 		 },
-		 error: function(XMLHttpRequest, textStatus, errorThrown) {
+		 error: function(XMLHttpRequest, textStatus, errorThrown){
+		 if(indexnew!=null){
+				
+				layer.close(index);
+				}
+		 
 			 console.log(XMLHttpRequest);
 			 console.log(textStatus);
 			 console.log(errorThrown);
             layer.msg('保存失败!',{time:2000});
          }
 	});
+	}
 });
 
 
@@ -411,11 +410,7 @@ $(function () {
         	viewModel.set("customer", $.extend(true, dafaults, resp));
         	//console.log(JSON.stringify(viewModel.customer.errorinfo));
         	
-        	
-        	
-        	   var reason=viewModel.get("customer.errorinfo");
-        	    //alert(reason);
-        	    //console.log("reason====="+reason);
+        	   /*var reason=viewModel.get("customer.errorinfo");
         		var map=new Map();
         		map=eval("("+reason+")");
         		var reasonnew="";
@@ -428,35 +423,45 @@ $(function () {
         					if(b%2!=0){
         						reasonnew=(a[k])[i];//label 名称
         						//console.log(reasonnew);
-        						
-        						$("label").each(function(i){ 
-        						    var str = $(this).text();
-        						    //console.log(str);
-        						    strVal = str.substring(-1,0);
-        						    //console.log(strVal);
-        						    
-        						}); 
         					}
         					b++;
         				}
         			} 
-        		}
-        	
-        	
+        		}*/
+        		
+        		/*----小灯泡 回显----*/
+            	var reason=viewModel.get("customer.errorinfo");
+            	var map=new Map();
+            	map=eval("("+reason+")");
+            	for (var key in map){
+            		var a = map[key];//获取到 错误信息 数据
+            		for(var i=0;i<a.length;i++){
+            			var reasonnew=a[i].key;//获取到  错误信息 字段名称
+            			
+            			$('label').each(function(){
+            				var labelText=$(this).text();//获取 页面上所有的字段 名称
+            				labelText = labelText.split(":");
+            				labelText.pop();
+            				labelText = labelText.join(":");//截取 :之前的信息
+            				for(var i=0;i<reasonnew.length;i++){
+            					///console.log("labelText的值：==="+labelText);
+            					///console.log("reasonnew[i]的值：==="+reasonnew);
+            					if(labelText==reasonnew){
+            						///console.log("labelText的值：==="+labelText);
+                					///console.log("reasonnew[i]的值：==="+reasonnew);
+            						$(this).next().find('input').css('border-color','#f17474');///input
+            						$(this).next().find('.k-state-default').css('border-color','#f17474');//data(span)
+            						$(this).next().find('.k-dropdown').css('border-color','#f17474');//select(span)
+            						$(this).next().find('.input-group-addon').addClass('yellow');//小灯泡
+            					}
+            				}
+            			});
+            		}
+            	}
+            	
+            	/*----end 小灯泡 回显----*/
         	
         });
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
- 
-	
-	
-	
 });

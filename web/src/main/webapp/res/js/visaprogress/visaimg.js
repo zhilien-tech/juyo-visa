@@ -98,6 +98,7 @@ $(function(){
 function reasion(){
 	var reason=country.errorinfo;
 	var map=new Map();
+	
 	map=eval("("+reason+")");
 	//alert(JSON.stringify(map));
 	///console.log(JSON.stringify(map));
@@ -112,12 +113,11 @@ function reasion(){
 			
 			//美国
 			if(countrystatus==0){
+				
 					//产生第一个页面的新数组      ___护照信息 页面
 					for(var m=0;m<firstAll.length;m++){
-						///console.log('------'+firstAll[m]);
 						if(a[i].key==firstAll[m]){
 							firstPart.push(firstAll[m]);
-							//console.log('_________护照信息__________'+firstPart);
 						}
 					}
 					
@@ -125,7 +125,6 @@ function reasion(){
 					for(var m=0;m<secondAll.length;m++){
 						if(a[i].key==secondAll[m]){
 							secondPart.push(secondAll[m]);
-							//console.log('_________基本信息__________'+firstPart);
 						}
 					}
 					
@@ -133,32 +132,30 @@ function reasion(){
 					for(var m=0;m<thirdAll.length;m++){
 						if(a[i].key==thirdAll[m]){
 							thirdPart.push(thirdAll[m]);
-							//console.log('_________签证信息__________'+firstPart);
 						}
 					}
 					
 					if(firstPart.length>0){
-						console.log("护照信息_________firstPart的值为："+firstPart)
-						window.location.href='/personal/basicInfo/basicInfoList.html?firstPart='
-											  +escape(JSON.stringify(firstPart))+"&secondPart="
-											  +escape(JSON.stringify(secondPart))+"&thirdPart="
-											  +escape(JSON.stringify(thirdPart));
-						console.log(JSON.stringify(firstPart));
-						return;
+							window.location.href='/personal/passportInfo/passportInfoList.html?firstPart='
+								  +escape(JSON.stringify(firstPart))+"&secondPart="
+								  +escape(JSON.stringify(secondPart))+"&thirdPart="
+								  +escape(JSON.stringify(thirdPart))+"&typeId=1";
+							
+						
+						///console.log(JSON.stringify(firstPart));
 					}else if(secondPart.length>0){
-						console.log("基本信息_________firstPart的值为："+firstPart)
-						window.location.href='/personal/passportInfo/passportInfoList.html?firstPart='
-											  +escape(JSON.stringify(firstPart))+"&secondPart="
-											  +escape(JSON.stringify(secondPart))+"&thirdPart="
-											  +escape(JSON.stringify(thirdPart));
-						return;
+						///console.log("_____________________"+secondPart);
+							window.location.href='/personal/basicInfo/basicInfoList.html?firstPart='
+								  +escape(JSON.stringify(firstPart))+"&secondPart="
+								  +escape(JSON.stringify(secondPart))+"&thirdPart="
+								  +escape(JSON.stringify(thirdPart))+"&typeId=1";
+	
 					}else if(thirdPart.length>0){
-						console.log("签证信息_________firstPart的值为："+firstPart)
-						window.location.href='/personal/visaInfo/visaInfoList.html?firstPart='
-											  +escape(JSON.stringify(firstPart))+"&secondPart="
-											  +escape(JSON.stringify(secondPart))+"&thirdPart="
-											  +escape(JSON.stringify(thirdPart));
-						return;
+
+							window.location.href='/personal/visaInfo/visaInfoList.html?firstPart='
+												  +escape(JSON.stringify(firstPart))+"&secondPart="
+												  +escape(JSON.stringify(secondPart))+"&thirdPart="
+												  +escape(JSON.stringify(thirdPart))+"&typeId=1";3
 					}
 				}
 			
@@ -187,20 +184,21 @@ function reasion(){
 					}
 					
 					if(firstPartJP.length>0){
-						window.location.href='/personal/basicInfo/basicJPInfoList.html?firstPart='
-											  +escape(JSON.stringify(firstPart))+"&secondPart="
-											  +escape(JSON.stringify(secondPart))+"&thirdPart="
-											  +escape(JSON.stringify(thirdPart));
+						///console.log("_______"+firstPartJP);
+						window.location.href='/personal/passportInfo/passportInfoList.html?firstPart='
+											  +escape(JSON.stringify(firstPartJP))+"&secondPart="
+											  +escape(JSON.stringify(secondPartJP))+"&thirdPart="
+											  +escape(JSON.stringify(thirdPartJP))+"&typeId=1";
 					}else if(secondPartJP.length>0){
-						window.location.href='/personal/passportInfo/passportJPInfoList.html?firstPart='
-											  +escape(JSON.stringify(firstPart))+"&secondPart="
-											  +escape(JSON.stringify(secondPart))+"&thirdPart="
-											  +escape(JSON.stringify(thirdPart));
+						window.location.href='/personal/basicInfo/basicJPInfoList.html?firstPart='
+											  +escape(JSON.stringify(firstPartJP))+"&secondPart="
+											  +escape(JSON.stringify(secondPartJP))+"&thirdPart="
+											  +escape(JSON.stringify(thirdPartJP))+"&typeId=1";
 					}else if(thirdPartJP.length>0){
 						window.location.href='/personal/visaInfo/JPvisaInfoList.html?firstPart='
-							                  +escape(JSON.stringify(firstPart))+"&secondPart="
-							                  +escape(JSON.stringify(secondPart))+"&thirdPart="
-							                  +escape(JSON.stringify(thirdPart));
+							                  +escape(JSON.stringify(firstPartJP))+"&secondPart="
+							                  +escape(JSON.stringify(secondPartJP))+"&thirdPart="
+							                  +escape(JSON.stringify(thirdPartJP))+"&typeId=1";
 					}
 				}
 		

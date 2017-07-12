@@ -176,7 +176,7 @@
                                         <label for="usa_arrival_date">人数:<span style="color: red">*</span></label>
                                         <div class='input-group'>
                                             <input id="usa_arrival_date" style="width: 100%;" class="k-textbox"
-                                                   name="headcount" data-bind="value:customer.headnum"/>
+                                                   name="headcount" data-bind="value:customer.headnum" />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -1033,13 +1033,13 @@
             <div class="col-xs-3">
                 <div class="form-group">
                     <label>姓:<span style="color: red">*</span></label>
-                    <input type="text" class="k-textbox fill" data-bind="value:xing"/>
+                    <input type="text" class="k-textbox fill" data-bind="value:xing,events: { blur: updateData1 }" />
                 </div>
             </div>
             <div class="col-xs-3">
                 <div class="form-group">
                     <label>名:<span style="color: red">*</span></label>
-                    <input type="text" class="k-textbox fill" data-bind="value:name"/>
+                    <input type="text" class="k-textbox fill" data-bind="value:name,events: { blur: updateData }" />
                 </div>
             </div>
           
@@ -1059,7 +1059,7 @@
                 <div class="form-group">
                     <label>主申请人:</label>
                     <div class="onoffswitch">
-                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main_#:data.uid#" data-bind="checked:ismainproposer">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main_#:data.uid#" data-bind="checked:ismainproposer,click:changeismainproposer">
                         <label class="onoffswitch-label" for="main_#:data.uid#">
                             <span class="onoffswitch-inner"></span>
                             <span class="onoffswitch-switch"></span>
@@ -1077,8 +1077,8 @@
                            data-suggest="true"
                            data-auto-bind="true"
                             data-value-primitive="true"
-                            data-value-field="id"
-                            data-text-field="fullname"
+                            data-value-field="value"
+                            data-text-field="text"
                             data-bind="value:relationproposer,source:proposers"/>
                 </div>
             </div>

@@ -13,8 +13,8 @@
     <link rel="stylesheet" href="/res/css/colors.min.css"/>
     <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
     <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
-</head>
-<body>
+</head >
+<body id="aaaa">
 <div>
     <div class="container-fluid" style="padding-bottom: 15px;">
         <div class="row">
@@ -257,7 +257,7 @@
                                         <label for="mobile">手机号码:<span style="color: red">*</span></label>
                                         <div class='input-group'>
                                             <input id="mobile" data-bind="value:customer.phone" class="k-textbox"
-                                                   style="width: 100%;"/>
+                                                   style="width: 100%;" required validationMessage="手机号码不能为空" name="phone"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -277,7 +277,7 @@
                                         <label for="email">电子邮箱:<span style="color: red">*</span></label>
                                         <div class='input-group'>
                                             <input id="email" data-bind="value:customer.email" class="k-textbox"
-                                                   style="width: 100%;"/>
+                                                   style="width: 100%;" required validationMessage="电子邮箱不能为空" name="email"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>

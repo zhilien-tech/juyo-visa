@@ -85,8 +85,8 @@ var countries = new kendo.data.DataSource({
 		},
 		payCompany:{
 			
-		}
-		
+		},
+		customerresource:{}
     },
     keys = {
 		"customer.peerList":{
@@ -168,6 +168,24 @@ $("#has_other_travelers").change(function () {
     }
 });
 
+
+
+function comsource(){
+	var flag=$("#customerSource").val();
+	if(flag==3){//直客 
+		$("#select").hide();
+		$("#selectno").show();
+		$('.companyFullName').addClass('hide');//隐藏 默认显示的 其他状态下的 公司全称
+		$('.ZKcompanyFullName').removeClass('hide');//显示   默认显示的  直客  公司全称
+	}else{//其他
+		$("#select").show();
+		$("#selectno").hide();
+		$('.companyFullName').removeClass('hide');//显示 默认显示的 其他状态下的 公司全称
+		$('.ZKcompanyFullName').addClass('hide');//隐藏   默认显示的  直客  公司全称
+	}
+}
+
+
 $(function () {
     $("#cus_phone").kendoMultiSelect({
    		placeholder:"请选择手机号",
@@ -202,7 +220,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -255,7 +273,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -308,7 +326,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -362,7 +380,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -381,9 +399,9 @@ $(function () {
 });
 
 //信息保存
-var validator = $("#orderForm").kendoValidator().data("kendoValidator");
+//var validator = $("#orderForm").kendoValidator().data("kendoValidator");
 function ordersave(){
-			 
+	 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 			 $.ajax({
 				 type: "POST",
 				 url: "/visa/order/orderSave",
@@ -391,6 +409,11 @@ function ordersave(){
 				 dataType: "json",
 				 data: JSON.stringify(viewModel.customer),
 				 success: function (result) {
+					 if(indexnew!=null){
+							
+							layer.close(index);
+							}
+					 
 					 console.log(result.code);
 					 if(result.code=="SUCCESS"){
 						 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
@@ -421,8 +444,25 @@ $(function () {
 			var color = $("#cus_linkman").data("kendoMultiSelect");
 			color.value(resp.customermanage.id);
         });
+        comsource();
     }
+    
+    comsource();
 });
 
-
+	
+	function comsource(){
+		var flag=$("#customerSource").val();
+		if(flag==3){//直客 
+			$("#select").hide();
+			$("#selectno").show();
+			$('.companyFullName').addClass('hide');//隐藏 默认显示的 其他状态下的 公司全称
+			$('.ZKcompanyFullName').removeClass('hide');//显示   默认显示的  直客  公司全称
+		}else{//其他
+			$("#select").show();
+			$("#selectno").hide();
+			$('.companyFullName').removeClass('hide');//显示 默认显示的 其他状态下的 公司全称
+			$('.ZKcompanyFullName').addClass('hide');//隐藏   默认显示的  直客  公司全称
+		}
+	}
 

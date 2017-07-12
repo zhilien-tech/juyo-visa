@@ -1,3 +1,12 @@
+/**
+ * 
+ * 
+ * 日本 二级 编辑页面 js
+ * 
+ * 
+ */
+
+
 
 //客户来源
 var customersourceEnum=[
@@ -6,6 +15,9 @@ var customersourceEnum=[
     {text:"直客",value:3},
     {text:"线下",value:4}
   ];
+var proposersnew=[
+                       
+                        ];
 var proposers=new kendo.data.DataSource({
     serverFiltering: true,
     transport: {
@@ -132,7 +144,7 @@ flights = new kendo.data.DataSource({
 var viewModel = kendo.observable({
 	 customersourceEnum:customersourceEnum,
 	 startcitynew:startcity,
-	 proposers:proposers,
+	 proposers:proposersnew,
     flights: flights,
     hotels: hotels,
     scenic: scenic,
@@ -260,7 +272,81 @@ var viewModel = kendo.observable({
    		}
     	  
     	  
-    }
+    },
+    changeismainproposer:function(e){
+    	console.log(e.data.id);
+    	console.log(e.data);
+    	console.log(e.data.fullname);
+    	var person=new Object();
+    	person.text=e.data.xing+e.data.name;
+    	person.value=e.data.id;
+    	if(!e.data.ismainproposer){
+	    		for(var i=0;i<proposersnew.length;i++){
+					if(proposersnew[i].value+""==(e.data.id)+""){
+						proposersnew.splice(i, 1);
+					}
+				}
+    			proposersnew.push(person);
+    			viewModel.set("proposers",proposersnew);
+    	}else{
+    		for(var i=0;i<proposersnew.length;i++){
+    			alert(e.data.xing+e.data.name);
+    			/*if(proposersnew[i].text+""==(e.data.xing+e.data.name)+""){
+    				proposersnew.splice(i, 1);
+    			}*/
+    			if(proposersnew[i].value+""==(e.data.id)+""){
+					proposersnew.splice(i, 1);
+				}
+    		}
+    		viewModel.set("proposers",proposersnew);
+    	}
+    },
+    updateData:function(e){
+    	
+	    	var person=new Object();
+	    	person.text=(e.data.xing+''+e.data.name);
+	    	person.value=e.data.id;
+//	    	alert(e.data.ismainproposer);
+	    	if(e.data.ismainproposer){
+	    		for(var i=0;i<proposersnew.length;i++){
+					if(proposersnew[i].value+""==(e.data.id)+""){
+						proposersnew.splice(i, 1);
+					}
+				}
+				proposersnew.push(person);
+				viewModel.set("proposers",proposersnew);
+			}else{
+				for(var i=0;i<proposersnew.length;i++){
+					if(proposersnew[i].value+""==(e.data.id)+""){
+						proposersnew.splice(i, 1);
+					}
+				}
+				viewModel.set("proposers",proposersnew);
+			}
+    },
+    updateData1:function(e){
+    	
+    	var person=new Object();
+    	person.text=(e.data.xing+''+e.data.name);
+    	person.value=e.data.id;
+//    	alert(e.data.ismainproposer);
+    	if(e.data.ismainproposer){
+    		for(var i=0;i<proposersnew.length;i++){
+				if(proposersnew[i].value+""==(e.data.id)+""){
+					proposersnew.splice(i, 1);
+				}
+			}
+			proposersnew.push(person);
+			viewModel.set("proposers",proposersnew);
+		}else{
+			for(var i=0;i<proposersnew.length;i++){
+				if(proposersnew[i].value+""==(e.data.id)+""){
+					proposersnew.splice(i, 1);
+				}
+			}
+			viewModel.set("proposers",proposersnew);
+		}
+}
 });
 kendo.bind($(document.body), viewModel);
 
@@ -321,7 +407,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				/*viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -389,7 +475,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				/*viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -443,7 +529,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				/*viewModel.set("customer.customermanage.customerSource",data.customerSource);*/
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				console.log("~~~~~~~~~~~"+viewModel.set("customer.customermanage.id",data.id));
     				//电话
@@ -498,8 +584,8 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				/*viewModel.set("customer.customermanage.customerSource",data.customerSource);
-    				*/viewModel.set("customer.customermanage.id",data.id);
+    				viewModel.set("customer.customerSource",data.customerSource);
+    				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
     				var color = $("#cus_phone").data("kendoMultiSelect");
@@ -515,29 +601,38 @@ $(function () {
         }
     });
 });
-
+//var validatable = $("#japancustomer").kendoValidator().data("kendoValidator");
 //信息保存
 function orderJpsave(){
-		
-			 console.log(JSON.stringify(viewModel.customer));
-
-			 $.ajax({
-				 type: "POST",
-				 url: "/visa/neworderjp/orderJpsave",
-				 contentType: "application/json",
-				 dataType: "json",
-				 data: JSON.stringify(viewModel.customer),
-				 success: function (result) {
-					 console.log(result.code);
-					 if(result.code=="SUCCESS"){
-						 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-						 //$.layer.closeAll();
-						 parent.layer.close(index);
-						 window.parent.successCallback('1');
-						 
+			//if(validatable.validate()){
+				 console.log(JSON.stringify(viewModel.customer));
+				 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+					
+				 $.ajax({
+					 type: "POST",
+					 url: "/visa/neworderjp/orderJpsave",
+					 contentType: "application/json",
+					 dataType: "json",
+					 data: JSON.stringify(viewModel.customer),
+					 success: function (result) {
+						 console.log(result.code);
+						 alert(result);
+						 if(result.code=="SUCCESS"){
+							 if(indexnew!=null){
+									
+									layer.close(index);
+									}
+							 
+							 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+							 //$.layer.closeAll();
+							 parent.layer.close(index);
+							 window.parent.successCallback('1');
+							 
+						 }
 					 }
-				 }
-			 });
+				 });
+		//	}
+			
 	 
 }
 
@@ -548,6 +643,37 @@ $(function () {
         $.getJSON("/visa/neworderjp/showDetail?orderid=" + oid, function (resp) {
         	//console.log(JSON.stringify(resp));
         	viewModel.set("customer", $.extend(true, defaults, resp));
+        	/*----小灯泡 回显----*/
+        	var reason=viewModel.get("customer.errorinfo");
+        	var map=new Map();
+        	map=eval("("+reason+")");
+        	console.log("map的值为："+map);
+        	for (var key in map){
+        		var a = map[key];//获取到 错误信息 数据
+        		for(var i=0;i<a.length;i++){
+        			var reasonnew=a[i].key+",";//获取到  错误信息 字段名称
+        			console.log("reasonnew的值为："+reasonnew);
+        		}
+        	}
+        	/*----end 小灯泡 回显----*/
+        	console.log();
+        	
+        	var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
+        	for(var i=0;i<proposerInfoJpList.length;i++){
+        		var ismain=proposerInfoJpList[i].ismainproposer;
+        		if(ismain){
+        			var person=new Object();
+        	    	person.text=proposerInfoJpList[i].fullname;
+        	    	person.value=proposerInfoJpList[i].id;
+        	    	
+        	    	
+        	    	proposersnew.push(person);
+//        			alert(JSON.stringify(proposersnew));
+        			viewModel.set("proposers",proposersnew);
+        		}
+        	}
+        	
+        	
         	var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
         	if(proposerInfoJpList.length>0){
         		
@@ -799,3 +925,7 @@ $(function () {
    		
    		
    	}
+   	
+function updateDatasource(){
+	
+}
