@@ -97,8 +97,11 @@ public class PassportInfoController extends BaseController {
 			customer.setId(cusdto.getId());
 			customer.setCountrynum(cusdto.getCountrynum());//国家码
 			customer.setChinesefullname(cusdto.getChinesefullname());//姓名
-			customer.setPassport(cusdto.getPassport());//护照号
+			customer.setChinesexing(cusdto.getChinesexing());//中文姓
 			customer.setChinesexingen(cusdto.getChinesexingen());//中文姓拼音
+			customer.setChinesename(cusdto.getChinesename());//中文名
+			customer.setChinesenameen(cusdto.getChinesenameen());//中文名拼音
+			customer.setPassport(cusdto.getPassport());//护照号
 			customer.setGender(cusdto.getGender());//性别
 			customer.setBirthcountry(cusdto.getDocountry());//国籍
 			customer.setBirthprovince(cusdto.getBirthprovince());//出生地点（省份）
@@ -125,7 +128,10 @@ public class PassportInfoController extends BaseController {
 			cus.setCountrynum(customer.getCountrynum());//国家码
 			cus.setChinesefullname(customer.getChinesefullname());//姓名
 			cus.setPassport(customer.getPassport());//护照号
+			cus.setChinesexing(customer.getChinesexing());//中文姓
 			cus.setChinesexingen(customer.getChinesexingen());//中文姓拼音
+			cus.setChinesename(customer.getChinesename());//中文名
+			cus.setChinesenameen(customer.getChinesenameen());//中文名拼音
 			cus.setGender(customer.getGender());//性别
 			cus.setDocountry(customer.getBirthcountry());//国籍
 			cus.setBirthprovince(customer.getBirthprovince());//出生地点（省份）
