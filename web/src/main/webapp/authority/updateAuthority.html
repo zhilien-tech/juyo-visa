@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>公司管理编辑</title>
+    <link rel="stylesheet" href="/res/plugin/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.common.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.office365.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/res/css/colors.min.css"/>
+    <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
+    <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/><!--修改的样式-->
+    <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
+    <link rel="stylesheet" href="/res/common/ztree/css/zTreeStyle/zTreeStyle.css"/><!--修改的样式-->
+    <style type="text/css">
+    .ztree{border:solid 1px red;}
+    </style>
+</head>
+<body>
+<div>
+    <div class="container-fluid" style="padding-top: 15px;">
+        <div class="row">
+        	<form id="addForm" method="post">
+	            <div class="col-xs-12 padding-0">
+	                <ul id="panelbar">
+	                    <li>
+	                        <div class="container-fluid">
+	                            <div class="row">
+	                                <div class="col-xs-12">
+	                                    <div class="departmentName form-group">
+	                                        <ul class="addDepartment">
+						                 	<input id="jobJson" name="jobJson" type="hidden" value=""/>
+						                 	<input id="deptId" name="id" type="hidden" value=""/>
+						                   <li><label class=" text-right">部门名称：</label></li>
+						                   <li class="li-input">
+						                   		<div>
+						                   			<input id="deptNameId" name="deptName" style="float:left;width:655px;"  type="text" class="form-control input-sm inputText" placeholder="请输入部门名称">
+							                    	<span class="prompt">*</span>
+						                   		</div>
+						                   </li>
+						                   <li><button type="button" class="btn btn-primary btn-sm btnPadding" id="addJob" style="float:left;margin-left:10px;top:20px;">添加职位</button></li>
+						                 </ul>
+	                                    </div>
+	                                    <div class="jobName cf"></div><!--职位权限 设置-->
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </li>
+	                </ul>
+	            </div>
+	         </form>
+        </div>
+        <div class="row" data-bind="visible:showToolBar">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <button id="saveDeptJob" class="k-primary k-button col-xs-12">
+                        <i class="fa fa-save"></i> 保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!--引入 js 库文件-->
+<script src="/res/plugin/template.js"></script>
+<script src="/res/plugin/jquery.min.js"></script>
+<script src="/res/plugin/layer/layer.js"></script>
+<script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
+<script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
+<script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
+<script src="/res/js/common.js"></script>
+<script src="/res/plugin/webtoolkit.md5.js"></script>
+<script src="/res/js/idcard.js"></script>
+<script src="/res/plugin/jquery.base64.js"></script>
+<!-- <script src="/res/js/wintone.js?v=4"></script> -->
+<script src="/res/js/projectpath/projectpath.js"></script>
+<script src="/res/js/authority/updateAuthority.js"></script>
+<script src="/res/common/ztree/jquery.ztree.core-3.5.js"></script>
+<script src="/res/common/ztree/jquery.ztree.excheck-3.5.js"></script>
+<script src="/res/common/ztree/jquery.ztree.exedit-3.5.js"></script>
+</html>

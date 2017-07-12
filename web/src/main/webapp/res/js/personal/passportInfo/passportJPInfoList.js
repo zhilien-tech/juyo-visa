@@ -75,8 +75,8 @@ $(function(){
 			labelText.pop();
 			labelText = labelText.join(":");//截取 :之前的信息
 			
-			for(var i=0;i<firstPart.length;i++){
-				if(labelText==firstPart[i]){
+			for(var i=0;i<firstPart;i++){
+				if(labelText==firstPart){
 					$(this).next().find('input').css('border-color','#f17474');
 					$(this).next().find('.k-state-default').css('border-color','#f17474');//select(span)
 					$(this).next().find('.input-group-addon').addClass('yellow');//小灯泡
