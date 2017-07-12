@@ -836,7 +836,7 @@ $(function () {
    	}
    	
    	
-   	function comsource(){
+   	/*function comsource(){
    		var flag=$("#customerSource").val();
    		if(flag==3){//直客 
    			$("#select").hide();
@@ -849,7 +849,7 @@ $(function () {
    			$('.companyFullName').removeClass('hide');//显示 默认显示的 其他状态下的 公司全称
    			$('.ZKcompanyFullName').addClass('hide');//隐藏   默认显示的  直客  公司全称
    		}
-   	}
+   	}*/
    	
  
    	function addporposer(){
