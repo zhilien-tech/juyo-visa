@@ -98,7 +98,6 @@ $(function(){
 function reasion(){
 	var reason=country.errorinfo;
 	var map=new Map();
-	alert(111);
 	map=eval("("+reason+")");
 	//alert(JSON.stringify(map));
 
