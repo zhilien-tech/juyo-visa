@@ -10,6 +10,11 @@ window.onload = function(){
      	viewModel.set("customer", $.extend(true, dafaults, resp));
      });
 }
+var firstPart ;
+var secondPart ;
+var thirdPart ;
+var country;
+var countrystatus;
 //初始化各个组件
 $(function(){
 	var aa = $.queryString("typeId");//得到签证进度在填写资料时跳转页面传来的参数
@@ -77,19 +82,21 @@ $(function(){
 		$(".input-group input").removeAttr("disabled"); //去掉所有input框的不可编辑属性
 		$(".input-group input").removeClass("k-state-disabled");//去掉不可编辑样式
 	}
-	
+	country = JSON.parse(unescape($.queryString("country")));
+    countrystatus=$.queryString("countrystatus");
 	/*-------------------------小灯泡 效果--------------------------*/
-	var firstPart = JSON.parse(unescape($.queryString("secondPart")));//获取 错误 信息
-	
+	firstPart = JSON.parse(unescape($.queryString("firstPart")));//获取 错误 信息
+	secondPart = JSON.parse(unescape($.queryString("secondPart")));//获取 错误 信息
+	thirdPart = JSON.parse(unescape($.queryString("thirdPart")));//获取 错误 信息
 	$('label').each(function(){
 			var labelText=$(this).text();//获取 页面上所有的字段 名称
 			labelText = labelText.split(":");
 			labelText.pop();
 			labelText = labelText.join(":");//截取 :之前的信息
 			
-			for(var i=0;i<firstPart.length;i++){
+			for(var i=0;i<secondPart.length;i++){
 				//console.log(labelText+"==="+firstPart[i]);
-				if(labelText==firstPart[i]){
+				if(labelText==secondPart[i]){
 					$(this).next().find('input').css('border-color','#f17474');
 					$(this).next().find('.k-state-default').css('border-color','#f17474');//select(span)
 					$(this).next().find('.input-group-addon').addClass('yellow');//小灯泡
@@ -363,7 +370,10 @@ $("#nextStepBtn").click(function(){
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){
 			layer.msg("操作成功",{time:2000});
-			window.location.href='/personal/visaInfo/visaInfoList.html?typeId=1';
+			window.location.href='/personal/visaInfo/visaInfoList.html?typeId=1&firstPart='
+				  +escape(JSON.stringify(firstPart))+"&secondPart="
+				  +escape(JSON.stringify(secondPart))+"&thirdPart="
+				  +escape(JSON.stringify(thirdPart))+"&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
              layer.msg('操作失败',{time:2000});

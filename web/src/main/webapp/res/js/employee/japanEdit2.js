@@ -290,7 +290,6 @@ var viewModel = kendo.observable({
     			viewModel.set("proposers",proposersnew);
     	}else{
     		for(var i=0;i<proposersnew.length;i++){
-    			alert(e.data.xing+e.data.name);
     			/*if(proposersnew[i].text+""==(e.data.xing+e.data.name)+""){
     				proposersnew.splice(i, 1);
     			}*/
@@ -616,7 +615,6 @@ function orderJpsave(){
 					 data: JSON.stringify(viewModel.customer),
 					 success: function (result) {
 						 console.log(result.code);
-						 alert(result);
 						 if(result.code=="SUCCESS"){
 							 if(indexnew!=null){
 									
@@ -836,7 +834,7 @@ $(function () {
    	}
    	
    	
-   	function comsource(){
+   	/*function comsource(){
    		var flag=$("#customerSource").val();
    		if(flag==3){//直客 
    			$("#select").hide();
@@ -849,7 +847,7 @@ $(function () {
    			$('.companyFullName').removeClass('hide');//显示 默认显示的 其他状态下的 公司全称
    			$('.ZKcompanyFullName').addClass('hide');//隐藏   默认显示的  直客  公司全称
    		}
-   	}
+   	}*/
    	
  
    	function addporposer(){
@@ -892,7 +890,6 @@ $(function () {
    	
    	
    	function togetherlinkman(){
-   		alert($(this).is(':checked'));
    		if(true){
    			
    			var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");

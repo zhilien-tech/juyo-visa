@@ -144,7 +144,9 @@ var viewModel = kendo.observable({
     payType: function (type) {
         return viewModel.get("customer.trip.paypersion") === type;
     },
-    
+    comsource:function(value){
+    	
+    },
 });
 kendo.bind($(document.body), viewModel);
 /*****************************************************
@@ -168,8 +170,7 @@ $("#has_other_travelers").change(function () {
     }
 });
 
-
-
+//客户来源
 function comsource(){
 	var flag=$("#customerSource").val();
 	if(flag==3){//直客 
@@ -185,9 +186,10 @@ function comsource(){
 	}
 }
 
-
 $(function () {
-    $("#cus_phone").kendoMultiSelect({
+	comsource();//页面加载时，初始化客户来源字段 
+	//手机--------------------------------------------------------------------------
+	$("#cus_phone").kendoMultiSelect({
    		placeholder:"请选择手机号",
         dataTextField: "telephone",
         dataValueField: "id",
@@ -234,13 +236,11 @@ $(function () {
     			error : function(xhr) {
     			}
     		});
-        	
         }
     });
-    
-});
-
-$(function () {
+	//end 手机--------------------------------------------------------------------------
+	
+	//邮箱--------------------------------------------------------------------------
 	$("#cus_email").kendoMultiSelect({
     	placeholder:"请选择邮箱",
         dataTextField: "email",
@@ -290,10 +290,10 @@ $(function () {
     		});
         }
     });
-});
-//联系人
-
-$(function () {
+	//end 邮箱--------------------------------------------------------------------------
+	
+	
+	//联系人--------------------------------------------------------------------------
 	$("#cus_linkman").kendoMultiSelect({
     	placeholder:"请选择联系人",
         dataTextField: "linkman",
@@ -342,12 +342,10 @@ $(function () {
     		});
         }
     });
-});
-
-
-//公司全称
-
-$(function () {
+	//end 联系人--------------------------------------------------------------------------
+	
+	
+	//公司全称--------------------------------------------------------------------------
 	$("#cus_fullComName").kendoMultiSelect({
     	placeholder:"请选择公司全称",
         dataTextField: "fullComName",
@@ -396,6 +394,7 @@ $(function () {
     		});
         }
     });
+	//end 公司全称--------------------------------------------------------------------------
 });
 
 //信息保存
@@ -443,26 +442,8 @@ $(function () {
 			color.value(resp.customermanage.id);
 			var color = $("#cus_linkman").data("kendoMultiSelect");
 			color.value(resp.customermanage.id);
+			var flag=viewModel.get("customer.customerSource");
+			comsource();//判断客户来源 状态 
         });
-        comsource();
     }
-    
-    comsource();
 });
-
-	
-	function comsource(){
-		var flag=$("#customerSource").val();
-		if(flag==3){//直客 
-			$("#select").hide();
-			$("#selectno").show();
-			$('.companyFullName').addClass('hide');//隐藏 默认显示的 其他状态下的 公司全称
-			$('.ZKcompanyFullName').removeClass('hide');//显示   默认显示的  直客  公司全称
-		}else{//其他
-			$("#select").show();
-			$("#selectno").hide();
-			$('.companyFullName').removeClass('hide');//显示 默认显示的 其他状态下的 公司全称
-			$('.ZKcompanyFullName').addClass('hide');//隐藏   默认显示的  直客  公司全称
-		}
-	}
-
