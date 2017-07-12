@@ -59,23 +59,18 @@ $(function () {
 				person.checked=jobfunctionlist[i].checked;
 				zNodes.push(person);
 			}
-			var a="";
-			console.log(jobnamelist.length);
+			
 			for (var i = 0; i < jobnamelist.length; i++) {
-				a+='<div class="job_container"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName" type="text" class="form-control input-sm inputText" value="'+jobnamelist[i].jobName+'"><input name="jobId" type="hidden" value="'+jobnamelist[i].jobId+'"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn">删除</button></li></ul>'
-				a+='<div class="ztree"><ul id="tree_'+treeIndex+'"></ul></div>'
-				a+='<input type="hidden" class="znodes" value="'+jobnamelist[i].znodes+'"/>'
-				a+='</div>';
+				$(".jobName").append('<div class="job_container"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName" type="text" class="form-control input-sm inputText" value="'+jobnamelist[i].jobName+'"><input name="jobId" type="hidden" value="'+jobnamelist[i].jobId+'"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn">删除</button></li></ul><div class="ztree"><ul id="tree_'+treeIndex+'"></ul></div><input type="hidden" class="znodes" value="'+jobnamelist[i].znodes+'"/></div>');
 				treeIndex++;
+				var ztree_container = $(".job_container:last").find("div.ztree").find("ul:first");
+		        var treeId = ztree_container.attr("id") ;
+		        var treeObj = $.fn.zTree.getZTreeObj(treeId);
+		        if(null == treeObj || undefined == treeObj){
+			      	//初始化ztree
+				    $.fn.zTree.init(ztree_container, setting, zNodes);
+		      	}
 			}
-			$(".jobName").append(a);
-			var ztree_container = $(".job_container:last").find("div.ztree").find("ul:first");
-	        var treeId = ztree_container.attr("id") ;
-	        var treeObj = $.fn.zTree.getZTreeObj(treeId);
-	        if(null == treeObj || undefined == treeObj){
-		      	//初始化ztree
-			    $.fn.zTree.init(ztree_container, setting, zNodes);
-	      	}
 		},
 		error : function(request) {
 			
