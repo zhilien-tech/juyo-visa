@@ -7,21 +7,28 @@ var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 //遍历得到的对象
 var zNodes =[
 	 {id:"0", pId:"0", name:"职位权限设置", open:true}
-	 /*<c:forEach var="p" items="${obj.list}">
-			{ id:"${p.id }", pId:"${p.parentId }", name:"${p.name }", open:true,checked:"${p.checked}"},
-	</c:forEach>*/
 ];
 
 var treeIndex = 0 ;
 //功能表的list
 var functionlist;
 $(function () {
+	//页面加载时得到对应的数据
+	var deptId = $.queryString("deptId");
+	var deptName = unescape($.queryString("deptName"));
+	var jobName = unescape($.queryString("jobName"));
+	var funName = unescape($.queryString("funName"));
+	var jobId = $.queryString("jobId");
+	//设置值
+	$("#deptId").val(deptId);
+	$("#deptNameId").val(deptName);
+	$("#jobName").val(jobName);
 	//页面加载时查询出本公司下所有的功能
 	$.ajax({
 		url : localhostPaht+'/visa/authority/queryComAllFunction',
 		success : function(data) {
 			data=JSON.parse(data);
-			functionlist=data.list;
+			functionlist=data.dept;
 			for(var i=0;i<functionlist.length;i++){
 				var person=new Object();
 				person.id=functionlist[i].id;

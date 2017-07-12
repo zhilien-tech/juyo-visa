@@ -45,4 +45,7 @@ public class Const {
 	//当前登录公司session
 	public static final String USER_COMPANY_KEY = "newcompanysession";
 
+	/**无效数据id*/
+	public static final int INVALID_DATA_ID = -1;
+
 }

@@ -1,7 +1,7 @@
 /*authority_list*/
 SELECT
 	c.comName,
-	c.createTime,
+	d.createTime,
 	d.id AS deptId,
 	d.deptName,
 	j.id AS jobId,

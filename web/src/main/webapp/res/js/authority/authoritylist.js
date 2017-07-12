@@ -31,7 +31,7 @@ function regCmd(command) {
                     		title: '编辑',
                     		maxmin: true, //开启最大化最小化按钮
                     		area: ['850px', '450px'],
-                    		content: '/company/updateCompany.html?comId=' + data.id+'&adminId='+data.adminid
+                    		content: '/authority/updateAuthority.html?deptId=' + data.deptid+'&deptName='+escape(data.deptname)+'&jobName='+escape(data.jobname)+'&funName='+escape(data.modulename)+'&jobId='+data.jobid
                     	});
                     }
                     break;
@@ -86,7 +86,7 @@ var grid = $("#grid").kendoGrid({
             read: {
                 type: "POST",
                 dataType: "json",
-                url: "/visa/company/companylist",
+                url: "/visa/authority/authoritylist",
                 contentType: 'application/json;charset=UTF-8',
             },
             parameterMap: function (options, type) {
@@ -126,7 +126,7 @@ var grid = $("#grid").kendoGrid({
         },
         {
         	title: ' 功能模块', 
-        	field: 'funname'
+        	field: 'modulename'
         },
         {
         	title: '职位名称',

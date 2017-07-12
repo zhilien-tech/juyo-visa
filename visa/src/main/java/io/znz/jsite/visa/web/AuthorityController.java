@@ -6,12 +6,11 @@
 
 package io.znz.jsite.visa.web;
 
+import io.znz.jsite.core.util.Const;
 import io.znz.jsite.visa.dto.DeptJobForm;
-import io.znz.jsite.visa.entity.company.CompanyEntity;
 import io.znz.jsite.visa.forms.authority.AuthoritySqlForm;
 import io.znz.jsite.visa.service.authority.AuthorityService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Dao;
@@ -45,10 +44,10 @@ public class AuthorityController {
 	/**
 	 * 列表信息展示
 	 */
-	@RequestMapping(value = "companylist")
+	@RequestMapping(value = "authoritylist")
 	@ResponseBody
-	public Object companylist(@RequestBody AuthoritySqlForm sqlForm, Pager pager) {
-		return authorityService.authoritylist(sqlForm, pager);
+	public Object authoritylist(@RequestBody AuthoritySqlForm sqlForm, Pager pager, final HttpSession session) {
+		return authorityService.authoritylist(sqlForm, pager, session);
 	}
 
 	/**
@@ -58,8 +57,8 @@ public class AuthorityController {
 	 */
 	@RequestMapping(value = "queryComAllFunction")
 	@ResponseBody
-	public Object queryComAllFunction(long jobId, HttpServletRequest request) {
-		return authorityService.queryComAllFunction(jobId, request);
+	public Object queryComAllFunction(final HttpSession session) {
+		return authorityService.queryComAllFunction(Const.INVALID_DATA_ID, session);
 	}
 
 	/**
@@ -73,32 +72,22 @@ public class AuthorityController {
 	}
 
 	/**
-	 * 回显公司数据
+	 * 回显权限数据
 	 * @param updateForm
 	 */
-	@RequestMapping(value = "updatecompany")
+	@RequestMapping(value = "updateAuthority")
 	@ResponseBody
-	public Object updatecompany(long comId) {
-		return authorityService.updatecompany(comId);
+	public Object updateAuthority(final Long deptId, final HttpSession session) {
+		return authorityService.loadJobJosn(deptId, session);
 	}
 
 	/**
-	 * 编辑保存公司信息
+	 * 编辑保存权限信息
 	 * @param updateForm
 	 */
-	@RequestMapping(value = "updateCompanySave", method = RequestMethod.POST)
+	@RequestMapping(value = "updateAuthoritySave", method = RequestMethod.POST)
 	@ResponseBody
-	public Object updateCompanySave(CompanyEntity updateForm) {
-		return authorityService.updateCompanySave(updateForm);
-	}
-
-	/**
-	 * 根据id删除单条数据
-	 * @param id
-	 */
-	@RequestMapping(value = "deleteCompany")
-	@ResponseBody
-	public Object deleteCompany(Integer comId) {
-		return authorityService.deleteCompany(comId);
+	public Object updateAuthoritySave(DeptJobForm updateForm, Long deptId, final HttpSession session) {
+		return authorityService.updateJobFunctions(updateForm, deptId, session);
 	}
 }

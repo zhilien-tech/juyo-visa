@@ -150,13 +150,12 @@ public class LoginController extends BaseController {
 				}
 
 				//********************************根据登录用户的id查询出用户就职表的数据********************************//
-				UserJobMapEntity userJob = dbDao.fetch(UserJobMapEntity.class, userId);
+				UserJobMapEntity userJob = dbDao.fetch(UserJobMapEntity.class, Cnd.where("empId", "=", userId));
 				Long comJobId = null;
-				CompanyJobEntity comJob = null;
 				if (!Util.isEmpty(userJob)) {
 					comJobId = userJob.getComJobId();//得到公司职位id
-					dbDao.fetch(CompanyJobEntity.class, comJobId);
 				}
+				CompanyJobEntity comJob = dbDao.fetch(CompanyJobEntity.class, Cnd.where("id", "=", comJobId));
 				//********************************根据公司职位id查询出公司职位表的数据********************************//
 				request.getSession().setAttribute(Const.USER_COMPANY_KEY, comJob);
 

@@ -7,27 +7,26 @@
 package io.znz.jsite.visa.service.authority;
 
 import io.znz.jsite.base.NutzBaseService;
-import io.znz.jsite.core.entity.EmployeeEntity;
+import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.visa.dto.DeptJobForm;
 import io.znz.jsite.visa.dto.JobDto;
+import io.znz.jsite.visa.dto.JobZnode;
+import io.znz.jsite.visa.dto.ZTreeNode;
 import io.znz.jsite.visa.entity.comfunjob.CompanyFunctionJobEntity;
 import io.znz.jsite.visa.entity.comfunmap.CompanyFunctionEntity;
-import io.znz.jsite.visa.entity.company.CompanyEntity;
-import io.znz.jsite.visa.entity.companyjob.CompanyJobEntity;
 import io.znz.jsite.visa.entity.department.DepartmentEntity;
 import io.znz.jsite.visa.entity.function.FunctionEntity;
 import io.znz.jsite.visa.entity.job.JobEntity;
-import io.znz.jsite.visa.enums.UserDeleteStatusEnum;
 import io.znz.jsite.visa.forms.authority.AuthoritySqlForm;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Chain;
@@ -39,6 +38,7 @@ import org.nutz.ioc.aop.Aop;
 import org.nutz.json.Json;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
@@ -56,11 +56,16 @@ import com.uxuexi.core.web.chain.support.JsonResult;
 @SuppressWarnings("rawtypes")
 @Service
 public class AuthorityService extends NutzBaseService {
+
 	/**
-	 * 公司列表展示
+	 * 权限列表展示
 	 * @param sqlForm
 	 */
-	public Object authoritylist(AuthoritySqlForm sqlForm, Pager pager) {
+	public Object authoritylist(AuthoritySqlForm sqlForm, Pager pager, final HttpSession session) {
+		//通过session获取公司的id
+		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		long comId = company.getComId();//得到公司的id
+		sqlForm.setComId(comId);
 		pager = new Pager();
 		pager.setPageNumber(sqlForm.getPageNumber());
 		pager.setPageSize(sqlForm.getPageSize());
@@ -71,8 +76,8 @@ public class AuthorityService extends NutzBaseService {
 	@Aop("txDb")
 	public Map<String, String> saveDeptJobData(DeptJobForm addForm, final HttpSession session) {
 		//通过session获取公司的id
-		CompanyEntity company = (CompanyEntity) session.getAttribute(Const.USER_COMPANY_KEY);
-		long comId = company.getId();//得到公司的id
+		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		long comId = company.getComId();//得到公司的id
 		String jobJson = addForm.getJobJson();
 
 		//1,先添加部门，拿到部门id
@@ -84,6 +89,7 @@ public class AuthorityService extends NutzBaseService {
 			newDept = new DepartmentEntity();
 			newDept.setComId(comId);
 			newDept.setDeptName(addForm.getDeptName());
+			newDept.setCreateTime(new Date());
 			newDept = dbDao.insert(newDept);
 		}
 		//获取到部门id
@@ -112,6 +118,7 @@ public class AuthorityService extends NutzBaseService {
 				newJob = new JobEntity();
 				newJob.setJobName(jobName);
 				newJob.setDeptId(deptId);
+				newJob.setCreateTime(new Date());
 				newJob = dbDao.insert(newJob);
 				jobId = newJob.getId();//得到职位id
 				//该公司添加新的职位
@@ -167,12 +174,14 @@ public class AuthorityService extends NutzBaseService {
 		}
 	}
 
-	public Object queryComAllFunction(long jobId, HttpServletRequest request) {
+	/**
+	 * 根据当前登录公司id查询出该公司的所有功能
+	 * @param jobId
+	 * @param session
+	 */
+	public Object queryComAllFunction(long jobId, final HttpSession session) {
 		Map<String, Object> obj = Maps.newHashMap();
-		//从session中取出当前登录公司信息
-		CompanyEntity company = (CompanyEntity) request.getSession().getAttribute(Const.USER_COMPANY_KEY);
-		long comId = company.getId();//得到当前登录公司id
-		List<FunctionEntity> allModule = getCompanyFunctions(request);
+		List<FunctionEntity> allModule = getCompanyFunctions(session);
 		DeptJobForm deptJobForm = new DeptJobForm();
 		if (jobId > 0) {
 			allModule = getJobFunctionInfos(jobId, allModule);
@@ -182,7 +191,7 @@ public class AuthorityService extends NutzBaseService {
 		}
 		obj.put("list", allModule);
 		obj.put("dept", deptJobForm);
-		return "redirect:/" + obj;
+		return obj;
 	}
 
 	private List<FunctionEntity> getJobFunctionInfos(long jobId, final List<FunctionEntity> allModule) {
@@ -212,10 +221,10 @@ public class AuthorityService extends NutzBaseService {
 	 * 查询当前登录公司拥有的所有功能
 	 * @param request
 	 */
-	public List<FunctionEntity> getCompanyFunctions(HttpServletRequest request) {
+	public List<FunctionEntity> getCompanyFunctions(final HttpSession session) {
 		//从session中获取当前登录公司数据
-		CompanyEntity company = (CompanyEntity) request.getSession().getAttribute(Const.USER_COMPANY_KEY);
-		long comId = company.getId();//得到公司的id
+		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		long comId = company.getComId();//得到公司的id
 		Sql comFunSql = Sqls.fetchEntity(sqlManager.get("authority_company_function"));
 		comFunSql.params().set("comId", comId);
 		List<FunctionEntity> allModule = DbSqlUtil.query(dbDao, FunctionEntity.class, comFunSql);
@@ -238,41 +247,115 @@ public class AuthorityService extends NutzBaseService {
 		return allModule;
 	}
 
-	/**
-	 * 添加公司操作
-	 * @param addForm
-	 */
-	public Object addcompany(CompanyEntity addForm, EmployeeEntity empForm) {
-		return JsonResult.success("添加成功");
-	}
+	//回显部门职位和职位功能
+	public Object loadJobJosn(final Long deptId, HttpSession session) {
+		Map<String, Object> map = Maps.newHashMap();
 
-	/**
-	 * 回显公司信息
-	 * @param comId
-	 */
-	public Object updatecompany(long comId) {
-		return dbDao.fetch(CompanyEntity.class, comId);
-	}
-
-	/**
-	 * 编辑保存公司信息
-	 * @param updateForm
-	 */
-	public Object updateCompanySave(CompanyEntity updateForm) {
-		return null;
-	}
-
-	/**
-	 * 根据用户id删除单条数据
-	 * @param userId
-	 */
-	@Aop("txDb")
-	public boolean deleteCompany(Integer comId) {
-		if (!Util.isEmpty(comId)) {
-			dbDao.update(CompanyEntity.class, Chain.make("deletestatus", UserDeleteStatusEnum.YES.intKey()),
-					Cnd.where("id", "=", comId));
-			return true;
+		//校验
+		int deptCnt = nutDao.count(DepartmentEntity.class, Cnd.where("id", "=", deptId));
+		if (deptCnt <= 0) {
+			return JsonResult.error("部门不存在!");
 		}
-		return false;
+
+		List<JobEntity> jobList = dbDao.query(JobEntity.class, Cnd.where("deptId", "=", deptId), null);
+		List<FunctionEntity> allModule = getCompanyFunctions(session);
+
+		List<JobZnode> JobZnodes = Lists.newArrayList();
+		for (JobEntity job : jobList) {
+			List<FunctionEntity> functions = getJobFunctionInfos(job.getId(), allModule);
+
+			JobZnode jn = new JobZnode();
+			jn.setJobName(job.getJobName());
+			jn.setJobId(job.getId());
+
+			List<ZTreeNode> znodes = Lists.transform(functions, new Function<FunctionEntity, ZTreeNode>() {
+				//将TFunctionEntity转换为ZTreeNode
+				@Override
+				public ZTreeNode apply(FunctionEntity f) {
+					ZTreeNode n = new ZTreeNode();
+					n.setId(f.getId());
+					n.setPId(f.getParentId());
+					n.setOpen(true);
+					n.setName(f.getFunName());
+					n.setChecked(f.getChecked());
+					return n;
+				}
+			});//end of tansform
+			String jsonNodes = Json.toJson(znodes);
+			jn.setZnodes(jsonNodes);
+			JobZnodes.add(jn);
+		}
+
+		DepartmentEntity dept = dbDao.fetch(DepartmentEntity.class, Cnd.where("id", "=", deptId));
+		map.put("dept", dept);
+		map.put("list", JobZnodes);
+		map.put("zNodes", allModule);
+		return map;
+	}
+
+	/**更新部门职位权限的数据信息*/
+	@Aop("txDb")
+	public Object updateJobFunctions(DeptJobForm updateForm, Long deptId, final HttpSession session) {
+		//校验
+		DepartmentEntity dept = dbDao.fetch(DepartmentEntity.class, Cnd.where("id", "=", deptId));
+		if (Util.isEmpty(dept)) {
+			return JsonResult.error("部门不存在!");
+		}
+		//修改部门名称
+		dbDao.update(DepartmentEntity.class, Chain.make("deptName", updateForm.getDeptName()),
+				Cnd.where("id", "=", updateForm.getDeptId()));
+
+		//通过session获取公司的id
+		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		long comId = company.getComId();//得到公司的id
+		String jobJson = updateForm.getJobJson();
+		JobDto[] jobJsonArray = Json.fromJsonAsArray(JobDto.class, jobJson);
+		//根据部门id查出此部门下面职位之前的数据
+		String jobIds = "";
+		List<JobEntity> beforeJob = dbDao.query(JobEntity.class, Cnd.where("deptId", "=", deptId), null);
+		for (JobEntity tJoblst : beforeJob) {
+			Long jobId = tJoblst.getId();
+			jobIds += String.valueOf(jobId) + ",";
+		}
+		if (!Util.isEmpty(jobIds)) {
+			jobIds = jobIds.substring(0, jobIds.length() - 1);
+		}
+		//职位表欲更新为
+		String afterjobIds = "";
+		if (jobJsonArray.length >= 1) {
+			for (JobDto jobDto : jobJsonArray) {
+				Long jobId = jobDto.getJobId();
+				afterjobIds += String.valueOf(jobId) + ",";
+			}
+		}
+		if (!Util.isEmpty(afterjobIds)) {
+			afterjobIds = afterjobIds.substring(0, afterjobIds.length() - 1);
+		}
+		List<JobEntity> afterJob = null;
+		if (!Util.isEmpty(afterjobIds)) {
+			afterJob = dbDao.query(JobEntity.class, Cnd.where("id", "in", afterjobIds), null);
+		}
+		dbDao.updateRelations(beforeJob, afterJob);
+
+		//根据职位id查询出公司功能职位表之前的数据
+		List<CompanyFunctionJobEntity> beforeComfunPos = dbDao.query(CompanyFunctionJobEntity.class,
+				Cnd.where("jobId", "in", jobIds), null);
+		//公司功能职位表欲更新为
+		List<CompanyFunctionJobEntity> afterComfunPos = dbDao.query(CompanyFunctionJobEntity.class,
+				Cnd.where("jobId", "in", afterjobIds), null);
+		dbDao.updateRelations(beforeComfunPos, afterComfunPos);
+		List<CompanyJobEntity> beforeComJob = dbDao.query(CompanyJobEntity.class,
+				Cnd.where("comId", "=", comId).and("jobId", "in", jobIds), null);
+		//欲更新为
+		List<CompanyJobEntity> afterComJob = dbDao.query(CompanyJobEntity.class,
+				Cnd.where("comId", "=", comId).and("jobId", "in", afterjobIds), null);
+		dbDao.updateRelations(beforeComJob, afterComJob);
+		if (!Util.isEmpty(jobJsonArray)) {
+			for (JobDto jobDto : jobJsonArray) {
+				saveOrUpdateSingleJob(dept.getId(), jobDto.getJobId(), comId, jobDto.getJobName(),
+						jobDto.getFunctionIds());
+			}
+		}
+		return JsonResult.success("更新成功");
 	}
 }

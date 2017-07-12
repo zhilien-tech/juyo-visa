@@ -85,30 +85,4 @@
 <script src="/res/common/ztree/jquery.ztree.core-3.5.js"></script>
 <script src="/res/common/ztree/jquery.ztree.excheck-3.5.js"></script>
 <script src="/res/common/ztree/jquery.ztree.exedit-3.5.js"></script>
-<script type="text/javascript">
-//添加保存
-$("#saveDeptJob").click(function(){
-	var _deptName = $("input#deptName").val();
-	var _jobJson = $("input#jobJson").val();
-	$.ajax({
-		type : "POST",
-		url : localhostPaht +'/visa/authority/addDeptJob',
-		data : {
-			deptName:_deptName,
-			jobJson:_jobJson
-		},
-		success : function(data) {
-			layer.load(1, {
-				 shade: [0.1,'#fff'] //0.1透明度的白色背景
-			});
-			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-		    parent.layer.close(index);
-		    window.parent.successCallback('1');
-		},
-		error : function(request) {
-			layer.msg('添加失败');
-		}
-	});
-});
-</script>
 </html>

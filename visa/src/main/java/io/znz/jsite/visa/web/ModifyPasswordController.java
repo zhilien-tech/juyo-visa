@@ -86,6 +86,8 @@ public class ModifyPasswordController {
 					}
 				}
 			}
+		} else {
+			return ResultObject.success("修改失败");
 		}
 		return ResultObject.success("修改成功");
 	}
