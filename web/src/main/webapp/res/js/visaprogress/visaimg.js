@@ -201,20 +201,14 @@ function reasion(){
 							                  +escape(JSON.stringify(thirdPartJP))+"&typeId=1";
 					}
 				}
-		
-			
-				
 			}
-		
-	
 	}
 	reasonnew+="有问题！请修改！";
 	 $.layer.prompt({
          formType: 2,
          value: reasonnew,
          title: '拒绝原因',
-     }, function (value, index, elem) {
-//         
+     }, function (value, index, elem) {      
     	 $.layer.closeAll();
      });
 }
@@ -230,8 +224,6 @@ function timeapply(){
     	 $.layer.closeAll();
      });
 }
-
-
 
 function jump(){
 	window.location.href='/myvisa/transactVisa/visaNationPersonal.html?country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
