@@ -31,7 +31,7 @@ var firstPart=[];
 var secondPart=[];
 var thirdPart=[];
 
-
+var orderstatus=0;
 var country;
 var countrystatus;
 $(function(){
@@ -39,9 +39,12 @@ $(function(){
     country = JSON.parse(unescape($.queryString("country")));
     countrystatus=$.queryString("countrystatus");
     if(countrystatus != "" && countrystatus != null && countrystatus == 1){//1表示进入日本的签证状态
+    	alert(111);
     	$('#writeResourceJump').attr('href','/personal/passportInfo/passportJPInfoList.html?typeId=1&country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus); 
 
     }else{
+    	alert(222);
+    	alert(country);
     	$('#writeResourceJump').attr('href','/personal/passportInfo/passportInfoList.html?typeId=1&country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus); 
 
     }
@@ -53,7 +56,10 @@ $(function(){
 		//alert(a);
 		var customerid=country.id;
 		//获取ordernum
-		var orderstatus=0;
+		var updateTime=country.updatetime;
+		$("#reason").hide();
+		$("#waitReview").hide();
+		
 		
 		$.ajax({
 			 type: "POST",
@@ -63,15 +69,12 @@ $(function(){
 			 success: function (result) {
 				$("#ordernum").text("订单号:"+result.ordernumber);
 				orderstatus=result.status;
+				if(orderstatus==3){
+					$("#waitReview").show();
+					$("#writeResourceJump").hide();
+				}
 			 }
 		 });
-		var updateTime=country.updatetime;
-		$("#reason").hide();
-		$("#waitReview").hide();
-		if(orderstatus==3){
-			$("#waitReview").show();
-			$("#writeResourceJump").hide();
-		}
 		if(a!=0){
 			//alert($("#writeResource"));
 			$("#writeResource").addClass("a-active");
@@ -250,14 +253,14 @@ function reasion(){
 				}
 			}
 	}
-	reasonnew+="有问题！请修改！";
+	/*reasonnew+="有问题！请修改！";
 	 $.layer.prompt({
          formType: 2,
          value: reasonnew,
          title: '拒绝原因',
      }, function (value, index, elem) {      
     	 $.layer.closeAll();
-     });
+     });*/
 }
 
 

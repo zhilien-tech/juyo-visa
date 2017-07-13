@@ -99,7 +99,7 @@
 		                                    <div class="form-group">
 		                                        <label for="first_name_en">手机:<span style="color: red">*</span></label>
 		                                        <div class='input-group'>
-		                                           <input id="cus_phone" name="telephone" 
+		                                           <input id="cus_phone" name="telephone" data-bind="value:customer.customermanage.telephone" 
 		                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
 		                                           <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 		                                        </div>
@@ -109,7 +109,7 @@
 		                                    <div class="form-group">
 		                                        <label for="first_name_en">邮箱:<span style="color: red">*</span></label>
 		                                        <div class='input-group'>
-		                                             <input id="cus_email" name="email" 
+		                                             <input id="cus_email" name="email"  data-bind="value:customer.customermanage.email"
 		                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
 		                                                   <!-- <select class="k-textbox" style="width: 100%;text-transform:uppercase;" id="cus_email"></select> 
 		                                                   data-bind="value:customer.customermanage.email"
@@ -446,8 +446,8 @@
                                                     data-value-primitive="true"
                                                     data-text-field="text"
                                                     data-value-field="text"
-                                                    data-bind="value:customer.tripJp.arrivecity,source:startcitynew"
-                                                    style="width: 100%;"></select>
+                                                    data-bind="value:customer.tripJp.arrivecity,source:startcitynew,events: { change: abab }"
+                                                    style="width: 100%;" ></select>
 	                                            <!-- <input id="endcity" class="k-textbox" style="width: 100%;text-transform:uppercase;"
 	                                                   data-bind="value:customer.tripJp.arrivecity"/> -->
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
@@ -951,7 +951,7 @@
                                                     data-value-primitive="true"
                                                     data-text-field="text"
                                                     data-value-field="text"
-                                                    data-bind="value:arrivecity,source:startcitynew"
+                                                    data-bind="value:arrivecity,source:startcitynew,events: { change: baba }"
                                                     style="width: 100%;"></select>
 
                 

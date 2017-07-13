@@ -73,13 +73,15 @@ $(function () {
 		labelText = labelText.split(":");
 		labelText.pop();
 		labelText = labelText.join(":");//截取 :之前的信息
-		
-		for(var i=0;i<thirdPart.length;i++){
-			//console.log(labelText+"==="+firstPart[i]);
-			if(labelText==thirdPart[i]){
-				$(this).next().find('input').css('border-color','#f17474');
-				$(this).next().find('.k-state-default').css('border-color','#f17474');//select(span)
-				$(this).next().find('.input-group-addon').addClass('yellow');//小灯泡
+		if(thirdPart!=null&&thirdPart!=''){
+			
+			for(var i=0;i<thirdPart.length;i++){
+				//console.log(labelText+"==="+firstPart[i]);
+				if(labelText==thirdPart[i]){
+					$(this).next().find('input').css('border-color','#f17474');
+					$(this).next().find('.k-state-default').css('border-color','#f17474');//select(span)
+					$(this).next().find('.input-group-addon').addClass('yellow');//小灯泡
+				}
 			}
 		}
 	});
@@ -471,6 +473,7 @@ $("#updatePassportSave").on("click",function(){
 });
 //点击保存时
 $("#nextStepBtn").click(function(){
+	alert(JSON.stringify(country));
 	$.ajax({
 		 type: "POST",
 		 url: "/visa/visainfo/updatePassportSave",

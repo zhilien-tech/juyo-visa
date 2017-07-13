@@ -172,6 +172,14 @@ $("#has_other_travelers").change(function () {
 
 //客户来源
 function comsource(){
+	viewModel.set("customer.customermanage.fullComName",'');
+	viewModel.set("customer.customermanage.linkman",'');
+	viewModel.set("customer.customermanage.email",'');
+	viewModel.set("customer.customermanage.telephone",'');
+	viewModel.set("customer.customerresource.linkman",'');
+	viewModel.set("customer.customerresource.fullComName",'');
+	viewModel.set("customer.customerresource.email",'');
+	viewModel.set("customer.customerresource.telephone",'');
 	var flag=$("#customerSource").val();
 	if(flag==3){//直客 
 		$("#select").hide();

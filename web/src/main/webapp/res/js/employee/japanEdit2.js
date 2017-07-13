@@ -345,12 +345,37 @@ var viewModel = kendo.observable({
 			}
 			viewModel.set("proposers",proposersnew);
 		}
+},
+abab:function(){
+	viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
+},
+baba:function(e){
+	var a=viewModel.get("customer.dateplanJpList");
+	console.log(JSON.stringify(a));
+	for(var i=0;i<a.length;i++){
+		if(a[i].arrivecity==e.data.arrivecity){
+			var b=i+1;
+			viewModel.set("customer.dateplanJpList["+b+"].startcity",e.data.arrivecity);
+		}
+	}
+	console.log(e.data.arrivecity);
 }
 });
 kendo.bind($(document.body), viewModel);
 
 
 	function comsource(){
+		viewModel.set("customer.customermanage.fullComName",'');
+		viewModel.set("customer.customermanage.linkman",'');
+		viewModel.set("customer.customermanage.email",'');
+		viewModel.set("customer.customermanage.telephone",'');
+		viewModel.set("customer.customerresourceJp.linkman",'');
+		viewModel.set("customer.customerresourceJp.fullComName",'');
+		viewModel.set("customer.customerresourceJp.email",'');
+		viewModel.set("customer.customerresourceJp.telephone",'');
+/*		viewModel.set();
+		viewModel.set();
+		viewModel.set();*/
 		var flag=$("#customerSource").val();
 		if(flag==3){//直客
 			$("#select").hide();
@@ -968,6 +993,7 @@ $(function () {
    		
    	}
    	
-function updateDatasource(){
-	
+function linkcityone(){
+	alert(viewModel.get("customer.tripJp.arrivecity"));
+	viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
 }
