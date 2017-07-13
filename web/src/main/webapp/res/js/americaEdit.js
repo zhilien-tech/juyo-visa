@@ -410,7 +410,7 @@ function ordersave(){
 				 success: function (result) {
 					 if(indexnew!=null){
 							
-							layer.close(index);
+							layer.close(indexnew);
 							}
 					 
 					 console.log(result.code);

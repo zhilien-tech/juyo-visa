@@ -242,6 +242,14 @@ public class NewOrderJaPanController {
 			orderOld = dbDao.insert(order);
 			//根据人数插入多个申请人的数据
 			List<NewProposerInfoJpEntity> proposerInfoJpList = order.getProposerInfoJpList();
+			if (Util.isEmpty(proposerInfoJpList) && proposerInfoJpList.size() == 0) {
+				for (int i = 0; i < orderOld.getHeadnum(); i++) {
+
+					NewProposerInfoJpEntity p = new NewProposerInfoJpEntity();
+					proposerInfoJpList.add(p);
+				}
+				order.setProposerInfoJpList(proposerInfoJpList);
+			}
 			if (!Util.isEmpty(orderOld.getHeadnum())) {
 
 				for (int i = orderOld.getHeadnum(); i > 0; i--) {
@@ -823,7 +831,7 @@ public class NewOrderJaPanController {
 		}
 
 		String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
-				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
+				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://218.244.148.21:9004/")
 				.replace("${logininfo}", "用户名:" + phone + "密码:" + temp);
 		String result = mailService.send(customer.getEmail(), html, "签证资料录入", MailService.Type.HTML);
 		if ("success".equalsIgnoreCase(result)) {
@@ -1103,7 +1111,8 @@ public class NewOrderJaPanController {
 			email = customer.getEmail();
 		}
 		String html = tmp.toString().replace("${name}", name).replace("${oid}", order.getOrdernumber())
-				.replace("${href}", "http://www.baidu.com").replace("${logininfo}", "用户名:" + phone + "密码:" + pwd);
+				.replace("${href}", "http://218.244.148.21:9004/")
+				.replace("${logininfo}", "用户名:" + phone + "密码:" + pwd);
 		String result = mailService.send(email, html, "签证资料录入", MailService.Type.HTML);
 		return result;
 	}
