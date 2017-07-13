@@ -63,6 +63,7 @@ public class CustomerDto {
 	private String city;//城市
 
 	private String mobile;// 手机号
+	/**客户座机号只能是0-9的数字*/
 	private String phone;//座机号
 	private String email;//邮箱
 

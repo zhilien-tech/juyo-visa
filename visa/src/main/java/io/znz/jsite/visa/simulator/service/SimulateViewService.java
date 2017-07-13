@@ -918,18 +918,23 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				log.error("入境时间不能在当前时间之前!");
 				throw new JSiteException("入境时间不能在当前时间之前!");
 			}
-			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlARRIVAL_US_DTEDay",
+
+			//预计抵达月日 改为ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEDay*
+			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEDay",
 					DateUtils.formatDate(dt.toDate(), "d"));
-			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlARRIVAL_US_DTEMonth",
+			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEMonth",
 					DateUtils.formatDate(dt.toDate(), "M"));
-			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxARRIVAL_US_DTEYear",
+			//预计抵达年  改为ctl00_SiteContentPlaceHolder_FormView1_tbxTRAVEL_DTEYear
+			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxTRAVEL_DTEYear",
 					DateUtils.formatDate(dt.toDate(), "yyyy"));
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxArriveCity", travel.getEntryCity());
 
-			//离开美国的相应信息
+			//离开美国的相应信息(根据逗留时间和抵达时间自动计算)
+			//停留时间是否为24小时内
+			boolean not24h = true;
 			Period period = travel.getPeriod();
 			if (!Util.isEmpty(period)) {
-				switch (travel.getPeriod()) {
+				switch (period) {
 				case DAY:
 					dt = dt.plusDays(travel.getStay());
 					break;
@@ -942,9 +947,22 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				case YEAR:
 					dt = dt.plusYears(travel.getStay());
 					break;
-				default:
-					log.error("停留时间类型错误，只能是[年Y月M周W日D]");
+				case H: {
+					not24h = false;
+					dt = dt.plusDays(1);
+					break;
 				}
+				default:
+					log.error("停留时间类型错误，只能是[年Y月M周W日D24小时内H]");
+				}
+				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_LOS_NOT24H", not24h);
+
+				//在美国待多久   待在什么地方
+				//选择停留时间单位(下拉列表)
+				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_LOS_CD", period.getValue());
+				//停留数量
+				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxTRAVEL_LOS", travel.getStay());
+
 				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlDEPARTURE_US_DTEDay",
 						DateUtils.formatDate(dt.toDate(), "d"));
 				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlDEPARTURE_US_DTEMonth",
@@ -953,18 +971,23 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 						DateUtils.formatDate(dt.toDate(), "yyyy"));
 				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxDepartCity", travel.getEntryCity());
 			} else {
-				log.error("停留时间类型错误，只能是[年Y月M周W日D]");
+				log.error("停留时间类型错误，只能是[年Y月M周W日D24小时内H]");
 			}
 		}
 
 		//有几个城市就生成几个空对象
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlTravelLoc_ctl_InsertButtonTravelLoc",
 				Lists.newArrayList(new Object()));
-		//将在美国访问那些城市
+
+		//入境城市
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlTravelLoc_ctl00_tbxSPECTRAVEL_LOCATION",
 				travel.getEntryCity());
-		//在美国逗留的地址
+		//在美国逗留的地址1(必填)
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxStreetAddress1", travel.getAddress());
+
+		//ctl00_SiteContentPlaceHolder_FormView1_tbxStreetAddress2,地址2(可选)
+
+		//在美国逗留的城市
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxCity", travel.getEntryCity());
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlTravelState", travel.getEntryProvince());
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbZIPCode", travel.getZipCode());
@@ -1028,7 +1051,7 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 							"ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl" + decimalFormat.format(i)
 									+ "_tbxGivenName", t.getFirstNameEN());
 
-					//如果亲属关系为空，则使用'其他'
+					//如果关系为空，则使用'其他'
 					Relation relation = t.getRelation();
 					if (!Util.isEmpty(relation)) {
 						validator(
@@ -1056,28 +1079,44 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 					list);
 			if (flag) {
 				for (int i = 0; i < histories.size(); i++) {
+
+					String indx = decimalFormat.format(i);
+
 					//去过几次生成几个空对象
 					HistoryDto h = histories.get(i);
 					//过往到过美国的相关信息
-					validator(map,
-							"ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl" + decimalFormat.format(i)
-									+ "_ddlPREV_US_VISIT_DTEDay", DateUtils.formatDate(h.getArrivalDate(), "d"));
-					validator(map,
-							"ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl" + decimalFormat.format(i)
-									+ "_ddlPREV_US_VISIT_DTEMonth", DateUtils.formatDate(h.getArrivalDate(), "M"));
-					validator(map,
-							"ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl" + decimalFormat.format(i)
-									+ "_tbxPREV_US_VISIT_DTEYear", DateUtils.formatDate(h.getArrivalDate(), "yyyy"));
-					validator(map,
-							"ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl" + decimalFormat.format(i)
-									+ "_tbxPREV_US_VISIT_LOS", String.valueOf(h.getStay()));
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl" + indx
+							+ "_ddlPREV_US_VISIT_DTEDay", DateUtils.formatDate(h.getArrivalDate(), "d"));
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl" + indx
+							+ "_ddlPREV_US_VISIT_DTEMonth", DateUtils.formatDate(h.getArrivalDate(), "M"));
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl" + indx
+							+ "_tbxPREV_US_VISIT_DTEYear", DateUtils.formatDate(h.getArrivalDate(), "yyyy"));
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl" + indx
+							+ "_tbxPREV_US_VISIT_LOS", String.valueOf(h.getStay()));
 
 					Period hPeriod = h.getPeriod();
 					if (!Util.isEmpty(hPeriod)) {
-						validator(map,
-								"ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl" + decimalFormat.format(i)
-										+ "_ddlPREV_US_VISIT_LOS_CD", hPeriod.getValue());
+						switch (hPeriod) {
+						case DAY:
+							break;
+						case WEEK:
+							break;
+						case MONTH:
+							break;
+						case YEAR:
+							break;
+						case H: {
+							break;
+						}
+						default:
+							log.error("停留时间类型错误，只能是[年Y月M周W日D24小时内H]");
+						}
+					} else {
+						log.error("停留时间类型错误，只能是[年Y月M周W日D24小时内H]");
 					}
+
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl" + indx
+							+ "_ddlPREV_US_VISIT_LOS_CD", hPeriod.getValue());
 					list.add(new Object());
 				}
 			}
@@ -1131,19 +1170,20 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 		//联系人相关信息
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_SURNAME", travel.getContactsLastNameEN());
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_GIVEN_NAME", travel.getContactsFirstNameEN());
-		Relation contactsRelation = travel.getContactsRelation();
-		if (!Util.isEmpty(contactsRelation)) {
-			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_REL_TO_APP", travel.getContactsRelation()
-					.getValue());
-		}
 
-		//和我的关系
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_LN1", travel.getContactsAddress());
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_CITY", travel.getContactsCity());
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_ADDR_STATE", travel.getContactsProvince());
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_POSTAL_CD", travel.getContactsZipCode());
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_HOME_TEL", travel.getContactsPhone());
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_EMAIL_ADDR", travel.getContactsEmail());
+
+		//和我的关系
+		Relation contactsRelation = travel.getContactsRelation();
+		if (!Util.isEmpty(contactsRelation)) {
+			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_REL_TO_APP", travel.getContactsRelation()
+					.getValue());
+		}
 
 		//家庭相关信息
 		FamilyDto father = customer.getFather();
@@ -1358,43 +1398,45 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				for (int i = 0; i < customer.getWorks().size(); i++) {
 					//雇佣几次生成几个空对象
 					workLst.add(new Object());
+					String stringIdx = decimalFormat.format(i);
 					//雇佣信息1
 					WorkDto w = customer.getWorks().get(i);
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx
 							+ "_tbEmployerName", w.getNameEN());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx
 							+ "_tbEmployerStreetAddress1", w.getRoomEN());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx
 							+ "_tbEmployerStreetAddress2", w.getAddressEN());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx
 							+ "_tbEmployerCity", w.getCity());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx
 							+ "_tbxPREV_EMPL_ADDR_STATE", w.getProvince());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx
 							+ "_tbxPREV_EMPL_ADDR_POSTAL_CD", w.getZipCode());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx
 							+ "_DropDownList2", w.getCountry());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx
 							+ "_tbEmployerPhone", w.getPhone());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
-							+ "_tbJobTitle", w.getJobEN());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
+					validator(map,
+							"ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx + "_tbJobTitle",
+							w.getJobEN());
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx
 							+ "_tbSupervisorSurname", w.getBossLastNameEN());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx
 							+ "_tbSupervisorGivenName", w.getBossFirstNameEN());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx
 							+ "_ddlEmpDateFromDay", DateUtils.formatDate(w.getStartDate(), "d"));
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx
 							+ "_ddlEmpDateFromMonth", DateUtils.formatDate(w.getStartDate(), "M"));
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx
 							+ "_tbxEmpDateFromYear", DateUtils.formatDate(w.getStartDate(), "yyyy"));
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx
 							+ "_ddlEmpDateToDay", DateUtils.formatDate(w.getEndDate(), "d"));
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx
 							+ "_ddlEmpDateToMonth", DateUtils.formatDate(w.getEndDate(), "M"));
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx
 							+ "_tbxEmpDateToYear", DateUtils.formatDate(w.getEndDate(), "yyyy"));
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl" + stringIdx
 							+ "_tbDescribeDuties", w.getDutyEN());
 				}
 			}
@@ -1410,35 +1452,37 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				for (int i = 0; i < customer.getSchools().size(); i++) {
 					//每个学校生成一个空对象
 					list.add(new Object());
+					String stringIdx = decimalFormat.format(i);
+
 					//学校
 					SchoolDto s = customer.getSchools().get(i);
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
 							+ "_tbxSchoolName", s.getNameEN());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
 							+ "_tbxSchoolAddr1", s.getRoomEN());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
 							+ "_tbxSchoolAddr2", s.getAddressEN());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
 							+ "_tbxSchoolCity", s.getCity());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
 							+ "_tbxEDUC_INST_ADDR_STATE", s.getProvince());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
 							+ "_tbxEDUC_INST_POSTAL_CD", s.getZipCode());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
 							+ "_ddlSchoolCountry", s.getCountry());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
 							+ "_tbxSchoolCourseOfStudy", s.getSpecialtyEN());
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
 							+ "_ddlSchoolFromDay", DateUtils.formatDate(s.getStartDate(), "d"));
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
 							+ "_ddlSchoolFromMonth", DateUtils.formatDate(s.getStartDate(), "M"));
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
 							+ "_tbxSchoolFromYear", DateUtils.formatDate(s.getStartDate(), "yyyy"));
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
 							+ "_ddlSchoolToDay", DateUtils.formatDate(s.getEndDate(), "d"));
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
 							+ "_ddlSchoolToMonth", DateUtils.formatDate(s.getEndDate(), "M"));
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + decimalFormat.format(i)
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
 							+ "_tbxSchoolToYear", DateUtils.formatDate(s.getEndDate(), "yyyy"));
 				}
 			}
@@ -1456,7 +1500,8 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 			int size = customer.getLanguages().size();
 			for (int i = 0; i < size; i++) {
 				list.add(new Object());
-				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlLANGUAGES_ctl" + decimalFormat.format(i)
+				String stringIdx = decimalFormat.format(i);
+				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlLANGUAGES_ctl" + stringIdx
 						+ "_tbxLANGUAGE_NAME", customer.getLanguages().get(i).toString());
 			}
 		}
@@ -1471,9 +1516,9 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				int size = customer.getVisitCountry().size();
 				for (int i = 0; i < size; i++) {
 					list.add(new Object());
-					validator(map,
-							"ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl" + decimalFormat.format(i)
-									+ "_ddlCOUNTRIES_VISITED", customer.getVisitCountry().get(i).toString());
+					String stringIdx = decimalFormat.format(i);
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl" + stringIdx
+							+ "_ddlCOUNTRIES_VISITED", customer.getVisitCountry().get(i).toString());
 				}
 			}
 		}
@@ -1487,9 +1532,9 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				int size = customer.getCharitable().size();
 				for (int i = 0; i < size; i++) {
 					list.add(new Object());
-					validator(map,
-							"ctl00_SiteContentPlaceHolder_FormView1_dtlORGANIZATIONS_ctl" + decimalFormat.format(i)
-									+ "_tbxORGANIZATION_NAME", customer.getCharitable().get(i).toString());
+					String stringIdx = decimalFormat.format(i);
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlORGANIZATIONS_ctl" + stringIdx
+							+ "_tbxORGANIZATION_NAME", customer.getCharitable().get(i).toString());
 				}
 			}
 		}

@@ -9,7 +9,8 @@ public enum Period {
     DAY("D", "天"),
     WEEK("W", "周"),
     MONTH("M", "月"),
-    YEAR("Y", "年");
+    YEAR("Y", "年"),
+    H("H", "24小时内");
     private String letter;
 
     public String getValue() {
