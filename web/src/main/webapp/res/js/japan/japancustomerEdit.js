@@ -102,11 +102,17 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-        return viewModel.get("customer.oldpassportJp");
+        ///return viewModel.get("customer.oldpassportJp");
+    	var oldPassportEnable = viewModel.get("customer.oldpassportJp");
+    	var state = oldPassportEnable ? oldPassportEnable.length > 0 : false;
+        return state;
     },
     // 曾用名
     oldNameEnable: function () {
-        return viewModel.get("customer.oldnameJp");
+        ///return viewModel.get("customer.oldnameJp");
+    	var oldNameEnable = viewModel.get("customer.oldnameJp");
+    	var state = oldNameEnable ? oldNameEnable.length > 0 : false;
+        return state;
     },
     // 其他国家公民
     otherCountryEnable: function () {
@@ -134,21 +140,18 @@ kendo.bind($(document.body), viewModel);
 
 //丢过护照
 $("#pp_lost").change(function () {
- /*   if ($(this).is(':checked')) {
-        viewModel.add("customer.oldnameJp");
-    } else {
-        viewModel.clear("customer.oldnameJp");
-    }*/
-	viewviewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
+	///viewviewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
+	viewModel.set("customer.oldpassportJp", $(this).is(':checked') ? " " : "");
 });
 //曾用名
 $("#has_used_name").change(function () {
-   if ($(this).is(':checked')) {
+   /*///if ($(this).is(':checked')) {
         viewModel.add("customer.oldName");
     } else {
         viewModel.clear("customer.oldName");
-    }
+    }*/
 	/*viewviewModel.set("customer.oldname", $(this).is(':checked') ? " " : "");*/
+	viewModel.set("customer.oldnameJp", $(this).is(':checked') ? " " : "");
 });
 //其他国家居民
 $("#has_pr").change(function () {

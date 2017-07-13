@@ -10,11 +10,6 @@ window.onload = function(){
      	viewModel.set("customer", $.extend(true, dafaults, resp));
      });
 }
-var firstPart ;
-var secondPart ;
-var thirdPart ;
-var country;
-var countrystatus;
 //初始化各个组件
 $(function(){
 	var aa = $.queryString("typeId");//得到签证进度在填写资料时跳转页面传来的参数
@@ -82,24 +77,23 @@ $(function(){
 		$(".input-group input").removeAttr("disabled"); //去掉所有input框的不可编辑属性
 		$(".input-group input").removeClass("k-state-disabled");//去掉不可编辑样式
 	}
-	country = JSON.parse(unescape($.queryString("country")));
-    countrystatus=$.queryString("countrystatus");
+	
 	/*-------------------------小灯泡 效果--------------------------*/
-	firstPart = JSON.parse(unescape($.queryString("firstPart")));//获取 错误 信息
-	secondPart = JSON.parse(unescape($.queryString("secondPart")));//获取 错误 信息
-	thirdPart = JSON.parse(unescape($.queryString("thirdPart")));//获取 错误 信息
+	var firstPart = JSON.parse(unescape($.queryString("secondPart")));//获取 错误 信息
+	
 	$('label').each(function(){
 			var labelText=$(this).text();//获取 页面上所有的字段 名称
 			labelText = labelText.split(":");
 			labelText.pop();
 			labelText = labelText.join(":");//截取 :之前的信息
-			
-			for(var i=0;i<secondPart.length;i++){
-				//console.log(labelText+"==="+firstPart[i]);
-				if(labelText==secondPart[i]){
-					$(this).next().find('input').css('border-color','#f17474');
-					$(this).next().find('.k-state-default').css('border-color','#f17474');//select(span)
-					$(this).next().find('.input-group-addon').addClass('yellow');//小灯泡
+			if(firstPart!=null){
+				for(var i=0;i<firstPart.length;i++){
+					//console.log(labelText+"==="+firstPart[i]);
+					if(labelText==firstPart[i]){
+						$(this).next().find('input').css('border-color','#f17474');
+						$(this).next().find('.k-state-default').css('border-color','#f17474');//select(span)
+						$(this).next().find('.input-group-addon').addClass('yellow');//小灯泡
+					}
 				}
 			}
 	});
@@ -287,11 +281,15 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-        return viewModel.get("customer.passportlose");
+    	var oldPassport = viewModel.get("customer.passportlose");
+    	var state = oldPassport ? oldPassport.length > 0 : false;
+        return state;
     },
     // 曾用名
     oldNameEnable: function () {
-        return viewModel.get("customer.oldname");
+    	var beforeName = viewModel.get("customer.oldname");
+    	var state = beforeName ? beforeName.length > 0 : false;
+        return state;
     },
     // 其他国家公民
     otherCountryEnable: function () {
@@ -301,11 +299,15 @@ var viewModel = kendo.observable({
     },
     //美国纳税人认证码
     usaAuthenticatorCode:function(){
-    	return viewModel.get("customer.authenticatorcode");
+    	var authenticationCode=viewModel.get("customer.authenticatorcode");
+    	var state = authenticationCode ? authenticationCode.length > 0 : false;
+    	return state;
     },
     //通信地址与家庭地址是否一致
     usaCommunicaHomeAddress:function(){
-    	return viewModel.get("customer.communicahomeaddress");
+    	var addressUnified=viewModel.get("customer.communicahomeaddress");
+    	var state = addressUnified ? addressUnified.length > 0 : false;
+    	return state;
     }
 });
 kendo.bind($(document.body), viewModel);//数据绑定结束
@@ -370,10 +372,7 @@ $("#nextStepBtn").click(function(){
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){
 			layer.msg("操作成功",{time:2000});
-			window.location.href='/personal/visaInfo/visaInfoList.html?typeId=1&firstPart='
-				  +escape(JSON.stringify(firstPart))+"&secondPart="
-				  +escape(JSON.stringify(secondPart))+"&thirdPart="
-				  +escape(JSON.stringify(thirdPart))+"&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
+			window.location.href='/personal/visaInfo/visaInfoList.html?typeId=1';
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
              layer.msg('操作失败',{time:2000});

@@ -263,7 +263,8 @@ var viewModel = kendo.observable({
     },
     //参过军
     joinArmy: function () {
-        var state = viewModel.get("customer.army");
+        var joinArmy = viewModel.get("customer.army");
+        var state = joinArmy ? joinArmy.length > 0 : false;
         return state;
     },
     //工作信息详情
@@ -309,11 +310,15 @@ var viewModel = kendo.observable({
     },
     //赴美国旅行目的列表
     travelPurposeEnable: function () {
-        return viewModel.get("customer.travelpurpose");
+    	var objectiveList = viewModel.get("customer.travelpurpose");
+    	var state = objectiveList ? objectiveList.length > 0 : false;
+        return state;
     },
     //是否制定了具体旅行计划
     travelPlanEnable: function () {
-    	return viewModel.get("customer.travelplan");
+    	var travelPlan = viewModel.get("customer.travelplan");
+    	var state = travelPlan ? travelPlan.length > 0 : false;
+    	return state;
     },
     //是否加入一个团队或组织旅行
     joinTeamEnable: function () {
@@ -325,7 +330,9 @@ var viewModel = kendo.observable({
     },
     //申请的制作者
     assistApplyEnable: function () {
-        return viewModel.get("customer.applicantproducer");
+    	var assistApplyEnable = viewModel.get("customer.applicantproducer");
+    	var state = assistApplyEnable ? assistApplyEnable.length > 0 : false;
+        return state;
     }
 });
 kendo.bind($(document.body), viewModel);
