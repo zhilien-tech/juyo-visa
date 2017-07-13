@@ -537,7 +537,7 @@ public class OrderController extends BaseController {
 		}
 
 		String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
-				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
+				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://218.244.148.21:9004/")
 				.replace("${logininfo}", "用户名:" + phone + "密码:" + temp);
 		String result = mailService.send(customer.getEmail(), html, "签证资料录入", MailService.Type.HTML);
 		if ("success".equalsIgnoreCase(result)) {
@@ -640,7 +640,7 @@ public class OrderController extends BaseController {
 			email = customer.getEmail();
 		}
 		String html = tmp.toString().replace("${name}", name).replace("${oid}", order.getOrdernumber())
-				.replace("${href}", "http://www.baidu.com")
+				.replace("${href}", "http://218.244.148.21:9004/")
 				.replace("${logininfo}", "用户名:" + phone + "密码:" + employeeEntity.getPassword());
 		String result = mailService.send(email, html, "签证资料录入", MailService.Type.HTML);
 
@@ -752,7 +752,7 @@ public class OrderController extends BaseController {
 		//订单表联系人的发送
 
 		String html = tmp.toString().replace("${name}", customerManage.getLinkman())
-				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
+				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://218.244.148.21:9004/")
 				.replace("${logininfo}", info);
 
 		String result = mailService.send(customerManage.getEmail(), html, "签证资料录入", MailService.Type.HTML);
@@ -769,7 +769,7 @@ public class OrderController extends BaseController {
 			NewCustomerOrderEntity newCustomerOrderEntity = query.get(j);
 			NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, newCustomerOrderEntity.getCustomerid());
 			html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
-					.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
+					.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://218.244.148.21:9004/")
 					.replace("${logininfo}", info);
 
 			result = mailService.send(customer.getEmail(), html, "签证资料录入", MailService.Type.HTML);
@@ -852,7 +852,7 @@ public class OrderController extends BaseController {
 
 		}
 		String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
-				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
+				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://218.244.148.21:9004/")
 				.replace("${interview}", str);
 		String result = mailService.send(customer.getEmail(), html, "签证信息通知", MailService.Type.HTML);
 		if ("success".equalsIgnoreCase(result)) {
@@ -962,7 +962,7 @@ public class OrderController extends BaseController {
 			}
 
 			String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
-					.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://www.baidu.com")
+					.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://218.244.148.21:9004/")
 					.replace("${interview}", str);
 
 			String result = mailService.send(customer.getEmail(), html, "签证信息通知", MailService.Type.HTML);

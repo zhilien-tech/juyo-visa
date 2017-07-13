@@ -618,7 +618,7 @@ function orderJpsave(){
 						 if(result.code=="SUCCESS"){
 							 if(indexnew!=null){
 									
-									layer.close(index);
+									layer.close(indexnew);
 									}
 							 
 							 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
@@ -627,7 +627,18 @@ function orderJpsave(){
 							 window.parent.successCallback('1');
 							 
 						 }
-					 }
+					 },
+					 error: function(XMLHttpRequest, textStatus, errorThrown){
+						 if(indexnew!=null){
+								
+								layer.close(indexnew);
+								}
+						 
+							 console.log(XMLHttpRequest);
+							 console.log(textStatus);
+							 console.log(errorThrown);
+				           /* layer.msg('失败!',{time:2000});*/
+				         }
 				 });
 		//	}
 			
@@ -728,7 +739,7 @@ $(function () {
     		viewModel.set("customer.tripJp.oneormore", true);
     		$('.WangFan').addClass('hide');
     		$('.DuoCheng').removeClass('hide');
-    		
+    		 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
     		$.ajax({
    			 type: "POST",
    			 url: "/visa/neworderjp/autothree",
@@ -737,7 +748,10 @@ $(function () {
    			 data: JSON.stringify(viewModel.customer),
    			 success: function (result) {
    					viewModel.set("customer", $.extend(true, defaults, result));
-   		        	
+   					if(indexnew!=null){
+						
+						layer.close(indexnew);
+						}
    		        	if(viewModel.get("customer.tripJp.oneormore")==1){
    		        		$('.WangFan').addClass('hide');
    		        		$('.DuoCheng').removeClass('hide');
@@ -801,6 +815,7 @@ $(function () {
     });
 
    	function autogenerate(){
+   	 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 	   	 $.ajax({
 			 type: "POST",
 			 url: "/visa/neworderjp/autogenerate",
@@ -828,8 +843,22 @@ $(function () {
 					var color = $("#cus_linkman").data("kendoMultiSelect");
 
 					color.value(result.customermanage.id);
-					
-			 }
+					 if(indexnew!=null){
+							
+							layer.close(indexnew);
+							}
+			 },
+			 error: function(XMLHttpRequest, textStatus, errorThrown){
+				 if(indexnew!=null){
+						
+						layer.close(indexnew);
+						}
+				 
+					 console.log(XMLHttpRequest);
+					 console.log(textStatus);
+					 console.log(errorThrown);
+		           /* layer.msg('失败!',{time:2000});*/
+		         }
 		 });
    	}
    	
@@ -854,6 +883,7 @@ $(function () {
    		var renShu=$('#usa_arrival_date').val();
    		if(renShu!=""){//人数 不等于null时
    			$('.mainApplicant').siblings('li').find('.k-content').css("display","none");
+   			var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
    			$.ajax({
      			 type: "POST",
      			 url: "/visa/neworderjp/autoporposer",
@@ -880,7 +910,22 @@ $(function () {
      					color.value(result.customermanage.id);
      					var color = $("#cus_linkman").data("kendoMultiSelect");
      					color.value(result.customermanage.id);
-     			 }
+     					 if(indexnew!=null){
+ 							
+ 							layer.close(indexnew);
+ 							}
+     			 },
+     			 error: function(XMLHttpRequest, textStatus, errorThrown){
+     				 if(indexnew!=null){
+     						
+     						layer.close(indexnew);
+     						}
+     				 
+     					 console.log(XMLHttpRequest);
+     					 console.log(textStatus);
+     					 console.log(errorThrown);
+     		            layer.msg('失败!',{time:2000});
+     		         }
      		 });
    			 $(".mainApplicant").hide();//隐藏 span标签的 主申请人
    		}

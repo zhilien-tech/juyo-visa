@@ -18,7 +18,7 @@
  </head>
 <body>
 	<header class="header">
-		<a href="javascript:window.history.go(-1);" onclick="jump();">
+		<a href="javascript:void(0);" onclick="jump();">
 			<i class="fa fa-chevron-left"></i><span>&nbsp;返回</span>
 		</a>
 	</header>
@@ -31,9 +31,14 @@
 				<a href="JavaScript:void(0);" id="writeResource">资料填写</a>
 				<span class="fa fa-long-arrow-down"></span>
 			  </div>
-			  <div class="progress-right" id="reason">
-			  	<a href="JavaScript:void(0);" onclick="window.location.href=''">填写资料</a>
+			  <div class="progress-right">
+			  	<a href="JavaScript:void(0);" id="writeResourceJump">填写资料</a>
+			  	<a href="JavaScript:void(0);" id="waitReview">提交成功  等待初审</a>
 			  </div>
+			<!--   <div class="progress-right" id="reason">
+			  	<a href="JavaScript:void(0);" id="writeResourceJump">填写资料</a>
+			  	<a href="JavaScript:void(0);" id="waitReview">提交成功  等待初审</a>
+			  </div> -->
 			</li>
 			<li>
 			  <div class="progress-left">
@@ -49,8 +54,8 @@
 				<a href="javascript:;" id="readysubmit">准备提交使馆</a>
 				<span class="fa fa-long-arrow-down"></span>
 			  </div>
-			  <div class="progress-right">
-			  	<label>预计&nbsp;&nbsp;2017-02-02&nbsp;提交使馆</label>
+			  <div class="progress-right" id="readyDate">
+			  	<!-- <label>预计&nbsp;&nbsp;2017-02-02&nbsp;提交使馆</label> -->
 			  </div>
 			</li>
 			<li>
@@ -58,8 +63,8 @@
 				<a href="javascript:;" id="alreadysubmit">已提交使馆</a>
 				<span class="fa fa-long-arrow-down"></span>
 			  </div>
-			  <div class="progress-right">
-			    <label>预计&nbsp;&nbsp;3-5个工作日&nbsp;返回结果</label>
+			  <div class="progress-right" id="resultDate">
+			    <!-- <label>预计&nbsp;&nbsp;3-5个工作日&nbsp;返回结果</label> -->
 			  </div>
 			</li>
 			<li>

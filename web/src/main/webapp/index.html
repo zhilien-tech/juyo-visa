@@ -37,7 +37,7 @@
 			            <input type="hidden" name="login" value="/"/>
 			            <input type="hidden" name="logintype" value="1"/>
 			            <ul>
-			                <li><input name="username" type="text" class="loginuser" onclick="clear();"/></li>
+			                <li ><input name="username" type="text" class="loginuser" onfocus="clear11();"/></li>
 			                <li><input name="password" type="password" class="loginpwd" id="pass1"/></li>
 			                <li class="yzm">
 			                    <span>
@@ -63,8 +63,8 @@
 			            <input type="hidden" name="login" value="/"/>
 			            <input type="hidden" name="logintype" value="2"/>
 			            <ul>
-			                <li><input name="username" type="text" class="loginuser"/></li>
-			                <li><input name="password" type="password" class="loginpwd"/></li>
+			                <li><input name="username" type="text" class="loginuser" onfocus="clear11();"/></li>
+			                <li><input name="password" type="password" class="loginpwd" id="pass2" autocomplete="off"/></li>
 			                <li class="yzm">
 			                    <span>
 			                        <input name="captcha" type="text" value="验证码" placeholder="验证码"/>
@@ -121,9 +121,9 @@
 <script src="/res/plugin/bootstrap/js/bootstrap.min.js"></script>
 <script src="/res/js/login.js"></script>
 <script type="text/javascript">
-function clear(){
-	alert(111);
+function clear11(){
 	$("#pass1").val("");
+	$("#pass2").val("");
 }
 </script>
 

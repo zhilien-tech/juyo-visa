@@ -466,7 +466,7 @@ $("#updatePassportSave").on("click",function(){
 $("#nextStepBtn").click(function(){
 	$.ajax({
 		 type: "POST",
-		 url: "/visa/visainfo/updateVisaInfoJPSave",
+		 url: "/visa/visainfo/updatePassportSave",
 		 contentType:"application/json",
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){

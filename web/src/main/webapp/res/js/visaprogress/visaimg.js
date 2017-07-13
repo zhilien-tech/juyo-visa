@@ -39,9 +39,9 @@ $(function(){
     country = JSON.parse(unescape($.queryString("country")));
     countrystatus=$.queryString("countrystatus");
     if(countrystatus != "" && countrystatus != null && countrystatus == 1){//1表示进入日本的签证状态
-    	$('#writeResource').attr('href','/personal/passportInfo/passportJPInfoList.html?typeId=1&country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus); 
+    	$('#writeResourceJump').attr('href','/personal/passportInfo/passportJPInfoList.html?typeId=1&country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus); 
     }else{
-    	$('#writeResource').attr('href','/personal/passportInfo/passportInfoList.html?typeId=1&country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus); 
+    	$('#writeResourceJump').attr('href','/personal/passportInfo/passportInfoList.html?typeId=1&country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus); 
     }
     //alert(unescape($.queryString("country")));
     if(country!=null&&country!=''){
@@ -51,6 +51,8 @@ $(function(){
 		//alert(a);
 		var customerid=country.id;
 		//获取ordernum
+		var orderstatus=0;
+		
 		$.ajax({
 			 type: "POST",
 			 url: "/visa/progress/ordernumber?customerid="+customerid+"&countrystatus="+countrystatus,
@@ -58,11 +60,16 @@ $(function(){
 			 dataType: "json",
 			 success: function (result) {
 				$("#ordernum").text("订单号:"+result.ordernumber);
+				orderstatus=result.status;
 			 }
 		 });
-		
-		
+		var updateTime=country.updatetime;
 		$("#reason").hide();
+		$("#waitReview").hide();
+		if(orderstatus==3){
+			$("#waitReview").show();
+			$("#writeResourceJump").hide();
+		}
 		if(a!=0){
 			//alert($("#writeResource"));
 			$("#writeResource").addClass("a-active");
@@ -72,10 +79,48 @@ $(function(){
 		}
 		if(a==4){
 			$("#approvel").text("初审通过");
+			$("#writeResourceJump").hide();
+		}
+		//准备提交到使馆的时间计算
+		if(a==8){
+			if(updateTime!=null&&updateTime!=''){
+				var val = Date.parse(updateTime);
+				var newDate = new Date(val);
+				var newtime=new Date((newDate/1000+86400)*1000);
+				var year = newtime.getFullYear();
+
+				var month=newtime.getMonth()+1;
+
+				var day = newtime.getDate();
+				$("#readyDate").html('<label>预计&nbsp;&nbsp;'+year+"-"+month+"-"+day+'&nbsp;提交使馆</label>');
+			}
+			
+		}
+		//提交到使馆的结果时间计算
+		if(a==9){
+			if(updateTime!=null&&updateTime!=''){
+				var val = Date.parse(updateTime);
+				var newDate = new Date(val);
+				var newtimethree=new Date((newDate/1000+86400*3)*1000);
+				var yearthree = newtimethree.getFullYear();
+				
+				var monththree=newtimethree.getMonth()+1;
+				
+				var daythree = newtimethree.getDate();
+				var newtimefive=new Date((newDate/1000+86400*5)*1000);
+				var yearfive = newtimefive.getFullYear();
+				
+				var monthfive=newtimefive.getMonth()+1;
+				
+				var dayfive = newtimefive.getDate();
+				$("#resultDate").html('<label>预计&nbsp;&nbsp;'+yearthree+"-"+monththree+"-"+daythree+'&nbsp;——————'+yearfive+"-"+monthfive+"-"+dayfive+'&nbsp'+'返回结果</label>');
+			}
+			
 		}
 		if(a>=8){
 			$("#approvel").text("初审通过");
 			$("#readysubmit").addClass("a-active");
+			$("#writeResourceJump").hide();
 			
 		}
 		if(a==5){
