@@ -7,6 +7,8 @@
 package io.znz.jsite.visa.service;
 
 import io.znz.jsite.base.NutzBaseService;
+import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
+import io.znz.jsite.core.util.Const;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 import io.znz.jsite.visa.entity.user.EmployeeEntity;
@@ -21,13 +23,20 @@ import io.znz.jsite.visa.forms.employeeform.EmployeeUpdateForm;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Sqls;
+import org.nutz.dao.entity.Record;
+import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.aop.Aop;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.util.FormUtil;
 
@@ -42,6 +51,24 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 	public static final int HASH_INTERATIONS = 1024;
 	private static final int SALT_SIZE = 8; //盐长度
 	private static final String INIT_PASSWORD = "000000"; //初始密码
+
+	/**
+	 * 页面加载时根据当前登录公司id查询出该公司下面的所有部门
+	 * @param session
+	 */
+	public Object queryDept(final HttpSession session) {
+		Map<String, Object> obj = Maps.newHashMap();
+		//通过session获取公司的id
+		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		long comId = company.getComId();//得到公司的id
+		Sql sql = Sqls.create(sqlManager.get("employee_query_deptname_list"));
+		Cnd cnd = Cnd.NEW();
+		cnd.and("d.comId", "=", comId);
+		cnd.and("d.deptName", "!=", "公司管理部");
+		List<Record> queryList = dbDao.query(sql, cnd, null);
+		obj.put("queryList", queryList);
+		return obj;
+	}
 
 	/**
 	 * 添加员工操作

@@ -47,20 +47,32 @@ $(function () {
 			var deptname = data.dept;
 			var jobnamelist = data.list;
 			var jobfunctionlist = data.zNodes;
-			//console.log(JSON.stringify(deptname));
-			//console.log(JSON.stringify(jobnamelist));
-			//console.log(JSON.stringify(jobfunctionlist));
 			for(var i=0;i<jobfunctionlist.length;i++){
-				var person=new Object();
-				person.id=jobfunctionlist[i].id;
-				person.pId=jobfunctionlist[i].parentId;
-				person.name=jobfunctionlist[i].funName;
-				person.open=true;
-				person.checked=jobfunctionlist[i].checked;
-				zNodes.push(person);
+				var fun=new Object();
+				fun.id=jobfunctionlist[i].id;
+				fun.pId=jobfunctionlist[i].parentId;
+				fun.name=jobfunctionlist[i].funName;
+				fun.open=true;
+				fun.checked=jobfunctionlist[i].checked;
+				zNodes.push(fun);
 			}
-			
+			for(var i=0;i<jobnamelist.length;i++){
+				var abab=jobnamelist[i].znodes;
+				var cc=JSON.parse(abab);
+				//console.log(JSON.stringify(cc));
+				for(var j=0;j<cc.length;j++){
+					for(var m=0;m<zNodes.length;m++){
+						//console.log(JSON.stringify(zNodes));
+						if(cc[j].id==zNodes[m].id){
+							zNodes.splice(m,1);
+							zNodes.push(cc[j]);
+						}
+					}
+				}
+			}
 			for (var i = 0; i < jobnamelist.length; i++) {
+				var objaa = jobnamelist[i];//得到对象
+				bb = JSON.parse(objaa.znodes);//将json转换为Object
 				$(".jobName").append('<div class="job_container"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName" type="text" class="form-control input-sm inputText" value="'+jobnamelist[i].jobName+'"><input name="jobId" type="hidden" value="'+jobnamelist[i].jobId+'"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn">删除</button></li></ul><div class="ztree"><ul id="tree_'+treeIndex+'"></ul></div><input type="hidden" class="znodes" value="'+jobnamelist[i].znodes+'"/></div>');
 				treeIndex++;
 				var ztree_container = $(".job_container:last").find("div.ztree").find("ul:first");
