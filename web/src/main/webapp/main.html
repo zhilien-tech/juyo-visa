@@ -243,8 +243,7 @@
             <a href="/" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
         </div>
         <div class="row J_mainContent" id="content-main">
-            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" frameborder="0" src=""
-                    data-id="home.html" seamless></iframe>
+            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" frameborder="0" src="" data-id="home.html" seamless></iframe>
         </div>
         <div class="footer">
             <div class="pull-right">&copy;2017 <a href="http://znz.io" target="_blank">ZNZ.IO</a></div>
@@ -678,17 +677,28 @@
     	  var j = JSON.parse($.base64.atob(decodeURI(username),true));
     	var logintype=$.queryString("logintype");
     	$("#userId").text(j);
-    	if(logintype != "" && logintype != null && logintype == 1){//1表示进入日本的签证状态
+    	/* if(logintype != "" && logintype != null && logintype == 1){//1表示进入日本的签证状态
         	$('.J_iframe').attr('src','/order/america.html'); 
-    	$('#homePage').html('<a  class="active J_menuTab" data-id="home.html">美国 </a>');
+    		$('#homePage').html('<a  class="active J_menuTab" data-id="home.html">美国 </a>');
         }else if(logintype == 4){
         	$('.J_iframe').attr('src','/company/companylist.html'); 
-    	$('#homePage').html('<a  class="active J_menuTab" data-id="home.html">公司管理 </a>');
+    		$('#homePage').html('<a  class="active J_menuTab" data-id="home.html">公司管理 </a>');
         }else{
         	$('.J_iframe').attr('src','/myvisa/transactVisa/visaNationList.html'); 
-    	$('#homePage').html('<a  class="active J_menuTab" data-id="home.html">办理中签证 </a>');
-        }
+    		$('#homePage').html('<a class="active J_menuTab" data-id="home.html">办理中签证 </a>');
+        } */
     	
+    	if(logintype != "" && logintype != null && logintype == 1){//1表示进入日本的签证状态
+        	$('.J_iframe').attr('src','/order/america.html'); 
+    		$('#homePage').html('<a  class="active J_menuTab" data-id="order/america.html">美国 </a>');
+        }else if(logintype == 4){
+        	$('.J_iframe').attr('src','/company/companylist.html'); 
+    		$('#homePage').html('<a  class="active J_menuTab" data-id="company/companylist.html">公司管理 </a>');
+        }else{
+        	$('.J_iframe').attr('src','/myvisa/transactVisa/visaNationList.html'); 
+    		$('#homePage').html('<a class="active J_menuTab" data-id="myvisa/transactVisa/visaNationList.html">办理中签证 </a>');
+        }
+        
         $.getJSON("/sys/user/curr",function(result){
             $("#name").html(result.name);
             $("#role").html(result.role);

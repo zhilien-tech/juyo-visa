@@ -30,7 +30,7 @@ function regCmd(command) {
                     		type: 2,
                     		title: '编辑',
                     		maxmin: true, //开启最大化最小化按钮
-                    		area: ['850px', '450px'],
+                    		area: ['850px', '550px'],
                     		content: '/authority/updateAuthority.html?deptId=' + data.deptid+'&deptName='+escape(data.deptname)+'&jobName='+escape(data.jobname)+'&funName='+escape(data.modulename)+'&jobId='+data.jobid
                     	});
                     }
@@ -52,7 +52,7 @@ function addAuthority(){
 	    maxmin: true,
 	    shadeClose: false,
 	    title: '添加',
-	    area: ['850px', '450px'],
+	    area: ['850px', '550px'],
 	    content: '/authority/addAuthority.html',
 	    end: function(){//添加完页面点击返回的时候自动加载表格数据
 	    	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
@@ -116,22 +116,25 @@ var grid = $("#grid").kendoGrid({
     columns: [
         {
         	title: '序号',
+        	 width: 75,
         	field: 'serialnumber',
         	template: "<span class='row-number'></span>" 
         },
         {
         	title: '部门名称',
-        	field: 'deptname'
-        	//template: '#= data.fullcomname#'
+        	width: 260,
+        	field: 'deptname',
+        	template: "<span class='ellipsis' title='#=data.deptname#'>#=data.deptname?data.deptname:''#</span>"
         },
         {
         	title: ' 功能模块', 
-        	field: 'modulename'
+        	field: 'modulename',
+        	template: "<span class='ellipsis' title='#=data.modulename#'>#=data.modulename?data.modulename:''#</span>"
         },
         {
         	title: '职位名称',
-        	field: 'jobname' 
-        	//template: '#= data.linkman#'
+        	field: 'jobname',
+        	template: "<span class='ellipsis' title='#=data.jobname#'>#=data.jobname?data.jobname:''#</span>"
         },
         {
             title: "操作", width: 98,
