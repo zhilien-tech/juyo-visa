@@ -52,7 +52,7 @@ $(function () {
 	//部门职位 添加职位
     $('#addJob').click(function(){
        $(".job_container .ztree").hide();
-       $('.jobName').append('<div class="job_container form-group"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName'+(treeIndex)+'" type="text" class="form-control input-sm inputText" style="float:left;width:655px;" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn" >删除</button></li></ul>'
+       $('.jobName').append('<div class="job_container form-group"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName'+(treeIndex)+'" type="text" class="k-textbox inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn" >删除</button></li></ul>'
        +'<div class="ztree"><ul id="tree_'+treeIndex+'"></ul></div></div>');
        treeIndex++;
 	   var ztree_container = $(".job_container:last").find("div.ztree").find("ul:first");
@@ -101,7 +101,7 @@ function setFunc(){
 	   jobInfos.push(job);
    });
    var jobJson = JSON.stringify(jobInfos) ;
-   alert(jobJson);
+   ///alert(jobJson);
    $("#jobJson").val(jobJson) ;
 }
 //添加保存
@@ -109,8 +109,8 @@ $("#saveDeptJob").click(function(){
 	setFunc();//设置功能
 	var _deptName = $("input#deptNameId").val();
 	var _jobJson = $("input#jobJson").val();
-	alert(_deptName);
-	alert(_jobJson);
+	///alert(_deptName);
+	///alert(_jobJson);
 	$.ajax({
 		type : "POST",
 		url : localhostPaht +'/visa/authority/addDeptJob',
