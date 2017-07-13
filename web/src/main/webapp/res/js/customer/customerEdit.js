@@ -340,7 +340,7 @@ $("#saveCustomerData").on("click",function(){
 		 success: function (result){
 			 if(indexnew!=null){
 					
-					layer.close(index);
+					layer.close(indexnew);
 					}
 			 
 			 console.log(result);
@@ -351,7 +351,7 @@ $("#saveCustomerData").on("click",function(){
 		 error: function(XMLHttpRequest, textStatus, errorThrown){
 		 if(indexnew!=null){
 				
-				layer.close(index);
+				layer.close(indexnew);
 				}
 		 
 			 console.log(XMLHttpRequest);

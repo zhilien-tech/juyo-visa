@@ -345,12 +345,37 @@ var viewModel = kendo.observable({
 			}
 			viewModel.set("proposers",proposersnew);
 		}
+},
+abab:function(){
+	viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
+},
+baba:function(e){
+	var a=viewModel.get("customer.dateplanJpList");
+	console.log(JSON.stringify(a));
+	for(var i=0;i<a.length;i++){
+		if(a[i].arrivecity==e.data.arrivecity){
+			var b=i+1;
+			viewModel.set("customer.dateplanJpList["+b+"].startcity",e.data.arrivecity);
+		}
+	}
+	console.log(e.data.arrivecity);
 }
 });
 kendo.bind($(document.body), viewModel);
 
 
 	function comsource(){
+		viewModel.set("customer.customermanage.fullComName",'');
+		viewModel.set("customer.customermanage.linkman",'');
+		viewModel.set("customer.customermanage.email",'');
+		viewModel.set("customer.customermanage.telephone",'');
+		viewModel.set("customer.customerresourceJp.linkman",'');
+		viewModel.set("customer.customerresourceJp.fullComName",'');
+		viewModel.set("customer.customerresourceJp.email",'');
+		viewModel.set("customer.customerresourceJp.telephone",'');
+/*		viewModel.set();
+		viewModel.set();
+		viewModel.set();*/
 		var flag=$("#customerSource").val();
 		if(flag==3){//直客
 			$("#select").hide();
@@ -618,7 +643,7 @@ function orderJpsave(){
 						 if(result.code=="SUCCESS"){
 							 if(indexnew!=null){
 									
-									layer.close(index);
+									layer.close(indexnew);
 									}
 							 
 							 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
@@ -627,7 +652,18 @@ function orderJpsave(){
 							 window.parent.successCallback('1');
 							 
 						 }
-					 }
+					 },
+					 error: function(XMLHttpRequest, textStatus, errorThrown){
+						 if(indexnew!=null){
+								
+								layer.close(indexnew);
+								}
+						 
+							 console.log(XMLHttpRequest);
+							 console.log(textStatus);
+							 console.log(errorThrown);
+				           /* layer.msg('失败!',{time:2000});*/
+				         }
 				 });
 		//	}
 			
@@ -728,7 +764,7 @@ $(function () {
     		viewModel.set("customer.tripJp.oneormore", true);
     		$('.WangFan').addClass('hide');
     		$('.DuoCheng').removeClass('hide');
-    		
+    		 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
     		$.ajax({
    			 type: "POST",
    			 url: "/visa/neworderjp/autothree",
@@ -737,7 +773,10 @@ $(function () {
    			 data: JSON.stringify(viewModel.customer),
    			 success: function (result) {
    					viewModel.set("customer", $.extend(true, defaults, result));
-   		        	
+   					if(indexnew!=null){
+						
+						layer.close(indexnew);
+						}
    		        	if(viewModel.get("customer.tripJp.oneormore")==1){
    		        		$('.WangFan').addClass('hide');
    		        		$('.DuoCheng').removeClass('hide');
@@ -801,6 +840,7 @@ $(function () {
     });
 
    	function autogenerate(){
+   	 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 	   	 $.ajax({
 			 type: "POST",
 			 url: "/visa/neworderjp/autogenerate",
@@ -828,8 +868,22 @@ $(function () {
 					var color = $("#cus_linkman").data("kendoMultiSelect");
 
 					color.value(result.customermanage.id);
-					
-			 }
+					 if(indexnew!=null){
+							
+							layer.close(indexnew);
+							}
+			 },
+			 error: function(XMLHttpRequest, textStatus, errorThrown){
+				 if(indexnew!=null){
+						
+						layer.close(indexnew);
+						}
+				 
+					 console.log(XMLHttpRequest);
+					 console.log(textStatus);
+					 console.log(errorThrown);
+		           /* layer.msg('失败!',{time:2000});*/
+		         }
 		 });
    	}
    	
@@ -854,6 +908,7 @@ $(function () {
    		var renShu=$('#usa_arrival_date').val();
    		if(renShu!=""){//人数 不等于null时
    			$('.mainApplicant').siblings('li').find('.k-content').css("display","none");
+   			var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
    			$.ajax({
      			 type: "POST",
      			 url: "/visa/neworderjp/autoporposer",
@@ -880,7 +935,22 @@ $(function () {
      					color.value(result.customermanage.id);
      					var color = $("#cus_linkman").data("kendoMultiSelect");
      					color.value(result.customermanage.id);
-     			 }
+     					 if(indexnew!=null){
+ 							
+ 							layer.close(indexnew);
+ 							}
+     			 },
+     			 error: function(XMLHttpRequest, textStatus, errorThrown){
+     				 if(indexnew!=null){
+     						
+     						layer.close(indexnew);
+     						}
+     				 
+     					 console.log(XMLHttpRequest);
+     					 console.log(textStatus);
+     					 console.log(errorThrown);
+     		            layer.msg('失败!',{time:2000});
+     		         }
      		 });
    			 $(".mainApplicant").hide();//隐藏 span标签的 主申请人
    		}
@@ -923,6 +993,7 @@ $(function () {
    		
    	}
    	
-function updateDatasource(){
-	
+function linkcityone(){
+	alert(viewModel.get("customer.tripJp.arrivecity"));
+	viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
 }

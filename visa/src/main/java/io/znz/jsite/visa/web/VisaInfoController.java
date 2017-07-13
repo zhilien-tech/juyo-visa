@@ -99,7 +99,10 @@ public class VisaInfoController extends BaseController {
 		if (!Util.isEmpty(user)) {
 			userId = user.getId();
 		}
-		NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, Cnd.where("empid", "=", userId));
+		//NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, Cnd.where("empid", "=", userId));
+		List<NewCustomerEntity> usalist = dbDao.query(NewCustomerEntity.class, Cnd.where("empid", "=", user.getId())
+				.orderBy("createtime", "desc"), null);
+		NewCustomerEntity customer = usalist.get(0);
 		long customerId = 0;
 		if (!Util.isEmpty(customer)) {
 			customerId = customer.getId();//得到客户id
@@ -634,7 +637,12 @@ public class VisaInfoController extends BaseController {
 			userId = user.getId();
 		}
 
-		NewCustomerJpEntity customer = dbDao.fetch(NewCustomerJpEntity.class, Cnd.where("empid", "=", userId));
+		//NewCustomerJpEntity customer = dbDao.fetch(NewCustomerJpEntity.class, Cnd.where("empid", "=", userId));
+
+		List<NewCustomerJpEntity> japanlist = dbDao.query(NewCustomerJpEntity.class,
+				Cnd.where("empid", "=", user.getId()).orderBy("createtime", "desc"), null);
+		NewCustomerJpEntity customer = japanlist.get(0);
+
 		long customerId = 0;
 		if (!Util.isEmpty(customer)) {
 			customerId = customer.getId();//得到客户id

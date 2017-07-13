@@ -20,7 +20,7 @@ var statuslist=[
                 {text:"初审",value:3},
                 {text:"初审通过",value:4},
                 {text:"初审拒绝",value:5},
-                {text:"代送",value:6},
+                {text:"待送",value:6},
                 {text:"DS-160",value:7},
                 {text:"准备提交使馆",value:8},
                 {text:"已提交使馆",value:9},
@@ -345,8 +345,8 @@ var grid = $("#grid").kendoGrid({
             title: "操作", width: 295,
             command: [
                 {name: "modify", imageClass:false, text: " 编辑"},
-                {name: "delivery", imageClass:false, text: "递送"},
                 {name: "shareall", imageClass:false, text: "分享"},
+                {name: "delivery", imageClass:false, text: "递送"},
                 {name: "download", imageClass:false, text: "下载"},
                 regCmd("modify"),
                 regCmd("shareall"),

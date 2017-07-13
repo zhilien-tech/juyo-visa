@@ -73,7 +73,7 @@ $(function () {
 			for (var i = 0; i < jobnamelist.length; i++) {
 				var objaa = jobnamelist[i];//得到对象
 				bb = JSON.parse(objaa.znodes);//将json转换为Object
-				$(".jobName").append('<div class="job_container"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName" type="text" class="form-control input-sm inputText" value="'+jobnamelist[i].jobName+'"><input name="jobId" type="hidden" value="'+jobnamelist[i].jobId+'"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn">删除</button></li></ul><div class="ztree"><ul id="tree_'+treeIndex+'"></ul></div><input type="hidden" class="znodes" value="'+jobnamelist[i].znodes+'"/></div>');
+				$(".jobName").append('<div class="job_container"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName" type="text" class="k-textbox inputText" value="'+jobnamelist[i].jobName+'"><input name="jobId" type="hidden" value="'+jobnamelist[i].jobId+'"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn">删除</button></li></ul><div class="ztree"><ul id="tree_'+treeIndex+'"></ul></div><input type="hidden" class="znodes" value="'+jobnamelist[i].znodes+'"/></div>');
 				treeIndex++;
 				var ztree_container = $(".job_container:last").find("div.ztree").find("ul:first");
 		        var treeId = ztree_container.attr("id") ;
@@ -92,7 +92,7 @@ $(function () {
 	//部门职位 添加职位
     $('#addJob').click(function(){
     	$(".job_container .ztree").hide();
-	       $('.jobName').append('<div class="job_container"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName" type="text" class="form-control input-sm inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" style="width:70px;" class="btn btn-primary btn-sm btnPadding" id="deleteBtn1" >删除</button></li></ul>'
+	       $('.jobName').append('<div class="job_container"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName" type="text" class="k-textbox inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" style="width:70px;" class="btn btn-primary btn-sm btnPadding" id="deleteBtn1" >删除</button></li></ul>'
 	       +'<div class="ztree"><ul id="tree_'+treeIndex+'"></ul></div></div>');
 	       treeIndex++;
 	   var ztree_container = $(".job_container:last").find("div.ztree").find("ul:first");
@@ -137,7 +137,7 @@ function setFunc(){
    var jobInfos = [];
    //取所有树
    $(".job_container").each(function(index,container){
-	   alert(index);
+	   ///alert(index);
 	   var jobName = $(container).find("input[name='jobName']").val();
 	   var jobId = $(container).find("input[name='jobId']").val();
 	   var treeObj = $.fn.zTree.getZTreeObj("tree_" + index);
@@ -161,8 +161,8 @@ $("#saveDeptJob").click(function(){
 	setFunc();//设置功能
 	var _deptName = $("input#deptNameId").val();
 	var _jobJson = $("input#jobJson").val();
-	alert(_deptName);
-	alert(_jobJson);
+	///alert(_deptName);
+	///alert(_jobJson);
 	$.ajax({
 		type : "POST",
 		url : localhostPaht +'/visa/authority/addDeptJob',

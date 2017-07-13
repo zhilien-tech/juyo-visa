@@ -16,7 +16,15 @@
     <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
     <link rel="stylesheet" href="/res/common/ztree/css/zTreeStyle/zTreeStyle.css"/><!--修改的样式-->
     <style type="text/css">
-    .ztree{border:solid 1px red;}
+    	.ztree{border: solid 1px #c9c9c9;margin-top: 5px;background-color: rgba(248, 248, 248, 0.68);}
+    	.li-input{width:100%;}
+    	#addJob{float:left;margin-left:10px;top:20px;}
+    	.inputText{float:left;width:70%;}
+    	span.prompt{float: left;color:red;}
+    	.jobName{clear: both;position: relative;top:15px;}
+    	ul.addDepartment.marHei{margin-top: 15px;}
+    	#settingsPermis,#deleteBtn{margin-left: 15px;}
+    	button#saveDeptJob{margin-bottom:25px;}
     </style>
 </head>
 <body onload="document.getElementById('deptNameId').focus()">
@@ -40,12 +48,10 @@
 						                 	<input id="jobJson" name="jobJson" type="hidden" value=""/>
 						                   <li><label class=" text-right">部门名称：</label></li>
 						                   <li class="li-input">
-						                   		<div>
-						                   			<input id="deptNameId" name="deptName" style="float:left;width:655px;"  type="text" class="form-control input-sm inputText" placeholder="请输入部门名称">
-							                    	<span class="prompt">*</span>
-						                   		</div>
+						                   		<input id="deptNameId" name="deptName" type="text" class="k-textbox inputText" placeholder="请输入部门名称">
+							                    <span class="prompt">*</span>
+							                    <button type="button" class="btn btn-primary btn-sm btnPadding" id="addJob">添加职位</button>
 						                   </li>
-						                   <li><button type="button" class="btn btn-primary btn-sm btnPadding" id="addJob" style="float:left;margin-left:10px;top:20px;">添加职位</button></li>
 						                 </ul>
 	                                    </div>
 	                                    <div class="jobName cf"></div><!--职位权限 设置-->
