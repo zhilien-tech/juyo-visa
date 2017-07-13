@@ -213,16 +213,32 @@ function reasion(){
      });
 }
 
-
+//点击 改签时间申请
 function timeapply(){
-	 $.layer.prompt({
+	 /*$.layer.prompt({
          formType: 2,
          value: '',
          title: '时间申请',
      }, function (value, index, elem) {
     	// alert(value+"=="+index+"=="+elem);value为输入的值
     	 $.layer.closeAll();
-     });
+     });*/
+	
+	 layer.open({
+		    type: 2,
+		    title:false,
+		    closeBtn:true,
+		    fix: false,
+		    maxmin: true,
+		    shadeClose: false,
+		    title: '改签时间申请',
+		    area: ['400px', '470px'],
+		    content: '/myvisa/transactVisa/changeTimeApply.html',
+		    /*end: function(){//添加完页面点击返回的时候自动加载表格数据
+		    	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				parent.layer.close(index);
+		    }*/
+		 });
 }
 
 function jump(){
