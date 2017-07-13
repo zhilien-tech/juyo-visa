@@ -115,7 +115,7 @@ $(function(){
 				var monthfive=newtimefive.getMonth()+1;
 				
 				var dayfive = newtimefive.getDate();
-				$("#resultDate").html('<label>预计&nbsp;&nbsp;'+yearthree+"-"+monththree+"-"+daythree+'&nbsp;——————'+yearfive+"-"+monthfive+"-"+dayfive+'&nbsp'+'返回结果</label>');
+				$("#resultDate").html('<label>预计&nbsp;&nbsp;'+yearthree+"-"+monththree+"-"+daythree+'&nbsp;~&nbsp;'+yearfive+"-"+monthfive+"-"+dayfive+'&nbsp;&nbsp;'+'返回结果</label>');
 			}
 			
 		}
