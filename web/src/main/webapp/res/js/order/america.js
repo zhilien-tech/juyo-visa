@@ -20,7 +20,7 @@ var statuslist=[
     {text:"初审",value:3},
     {text:"初审通过",value:4},
     {text:"初审拒绝",value:5},
-    {text:"代送",value:6},
+    {text:"待送",value:6},
     {text:"DS-160",value:7},
     {text:"准备提交使馆",value:8},
     {text:"已提交使馆",value:9},
@@ -228,9 +228,9 @@ function detailInit(e) {
                 title: "操作", width: 300,
                 command: [
                     {name: "customerEdit", imageClass:false, text: "编辑"},
-                    {name: "delivery", imageClass:false, text: "递送"},
                     {name: "share", imageClass:false, text: "分享"	
                     },//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
+                    {name: "delivery", imageClass:false, text: "递送"},
                     {name: "notice", imageClass:false, text: "通知"},
                     regCmd("customerEdit"),
                     regCmd("share"),
@@ -317,7 +317,7 @@ var grid = $("#grid").kendoGrid({
             }
         },
         {field: 'linkman', title: '联系人', width: 90,template: "<span class='ellipsis' title='#=data.linkman#'>#=data.linkman?data.linkman:''#</span>"},
-        {field: 'email', title: '邮箱',template: "<span class='ellipsis' title='#=data.email#'>#=data.email#</span>"},
+        {field: 'email', title: '电话',template: "<span class='ellipsis' title='#=data.telephone#'>#=data.telephone?data.telephone:''#</span>"},
         {field: 'sendtime', title: '送签时间',format: "{0: yyyy-MM-dd }",template: "<span class='ellipsis' title='#=data.sendtime#'>#=data.sendtime?kendo.toString(data.sendtime, 'yyyy-MM-dd'):''#</span>"},
         {field: 'outtime', title: '出签时间',format: "{0: yyyy-MM-dd }",template: "<span class='ellipsis' title='#=data.outtime#'>#=data.outtime?kendo.toString(data.outtime, 'yyyy-MM-dd'):''#</span>"},
         {field: 'headcount', title: '人数', values: ["美国", "日本"], width: 80,},

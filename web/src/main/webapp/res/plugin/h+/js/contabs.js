@@ -1,5 +1,6 @@
 
 $(function () {
+	
     //计算元素集合的总宽度
     function calSumWidth(elements) {
         var width = 0;
@@ -104,28 +105,33 @@ $(function () {
             $(this).attr('data-index', index);
         }
     });
-
+    
+    //点击 左菜单栏项 触发 function
     function menuItem() {
         // 获取标识数据
-        var dataUrl = $(this).attr('href'),
-            dataIndex = $(this).data('index'),
-            menuName = $.trim($(this).text()),
+        var dataUrl = $(this).attr('href'),//左菜单栏 对应的路径
+        	dataIndex = $(this).data('index'),//左菜单栏 下标
+        	menuName = $.trim($(this).text()),//左菜单栏 标题name
             flag = true;
-        if (dataUrl == undefined || $.trim(dataUrl).length == 0)return false;
+        if (dataUrl == undefined || $.trim(dataUrl).length == 0) return false;
 
         // 选项卡菜单已存在
         $('.J_menuTab').each(function () {
             if ($(this).data('id') == dataUrl) {
-                if (!$(this).hasClass('active')) {
+                if (!$(this).hasClass('active')){
                     $(this).addClass('active').siblings('.J_menuTab').removeClass('active');
                     scrollToTab(this);
                     // 显示tab对应的内容区
                     $('.J_mainContent .J_iframe').each(function () {
-                        if ($(this).data('id') == dataUrl) {
+                        if ($(this).data('id') == dataUrl){
                             $(this).show().siblings('.J_iframe').hide();
                             return false;
                         }
                     });
+                }else{
+                	//当 点击 菜单项 tab选项卡已经有对应的标题选项卡时 重写添加选项卡对应的iframe
+                	 var str1 = '<iframe class="J_iframe" name="iframe' + dataIndex + '" width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataUrl + '" seamless></iframe>';
+                     $('.J_mainContent').find('iframe.J_iframe').hide().parents('.J_mainContent').append(str1);
                 }
                 flag = false;
                 return false;
@@ -134,27 +140,29 @@ $(function () {
 
         // 选项卡菜单不存在
         if (flag) {
-            var str = '<a href="javascript:;" class="active J_menuTab" data-id="' + dataUrl + '">' + menuName + ' <i class="fa fa-times-circle"></i></a>';
+            var str = '<a href="javascript:;" class="active J_menuTab" data-id="'+ dataUrl + '">' 
+            	+ menuName + ' <i class="fa fa-times-circle"></i></a>';
             $('.J_menuTab').removeClass('active');
 
             // 添加选项卡对应的iframe
             var str1 = '<iframe class="J_iframe" name="iframe' + dataIndex + '" width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataUrl + '" seamless></iframe>';
             $('.J_mainContent').find('iframe.J_iframe').hide().parents('.J_mainContent').append(str1);
-
+            
             //显示loading提示
-//            var loading = layer.load();
-//
-//            $('.J_mainContent iframe:visible').load(function () {
-//                //iframe加载完成后隐藏loading提示
-//                layer.close(loading);
-//            });
+            /*var loading = layer.load();
+            $('.J_mainContent iframe:visible').load(function () {
+                //iframe加载完成后隐藏loading提示
+                layer.close(loading);
+            });*/
+            
             // 添加选项卡
             $('.J_menuTabs .page-tabs-content').append(str);
             scrollToTab($('.J_menuTab.active'));
         }
         return false;
     }
-
+    
+    //点击 左菜单栏项 触发
     $('.J_menuItem').on('click', menuItem);
 
     // 关闭选项卡菜单

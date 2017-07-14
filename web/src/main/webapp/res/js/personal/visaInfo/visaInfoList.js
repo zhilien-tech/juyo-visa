@@ -10,6 +10,11 @@ var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
      	viewModel.set("customer", $.extend(true, dafaults, resp));
      });
 }*/
+var firstPart ;
+var secondPart ;
+var thirdPart ;
+var country;
+var countrystatus;
 //初始化页面组件
 $(function () {
 	//页面加载时回显签证信息
@@ -57,6 +62,32 @@ $(function () {
 		$(".input-group input").removeAttr("disabled"); //去掉所有input框的不可编辑属性
 		$(".input-group input").removeClass("k-state-disabled");//去掉不可编辑样式
 	}
+	country = JSON.parse(unescape($.queryString("country")));
+    countrystatus=$.queryString("countrystatus");
+	/*-------------------------小灯泡 效果--------------------------*/
+	firstPart = JSON.parse(unescape($.queryString("secondPart")));//获取 错误 信息
+	secondPart = JSON.parse(unescape($.queryString("secondPart")));//获取 错误 信息
+	thirdPart = JSON.parse(unescape($.queryString("thirdPart")));//获取 错误 信息
+	$('label').each(function(){
+		var labelText=$(this).text();//获取 页面上所有的字段 名称
+		labelText = labelText.split(":");
+		labelText.pop();
+		labelText = labelText.join(":");//截取 :之前的信息
+		if(thirdPart!=null&&thirdPart!=''){
+			
+			for(var i=0;i<thirdPart.length;i++){
+				//console.log(labelText+"==="+firstPart[i]);
+				if(labelText==thirdPart[i]){
+					$(this).next().find('input').css('border-color','#f17474');
+					$(this).next().find('.k-state-default').css('border-color','#f17474');//select(span)
+					$(this).next().find('.input-group-addon').addClass('yellow');//小灯泡
+				}
+			}
+		}
+	});
+	/*-------------------------end 小灯泡 效果--------------------------*/	
+	
+	
 });
 //客户来源
 var customersourceEnum=[
@@ -234,7 +265,8 @@ var viewModel = kendo.observable({
     },
     //参过军
     joinArmy: function () {
-        var state = viewModel.get("customer.army");
+        var joinArmy = viewModel.get("customer.army");
+        var state = joinArmy ? joinArmy.length > 0 : false;
         return state;
     },
     //工作信息详情
@@ -280,11 +312,15 @@ var viewModel = kendo.observable({
     },
     //赴美国旅行目的列表
     travelPurposeEnable: function () {
-        return viewModel.get("customer.travelpurpose");
+    	var objectiveList = viewModel.get("customer.travelpurpose");
+    	var state = objectiveList ? objectiveList.length > 0 : false;
+        return state;
     },
     //是否制定了具体旅行计划
     travelPlanEnable: function () {
-    	return viewModel.get("customer.travelplan");
+    	var travelPlan = viewModel.get("customer.travelplan");
+    	var state = travelPlan ? travelPlan.length > 0 : false;
+    	return state;
     },
     //是否加入一个团队或组织旅行
     joinTeamEnable: function () {
@@ -296,7 +332,9 @@ var viewModel = kendo.observable({
     },
     //申请的制作者
     assistApplyEnable: function () {
-        return viewModel.get("customer.applicantproducer");
+    	var assistApplyEnable = viewModel.get("customer.applicantproducer");
+    	var state = assistApplyEnable ? assistApplyEnable.length > 0 : false;
+        return state;
     }
 });
 kendo.bind($(document.body), viewModel);
@@ -437,11 +475,12 @@ $("#updatePassportSave").on("click",function(){
 $("#nextStepBtn").click(function(){
 	$.ajax({
 		 type: "POST",
-		 url: "/visa/visainfo/updateVisaInfoJPSave",
+		 url: "/visa/visainfo/updatePassportSave",
 		 contentType:"application/json",
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){
 			layer.msg("保存成功",{time:2000});
+			 window.location.href='/myvisa/transactVisa/visaProgressImg.html?country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
              layer.msg('保存失败',{time:2000});

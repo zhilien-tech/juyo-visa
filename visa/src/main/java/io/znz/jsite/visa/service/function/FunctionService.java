@@ -18,6 +18,7 @@ import org.nutz.dao.pager.Pager;
 import org.springframework.stereotype.Service;
 
 import com.uxuexi.core.common.util.Util;
+import com.uxuexi.core.web.chain.support.JsonResult;
 
 /**
  * 功能管理
@@ -42,12 +43,14 @@ public class FunctionService extends NutzBaseService<FunctionEntity> {
 	 * @param addForm
 	 */
 	public Object addfunction(FunctionEntity addForm) {
+		//添加功能表数据
 		addForm.setCreateTime(new Date());
 		Integer parentId = addForm.getParentId();
 		if (Util.isEmpty(parentId)) {
 			addForm.setParentId(0);
 		}
-		return dbDao.insert(addForm);
+		dbDao.insert(addForm);
+		return JsonResult.success("添加成功");
 	}
 
 	/**

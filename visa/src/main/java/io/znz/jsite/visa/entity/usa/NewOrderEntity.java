@@ -82,6 +82,8 @@ public class NewOrderEntity {
 	@Column
 	private int status;
 	@Column
+	private int customerSource;//客户来源
+	@Column
 	private Date createtime;
 	@Column
 	private Date updatetime;
@@ -99,4 +101,9 @@ public class NewOrderEntity {
 	private NewPayCompanyEntity payCompany;
 
 	private NewFastMailEntity fastMail;
+
+	private NewCustomerresourceEntity customerresource;
+
+	//资料是否填写完成
+	private int writebasicinfo;
 }

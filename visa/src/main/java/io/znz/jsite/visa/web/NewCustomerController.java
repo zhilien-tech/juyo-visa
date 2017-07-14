@@ -485,6 +485,7 @@ public class NewCustomerController {
 			dbDao.update(NewCustomerEntity.class, Chain.make("errorinfo", error), Cnd.where("id", "=", customerid));
 		}
 		if ("agree".equals(flag)) {
+			dbDao.update(NewCustomerEntity.class, Chain.make("errorinfo", ""), Cnd.where("id", "=", customerid));
 			dbDao.update(NewCustomerEntity.class, Chain.make("status", OrderVisaApproStatusEnum.agree.intKey()),
 					Cnd.where("id", "=", newCustomer.getId()));
 

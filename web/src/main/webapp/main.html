@@ -16,7 +16,8 @@
 			.colo{color:#fff;}
 			.content-tabs .roll-left {left: 50px;border-left: solid 1px #eeeeee;}
 			nav.page-tabs { margin-left: 90px;}
-			.skin-1 .navbar-minimalize {z-index: 2;float: none;margin: 6px;position: absolute;}
+			.skin-1 .navbar-minimalize {z-index: 2;float: none;margin: 6px;position: absolute;}	
+			.slimScrollDiv >* {overflow: inherit;}/*在左菜单隐藏只显示 图标时，滑动图标 显示二级菜单title*/
 		</style>
 	</head>
 <body class="fixed-sidebar full-height-layout gray-bg skin-1" style="overflow:hidden">
@@ -54,6 +55,7 @@
                 </li>
                 <li id="6"><a class="J_menuItem" href="company/companylist.html"><i class="fa fa-building"></i>&nbsp<span class="nav-label">公司管理</span></a></li>
                 <li id="7"><a class="J_menuItem" href="function/functionlist.html"><i class="fa fa-group"></i><span class="nav-label">功能管理</span></a></li>
+                <li id="8"><a class="J_menuItem" href="authority/authoritylist.html"><i class="fa fa-group"></i><span class="nav-label">权限管理</span></a></li>
                 <li id="2">
                     <a href="#">
                         <i class="fa fa-building"></i>
@@ -221,8 +223,9 @@
             <button class="roll-nav roll-left J_tabLeft"><i class="fa fa-backward"></i>
             </button>
             <nav class="page-tabs J_menuTabs">
-                <div class="page-tabs-content">
-                    <a class="active J_menuTab" data-id="home.html">首页</a>
+                <div class="page-tabs-content" id="homePage">
+                   <!--  <a class="active J_menuTab" data-id="home.html">首页</a> -->
+                   
                 </div>
             </nav>
             <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i></button>
@@ -240,8 +243,7 @@
             <a href="/" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
         </div>
         <div class="row J_mainContent" id="content-main">
-            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" frameborder="0" src=""
-                    data-id="home.html" seamless></iframe>
+            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" frameborder="0" src="" data-id="home.html" seamless></iframe>
         </div>
         <div class="footer">
             <div class="pull-right">&copy;2017 <a href="http://znz.io" target="_blank">ZNZ.IO</a></div>
@@ -640,14 +642,11 @@
 <script src="/res/plugin/layer/layer.js?v=3.0.2"></script>
 <script src="/res/plugin/pace/pace.min.js?v=0.5.1"></script>
 
-
-
-
-
 <script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
 <script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
 <script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
-
+<script src="/res/plugin/jquery.base64.js"></script>
+<script src="/res/plugin/jquery.querystring.js"></script>
 <script src="/res/js/common.js"></script>
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
@@ -675,22 +674,35 @@
     	}
     	//显示登录人姓名
     	var username=$.queryString("username");
+    	  var j = JSON.parse($.base64.atob(decodeURI(username),true));
     	var logintype=$.queryString("logintype");
-    	$("#userId").text(decodeURIComponent(username));
-    	if(logintype != "" && logintype != null && logintype == 1){//1表示进入日本的签证状态
+    	$("#userId").text(j);
+    	/* if(logintype != "" && logintype != null && logintype == 1){//1表示进入日本的签证状态
         	$('.J_iframe').attr('src','/order/america.html'); 
+    		$('#homePage').html('<a  class="active J_menuTab" data-id="home.html">美国 </a>');
         }else if(logintype == 4){
         	$('.J_iframe').attr('src','/company/companylist.html'); 
+    		$('#homePage').html('<a  class="active J_menuTab" data-id="home.html">公司管理 </a>');
         }else{
         	$('.J_iframe').attr('src','/myvisa/transactVisa/visaNationList.html'); 
-        }
+    		$('#homePage').html('<a class="active J_menuTab" data-id="home.html">办理中签证 </a>');
+        } */
     	
+    	if(logintype != "" && logintype != null && logintype == 1){//1表示进入日本的签证状态
+        	$('.J_iframe').attr('src','/order/america.html'); 
+    		$('#homePage').html('<a  class="active J_menuTab" data-id="order/america.html">美国 </a>');
+        }else if(logintype == 4){
+        	$('.J_iframe').attr('src','/company/companylist.html'); 
+    		$('#homePage').html('<a  class="active J_menuTab" data-id="company/companylist.html">公司管理 </a>');
+        }else{
+        	$('.J_iframe').attr('src','/myvisa/transactVisa/visaNationList.html'); 
+    		$('#homePage').html('<a class="active J_menuTab" data-id="myvisa/transactVisa/visaNationList.html">办理中签证 </a>');
+        }
+        
         $.getJSON("/sys/user/curr",function(result){
             $("#name").html(result.name);
             $("#role").html(result.role);
         });
-        
-        /*菜单栏 高亮设置*/
     });
 </script>
 </body>

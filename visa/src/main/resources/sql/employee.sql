@@ -24,3 +24,15 @@ SELECT
 FROM
 	visa_employee ve
 $condition
+/*employee_query_deptname_list*/
+SELECT
+	d.id,
+	d.comId,
+	d.deptName,
+	d.createTime,
+	d.updateTime,
+	d.remark
+FROM
+	visa_new_department d
+LEFT JOIN visa_new_company c ON c.id = d.comId
+$condition

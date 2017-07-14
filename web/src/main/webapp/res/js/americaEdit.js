@@ -85,8 +85,8 @@ var countries = new kendo.data.DataSource({
 		},
 		payCompany:{
 			
-		}
-		
+		},
+		customerresource:{}
     },
     keys = {
 		"customer.peerList":{
@@ -144,7 +144,9 @@ var viewModel = kendo.observable({
     payType: function (type) {
         return viewModel.get("customer.trip.paypersion") === type;
     },
-    
+    comsource:function(value){
+    	
+    },
 });
 kendo.bind($(document.body), viewModel);
 /*****************************************************
@@ -168,8 +170,34 @@ $("#has_other_travelers").change(function () {
     }
 });
 
+//客户来源
+function comsource(){
+	viewModel.set("customer.customermanage.fullComName",'');
+	viewModel.set("customer.customermanage.linkman",'');
+	viewModel.set("customer.customermanage.email",'');
+	viewModel.set("customer.customermanage.telephone",'');
+	viewModel.set("customer.customerresource.linkman",'');
+	viewModel.set("customer.customerresource.fullComName",'');
+	viewModel.set("customer.customerresource.email",'');
+	viewModel.set("customer.customerresource.telephone",'');
+	var flag=$("#customerSource").val();
+	if(flag==3){//直客 
+		$("#select").hide();
+		$("#selectno").show();
+		$('.companyFullName').addClass('hide');//隐藏 默认显示的 其他状态下的 公司全称
+		$('.ZKcompanyFullName').removeClass('hide');//显示   默认显示的  直客  公司全称
+	}else{//其他
+		$("#select").show();
+		$("#selectno").hide();
+		$('.companyFullName').removeClass('hide');//显示 默认显示的 其他状态下的 公司全称
+		$('.ZKcompanyFullName').addClass('hide');//隐藏   默认显示的  直客  公司全称
+	}
+}
+
 $(function () {
-    $("#cus_phone").kendoMultiSelect({
+	comsource();//页面加载时，初始化客户来源字段 
+	//手机--------------------------------------------------------------------------
+	$("#cus_phone").kendoMultiSelect({
    		placeholder:"请选择手机号",
         dataTextField: "telephone",
         dataValueField: "id",
@@ -202,7 +230,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -216,13 +244,11 @@ $(function () {
     			error : function(xhr) {
     			}
     		});
-        	
         }
     });
-    
-});
-
-$(function () {
+	//end 手机--------------------------------------------------------------------------
+	
+	//邮箱--------------------------------------------------------------------------
 	$("#cus_email").kendoMultiSelect({
     	placeholder:"请选择邮箱",
         dataTextField: "email",
@@ -255,7 +281,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -272,10 +298,10 @@ $(function () {
     		});
         }
     });
-});
-//联系人
-
-$(function () {
+	//end 邮箱--------------------------------------------------------------------------
+	
+	
+	//联系人--------------------------------------------------------------------------
 	$("#cus_linkman").kendoMultiSelect({
     	placeholder:"请选择联系人",
         dataTextField: "linkman",
@@ -308,7 +334,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -324,12 +350,10 @@ $(function () {
     		});
         }
     });
-});
-
-
-//公司全称
-
-$(function () {
+	//end 联系人--------------------------------------------------------------------------
+	
+	
+	//公司全称--------------------------------------------------------------------------
 	$("#cus_fullComName").kendoMultiSelect({
     	placeholder:"请选择公司全称",
         dataTextField: "fullComName",
@@ -362,7 +386,7 @@ $(function () {
     				var color = $("#cus_fullComName").data("kendoMultiSelect");
     				color.value(data.id);
     				//客户来源
-    				viewModel.set("customer.customermanage.customerSource",data.customerSource);
+    				viewModel.set("customer.customerSource",data.customerSource);
     				viewModel.set("customer.customermanage.id",data.id);
     				//电话
     				viewModel.set("customer.customermanage.telephone",data.telephone);
@@ -378,12 +402,13 @@ $(function () {
     		});
         }
     });
+	//end 公司全称--------------------------------------------------------------------------
 });
 
 //信息保存
-var validator = $("#orderForm").kendoValidator().data("kendoValidator");
+//var validator = $("#orderForm").kendoValidator().data("kendoValidator");
 function ordersave(){
-			 
+	 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 			 $.ajax({
 				 type: "POST",
 				 url: "/visa/order/orderSave",
@@ -391,6 +416,11 @@ function ordersave(){
 				 dataType: "json",
 				 data: JSON.stringify(viewModel.customer),
 				 success: function (result) {
+					 if(indexnew!=null){
+							
+							layer.close(indexnew);
+							}
+					 
 					 console.log(result.code);
 					 if(result.code=="SUCCESS"){
 						 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
@@ -420,9 +450,8 @@ $(function () {
 			color.value(resp.customermanage.id);
 			var color = $("#cus_linkman").data("kendoMultiSelect");
 			color.value(resp.customermanage.id);
+			var flag=viewModel.get("customer.customerSource");
+			comsource();//判断客户来源 状态 
         });
     }
 });
-
-
-

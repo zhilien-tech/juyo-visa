@@ -11,30 +11,35 @@ window.onload = function(){
      	viewModel.set("customer", $.extend(true, dafaults, resp));
      });
 }
+var firstPartJP;
+var secondPartJP ;
+var thirdPartJP ;
+var country;
+var countrystatus;
 //初始化各个组件
 $(function(){
 	var aa = $.queryString("typeId");//得到签证进度在填写资料时跳转页面传来的参数
 	if(aa == null || aa == "" || aa == undefined){//表示不是从签证进度跳转而来
 		$("#nextStepBtn").hide();//隐藏下一步按钮
 		$("#back").hide();//隐藏返回按钮
-		$("#sex").kendoDropDownList({enable:false});//性别 状态 下拉框初始化不可编辑
+		//$("#sex").kendoDropDownList({enable:false});//性别 状态 下拉框初始化不可编辑
 		$("#birthDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//出生日期
 		$("#birthDate").data("kendoDatePicker").enable(false);//出生日期 不可编辑
-		$("#signedDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//签发日期
+		/*$("#signedDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//签发日期
 		$("#signedDate").data("kendoDatePicker").enable(false);//签发日期 不可编辑
 		$("#validDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//有效期限
-		$("#validDate").data("kendoDatePicker").enable(false);//有效期限不可编辑
+		$("#validDate").data("kendoDatePicker").enable(false);//有效期限不可编辑*/
 		//操作 编辑 按钮时
 		$(".editBtn").click(function(){
 			$(this).addClass("hide");//编辑 按钮隐藏
 			$(".cancelBtn").removeClass("hide");//取消 按钮显示
 			$(".saveBtn").removeClass("hide");//保存 按钮显示
-			$("#sex").data("kendoDropDownList").enable(true);//性别 状态 下拉框初始化可编辑
+			//$("#sex").data("kendoDropDownList").enable(true);//性别 状态 下拉框初始化可编辑
 			$(".input-group .k-textbox").removeClass("k-state-disabled");//删除 不可编辑的边框颜色
 			$(".input-group input").removeAttr("disabled");//删除 不可编辑的属性
 			$("#birthDate").data("kendoDatePicker").enable(true);//出生日期 不可编辑
-			$("#signedDate").data("kendoDatePicker").enable(true);//签发日期 不可编辑
-			$("#validDate").data("kendoDatePicker").enable(true);//有效期限不可编辑
+			//$("#signedDate").data("kendoDatePicker").enable(true);//签发日期 不可编辑
+			//$("#validDate").data("kendoDatePicker").enable(true);//有效期限不可编辑
 		});
 		
 		//操作 取消 按钮时
@@ -44,7 +49,7 @@ $(function(){
 			$(".editBtn").removeClass("hide");//编辑 按钮显示
 			$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
 			$(".input-group input").attr("disabled");//添加 不可编辑的属性
-			$("#sex").data("kendoDropDownList").enable(false);//性别 状态 下拉框初始化不可编辑
+			//$("#sex").data("kendoDropDownList").enable(false);//性别 状态 下拉框初始化不可编辑
 		});
 		
 		//操作 保存 按钮时
@@ -59,11 +64,35 @@ $(function(){
 		//隐藏编辑按钮
 		$(".editBtn").hide();
 		$("#birthDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//出生日期
-		$("#signedDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//签发日期
-		$("#validDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//有效期限
+		//$("#signedDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//签发日期
+		//$("#validDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//有效期限
 		$(".input-group input").removeAttr("disabled"); //去掉所有input框的不可编辑属性
 		$(".input-group input").removeClass("k-state-disabled");//去掉不可编辑样式
 	}
+	country = JSON.parse(unescape($.queryString("country")));
+    countrystatus=$.queryString("countrystatus");
+	/*-------------------------小灯泡 效果--------------------------*/
+	firstPartJP = JSON.parse(unescape($.queryString("firstPartJP")));//获取 错误 信息
+	secondPartJP = JSON.parse(unescape($.queryString("secondPartJP")));//获取 错误 信息
+	thirdPartJP = JSON.parse(unescape($.queryString("thirdPartJP")));//获取 错误 信息
+	$('label').each(function(){
+			
+			var labelText=$(this).text();//获取 页面上所有的字段 名称
+			labelText = labelText.split(":");
+			labelText.pop();
+			labelText = labelText.join(":");//截取 :之前的信息
+			
+			for(var i=0;i<secondPartJP.length;i++){
+				if(labelText==secondPartJP[i]){
+					$(this).next().find('input').css('border-color','#f17474');
+					$(this).next().find('.k-state-default').css('border-color','#f17474');//select(span)
+					$(this).next().find('.input-group-addon').addClass('yellow');//小灯泡
+				}
+			}
+	}); 
+	/*-------------------------end 小灯泡 效果--------------------------*/
+	
+	
 });
 /*------------------------------------------------container---------------------------------------------------*/
 //客户来源
@@ -249,11 +278,17 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-        return viewModel.get("customer.passportlose");
+    	var oldPassportEnable = viewModel.get("customer.passportlose");
+        var state = oldPassportEnable ? oldPassportEnable.length > 0 : false;
+        return state;
+        //return viewModel.get("customer.passportlose");
     },
     // 曾用名
     oldNameEnable: function () {
-        return viewModel.get("customer.oldname");
+    	var oldNameEnable = viewModel.get("customer.oldname");
+        var state = oldNameEnable ? oldNameEnable.length > 0 : false;
+        return state;
+        ///return viewModel.get("customer.oldname");
     },
     // 其他国家公民
     otherCountryEnable: function () {
@@ -263,11 +298,17 @@ var viewModel = kendo.observable({
     },
     //美国纳税人认证码
     usaAuthenticatorCode:function(){
-    	return viewModel.get("customer.authenticatorcode");
+    	var usaAuthenticatorCode = viewModel.get("customer.authenticatorcode");
+        var state = usaAuthenticatorCode ? usaAuthenticatorCode.length > 0 : false;
+        return state;
+    	///return viewModel.get("customer.authenticatorcode");
     },
     //通信地址与家庭地址是否一致
     usaCommunicaHomeAddress:function(){
-    	return viewModel.get("customer.communicahomeaddress");
+    	var usaCommunicaHomeAddress = viewModel.get("customer.communicahomeaddress");
+        var state = usaCommunicaHomeAddress ? usaCommunicaHomeAddress.length > 0 : false;
+        return state;
+    	///return viewModel.get("customer.communicahomeaddress");
     }
 });
 kendo.bind($(document.body), viewModel);//数据绑定结束
@@ -332,7 +373,10 @@ $("#nextStepBtn").click(function(){
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){
 			layer.msg("操作成功",{time:2000});
-			window.location.href='/personal/visaInfo/JPvisaInfoList.html?typeId=1';
+			window.location.href='/personal/visaInfo/JPvisaInfoList.html?firstPartJP='
+				  +escape(JSON.stringify(firstPartJP))+"&secondPartJP="
+				  +escape(JSON.stringify(secondPartJP))+"&thirdPartJP="
+				  +escape(JSON.stringify(thirdPartJP))+"&typeId=1"+"&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
              layer.msg('操作失败',{time:2000});

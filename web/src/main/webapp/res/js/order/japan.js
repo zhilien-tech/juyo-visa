@@ -20,7 +20,7 @@ var statuslist=[
                 {text:"初审",value:3},
                 {text:"初审通过",value:4},
                 {text:"初审拒绝",value:5},
-                {text:"代送",value:6},
+                {text:"待送",value:6},
                 {text:"DS-160",value:7},
                 {text:"准备提交使馆",value:8},
                 {text:"已提交使馆",value:9},
@@ -106,8 +106,15 @@ function regCmd(command) {
                             });*/
                 			
                 			 layer.msg("分享成功",{time: 2000});
-                		} else {
+                		} else if(resp.code === "FAIL"){
+                				if(index!=null){
+        						
+            					layer.close(index);
+            					}
                 			$.layer.alert(resp.msg);
+                		}else{
+                			$.layer.alert(resp.msg);
+                			
                 		}
                 	});
                 	break;
@@ -300,8 +307,8 @@ var grid = $("#grid").kendoGrid({
             model: {
                 id: "id",
                 fields: {
-                	sendtime: {type: "date"},
-                	outtime: {type: "date"},
+                	senddate: {type: "date"},
+                	outdate: {type: "date"},
                     email: {type: "string"}
                    /* user: {defaultValue: {id: "1", name: "管理员"}},
                     useFor: {defaultValue: "美国"},
@@ -314,12 +321,12 @@ var grid = $("#grid").kendoGrid({
         serverFiltering: true
     },
     columns: [
-      {
+ /*     {
 	    field: 'rowNumber',
       	title: '序号',
       	template: "<span class='row-number'></span>",
       	width:75
-      },
+      },*/
         {
             field: 'ordernumber', title: ' 订单号', width: 130,
             template: "<span class='ellipsis' title='#=ordernumber#'>#=ordernumber#</span>",
@@ -328,9 +335,9 @@ var grid = $("#grid").kendoGrid({
             }
         },
         {field: 'linkman', title: '联系人', width: 90,template: "<span class='ellipsis' title='#=data.linkman#'>#=data.linkman?data.linkman:''#</span>"},
-        {field: 'telephone', title: '电话',template: "<span class='ellipsis' title='#=data.telephone#'>#=data.telephone#</span>"},
-        {field: 'senddate', title: '送签时间',format: "{0: yyyy-MM-dd }",template: "<span class='ellipsis' title='#=data.senddate#'>#=data.senddate?kendo.toString(data.senddate, 'yyyy-MM-dd'):''#</span>"},
-        {field: 'outdate', title: '出签时间',format: "{0: yyyy-MM-dd }",template: "<span class='ellipsis' title='#=data.outdate#'>#=data.outdate?kendo.toString(data.outdate, 'yyyy-MM-dd'):''#</span>"},
+        {field: 'telephone', title: '电话',template: "<span class='ellipsis' title='#=data.telephone#'>#=data.telephone?data.telephone:''#</span>"},
+        {field: 'senddate', title: '送签时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.senddate#'>#=data.senddate?kendo.toString(data.senddate, 'yyyy-MM-dd'):''#</span>"},
+        {field: 'outdate', title: '出签时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.outdate#'>#=data.outdate?kendo.toString(data.outdate, 'yyyy-MM-dd'):''#</span>"},
         {field: 'headnum', title: '人数', values: ["美国", "日本"], width: 75,},
         {field: 'countrytype', title: '国家', width: 80,values:countrylist},
         {field: 'status', title: '状态',values:statuslist, width: 80,},
@@ -338,8 +345,8 @@ var grid = $("#grid").kendoGrid({
             title: "操作", width: 295,
             command: [
                 {name: "modify", imageClass:false, text: " 编辑"},
-                {name: "delivery", imageClass:false, text: "递送"},
                 {name: "shareall", imageClass:false, text: "分享"},
+                {name: "delivery", imageClass:false, text: "递送"},
                 {name: "download", imageClass:false, text: "下载"},
                 regCmd("modify"),
                 regCmd("shareall"),
@@ -347,7 +354,7 @@ var grid = $("#grid").kendoGrid({
                 regCmd("delivery"),
             ]
         }
-    ],
+    ]/*,
     dataBound: function () {  
         var rows = this.items();  
         $(rows).each(function () {  
@@ -355,7 +362,7 @@ var grid = $("#grid").kendoGrid({
             var rowLabel = $(this).find(".row-number");  
             $(rowLabel).html(index);  
         });  
-    }
+    }*/
 }).data("kendoGrid");
 //页面刷新
 function successCallback(id){

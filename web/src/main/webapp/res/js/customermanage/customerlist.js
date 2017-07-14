@@ -74,7 +74,7 @@ var grid = $("#grid").kendoGrid({
     pageSize: 20,
     height: "93%",
     sortable: true,
-    editable: true,
+    editable: false,
     resizable: true,
     filterable: true,
     selectable: "row",
@@ -131,8 +131,8 @@ var grid = $("#grid").kendoGrid({
         
         {
         	title: '公司名称',
-        	field: 'fullcomname'
-        	//template: '#= data.fullcomname#'
+        	field: 'fullcomname',
+        	template: "<span class='ellipsis' title='#=data.fullcomname#'>#=data.fullcomname?data.fullcomname:''#</span>"
         },
         {
         	title: '客户来源', 
@@ -146,14 +146,13 @@ var grid = $("#grid").kendoGrid({
         },
         {
         	title: '手机',
-        	field: 'telephone'
-        	
-        	//template: '#= data.telephone#'
+        	field: 'telephone',
+        	template: "<span class='ellipsis' title='#=data.telephone#'>#=data.telephone?data.telephone:''#</span>"
         },
         {
         	title: '邮箱',
-        	field: 'email'
-        	//template: '#= data.email#'
+        	field: 'email',
+        	template: "<span class='ellipsis' title='#=data.email#'>#=data.email?data.email:''#</span>"
         },
         {
             title: "操作", width: 98,

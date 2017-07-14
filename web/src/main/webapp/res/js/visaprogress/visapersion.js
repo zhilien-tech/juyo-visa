@@ -18,7 +18,7 @@ function intoprogressImg(){
 }
 
 
-/*
+
 function jump(){
 	window.location.href='/myvisa/transactVisa/visaNationList.html?country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
-}*/
+}

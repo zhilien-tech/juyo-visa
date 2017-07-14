@@ -11,8 +11,13 @@ import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 import io.znz.jsite.visa.entity.company.CompanyEntity;
+import io.znz.jsite.visa.entity.companyjob.CompanyJobEntity;
+import io.znz.jsite.visa.entity.department.DepartmentEntity;
+import io.znz.jsite.visa.entity.job.JobEntity;
+import io.znz.jsite.visa.entity.userjobmap.UserJobMapEntity;
 import io.znz.jsite.visa.enums.UserDeleteStatusEnum;
 import io.znz.jsite.visa.forms.companyform.CompanySqlForm;
+import io.znz.jsite.visa.service.authority.PublicAuthorityService;
 
 import java.util.Date;
 
@@ -20,6 +25,7 @@ import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.pager.Pager;
 import org.nutz.ioc.aop.Aop;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uxuexi.core.common.util.Util;
@@ -36,6 +42,14 @@ public class CompanyService extends NutzBaseService<CompanyEntity> {
 	public static final int HASH_INTERATIONS = 1024;
 	private static final int SALT_SIZE = 8; //盐长度
 	private static final String INIT_PASSWORD = "000000"; //初始密码
+
+	//管理员所在的部门
+	private static final String MANAGE_DEPART = "公司管理部";
+	//管理员职位
+	private static final String MANAGE_POSITION = "公司管理员";
+
+	@Autowired
+	private PublicAuthorityService publicAuthorityService;
 
 	/**
 	 * 公司列表展示
@@ -74,6 +88,35 @@ public class CompanyService extends NutzBaseService<CompanyEntity> {
 		}
 		CompanyEntity companyAdd = dbDao.insert(addForm);
 		Integer comId = companyAdd.getId();//得到公司id
+		//#########################添加管理员所在的部门信息##########################//
+		DepartmentEntity dept = new DepartmentEntity();
+		dept.setComId(comId);
+		dept.setCreateTime(new Date());
+		dept.setDeptName(MANAGE_DEPART);
+		DepartmentEntity addDept = dbDao.insert(dept);
+		long deptId = addDept.getId();//得到部门id
+		//######################添加公司管理员的职位信息#########################//
+		JobEntity job = new JobEntity();
+		job.setCreateTime(new Date());
+		job.setDeptId(deptId);
+		job.setJobName(MANAGE_POSITION);
+		JobEntity addJob = dbDao.insert(job);
+		long jobId = addJob.getId();
+		//##################在公司职位表中添加管理员的公司职位信息#####################//
+		CompanyJobEntity comJob = new CompanyJobEntity();
+		comJob.setComId(comId);
+		comJob.setJobId(jobId);
+		CompanyJobEntity addComJob = dbDao.insert(comJob);
+		long comJobId = addComJob.getId();//得到公司职位id
+		//添加用户就职表
+		UserJobMapEntity userJob = new UserJobMapEntity();
+		userJob.setComJobId(comJobId);
+		userJob.setEmpId(empId);
+		userJob.setStatus(userAdd.getStatus());
+		userJob.setHireDate(new Date());
+		dbDao.insert(userJob);
+		//分配权限
+		publicAuthorityService.companyFunction(addForm);
 		return JsonResult.success("添加成功");
 	}
 

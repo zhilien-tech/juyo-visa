@@ -41,7 +41,32 @@ function regCmd(command) {
 }
 //添加员工
 function addUser(){
-  layer.open({
+	$.ajax({
+		url : localhostPaht+'/visa/employeemanage/queryDeptName',
+		success : function(data) {
+			var data = JSON.parse(data);
+			var aa = data.queryList;
+			var str = '<option value="">--请选择--</option>';
+			for (var i = 0; i < aa.length; i++) {
+				//console.log(aa[i].id);
+				//console.log(aa[i].deptname);
+				/*var opt = new Option();  
+			    opt.value= aa[i].id;  
+			    opt.text = aa[i].deptname;  
+			    $("#deptId").append(opt);  */
+				str += '<option value="'+aa[i].id+'">'+aa[i].deptname+'</option>';
+				//$('#deptId').append("<option value='"+ aa[i].id+"'>"+ aa[i].deptname +"</option>"); 
+				
+			}
+			console.log("______"+str);
+			//document.getElementById("deptId").innerHTML=str;
+			$('#deptId').append("<option value='1'>1111</option>");
+		},
+		error : function(request) {
+			
+		}
+	});
+	layer.open({
 	    type: 2,
 	    title:false,
 	    closeBtn:true,
@@ -55,14 +80,14 @@ function addUser(){
 	    	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
 	    }
-	 });
+	});
 }
 //初始化上部的表格布局
 var grid = $("#grid").kendoGrid({
     pageSize: 20,
     height: "93%",
     sortable: true,
-    editable: true,
+    editable: false,
     resizable: true,
     filterable: true,
     selectable: "row",
