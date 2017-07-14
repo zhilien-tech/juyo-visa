@@ -9,7 +9,7 @@ package io.znz.jsite.visa.enums;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * 军队枚举
+ * 配偶状态
  * @author   孙斌
  * @Date	 2017年6月11日 	 
  */

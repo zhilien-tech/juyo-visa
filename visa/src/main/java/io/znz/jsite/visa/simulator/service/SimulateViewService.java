@@ -13,11 +13,8 @@ import io.znz.jsite.util.DateUtils;
 import io.znz.jsite.util.StringUtils;
 import io.znz.jsite.visa.bean.Option;
 import io.znz.jsite.visa.bean.helper.Gender;
-import io.znz.jsite.visa.bean.helper.Marital;
-import io.znz.jsite.visa.bean.helper.Payer;
 import io.znz.jsite.visa.bean.helper.Period;
 import io.znz.jsite.visa.bean.helper.Relation;
-import io.znz.jsite.visa.bean.helper.UsaStatus;
 import io.znz.jsite.visa.entity.customer.NewArmyEntity;
 import io.znz.jsite.visa.entity.customer.NewLanguageEntity;
 import io.znz.jsite.visa.entity.customer.NewOldnameEntity;
@@ -39,12 +36,18 @@ import io.znz.jsite.visa.entity.usa.NewPayCompanyEntity;
 import io.znz.jsite.visa.entity.usa.NewPayPersionEntity;
 import io.znz.jsite.visa.entity.usa.NewPeerPersionEntity;
 import io.znz.jsite.visa.entity.usa.NewTrip;
+import io.znz.jsite.visa.enums.DayTypeEnum;
 import io.znz.jsite.visa.enums.GenderEnum;
 import io.znz.jsite.visa.enums.IsDadOrMumEnum;
 import io.znz.jsite.visa.enums.IsusaEnum;
 import io.znz.jsite.visa.enums.LanguageEnum;
 import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
-import io.znz.jsite.visa.enums.OrderVisaUsaRelationEnum;
+import io.znz.jsite.visa.enums.PayPersionRelationEnum;
+import io.znz.jsite.visa.enums.PeerPersionRelationWithMeEnum;
+import io.znz.jsite.visa.enums.RelationInUSAIdentityEnum;
+import io.znz.jsite.visa.enums.RelationRelativeWithMeEnum;
+import io.znz.jsite.visa.enums.SpouseEnum;
+import io.znz.jsite.visa.enums.USARelationWithMeEnum;
 import io.znz.jsite.visa.service.TelecodeService;
 import io.znz.jsite.visa.simulator.dto.ArmyDto;
 import io.znz.jsite.visa.simulator.dto.CustomerDto;
@@ -163,9 +166,6 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 		c.setBirthProvince(n.getBirthprovince());
 		c.setBirthCity(n.getBirthcity());
 
-		//TODO 出生地中文
-		//TODO 出生城市中文
-
 		/*-----------现居地信息-----------*/
 		c.setCountry(n.getNowcountry());//国籍
 		c.setProvince(n.getNowprovince());
@@ -251,8 +251,6 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 		c.setCharitable(commonweals);
 
 		//财务证明  美国  没有
-		//		List<Option> finances = Lists.newArrayList();
-
 		/*--------------------------------------------------------*/
 
 		//6学历   visa_new_teachinfo 
@@ -268,7 +266,7 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 
 				to.setCity(from.getCity());
 				to.setCountry(from.getCountry());
-				//TODO 学位录入有问题
+				//美国签证网站现在不要求填写学位
 				to.setDegree(from.getMajor());
 				to.setDegreeEN(from.getMajoren());
 				to.setEndDate(from.getStartdate());
@@ -302,7 +300,6 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				to.setBewriteEN(from.getJobdescriptionen());
 
 				//当前工作信息没有老板姓名
-
 				to.setCity(from.getNowcity());
 				to.setCountry(from.getNowcountry());
 				to.setCurrent(true);
@@ -323,10 +320,6 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				to.setRoom(from.getUnitaddresssmall());
 				to.setRoomEN(from.getUnitaddresssmallen());
 				to.setSalary(from.getMonthmoney());
-
-				//当前工作不填写起止时间
-				//				to.setStartDate(from.get);
-				//				to.setEndDate(endDate);
 
 				to.setZipCode(from.getZipcode());
 
@@ -369,7 +362,6 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				to.setId(from.getId());
 
 				//无行业
-
 				to.setJob(from.getJob());
 				to.setJobEN(from.getJoben());
 
@@ -382,7 +374,6 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				to.setRoomEN(from.getUnitaddresssmallen());
 
 				//无月薪
-
 				to.setStartDate(from.getStartdate());
 				to.setEndDate(from.getEnddate());
 				to.setZipCode(from.getZipcode());
@@ -409,15 +400,16 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				to.setId(from.getId());
 				to.setInUsa(from.getDirect() == 1);
 
-				//TODO  待处理关系
-				OrderVisaUsaRelationEnum relation2Me = EnumUtil.get(OrderVisaUsaRelationEnum.class,
-						from.getRelationme());
-				//				to.setRelation(relation2Me);
+				//亲属关系
+				String relation2Me = EnumUtil.getValue(RelationRelativeWithMeEnum.class, from.getRelationme());
+				to.setRelation(relation2Me);
 				to.setUsaAddress(from.getUsaaddress());
 				to.setUsaPhone(from.getUsaphone());
 
-				//在美身份 S，C，P，O  TODO
-				//				to.setUsaStatus(from.getUsaidentify());
+				//在美身份 S，C，P，O  
+				Integer usaidentifyKey = from.getUsaidentify();
+				String usaStatus = EnumUtil.getValue(RelationInUSAIdentityEnum.class, usaidentifyKey);
+				to.setUsaStatus(usaStatus);
 
 				return to;
 			}
@@ -437,10 +429,9 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 						to.setDestination(defaultCountry);
 						to.setId(from.getId());
 
-						//TODO 停留时间单位
 						String stayunit = from.getStayunit();
-
-						//						to.setPeriod();
+						Period period = EnumUtil.get(Period.class, stayunit);
+						to.setPeriod(period);
 
 						//无备注
 						to.setStay(from.getStayday());
@@ -477,15 +468,14 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				to.setFirstNameEN(from.getSplitreasonen());
 				to.setId(from.getId());
 
-				//TODO 没有job
-				//				to.setJob();
 				to.setLastName(from.getSpousexing());
 				to.setLastNameEN(from.getSpousexingen());
 				to.setNationality(from.getSpousecountry());
 				to.setPhone(from.getSpouseunitphone());
 				to.setProvince(from.getSpousenowprevince());
-				//TODO 状态
-				//				to.setState(state);
+				//配偶状态
+				String spouseState = EnumUtil.getValue(SpouseEnum.class, from.getMarrystatus());
+				to.setState(spouseState);
 				to.setWedDate(from.getMarrydate());
 				to.setZipCode(from.getSpousezipcode());
 				return to;
@@ -514,11 +504,6 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				to.setSpecialty(from.getArmydo());
 				to.setStartDate(from.getStartdate());
 
-				//TODO 军种
-				//				Integer armyKey = from.getArmytype(); 
-				//				String armytype = EnumUtil.getValue(en, armyKey) ;
-				//				
-				//								to.setType(armytype);
 				return to;
 			}
 		});
@@ -585,8 +570,10 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 			trDto.setContactsLastNameEN(travel.getLinkxingen());
 			trDto.setContactsPhone(travel.getPhone());
 			trDto.setContactsProvince(travel.getLinkstate());
-			//TODO 联系人关系
-			//			trDto.setContactsRelation(travel.getLinkrelation());
+
+			//美国联系人关系
+			String relation2Me = EnumUtil.getValue(USARelationWithMeEnum.class, travel.getLinkrelation());
+			trDto.setContactsRelation(relation2Me);
 			trDto.setContactsZipCode(travel.getLinkzipcode());
 
 			trDto.setCountry(defaultCountry);
@@ -595,14 +582,18 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 			trDto.setHotel(travel.getUsahotel());
 			trDto.setId(travel.getId());
 
-			//TODO 停留单位
-			//			trDto.setPeriod(travel.getStaytype());
+			int staytypeKey = travel.getStaytype();
+			String staytype = EnumUtil.getValue(DayTypeEnum.class, staytypeKey);
+			Period period = EnumUtil.get(Period.class, staytype);
+			trDto.setPeriod(period);
 			trDto.setStay(travel.getStaytime());
 			trDto.setTeam(travel.getTeamname());
 			trDto.setZipCode(travel.getZipcode());
 
-			//支付公司信息
+			//谁支付
+			trDto.setPayer(travel.getPaypersion());
 
+			//支付公司信息
 			NewPayCompanyEntity company = dbDao.fetch(NewPayCompanyEntity.class,
 					Cnd.where("orderid", "=", map.getOrderid()));
 			if (!Util.isEmpty(company)) {
@@ -614,8 +605,8 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				trDto.setCompanyNameEN(company.getComnameen());
 				trDto.setCompanyPhone(company.getComphone());
 
-				//TODO 省份
-				//				trDto.setCompanyProvince(company.get);
+				//付费公司省份
+				trDto.setCompanyProvince(company.getComprovince());
 
 				trDto.setCompanyRelation(company.getComrelation());
 				trDto.setCompanyRelationEN(company.getComrelationen());
@@ -629,17 +620,16 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 					Cnd.where("orderid", "=", map.getOrderid()));
 
 			if (!Util.isEmpty(payer)) {
-				//TODO
-				//				trDto.setPayer(payer);
-				trDto.setPayer(Payer.SELF);
 				trDto.setPayerEmail(payer.getEmail());
 				trDto.setPayerFirstName(payer.getName());
 				trDto.setPayerFirstNameEN(payer.getNameen());
 				trDto.setPayerLastName(payer.getXing());
 				trDto.setPayerLastNameEN(payer.getXingen());
 				trDto.setPayerPhone(payer.getPhone());
-				//TODO
-				trDto.setPayerRelation(Relation.BUSINESS);
+
+				//支付人关系
+				String payerRelation = EnumUtil.getValue(PayPersionRelationEnum.class, payer.getRelation());
+				trDto.setPayerRelation(payerRelation);
 			}
 
 			//查询同行人
@@ -657,8 +647,10 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 							to.setId(from.getId());
 							to.setLastName(from.getPeerxing());
 							to.setLastNameEN(from.getPeerxingen());
-							//TODO  待处理  关系
-							//							to.setRelation(from.getRelationme());
+
+							String relation2Me = EnumUtil.getValue(PeerPersionRelationWithMeEnum.class,
+									from.getRelationme());
+							to.setRelation(relation2Me);
 							return to;
 						}
 					});
@@ -690,7 +682,7 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 
 			father.setId(fatherEntity.getId());
 			father.setInUsa(fatherEntity.getStayusa() == IsusaEnum.yes.intKey());
-			father.setRelation(Relation.FATHER);
+			father.setRelation(IsDadOrMumEnum.dad.value());
 			c.setFather(father);
 		}
 
@@ -708,7 +700,7 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 
 			mum.setId(fatherEntity.getId());
 			mum.setInUsa(fatherEntity.getStayusa() == IsusaEnum.yes.intKey());
-			mum.setRelation(Relation.MOTHER);
+			mum.setRelation(IsDadOrMumEnum.mum.value());
 			c.setMother(mum);
 		}
 		return c;
@@ -992,10 +984,10 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlTravelState", travel.getEntryProvince());
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbZIPCode", travel.getZipCode());
 		//由谁支付,S,O,C
-		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlWhoIsPaying", travel.getPayer().getValue());
+		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlWhoIsPaying", travel.getPayer());
 		//如果是由个人S支付，则忽略以下字段
 		switch (travel.getPayer()) {
-		case COMPANY:
+		case "C":
 			//如果是由公司C支付
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxPayingCompany", travel.getCompanyNameEN());
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxPayerPhone", travel.getCompanyPhone());
@@ -1008,18 +1000,17 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxPayerPostalZIPCode", travel.getCompanyZipCode());
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlPayerCountry", travel.getCompanyCountry());
 			break;
-		case OTHER:
+		case "O":
 			//如果是别人O支付,相关信息
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxPayerSurname", travel.getPayerLastNameEN());
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxPayerGivenName", travel.getPayerFirstNameEN());
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxPayerPhone", travel.getPayerPhone());
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxPAYER_EMAIL_ADDR", travel.getPayerEmail());
-			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlPayerRelationship", travel.getPayerRelation()
-					.getValue());
+			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlPayerRelationship", travel.getPayerRelation());
 			//选择，与本人关系
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_rblPayerAddrSameAsInd_0", true);
 			break;
-		case SELF:
+		case "S":
 		default:
 			break;
 		}
@@ -1052,12 +1043,12 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 									+ "_tbxGivenName", t.getFirstNameEN());
 
 					//如果关系为空，则使用'其他'
-					Relation relation = t.getRelation();
+					String relation = t.getRelation();
 					if (!Util.isEmpty(relation)) {
 						validator(
 								map,
 								"ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl"
-										+ decimalFormat.format(i) + "_ddlTCRelationship", relation.getValue());
+										+ decimalFormat.format(i) + "_ddlTCRelationship", relation);
 					} else {
 						validator(
 								map,
@@ -1179,10 +1170,9 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_EMAIL_ADDR", travel.getContactsEmail());
 
 		//和我的关系
-		Relation contactsRelation = travel.getContactsRelation();
+		String contactsRelation = travel.getContactsRelation();
 		if (!Util.isEmpty(contactsRelation)) {
-			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_REL_TO_APP", travel.getContactsRelation()
-					.getValue());
+			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_REL_TO_APP", contactsRelation);
 		}
 
 		//家庭相关信息
@@ -1206,7 +1196,7 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 					.isInUsa());
 			//父亲是否在美国
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlFATHER_US_STATUS", customer.getFather()
-					.getUsaStatus().getValue());
+					.getUsaStatus());
 			//父亲在美国属于什么身份SCPO，前端似乎没这个字段，这是后端填表必须要的信息
 		} else {
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_cbxFATHER_SURNAME_UNK_IND", true);//不知道父亲的姓氏
@@ -1231,7 +1221,7 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_rblMOTHER_LIVE_IN_US_IND_0", customer.getMother()
 					.isInUsa());
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlMOTHER_US_STATUS", customer.getMother()
-					.getUsaStatus().getValue());
+					.getUsaStatus());
 			//母亲在美国属于什么身份SCPO，前端似乎没这个字段，这是后端填表必须要的信息
 		} else {
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_cbxMOTHER_SURNAME_UNK_IND", true);//不知道母亲的姓氏
@@ -1255,18 +1245,18 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl" + decimalFormat.format(i)
 							+ "_tbxUS_REL_GIVEN_NAME", f.getFirstNameEN());
 
-					Relation fRelation = f.getRelation();
+					String fRelation = f.getRelation();
 					if (!Util.isEmpty(fRelation)) {
 						validator(map,
 								"ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl" + decimalFormat.format(i)
-										+ "_ddlUS_REL_TYPE", fRelation.getValue());
+										+ "_ddlUS_REL_TYPE", fRelation);
 					}
 
-					UsaStatus fUsaStatus = f.getUsaStatus();
+					String fUsaStatus = f.getUsaStatus();
 					if (!Util.isEmpty(fUsaStatus)) {
 						validator(map,
 								"ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl" + decimalFormat.format(i)
-										+ "_ddlUS_REL_STATUS", fUsaStatus.getValue());
+										+ "_ddlUS_REL_STATUS", fUsaStatus);
 					}
 				}
 			}
@@ -1296,12 +1286,12 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 			SpouseDto spouse = customer.getSpouse();
 			if (!Util.isEmpty(spouse)) {
 
-				Marital spState = spouse.getState();
+				//婚姻状态
+				String spState = spouse.getState();
 				if (!Util.isEmpty(spState)) {
-					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_MARITAL_STATUS", spState.getValue());
+					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_MARITAL_STATUS", spState);
 				}
 
-				//已婚M
 				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxSpouseSurname", spouse.getLastNameEN());
 				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxSpouseGivenName", spouse.getFirstNameEN());
 				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlSpouseNatDropDownList",

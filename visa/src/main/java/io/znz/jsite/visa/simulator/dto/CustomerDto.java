@@ -7,8 +7,8 @@ package io.znz.jsite.visa.simulator.dto;
 
 import io.znz.jsite.util.StringUtils;
 import io.znz.jsite.visa.bean.Option;
-import io.znz.jsite.visa.bean.helper.Relation;
 import io.znz.jsite.visa.bean.helper.State;
+import io.znz.jsite.visa.enums.IsDadOrMumEnum;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -142,7 +142,7 @@ public class CustomerDto {
 		if (mother == null) {
 			return;
 		} else {
-			mother.setRelation(Relation.MOTHER);
+			mother.setRelation(IsDadOrMumEnum.mum.value());
 		}
 		if (families == null) {
 			families = Lists.newArrayList(mother);
@@ -163,7 +163,7 @@ public class CustomerDto {
 		if (father == null) {
 			return;
 		} else {
-			father.setRelation(Relation.FATHER);
+			father.setRelation(IsDadOrMumEnum.dad.value());
 		}
 		if (families == null) {
 			families = Lists.newArrayList(father);
@@ -199,8 +199,8 @@ public class CustomerDto {
 			return father;
 		if (families != null) {
 			for (FamilyDto family : families) {
-				if (family.getRelation() == Relation.FATHER) {
-					family.setRelation(Relation.FATHER);
+				if (IsDadOrMumEnum.dad.value().equals(family.getRelation())) {
+					family.setRelation(IsDadOrMumEnum.dad.value());
 					father = family;
 					return family;
 				}
@@ -214,8 +214,8 @@ public class CustomerDto {
 			return mother;
 		if (families != null) {
 			for (FamilyDto family : families) {
-				if (family.getRelation() == Relation.MOTHER) {
-					family.setRelation(Relation.MOTHER);
+				if (IsDadOrMumEnum.mum.value().equals(family.getRelation())) {
+					family.setRelation(IsDadOrMumEnum.mum.value());
 					mother = family;
 					return family;
 				}
@@ -230,7 +230,8 @@ public class CustomerDto {
 			Iterator<FamilyDto> it = families.iterator();
 			while (it.hasNext()) {
 				FamilyDto f = it.next();
-				if (f.getRelation() != Relation.FATHER && f.getRelation() != Relation.MOTHER) {
+				if (!IsDadOrMumEnum.dad.value().equals(f.getRelation())
+						&& !IsDadOrMumEnum.mum.value().equals(f.getRelation())) {
 					list.add(f);
 				}
 			}

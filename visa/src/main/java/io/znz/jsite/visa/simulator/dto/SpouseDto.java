@@ -6,8 +6,6 @@
 
 package io.znz.jsite.visa.simulator.dto;
 
-import io.znz.jsite.visa.bean.helper.Marital;
-
 import java.util.Date;
 
 /**
@@ -21,7 +19,7 @@ import java.util.Date;
 public class SpouseDto {
 
 	private Integer id;
-	private Marital state = Marital.SINGLE;
+	private String state;//婚姻状态
 	private Date wedDate;
 	private String lastName;
 	private String firstName;
@@ -62,11 +60,11 @@ public class SpouseDto {
 		this.id = id;
 	}
 
-	public Marital getState() {
+	public String getState() {
 		return state;
 	}
 
-	public void setState(Marital state) {
+	public void setState(String state) {
 		this.state = state;
 	}
 

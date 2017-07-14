@@ -6,9 +6,6 @@
 
 package io.znz.jsite.visa.simulator.dto;
 
-import io.znz.jsite.visa.bean.helper.Relation;
-import io.znz.jsite.visa.bean.helper.UsaStatus;
-
 import java.util.Date;
 
 public class FamilyDto {
@@ -20,11 +17,11 @@ public class FamilyDto {
 	private String firstNameEN;
 
 	private Date birthday;//生日
-	private Relation relation;
+	private String relation;
 
 	private boolean inUsa;//是否在美国
 	private boolean inJapan;//是否在日本
-	private UsaStatus usaStatus = UsaStatus.OTHER;//亲属在美身份
+	private String usaStatus = "O";//亲属在美身份
 	private String usaAddress;// 在美地址
 	private String usaPhone;// 在美电话
 
@@ -76,11 +73,11 @@ public class FamilyDto {
 		this.birthday = birthday;
 	}
 
-	public Relation getRelation() {
+	public String getRelation() {
 		return relation;
 	}
 
-	public void setRelation(Relation relation) {
+	public void setRelation(String relation) {
 		this.relation = relation;
 	}
 
@@ -100,11 +97,11 @@ public class FamilyDto {
 		this.inJapan = inJapan;
 	}
 
-	public UsaStatus getUsaStatus() {
+	public String getUsaStatus() {
 		return usaStatus;
 	}
 
-	public void setUsaStatus(UsaStatus usaStatus) {
+	public void setUsaStatus(String usaStatus) {
 		this.usaStatus = usaStatus;
 	}
 
