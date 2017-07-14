@@ -6,7 +6,6 @@
 
 package io.znz.jsite.visa.simulator.dto;
 
-import io.znz.jsite.visa.bean.helper.Relation;
 
 /**
  * @author   朱晓川
@@ -20,7 +19,7 @@ public class TogetherDto {
 	private String lastNameEN;
 	private String firstNameEN;
 
-	private Relation relation;
+	private String relation;
 
 	public Integer getId() {
 		return id;
@@ -62,11 +61,11 @@ public class TogetherDto {
 		this.firstNameEN = firstNameEN;
 	}
 
-	public Relation getRelation() {
+	public String getRelation() {
 		return relation;
 	}
 
-	public void setRelation(Relation relation) {
+	public void setRelation(String relation) {
 		this.relation = relation;
 	}
 }

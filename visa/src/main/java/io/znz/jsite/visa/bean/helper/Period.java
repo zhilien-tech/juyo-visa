@@ -1,29 +1,32 @@
 package io.znz.jsite.visa.bean.helper;
 
-import java.lang.reflect.Field;
+import com.uxuexi.core.common.enums.IEnum;
 
 /**
  * Created by Chaly on 2017/3/12.
  */
-public enum Period {
-    DAY("D", "天"),
-    WEEK("W", "周"),
-    MONTH("M", "月"),
-    YEAR("Y", "年");
-    private String letter;
+public enum Period implements IEnum {
+	DAY("D", "天"), WEEK("W", "周"), MONTH("M", "月"), YEAR("Y", "年"), H("H", "24小时内");
+	private String key;
+	private String value;
 
-    public String getValue() {
-        return letter;
-    }
+	public String getValue() {
+		return key;
+	}
 
-    private Period(String letter, String value) {
-        this.letter = letter;
-        try {
-            Field fieldName = getClass().getSuperclass().getDeclaredField("name");
-            fieldName.setAccessible(true);
-            fieldName.set(this, value);
-            fieldName.setAccessible(false);
-        } catch (Exception e) {
-        }
-    }
+	private Period(String key, String value) {
+		this.key = key;
+		this.value = value;
+	}
+
+	@Override
+	public String key() {
+		return key;
+
+	}
+
+	@Override
+	public String value() {
+		return value;
+	}
 }

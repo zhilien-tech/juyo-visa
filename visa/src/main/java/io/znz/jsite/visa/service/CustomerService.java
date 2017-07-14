@@ -565,7 +565,7 @@ public class CustomerService extends BaseService<Customer, Long> {
 					.isInUsa());
 			//父亲是否在美国
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlFATHER_US_STATUS", customer.getFather()
-					.getUsaStatus().getValue());
+					.getUsaStatus());
 			//父亲在美国属于什么身份SCPO，前端似乎没这个字段，这是后端填表必须要的信息
 		} else {
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_cbxFATHER_SURNAME_UNK_IND", true);//不知道父亲的姓氏
@@ -590,7 +590,7 @@ public class CustomerService extends BaseService<Customer, Long> {
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_rblMOTHER_LIVE_IN_US_IND_0", customer.getMother()
 					.isInUsa());
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlMOTHER_US_STATUS", customer.getMother()
-					.getUsaStatus().getValue());
+					.getUsaStatus());
 			//母亲在美国属于什么身份SCPO，前端似乎没这个字段，这是后端填表必须要的信息
 		} else {
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_cbxMOTHER_SURNAME_UNK_IND", true);//不知道母亲的姓氏
@@ -616,7 +616,7 @@ public class CustomerService extends BaseService<Customer, Long> {
 					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl" + decimalFormat.format(i)
 							+ "_ddlUS_REL_TYPE", f.getRelation().getValue());
 					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl" + decimalFormat.format(i)
-							+ "_ddlUS_REL_STATUS", f.getUsaStatus().getValue());
+							+ "_ddlUS_REL_STATUS", f.getUsaStatus());
 				}
 			}
 		}

@@ -528,6 +528,18 @@
             <artifactId>pinyin4j</artifactId>
             <version>2.5.1</version>
         </dependency>
+        <!-- 下载 -->
+        <dependency>
+			<groupId>org.csource</groupId>
+			<artifactId>fastdfs-client</artifactId>
+			<version>1.24.1</version>
+		</dependency>
+        	<!-- 七牛 -->
+		<dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>qiniu-java-sdk</artifactId>
+			<version>[7.0.0, 7.0.99]</version>
+		</dependency>
         <!-- Swagger -->
         <!--<dependency>-->
             <!--<groupId>io.springfox</groupId>-->

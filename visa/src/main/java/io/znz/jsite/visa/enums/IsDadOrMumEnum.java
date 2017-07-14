@@ -14,7 +14,7 @@ import com.uxuexi.core.common.enums.IEnum;
  * @Date	 2017年6月11日 	 
  */
 public enum IsDadOrMumEnum implements IEnum {
-	dad(1, "父亲"), mum(0, "母亲");
+	dad(1, "F"), mum(0, "M");
 	private int key;
 	private String value;
 

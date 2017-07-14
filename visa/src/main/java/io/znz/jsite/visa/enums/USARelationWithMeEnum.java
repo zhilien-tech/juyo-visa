@@ -1,5 +1,5 @@
 /**
- * PeerPersionRelationWithMeEnum.java
+ * UserStatusEnum.java
  * io.znz.jsite.visa.enums
  * Copyright (c) 2017, 北京科技有限公司版权所有.
 */
@@ -9,17 +9,17 @@ package io.znz.jsite.visa.enums;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- *	同行人关系
+ * 美国联系人关系
  * @author   孙斌
- * @Date	 2017年7月14日 	 
+ * @Date	 2017年6月11日 	 
  */
-public enum PeerPersionRelationWithMeEnum implements IEnum {
-	SPOUSE(2, "S"), FRIEND(3, "F"), OTHER_RELATIVE(1, "R"), BUSINESS_ASSOCIATE(4, "B"), PARENT(8, "P"), CHILD(0, "C"), OTHER(
-			7, "O");
+public enum USARelationWithMeEnum implements IEnum {
+	SPOUSE(2, "S"), FRIEND(3, "C"), RELATIVE(1, "R"), BUSINESS_ASSOCIATE(4, "B"), EMPLOYER(8, "P"), SCHOOL_OFFICIAL(0,
+			"H"), OTHER(7, "O");
 	private int key;
 	private String value;
 
-	private PeerPersionRelationWithMeEnum(final int key, final String value) {
+	private USARelationWithMeEnum(final int key, final String value) {
 		this.value = value;
 		this.key = key;
 	}

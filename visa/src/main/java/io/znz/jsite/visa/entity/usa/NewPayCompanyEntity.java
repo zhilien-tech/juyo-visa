@@ -39,6 +39,9 @@ public class NewPayCompanyEntity implements Serializable {
 	@Column
 	@Comment("付费公司国家")
 	private String comcountry;
+	@Column
+	@Comment("付费公司省份")
+	private String comprovince;
 
 	@Column
 	@Comment("付费公司城市")
