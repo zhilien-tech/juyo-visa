@@ -9,7 +9,7 @@ package io.znz.jsite.visa.enums;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * 同行人和我的关系枚举
+ * 美国联系人关系
  * @author   孙斌
  * @Date	 2017年6月11日 	 
  */

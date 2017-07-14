@@ -9,10 +9,7 @@ package io.znz.jsite.visa.enums;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * TODO(这里用一句话描述这个类的作用)
- * <p>
- * TODO(这里描述这个类补充说明 – 可选)
- *
+ * 支付人关系
  * @author   孙斌
  * @Date	 2017年7月14日 	 
  */
