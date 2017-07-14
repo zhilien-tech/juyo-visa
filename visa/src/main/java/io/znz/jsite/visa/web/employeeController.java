@@ -7,11 +7,15 @@
 package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.BaseController;
+import io.znz.jsite.visa.entity.job.JobEntity;
 import io.znz.jsite.visa.forms.employeeform.EmployeeAddForm;
 import io.znz.jsite.visa.forms.employeeform.EmployeeSqlForm;
 import io.znz.jsite.visa.forms.employeeform.EmployeeUpdateForm;
 import io.znz.jsite.visa.service.EmployeeViewService;
 
+import javax.servlet.http.HttpSession;
+
+import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.pager.Pager;
 import org.nutz.mvc.annotation.POST;
@@ -50,6 +54,26 @@ public class employeeController extends BaseController {
 		pager.setPageNumber(sqlForm.getPageNumber());
 		pager.setPageSize(sqlForm.getPageSize());
 		return employeeViewService.listPage(sqlForm, pager);
+	}
+
+	/**
+	 * 页面加载时查询出该公司下面的所有部门
+	 * @param session
+	 */
+	@RequestMapping(value = "queryDeptName")
+	@ResponseBody
+	public Object queryDeptName(final HttpSession session) {
+		return employeeViewService.queryDept(session);
+	}
+
+	/**
+	 * 添加时查询出部门联动带出职位
+	 */
+	@RequestMapping(value = "selectDeptName")
+	@ResponseBody
+	public Object selectDeptName(long deptId) {
+		//根据前端传过来的部门id查询出职位
+		return dbDao.query(JobEntity.class, Cnd.where("deptId", "=", deptId), null);
 	}
 
 	/**
