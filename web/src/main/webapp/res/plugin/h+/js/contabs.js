@@ -117,6 +117,7 @@ $(function () {
 
         // 选项卡菜单已存在
         $('.J_menuTab').each(function () {
+        	 
             if ($(this).data('id') == dataUrl) {
                 if (!$(this).hasClass('active')){
                     $(this).addClass('active').siblings('.J_menuTab').removeClass('active');
@@ -172,7 +173,6 @@ $(function () {
 
         // 当前元素处于活动状态
         if ($(this).parents('.J_menuTab').hasClass('active')) {
-
             // 当前元素后面有同辈元素，使后面的一个元素处于活动状态
             if ($(this).parents('.J_menuTab').next('.J_menuTab').size()) {
 
@@ -232,7 +232,6 @@ $(function () {
         else {
             //  移除当前选项卡
             $(this).parents('.J_menuTab').remove();
-
             // 移除相应tab对应的内容区
             $('.J_mainContent .J_iframe').each(function () {
                 if ($(this).data('id') == closeTabId) {
@@ -266,20 +265,41 @@ $(function () {
 
     // 点击选项卡菜单
     function activeTab() {
+    	
         if (!$(this).hasClass('active')) {
-            var currentId = $(this).data('id');
+        	
+            var currentId = $(this).data('id');//获取 tab的路径
             // 显示tab对应的内容区
             $('.J_mainContent .J_iframe').each(function () {
-                if ($(this).data('id') == currentId) {
+            	///console.log($(this).data('id'));
+                /*if ($(this).data('id') == currentId){
                     $(this).show().siblings('.J_iframe').hide();
                     return false;
-                }
+                }*/
+            	if($(this).data('id')=="home.html"){//由于 不知道从哪里取到的home.html路径 所以先暂时做此处理
+            		if (currentId=="order/america.html"){//再此做了强制处理~
+                        $(this).show().siblings('.J_iframe').hide();
+                        return false;
+                    }
+            	}else{
+            		if ($(this).data('id') == currentId){
+                        $(this).show().siblings('.J_iframe').hide();
+                        return false;
+                    }
+            	}
             });
             $(this).addClass('active').siblings('.J_menuTab').removeClass('active');
+            //var str1 = '<iframe class="J_iframe" width="100%" height="100%" src="' + currentId + '" frameborder="0" data-id="' + currentId + '" seamless></iframe>';
+            //$('.J_mainContent').find('iframe.J_iframe').hide().parents('.J_mainContent').append(str1);
+            
+            
             scrollToTab(this);
         }
     }
-
+    
+    
+    
+    //页面 顶部tab 点击事件
     $('.J_menuTabs').on('click', '.J_menuTab', activeTab);
 
     //刷新iframe

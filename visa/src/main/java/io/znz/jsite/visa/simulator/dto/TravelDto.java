@@ -6,9 +6,7 @@
 
 package io.znz.jsite.visa.simulator.dto;
 
-import io.znz.jsite.visa.bean.helper.Payer;
 import io.znz.jsite.visa.bean.helper.Period;
-import io.znz.jsite.visa.bean.helper.Relation;
 
 import java.util.Date;
 import java.util.List;
@@ -43,9 +41,9 @@ public class TravelDto {
 	private String contactsZipCode;
 	private String contactsPhone;
 	private String contactsEmail;
-	private Relation contactsRelation;
+	private String contactsRelation;
 
-	private Payer payer;
+	private String payer;
 
 	//支付人信息
 	private String payerLastName;
@@ -54,7 +52,7 @@ public class TravelDto {
 	private String payerFirstNameEN;
 	private String payerPhone;
 	private String payerEmail;
-	private Relation payerRelation;
+	private String payerRelation;
 
 	//支付公司信息
 	private String companyName;
@@ -241,19 +239,19 @@ public class TravelDto {
 		this.contactsEmail = contactsEmail;
 	}
 
-	public Relation getContactsRelation() {
+	public String getContactsRelation() {
 		return contactsRelation;
 	}
 
-	public void setContactsRelation(Relation contactsRelation) {
+	public void setContactsRelation(String contactsRelation) {
 		this.contactsRelation = contactsRelation;
 	}
 
-	public Payer getPayer() {
+	public String getPayer() {
 		return payer;
 	}
 
-	public void setPayer(Payer payer) {
+	public void setPayer(String payer) {
 		this.payer = payer;
 	}
 
@@ -305,11 +303,11 @@ public class TravelDto {
 		this.payerEmail = payerEmail;
 	}
 
-	public Relation getPayerRelation() {
+	public String getPayerRelation() {
 		return payerRelation;
 	}
 
-	public void setPayerRelation(Relation payerRelation) {
+	public void setPayerRelation(String payerRelation) {
 		this.payerRelation = payerRelation;
 	}
 

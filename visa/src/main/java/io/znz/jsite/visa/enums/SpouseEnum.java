@@ -9,12 +9,12 @@ package io.znz.jsite.visa.enums;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * 军队枚举
+ * 配偶状态
  * @author   孙斌
  * @Date	 2017年6月11日 	 
  */
 public enum SpouseEnum implements IEnum {
-	sing(0, "单身"), marry(1, "已婚"), liyi(2, "离异"), sangou(3, "丧偶");
+	sing(0, "S"), marry(1, "M"), liyi(2, "D"), sangou(3, "M");
 	private int key;
 	private String value;
 

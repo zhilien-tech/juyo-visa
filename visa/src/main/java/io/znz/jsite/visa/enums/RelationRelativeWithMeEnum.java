@@ -9,16 +9,16 @@ package io.znz.jsite.visa.enums;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * 订单领区枚举
+ * 在美亲戚和我的关系枚举
  * @author   孙斌
  * @Date	 2017年6月11日 	 
  */
-public enum IsDadOrMumEnum implements IEnum {
-	dad(1, "F"), mum(0, "M");
+public enum RelationRelativeWithMeEnum implements IEnum {
+	SPOUSE(3, "S"), FIANCÉ(0, "F"), CHILD(1, "C"), SIBLING(2, "B");
 	private int key;
 	private String value;
 
-	private IsDadOrMumEnum(final int key, final String value) {
+	private RelationRelativeWithMeEnum(final int key, final String value) {
 		this.value = value;
 		this.key = key;
 	}

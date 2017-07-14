@@ -364,7 +364,7 @@ baba:function(e){
 kendo.bind($(document.body), viewModel);
 
 
-	function comsource(){
+function comsource(){
 		viewModel.set("customer.customermanage.fullComName",'');
 		viewModel.set("customer.customermanage.linkman",'');
 		viewModel.set("customer.customermanage.email",'');
@@ -373,9 +373,6 @@ kendo.bind($(document.body), viewModel);
 		viewModel.set("customer.customerresourceJp.fullComName",'');
 		viewModel.set("customer.customerresourceJp.email",'');
 		viewModel.set("customer.customerresourceJp.telephone",'');
-/*		viewModel.set();
-		viewModel.set();
-		viewModel.set();*/
 		var flag=$("#customerSource").val();
 		if(flag==3){//直客
 			$("#select").hide();
@@ -700,7 +697,6 @@ $(function () {
         	    	person.text=proposerInfoJpList[i].fullname;
         	    	person.value=proposerInfoJpList[i].id;
         	    	
-        	    	
         	    	proposersnew.push(person);
 //        			alert(JSON.stringify(proposersnew));
         			viewModel.set("proposers",proposersnew);
@@ -731,34 +727,26 @@ $(function () {
 			var color = $("#cus_linkman").data("kendoMultiSelect");
 			color.value(resp.customermanage.id);
 			//客户来源加载显示判断
-			 comsource();
-			
-			//时间格式
-			/*var intimename=document.getEelementsByName("intimename");
-			for(var i in intimername){
-				alert(i);
-			}*/
-			
-		/*	$("[name='intimename']").each(function(){
-				var mm = $(this).val();
-			});*/
-			
+			// comsource();
+			var flag=$("#customerSource").val();
+			if(flag==3){//直客
+				$("#select").hide();
+				$("#selectno").show();
+				$(".companyFullName").hide();
+				$('.ZKcompanyFullName').removeClass("hide");// 显示 直客状态下的  公司全称
+			}else{//其他的...
+				$("#select").show();
+				$("#selectno").hide();
+				$(".companyFullName").show();
+				$('.ZKcompanyFullName').addClass("hide");// 隐藏 直客状态下的  公司全称
+			}
         });
     }
     
-    comsource();//客户来源 状态 模块加载
+   //comsource();//客户来源 状态 模块加载
    
 });
-/*$(function(){
-	
-	if(viewModel.get("customer.tripJp.oneormore")==1){
-		$('.WangFan').addClass('hide');
-		$('.DuoCheng').removeClass('hide');
-	}else{
-		$('.WangFan').removeClass('hide');
-		$('.DuoCheng').addClass('hide');
-	}
-});*/
+
    $("#DuoCheng_WangFan").change(function(){
     	if($(this).is(':checked')){
     		viewModel.set("customer.tripJp.oneormore", true);
@@ -886,22 +874,6 @@ $(function () {
 		         }
 		 });
    	}
-   	
-   	
-   	/*function comsource(){
-   		var flag=$("#customerSource").val();
-   		if(flag==3){//直客 
-   			$("#select").hide();
-   			$("#selectno").show();
-   			$('.companyFullName').addClass('hide');//隐藏 默认显示的 其他状态下的 公司全称
-   			$('.ZKcompanyFullName').removeClass('hide');//显示   默认显示的  直客  公司全称
-   		}else{//其他
-   			$("#select").show();
-   			$("#selectno").hide();
-   			$('.companyFullName').removeClass('hide');//显示 默认显示的 其他状态下的 公司全称
-   			$('.ZKcompanyFullName').addClass('hide');//隐藏   默认显示的  直客  公司全称
-   		}
-   	}*/
    	
  
    	function addporposer(){

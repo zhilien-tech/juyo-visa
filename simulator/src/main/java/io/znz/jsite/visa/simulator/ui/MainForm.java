@@ -233,6 +233,7 @@ public class MainForm extends JPanel {
 					} else {
 						JOptionPane.showMessageDialog(new JLabel(), ro.getMsg());
 					}
+
 				} catch (Exception exception) {
 					MainForm.this.log(ExceptionUtils.getStackTrace(exception));
 					JOptionPane.showMessageDialog(new JLabel(), "服务器不可用");
@@ -240,6 +241,28 @@ public class MainForm extends JPanel {
 				executeTask.setEnabled(true);
 			}
 		}).start();
+	}
+
+	/**TODO  直接使用数据文件进行测试*/
+	private void useFile4Test() {
+
+		File tmp = new File(System.getProperty("user.dir") + "/tmp");
+		if (!tmp.exists())
+			tmp.mkdirs();
+		final String oid = "1348";
+		File target = new File(tmp, oid + ".json");
+
+		//执行命令行
+		File python = new File(pyFile.getText());
+		if (python.exists()) {
+			String cmd = "python " + pyFile.getText() + " " + target.getAbsolutePath();
+			command.setText(cmd);
+			exe(command.getText());
+			log("准备任务码为" + oid + "的上传文件");
+			log("总计用时:" + ((System.currentTimeMillis() - startTime) / 1000) + "秒");
+		} else {
+			JOptionPane.showMessageDialog(new JLabel(), "自动化脚本不存在");
+		}
 	}
 
 	//上传 DS160文件的按钮点击事件

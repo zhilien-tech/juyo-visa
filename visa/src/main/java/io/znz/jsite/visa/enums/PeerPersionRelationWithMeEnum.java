@@ -1,5 +1,5 @@
 /**
- * UserStatusEnum.java
+ * PeerPersionRelationWithMeEnum.java
  * io.znz.jsite.visa.enums
  * Copyright (c) 2017, 北京科技有限公司版权所有.
 */
@@ -9,16 +9,17 @@ package io.znz.jsite.visa.enums;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * 订单领区枚举
+ *	同行人关系
  * @author   孙斌
- * @Date	 2017年6月11日 	 
+ * @Date	 2017年7月14日 	 
  */
-public enum IsDadOrMumEnum implements IEnum {
-	dad(1, "F"), mum(0, "M");
+public enum PeerPersionRelationWithMeEnum implements IEnum {
+	SPOUSE(2, "S"), FRIEND(3, "F"), OTHER_RELATIVE(1, "R"), BUSINESS_ASSOCIATE(4, "B"), PARENT(8, "P"), CHILD(0, "C"), OTHER(
+			7, "O");
 	private int key;
 	private String value;
 
-	private IsDadOrMumEnum(final int key, final String value) {
+	private PeerPersionRelationWithMeEnum(final int key, final String value) {
 		this.value = value;
 		this.key = key;
 	}

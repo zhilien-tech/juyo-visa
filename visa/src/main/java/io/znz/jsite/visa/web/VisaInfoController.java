@@ -324,6 +324,7 @@ public class VisaInfoController extends BaseController {
 		String producerMing = customer.getApplicantproducer().getProducerMing();
 		String xing = customer.getChinesexing();
 		String name = customer.getChinesename();
+		customer.setWritebasicinfo(1);
 		if (!Util.isEmpty(xing) && !Util.isEmpty(name)) {
 			customer.setChinesefullname(xing + name);
 		} else if (Util.isEmpty(xing) && !Util.isEmpty(name)) {
@@ -673,7 +674,8 @@ public class VisaInfoController extends BaseController {
 	@RequestMapping(value = "updateVisaInfoJPSave", method = RequestMethod.POST)
 	@ResponseBody
 	public Object updateVisaInfoJPSave(@RequestBody NewCustomerJpEntity customer) {
-
+		customer.setWritebasicinfo(1);
+		dbDao.update(customer, null);
 		List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
 				Cnd.where("customer_jp_id", "=", customer.getId()), null);
 		long orderid = query.get(0).getOrder_jp_id();
