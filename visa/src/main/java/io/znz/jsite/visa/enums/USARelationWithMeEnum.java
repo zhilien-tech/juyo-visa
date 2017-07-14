@@ -9,16 +9,17 @@ package io.znz.jsite.visa.enums;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * 军队枚举
+ * 同行人和我的关系枚举
  * @author   孙斌
  * @Date	 2017年6月11日 	 
  */
-public enum SpouseEnum implements IEnum {
-	sing(0, "S"), marry(1, "M"), liyi(2, "D"), sangou(3, "M");
+public enum USARelationWithMeEnum implements IEnum {
+	SPOUSE(2, "S"), FRIEND(3, "C"), RELATIVE(1, "R"), BUSINESS_ASSOCIATE(4, "B"), EMPLOYER(8, "P"), SCHOOL_OFFICIAL(0,
+			"H"), OTHER(7, "O");
 	private int key;
 	private String value;
 
-	private SpouseEnum(final int key, final String value) {
+	private USARelationWithMeEnum(final int key, final String value) {
 		this.value = value;
 		this.key = key;
 	}
