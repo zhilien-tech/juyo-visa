@@ -450,6 +450,7 @@ $(function () {
 			color.value(resp.customermanage.id);
 			var color = $("#cus_linkman").data("kendoMultiSelect");
 			color.value(resp.customermanage.id);
+	
 			var flag=viewModel.get("customer.customerSource");
 			comsource();//判断客户来源 状态 
         });
