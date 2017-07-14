@@ -118,6 +118,7 @@ var grid = $("#grid").kendoGrid({
     columns: [
         {
         	title: '序号',
+        	width: 75,
         	field: 'serialnumber',
         	template: "<span class='row-number'></span>" 
         },
@@ -127,8 +128,9 @@ var grid = $("#grid").kendoGrid({
         	//template: '#= data.fullcomname#'
         },
         {
-        	title: ' 访问地止', 
-        	field: 'url'
+        	title: ' 访问地址', 
+        	field: 'url',
+        	template: "<span class='ellipsis' title='#=data.url#'>#=data.url?data.url:''#</span>"	
         },
         {
         	title: '功能等级',
@@ -137,8 +139,8 @@ var grid = $("#grid").kendoGrid({
         },
         {
         	title: '备注',
-        	field: 'remark'
-        	//template: '#= data.telephone#'
+        	field: 'remark',
+        	template: "<span class='ellipsis' title='#=data.remark#'>#=data.remark?data.remark:''#</span>"
         },
         {
             title: "操作", width: 98,
