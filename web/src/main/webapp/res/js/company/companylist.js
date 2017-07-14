@@ -116,13 +116,14 @@ var grid = $("#grid").kendoGrid({
     columns: [
         {
         	title: '序号',
+        	width: 75,
         	field: 'serialnumber',
         	template: "<span class='row-number'></span>" 
         },
         {
         	title: '公司名称',
-        	field: 'comname'
-        	//template: '#= data.fullcomname#'
+        	field: 'comname',
+        	template: "<span class='ellipsis' title='#=data.comname#'>#=data.comname?data.comname:''#</span>"
         },
         {
         	title: ' 联系人', 
@@ -130,13 +131,13 @@ var grid = $("#grid").kendoGrid({
         },
         {
         	title: '联系电话',
-        	field: 'mobile' 
-        	//template: '#= data.linkman#'
+        	field: 'mobile',
+        	template: "<span class='ellipsis' title='#=data.mobile#'>#=data.mobile?data.mobile:''#</span>"
         },
         {
         	title: '邮箱',
-        	field: 'email'
-        	//template: '#= data.telephone#'
+        	field: 'email',
+        	template: "<span class='ellipsis' title='#=data.email#'>#=data.email?data.email:''#</span>"
         },
         {
         	title: '座机号码',
