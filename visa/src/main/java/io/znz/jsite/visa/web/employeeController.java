@@ -18,13 +18,14 @@ import javax.servlet.http.HttpSession;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.pager.Pager;
-import org.nutz.mvc.annotation.POST;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
 
 /**
@@ -69,22 +70,25 @@ public class employeeController extends BaseController {
 	/**
 	 * 添加时查询出部门联动带出职位
 	 */
-	@RequestMapping(value = "selectDeptName")
+	@RequestMapping(value = "selectJobName")
 	@ResponseBody
-	public Object selectDeptName(long deptId) {
+	public Object selectJobName(String deptId) {
+		Long parseLong = null;
+		if (!Util.isEmpty(deptId)) {
+			parseLong = Long.parseLong(deptId);
+		}
 		//根据前端传过来的部门id查询出职位
-		return dbDao.query(JobEntity.class, Cnd.where("deptId", "=", deptId), null);
+		return dbDao.query(JobEntity.class, Cnd.where("deptId", "=", parseLong), null);
 	}
 
 	/**
 	 * 添加数据操作
 	 * @param addForm
 	 */
-	@RequestMapping(value = "addUserData")
+	@RequestMapping(value = "addUserData", method = RequestMethod.POST)
 	@ResponseBody
-	@POST
-	public Object addUserData(EmployeeAddForm addForm) {
-		return employeeViewService.addUserData(addForm);
+	public Object addUserData(EmployeeAddForm addForm, long jobId, final HttpSession session) {
+		return employeeViewService.addUserData(addForm, jobId, session);
 	}
 
 	/**
@@ -93,8 +97,8 @@ public class employeeController extends BaseController {
 	 */
 	@RequestMapping(value = "updateData")
 	@ResponseBody
-	public Object updateData(long uid) {
-		return employeeViewService.updateDate(uid);
+	public Object updateData(long uid, final HttpSession session) {
+		return employeeViewService.updateDate(uid, session);
 	}
 
 	/**
@@ -103,8 +107,8 @@ public class employeeController extends BaseController {
 	 */
 	@RequestMapping(value = "updateUserData")
 	@ResponseBody
-	public Object updateUserData(EmployeeUpdateForm updateForm) {
-		return employeeViewService.updateDataSave(updateForm);
+	public Object updateUserData(EmployeeUpdateForm updateForm, final HttpSession session) {
+		return employeeViewService.updateDataSave(updateForm, session);
 	}
 
 	/**

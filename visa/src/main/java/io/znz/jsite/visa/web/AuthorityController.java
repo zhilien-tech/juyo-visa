@@ -6,6 +6,7 @@
 
 package io.znz.jsite.visa.web;
 
+import io.znz.jsite.base.BaseController;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.visa.dto.DeptJobForm;
 import io.znz.jsite.visa.forms.authority.AuthoritySqlForm;
@@ -31,7 +32,7 @@ import com.uxuexi.core.db.dao.IDbDao;
  */
 @Controller
 @RequestMapping("visa/authority")
-public class AuthorityController {
+public class AuthorityController extends BaseController {
 	@Autowired
 	private IDbDao dbDao;
 

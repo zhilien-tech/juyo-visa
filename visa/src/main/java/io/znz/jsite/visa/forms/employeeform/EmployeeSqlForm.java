@@ -6,7 +6,7 @@
 
 package io.znz.jsite.visa.forms.employeeform;
 
-import io.znz.jsite.visa.enums.UserDeleteStatusEnum;
+import io.znz.jsite.visa.enums.UserJobStatusEnum;
 import io.znz.jsite.visa.form.KenDoParamForm;
 
 import java.util.Date;
@@ -76,8 +76,9 @@ public class EmployeeSqlForm extends KenDoParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
-		cnd.and("ve.status", "=", UserDeleteStatusEnum.NO.intKey());//未删除
-		cnd.orderBy("ve.createTime", "DESC");
+		cnd.and("e.status", "=", UserJobStatusEnum.JOB.intKey());//在职
+		cnd.and("d.deptName", "!=", "公司管理部");
+		cnd.orderBy("e.createTime", "DESC");
 		return cnd;
 	}
 }

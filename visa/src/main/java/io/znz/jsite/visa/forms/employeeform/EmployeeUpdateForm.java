@@ -21,8 +21,13 @@ import com.uxuexi.core.web.form.ModForm;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class EmployeeUpdateForm extends ModForm {
+
 	//公司id
 	private Integer comId;
+	//部门名称
+	private long deptId;
+	//职位名称
+	private long jobId;
 	//用户姓名
 	private String fullName;
 	//用户名/手机号码

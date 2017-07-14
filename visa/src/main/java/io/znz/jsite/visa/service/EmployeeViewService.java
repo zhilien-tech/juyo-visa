@@ -35,9 +35,11 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.aop.Aop;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.uxuexi.core.common.util.BeanUtil;
 import com.uxuexi.core.common.util.Util;
+import com.uxuexi.core.db.util.DbSqlUtil;
+import com.uxuexi.core.web.chain.support.JsonResult;
 import com.uxuexi.core.web.util.FormUtil;
 
 /**
@@ -65,6 +67,7 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 		Cnd cnd = Cnd.NEW();
 		cnd.and("d.comId", "=", comId);
 		cnd.and("d.deptName", "!=", "公司管理部");
+		cnd.and("d.deptName", "!=", "");
 		List<Record> queryList = dbDao.query(sql, cnd, null);
 		obj.put("queryList", queryList);
 		return obj;
@@ -74,36 +77,88 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 	 * 添加员工操作
 	 * @param addForm
 	 */
-	public Object addUserData(EmployeeAddForm addForm) {
-		//添加用户数据
-		addForm.setCreateTime(new Date());
-		addForm.setStatus(UserDeleteStatusEnum.NO.intKey());//未删除
-		addForm.setUserType(UserTypeEnum.PERSONNEL.intKey());//工作人员身份
-		addForm.setDisableUserStatus(UserStatusEnum.VALID.intKey());//激活
-		//初始密码
-		byte[] salt = Digests.generateSalt(SALT_SIZE);
-		addForm.setSalt(Encodes.encodeHex(salt));
-		byte[] password = INIT_PASSWORD.getBytes();
-		byte[] hashPassword = Digests.sha1(password, salt, HASH_INTERATIONS);
-		addForm.setPassword(Encodes.encodeHex(hashPassword));
-		EmployeeEntity userdto = FormUtil.add(dbDao, addForm, EmployeeEntity.class);
-		Integer userId = userdto.getId();//得到用户id
-		//##########################添加用户就职表数据##########################//
-		UserJobMapEntity userjob = new UserJobMapEntity();
-		userjob.setEmpId(userId);
-		userjob.setStatus(UserJobStatusEnum.JOB.intKey());//在职
-		userjob.setHireDate(new Date());
-		dbDao.insert(userjob);
-		return userdto;
+	@Aop("txDb")
+	public Object addUserData(EmployeeAddForm addForm, long jobId, final HttpSession session) {
+		//通过session获取公司的id
+		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		long comId = company.getComId();//得到公司的id
+		//查询出如果本公司下的某个员工离职了，再此入职让他的状态改为入职状态即可
+		Sql sqlUser = Sqls.create(sqlManager.get("employee_update_old_user"));
+		Cnd cnd = Cnd.NEW();
+		cnd.and("cj.comId", "=", comId);
+		cnd.and("e.status", "=", UserJobStatusEnum.QUIT.intKey());//离职
+		cnd.and("ej.status", "=", UserJobStatusEnum.QUIT.intKey());//离职
+		cnd.and("e.telephone", "=", addForm.getTelephone());//用户名
+		List<Record> before = dbDao.query(sqlUser, cnd, null);
+		Long userId = null;
+		for (Record record : before) {
+			if (!Util.isEmpty(before)) {
+				userId = (long) record.getInt("id");
+			}
+		}
+		if (Util.isEmpty(before)) {
+			//添加用户数据
+			addForm.setCreateTime(new Date());
+			addForm.setStatus(UserJobStatusEnum.JOB.intKey());//在职
+			addForm.setUserType(UserTypeEnum.PERSONNEL.intKey());//工作人员身份
+			addForm.setDisableUserStatus(UserStatusEnum.VALID.intKey());//激活
+			//初始密码
+			byte[] salt = Digests.generateSalt(SALT_SIZE);
+			addForm.setSalt(Encodes.encodeHex(salt));
+			byte[] password = INIT_PASSWORD.getBytes();
+			byte[] hashPassword = Digests.sha1(password, salt, HASH_INTERATIONS);
+			addForm.setPassword(Encodes.encodeHex(hashPassword));
+			EmployeeEntity userdto = FormUtil.add(dbDao, addForm, EmployeeEntity.class);
+			Integer userIds = userdto.getId();//得到用户id
+			//根据公司id和职位id查询出公司职位表的id
+			CompanyJobEntity comJob = dbDao.fetch(CompanyJobEntity.class,
+					Cnd.where("comId", "=", comId).and("jobId", "=", jobId));
+			Long comJobId = comJob.getId();//得到公司职位id
+			//往用户就职表中填入数据
+			Sql sql = Sqls.create(sqlManager.get("employee_add_emp_job_data"));
+			sql.params().set("userId", userId);
+			sql.params().set("statusId", UserJobStatusEnum.JOB.intKey());//在职
+			sql.params().set("comJobId", comJobId);
+			UserJobMapEntity newUser = DbSqlUtil.fetchEntity(dbDao, UserJobMapEntity.class, sql);
+			if (Util.isEmpty(newUser)) {
+				newUser = new UserJobMapEntity();
+				newUser.setEmpId(userIds);
+				newUser.setComJobId(comJobId);
+				newUser.setStatus(UserJobStatusEnum.JOB.intKey());//在职
+				newUser.setHireDate(new Date());
+				newUser = dbDao.insert(newUser);
+			}
+		}
+		//若此员工在本公司离职，但是又想入职，查询出他的信息之后更新此员工的状态即可
+		if (!Util.isEmpty(before)) {
+			dbDao.update(UserJobMapEntity.class, Chain.make("status", UserJobStatusEnum.JOB.intKey()),
+					Cnd.where("empId", "=", userId));
+			dbDao.update(EmployeeEntity.class, Chain.make("status", UserJobStatusEnum.JOB.intKey()),
+					Cnd.where("id", "=", userId));
+		}
+		return JsonResult.success("添加成功!");
 	}
 
 	/**
-	 * 回显客户信息数据
+	 * 回显用户信息数据
 	 * @param cid 
 	 */
-	public Object updateDate(long uid) {
-		EmployeeEntity one = dbDao.fetch(EmployeeEntity.class, uid);
-		return one;
+	public Object updateDate(long uid, final HttpSession session) {
+		Map<String, Object> obj = Maps.newHashMap();
+		Sql sqluser = Sqls.create(sqlManager.get("employee_update_data"));
+		sqluser.params().set("userId", uid);
+		Record one = dbDao.fetch(sqluser);
+		//通过session获取公司的id
+		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		long comId = company.getComId();//得到公司的id
+		Sql sql = Sqls.create(sqlManager.get("employee_select_dept_list"));
+		Cnd cnd = Cnd.NEW();
+		cnd.and("d.comId", "=", comId);
+		cnd.and("d.deptName", "!=", "公司管理部");
+		List<Record> userDeptList = dbDao.query(sql, cnd, null);
+		obj.put("one", one);//用户信息
+		obj.put("userDeptList", userDeptList);//部门职位信息
+		return obj;
 	}
 
 	/**
@@ -111,9 +166,29 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 	 * @param updateForm
 	 * @return 
 	 */
-	public Object updateDataSave(EmployeeUpdateForm updateForm) {
+	public Object updateDataSave(EmployeeUpdateForm updateForm, final HttpSession session) {
+		//通过session获取公司的id
+		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		long comId = company.getComId();//得到公司的id
+		Map<String, Object> obj = Maps.newHashMap();
+		if (!Util.isEmpty(updateForm)) {
+			updateForm.setStatus(UserJobStatusEnum.JOB.intKey());
+			updateForm.setUpdateTime(new Date());
+		}
+		EmployeeEntity user = new EmployeeEntity();
+		BeanUtil.copyProperties(updateForm, user);
+		this.updateIgnoreNull(user);//更新用户表中的数据
+		//根据公司id和职位id查询出公司职位表的id
+		CompanyJobEntity comJob = dbDao.fetch(CompanyJobEntity.class,
+				Cnd.where("comId", "=", comId).and("jobId", "=", updateForm.getJobId()));
+		long comJobId = comJob.getId();//得到公司职位id
+		//更新部门职位
+		dbDao.update(CompanyJobEntity.class, Chain.make("jobId", updateForm.getJobId()), Cnd.where("id", "=", comJobId));
+		dbDao.update(UserJobMapEntity.class, Chain.make("comJobId", comJobId),
+				Cnd.where("empId", "=", updateForm.getId()));
+
 		//查询出当前数据库中已存在的数据
-		List<EmployeeEntity> before = dbDao.query(EmployeeEntity.class, Cnd.where("id", "=", updateForm.getId()), null);
+		/*List<EmployeeEntity> before = dbDao.query(EmployeeEntity.class, Cnd.where("id", "=", updateForm.getId()), null);
 		//欲更新为
 		List<EmployeeEntity> after = Lists.newArrayList();
 		if (!Util.isEmpty(before)) {
@@ -134,8 +209,8 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 				after.add(m);
 			}
 		}
-		dbDao.updateRelations(before, after);
-		return null;
+		dbDao.updateRelations(before, after);*/
+		return obj;
 	}
 
 	/**

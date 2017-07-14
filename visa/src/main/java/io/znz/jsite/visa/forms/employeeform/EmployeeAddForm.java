@@ -25,6 +25,10 @@ public class EmployeeAddForm extends AddForm {
 	private Integer id;
 	//公司id
 	private Integer comId;
+	//部门id
+	private Integer jobId;
+	//职位id
+	private Integer deptId;
 	//用户姓名
 	private String fullName;
 	//用户名/手机号码

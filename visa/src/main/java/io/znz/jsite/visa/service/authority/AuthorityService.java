@@ -309,7 +309,11 @@ public class AuthorityService extends NutzBaseService {
 		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
 		long comId = company.getComId();//得到公司的id
 		String jobJson = updateForm.getJobJson();
-		JobDto[] jobJsonArray = Json.fromJsonAsArray(JobDto.class, jobJson);
+		String replacejobJson = null;
+		if (!Util.isEmpty(jobJson)) {
+			replacejobJson = jobJson.replaceAll("&quot;", "\"");
+		}
+		JobDto[] jobJsonArray = Json.fromJsonAsArray(JobDto.class, replacejobJson);
 		//根据部门id查出此部门下面职位之前的数据
 		String jobIds = "";
 		List<JobEntity> beforeJob = dbDao.query(JobEntity.class, Cnd.where("deptId", "=", deptId), null);

@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/><!--修改的样式-->
     <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
 </head>
-<body onload="document.getElementById('fullNameId').focus()">
+<body>
 <div>
     <div class="container-fluid" style="padding-top: 15px;">
         <div class="row">
@@ -81,25 +81,10 @@
 	                                    </div>
 	                                </div>
 	                                <div class="col-xs-6">
-	                                    <!-- <div class="form-group">
-	                                        <label for="last_name_cn">所属部门:</label>
-	                                        <div class='input-group'>
-	                                            <select id="usa_times_stay_unit" style="width:100%;"
-	                                                    data-role="dropdownlist"
-	                                                    data-value-primitive="true"
-	                                                    data-bind="value:customer.travel.period">
-	                                                <option>请选择</option>
-	                                                <option> </option>
-	                                            </select>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-	                                        </div>
-	                                    </div> -->
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">所属部门:<span style="color: red">*</span></label>
-	                                        <div class='input-group'>
-	                                            <input id="departmentId" name="department" type="text" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-	                                        </div>
+	                                        <select id="deptId" name="deptId" onchange="loadSelectJob();" class="form-control input-sm inputWidth">
+					                        </select>
 	                                    </div>
 	                                </div>
 	                            </div>
@@ -108,23 +93,11 @@
 								<div class="row">
 	                                <div class="col-xs-6">
 	                                    <div class="form-group">
-	                                        <!-- <label for="last_name_cn">用户职位:</label>
-	                                        <div class='input-group'>
-	                                            <select id="usa_times_stay_unit" style="width:100%;"
-	                                                    data-role="dropdownlist"
-	                                                    data-value-primitive="true"
-	                                                    data-bind="value:customer.travel.period">
-	                                                <option>请选择</option>
-	                                                <option> </option>
-	                                            </select>
-	                                           	 <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-	                                        	</div>
-	                                    	</div> -->
+		                                    <div class="form-group">
 		                                    <label for="last_name_cn">用户职位:<span style="color: red">*</span></label>
-		                                    <div class='input-group'>
-		                                      <input id="jobId" name="job" type="text" class="k-textbox" style="width: 100%;"/>
-		                                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-		                                    </div>
+		                                        <select id="jobId" name="jobId"  class="form-control input-sm inputWidth">
+						              			</select>
+		                                	</div>
 	                                	</div>
 	                            	</div>
 	                            	<div class="col-xs-6">
@@ -179,9 +152,10 @@
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
 <script src="/res/js/employee/employeelist.js"></script>
-<script src="/res/js/wintone.js?v=4"></script>
+<!-- <script src="/res/js/wintone.js?v=4"></script> -->
 <script src="/res/plugin/layer/layer.js"></script>
 <script type="text/javascript">
+loadSelectDept();
 //回显数据
 function GetQueryString(name)
 {
@@ -199,6 +173,51 @@ function display(optionID){
       }
    }
 }
+//循环出部门下拉框
+function loadSelectDept(){
+	$.ajax({
+		url : localhostPaht+'/visa/employeemanage/queryDeptName',
+		success : function(data) {
+			var data = JSON.parse(data);
+			var aa = data.queryList;
+			var str = '<option value="">--请选择--</option>';
+			for (var i = 0; i < aa.length; i++) {
+				str += '<option value="'+aa[i].id+'">'+aa[i].deptname+'</option>';
+			}
+			$('#deptId').html(str);
+			var deptId = GetQueryString("deptId");
+			$("#deptId").val(deptId);
+			loadSelectJob();
+		},
+		error : function(request) {
+			
+		}
+	});
+}
+//根据部门id联动查询职位
+function loadSelectJob(){
+	var deptId = $("#deptId").val();
+	var jobId = GetQueryString("jobId");
+	$.ajax({
+		url : localhostPaht+'/visa/employeemanage/selectJobName?deptId='+deptId,
+		success : function(data) {
+			var data = JSON.parse(data);
+			console.log("第一次："+JSON.stringify(data));
+			var str = '<option value="">--请选择--</option>';
+			for (var i = 0; i < data.length; i++) {
+				if(jobId==data[i].id){
+					str += '<option value="'+data[i].id+'" selected="selected">'+data[i].jobName+'</option>';
+				}else{
+					str += '<option value="'+data[i].id+'">'+data[i].jobName+'</option>';
+				}
+			}
+			$('#jobId').html(str);
+		},
+		error : function(request) {
+			
+		}
+	});
+}
 //调用方法
 var uid = GetQueryString("uid");
 $("#uid").val(uid);
@@ -210,14 +229,27 @@ $.ajax({
 	},
 	success : function(data) {
 		var data=JSON.parse(data);
-		$('#fullNameId').val(data.fullName);
-		$('#telephoneId').val(data.telephone);
-		$('#qqId').val(data.qq);
-		$('#landlineId').val(data.landline);
-		$('#emailId').val(data.email);
-		$('#departmentId').val(data.department);
-		$('#jobId').val(data.job);
-		display(data.disableUserStatus);
+		var userinfo = data.one;
+		//用户信息
+		$('#fullNameId').val(userinfo.fullname);
+		$('#telephoneId').val(userinfo.telephone);
+		$('#qqId').val(userinfo.qq);
+		$('#landlineId').val(userinfo.landline);
+		$('#emailId').val(userinfo.email);
+		display(userinfo.disableuserstatus);
+		//部门职位信息
+		var deptjobinfo = data.userDeptList;
+		var str = '<option value="">--请选择--</option>';
+		for(var i=0;i<deptjobinfo.length;i++){
+			var deptId = deptjobinfo[i].id;
+			var deptName = deptjobinfo[i].deptname;
+			if(deptId==userinfo.deptid){
+				str += '<option value="'+deptId+'" selected="selected">'+deptName+'</option>';
+			}else{
+				str += '<option value="'+deptId+'">'+deptName+'</option>';
+			}
+		}
+			$('#deptId').html(str);
 	},
 	error : function(request) {
 		layer.msg('更新失败');
@@ -225,26 +257,6 @@ $.ajax({
 });
 //编辑保存
 $("#saveBtn").click(function(){
-	var fullName = $("#fullNameId").val();
-	var telephone = $("#telephoneId").val();
-	var department = $("#departmentId").val();
-	var job = $("#jobId").val();
-	if(fullName == null || fullName== ""){
-		layer.msg('用户姓名不能为空');
-		return false;
-	}
-	if(telephone == null || telephone== ""){
-		layer.msg('用户名/手机号不能为空');
-		return false;
-	}
-	if(department == null || department== ""){
-		layer.msg('所属部门不能为空');
-		return false;
-	}
-	if(job == null || job== ""){
-		layer.msg('用户职位不能为空');
-		return false;
-	}
 	$.ajax({
 		type : "POST",
 		url : localhostPaht +'/visa/employeemanage/updateUserData',

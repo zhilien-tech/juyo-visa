@@ -75,7 +75,6 @@ $(function(){
 		$(".input-group input").removeClass("k-state-disabled");//去掉不可编辑样式
 	}
 	country = JSON.parse(unescape($.queryString("country")));
-	alert(country);
     countrystatus=$.queryString("countrystatus");
 	/*-------------------------小灯泡 效果--------------------------*/
 	firstPart = JSON.parse(unescape($.queryString("firstPart")));//获取 错误 信息
@@ -191,7 +190,6 @@ $("#updatePassportSave").on("click",function(){
 });
 //点击下一步时跳转至基本信息
 $("#nextStepBtn").click(function(){
-	alert(JSON.stringify(country));
 	$.ajax({
 		 type: "POST",
 		 url: "/visa/passportinfo/updatePassportSave",
