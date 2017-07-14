@@ -612,13 +612,13 @@
                                                     data-role="dropdownlist"
                                                     data-value-primitive="true"
                                                     data-bind="value:customer.trip.linkrelation">
-                                                <option value="0">父母</option>
+                                               <!--  <option value="0">父母</option> -->
                                                 <option value="1">亲戚</option>
                                                 <option value="2">配偶</option>
                                                 <option value="3">朋友</option>
                                                 <option value="4">商业关系</option>
-                                                <option value="6">雇主</option>
-                                                <option value="5">学校</option>
+                                                <option value="8">雇主</option>
+                                                <option value="0">学校</option>
                                                 <option value="7">其他</option>
                                             </select>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
@@ -712,16 +712,16 @@
                                         <div class='input-group'>
                                             <select id="who_pay" data-role="dropdownlist" style="width: 100%;"
                                                     data-bind="value:customer.trip.paypersion">
-                                                <option>我自己</option>
-                                                <option>其他人</option>
-                                                <option>公司/组织</option>
+                                                <option value="S">我自己</option>
+                                                <option value="O">其他人</option>
+                                                <option value="C">公司/组织</option>
                                             </select>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div data-bind="visible:payType('其他人')"><!-- data-bind="visible:payType('其他人')" -->
+                            <div data-bind="visible:payType('O')"><!-- data-bind="visible:payType('其他人')" -->
                                 <!--支付人姓-->
                                 <div class="row who_pay">
                                     <div class="col-xs-6">
@@ -806,7 +806,7 @@
 						                        <option value="0">父母</option>
 						                        <option value="1">亲戚</option>
 						                        <option value="3">朋友</option>
-						                        <option value="4">生意关联方</option>
+						                        <!-- <option value="4">生意关联方</option> -->
 						                        <option value="7">其他</option>
                                                 </select>
                                                 
@@ -816,7 +816,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div data-bind="visible:payType('公司/组织')"><!-- data-bind="visible:payType('公司/组织')" -->
+                            <div data-bind="visible:payType('C')"><!-- data-bind="visible:payType('公司/组织')" -->
                                 <!--付费公司名称(中文)-->
                                 <div class="row who_pay">
                                     <div class="col-xs-12">
@@ -1345,8 +1345,8 @@
                             data-value-primitive="true"
                             data-bind="value:relationme">
                          <option value="2">配偶</option>
-                        <option value="8">雇员</option>
-                        <option value="0">学校职员</option>
+                        <option value="8">父母</option>
+                        <option value="0">子女</option>
                         <option value="1">亲戚</option>
                         <option value="3">朋友</option>
                         <option value="4">生意关联方</option>
