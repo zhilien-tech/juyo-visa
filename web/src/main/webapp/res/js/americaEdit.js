@@ -192,7 +192,7 @@ function comsource(){
 }
 
 $(function () {
-	//comsource();//页面加载时，初始化客户来源字段 
+	comsource();//页面加载时，初始化客户来源字段 
 	//手机--------------------------------------------------------------------------
 	$("#cus_phone").kendoMultiSelect({
    		placeholder:"请选择手机号",

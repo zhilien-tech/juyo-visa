@@ -393,7 +393,7 @@ $(function () {
 	df.applyPattern("HH:mm");
 	var date=new Date();
 	var str=df.format(date);*/
-	
+	comsource();//页面加载时，初始化客户来源字段 
 	
     $("#cus_phone").kendoMultiSelect({
    		placeholder:"请选择手机号",
