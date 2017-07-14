@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.IdentityHashMap;
+import java.util.Map;
 import java.util.prefs.Preferences;
 
 import javax.swing.JButton;
@@ -186,53 +187,53 @@ public class MainForm extends JPanel {
 			@Override
 			public void run() {
 				try {
-					//					String json = HttpClientUtil.get(getBaseUrl() + TASK_FETCH_URI);
-					//					ResultObject<Map, Object> ro = JSON.parseObject(json, ResultObject.class);
-					//					if (ro.getCode() == ResultObject.ResultCode.SUCCESS) {
-					//						final String oid = String.valueOf(ro.getAttributes().get("oid"));
-					//						String image = getBaseUrl() + String.valueOf(ro.getAttributes().get("avatar"));
-					//						SwingUtilities.invokeLater(new Runnable() {
-					//							@Override
-					//							public void run() {
-					//								taskId.setText(oid);
-					//							}
-					//						});
-					//
-					//						/*
-					//						 * 把用户的证件照以及签证的json数据信息保存到本地以供python脚本使用。
-					//						 * 在用户当前工作目录内创建名为tmp的文件夹用于保存文件
-					//						 */
-					//						File tmp = new File(System.getProperty("user.dir") + "/tmp");
-					//						if (!tmp.exists())
-					//							tmp.mkdirs();
-					//
-					//						//保存头像
-					//						String imageFile = tmp.getAbsolutePath() + File.separator + oid + ".jpg";
-					//						HttpClientUtil.download(image, imageFile);
-					//
-					//						//替换json 中的文件为绝对路径，保存json文件
-					//						ro.getData().put("ctl00_cphMain_imageFileUpload", imageFile);
-					//						log(imageFile);
-					//
-					//						File target = new File(tmp, oid + ".json");
-					//						FileUtils.writeStringToFile(target, JSON.toJSONString(ro.getData()));
-					//						log("文件已保存至:" + target.getAbsolutePath());
-					//
-					//						//执行命令行
-					//						File python = new File(pyFile.getText());
-					//						if (python.exists()) {
-					//							String cmd = "python " + pyFile.getText() + " " + target.getAbsolutePath();
-					//							command.setText(cmd);
-					//							exe(command.getText());
-					//							log("准备任务码为" + oid + "的上传文件");
-					//							log("总计用时:" + ((System.currentTimeMillis() - startTime) / 1000) + "秒");
-					//						} else {
-					//							JOptionPane.showMessageDialog(new JLabel(), "自动化脚本不存在");
-					//						}
-					//					} else {
-					//						JOptionPane.showMessageDialog(new JLabel(), ro.getMsg());
-					//					}
-					useFile4Test();
+					String json = HttpClientUtil.get(getBaseUrl() + TASK_FETCH_URI);
+					ResultObject<Map, Object> ro = JSON.parseObject(json, ResultObject.class);
+					if (ro.getCode() == ResultObject.ResultCode.SUCCESS) {
+						final String oid = String.valueOf(ro.getAttributes().get("oid"));
+						String image = getBaseUrl() + String.valueOf(ro.getAttributes().get("avatar"));
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								taskId.setText(oid);
+							}
+						});
+
+						/*
+						 * 把用户的证件照以及签证的json数据信息保存到本地以供python脚本使用。
+						 * 在用户当前工作目录内创建名为tmp的文件夹用于保存文件
+						 */
+						File tmp = new File(System.getProperty("user.dir") + "/tmp");
+						if (!tmp.exists())
+							tmp.mkdirs();
+
+						//保存头像
+						String imageFile = tmp.getAbsolutePath() + File.separator + oid + ".jpg";
+						HttpClientUtil.download(image, imageFile);
+
+						//替换json 中的文件为绝对路径，保存json文件
+						ro.getData().put("ctl00_cphMain_imageFileUpload", imageFile);
+						log(imageFile);
+
+						File target = new File(tmp, oid + ".json");
+						FileUtils.writeStringToFile(target, JSON.toJSONString(ro.getData()));
+						log("文件已保存至:" + target.getAbsolutePath());
+
+						//执行命令行
+						File python = new File(pyFile.getText());
+						if (python.exists()) {
+							String cmd = "python " + pyFile.getText() + " " + target.getAbsolutePath();
+							command.setText(cmd);
+							exe(command.getText());
+							log("准备任务码为" + oid + "的上传文件");
+							log("总计用时:" + ((System.currentTimeMillis() - startTime) / 1000) + "秒");
+						} else {
+							JOptionPane.showMessageDialog(new JLabel(), "自动化脚本不存在");
+						}
+					} else {
+						JOptionPane.showMessageDialog(new JLabel(), ro.getMsg());
+					}
+
 				} catch (Exception exception) {
 					MainForm.this.log(ExceptionUtils.getStackTrace(exception));
 					JOptionPane.showMessageDialog(new JLabel(), "服务器不可用");

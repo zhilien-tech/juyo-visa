@@ -431,6 +431,11 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 
 						String stayunit = from.getStayunit();
 						Period period = EnumUtil.get(Period.class, stayunit);
+						if (Util.isEmpty(period)) {
+							log.error("历史出行美国记录,停留时间单位不正确");
+						}
+						log.info("历史出行美国记录,停留时间单位:" + stayunit);
+
 						to.setPeriod(period);
 
 						//无备注
@@ -465,7 +470,7 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				to.setDivorceReasonEN(from.getSplitreasonen());
 
 				to.setFirstName(from.getSpousename());
-				to.setFirstNameEN(from.getSplitreasonen());
+				to.setFirstNameEN(from.getSpousenameen());
 				to.setId(from.getId());
 
 				to.setLastName(from.getSpousexing());
@@ -680,6 +685,8 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 			father.setLastName(fatherEntity.getXing());
 			father.setLastNameEN(fatherEntity.getXingen());
 
+			father.setBirthday(fatherEntity.getBirthday());
+
 			father.setId(fatherEntity.getId());
 			father.setInUsa(fatherEntity.getStayusa() == IsusaEnum.yes.intKey());
 			father.setRelation(IsDadOrMumEnum.dad.value());
@@ -697,6 +704,8 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 			mum.setFirstNameEN(fatherEntity.getNameen());
 			mum.setLastName(fatherEntity.getXing());
 			mum.setLastNameEN(fatherEntity.getXingen());
+
+			mum.setBirthday(mumEntity.getBirthday());
 
 			mum.setId(fatherEntity.getId());
 			mum.setInUsa(fatherEntity.getStayusa() == IsusaEnum.yes.intKey());
@@ -953,7 +962,7 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				//选择停留时间单位(下拉列表)
 				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_LOS_CD", period.getValue());
 				//停留数量
-				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxTRAVEL_LOS", travel.getStay());
+				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxTRAVEL_LOS", travel.getStay() + "");
 
 				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlDEPARTURE_US_DTEDay",
 						DateUtils.formatDate(dt.toDate(), "d"));
@@ -1292,8 +1301,8 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_MARITAL_STATUS", spState);
 				}
 
-				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxSpouseSurname", spouse.getLastNameEN());
-				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxSpouseGivenName", spouse.getFirstNameEN());
+				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxSpouseSurname", spouse.getFirstNameEN());
+				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxSpouseGivenName", spouse.getLastNameEN());
 				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlSpouseNatDropDownList",
 						spouse.getNationality());
 				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxSpousePOBCity", spouse.getBirthCity());
