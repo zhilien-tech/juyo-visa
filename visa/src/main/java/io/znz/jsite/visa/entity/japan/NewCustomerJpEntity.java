@@ -166,6 +166,14 @@ public class NewCustomerJpEntity implements Serializable {
 	@Comment("错误信息")
 	private String errorinfo;
 
+	@Column
+	@Comment("信息是否填写完毕")
+	private int writebasicinfo;
+
+	@Column
+	@Comment("照片路径")
+	private String phoneurl;
+
 	private NewWorkinfoJpEntity workinfoJp;
 
 	private List<NewFinanceJpEntity> financeJpList;

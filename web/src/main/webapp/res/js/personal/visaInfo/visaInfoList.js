@@ -473,7 +473,6 @@ $("#updatePassportSave").on("click",function(){
 });
 //点击保存时
 $("#nextStepBtn").click(function(){
-	alert(JSON.stringify(country));
 	$.ajax({
 		 type: "POST",
 		 url: "/visa/visainfo/updatePassportSave",

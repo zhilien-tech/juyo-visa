@@ -33,6 +33,7 @@ import io.znz.jsite.visa.entity.japan.NewWorkinfoJpEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
 import io.znz.jsite.visa.entity.usa.NewOrderEntity;
 import io.znz.jsite.visa.entity.user.EmployeeEntity;
+import io.znz.jsite.visa.enums.GenderEnum;
 import io.znz.jsite.visa.enums.OrderJapancustomersourceEnum;
 import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
 import io.znz.jsite.visa.enums.UserTypeEnum;
@@ -829,10 +830,17 @@ public class NewOrderJaPanController {
 
 			employeeEntity = dbDao.insert(employeeEntity);
 		}
+		Integer gender = customer.getGender();
+		String genderStr = "";
+		if (gender.intValue() == GenderEnum.female.intKey()) {
+			genderStr = "女士";
+		} else if (gender.intValue() == GenderEnum.man.intKey()) {
+			genderStr = "先生";
 
+		}
 		String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
 				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://218.244.148.21:9004/")
-				.replace("${logininfo}", "用户名:" + phone + "密码:" + temp);
+				.replace("${logininfo}", "用户名:" + phone + "密码:" + temp).replace("${gender}", genderStr);
 		String result = mailService.send(customer.getEmail(), html, "签证资料录入", MailService.Type.HTML);
 		if ("success".equalsIgnoreCase(result)) {
 			//成功以后分享次数加1
@@ -987,11 +995,18 @@ public class NewOrderJaPanController {
 						//}
 					}
 				}
+				Integer gender = customerLinkMan.getGender();
+				String genderStr = "";
+				if (gender.intValue() == GenderEnum.female.intKey()) {
+					genderStr = "女士";
+				} else if (gender.intValue() == GenderEnum.man.intKey()) {
+					genderStr = "先生";
 
+				}
 				String html = tmp.toString()
 						.replace("${name}", customerLinkMan.getChinesexing() + customerLinkMan.getChinesename())
 						.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://218.244.148.21:9004/")
-						.replace("${logininfo}", customerinfo);
+						.replace("${logininfo}", customerinfo).replace("${gender}", genderStr);
 				String result = mailService.send(customerLinkMan.getEmail(), html, "签证资料录入", MailService.Type.HTML);
 			} else {
 
@@ -1031,11 +1046,20 @@ public class NewOrderJaPanController {
 						}
 						order.setUserid(employeeEntity.getId());
 						dbDao.update(order, null);
+
+						Integer gender = customer.getGender();
+						String genderStr = "";
+						if (gender.intValue() == GenderEnum.female.intKey()) {
+							genderStr = "女士";
+						} else if (gender.intValue() == GenderEnum.man.intKey()) {
+							genderStr = "先生";
+
+						}
 						String html = tmp.toString()
 								.replace("${name}", customer.getChinesexing() + customer.getChinesename())
 								.replace("${oid}", order.getOrdernumber())
 								.replace("${href}", "http://218.244.148.21:9004/")
-								.replace("${logininfo}", "用户名:" + phone + "密码:" + temp);
+								.replace("${logininfo}", "用户名:" + phone + "密码:" + temp).replace("${gender}", genderStr);
 						String result = mailService.send(customer.getEmail(), html, "签证资料录入", MailService.Type.HTML);
 
 						/*result = getMailContent(order, phone, customer, null);*/

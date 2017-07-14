@@ -18,6 +18,7 @@ import io.znz.jsite.visa.entity.usa.NewPayPersionEntity;
 import io.znz.jsite.visa.entity.usa.NewPeerPersionEntity;
 import io.znz.jsite.visa.entity.usa.NewTrip;
 import io.znz.jsite.visa.entity.user.EmployeeEntity;
+import io.znz.jsite.visa.enums.GenderEnum;
 import io.znz.jsite.visa.enums.InterviewTimeEnum;
 import io.znz.jsite.visa.enums.OrderJapancustomersourceEnum;
 import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
@@ -535,10 +536,17 @@ public class OrderController extends BaseController {
 
 			employeeEntity = dbDao.insert(employeeEntity);
 		}
+		Integer gender = customer.getGender();
+		String genderStr = "";
+		if (gender.intValue() == GenderEnum.female.intKey()) {
+			genderStr = "女士";
+		} else if (gender.intValue() == GenderEnum.man.intKey()) {
+			genderStr = "先生";
 
+		}
 		String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
 				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://218.244.148.21:9004/")
-				.replace("${logininfo}", "用户名:" + phone + "密码:" + temp);
+				.replace("${logininfo}", "用户名:" + phone + "密码:" + temp).replace("${gender}", genderStr);
 		String result = mailService.send(customer.getEmail(), html, "签证资料录入", MailService.Type.HTML);
 		if ("success".equalsIgnoreCase(result)) {
 			//成功以后分享次数加1
@@ -639,9 +647,18 @@ public class OrderController extends BaseController {
 			name = customer.getChinesexing() + customer.getChinesename();
 			email = customer.getEmail();
 		}
+		Integer gender = customer.getGender();
+		String genderStr = "";
+		if (gender.intValue() == GenderEnum.female.intKey()) {
+			genderStr = "女士";
+		} else if (gender.intValue() == GenderEnum.man.intKey()) {
+			genderStr = "先生";
+
+		}
 		String html = tmp.toString().replace("${name}", name).replace("${oid}", order.getOrdernumber())
 				.replace("${href}", "http://218.244.148.21:9004/")
-				.replace("${logininfo}", "用户名:" + phone + "密码:" + employeeEntity.getPassword());
+				.replace("${logininfo}", "用户名:" + phone + "密码:" + employeeEntity.getPassword())
+				.replace("${gender}", genderStr);
 		String result = mailService.send(email, html, "签证资料录入", MailService.Type.HTML);
 
 		if ("success".equalsIgnoreCase(result)) {
@@ -851,9 +868,18 @@ public class OrderController extends BaseController {
 			}
 
 		}
+		Integer gender = customer.getGender();
+		String genderStr = "";
+		if (gender.intValue() == GenderEnum.female.intKey()) {
+			genderStr = "女士";
+		} else if (gender.intValue() == GenderEnum.man.intKey()) {
+			genderStr = "先生";
+
+		}
+
 		String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
 				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://218.244.148.21:9004/")
-				.replace("${interview}", str);
+				.replace("${interview}", str).replace("${gender}", genderStr);
 		String result = mailService.send(customer.getEmail(), html, "签证信息通知", MailService.Type.HTML);
 		if ("success".equalsIgnoreCase(result)) {
 			//成功以后分享次数加1
@@ -924,60 +950,70 @@ public class OrderController extends BaseController {
 		//客户联系人的发送
 		for (NewCustomerOrderEntity newCustomerOrderEntity : query) {
 			NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, newCustomerOrderEntity.getCustomerid());
+			if (!Util.isEmpty(customer.getEmail())) {
+				NewDeliveryUSAEntity fetch = dbDao.fetch(NewDeliveryUSAEntity.class,
+						Cnd.where("customer_usa_id", "=", customer.getId()));
+				String str = "";
+				if (!Util.isEmpty(fetch)) {
+					DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-			NewDeliveryUSAEntity fetch = dbDao.fetch(NewDeliveryUSAEntity.class,
-					Cnd.where("customer_usa_id", "=", customer.getId()));
-			String str = "";
-			if (!Util.isEmpty(fetch)) {
-				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+					if (!Util.isEmpty(fetch.getEarlydate())) {
+						str += "最早时间:" + df.format(fetch.getEarlydate()) + ";";
+					}
 
-				if (!Util.isEmpty(fetch.getEarlydate())) {
-					str += "最早时间:" + df.format(fetch.getEarlydate()) + ";";
+					if (!Util.isEmpty(fetch.getLatterdate())) {
+						str += "最晚时间:" + df.format(fetch.getLatterdate()) + ";";
+					}
+
+					if (!Util.isEmpty(fetch.getInterviewtime())) {
+						str += "面签时段:" + InterviewTimeEnum.get(fetch.getInterviewtime()) + ";";
+					}
+
+					if (!Util.isEmpty(fetch.getVisasendtype())) {
+						str += "护照递送方式:" + SendPassportEnum.get(fetch.getVisasendtype()) + ";";
+					}
+
+					if (!Util.isEmpty(fetch.getPrevince())) {
+						str += "   " + fetch.getPrevince() + "   ";
+					}
+
+					if (!Util.isEmpty(fetch.getDetailplace())) {
+						str += "   " + fetch.getDetailplace() + "   ";
+					}
+
+					if (!Util.isEmpty(fetch.getFastmailaddress())) {
+						str += "   " + fetch.getFastmailaddress() + "   ";
+					}
+
+				}
+				Integer gender = customer.getGender();
+				String genderStr = "";
+				if (gender.intValue() == GenderEnum.female.intKey()) {
+					genderStr = "女士";
+				} else if (gender.intValue() == GenderEnum.man.intKey()) {
+					genderStr = "先生";
+
 				}
 
-				if (!Util.isEmpty(fetch.getLatterdate())) {
-					str += "最晚时间:" + df.format(fetch.getLatterdate()) + ";";
-				}
+				String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
+						.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://218.244.148.21:9004/")
+						.replace("${interview}", str).replace("${gender}", genderStr);
 
-				if (!Util.isEmpty(fetch.getInterviewtime())) {
-					str += "面签时段:" + InterviewTimeEnum.get(fetch.getInterviewtime()) + ";";
-				}
+				String result = mailService.send(customer.getEmail(), html, "签证信息通知", MailService.Type.HTML);
 
-				if (!Util.isEmpty(fetch.getVisasendtype())) {
-					str += "护照递送方式:" + SendPassportEnum.get(fetch.getVisasendtype()) + ";";
+				if ("success".equalsIgnoreCase(result)) {
+					//成功以后分享次数加1
+					/*dbDao.update(NewCustomerEntity.class, Chain.make("noticecount", customer.getSharecount() + 1),
+							Cnd.where("id", "=", customer.getId()));
+					*/
+					dbDao.update(
+							NewCustomerEntity.class,
+							Chain.make("noticecount", customer.getSharecount() + 1)
+									.add("status", OrderVisaApproStatusEnum.yueVisa.intKey())
+									.add("updatetime", new Date()), Cnd.where("id", "=", customer.getId()));
 				}
-
-				if (!Util.isEmpty(fetch.getPrevince())) {
-					str += "   " + fetch.getPrevince() + "   ";
-				}
-
-				if (!Util.isEmpty(fetch.getDetailplace())) {
-					str += "   " + fetch.getDetailplace() + "   ";
-				}
-
-				if (!Util.isEmpty(fetch.getFastmailaddress())) {
-					str += "   " + fetch.getFastmailaddress() + "   ";
-				}
-
 			}
 
-			String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
-					.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://218.244.148.21:9004/")
-					.replace("${interview}", str);
-
-			String result = mailService.send(customer.getEmail(), html, "签证信息通知", MailService.Type.HTML);
-
-			if ("success".equalsIgnoreCase(result)) {
-				//成功以后分享次数加1
-				/*dbDao.update(NewCustomerEntity.class, Chain.make("noticecount", customer.getSharecount() + 1),
-						Cnd.where("id", "=", customer.getId()));
-				*/
-				dbDao.update(
-						NewCustomerEntity.class,
-						Chain.make("noticecount", customer.getSharecount() + 1)
-								.add("status", OrderVisaApproStatusEnum.yueVisa.intKey()).add("updatetime", new Date()),
-						Cnd.where("id", "=", customer.getId()));
-			}
 		}
 
 		return ResultObject.success("通知成功");

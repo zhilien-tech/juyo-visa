@@ -125,4 +125,6 @@ public class NewOrderJpEntity implements Serializable {
 
 	private List<NewProposerInfoJpEntity> proposerInfoJpList;
 
+	//资料是否填写完成
+	private int writebasicinfo;
 }

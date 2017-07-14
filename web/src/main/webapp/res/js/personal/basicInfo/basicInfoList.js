@@ -380,7 +380,10 @@ $("#nextStepBtn").click(function(){
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){
 			layer.msg("操作成功",{time:2000});
-			window.location.href='/personal/visaInfo/visaInfoList.html?typeId=1&country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
+			window.location.href='/personal/visaInfo/visaInfoList.html?typeId=1&firstPart='
+				  +escape(JSON.stringify(firstPart))+"&secondPart="
+				  +escape(JSON.stringify(secondPart))+"&thirdPart="
+				  +escape(JSON.stringify(thirdPart))+"&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
              layer.msg('操作失败',{time:2000});

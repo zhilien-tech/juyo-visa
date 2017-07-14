@@ -103,4 +103,7 @@ public class NewOrderEntity {
 	private NewFastMailEntity fastMail;
 
 	private NewCustomerresourceEntity customerresource;
+
+	//资料是否填写完成
+	private int writebasicinfo;
 }
