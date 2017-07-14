@@ -144,9 +144,6 @@ var viewModel = kendo.observable({
     payType: function (type) {
         return viewModel.get("customer.trip.paypersion") === type;
     },
-    comsource:function(value){
-    	
-    },
 });
 kendo.bind($(document.body), viewModel);
 /*****************************************************
@@ -195,7 +192,7 @@ function comsource(){
 }
 
 $(function () {
-	comsource();//页面加载时，初始化客户来源字段 
+	//comsource();//页面加载时，初始化客户来源字段 
 	//手机--------------------------------------------------------------------------
 	$("#cus_phone").kendoMultiSelect({
    		placeholder:"请选择手机号",
@@ -451,7 +448,19 @@ $(function () {
 			var color = $("#cus_linkman").data("kendoMultiSelect");
 			color.value(resp.customermanage.id);
 			var flag=viewModel.get("customer.customerSource");
-			comsource();//判断客户来源 状态 
+        	//comsource();//判断客户来源 状态 
+			var flag=$("#customerSource").val();
+			if(flag==3){//直客 
+				$("#select").hide();
+				$("#selectno").show();
+				$('.companyFullName').addClass('hide');//隐藏 默认显示的 其他状态下的 公司全称
+				$('.ZKcompanyFullName').removeClass('hide');//显示   默认显示的  直客  公司全称
+			}else{//其他
+				$("#select").show();
+				$("#selectno").hide();
+				$('.companyFullName').removeClass('hide');//显示 默认显示的 其他状态下的 公司全称
+				$('.ZKcompanyFullName').addClass('hide');//隐藏   默认显示的  直客  公司全称
+			}
         });
     }
 });
