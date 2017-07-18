@@ -9,20 +9,18 @@ Released under the MIT License <http://www.opensource.org/licenses/mit-license.p
 	margin-bottom: 1em;
 }
 .uploadify-button {
-	background-color: #367fa9;
-    border-color: #204d74;
+	background-color: #0072c6;
     font: bold 12px Arial, Helvetica, sans-serif;
     text-align: center;
     color: #fff;
     font-weight: 500;
-    width: 46px !important;
-    border-radius: 3px;
+    width: 66px !important;
+    border-radius: 0;;
 }
 .uploadify:hover .uploadify-button {
 	background-position: center bottom;
 	color: #fff;
-    background-color: #286090;
-    border-color: #204d74;
+    background-color: #0171c3;
 }
 .uploadify-button.disabled {
 	background-color: #D0D0D0;
