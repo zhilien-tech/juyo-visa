@@ -23,7 +23,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  * @author   孙斌
  * @Date	 2017年6月25日 	 
  */
-@Component("loginInterceptor")
+@Component("loginInterceptor_old")
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 	/**
