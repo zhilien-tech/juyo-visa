@@ -159,7 +159,7 @@
 			<!-- <mvc:mapping path="/visa/*"/>
 			<mvc:mapping path="/visa/*/*"/> -->
 			<mvc:mapping path="/res/*/*"/>
-			<mvc:mapping path="/**"/>
+		<mvc:mapping path="/**"/>
 			<ref bean="loginInterceptor"/>
 		</mvc:interceptor>
     </mvc:interceptors>
