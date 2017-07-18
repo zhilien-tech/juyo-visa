@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,6 +19,20 @@
     	.upload-btn div{display: inline-block;}
     	#yvlan a{background-color: #0072c6;color: #fff;display: inline-block;width: 66px;text-align: center;line-height: 30px;font-size: 12px;margin-left:15px;}
     	#uploadFile-queue .uploadify-queue-item{margin-left:15px;}
+        .white_content {display: none;
+    position: absolute;
+    top: 18%;
+    left: 35%;
+    width: 30%;
+    height: 60%;
+    padding: 10px;
+    border: 1px solid #f2f2f2;
+    background-color: rgb(251, 251, 251);
+    z-index: 1002;
+    overflow: hidden;
+    box-shadow: 0 0 80px rgba(191, 191, 191, 0.28);} 
+    	#light a{float: right;}
+    	#imgId{width:100%;}
     </style>
 </head>
 <body id="aaaa">
@@ -2378,7 +2392,10 @@
         </div>
     </div>
 </div>
-
+<div id="light" class="white_content">
+	<a href ="javascript:void(0)" onclick ="document.getElementById('light').style.display='none';">X</a>
+	<img id="imgId" src="">
+</div> 
 </body>
 <!--引入 js 模板片段-->
 <script id="tpl_has_pr" type="text/text">
@@ -3113,9 +3130,19 @@ $(function(){
 			 if(index!=null){
 					layer.close(index);
 			 }
-			
+			 /*显示 预览 按钮*/
 			viewModel.set("customer.phoneurl",data);
-			$("#yvlan").html('<a href="'+data+'">预览</a>');
+			/*$("#yvlan").html('<a href="'+data+'">预览</a>'); */
+            $("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
+            $(document).on('click','#preview',function(){
+            	$('#light').css('display','block');
+            	$('#fade').css('display','block');
+            	var phoneurl=viewModel.get("customer.phoneurl");
+            	if(phoneurl!=null&&phoneurl!=''){
+            		console.log("1111111====="+phoneurl);
+            		$("#imgId").attr('src',phoneurl);
+            	}
+            });
 		},
         //加上此句会重写onSelectError方法【需要重写的事件】
         'overrideEvents': ['onSelectError', 'onDialogClose'],
