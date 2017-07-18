@@ -6,8 +6,11 @@
 
 package io.znz.jsite.core.interceptor;
 
+import io.znz.jsite.core.util.Const;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -30,17 +33,17 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-		/*		HttpSession session = request.getSession();
-				Object attribute = session.getAttribute(Const.SESSION_NAME);
-				String nowurl = request.getRequestURL().toString();
-				String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-				if (nowurl.equals(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/")) {
-					return true;
-				}
-				if (Util.isEmpty(attribute)) {
-					response.sendRedirect(url);
-					return false;
-				}*/
+		HttpSession session = request.getSession();
+		Object attribute = session.getAttribute(Const.SESSION_NAME);
+		/*	String nowurl = request.getRequestURL().toString();
+		String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+		if (nowurl.equals(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/")) {
+			return true;
+		}*/
+		/*if (Util.isEmpty(attribute)) {
+			response.sendRedirect("index.html");
+			return false;
+		}*/
 
 		return true;
 
