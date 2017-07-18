@@ -3094,7 +3094,7 @@ $(function(){
 		'buttonText' : '上传',//按钮显示的文字
 		'fileSizeLimit' : '3000MB',
 		'fileTypeDesc' : '文件',//在浏览窗口底部的文件类型下拉菜单中显示的文本
-		 'fileTypeExts' : '*.png; *.txt; *.doc; *.pdf; *.xls; *.jpg; *.docx; *.xlsx;',//上传文件的类型
+		 'fileTypeExts' : '*.png;*.jpg; *.jpeg; *.gif;',//上传文件的类型
 		'swf' : '/res/upload/uploadify.swf',//指定swf文件
 		'multi' : false,//multi设置为true将允许多文件上传
 		'successTimeout' : 1800, 
@@ -3110,14 +3110,14 @@ $(function(){
 				var url  = jsonobj;//地址 */
 				console.log(data);
 			 console.log(response);
-			 alert(typeof data);
+			/*  alert(typeof data); */
 			 if(index!=null){
 					
 					layer.close(index);
 			 }
 			
 			viewModel.set("customer.phoneurl",data);
-           
+			$("#yvlan").html('<a href="'+data+'">预览</a>');
 		},
         //加上此句会重写onSelectError方法【需要重写的事件】
         'overrideEvents': ['onSelectError', 'onDialogClose'],
@@ -3137,7 +3137,7 @@ $(function(){
             }
         },
         'onUploadError':function(file, errorCode, errorMsg, errorString){
-        	alert('The file ' + file.name + ' could not be uploaded: ' + errorString);
+        	/* alert('The file ' + file.name + ' could not be uploaded: ' + errorString); */
         }
 	});
 }
