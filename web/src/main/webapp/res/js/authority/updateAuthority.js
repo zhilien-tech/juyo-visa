@@ -55,7 +55,7 @@ $(function () {
 				fun.checked=jobfunctionlist[i].checked;
 				zNodes.push(fun);
 			}
-
+			var root =  {id:"0", pId:"0", name:"职位权限设置", open:true};
 			for (var i = 0; i < jobnamelist.length; i++) {
 				var objaa = jobnamelist[i];//得到对象
 				bb = JSON.parse(objaa.znodes);//将json转换为Object
@@ -66,6 +66,7 @@ $(function () {
 		        var treeObj = $.fn.zTree.getZTreeObj(treeId);
 		        if(null == treeObj || undefined == treeObj){
 		        	var nodes = eval("(" +jobnamelist[i].znodes+")");
+		        	nodes.push(root);
 			      	//初始化ztree
 				    $.fn.zTree.init(ztree_container, setting, nodes );
 		      	}
@@ -81,7 +82,7 @@ $(function () {
 	//部门职位 添加职位
     $('#addJob').click(function(){
     	$(".job_container .ztree").hide();
-	       $('.jobName').append('<div class="job_container"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName" type="text" class="k-textbox inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" style="width:70px;" class="btn btn-primary btn-sm btnPadding" id="deleteBtn1" >删除</button></li></ul>'
+	       $('.jobName').append('<div class="job_container"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName" type="text" class="k-textbox inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn1" >删除</button></li></ul>'
 	       +'<div class="ztree"><ul id="tree_'+treeIndex+'"></ul></div></div>');
 	       treeIndex++;
 	   var ztree_container = $(".job_container:last").find("div.ztree").find("ul:first");

@@ -108,6 +108,17 @@ $("#saveDeptJob").click(function(){
 	setFunc();//设置功能
 	var _deptName = $("input#deptNameId").val();
 	var _jobJson = $("input#jobJson").val();
+	try{
+		$("input[id='jobName']").each(function(index,element){
+			var eachJobName = $(element).val();
+			if(null == eachJobName || undefined == eachJobName || "" == eachJobName || "" == $.trim(eachJobName)){
+				throw "职位不能为空且至少存在一个";
+			}
+		}) ;
+	}catch(e){
+		layer.msg(e) ;
+		return false ;
+	}
 	$.ajax({
 		type : "POST",
 		url : localhostPaht +'/visa/authority/addDeptJob',

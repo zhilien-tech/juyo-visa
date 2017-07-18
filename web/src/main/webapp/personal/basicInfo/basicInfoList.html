@@ -167,7 +167,7 @@
 		             <div class="row marital">
 		                 <div class="col-xs-6">
 		                     <div class="form-group">
-		                         <label for="s_divorce_country"> 离婚国家:
+		                         <label for="s_divorce_country">离婚国家:
 		                             <span style="color: red">*</span>
 		                         </label>
 		                         <div class='input-group'>
@@ -214,7 +214,7 @@
 		             <div class="row marital">
 		                 <div class="col-xs-12">
 		                     <div class="form-group">
-		                         <label for="s_divorce_why"> 离婚原因（英文），填写中文自动翻译:
+		                         <label for="s_divorce_why">离婚原因（英文），填写中文自动翻译:
 		                             <span style="color: red">*</span>
 		                         </label>
 		                         <div class='input-group'>
@@ -514,6 +514,15 @@
                     </div>
                 </div>
              </div>
+             <div class="col-xs-8">
+                <div class="form-group">
+                    <label for="last_name_cn">身份证号码:</label>
+                    <div class='input-group'>
+                      <input id="" type="text" data-bind="value:customer.idcard" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    </div>
+                </div>
+             </div>
              <!-- <div class="col-xs-4">
                 <div class="form-group">
                     <label for="last_name_cn">出生地点（省份）:</label>
@@ -534,20 +543,7 @@
              </div> -->
            </div>
            <!--end 出生日期/出生地点/国籍/身份证号码-->
-           
-           <!--出生日期/出生地点/国籍/身份证号码-->
-           <div class="row">
-             <div class="col-xs-12">
-                <div class="form-group">
-                    <label for="last_name_cn">身份证号码:</label>
-                    <div class='input-group'>
-                      <input id="" type="text" data-bind="value:customer.idcard" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                    </div>
-                </div>
-             </div>
-           </div>
-           <!--end 出生日期/出生地点/国籍/身份证号码-->
+         
            
            <!--是否有其他国籍/是否是其它国家和地区的永久居民-->
            <div class="row">

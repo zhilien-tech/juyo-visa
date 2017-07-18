@@ -417,10 +417,18 @@ $(function () {
     if (oid) {
         $.getJSON("/visa/newcustomer/showDetail?customerid=" + oid, function (resp) {
         	viewModel.set("customer", $.extend(true, dafaults, resp));
-        	var phoneurl=viewModel.get("customer.phoneurl");
-        	if(phoneurl!=null&&phoneurl!=''){
-        		$("#yvlan").html('<a href="'+phoneurl+'">预览</a>');
-        	}
+        	
+        	/*预览 按钮*/
+            $("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
+            $(document).on('click','#preview',function(){
+            	$('#light').css('display','block');
+            	$('#fade').css('display','block');
+            	var phoneurl=viewModel.get("customer.phoneurl");
+            	if(phoneurl!=null&&phoneurl!=''){
+            		console.log("1111111====="+phoneurl);
+            		$("#imgId").attr('src',phoneurl);
+            	}
+            });
         	//console.log(JSON.stringify(viewModel.customer.errorinfo));
         	
         	   /*var reason=viewModel.get("customer.errorinfo");
@@ -471,10 +479,13 @@ $(function () {
             			});
             		}
             	}
-            	
             	/*----end 小灯泡 回显----*/
         	
+            	
+            	
         });
+        
     }
+    
     
 });
