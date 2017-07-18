@@ -82,12 +82,7 @@
 	                                <div class="col-xs-6">
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">所属部门:<span style="color: red">*</span></label>
-	                                        <!-- <div class='input-group'>
-	                                            <input id="deptId" name="department" placeholder="请输入所属部门" type="text" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-	                                        </div> -->
-	                                        <select id="deptId" name="deptName" onchange="selectDeptName();" class="form-control input-sm inputWidth">
-					                         	
+	                                        <select id="deptId" name="deptId" onchange="loadSelectJob();" class="form-control input-sm inputWidth">
 					                        </select>
 	                                    </div>
 	                                </div>
@@ -98,10 +93,8 @@
 	                                <div class="col-xs-6">
 	                                    <div class="form-group">
 	                                    <label for="last_name_cn">用户职位:<span style="color: red">*</span></label>
-	                                        <div class='input-group'>
-	                                            <input id="jobId" name="job" placeholder="请输入用户职位" type="text" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-	                                        </div>
+	                                        <select id="jobId" name="jobId"  class="form-control input-sm inputWidth">
+					              			</select>
 	                                	</div>
 	                            	</div>
 	                            	<div class="col-xs-6">
@@ -152,26 +145,6 @@
 <script type="text/javascript">
 //添加保存
 $("#saveBtn").click(function(){
-	var fullName = $("#fullNameId").val();
-	var telephone = $("#telephoneId").val();
-	var department = $("#deptId").val();
-	var job = $("#jobId").val();
-	if(fullName == null || fullName== ""){
-		layer.msg('用户姓名不能为空');
-		return false;
-	}
-	if(telephone == null || telephone== ""){
-		layer.msg('用户名/手机号不能为空');
-		return false;
-	}
-	if(department == null || department== ""){
-		layer.msg('所属部门不能为空');
-		return false;
-	}
-	if(job == null || job== ""){
-		layer.msg('用户职位不能为空');
-		return false;
-	}
 	$.ajax({
 		type : "POST",
 		url : localhostPaht +'/visa/employeemanage/addUserData',

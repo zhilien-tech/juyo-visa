@@ -101,7 +101,6 @@ function setFunc(){
 	   jobInfos.push(job);
    });
    var jobJson = JSON.stringify(jobInfos) ;
-   ///alert(jobJson);
    $("#jobJson").val(jobJson) ;
 }
 //添加保存
@@ -109,8 +108,6 @@ $("#saveDeptJob").click(function(){
 	setFunc();//设置功能
 	var _deptName = $("input#deptNameId").val();
 	var _jobJson = $("input#jobJson").val();
-	///alert(_deptName);
-	///alert(_jobJson);
 	$.ajax({
 		type : "POST",
 		url : localhostPaht +'/visa/authority/addDeptJob',

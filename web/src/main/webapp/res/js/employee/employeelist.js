@@ -29,7 +29,7 @@ function regCmd(command) {
                         title: '基本资料',
                         maxmin: true, //开启最大化最小化按钮
                         area: ['750px', '500px'],
-                        content: '/employee/updateEmployee.html?uid=' + data.id
+                        content: '/employee/updateEmployee.html?uid=' + data.id+'&deptId='+data.deptid+'&jobId='+data.jobid
                     });
                     break;
                 default:
@@ -41,31 +41,6 @@ function regCmd(command) {
 }
 //添加员工
 function addUser(){
-	$.ajax({
-		url : localhostPaht+'/visa/employeemanage/queryDeptName',
-		success : function(data) {
-			var data = JSON.parse(data);
-			var aa = data.queryList;
-			var str = '<option value="">--请选择--</option>';
-			for (var i = 0; i < aa.length; i++) {
-				//console.log(aa[i].id);
-				//console.log(aa[i].deptname);
-				/*var opt = new Option();  
-			    opt.value= aa[i].id;  
-			    opt.text = aa[i].deptname;  
-			    $("#deptId").append(opt);  */
-				str += '<option value="'+aa[i].id+'">'+aa[i].deptname+'</option>';
-				//$('#deptId').append("<option value='"+ aa[i].id+"'>"+ aa[i].deptname +"</option>"); 
-				
-			}
-			console.log("______"+str);
-			//document.getElementById("deptId").innerHTML=str;
-			$('#deptId').append("<option value='1'>1111</option>");
-		},
-		error : function(request) {
-			
-		}
-	});
 	layer.open({
 	    type: 2,
 	    title:false,
@@ -150,11 +125,11 @@ var grid = $("#grid").kendoGrid({
         },
         {
         	title: '部门',
-        	field: 'department'
+        	field: 'deptname'
         },
         {
         	title: '职位',
-        	field: 'job'
+        	field: 'jobname'
         },
         {
             title: "操作", width: 98,

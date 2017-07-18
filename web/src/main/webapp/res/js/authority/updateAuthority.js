@@ -56,20 +56,7 @@ $(function () {
 				fun.checked=jobfunctionlist[i].checked;
 				zNodes.push(fun);
 			}
-			for(var i=0;i<jobnamelist.length;i++){
-				var abab=jobnamelist[i].znodes;
-				var cc=JSON.parse(abab);
-				//console.log(JSON.stringify(cc));
-				for(var j=0;j<cc.length;j++){
-					for(var m=0;m<zNodes.length;m++){
-						//console.log(JSON.stringify(zNodes));
-						if(cc[j].id==zNodes[m].id){
-							zNodes.splice(m,1);
-							zNodes.push(cc[j]);
-						}
-					}
-				}
-			}
+
 			for (var i = 0; i < jobnamelist.length; i++) {
 				var objaa = jobnamelist[i];//得到对象
 				bb = JSON.parse(objaa.znodes);//将json转换为Object
@@ -79,10 +66,13 @@ $(function () {
 		        var treeId = ztree_container.attr("id") ;
 		        var treeObj = $.fn.zTree.getZTreeObj(treeId);
 		        if(null == treeObj || undefined == treeObj){
+		        	var nodes = eval("(" +jobnamelist[i].znodes+")");
 			      	//初始化ztree
-				    $.fn.zTree.init(ztree_container, setting, zNodes);
+				    $.fn.zTree.init(ztree_container, setting, nodes );
 		      	}
 			}
+			var dptid = deptname.id;
+			$("#deptId").val(dptid);
 		},
 		error : function(request) {
 			
@@ -109,15 +99,7 @@ $(function () {
       $(this).closest('.job_container').remove();
 
     });
-    //创建所有的树
-    $('.job_container').each(function(index,element){
-    	var znodesJson = $(element).find("input.znodes").val();
-    	var treeContainer = $(element).find("div.ztree").find("ul:first");
-    	//每个职位的节点
-    	var nodes = eval('(' +znodesJson+ ')');
-    	nodes.push(root) ;
-    	$.fn.zTree.init(treeContainer, setting, nodes);
-    });
+   
     //设置权限 按钮
     $('.jobName').on("click","#settingsPermis",function() {
     	$(this).parents('.marHei').next().toggle('500');
@@ -131,13 +113,14 @@ $(function () {
 	    	$.fn.zTree.init(ztree_container, setting, zNodes);
       	}
     });
-});
+});  //$.function结束
+
+
 //设置功能
 function setFunc(){
    var jobInfos = [];
    //取所有树
    $(".job_container").each(function(index,container){
-	   ///alert(index);
 	   var jobName = $(container).find("input[name='jobName']").val();
 	   var jobId = $(container).find("input[name='jobId']").val();
 	   var treeObj = $.fn.zTree.getZTreeObj("tree_" + index);
@@ -152,7 +135,6 @@ function setFunc(){
 	   job.functionIds=funcIds;
 	   jobInfos.push(job);
    });
-   
    var jobJson = JSON.stringify(jobInfos) ;
    $("#jobJson").val(jobJson) ;
 }
@@ -161,25 +143,35 @@ $("#saveDeptJob").click(function(){
 	setFunc();//设置功能
 	var _deptName = $("input#deptNameId").val();
 	var _jobJson = $("input#jobJson").val();
-	///alert(_deptName);
-	///alert(_jobJson);
+	var _dptid = $("#deptId").val();
+	try{
+		$("input[name='jobName']").each(function(index,element){
+			var eachJobName = $(element).val();
+			if(null == eachJobName || undefined == eachJobName || "" == eachJobName || "" == $.trim(eachJobName)){
+				throw "职位名称不能为空";
+			}
+		}) ;
+	}catch(e){
+		layer.msg("职位不能为空且至少存在一个") ;
+		return false ;
+	}
 	$.ajax({
 		type : "POST",
-		url : localhostPaht +'/visa/authority/addDeptJob',
+		url : localhostPaht +'/visa/authority/updateAuthoritySave',
+		//contentType: "application/json",
+		dataType: "json",
 		data : {
 			deptName:_deptName,
-			jobJson:_jobJson
+			jobJson:_jobJson,
+			deptId:_dptid
 		},
 		success : function(data) {
-			layer.load(1, {
-				 shade: [0.1,'#fff'] //0.1透明度的白色背景
-			});
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-		    parent.layer.close(index);
-		    window.parent.successCallback('1');
+			parent.layer.close(index);
+			window.parent.successCallback('2');
 		},
 		error : function(request) {
-			layer.msg('添加失败');
+			layer.msg("职位不能为空且至少存在一个");
 		}
 	});
 });
