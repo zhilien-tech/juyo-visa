@@ -8,7 +8,6 @@ var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 var zNodes =[
 	 {id:"0", pId:"0", name:"职位权限设置", open:true}
 ];
-var root =  {id:"0", pId:"0", name:"职位权限设置", open:true};
 var treeIndex = 0 ;
 //功能表的list
 var functionlist;
@@ -94,12 +93,29 @@ $(function () {
       	}
     });
     //删除按钮
-    $('.jobName').on("click","#deleteBtn",function() {
-      $(this).parent().parent().next().remove();
-      $(this).closest('.job_container').remove();
-
+    $(document).on("click","#deleteBtn",function(jobId){
+    	var dele= this;
+		layer.confirm("您确认删除信息吗？", {
+		    btn: ["是","否"], //按钮
+		    shade: false //不显示遮罩
+		},function(index){
+		     layer.close(index);
+		     $(dele).parent().parent().next().remove();
+		     $(dele).closest('.job_container').remove();
+		},function(index){
+			//点击否
+			layer.close(index);
+		});
     });
    
+  //删除不提示
+    $(document).on("click","#deleteBtn1",function(jobId){
+    	var dele= this;
+    	//删除按钮
+        $(dele).parent().parent().next().remove();
+        $(dele).closest('.job_container').remove();
+    });	
+    
     //设置权限 按钮
     $('.jobName').on("click","#settingsPermis",function() {
     	$(this).parents('.marHei').next().toggle('500');
@@ -114,7 +130,6 @@ $(function () {
       	}
     });
 });  //$.function结束
-
 
 //设置功能
 function setFunc(){
@@ -138,7 +153,7 @@ function setFunc(){
    var jobJson = JSON.stringify(jobInfos) ;
    $("#jobJson").val(jobJson) ;
 }
-//添加保存
+//修改保存
 $("#saveDeptJob").click(function(){
 	setFunc();//设置功能
 	var _deptName = $("input#deptNameId").val();

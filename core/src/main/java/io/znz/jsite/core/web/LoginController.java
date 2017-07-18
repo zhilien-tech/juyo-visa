@@ -5,14 +5,18 @@ import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.entity.NewCustomerEntity;
 import io.znz.jsite.core.entity.NewCustomerJpEntity;
 import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
+import io.znz.jsite.core.entity.function.FunctionEntity;
 import io.znz.jsite.core.entity.userjob.UserJobMapEntity;
 import io.znz.jsite.core.enums.UserLoginEnum;
+import io.znz.jsite.core.service.authority.AuthorityService;
+import io.znz.jsite.core.service.authority.LoginAuthorityService;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.util.StringUtils;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,6 +30,8 @@ import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.json.Json;
+import org.nutz.json.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -54,6 +60,12 @@ public class LoginController extends BaseController {
 
 	@Autowired
 	protected Dao nutDao;
+
+	@Autowired
+	protected LoginAuthorityService loginAuthorityService;
+
+	@Autowired
+	protected AuthorityService authority;
 
 	@Inject
 	private SqlManager sqlManager;
@@ -169,14 +181,14 @@ public class LoginController extends BaseController {
 					String str = "";
 					if (!Util.isEmpty(usacreatetime) && !Util.isEmpty(jpcreatetime)) {
 						if (usaCustomerInfo.getCreatetime().getTime() > jpCustomerInfo.getCreatetime().getTime()) {
-							str += "14,15,16,";
+							str += "10,11,12,";
 						} else {
-							str += "11,12,13,";
+							str += "13,14,15,";
 						}
 					} else if (!Util.isEmpty(usacreatetime) && Util.isEmpty(jpcreatetime)) {
-						str += "14,15,16,";
+						str += "10,11,12,";
 					} else if (Util.isEmpty(usacreatetime) && !Util.isEmpty(jpcreatetime)) {
-						str += "11,12,13,";
+						str += "13,14,15,";
 					} else {
 
 					}
@@ -190,20 +202,34 @@ public class LoginController extends BaseController {
 						fullname = Encodes.encodeBase64(JSON.toJSONString(username1));
 						if (username.equals(telephone) && newpass.equals(pwd)) {//username为页面传来的用户名
 							if (UserLoginEnum.PERSONNEL.intKey() == logintype
-									&& UserLoginEnum.PERSONNEL.intKey() == userType) {//工作人员登录
+									&& UserLoginEnum.PERSONNEL.intKey() == userType) {//普通工作人员登录
+								List<FunctionEntity> employeeLoginFunction = loginAuthorityService
+										.employeeLoginFunction(userId, request);
+								String json = Json.toJson(employeeLoginFunction,
+										JsonFormat.compact().setDateFormat("yyyy-MM-dd HH:mm:ss"));
+								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));
 								return "redirect:" + to + "?auth=2,3,6,7," + str + "&username=" + fullname
-										+ "&logintype=" + logintype;
+										+ "&logintype=" + logintype + "&empList=" + jsonEncode;
+							} else if (UserLoginEnum.PERSONNEL.intKey() == logintype
+									&& UserLoginEnum.COMPANY_ADMIN.intKey() == userType) {//公司管理员员登录
+								List<FunctionEntity> companyFunctions = authority
+										.getCompanyFunctions(comJob.getComId());
+								String json = Json.toJson(companyFunctions,
+										JsonFormat.compact().setDateFormat("yyyy-MM-dd HH:mm:ss"));
+								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));
+								return "redirect:" + to + "?auth=2,3,6,7," + str + "&username=" + fullname
+										+ "&logintype=" + logintype + "&empList=" + jsonEncode;
 							} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype
 									&& UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {//游客身份登录
-								return "redirect:" + to + "?auth=1,4,5,6,7," + str + "&username=" + fullname
-										+ "&logintype=" + logintype;
+								return "redirect:" + to + "?auth=8,9,16,7," + str + "&username=" + fullname
+										+ "&logintype=" + logintype + "&tourist=1";
 							} else if (UserLoginEnum.SUPERMAN.intKey() == 3
 									&& UserLoginEnum.SUPERMAN.intKey() == userType) {
 								return "redirect:" + to + "?auth=0," + str + "&username=" + fullname + "&logintype="
-										+ logintype;
+										+ logintype + "&tourist=3";
 							} else if (UserLoginEnum.ADMIN.intKey() == 4 && UserLoginEnum.ADMIN.intKey() == userType) {
-								return "redirect:" + to + "?auth=1,2,3,4,5," + str + "&username=" + fullname
-										+ "&logintype=" + 4;
+								return "redirect:" + to + "?auth=4," + "&username=" + fullname + "&logintype=" + 4
+										+ "&tourist=2";
 							} else {
 
 								model.addFlashAttribute("error", "登录身份错误,请重试!");
