@@ -95,6 +95,8 @@
 			</constructor-arg> 
 		</bean>
 		
+		<bean id="qiniuUploadService" class="io.znz.jsite.download.impl.QiniuUploadServiceImpl"/>
+		
 		<!-- 事务 -->
 	    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 	        <property name="dataSource" ref="dataSource" />

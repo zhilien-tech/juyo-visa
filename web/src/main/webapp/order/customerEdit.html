@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/res/css/colors.min.css"/>
     <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
     <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
-<!--     <link rel="stylesheet" href="/res/upload/uploadify.css"/> -->
+    <link rel="stylesheet" href="/res/upload/uploadify.css"/>
 </head >
 <body id="aaaa">
 <div>
@@ -37,6 +37,23 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                                                           
+                              <!--   上传测试   -->
+                              <div class="row">
+                                <div class="col-xs-6">
+				      			<div >
+				      				<label class="col-sm-3 text-right padding">上传证件照:</label>
+				      				<div class="col-sm-8 padding"> 
+				      					<button id="uploadFile" name="file" type="file" class="btn btn-primary btn-sm" >上传</button>
+				      					<!-- <input type="file" name="file" id="file" class="btn btn-primary btn-sm" />  -->
+				      					<span id="completeFileName"></span>
+				      					<span id="yvlan"></span>
+				      				</div>
+				      				
+				      			</div>
+				      			</div>
+				      			</div>
                             <!--姓-->
                             <div class="row">
                                 <div class="col-xs-6">
@@ -48,17 +65,7 @@
                                         </div>
                                     </div>
                                 </div>
-  <!--                               
-                                上传测试
-				      			<div >
-				      				<label class="col-sm-3 text-right padding"></label>
-				      				<div class="col-sm-8 padding"> 
-				      					<button id="file" name="file" type="file" class="btn btn-primary btn-sm" >上传</button>
-				      					<input type="file" name="file" id="file" class="btn btn-primary btn-sm" /> 
-				      					<span id="completeFileName"></span>
-				      				</div>
-				      				
-				      			</div> -->
+
                                 
                                 
                                 <div class="col-xs-6">
@@ -3056,7 +3063,8 @@
 <script src="/res/js/idcard.js"></script>
 <script src="/res/js/wintone.js?v=4"></script>
 <script src="/res/js/customer/customerEdit.js"></script>
-<!-- <script src="/res/upload/jquery.uploadify.min.js"></script> -->
+<script src="/res/upload/jquery.uploadify.min.js"></script>
+<script src="/res/js/projectpath/projectpath.js"></script>
 <script type="text/javascript">
 $(function(){
 	//折叠板 效果初始化
@@ -3068,17 +3076,20 @@ $(function(){
 
 
 
-/* $(function(){
+$(function(){
 	uploadFile();
 });
 //文件上传
  function uploadFile(){
+/* 	alert(localhostPaht);
+	alert(curWwwPath);
+	alert(pathName); */
 	 var index=null;
-	$.fileupload1 = $('#file').uploadify({
+	$.fileupload1 = $('#uploadFile').uploadify({
 		'auto' : true,//选择文件后自动上传
 		'formData' : {
-			'fcharset' : 'uft-8',
-			'action' : 'uploadimage'
+			'fcharset' : 'uft-8'/* ,
+			'action' : 'uploadimage' */
 		},
 		'buttonText' : '上传',//按钮显示的文字
 		'fileSizeLimit' : '3000MB',
@@ -3086,23 +3097,33 @@ $(function(){
 		 'fileTypeExts' : '*.png; *.txt; *.doc; *.pdf; *.xls; *.jpg; *.docx; *.xlsx;',//上传文件的类型
 		'swf' : '/res/upload/uploadify.swf',//指定swf文件
 		'multi' : false,//multi设置为true将允许多文件上传
-		'successTimeout' : 1800, */
+		'successTimeout' : 1800, 
 		/* 'queueSizeLimit' : 100, */
-		/* 'uploader' : '${base}/admin/airlinepolicy/uploadFile.html;jsessionid=${pageContext.session.id}',
+		'uploader' : localhostPaht+'/visa/newcustomer/uploadFile',
 		//下面的例子演示如何获取到vid
 		'onUploadStart':function(file){
 			index = layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 		},
 		 'onUploadSuccess' : function(file, data, response) {
-			 
+			 console.log(file);
+			/* 	var jsonobj = eval('(' + data + ')');
+				var url  = jsonobj;//地址 */
+				console.log(data);
+			 console.log(response);
+			 alert(typeof data);
+			 if(index!=null){
+					
+					layer.close(index);
+			 }
 			
-			
+			viewModel.set("customer.phoneurl",data);
            
 		},
         //加上此句会重写onSelectError方法【需要重写的事件】
         'overrideEvents': ['onSelectError', 'onDialogClose'],
         //返回一个错误，选择文件的时候触发
         'onSelectError':function(file, errorCode, errorMsg){
+        	console.log(errorMsg);
             switch(errorCode) {
                 case -110:
                     alert("文件 ["+file.name+"] 大小超出系统限制！");
@@ -3114,8 +3135,11 @@ $(function(){
                     alert("文件 ["+file.name+"] 类型不正确！");
                     break;
             }
+        },
+        'onUploadError':function(file, errorCode, errorMsg, errorString){
+        	alert('The file ' + file.name + ' could not be uploaded: ' + errorString);
         }
 	});
-} */
+}
 </script>
 </html>

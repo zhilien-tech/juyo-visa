@@ -417,6 +417,10 @@ $(function () {
     if (oid) {
         $.getJSON("/visa/newcustomer/showDetail?customerid=" + oid, function (resp) {
         	viewModel.set("customer", $.extend(true, dafaults, resp));
+        	var phoneurl=viewModel.get("customer.phoneurl");
+        	if(phoneurl!=null&&phoneurl!=''){
+        		$("#yvlan").html('<a href="'+phoneurl+'">预览</a>');
+        	}
         	//console.log(JSON.stringify(viewModel.customer.errorinfo));
         	
         	   /*var reason=viewModel.get("customer.errorinfo");

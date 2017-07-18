@@ -8,6 +8,14 @@ String.prototype.startsWith = function (str) {
         return false;
     return true;
 }
+var passporttype=[
+                 {text:"外交",value:0},
+                 {text:"普通",value:1},
+                 {text:"公务",value:3},
+                 {text:"其他",value:4},
+                
+                 
+               ];
 function translateZhToEn(from, to) {
     $.getJSON("/translate/google", {q: $(from).val()}, function (result) {
         $("#" + to).val(result.data).change();
@@ -30,6 +38,7 @@ var countries = new kendo.data.DataSource({
         }
     }),
     dafaults = {
+	passporttype:1,
 	workinfoJp: {},
 	financeJpList:[],
 	oldpassportJp: {},
@@ -63,6 +72,7 @@ var countries = new kendo.data.DataSource({
  * 数据绑定
  ****************************************************/
 var viewModel = kendo.observable({
+	passporttype:passporttype,
     countries: countries,
     states: states,
     onDateChange: function (e) {
@@ -244,10 +254,12 @@ function agreeOrRefuse(flag){
 
 $(function () {
     //如果有传递ID就是修改
+	 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
     var oid = $.queryString("cid");
     if (oid) {
         $.getJSON("/visa/newcustomerjp/showDetail?customerid=" + oid, function (resp) {
         	viewModel.set("customer", $.extend(true, dafaults, resp));
+        	viewModel.set("customer.passporttype", 1);
         	
       /*  	var reason=viewModel.get("customer.errorinfo");
         	var map=new Map();
@@ -312,4 +324,8 @@ $(function () {
         	
         });
     }
+	 if(indexnew!=null){
+			
+			layer.close(indexnew);
+			}
 });

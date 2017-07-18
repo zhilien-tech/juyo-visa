@@ -104,9 +104,12 @@ $(function () {
             $(this).attr('data-index', index);
         }
     });
-    
+    $(function(){
+    	menuItem();
+    });
     //点击 左菜单栏项 触发 function
     function menuItem() {
+    	
         // 获取标识数据
         var dataUrl = $(this).attr('href'),//左菜单栏 对应的路径
         	dataIndex = $(this).data('index'),//左菜单栏 下标
@@ -167,8 +170,8 @@ $(function () {
     }
     
     //点击 左菜单栏项 触发
-    $('.J_menuItem').on('click', menuItem);
-
+   // $('.J_menuItem').on('click', menuItem);
+    $('.J_menuItem').click(menuItem);
     // 关闭选项卡菜单
     function closeTab() {
         var closeTabId = $(this).parents('.J_menuTab').data('id');
