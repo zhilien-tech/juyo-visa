@@ -6,7 +6,11 @@ Released under the MIT License <http://www.opensource.org/licenses/mit-license.p
 
 .uploadify {
 	position: relative;
-	margin-bottom: 1em;
+    width: 66px !important;
+    margin: 0 0 0 15px;
+}
+object#SWFUpload_0 {
+    width: 66px !important;
 }
 .uploadify-button {
 	background-color: #0072c6;

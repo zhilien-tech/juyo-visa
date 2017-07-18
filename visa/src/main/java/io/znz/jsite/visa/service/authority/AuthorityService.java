@@ -79,7 +79,10 @@ public class AuthorityService extends NutzBaseService {
 		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
 		long comId = company.getComId();//得到公司的id
 		String jobJson = addForm.getJobJson();
-
+		String replacejobJson = null;
+		if (!Util.isEmpty(jobJson)) {
+			replacejobJson = jobJson.replaceAll("&quot;", "\"");
+		}
 		//1,先添加部门，拿到部门id
 		Sql sql1 = Sqls.create(sqlManager.get("authority_dept_data"));
 		sql1.params().set("deptName", addForm.getDeptName());
@@ -94,8 +97,7 @@ public class AuthorityService extends NutzBaseService {
 		}
 		//获取到部门id
 		Long deptId = newDept.getId();
-		JobDto[] jobJsonArray = Json.fromJsonAsArray(JobDto.class, jobJson);
-
+		JobDto[] jobJsonArray = Json.fromJsonAsArray(JobDto.class, replacejobJson);
 		if (!Util.isEmpty(jobJsonArray)) {
 			for (JobDto jobDto : jobJsonArray) {
 				saveOrUpdateSingleJob(deptId, null, comId, jobDto.getJobName(), jobDto.getFunctionIds());

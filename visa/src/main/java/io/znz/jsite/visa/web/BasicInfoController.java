@@ -91,7 +91,10 @@ public class BasicInfoController extends BaseController {
 		//NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, Cnd.where("empid", "=", userId));
 		List<NewCustomerEntity> usalist = dbDao.query(NewCustomerEntity.class, Cnd.where("empid", "=", user.getId())
 				.orderBy("createtime", "desc"), null);
-		NewCustomerEntity customer = usalist.get(0);
+		NewCustomerEntity customer = null;
+		if (!Util.isEmpty(usalist)) {
+			customer = usalist.get(0);
+		}
 		long customerId = 0;
 		if (!Util.isEmpty(customer)) {
 			customerId = customer.getId();//得到客户id
@@ -446,7 +449,10 @@ public class BasicInfoController extends BaseController {
 		//NewCustomerJpEntity cusdto = dbDao.fetch(NewCustomerJpEntity.class, Cnd.where("empid", "=", userId));
 		List<NewCustomerJpEntity> japanlist = dbDao.query(NewCustomerJpEntity.class,
 				Cnd.where("empid", "=", user.getId()).orderBy("createtime", "desc"), null);
-		NewCustomerJpEntity cusdto = japanlist.get(0);
+		NewCustomerJpEntity cusdto = null;
+		if (!Util.isEmpty(japanlist)) {
+			cusdto = japanlist.get(0);
+		}
 
 		NewCustomerJpDto customer = new NewCustomerJpDto();
 		long customerId = 0;

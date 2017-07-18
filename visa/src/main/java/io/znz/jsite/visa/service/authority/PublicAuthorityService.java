@@ -25,7 +25,10 @@ import com.uxuexi.core.common.util.Util;
  */
 @Service
 public class PublicAuthorityService extends NutzBaseService {
-	//新增上游公司后给公司配置功能
+	/**
+	 * 新增公司后给公司配置功能
+	 * @param addForm
+	 */
 	public boolean companyFunction(CompanyEntity addForm) {
 		//通过session获取公司的id
 		//TCompanyEntity company = (TCompanyEntity) session.getAttribute(LoginService.USER_COMPANY_KEY);
@@ -34,7 +37,7 @@ public class PublicAuthorityService extends NutzBaseService {
 		CompanyEntity fetchType = dbDao.fetch(CompanyEntity.class, Cnd.where("adminId", "=", adminId));
 		long comId = fetchType.getId();//得到公司id
 		//上游公司功能ID
-		int[] function = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 };
+		int[] function = { 1, 2, 3, 6, 17, 18, 19, 20, 21, 22, 23, 24 };
 		List<CompanyFunctionEntity> functionList = Lists.newArrayList();
 		for (int i = 0; i < function.length; i++) {
 			//向公司功能关系表中添加数据
@@ -45,5 +48,14 @@ public class PublicAuthorityService extends NutzBaseService {
 		}
 		List<CompanyFunctionEntity> insert = dbDao.insert(functionList);
 		return !Util.isEmpty(insert);
+	}
+
+	/**
+	 * 美国单子点击分享时给游客配置功能
+	 * @param userId 用户id
+	 * @param userType 用户类型  此处需要游客类型
+	 */
+	public Object shareAddFunction(long userId, int userType) {
+		return null;
 	}
 }
