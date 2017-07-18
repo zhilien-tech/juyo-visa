@@ -55,7 +55,7 @@ $(function () {
 				fun.checked=jobfunctionlist[i].checked;
 				zNodes.push(fun);
 			}
-
+			var root =  {id:"0", pId:"0", name:"职位权限设置", open:true};
 			for (var i = 0; i < jobnamelist.length; i++) {
 				var objaa = jobnamelist[i];//得到对象
 				bb = JSON.parse(objaa.znodes);//将json转换为Object
@@ -66,6 +66,7 @@ $(function () {
 		        var treeObj = $.fn.zTree.getZTreeObj(treeId);
 		        if(null == treeObj || undefined == treeObj){
 		        	var nodes = eval("(" +jobnamelist[i].znodes+")");
+		        	nodes.push(root);
 			      	//初始化ztree
 				    $.fn.zTree.init(ztree_container, setting, nodes );
 		      	}
