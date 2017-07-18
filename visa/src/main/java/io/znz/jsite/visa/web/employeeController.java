@@ -7,6 +7,8 @@
 package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.BaseController;
+import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
+import io.znz.jsite.core.util.Const;
 import io.znz.jsite.visa.entity.job.JobEntity;
 import io.znz.jsite.visa.forms.employeeform.EmployeeAddForm;
 import io.znz.jsite.visa.forms.employeeform.EmployeeSqlForm;
@@ -50,7 +52,11 @@ public class employeeController extends BaseController {
 	 */
 	@RequestMapping(value = "employeelist")
 	@ResponseBody
-	public Object employeelist(@RequestBody EmployeeSqlForm sqlForm) {
+	public Object employeelist(@RequestBody EmployeeSqlForm sqlForm, final HttpSession session) {
+		//通过session获取公司的id
+		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		long comId = company.getComId();//得到公司的id
+		sqlForm.setComId(comId);
 		Pager pager = new Pager();
 		pager.setPageNumber(sqlForm.getPageNumber());
 		pager.setPageSize(sqlForm.getPageSize());

@@ -102,6 +102,7 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 			addForm.setStatus(UserJobStatusEnum.JOB.intKey());//在职
 			addForm.setUserType(UserTypeEnum.PERSONNEL.intKey());//工作人员身份
 			addForm.setDisableUserStatus(UserStatusEnum.VALID.intKey());//激活
+			addForm.setComId(comId);
 			//初始密码
 			byte[] salt = Digests.generateSalt(SALT_SIZE);
 			addForm.setSalt(Encodes.encodeHex(salt));

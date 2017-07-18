@@ -22,13 +22,13 @@ import com.uxuexi.core.web.form.AddForm;
 @EqualsAndHashCode(callSuper = true)
 public class EmployeeAddForm extends AddForm {
 	//主键
-	private Integer id;
+	private long id;
 	//公司id
-	private Integer comId;
+	private long comId;
 	//部门id
-	private Integer jobId;
+	private long jobId;
 	//职位id
-	private Integer deptId;
+	private long deptId;
 	//用户姓名
 	private String fullName;
 	//用户名/手机号码
