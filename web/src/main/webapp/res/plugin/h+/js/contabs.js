@@ -1,4 +1,3 @@
-
 $(function () {
 	
     //计算元素集合的总宽度
@@ -121,7 +120,7 @@ $(function () {
         // 选项卡菜单已存在
         $('.J_menuTab').each(function () {
         	 
-            if ($(this).data('id') == dataUrl) {
+            if ($(this).data('id') == dataUrl){
                 if (!$(this).hasClass('active')){
                     $(this).addClass('active').siblings('.J_menuTab').removeClass('active');
                     scrollToTab(this);
