@@ -288,6 +288,15 @@ var viewModel = kendo.observable({
 				}
     			proposersnew.push(person);
     			viewModel.set("proposers",proposersnew);
+    			var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
+    			console.log(proposerInfoJpList);
+    		/*	for(var m=0;m<proposerInfoJpList.length;m++){
+    				if(proposerInfoJpList[m].id==e.data.id){
+    					viewModel.set("customer.proposerInfoJpList["+m+"].ismainproposer",true);
+					}
+    			}*/
+    			//viewModel.set("customer.proposerInfoJpList",viewModel.get("customer.proposerInfoJpList"));
+    			$("#ismainproposer_"+e.data.id).text("主申请人("+e.data.xing+e.data.name+")");
     	}else{
     		for(var i=0;i<proposersnew.length;i++){
     			/*if(proposersnew[i].text+""==(e.data.xing+e.data.name)+""){
@@ -298,6 +307,7 @@ var viewModel = kendo.observable({
 				}
     		}
     		viewModel.set("proposers",proposersnew);
+    		$("#ismainproposer_"+e.data.id).text("副申请人("+e.data.xing+e.data.name+")");
     	}
     },
     updateData:function(e){
@@ -670,6 +680,7 @@ function orderJpsave(){
 $(function () {
     //如果有传递ID就是修改
     var oid = $.queryString("cid");
+    var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
     if (oid) {
         $.getJSON("/visa/neworderjp/showDetail?orderid=" + oid, function (resp) {
         	//console.log(JSON.stringify(resp));
@@ -742,6 +753,10 @@ $(function () {
 			}
         });
     }
+    if(indexnew!=null){
+		
+		layer.close(indexnew);
+		}
     
    //comsource();//客户来源 状态 模块加载
    

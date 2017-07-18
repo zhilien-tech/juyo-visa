@@ -1027,7 +1027,7 @@
 <!-- 主申请人 模板 -->
 <script id="tpl_customer" type="text/html">
 <li class="k-item k-state-default k-first k-last k-state-highlight">
-    <span class="k-link span-Title">#:data.ismainproposer?'主申请人':'副申请人'#(#:data.xing+data.name#)<span class="k-icon k-i-arrow-60-down k-panelbar-collapse"></span></span>
+    <span class="k-link span-Title" id="ismainproposer_#:data.id#">#:data.ismainproposer?'主申请人':'副申请人'#(#:data.xing+data.name#)<span class="k-icon k-i-arrow-60-down k-panelbar-collapse"></span></span>
     <div class="container-fluid k-content" style="padding-top: 15px;padding-bottom: 15px;">
         <div class="row">
             <div class="col-xs-3">

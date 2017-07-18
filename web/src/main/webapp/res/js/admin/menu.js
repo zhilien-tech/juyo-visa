@@ -103,7 +103,7 @@ define(['jquery', 'template'], function ($, template) {
         }
     });
 
-    //双击刷新iframe
+    //双击刷新iframe dbl
     $('.J_menuTabs').on('dblclick', '.J_menuTab', function () {
         var target = $('iframe[data-id="' + $(this).data('id') + '"]');
         target.attr('src', target.attr('src'));
