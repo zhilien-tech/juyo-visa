@@ -1,6 +1,6 @@
 /**
- * UserLoginEnum.java
- * io.znz.jsite.core.enums
+ * UserJobStatusEnum.java
+ * io.znz.jsite.visa.enums
  * Copyright (c) 2017, 北京科技有限公司版权所有.
 */
 
@@ -9,17 +9,16 @@ package io.znz.jsite.core.enums;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * 用户登录枚举
+ * 用户就职状态
  * @author   崔建斌
- * @Date	 2017年6月16日 	 
+ * @Date	 2017年7月10日 	 
  */
-public enum UserLoginEnum implements IEnum {
-	PERSONNEL(1, "工作人员"), TOURIST_IDENTITY(2, "游客身份"), SUPERMAN(3, "超级管理员"), ADMIN(4, "平台管理员"), COMPANY_ADMIN(5,
-			"公司管理员");
+public enum UserJobStatusEnum implements IEnum {
+	JOB(1, "在职"), QUIT(2, "离职");
 	private int key;
 	private String value;
 
-	private UserLoginEnum(final int key, final String value) {
+	private UserJobStatusEnum(final int key, final String value) {
 		this.value = value;
 		this.key = key;
 	}

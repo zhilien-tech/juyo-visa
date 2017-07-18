@@ -8,6 +8,7 @@ package io.znz.jsite.visa.service.company;
 
 import io.znz.jsite.base.NutzBaseService;
 import io.znz.jsite.core.entity.EmployeeEntity;
+import io.znz.jsite.core.enums.UserLoginEnum;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 import io.znz.jsite.visa.entity.company.CompanyEntity;
@@ -16,6 +17,7 @@ import io.znz.jsite.visa.entity.department.DepartmentEntity;
 import io.znz.jsite.visa.entity.job.JobEntity;
 import io.znz.jsite.visa.entity.userjobmap.UserJobMapEntity;
 import io.znz.jsite.visa.enums.UserDeleteStatusEnum;
+import io.znz.jsite.visa.enums.UserStatusEnum;
 import io.znz.jsite.visa.forms.companyform.CompanySqlForm;
 import io.znz.jsite.visa.service.authority.PublicAuthorityService;
 
@@ -73,9 +75,9 @@ public class CompanyService extends NutzBaseService<CompanyEntity> {
 		byte[] password = INIT_PASSWORD.getBytes();
 		byte[] hashPassword = Digests.sha1(password, salt, HASH_INTERATIONS);
 		empForm.setPassword(Encodes.encodeHex(hashPassword));//初始密码
-		empForm.setStatus(0);
+		empForm.setStatus(UserStatusEnum.VALID.intKey());//激活
 		empForm.setCreateTime(new Date());
-		empForm.setUserType(1);
+		empForm.setUserType(UserLoginEnum.COMPANY_ADMIN.intKey());//工作人员类别
 		empForm.setTelephone(addForm.getAdminName());
 		empForm.setFullName(addForm.getAdminName());
 		EmployeeEntity userAdd = dbDao.insert(empForm);

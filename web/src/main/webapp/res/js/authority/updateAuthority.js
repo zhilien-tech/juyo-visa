@@ -8,7 +8,6 @@ var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 var zNodes =[
 	 {id:"0", pId:"0", name:"职位权限设置", open:true}
 ];
-var root =  {id:"0", pId:"0", name:"职位权限设置", open:true};
 var treeIndex = 0 ;
 //功能表的list
 var functionlist;
@@ -114,7 +113,6 @@ $(function () {
       	}
     });
 });  //$.function结束
-
 
 //设置功能
 function setFunc(){
