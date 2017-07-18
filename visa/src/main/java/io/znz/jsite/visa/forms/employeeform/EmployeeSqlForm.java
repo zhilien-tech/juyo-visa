@@ -28,7 +28,7 @@ import org.nutz.dao.sql.Sql;
 @EqualsAndHashCode(callSuper = true)
 public class EmployeeSqlForm extends KenDoParamForm {
 	//公司id
-	private Integer comId;
+	private long comId;
 	//用户姓名
 	private String fullName;
 	//用户名/手机号码
@@ -76,6 +76,7 @@ public class EmployeeSqlForm extends KenDoParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
+		cnd.and("e.comId", "=", comId);
 		cnd.and("e.status", "=", UserJobStatusEnum.JOB.intKey());//在职
 		cnd.and("d.deptName", "!=", "公司管理部");
 		cnd.orderBy("e.createTime", "DESC");
