@@ -170,7 +170,8 @@ $(function () {
     /*$(function(){
     	menuItem();
     });*/
-	$('.nav-second-level').hide();
+	//$('.nav-second-level').hide();
+
     //点击 左菜单栏项 触发 function
     function menuItem() {
     	
@@ -190,15 +191,20 @@ $(function () {
         
         // 选项卡菜单已存在
         $('.J_menuTab').each(function () {
-        	 
             if ($(this).data('id') == dataUrl){
                 if (!$(this).hasClass('active')){
                     $(this).addClass('active').siblings('.J_menuTab').removeClass('active');
                     scrollToTab(this);
                     
                     // 显示tab对应的内容区
-                    $('.J_mainContent .J_iframe').each(function () {
-                        if ($(this).data('id') == dataUrl){
+                    $('.J_mainContent .J_iframe').each(function(){
+                        /*if ($(this).data('id') == dataUrl){
+                            $(this).show().siblings('.J_iframe').hide();
+                            return false;
+                        }//07-19 10:00*/
+                    	///console.log("$(this).attr('src')的值为：__________"+$(this).attr('src'));
+                    	///console.log("dataUrl的值为：__________"+dataUrl);
+                    	if ($(this).attr('src') == dataUrl){
                             $(this).show().siblings('.J_iframe').hide();
                             return false;
                         }
