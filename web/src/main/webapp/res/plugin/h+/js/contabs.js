@@ -110,6 +110,20 @@ $(function () {
     //点击 左菜单栏项 触发 function
     function menuItem() {
     	
+    	//left menu Highlight----------------------------------
+    	if(typeof(Storage) !== "undefined") {
+    		
+    		var thisId=$(this).attr('id');
+    		if(thisId!=undefined){
+    			 sessionStorage.clickcountIdValue = thisId;
+    			 $('#'+sessionStorage.clickcountIdValue).addClass("menuHighlight").parent().siblings('li').find('a').removeClass("menuHighlight");
+    			 $('#'+sessionStorage.clickcountIdValue).parents('.active').siblings('li').find('.J_menuItem').removeClass("menuHighlight");
+    		}
+    	} else {
+    	    alert("抱歉！您的浏览器不支持 Web Storage 请联系相关技术人员！");
+    	}
+    	//end left menu Highlight------------------------------
+    	
         // 获取标识数据
         var dataUrl = $(this).attr('href'),//左菜单栏 对应的路径
         	dataIndex = $(this).data('index'),//左菜单栏 下标
