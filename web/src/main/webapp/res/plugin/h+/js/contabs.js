@@ -130,7 +130,7 @@ $(function () {
     	//公司管理员登录
     	var empList=$.queryString("empList");
     	var emp=JSON.parse(JSON.parse($.base64.atob(decodeURI(empList),true))); 
-    	console.log(emp)
+    	///console.log(emp)
     	
     	for(var i=0;i<emp.length;i++){
     		$("#"+emp[i].id).show();
@@ -145,12 +145,12 @@ $(function () {
     				}
     			}
     			if(a>0){
-    				html+='<li><a href="javascript:;" class="J_menuItem" id="'+emp[i].id+'"><i class="fa fa-building"></i><span class="nav-label" >'+emp[i].funName+'</span><span class="fa arrow"></span></a>'
+    				html+='<li><a href="javascript:;" class="J_menuItem1" id="'+emp[i].id+'"><i class="fa fa-building"></i><span class="nav-label" >'+emp[i].funName+'</span><span class="fa arrow"></span></a>'
                 	html+='<ul class="nav nav-second-level">';
     	    		for(var j=i+1;j<emp.length;j++){
     	    			if(emp[i].id==emp[j].parentId){
     	    				html+='<li><a class="J_menuItem" href="'+emp[j].url+'" id="'+emp[j].id+'">'+emp[j].funName+'</a></li>'
-    	                   console.log("第"+j+"次:"+html);
+    	                   ///console.log("第"+j+"次:"+html);
     	    			}
     	    		}
     	    		html+= '</ul>';
@@ -164,27 +164,28 @@ $(function () {
 		$("#side-menu").append(html);
 	}
     
-    /*$(function(){
-    	menuItem();
-    });*/
-	//$('.nav-second-level').hide();
-
+	$('.nav-second-level').hide();
+	$('.J_menuItem1').on('click', function(){
+		$(this).next().toggle('100');
+		$(this).parent().siblings().find('ul').hide('100');
+	});
     //点击 左菜单栏项 触发 function
     function menuItem() {
+
+    		//left menu Highlight----------------------------------
+        	if(typeof(Storage) !== "undefined") {
+        		var thisId=$(this).attr('id');
+        		if(thisId!=undefined){
+        			 sessionStorage.clickcountIdValue = thisId;
+        			 $('#'+sessionStorage.clickcountIdValue).addClass("menuHighlight").parent().siblings('li').find('a').removeClass("menuHighlight");
+        			 $('#'+sessionStorage.clickcountIdValue).parent().parent().parent().siblings('li').find('.J_menuItem').removeClass("menuHighlight");
+        		}
+        		$(this).parent().siblings().find('ul').hide('100');
+        	} else {
+        	    alert("抱歉！您的浏览器不支持 Web Storage 请联系相关技术人员！");
+        	}
+        	//end left menu Highlight------------------------------
     	
-    	//left menu Highlight----------------------------------
-    	if(typeof(Storage) !== "undefined") {
-    		
-    		var thisId=$(this).attr('id');
-    		if(thisId!=undefined){
-    			 sessionStorage.clickcountIdValue = thisId;
-    			 $('#'+sessionStorage.clickcountIdValue).addClass("menuHighlight").parent().siblings('li').find('a').removeClass("menuHighlight");
-    			 $('#'+sessionStorage.clickcountIdValue).parents('.active').siblings('li').find('.J_menuItem').removeClass("menuHighlight");
-    		}
-    	} else {
-    	    alert("抱歉！您的浏览器不支持 Web Storage 请联系相关技术人员！");
-    	}
-    	//end left menu Highlight------------------------------
 
         // 获取标识数据
         var dataUrl = $(this).attr('href'),//左菜单栏 对应的路径
@@ -192,9 +193,6 @@ $(function () {
         	menuName = $.trim($(this).text()),//左菜单栏 标题name
             flag = true;
         if (dataUrl == undefined || $.trim(dataUrl).length == 0) return false;
-        
-        /*var str1 = '<iframe class="J_iframe" name="iframe' + dataIndex + '" width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataUrl + '" seamless></iframe>';
-        $('.J_mainContent').find('iframe.J_iframe').hide().parents('.J_mainContent').append(str1);*/
         
         // 选项卡菜单已存在
         $('.J_menuTab').each(function () {
@@ -209,8 +207,8 @@ $(function () {
                             $(this).show().siblings('.J_iframe').hide();
                             return false;
                         }//07-19 10:00*/
-                    	///console.log("$(this).attr('src')的值为：__________"+$(this).attr('src'));
-                    	///console.log("dataUrl的值为：__________"+dataUrl);
+                    	//console.log("$(this).attr('src')的值为：__________"+$(this).attr('src'));
+                    	//console.log("dataUrl的值为：__________"+dataUrl);
                     	if ($(this).attr('src') == dataUrl){
                             $(this).show().siblings('.J_iframe').hide();
                             return false;
