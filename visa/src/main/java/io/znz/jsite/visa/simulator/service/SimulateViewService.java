@@ -269,24 +269,30 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 			public SchoolDto apply(NewTeachinfoEntity from) {
 				SchoolDto to = new SchoolDto();
 				to.setId(from.getId());
+
+				to.setRoom(from.getSchooladdresssmall());
+				to.setRoomEN(from.getSchooladdresssmallen());
+
 				to.setAddress(from.getSchooladdressbig());
 				to.setAddressEN(from.getSchooladdressbigen());
 
 				to.setCity(from.getCity());
+				to.setProvince(from.getPrevince());
 				to.setCountry(from.getCountry());
 				//美国签证网站现在不要求填写学位
 				to.setDegree(from.getMajor());
 				to.setDegreeEN(from.getMajoren());
-				to.setEndDate(from.getStartdate());
+
+				to.setStartDate(from.getStartdate());
+				to.setEndDate(from.getEnddate());
+
 				to.setName(from.getSchoolname());
 				to.setNameEN(from.getSchoolnameen());
 				to.setPhone(from.getSchoolphone());
-				to.setProvince(from.getPrevince());
-				to.setRoom(from.getSchooladdresssmall());
-				to.setRoomEN(from.getSchooladdresssmallen());
+
 				to.setSpecialty(from.getMajor());
 				to.setSpecialtyEN(from.getMajoren());
-				to.setStartDate(from.getEnddate());
+
 				to.setZipCode(from.getZipcode());
 				return to;
 			}

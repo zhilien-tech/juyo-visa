@@ -62,11 +62,6 @@ public class MainForm extends JPanel {
 	private static final String TASK_FETCH_URI = "visa/simulator/fetch";
 	//	private static final String TASK_FETCH_URI = "visa/customer/fetch";
 
-	/**
-	 * 图片服务器地址
-	 */
-	private static final String IMAGES_SERVER_ADDR = "http://oluwc01ms.bkt.clouddn.com/";
-
 	private static final String HISTORY = "history";
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss.SSS]");
 	private long startTime = 0;
@@ -196,7 +191,7 @@ public class MainForm extends JPanel {
 					ResultObject<Map, Object> ro = JSON.parseObject(json, ResultObject.class);
 					if (ro.getCode() == ResultObject.ResultCode.SUCCESS) {
 						final String oid = String.valueOf(ro.getAttributes().get("oid"));
-						String image = IMAGES_SERVER_ADDR + String.valueOf(ro.getAttributes().get("avatar"));
+						String image = String.valueOf(ro.getAttributes().get("avatar"));
 						SwingUtilities.invokeLater(new Runnable() {
 							@Override
 							public void run() {
