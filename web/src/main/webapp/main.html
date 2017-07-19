@@ -43,7 +43,7 @@
                     <div class="logo-element">JST</div>
                 </li>
                 <!--菜单列表-->
-                <li>
+              <!--   <li>
                     <a href="#" id="1">
                         <i class="fa fa-building"></i>
                         <span class="nav-label" >公司管理</span>
@@ -74,16 +74,16 @@
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level">
-                    	<!-- 美国我的资料 -->
+                    	美国我的资料
                         <li><a class="J_menuItem" href="personal/passportInfo/passportInfoList.html" id="10">护照信息</a></li>
                         <li><a class="J_menuItem" href="personal/basicInfo/basicInfoList.html" id="11">基本信息</a></li>
                         <li><a class="J_menuItem" href="personal/visaInfo/visaInfoList.html" id="12">签证信息</a></li>
-                        <!-- 日本我的资料 -->
+                        日本我的资料
                         <li><a class="J_menuItem" href="personal/passportInfo/passportJPInfoList.html" id="13">护照信息</a></li>
                         <li><a class="J_menuItem" href="personal/basicInfo/basicJPInfoList.html" id="14">基本信息</a></li>
 						<li><a class="J_menuItem" href="personal/visaInfo/JPvisaInfoList.html" id="15">签证信息</a></li>
-                        <!-- <li><a class="J_menuItem" href="">证照信息</a></li>
-                        <li><a class="J_menuItem" href="">常用联系人</a></li> -->
+                        <li><a class="J_menuItem" href="">证照信息</a></li>
+                        <li><a class="J_menuItem" href="">常用联系人</a></li>
                         <li><a class="J_menuItem" href="personal/modifyPassword/modifyPassword.html" id="16">修改密码</a></li>
                     </ul>
                 </li>
@@ -96,15 +96,15 @@
                     <ul class="nav nav-second-level">
                     	<li><a class="J_menuItem" href="order/america.html" id="18">美国</a></li>
                     	<li><a class="J_menuItem" href="order/japan.html" id="19">日本</a></li>
-                        <!-- <li><a class="J_menuItem" href="order/list.html">订单管理</a></li>
-                        <li><a class="J_menuItem" href="customer.html">客户管理</a></li> -->
-                        <!--<li>-->
-                            <!--<a href="#">销售填表<span class="fa arrow"></span></a>-->
-                            <!--<ul class="nav nav-third-level">-->
-                                <!--<li><a class="J_menuItem" href="/m/japan.html">日本</a></li>-->
-                                <!--<li><a class="J_menuItem" href="/m/usa.html">美国</a></li>-->
-                            <!--</ul>-->
-                        <!--</li>-->
+                        <li><a class="J_menuItem" href="order/list.html">订单管理</a></li>
+                        <li><a class="J_menuItem" href="customer.html">客户管理</a></li>
+                        <li>
+                            <a href="#">销售填表<span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li><a class="J_menuItem" href="/m/japan.html">日本</a></li>
+                                <li><a class="J_menuItem" href="/m/usa.html">美国</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
                 <li>
@@ -119,7 +119,7 @@
                         <li><a class="J_menuItem" href="hotel.html" id="23">酒店管理</a></li>
                         <li><a class="J_menuItem" href="scenic.html" id="24">景点管理</a></li>
                     </ul>
-                </li>
+                </li> -->
             </ul>
         </div>
     </nav>
@@ -667,7 +667,7 @@
         });
     }
     $(function () {
-    	for(var i=1;i<25;i++){
+    	/* for(var i=1;i<25;i++){
     		$("#"+i).hide();
     	}
     	var tourist=$.queryString("tourist");
@@ -687,16 +687,31 @@
     		for(var i=1;i<25;i++){
         		$("#"+i).show();
         	}
-    	}else{
+    	} else{*/
 	    	//公司管理员登录
-	    	var empList=$.queryString("empList");
-	    	var emp=JSON.parse(JSON.parse($.base64.atob(decodeURI(empList),true))); 
-	    	///console.log(emp)
-	    	for(var i=0;i<emp.length;i++){
+	    	//var empList=$.queryString("empList");
+	    	//var emp=JSON.parse(JSON.parse($.base64.atob(decodeURI(empList),true))); 
+	    	
+	    	/* for(var i=0;i<emp.length;i++){
 	    		$("#"+emp[i].id).show();
+	    	} */
+	    	/* var html="";
+	    	for(var i=0;i<emp.length;i++){
+	    		if(emp[i].parentId==0){
+		    		html+='<li><a href="javascript:;" class="J_menuItem" id="'+emp[i].id+'"><i class="fa fa-building"></i><span class="nav-label" >'+emp[i].funName+'</span><span class="fa arrow"></span></a>'
+	            	html+='<ul class="nav nav-second-level">';
+		    		for(var j=i+1;j<emp.length;j++){
+		    			if(emp[i].id==emp[j].parentId){
+		    				html+='<li><a class="J_menuItem" href="'+emp[j].url+'" id="'+emp[j].id+'">'+emp[j].funName+'</a></li>'
+		                   console.log("第"+j+"次:"+html);
+		    			}
+		    		}
+		    		html+= '</ul>';
+	       			html+='</li>';
+	    		}
 	    	}
-    	}
-    	
+    		$("#side-menu").append(html); */
+    	//}
     	/* var flag=$.queryString("auth");
     	console.log(flag);
     	var num=flag.split(",");
@@ -720,14 +735,14 @@
         } */
     	
     	if(logintype != "" && logintype != null && logintype == 1){//1表示进入日本的签证状态
-        	$('.J_iframe').attr('src','order/america.html'); 
+        	$('.J_iframe').attr('src','/order/america.html'); 
     		$('#homePage').html('<a href="javascript:;" class="active J_menuTab" data-id="order/america.html">美国 </a>');
     		
         }else if(logintype == 4){
-        	$('.J_iframe').attr('src','company/companylist.html'); 
+        	$('.J_iframe').attr('src','/company/companylist.html'); 
     		$('#homePage').html('<a href="javascript:;" class="active J_menuTab" data-id="company/companylist.html">公司管理 </a>');
         }else{
-        	$('.J_iframe').attr('src','myvisa/transactVisa/visaNationList.html'); 
+        	$('.J_iframe').attr('src','/myvisa/transactVisa/visaNationList.html'); 
     		$('#homePage').html('<a href="javascript:;" class="active J_menuTab" data-id="myvisa/transactVisa/visaNationList.html">办理中签证 </a>');
         }
         

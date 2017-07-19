@@ -40,4 +40,12 @@ public class LoginAuthorityService extends NutzBaseService {
 		//request.getSession().setAttribute(Const.USER_JOB_FUNCTION, empfunlist);
 		return empfunlist;
 	}
+
+	/**
+	 * 超级管理员登录时
+	 */
+	public List<FunctionEntity> superAdministratorFunction() {
+		List<FunctionEntity> query = dbDao.query(FunctionEntity.class, null, null);
+		return query;
+	}
 }
