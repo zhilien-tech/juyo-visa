@@ -104,11 +104,79 @@ $(function () {
             $(this).attr('data-index', index);
         }
     });
-    $(function(){
+    
+    for(var i=1;i<25;i++){
+		$("#"+i).hide();
+	}
+	var tourist=$.queryString("tourist");
+	if(tourist==1){//游客
+		var flag=$.queryString("auth");
+		alert(flag);
+    	var num=flag.split(",");
+    	for(var i=0;i<num.length;i++){
+    		$("#"+num[i]).show();
+    	}
+	}else if(tourist==2){//平台管理员
+		var flag=$.queryString("auth");
+    	var num=flag.split(",");
+    	for(var i=0;i<num.length;i++){
+    		$("#"+num[i]).show();
+    	}
+	}else if(tourist==3){//超级管理员
+		for(var i=1;i<25;i++){
+    		$("#"+i).show();
+    	}
+	}else{
+    	//公司管理员登录
+    	var empList=$.queryString("empList");
+    	var emp=JSON.parse(JSON.parse($.base64.atob(decodeURI(empList),true))); 
+    	console.log(emp)
+    	
+    	for(var i=0;i<emp.length;i++){
+    		$("#"+emp[i].id).show();
+    	}
+    	var html="";
+    	for(var i=0;i<emp.length;i++){
+    		if(emp[i].parentId==0){
+    			var a=0;
+    			for(var m=i;m<emp.length;m++){
+    				if(emp[m].parentId==emp[i].id){
+    					a++;
+    				}
+    			}
+    			if(a>0){
+    				html+='<li><a href="javascript:;" class="J_menuItem" id="'+emp[i].id+'"><i class="fa fa-building"></i><span class="nav-label" >'+emp[i].funName+'</span><span class="fa arrow"></span></a>'
+                	html+='<ul class="nav nav-second-level">';
+    	    		for(var j=i+1;j<emp.length;j++){
+    	    			if(emp[i].id==emp[j].parentId){
+    	    				html+='<li><a class="J_menuItem" href="'+emp[j].url+'" id="'+emp[j].id+'">'+emp[j].funName+'</a></li>'
+    	                   console.log("第"+j+"次:"+html);
+    	    			}
+    	    		}
+    	    		html+= '</ul>';
+           			html+='</li>';
+    			}else{
+    				html+='<li><a href="'+emp[i].url+'" class="J_menuItem" id="'+emp[i].id+'"><span class="nav-label" >'+emp[i].funName+'</span></a>'
+           			html+='</li>';
+    			}
+    			
+    			
+	    		
+    		}
+    	}
+		$("#side-menu").append(html);
+	}
+    
+    /*$(function(){
     	menuItem();
-    });
+    });*/
+	$('.nav-second-level').hide();
     //点击 左菜单栏项 触发 function
     function menuItem() {
+    	
+    	/*2017-07-18 18:30*/
+    	$(this).next().toggle();
+    	/**/
     	
         // 获取标识数据
         var dataUrl = $(this).attr('href'),//左菜单栏 对应的路径
@@ -170,8 +238,8 @@ $(function () {
     }
     
     //点击 左菜单栏项 触发
-   // $('.J_menuItem').on('click', menuItem);
-    $('.J_menuItem').click(menuItem);
+    $('.J_menuItem').on('click', menuItem);
+    //$('.J_menuItem').click(menuItem);
     // 关闭选项卡菜单
     function closeTab() {
         var closeTabId = $(this).parents('.J_menuTab').data('id');
