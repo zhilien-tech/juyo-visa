@@ -129,8 +129,13 @@ $(function () {
                     
                     // 显示tab对应的内容区
                     $('.J_mainContent .J_iframe').each(function(){
-                    	console.log("$(this).data('id')的值为："+$(this).data('id'));
-                        if ($(this).data('id') == dataUrl){
+                        /*if ($(this).data('id') == dataUrl){
+                            $(this).show().siblings('.J_iframe').hide();
+                            return false;
+                        }//07-19 10:00*/
+                    	///console.log("$(this).attr('src')的值为：__________"+$(this).attr('src'));
+                    	///console.log("dataUrl的值为：__________"+dataUrl);
+                    	if ($(this).attr('src') == dataUrl){
                             $(this).show().siblings('.J_iframe').hide();
                             return false;
                         }
