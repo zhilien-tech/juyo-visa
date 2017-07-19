@@ -104,9 +104,9 @@ $(function () {
             $(this).attr('data-index', index);
         }
     });
-    $(function(){
+    /*$(function(){
     	menuItem();
-    });
+    });*/
     //点击 左菜单栏项 触发 function
     function menuItem() {
     	
@@ -122,14 +122,14 @@ $(function () {
         
         // 选项卡菜单已存在
         $('.J_menuTab').each(function () {
-        	 
             if ($(this).data('id') == dataUrl){
                 if (!$(this).hasClass('active')){
                     $(this).addClass('active').siblings('.J_menuTab').removeClass('active');
                     scrollToTab(this);
                     
                     // 显示tab对应的内容区
-                    $('.J_mainContent .J_iframe').each(function () {
+                    $('.J_mainContent .J_iframe').each(function(){
+                    	console.log("$(this).data('id')的值为："+$(this).data('id'));
                         if ($(this).data('id') == dataUrl){
                             $(this).show().siblings('.J_iframe').hide();
                             return false;
@@ -170,8 +170,8 @@ $(function () {
     }
     
     //点击 左菜单栏项 触发
-   // $('.J_menuItem').on('click', menuItem);
-    $('.J_menuItem').click(menuItem);
+    $('.J_menuItem').on('click', menuItem);
+    //$('.J_menuItem').click(menuItem);
     // 关闭选项卡菜单
     function closeTab() {
         var closeTabId = $(this).parents('.J_menuTab').data('id');
