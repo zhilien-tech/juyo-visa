@@ -31,6 +31,7 @@ import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
 import io.znz.jsite.visa.util.Const;
 
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -52,6 +53,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import com.ibm.icu.text.SimpleDateFormat;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
 
@@ -96,6 +98,23 @@ public class NewCustomerController {
 	@ResponseBody
 	@Transactional
 	public Object customerSave(@RequestBody NewCustomerEntity customer) {
+		String idcard = customer.getIdcard();
+		if (!Util.isEmpty(idcard)) {
+			String birthday = idcard.substring(6, 14);
+			SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+			try {
+				Date parse = df.parse(birthday);
+				if (!Util.isEmpty(parse)) {
+					customer.setBirthdate(parse);
+				}
+			} catch (ParseException e) {
+
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
+			}
+		}
+
 		String xing = customer.getChinesexing();
 		String name = customer.getChinesename();
 		if (!Util.isEmpty(xing) && !Util.isEmpty(name)) {
