@@ -1,5 +1,4 @@
 $(function () {
-
     //计算元素集合的总宽度
     function calSumWidth(elements) {
         var width = 0;
@@ -186,17 +185,16 @@ $(function () {
 			    function closeTab() {
 			        var closeTabId = $(this).parents('.J_menuTab').data('id');
 			        var currentWidth = $(this).parents('.J_menuTab').width();
-
 			        // 当前元素处于活动状态
 			        if ($(this).parents('.J_menuTab').hasClass('active')) {
 			            // 当前元素后面有同辈元素，使后面的一个元素处于活动状态
 			            if ($(this).parents('.J_menuTab').next('.J_menuTab').size()) {
-
 			                var activeId = $(this).parents('.J_menuTab').next('.J_menuTab:eq(0)').data('id');
 			                $(this).parents('.J_menuTab').next('.J_menuTab:eq(0)').addClass('active');
 
 			                $('.J_mainContent .J_iframe').each(function () {
-			                    if ($(this).data('id') == activeId) {
+			                    ///if ($(this).data('id') == activeId) {
+			                	if ($(this).attr('src') == activeId) {
 			                        $(this).show().siblings('.J_iframe').hide();
 			                        return false;
 			                    }
@@ -213,7 +211,7 @@ $(function () {
 			                $(this).parents('.J_menuTab').remove();
 
 			                // 移除tab对应的内容区
-			                $('.J_mainContent .J_iframe').each(function () {
+			                $('.J_mainContent .J_iframe').each(function (){
 			                    if ($(this).data('id') == closeTabId) {
 			                        $(this).remove();
 			                        return false;
@@ -226,7 +224,8 @@ $(function () {
 			                var activeId = $(this).parents('.J_menuTab').prev('.J_menuTab:last').data('id');
 			                $(this).parents('.J_menuTab').prev('.J_menuTab:last').addClass('active');
 			                $('.J_mainContent .J_iframe').each(function () {
-			                    if ($(this).data('id') == activeId) {
+			                    ///if ($(this).data('id') == activeId) {
+			                	if ($(this).attr('src') == activeId) {
 			                        $(this).show().siblings('.J_iframe').hide();
 			                        return false;
 			                    }
@@ -351,8 +350,6 @@ $(function () {
 			        $('.page-tabs-content').css("margin-left", "0");
 			    });
 			    
-			    
-			    
 			  //查看左侧隐藏的选项卡
 			    function scrollTabLeft() {
 			        var marginLeftVal = Math.abs(parseInt($('.page-tabs-content').css('margin-left')));
@@ -460,5 +457,6 @@ $(function () {
     		}
     	}
 		$("#side-menu").append(html);*/
+	//}
 	//}
 });

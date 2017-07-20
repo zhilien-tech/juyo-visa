@@ -2,16 +2,12 @@
 var countrylist=[
     {text:"美国",value:0},
     {text:"日本",value:1},
-   
-    
   ];
 //性别
 var genderlist=[
-                 {text:"男",value:1},
-                 {text:"女",value:0},
-                 
-                 
-                 ];
+    {text:"男",value:1},
+    {text:"女",value:0},
+  ];
 //状态listorder
 var statuslist=[
     {text:"下单",value:15},
@@ -29,7 +25,6 @@ var statuslist=[
     {text:"拒签",value:12},
     {text:"完成",value:13},
     {text:"EVUS",value:14}
-    
   ];
 //注册命令
 function regCmd(command) {
@@ -52,9 +47,8 @@ function regCmd(command) {
                     $.getJSON("/visa/order/share?type=customer&customerid=" + data.id, {}, function (resp) {
                         if (resp.code === "SUCCESS") {
                 			if(index!=null){
-        						
             					layer.close(index);
-            					}
+            				}
                 			/*layer.confirm('发送成功，打开预览？', {
                                 btn: ['预览', '关闭']
                             }, function (index, layero) {
@@ -78,9 +72,8 @@ function regCmd(command) {
                 	$.getJSON("/visa/order/notice?type=customer&customerid=" + data.id, {}, function (resp) {
                 		if (resp.code === "SUCCESS") {
                 			if(index!=null){
-        						
             					layer.close(index);
-            					}
+            				}
                 			/* $.layer.confirm('发送成功，打开预览？', {
                                 btn: ['预览', '关闭']
                             }, function (index, layero) {
@@ -228,8 +221,7 @@ function detailInit(e) {
                 title: "操作", width: 300,
                 command: [
                     {name: "customerEdit", imageClass:false, text: "编辑"},
-                    {name: "share", imageClass:false, text: "分享"	
-                    },//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
+                    {name: "share", imageClass:false, text: "分享"},//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
                     {name: "delivery", imageClass:false, text: "递送"},
                     {name: "notice", imageClass:false, text: "通知"},
                     regCmd("customerEdit"),
@@ -339,8 +331,7 @@ var grid = $("#grid").kendoGrid({
 //页面刷新
 function successCallback(id){
 	//grid.GetJQuery().refresh();
-	grid.dataSource.read();
-	
+	  grid.dataSource.read();
 	  if(id == '1'){
 		  layer.msg("添加成功",{time: 2000});
 	  }else if(id == '2'){
