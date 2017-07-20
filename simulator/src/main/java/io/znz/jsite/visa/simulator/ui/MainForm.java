@@ -68,7 +68,7 @@ public class MainForm extends JPanel {
 
 	public MainForm() {
 		initComponents();
-		pyFile.setText(System.getProperty("user.dir") + "/doc/ds160.py");
+		pyFile.setText(System.getProperty("user.dir") + "/conf/ds160.py");
 		host.setText("127.0.0.1");
 		port.setText("8080");
 	}

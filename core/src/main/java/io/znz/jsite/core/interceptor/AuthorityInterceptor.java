@@ -76,6 +76,7 @@ public class AuthorityInterceptor extends HandlerInterceptorAdapter {
 				//输出json字符串
 				//response.getWriter().write(msg);
 				response.getWriter().println(msg);
+				response.getWriter().close();
 			} else {
 				//跳转，提示没有权限
 				response.sendRedirect("/error/auth_msg.jsp");
