@@ -8,16 +8,19 @@ var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 window.onload = function(){
 	 $.getJSON(localhostPaht +'/visa/passportinfo/listJPPassport', function (resp) {
      	viewModel.set("customer", $.extend(true, dafaults, resp));
-     });
-	 //预览 按钮
-     $("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
-     $(document).on('click','#preview',function(){
-     	$('#light').css('display','block');
-     	$('#fade').css('display','block');
-     	var phoneurl=viewModel.get("customer.phoneurl");
-     	if(phoneurl!=null&&phoneurl!=''){
-     		$("#imgId").attr('src',phoneurl);
-     	}
+     	//预览 按钮
+   	   /*var phoneurl=viewModel.get("customer.phoneurl");
+    	 if(phoneurl!=null&&phoneurl!=''){
+    		$("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
+    	 }
+        $(document).on('click','#preview',function(){
+        	$('#light').css('display','block');
+        	$('#fade').css('display','block');
+        	var phoneurl=viewModel.get("customer.phoneurl");
+        	if(phoneurl!=null&&phoneurl!=''){
+        		$("#imgId").attr('src',phoneurl);
+        	}
+        });*/
      });
 }
 var firstPartJP;

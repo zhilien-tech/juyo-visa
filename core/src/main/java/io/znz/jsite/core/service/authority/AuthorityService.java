@@ -8,10 +8,14 @@ package io.znz.jsite.core.service.authority;
 
 import io.znz.jsite.base.NutzBaseService;
 import io.znz.jsite.core.entity.function.FunctionEntity;
+import io.znz.jsite.core.util.Const;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
@@ -62,5 +66,17 @@ public class AuthorityService extends NutzBaseService {
 	 */
 	public FunctionEntity findFuctionByRequestPath(String requestPath) {
 		return dbDao.fetch(FunctionEntity.class, Cnd.where("url", "LIKE", "%" + requestPath + "%"));
+	}
+
+	/**
+	 * 登录时查询出用户的功能
+	 * @param request
+	 * @param functions
+	 */
+	public Object loginfunctions(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		//功能session
+		List<FunctionEntity> functions = (List<FunctionEntity>) session.getAttribute(Const.AUTHS_KEY);
+		return functions;
 	}
 }

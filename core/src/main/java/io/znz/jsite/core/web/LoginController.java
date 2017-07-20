@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
@@ -30,14 +31,13 @@ import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
-import org.nutz.json.Json;
-import org.nutz.json.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
@@ -67,7 +67,7 @@ public class LoginController extends BaseController {
 	protected LoginAuthorityService loginAuthorityService;
 
 	@Autowired
-	protected AuthorityService authority;
+	protected AuthorityService authorityViewService;
 
 	@Inject
 	private SqlManager sqlManager;
@@ -77,7 +77,7 @@ public class LoginController extends BaseController {
 	/**
 	 * 登录页面.这页面不是实际的登录页,而是按照不同的规则进行跳转以达到多登录页的效果
 	 */
-	@RequestMapping(value = "login", method = RequestMethod.GET)
+	@RequestMapping(value = "login", method = RequestMethod.POST)
 	public String login(@RequestParam(required = false) String module, HttpServletRequest request) {
 		String path = request.getServletContext().getContextPath();
 		//获取手动设置的跳转
@@ -207,19 +207,21 @@ public class LoginController extends BaseController {
 							if (UserLoginEnum.PERSONNEL.intKey() == logintype
 									&& UserLoginEnum.PERSONNEL.intKey() == userType) {//普通工作人员登录
 								functions = loginAuthorityService.employeeLoginFunction(userId, request);
-								String json = Json.toJson(functions,
+								/*String json = Json.toJson(functions,
 										JsonFormat.compact().setDateFormat("yyyy-MM-dd HH:mm:ss"));
-								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));
+								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));*/
+								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 								return "redirect:" + to + "?auth=2,3,6,7," + str + "&username=" + fullname
-										+ "&logintype=" + logintype + "&empList=" + jsonEncode;
+										+ "&logintype=" + logintype;
 							} else if (UserLoginEnum.PERSONNEL.intKey() == logintype
 									&& UserLoginEnum.COMPANY_ADMIN.intKey() == userType) {//公司管理员员登录
-								functions = authority.getCompanyFunctions(comJob.getComId());
-								String json = Json.toJson(functions,
+								functions = authorityViewService.getCompanyFunctions(comJob.getComId());
+								/*String json = Json.toJson(functions,
 										JsonFormat.compact().setDateFormat("yyyy-MM-dd HH:mm:ss"));
-								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));
+								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));*/
+								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 								return "redirect:" + to + "?auth=2,3,6,7," + str + "&username=" + fullname
-										+ "&logintype=" + logintype + "&empList=" + jsonEncode;
+										+ "&logintype=" + logintype;
 							} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype
 									&& UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {//游客身份登录
 								//我的签证
@@ -333,19 +335,21 @@ public class LoginController extends BaseController {
 								passf.setRemark("修改密码");
 								passf.setSort(16);
 								functions.add(passf);
-								String json = Json.toJson(functions,
+								/*String json = Json.toJson(functions,
 										JsonFormat.compact().setDateFormat("yyyy-MM-dd HH:mm:ss"));
-								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));
+								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));*/
+								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 								return "redirect:" + to + "?auth=7,8,9,16," + str + "&username=" + fullname
-										+ "&logintype=" + logintype + "&empList=" + jsonEncode;
+										+ "&logintype=" + logintype;
 							} else if (UserLoginEnum.SUPERMAN.intKey() == 3
 									&& UserLoginEnum.SUPERMAN.intKey() == userType) {//超级管理员登录
 								functions = loginAuthorityService.superAdministratorFunction();
-								String json = Json.toJson(functions,
+								/*String json = Json.toJson(functions,
 										JsonFormat.compact().setDateFormat("yyyy-MM-dd HH:mm:ss"));
-								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));
+								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));*/
+								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 								return "redirect:" + to + "?auth=0," + str + "&username=" + fullname + "&logintype="
-										+ logintype + "&empList=" + jsonEncode;
+										+ logintype;
 							} else if (UserLoginEnum.ADMIN.intKey() == 4 && UserLoginEnum.ADMIN.intKey() == userType) {//平台用户
 								//公司管理
 								FunctionEntity comf = new FunctionEntity();
@@ -358,11 +362,11 @@ public class LoginController extends BaseController {
 								comf.setRemark("公司管理");
 								comf.setSort(4);
 								functions.add(comf);
-								String json = Json.toJson(functions,
+								/*String json = Json.toJson(functions,
 										JsonFormat.compact().setDateFormat("yyyy-MM-dd HH:mm:ss"));
-								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));
-								return "redirect:" + to + "?auth=4," + "&username=" + fullname + "&logintype=" + 4
-										+ "&empList=" + jsonEncode;
+								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));*/
+								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
+								return "redirect:" + to + "?auth=4," + "&username=" + fullname + "&logintype=" + 4;
 							} else {
 
 								model.addFlashAttribute("error", "登录身份错误,请重试!");
@@ -378,7 +382,6 @@ public class LoginController extends BaseController {
 			} else {
 				model.addFlashAttribute("error", "验证码错误,请重试!");
 			}
-			request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 		}
 		String error = Encodes.encodeBase64(JSON.toJSONString(model.getFlashAttributes()));
 		model.addAttribute("e", error);
@@ -386,11 +389,24 @@ public class LoginController extends BaseController {
 	}
 
 	/**
+	 * 登录时查询出用户的功能
+	 * @param request
+	 * @param functions
+	 */
+	@RequestMapping(value = "loginfunctions", method = RequestMethod.POST)
+	@ResponseBody
+	public Object loginfunctions(HttpServletRequest request) {
+		return authorityViewService.loginfunctions(request);
+	}
+
+	/**
 	 * 登出
 	 */
 	@RequestMapping(value = "logout")
 	public String logout(@RequestParam(defaultValue = "/") String to, SessionStatus status, HttpServletRequest request) {
-		request.getSession().removeAttribute(Const.SESSION_NAME);//清除session
+		HttpSession session = request.getSession();
+		session.removeAttribute(Const.SESSION_NAME);//清除session
+		session.removeAttribute(Const.AUTHS_KEY);//清除session
 		status.setComplete();
 		SecurityUtils.getSubject().logout();
 		return "redirect:" + to;
