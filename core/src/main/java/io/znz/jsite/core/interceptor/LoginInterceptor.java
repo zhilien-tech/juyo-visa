@@ -6,20 +6,19 @@
 
 package io.znz.jsite.core.interceptor;
 
+import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.util.Const;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.uxuexi.core.common.util.Util;
+
 /**
- * TODO(这里用一句话描述这个类的作用)
- * <p>
- * TODO(这里描述这个类补充说明 – 可选)
- *
+ * 登录拦截器
  * @author   孙斌
  * @Date	 2017年6月25日 	 
  */
@@ -32,22 +31,21 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
-		HttpSession session = request.getSession();
-		Object attribute = session.getAttribute(Const.SESSION_NAME);
-		/*String nowurl = request.getRequestURL().toString();
-		String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-		if (nowurl.equals(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/")) {
+		String requestUri = request.getRequestURL().toString();
+		String contextPath = request.getContextPath();
+		String url = requestUri.substring(contextPath.length());
+		//String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+		/*if (nowurl.equals(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/")) {
 			return true;
 		}*/
-		/*		if (Util.isEmpty(attribute)) {
-					request.getRequestDispatcher("/index.html").forward(request, response);
-					//			response.sendRedirect("/");
-					return false;
-				}*/
-
+		//从session中取出当前登录用户信息
+		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute(Const.SESSION_NAME);
+		if (Util.isEmpty(user)) {
+			request.getRequestDispatcher("/index.html").forward(request, response);
+			response.sendRedirect("/");
+			return false;
+		}
 		return true;
-
 	}
 
 }

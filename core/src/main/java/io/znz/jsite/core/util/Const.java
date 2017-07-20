@@ -41,13 +41,15 @@ public class Const {
 	 * 
 	 */
 
+	//平台管理员
+	public static final String PLAT_ADMIN = "admin";
 	//当前登录用户信息
 	public static final String SESSION_NAME = "newusersession";
 	//当前登录公司信息
 	public static final String USER_COMPANY_KEY = "newcompanysession";
 	//当前登录用户的职位功能
-	public static final String USER_JOB_FUNCTION = "newuserjobfunsession";
-	/**无效数据id*/
+	public static final String AUTHS_KEY = "authskeyfunction";
+	//无效数据id
 	public static final int INVALID_DATA_ID = -1;
 
 }

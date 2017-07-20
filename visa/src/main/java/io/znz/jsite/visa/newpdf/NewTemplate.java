@@ -6,9 +6,12 @@ import io.znz.jsite.util.SpringUtil;
 import io.znz.jsite.util.StringUtils;
 import io.znz.jsite.visa.bean.Flight;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
+import io.znz.jsite.visa.entity.japan.NewDateplanJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrderJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrthercountryJpEntity;
+import io.znz.jsite.visa.entity.japan.NewProposerInfoJpEntity;
 import io.znz.jsite.visa.entity.japan.NewRecentlyintojpJpEntity;
+import io.znz.jsite.visa.entity.japan.NewTripJpEntity;
 import io.znz.jsite.visa.entity.japan.NewTripplanJpEntity;
 import io.znz.jsite.visa.entity.japan.NewWorkinfoJpEntity;
 import io.znz.jsite.visa.enums.GenderEnum;
@@ -17,7 +20,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,6 +30,7 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
+import org.nutz.dao.Cnd;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -172,12 +175,23 @@ public abstract class NewTemplate {
 	//生成申请表中的二维码
 	protected Image qrcode(NewCustomerJpEntity customer) {
 		try {
+			String passporteffectdate = "";
+			if (!Util.isEmpty(customer.getPassporteffectdate())) {
+				passporteffectdate = df2.format(customer.getPassporteffectdate());
+			}
+			String birthday = "";
+			if (!Util.isEmpty(customer.getBirthday())) {
+				birthday = df2.format(customer.getBirthday());
+			}
+			String gender = "";
+			if (!Util.isEmpty(customer.getGender())) {
+				gender = customer.getGender() == GenderEnum.female.intKey() ? "F" : "M";
+			}
 			StringBuilder sb = new StringBuilder("1,").append(customer.getPassport()).append(",")
-					.append(df2.format(customer.getPassporteffectdate())).append(",")
-					.append(customer.getChinesexingen()).append(",").append(customer.getChinesenameen()).append(",")
-					.append(customer.getGender() == GenderEnum.female.intKey() ? "F" : "M").append(",")
-					.append(df2.format(customer.getBirthday())).append(",").append(customer.getDocountry()).append(",")
-					.append(customer.getIdcard()).append(",\"\",,\"\"");
+					.append(passporteffectdate).append(",").append(customer.getChinesexingen()).append(",")
+					.append(customer.getChinesenameen()).append(",").append(gender).append(",").append(birthday)
+					.append(",").append(customer.getDocountry()).append(",").append(customer.getIdcard())
+					.append(",\"\",,\"\"");
 			String content = sb.toString().toUpperCase();
 			QRCodeWriter writer = new QRCodeWriter();
 			Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>();
@@ -254,9 +268,25 @@ public abstract class NewTemplate {
 	}
 
 	public String getMasterName(NewOrderJpEntity order) {
+		String mainName = "";
 		for (NewCustomerJpEntity c : order.getCustomerJpList()) {
-			if (c.isMain()) {
-				return c.getChinesexing() + c.getChinesename();
+			if (!Util.isEmpty(c)) {
+				List<NewProposerInfoJpEntity> proposerList = dbdao.query(NewProposerInfoJpEntity.class,
+						Cnd.where("customer_jp_id", "=", c.getId()), null);
+				if (!Util.isEmpty(proposerList) && proposerList.size() > 0) {
+
+					if (proposerList.get(0).getIsMainProposer() || StringUtils.isBlank(mainName)) {
+						if (Util.isEmpty(c.getChinesexing())) {
+							c.setChinesexing("");
+						}
+						if (Util.isEmpty(c.getChinesename())) {
+							c.setChinesename("");
+						}
+						mainName = c.getChinesexing() + c.getChinesename();
+						return mainName;
+					}
+				}
+
 			}
 		}
 		return "";
@@ -264,8 +294,25 @@ public abstract class NewTemplate {
 
 	//行程安排的出入境，如果是多程应该怎么处理？？？？？？？？？？？
 	public String getExcelFileName(NewOrderJpEntity order) {
-		return DateUtils.formatDate(order.getTripJp().getStartdate(), df9) + "-"
-				+ DateUtils.formatDate(order.getTripJp().getReturndate(), df9) + getMasterName(order)
+		NewTripJpEntity tripJp = order.getTripJp();
+		Date startDate = null;
+		Date endDate = null;
+		if (!Util.isEmpty(tripJp)) {
+			if (tripJp.getOneormore().intValue() == 1) {
+				//多程
+				List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
+				if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
+					startDate = dateplanJpList.get(0).getStartdate();
+					endDate = dateplanJpList.get(dateplanJpList.size() - 1).getStartdate();
+				}
+			} else if (tripJp.getOneormore().intValue() == 0) {
+				//单程
+				startDate = tripJp.getStartdate();
+				endDate = tripJp.getReturndate();
+			}
+		}
+
+		return DateUtils.formatDate(startDate, df9) + "-" + DateUtils.formatDate(endDate, df9) + getMasterName(order)
 				+ order.getCustomerJpList().size() + "人.xlsx";
 	}
 
@@ -305,19 +352,24 @@ public abstract class NewTemplate {
 			map.put("topmostSubform[0].Page1[0].#area[11].T7[0]", filter(customer.getChinesenameen()));
 			map.put("topmostSubform[0].Page1[0].#area[11].tyuubun[1]", filter(customer.getChinesename()));
 			//if (customer.getOldName() != null) {
-			if (!Util.isEmpty(customer.getOldnameJp())) {
+			if (!Util.isEmpty(customer.getOldnameJp().getId()) && customer.getOldnameJp().getId() > 0) {
 				map.put("topmostSubform[0].Page1[0].#area[12].T16[1]", filter(customer.getOldnameJp().getOldxingen()
 						+ customer.getOldnameJp().getOldnameen()));
 				map.put("topmostSubform[0].Page1[0].#area[12].tyuubun[2]", filter(customer.getOldnameJp().getOldxing()
 						+ customer.getOldnameJp().getOldname()));
 			}
-			map.put("topmostSubform[0].Page1[0].#area[3].#area[4].T14[0]", df0.format(customer.getBirthday()));
+			if (!Util.isEmpty(customer.getBirthday())) {
+
+				map.put("topmostSubform[0].Page1[0].#area[3].#area[4].T14[0]", df0.format(customer.getBirthday()));
+			}
 
 			map.put("topmostSubform[0].Page1[0].#area[3].#area[4].T16[0]", filter(customer.getBirthprovince()
 					+ customer.getBirthcity()));
 			//申请人性别 0:男;1:女;
-			map.put("topmostSubform[0].Page1[0].#area[5].#area[6].#area[7].RB1[0]",
-					customer.getGender() == GenderEnum.man.intKey() ? "0" : "1");
+			if (!Util.isEmpty(customer.getGender())) {
+				map.put("topmostSubform[0].Page1[0].#area[5].#area[6].#area[7].RB1[0]",
+						customer.getGender() == GenderEnum.man.intKey() ? "0" : "1");
+			}
 			//Spouse spouse = customer.getSpouse();
 			/*if (spouse != null) {
 				int state;
@@ -342,8 +394,11 @@ public abstract class NewTemplate {
 					StringUtils.isBlank(customer.getFamilywork()) ? "无" : customer.getFamilywork());
 			//}
 			map.put("topmostSubform[0].Page1[0].T50[0]", filter(customer.getDocountry()));//国籍
-			for (NewOrthercountryJpEntity option : customer.getOrthercountryJpList()) {
-				map.put("topmostSubform[0].Page1[0].T34[0]", option.getCountry());
+			if (!Util.isEmpty(customer.getOrthercountryJpList())) {
+
+				for (NewOrthercountryJpEntity option : customer.getOrthercountryJpList()) {
+					map.put("topmostSubform[0].Page1[0].T34[0]", option.getCountry());
+				}
 			}
 			map.put("topmostSubform[0].Page1[0].T37[0]", customer.getIdcard());
 			/*String type;
@@ -360,9 +415,16 @@ public abstract class NewTemplate {
 			map.put("topmostSubform[0].Page1[0].#area[1].#area[2].RB3[0]", customer.getPassporttype() + "");
 			map.put("topmostSubform[0].Page1[0].T49[0]", filter(customer.getPassport()));
 			map.put("topmostSubform[0].Page1[0].#area[9].T57[1]", filter(customer.getPassportsendplace()));
-			map.put("topmostSubform[0].Page1[0].#area[9].T53[0]", df0.format(customer.getPassportsenddate()));
+			if (!Util.isEmpty(customer.getPassportsenddate())) {
+
+				map.put("topmostSubform[0].Page1[0].#area[9].T53[0]", df0.format(customer.getPassportsenddate()));
+			}
+
 			map.put("topmostSubform[0].Page1[0].#area[0].T57[0]", filter(customer.getPassportsendoffice()));
-			map.put("topmostSubform[0].Page1[0].#area[0].T59[0]", df0.format(customer.getPassporteffectdate()));
+			if (!Util.isEmpty(customer.getPassporteffectdate())) {
+
+				map.put("topmostSubform[0].Page1[0].#area[0].T59[0]", df0.format(customer.getPassporteffectdate()));
+			}
 
 			//出行信息
 			if (order.getVisatype() == 6) {
@@ -373,19 +435,45 @@ public abstract class NewTemplate {
 			map.put("topmostSubform[0].Page1[0].T62[0]", filter(order.getTripJp().getTrippurpose()));
 			/*Ticket entry = order.getEntry();
 			Ticket depart = order.getDepart();*/
-			DateTime dtEntry = new DateTime(order.getTripJp().getStartdate());
+			//判断是多程还是单程
+			NewTripJpEntity tripJp = order.getTripJp();
+			Date startDate = null;
+			Date endDate = null;
+			String startFlightnum = "";
+			String endFlightnum = "";
+			if (!Util.isEmpty(tripJp)) {
+				if (tripJp.getOneormore().intValue() == 1) {
+					//多程
+					List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
+					if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
+						startDate = dateplanJpList.get(0).getStartdate();
+						endDate = dateplanJpList.get(dateplanJpList.size() - 1).getStartdate();
+						startFlightnum = dateplanJpList.get(0).getFlightnum();
+						endFlightnum = dateplanJpList.get(dateplanJpList.size() - 1).getFlightnum();
+					}
+				} else if (tripJp.getOneormore().intValue() == 0) {
+					//单程
+					startDate = tripJp.getStartdate();
+					endDate = tripJp.getReturndate();
+					startFlightnum = tripJp.getFlightnum();
+					endFlightnum = tripJp.getReturnflightnum();
+				}
+			}
+
+			DateTime dtEntry = new DateTime(startDate);
 			if (dtEntry.isBeforeNow()) {
 				throw new JSiteException("入境时间不能在当前时间之前!");
 			}
-			DateTime dtDepart = new DateTime(order.getTripJp().getReturndate());
-			if (dtDepart.isBefore(order.getTripJp().getStartdate().getTime())) {
+			DateTime dtDepart = new DateTime(endDate);
+			if (dtDepart.isBefore(startDate.getTime())) {
 				throw new JSiteException("出境时间不能在入境时间之前!");
 			}
-			map.put("topmostSubform[0].Page1[0].#area[21].T68[2]", df1.format(order.getTripJp().getStartdate()));
-			map.put("topmostSubform[0].Page1[0].#area[21].T68[3]", df1.format(order.getTripJp().getReturndate()));
+
+			map.put("topmostSubform[0].Page1[0].#area[21].T68[2]", df1.format(startDate));
+			map.put("topmostSubform[0].Page1[0].#area[21].T68[3]", df1.format(endDate));
 			map.put("topmostSubform[0].Page1[0].T66[0]", (Days.daysBetween(dtEntry, dtDepart).getDays() + 1) + "天");
 
-			Flight flight = dbdao.fetch(Flight.class, Long.valueOf(order.getTripJp().getFlightnum()));
+			Flight flight = dbdao.fetch(Flight.class, Long.valueOf(startFlightnum));
 
 			map.put("topmostSubform[0].Page1[0].#area[15].#area[16].T68[0]", filter(flight.getToCity()));
 			map.put("topmostSubform[0].Page1[0].#area[15].#area[16].T68[1]", filter(flight.getLine()));
@@ -403,13 +491,16 @@ public abstract class NewTemplate {
 			//}
 			map.put("topmostSubform[0].Page1[0].T3[1]", "");
 			//上次赴日日期及停留时间
-			Collections.reverse(customer.getRecentlyintojpJpList());
-			for (NewRecentlyintojpJpEntity history : customer.getRecentlyintojpJpList()) {
-				map.put("topmostSubform[0].Page1[0].T64[0]", filter(df1.format(history.getIntousadate()) + " "
-						+ history.getStayday() + history.getStayunit()));
+			//Collections.reverse(customer.getRecentlyintojpJpList());
+			if (!Util.isEmpty(customer.getRecentlyintojpJpList()) && customer.getRecentlyintojpJpList().size() > 0) {
+
+				for (NewRecentlyintojpJpEntity history : customer.getRecentlyintojpJpList()) {
+					map.put("topmostSubform[0].Page1[0].T64[0]", filter(df1.format(history.getIntousadate()) + " "
+							+ history.getStayday() + history.getStayunit()));
+				}
 			}
 			NewWorkinfoJpEntity work = customer.getWorkinfoJp();
-			if (work != null) {
+			if (!Util.isEmpty(work)) {
 				map.put("topmostSubform[0].Page1[0].#area[13].#area[14].emp_name[0]", filter(work.getUnitname()));
 				map.put("topmostSubform[0].Page1[0].#area[13].#area[14].emp_tel[0]", filter(work.getUnitphone()));
 				map.put("topmostSubform[0].Page1[0].emp_adr[0]", filter(work.getUnitaddress()));
@@ -448,7 +539,12 @@ public abstract class NewTemplate {
 					ColumnText.showTextAligned(ps.getOverContent(1), Element.ALIGN_LEFT, phrase, rect.getAsNumber(0)
 							.floatValue() + 2, rect.getAsNumber(1).floatValue() + 1, 0);
 				} else if (map.containsKey(key)) {
-					fields.setField(key, map.get(key));
+					if (!Util.isEmpty(key)) {
+						if (!Util.isEmpty(map.get(key))) {
+
+							fields.setField(key, map.get(key));
+						}
+					}
 				}
 			}
 			ps.setFormFlattening(true); // 这句不能少
@@ -457,13 +553,17 @@ public abstract class NewTemplate {
 			IOUtils.closeQuietly(stream);
 			return stream;
 		} catch (Exception e) {
-			if (e instanceof JSiteException) {
-				throw (JSiteException) e;
-			} else {
-				e.printStackTrace();
-				throw new JSiteException("申请表生成异常!");
-			}
+			//			if (e instanceof JSiteException) {
+			//throw (JSiteException) e;
+
+			e.printStackTrace();
+
+			/*	} else {
+					e.printStackTrace();
+					throw new JSiteException("申请表生成异常!");
+				}*/
 		}
+		return null;
 	}
 
 	public int diffDays(Date date1, Date date2) {

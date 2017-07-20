@@ -12,8 +12,10 @@ import io.znz.jsite.visa.bean.Flight;
 import io.znz.jsite.visa.bean.Hotel;
 import io.znz.jsite.visa.bean.Scenic;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
+import io.znz.jsite.visa.entity.japan.NewDateplanJpEntity;
 import io.znz.jsite.visa.entity.japan.NewFinanceJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrderJpEntity;
+import io.znz.jsite.visa.entity.japan.NewProposerInfoJpEntity;
 import io.znz.jsite.visa.entity.japan.NewTripJpEntity;
 import io.znz.jsite.visa.entity.japan.NewTripplanJpEntity;
 import io.znz.jsite.visa.enums.GenderEnum;
@@ -36,6 +38,7 @@ import org.jeecgframework.poi.excel.entity.enmus.ExcelType;
 import org.jeecgframework.poi.excel.entity.params.ExcelExportEntity;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeFieldType;
+import org.nutz.dao.Cnd;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
@@ -51,6 +54,8 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.uxuexi.core.common.util.EnumUtil;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
 
 /**
@@ -71,8 +76,18 @@ public class NewHasee extends NewTemplate {
 			map.put("company", "北京神舟国际旅行社集团有限公司");
 			StringBuilder sb = new StringBuilder("(");
 			for (NewCustomerJpEntity customer : order.getCustomerJpList()) {
-				sb.append(customer.getChinesexing()).append(customer.getChinesename()).append(":")
-						.append(customer.isMain() ? "主卡" : "副卡").append("、");
+
+				if (!Util.isEmpty(customer)) {
+					List<NewProposerInfoJpEntity> proposerList = dbdao.query(NewProposerInfoJpEntity.class,
+							Cnd.where("customer_jp_id", "=", customer.getId()), null);
+					if (!Util.isEmpty(proposerList) && proposerList.size() > 0) {
+
+						sb.append(customer.getChinesexing()).append(customer.getChinesename()).append(":")
+								.append(proposerList.get(0).getIsMainProposer() ? "主卡" : "副卡").append("、");
+					}
+
+				}
+
 			}
 			sb = new StringBuilder(StringUtils.removeEnd(sb.toString(), "、"));
 			sb.append(")");
@@ -83,28 +98,54 @@ public class NewHasee extends NewTemplate {
 					order.getVisatype() == OrderJapanVisaType.SINGLE.intKey() ? "" : sb.toString().trim());
 			map.put("content", content);//旅行社名称
 			map.put("id", "1-2");//番号
+
+			//判断是多程还是单程
+			NewTripJpEntity tripJp = order.getTripJp();
+			Date startDate = null;
+			Date endDate = null;
+			String startFlightnum = "";
+			String endFlightnum = "";
+			if (!Util.isEmpty(tripJp)) {
+				if (tripJp.getOneormore().intValue() == 1) {
+					//多程
+					List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
+					if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
+						startDate = dateplanJpList.get(0).getStartdate();
+						endDate = dateplanJpList.get(dateplanJpList.size() - 1).getStartdate();
+						startFlightnum = dateplanJpList.get(0).getFlightnum();
+						endFlightnum = dateplanJpList.get(dateplanJpList.size() - 1).getFlightnum();
+					}
+				} else if (tripJp.getOneormore().intValue() == 0) {
+					//单程
+					startDate = tripJp.getStartdate();
+					endDate = tripJp.getReturndate();
+					startFlightnum = tripJp.getFlightnum();
+					endFlightnum = tripJp.getReturnflightnum();
+				}
+			}
 			NewTripJpEntity entry = order.getTripJp();
+
 			if (entry == null)
 				throw new JSiteException("入境信息不能为空!");
-			DateTime dt = new DateTime(entry.getStartdate());
+			DateTime dt = new DateTime(startDate);
 			if (dt.isBeforeNow()) {
 				throw new JSiteException("入境时间不能在当前时间之前!");
 			}
-			map.put("entryDate", df3.format(entry.getStartdate()));//入境日期
-			Flight entryFlight = dbdao.fetch(Flight.class, Long.valueOf(entry.getFlightnum()));
+			map.put("entryDate", df3.format(startDate));//入境日期
+			Flight entryFlight = dbdao.fetch(Flight.class, Long.valueOf(startFlightnum));
 			map.put("entryFlight", entryFlight.getCompany() + ":" + entryFlight.getLine());//入境口岸/航班
 			NewTripJpEntity depart = order.getTripJp();
 			//Ticket depart = order.getDepart();
 			if (depart == null)
 				throw new JSiteException("出境信息不能为空!");
-			if (dt.isAfter(depart.getReturndate().getTime())) {
+			if (dt.isAfter(endDate.getTime())) {
 				throw new JSiteException("出境时间不能在入境时间之前!");
 			}
-			map.put("departDate", df3.format(depart.getReturndate()));//出境日期
-			Flight departFlight = dbdao.fetch(Flight.class, Long.valueOf(entry.getReturnflightnum()));
+			map.put("departDate", df3.format(endDate));//出境日期
+			Flight departFlight = dbdao.fetch(Flight.class, Long.valueOf(endFlightnum));
 			map.put("departFlight", departFlight.getCompany() + ":" + departFlight.getLine());//出境口岸/航班
 
-			map.put("stay", (diffDays(entry.getStartdate(), depart.getStartdate()) + 1) + "天");//停留周期
+			map.put("stay", (diffDays(startDate, endDate) + 1) + "天");//停留周期
 			//受理日和发给日没有入口？？？？
 			map.put("startDate", df4.format(order.getSenddate()));//受理日
 			map.put("endDate", df4.format(order.getOutdate()));//发给日
@@ -196,46 +237,119 @@ public class NewHasee extends NewTemplate {
 				table.addCell(cell);
 			}
 			//设置表体
-			for (int i = 0; i < 2; i++) {
-				NewTripJpEntity trip = trips.get(0);
-				Flight flight = null;
-				if (i == 0) {
+			NewTripJpEntity tripJp = order.getTripJp();
+			Date startDate = null;
+			Date endDate = null;
+			String startFlightnum = "";
+			String endFlightnum = "";
+			if (!Util.isEmpty(tripJp)) {
+				if (tripJp.getOneormore().intValue() == 1) {
+					//多程
+					List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
+					if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
+						startDate = dateplanJpList.get(0).getStartdate();
+						endDate = dateplanJpList.get(dateplanJpList.size() - 1).getStartdate();
+						startFlightnum = dateplanJpList.get(0).getFlightnum();
+						endFlightnum = dateplanJpList.get(dateplanJpList.size() - 1).getFlightnum();
+						//多程相对应的处理
+						for (int i = 0; i < dateplanJpList.size(); i++) {
+							/*NewTripJpEntity trip = trips.get(0);*/
+							NewDateplanJpEntity newDateplanJpEntity = dateplanJpList.get(i);
+							Flight flight = null;
 
-					flight = dbdao.fetch(Flight.class, Long.valueOf(trip.getFlightnum()));
-				} else {
-					flight = dbdao.fetch(Flight.class, Long.valueOf(trip.getReturnflightnum()));
+							flight = dbdao.fetch(Flight.class, Long.valueOf(newDateplanJpEntity.getFlightnum()));
+							//trip.getSeat()方式
+							String datas[] = {
+									flight.getFrom(),
+									flight.getLine(),
+									"",
+									df6.format(newDateplanJpEntity.getStartdate()).toUpperCase(),
+									df7.format(flight.getDeparture()),
+									df7.format(flight.getLanding()),
+									newDateplanJpEntity.getReturndate() != null ? df7.format(newDateplanJpEntity
+											.getReturndate()) : "", "OK", "2PC",
+									(i == 0 ? "--　" : "") + flight.getFromTerminal() + (i == 0 ? "" : "　--") };
+							for (int j = 0; j < datas.length; j++) {
+								String data = datas[j];
+								PdfPCell cell = new PdfPCell(new Paragraph(data, font));
+								cell.setHorizontalAlignment(j == 0 ? Element.ALIGN_LEFT : Element.ALIGN_CENTER);
+								cell.setUseVariableBorders(true);
+								cell.setBorderWidthLeft(0);
+								cell.setBorderWidthRight(0);
+								cell.setBorderWidthTop(0);
+								cell.setBorderWidthBottom(0);
+								table.addCell(cell);
+							}
+							//添加一个空行dbdao.fetch(Flight.class, Long.valueOf(trips.get(0).getFlightnum()));
+
+						}
+						Flight flight1 = dbdao.fetch(Flight.class, Long.valueOf(dateplanJpList.get(0).getFlightnum()));
+						String datas[] = { flight1.getFrom(), "", "", "", "", "", "", "", "", "", };
+						for (int j = 0; j < datas.length; j++) {
+							String data = datas[j];
+							PdfPCell cell = new PdfPCell(new Paragraph(data, font));
+							cell.setHorizontalAlignment(j == 0 ? Element.ALIGN_LEFT : Element.ALIGN_CENTER);
+							cell.setUseVariableBorders(true);
+							cell.setBorderWidthLeft(0);
+							cell.setBorderWidthRight(0);
+							cell.setBorderWidthTop(0);
+							cell.setBorderWidthBottom(0);
+							table.addCell(cell);
+						}
+
+					}
+				} else if (tripJp.getOneormore().intValue() == 0) {
+					//单程
+					startDate = tripJp.getStartdate();
+					endDate = tripJp.getReturndate();
+					startFlightnum = tripJp.getFlightnum();
+					endFlightnum = tripJp.getReturnflightnum();
+
+					//单程相对应的处理
+					for (int i = 0; i < 2; i++) {
+						NewTripJpEntity trip = trips.get(0);
+						Flight flight = null;
+						if (i == 0) {
+
+							flight = dbdao.fetch(Flight.class, Long.valueOf(trip.getFlightnum()));
+						} else {
+							flight = dbdao.fetch(Flight.class, Long.valueOf(trip.getReturnflightnum()));
+						}
+						//trip.getSeat()方式
+						String datas[] = { flight.getFrom(), flight.getLine(), "",
+								df6.format(trip.getStartdate()).toUpperCase(), df7.format(flight.getDeparture()),
+								df7.format(flight.getLanding()),
+								trip.getReturndate() != null ? df7.format(trip.getReturndate()) : "", "OK", "2PC",
+								(i == 0 ? "--　" : "") + flight.getFromTerminal() + (i == 0 ? "" : "　--") };
+						for (int j = 0; j < datas.length; j++) {
+							String data = datas[j];
+							PdfPCell cell = new PdfPCell(new Paragraph(data, font));
+							cell.setHorizontalAlignment(j == 0 ? Element.ALIGN_LEFT : Element.ALIGN_CENTER);
+							cell.setUseVariableBorders(true);
+							cell.setBorderWidthLeft(0);
+							cell.setBorderWidthRight(0);
+							cell.setBorderWidthTop(0);
+							cell.setBorderWidthBottom(0);
+							table.addCell(cell);
+						}
+					}
+					//添加一个空行dbdao.fetch(Flight.class, Long.valueOf(trips.get(0).getFlightnum()));
+
+					Flight flight1 = dbdao.fetch(Flight.class, Long.valueOf(trips.get(0).getFlightnum()));
+					String datas[] = { flight1.getFrom(), "", "", "", "", "", "", "", "", "", };
+					for (int j = 0; j < datas.length; j++) {
+						String data = datas[j];
+						PdfPCell cell = new PdfPCell(new Paragraph(data, font));
+						cell.setHorizontalAlignment(j == 0 ? Element.ALIGN_LEFT : Element.ALIGN_CENTER);
+						cell.setUseVariableBorders(true);
+						cell.setBorderWidthLeft(0);
+						cell.setBorderWidthRight(0);
+						cell.setBorderWidthTop(0);
+						cell.setBorderWidthBottom(0);
+						table.addCell(cell);
+					}
+
 				}
-				//trip.getSeat()方式
-				String datas[] = { flight.getFrom(), flight.getLine(), "",
-						df6.format(trip.getStartdate()).toUpperCase(), df7.format(flight.getDeparture()),
-						df7.format(flight.getLanding()),
-						trip.getReturndate() != null ? df7.format(trip.getReturndate()) : "", "OK", "2PC",
-						(i == 0 ? "--　" : "") + flight.getFromTerminal() + (i == 0 ? "" : "　--") };
-				for (int j = 0; j < datas.length; j++) {
-					String data = datas[j];
-					PdfPCell cell = new PdfPCell(new Paragraph(data, font));
-					cell.setHorizontalAlignment(j == 0 ? Element.ALIGN_LEFT : Element.ALIGN_CENTER);
-					cell.setUseVariableBorders(true);
-					cell.setBorderWidthLeft(0);
-					cell.setBorderWidthRight(0);
-					cell.setBorderWidthTop(0);
-					cell.setBorderWidthBottom(0);
-					table.addCell(cell);
-				}
-			}
-			//添加一个空行dbdao.fetch(Flight.class, Long.valueOf(trips.get(0).getFlightnum()));
-			Flight flight1 = dbdao.fetch(Flight.class, Long.valueOf(trips.get(0).getFlightnum()));
-			String datas[] = { flight1.getFrom(), "", "", "", "", "", "", "", "", "", };
-			for (int j = 0; j < datas.length; j++) {
-				String data = datas[j];
-				PdfPCell cell = new PdfPCell(new Paragraph(data, font));
-				cell.setHorizontalAlignment(j == 0 ? Element.ALIGN_LEFT : Element.ALIGN_CENTER);
-				cell.setUseVariableBorders(true);
-				cell.setBorderWidthLeft(0);
-				cell.setBorderWidthRight(0);
-				cell.setBorderWidthTop(0);
-				cell.setBorderWidthBottom(0);
-				table.addCell(cell);
 			}
 
 			table.writeSelectedRows(0, -1, padding, 493, cbq);
@@ -289,25 +403,67 @@ public class NewHasee extends NewTemplate {
 				NewCustomerJpEntity c = customers.get(i);
 				StringBuilder sbt = new StringBuilder();
 				StringBuilder sbv = new StringBuilder();
-				for (NewFinanceJpEntity option : c.getFinanceJpList()) {
-					sbt.append(option.getBusiness()).append("\n");
-					sbv.append(option.getDetail()).append("\n");
+				if (!Util.isEmpty(c.getFinanceJpList()) && c.getFinanceJpList().size() > 0) {
+
+					for (NewFinanceJpEntity option : c.getFinanceJpList()) {
+						if (Util.isEmpty(option)) {
+
+							sbt.append(option.getBusiness()).append("\n");
+							sbv.append(option.getDetail()).append("\n");
+						}
+					}
 				}
-				String datas[] = { "1-" + (i + 1), c.getChinesexing() + c.getChinesename(),
-						(c.getChinesexingen() + "\n" + c.getChinesenameen()).toUpperCase(), c.getGender().toString(),
-						df1.format(c.getBirthday()), c.getPassportsendplace().toUpperCase(),
-						c.getWorkinfoJp() != null ? c.getWorkinfoJp().getMyjob() : "",
-						c.getNowprovince().toUpperCase(), "良好", c.getMarrystate() + "", "身份证\n户口本",
-						StringUtils.isBlank(sbt.toString()) ? "" : sbt.toString(),
-						StringUtils.isBlank(sbv.toString()) ? "" : sbv.toString(),
-						//主卡和副卡的关系
-						c.isMain() ? "主卡" : getMasterName(order) + "的" + "主卡和副卡的关系", "推荐" };
-				for (String title : datas) {
-					PdfPCell cell = new PdfPCell(new Paragraph(title, font));
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					table.addCell(cell);
+
+				if (Util.isEmpty(c.getChinesexingen())) {
+					c.setChinesexingen("");
 				}
+				if (Util.isEmpty(c.getChinesenameen())) {
+					c.setChinesenameen("");
+				}
+
+				if (!Util.isEmpty(c)) {
+					List<NewProposerInfoJpEntity> proposerList = dbdao.query(NewProposerInfoJpEntity.class,
+							Cnd.where("customer_jp_id", "=", c.getId()), null);
+					if (!Util.isEmpty(proposerList) && proposerList.size() > 0) {
+						String gender = "";
+						if (!Util.isEmpty(c.getGender())) {
+							gender = EnumUtil.getValue(GenderEnum.class, c.getGender().intValue());
+						}
+						String birthday = "";
+						if (!Util.isEmpty(c.getGender())) {
+							birthday = df1.format(c.getBirthday());
+						}
+						String passportsendplace = "";
+						if (!Util.isEmpty(c.getGender())) {
+							passportsendplace = c.getPassportsendplace().toUpperCase();
+						}
+						String datas[] = { "1-" + (i + 1),
+								c.getChinesexing() + c.getChinesename(),
+								(c.getChinesexingen() + "\n" + c.getChinesenameen()).toUpperCase(),
+								gender,
+								birthday,
+								passportsendplace,
+								!Util.isEmpty(c.getWorkinfoJp()) ? c.getWorkinfoJp().getMyjob() : "",
+								!Util.isEmpty(c.getNowprovince()) ? c.getNowprovince().toUpperCase() : "",
+								"良好",
+								c.getMarrystate() + "",
+								"身份证\n户口本",
+								StringUtils.isBlank(sbt.toString()) ? "" : sbt.toString(),
+								StringUtils.isBlank(sbv.toString()) ? "" : sbv.toString(),
+								//主卡和副卡的关系
+								proposerList.get(0).getIsMainProposer() ? "主卡" : getMasterName(order) + "的"
+										+ "主卡和副卡的关系", "推荐" };
+
+						for (String title : datas) {
+							PdfPCell cell = new PdfPCell(new Paragraph(title, font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							table.addCell(cell);
+						}
+					}
+
+				}
+
 			}
 			document.add(table);
 			document.close();
@@ -326,6 +482,7 @@ public class NewHasee extends NewTemplate {
 	public ByteArrayOutputStream trip(NewOrderJpEntity order) {
 		try {
 			List<NewTripplanJpEntity> trips = order.getTripplanJpList();
+
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			Document document = new Document(PageSize.A4, 0, 0, 36, 36);
 			PdfWriter.getInstance(document, stream);
@@ -340,14 +497,36 @@ public class NewHasee extends NewTemplate {
 				document.add(p);
 			}
 			font.setSize(10);
+			//判断
+			NewTripJpEntity tripJp = order.getTripJp();
+			Date startDate = null;
+			Date endDate = null;
+			if (!Util.isEmpty(tripJp)) {
+				if (tripJp.getOneormore().intValue() == 1) {
+					//多程
+					List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
+					if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
+						startDate = dateplanJpList.get(0).getStartdate();
+						endDate = dateplanJpList.get(dateplanJpList.size() - 1).getStartdate();
+					}
+				} else if (tripJp.getOneormore().intValue() == 0) {
+					//单程
+					startDate = tripJp.getStartdate();
+					endDate = tripJp.getReturndate();
+				}
+			}
+
 			{
-				String text = String.format("（平成%sから平成%s）", format(order.getTripJp().getStartdate(), "yy年MM月dd日"),
-						format(order.getTripJp().getReturndate(), "yy年MM月dd日"));
-				Paragraph p = new Paragraph(text, font);
-				p.setSpacingBefore(5);
-				p.setIndentationRight(20);
-				p.setAlignment(Paragraph.ALIGN_RIGHT);
-				document.add(p);
+				if (!Util.isEmpty(startDate) && !Util.isEmpty(endDate)) {
+
+					String text = String.format("（平成%sから平成%s）", format(startDate, "yy年MM月dd日"),
+							format(endDate, "yy年MM月dd日"));
+					Paragraph p = new Paragraph(text, font);
+					p.setSpacingBefore(5);
+					p.setIndentationRight(20);
+					p.setAlignment(Paragraph.ALIGN_RIGHT);
+					document.add(p);
+				}
 			}
 			{
 				String text = String.format("（旅行参加者 %s 他%s名、計%s名）", getMasterName(order), order.getCustomerJpList()
@@ -375,27 +554,42 @@ public class NewHasee extends NewTemplate {
 			}
 			font.setSize(10);
 			//生成表体
-			for (int i = 0; i < trips.size(); i++) {
-				NewTripplanJpEntity trip = trips.get(i);
-				StringBuilder scenics = new StringBuilder();
-				/*for (Scenic scenic : trip.getViewid()) {
+			//旅游计划空处理
+			if (!Util.isEmpty(trips) && trips.size() > 0) {
+
+				for (int i = 0; i < trips.size(); i++) {
+					NewTripplanJpEntity trip = trips.get(i);
+					StringBuilder scenics = new StringBuilder();
+					/*for (Scenic scenic : trip.getViewid()) {
 					scenics.append(scenic.getNameJP()).append("、");
-				}*/
-				String viewid = trip.getViewid();
-				String[] split = viewid.split(",");
-				Scenic scenic = this.dbdao.fetch(Scenic.class, Long.valueOf(split[0]));
-				scenics.append(scenic.getNameJP()).append("、");
-				Hotel h = this.dbdao.fetch(Hotel.class, Long.valueOf(trip.getHotelid()));
-				StringBuilder hotel = new StringBuilder(h.getNameJP()).append("\n").append(h.getAddressJP())
-						.append("\n").append(h.getPhone());
-				String datas[] = { String.valueOf(i + 1), format(trip.getNowdate(), df9), scenics.toString(),
-						hotel.toString() };
-				for (int j = 0; j < datas.length; j++) {
-					String data = datas[j];
-					PdfPCell cell = new PdfPCell(new Paragraph(data, font));
-					cell.setHorizontalAlignment(j > 1 ? Element.ALIGN_LEFT : Element.ALIGN_CENTER);
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					table.addCell(cell);
+					}*/
+					String viewid = trip.getViewid();
+					String[] split = viewid.split(",");
+					for (String string : split) {
+
+						Scenic scenic = this.dbdao.fetch(Scenic.class, Long.valueOf(string));
+						scenics.append(scenic.getNameJP()).append("、");
+					}
+					StringBuilder hotel = new StringBuilder();
+					//宾馆空处理
+					if (!Util.isEmpty(trip.getHotelid())) {
+
+						Hotel h = this.dbdao.fetch(Hotel.class, Long.valueOf(trip.getHotelid()));
+						if (!Util.isEmpty(h)) {
+
+							hotel = new StringBuilder(h.getNameJP()).append("\n").append(h.getAddressJP()).append("\n")
+									.append(h.getPhone());
+						}
+					}
+					String datas[] = { String.valueOf(i + 1), format(trip.getNowdate(), df9), scenics.toString(),
+							hotel.toString() };
+					for (int j = 0; j < datas.length; j++) {
+						String data = datas[j];
+						PdfPCell cell = new PdfPCell(new Paragraph(data, font));
+						cell.setHorizontalAlignment(j > 1 ? Element.ALIGN_LEFT : Element.ALIGN_CENTER);
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						table.addCell(cell);
+					}
 				}
 			}
 			document.add(table);
@@ -433,14 +627,35 @@ public class NewHasee extends NewTemplate {
 				document.add(p);
 			}
 			font.setSize(10);
+			//判断
+			NewTripJpEntity tripJp = order.getTripJp();
+			Date startDate = null;
+			Date endDate = null;
+			if (!Util.isEmpty(tripJp)) {
+				if (tripJp.getOneormore().intValue() == 1) {
+					//多程
+					List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
+					if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
+						startDate = dateplanJpList.get(0).getStartdate();
+						endDate = dateplanJpList.get(dateplanJpList.size() - 1).getStartdate();
+					}
+				} else if (tripJp.getOneormore().intValue() == 0) {
+					//单程
+					startDate = tripJp.getStartdate();
+					endDate = tripJp.getReturndate();
+				}
+			}
+
 			{
-				String text = String.format("（平成%sから平成%s）", format(order.getTripJp().getStartdate(), "yy年MM月dd日"),
-						format(order.getTripJp().getReturndate(), "yy年MM月dd日"));
-				Paragraph p = new Paragraph(text, font);
-				p.setSpacingBefore(5);
-				p.setIndentationRight(20);
-				p.setAlignment(Paragraph.ALIGN_RIGHT);
-				document.add(p);
+				if (!Util.isEmpty(startDate) && !Util.isEmpty(endDate)) {
+					String text = String.format("（平成%sから平成%s）", format(startDate, "yy年MM月dd日"),
+							format(endDate, "yy年MM月dd日"));
+					Paragraph p = new Paragraph(text, font);
+					p.setSpacingBefore(5);
+					p.setIndentationRight(20);
+					p.setAlignment(Paragraph.ALIGN_RIGHT);
+					document.add(p);
+				}
 			}
 			{
 				String text = String.format("（旅行参加者 %s 他%s名、計%s名）", getMasterName(order), order.getCustomerJpList()
@@ -470,10 +685,35 @@ public class NewHasee extends NewTemplate {
 			//生成表体
 			for (int i = 0; i < order.getCustomerJpList().size(); i++) {
 				NewCustomerJpEntity c = order.getCustomerJpList().get(i);
+				//				EnumUtil.getValue(GenderEnum.class, c.getGender());
+				String birthDay = "";
+				if (!Util.isEmpty(c.getBirthday())) {
+					birthDay = df1.format(c.getBirthday());
+				}
+				String gender = "";
+				if (!Util.isEmpty(c.getGender())) {
+					gender = EnumUtil.getValue(GenderEnum.class, c.getGender());
+				}
+				String passportsendplace = "";
+				if (!Util.isEmpty(c.getPassportsendplace())) {
+					passportsendplace = c.getPassportsendplace().toUpperCase();
+				}
+				if (Util.isEmpty(c.getChinesexing())) {
+					c.setChinesexing("");
+				}
+				if (Util.isEmpty(c.getChinesename())) {
+					c.setChinesename("");
+				}
+				if (Util.isEmpty(c.getChinesexingen())) {
+					c.setChinesexingen("");
+				}
+				if (Util.isEmpty(c.getChinesenameen())) {
+					c.setChinesenameen("");
+				}
 				String datas[] = { String.valueOf(i + 1), c.getChinesexing() + c.getChinesename(),
-						(c.getChinesexingen() + "\n" + c.getChinesenameen()).toUpperCase(), c.getGender().toString(),
-						df1.format(c.getBirthday()), c.getWorkinfoJp() == null ? "" : c.getWorkinfoJp().getMyjob(),
-						c.getPassportsendplace().toUpperCase(), c.getPassport(), };
+						(c.getChinesexingen() + "\n" + c.getChinesenameen()).toUpperCase(), gender, birthDay,
+						Util.isEmpty(c.getWorkinfoJp()) ? "" : c.getWorkinfoJp().getMyjob(), passportsendplace,
+						c.getPassport(), };
 				for (String data : datas) {
 					PdfPCell cell = new PdfPCell(new Paragraph(data, font));
 					cell.setFixedHeight(30);
@@ -514,13 +754,36 @@ public class NewHasee extends NewTemplate {
 
 			String mainName = "";
 			for (NewCustomerJpEntity c : order.getCustomerJpList()) {
-				if (c.isMain() || StringUtils.isBlank(mainName)) {
-					mainName = c.getChinesexing() + c.getChinesename();
+				//客户主申请人以及他们的名字处理
+				if (!Util.isEmpty(c)) {
+					List<NewProposerInfoJpEntity> proposerList = dbdao.query(NewProposerInfoJpEntity.class,
+							Cnd.where("customer_jp_id", "=", c.getId()), null);
+					if (!Util.isEmpty(proposerList) && proposerList.size() > 0) {
+
+						if (proposerList.get(0).getIsMainProposer() || StringUtils.isBlank(mainName)) {
+							if (Util.isEmpty(c.getChinesexing())) {
+								c.setChinesexing("");
+							}
+							if (Util.isEmpty(c.getChinesename())) {
+								c.setChinesename("");
+							}
+							mainName = c.getChinesexing() + c.getChinesename();
+						}
+					}
+
 				}
 			}
 
 			context.put("name", mainName);
-			context.put("count", String.valueOf(order.getCustomerJpList().size() - 1));
+			//客户人数空处理
+			if (!Util.isEmpty(order.getCustomerJpList()) && order.getCustomerJpList().size() > 0) {
+
+				context.put("count", String.valueOf(order.getCustomerJpList().size()));
+			} else {
+				context.put("count", 0 + "");
+
+			}
+			//TODO 面签类型  被写死
 			switch (order.getVisatype()) {
 			case 0:
 				context.put("reason", "");
@@ -543,15 +806,46 @@ public class NewHasee extends NewTemplate {
 				context.put("type", "相当な高所得者向け数次査証(個人観光)・1回目");
 				break;
 			}
-			String entry[] = format(order.getTripJp().getStartdate(), df9).split("\\.");
-			context.put("sYear", entry[0]);
-			context.put("sMouth", entry[1]);
-			context.put("sDay", entry[2]);
+			//生成身元保证书日期区分多程与单程
+			NewTripJpEntity tripJp = order.getTripJp();
+			if (!Util.isEmpty(tripJp)) {
+				if (tripJp.getOneormore().intValue() == 1) {
+					//多程
+					List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
+					if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
 
-			String depart[] = format(order.getTripJp().getReturndate(), df9).split("\\.");
-			context.put("eYear", depart[0]);
-			context.put("eMouth", depart[1]);
-			context.put("eDay", depart[2]);
+						String entry[] = format(dateplanJpList.get(0).getStartdate(), df9).split("\\.");
+						context.put("sYear", entry[0]);
+						context.put("sMouth", entry[1]);
+						context.put("sDay", entry[2]);
+
+						String depart[] = format(dateplanJpList.get(dateplanJpList.size() - 1).getStartdate(), df9)
+								.split("\\.");
+						context.put("eYear", depart[0]);
+						context.put("eMouth", depart[1]);
+						context.put("eDay", depart[2]);
+					}
+				} else if (tripJp.getOneormore().intValue() == 0) {
+					//单程
+					String entry[] = format(order.getTripJp().getStartdate(), df9).split("\\.");
+					context.put("sYear", entry[0]);
+					context.put("sMouth", entry[1]);
+					context.put("sDay", entry[2]);
+
+					String depart[] = format(order.getTripJp().getReturndate(), df9).split("\\.");
+					context.put("eYear", depart[0]);
+					context.put("eMouth", depart[1]);
+					context.put("eDay", depart[2]);
+				}
+			} else {
+				context.put("sYear", "");
+				context.put("sMouth", "");
+				context.put("sDay", "");
+
+				context.put("eYear", "");
+				context.put("eMouth", "");
+				context.put("eDay", "");
+			}
 
 			// 3) Set PDF as format converter
 
@@ -597,15 +891,43 @@ public class NewHasee extends NewTemplate {
 			List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 			String mainName = "";
 			for (NewCustomerJpEntity c : order.getCustomerJpList()) {
-				if (c.isMain() || StringUtils.isBlank(mainName)) {
-					mainName = c.getChinesexing() + c.getChinesename();
+
+				if (!Util.isEmpty(c)) {
+					List<NewProposerInfoJpEntity> proposerList = dbdao.query(NewProposerInfoJpEntity.class,
+							Cnd.where("customer_jp_id", "=", c.getId()), null);
+					if (!Util.isEmpty(proposerList) && proposerList.size() > 0) {
+
+						if (proposerList.get(0).getIsMainProposer() || StringUtils.isBlank(mainName)) {
+							mainName = c.getChinesexing() + c.getChinesename();
+						}
+					}
 				}
+
+				String birthDay = "";
+				if (!Util.isEmpty(c.getBirthday())) {
+					birthDay = DateUtils.formatDate(c.getBirthday(), "yyyy/M/d");
+				}
+				String gender = "";
+				if (!Util.isEmpty(c.getGender())) {
+					gender = c.getGender() == GenderEnum.female.intKey() ? "2" : "1";
+				}
+				String nowcity = "";
+				if (!Util.isEmpty(c.getNowcity())) {
+					nowcity = c.getNowcity().toLowerCase();
+				}
+				if (Util.isEmpty(c.getChinesexingen())) {
+					c.setChinesexingen("");
+				}
+				if (Util.isEmpty(c.getChinesenameen())) {
+					c.setChinesenameen("");
+				}
+
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("name", c.getChinesexing() + c.getChinesename());
 				map.put("name_en", (c.getChinesexingen() + " " + c.getChinesenameen()).toUpperCase());
-				map.put("gender", c.getGender() == GenderEnum.female.intKey() ? "2" : "1");
-				map.put("city", c.getNowcity().toLowerCase());
-				map.put("birthday", DateUtils.formatDate(c.getBirthday(), "yyyy/M/d"));
+				map.put("gender", gender);
+				map.put("city", nowcity);
+				map.put("birthday", birthDay);
 				map.put("passport", c.getPassport());
 				map.put("remark", "");
 				list.add(map);
@@ -632,16 +954,24 @@ public class NewHasee extends NewTemplate {
 		try {
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			Map<String, String> map = new HashMap<String, String>();
+			if (!Util.isEmpty(trip.getHotelid())) {
 
-			Hotel hotel = this.dbdao.fetch(Hotel.class, Long.valueOf(trip.getHotelid()));
-			map.put("hotel", hotel.getNameJP() + "\n" + hotel.getAddressJP() + "\n" + hotel.getPhone());
-			map.put("city", hotel.getCity());
+				Hotel hotel = this.dbdao.fetch(Hotel.class, Long.valueOf(trip.getHotelid()));
+				map.put("hotel", hotel.getNameJP() + "\n" + hotel.getAddressJP() + "\n" + hotel.getPhone());
+				map.put("city", hotel.getCity());
+			}
 			map.put("guest", guest);
 			DateTime dt = new DateTime(trip.getNowdate());
-			dt = dt.withField(DateTimeFieldType.hourOfDay(), trip.getIntime().getHours());
-			dt = dt.withField(DateTimeFieldType.minuteOfHour(), trip.getIntime().getMinutes());
+			if (!Util.isEmpty(trip.getIntime())) {
+
+				dt = dt.withField(DateTimeFieldType.hourOfDay(), trip.getIntime().getHours());
+				dt = dt.withField(DateTimeFieldType.minuteOfHour(), trip.getIntime().getMinutes());
+			}
 			map.put("checkInDate", df5.format(dt.toDate()));
-			map.put("checkOutDate", df5.format(trip.getOuttime()));
+			if (!Util.isEmpty(trip.getOuttime())) {
+
+				map.put("checkOutDate", df5.format(trip.getOuttime()));
+			}
 			map.put("room", trip.getHometype() + "");
 			map.put("breakfast", trip.getBreakfast() + "");
 			map.put("dinner", trip.getDinner() + "");

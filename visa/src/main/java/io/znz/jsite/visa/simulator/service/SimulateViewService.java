@@ -36,6 +36,7 @@ import io.znz.jsite.visa.entity.usa.NewPayCompanyEntity;
 import io.znz.jsite.visa.entity.usa.NewPayPersionEntity;
 import io.znz.jsite.visa.entity.usa.NewPeerPersionEntity;
 import io.znz.jsite.visa.entity.usa.NewTrip;
+import io.znz.jsite.visa.enums.ArmyEnum;
 import io.znz.jsite.visa.enums.DayTypeEnum;
 import io.znz.jsite.visa.enums.GenderEnum;
 import io.znz.jsite.visa.enums.IsDadOrMumEnum;
@@ -85,11 +86,14 @@ import org.springframework.util.Assert;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import com.uxuexi.core.common.util.DateTimeUtil;
+import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
 
 /**
  * 自动填表service
+ * 注意:当前日期与出生日期的差，也就是客户年龄满14周岁才会出现[工作/教育/培训]
  * 	
  * @author   朱晓川
  * @Date	 2017年7月6日 	 
@@ -102,6 +106,9 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 
 	//历史出行 目的地的国家 默认为美国
 	private static final String defaultCountry = "USA";
+
+	/**工作年龄，14周岁*/
+	private static final int WORK_AGE = 14;
 
 	private static Log log = Logs.get();
 
@@ -121,6 +128,7 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 			CustomerDto customer = transfrom(nCustomer, customerId);
 			ResultObject ro = ResultObject.success(formatJson(customer));
 			ro.addAttribute("oid", nCustomer.getId());
+			ro.addAttribute("avatar", nCustomer.getPhoneurl());
 
 			//TODO  查询客户的白底免冠照片
 			//			Photo photo = photoService.findByKeyAndCustomer("avatar", c.getId());
@@ -261,24 +269,30 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 			public SchoolDto apply(NewTeachinfoEntity from) {
 				SchoolDto to = new SchoolDto();
 				to.setId(from.getId());
+
+				to.setRoom(from.getSchooladdresssmall());
+				to.setRoomEN(from.getSchooladdresssmallen());
+
 				to.setAddress(from.getSchooladdressbig());
 				to.setAddressEN(from.getSchooladdressbigen());
 
 				to.setCity(from.getCity());
+				to.setProvince(from.getPrevince());
 				to.setCountry(from.getCountry());
 				//美国签证网站现在不要求填写学位
 				to.setDegree(from.getMajor());
 				to.setDegreeEN(from.getMajoren());
-				to.setEndDate(from.getStartdate());
+
+				to.setStartDate(from.getStartdate());
+				to.setEndDate(from.getEnddate());
+
 				to.setName(from.getSchoolname());
 				to.setNameEN(from.getSchoolnameen());
 				to.setPhone(from.getSchoolphone());
-				to.setProvince(from.getPrevince());
-				to.setRoom(from.getSchooladdresssmall());
-				to.setRoomEN(from.getSchooladdresssmallen());
+
 				to.setSpecialty(from.getMajor());
 				to.setSpecialtyEN(from.getMajoren());
-				to.setStartDate(from.getEnddate());
+
 				to.setZipCode(from.getZipcode());
 				return to;
 			}
@@ -502,6 +516,8 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 			@Override
 			public ArmyDto apply(NewArmyEntity from) {
 				ArmyDto to = new ArmyDto();
+				//军种
+				to.setType(EnumUtil.getValue(ArmyEnum.class, from.getArmytype()));
 				to.setCountry(from.getCountry());
 				to.setEndDate(from.getEnddate());
 				to.setId(from.getId());
@@ -786,11 +802,20 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				+ customer.getLastNameEN());
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_cbxAPP_FULL_NAME_NATIVE_NA", true);
 
+		//出生日期
+		Date birthday = customer.getBirthday();
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlDOBDay_1",
 				DateUtils.formatDate(customer.getBirthday(), "dd"));
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlDOBMonth_1", dateFormatLocal(customer.getBirthday()));
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxDOBYear_1",
 				DateUtils.formatDate(customer.getBirthday(), "yyyy"));
+
+		//是否已经工作
+		Date workDate = DateUtil.addYear(birthday, WORK_AGE);
+		Date now = DateTimeUtil.nowDate();
+		boolean worked = workDate.before(now);
+		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxDOB_Worked", worked);
+
 		//这个字段不用管
 		//曾用名信息
 		//有就是true，没有false
@@ -908,49 +933,49 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlPurposeOfTrip", "B");
 		//不管，基本都是B签
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlOtherPurpose", "B1-B2");
-		//不管
-		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_rblSpecificTravel_0", true);
-		//不管
-		//到达美国的相应信息
+
+		/**
+		 * 是否有具体的travel计划，默认为false
+		 * 填写抵达日期，抵达城市，停留多久即可
+		 */
+		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_rblSpecificTravel_0", false);
 		TravelDto travel = customer.getTravel();
 		{
-			DateTime dt = new DateTime(travel.getArrivalDate());
-			if (dt.isBeforeNow()) {
+			DateTime arrivalDate = new DateTime(travel.getArrivalDate());
+			if (arrivalDate.isBeforeNow()) {
 				log.error("入境时间不能在当前时间之前!");
 				throw new JSiteException("入境时间不能在当前时间之前!");
 			}
 
-			//预计抵达月日 改为ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEDay*
+			//预计抵达年月日,抵达城市
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEDay",
-					DateUtils.formatDate(dt.toDate(), "d"));
+					DateUtils.formatDate(arrivalDate.toDate(), "d"));
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEMonth",
-					DateUtils.formatDate(dt.toDate(), "M"));
-			//预计抵达年  改为ctl00_SiteContentPlaceHolder_FormView1_tbxTRAVEL_DTEYear
+					DateUtils.formatDate(arrivalDate.toDate(), "M"));
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxTRAVEL_DTEYear",
-					DateUtils.formatDate(dt.toDate(), "yyyy"));
+					DateUtils.formatDate(arrivalDate.toDate(), "yyyy"));
 			validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxArriveCity", travel.getEntryCity());
 
-			//离开美国的相应信息(根据逗留时间和抵达时间自动计算)
 			//停留时间是否为24小时内
 			boolean not24h = true;
 			Period period = travel.getPeriod();
 			if (!Util.isEmpty(period)) {
 				switch (period) {
 				case DAY:
-					dt = dt.plusDays(travel.getStay());
+					arrivalDate = arrivalDate.plusDays(travel.getStay());
 					break;
 				case WEEK:
-					dt = dt.plusWeeks(travel.getStay());
+					arrivalDate = arrivalDate.plusWeeks(travel.getStay());
 					break;
 				case MONTH:
-					dt = dt.plusMonths(travel.getStay());
+					arrivalDate = arrivalDate.plusMonths(travel.getStay());
 					break;
 				case YEAR:
-					dt = dt.plusYears(travel.getStay());
+					arrivalDate = arrivalDate.plusYears(travel.getStay());
 					break;
 				case H: {
 					not24h = false;
-					dt = dt.plusDays(1);
+					arrivalDate = arrivalDate.plusDays(1);
 					break;
 				}
 				default:
@@ -958,19 +983,24 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 				}
 				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_LOS_NOT24H", not24h);
 
-				//在美国待多久   待在什么地方
 				//选择停留时间单位(下拉列表)
 				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_LOS_CD", period.getValue());
 				//停留数量
 				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxTRAVEL_LOS", travel.getStay() + "");
 
-				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlDEPARTURE_US_DTEDay",
-						DateUtils.formatDate(dt.toDate(), "d"));
-				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlDEPARTURE_US_DTEMonth",
-						DateUtils.formatDate(dt.toDate(), "M"));
-				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxDEPARTURE_US_DTEYear",
-						DateUtils.formatDate(dt.toDate(), "yyyy"));
-				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxDepartCity", travel.getEntryCity());
+				/**
+				 * 注意:只有当选择了有具体travel计划的时候才要求同时填写抵达以及离开的日期和城市，此时页面元素的id会变化 
+				 */
+
+				//离开美国的相应信息(根据逗留时间和抵达时间自动计算)
+				//				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlDEPARTURE_US_DTEDay",
+				//						DateUtils.formatDate(dt.toDate(), "d"));
+				//				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlDEPARTURE_US_DTEMonth",
+				//						DateUtils.formatDate(dt.toDate(), "M"));
+				//				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxDEPARTURE_US_DTEYear",
+				//						DateUtils.formatDate(dt.toDate(), "yyyy"));
+				//				validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxDepartCity", travel.getEntryCity());
+
 			} else {
 				log.error("停留时间类型错误，只能是[年Y月M周W日D24小时内H]");
 			}
@@ -980,7 +1010,7 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlTravelLoc_ctl_InsertButtonTravelLoc",
 				Lists.newArrayList(new Object()));
 
-		//入境城市
+		//计划拜访的地点，字符串，这里使用入境城市，只有当选择了有具体travel计划的时候才要求填写
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlTravelLoc_ctl00_tbxSPECTRAVEL_LOCATION",
 				travel.getEntryCity());
 		//在美国逗留的地址1(必填)
@@ -1458,9 +1488,10 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
 							+ "_tbxSchoolName", s.getNameEN());
 					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
-							+ "_tbxSchoolAddr1", s.getRoomEN());
+							+ "_tbxSchoolAddr1", s.getAddressEN());
+					//地址2 可选使用room地址
 					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
-							+ "_tbxSchoolAddr2", s.getAddressEN());
+							+ "_tbxSchoolAddr2", s.getRoomEN());
 					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
 							+ "_tbxSchoolCity", s.getCity());
 					validator(map, "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl" + stringIdx
@@ -1582,6 +1613,7 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 			}
 		}
 
+		//Security Background 全部勾选否
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_rblINSURGENT_ORG_IND_0", false);
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_rblDisease_0", false);
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_rblDisorder_0", false);

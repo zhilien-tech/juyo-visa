@@ -422,10 +422,13 @@ $(function () {
     var oid = $.queryString("cid");
     if (oid) {
         $.getJSON("/visa/newcustomer/showDetail?customerid=" + oid, function (resp) {
-        viewModel.set("customer", $.extend(true, dafaults, resp));
-        	
+        	viewModel.set("customer", $.extend(true, dafaults, resp));
+        	var phoneurl=viewModel.get("customer.phoneurl");
+        	if(phoneurl!=null&&phoneurl!=''){
+        		$("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
+        	}
+
         	/*预览 按钮*/
-            $("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
             $(document).on('click','#preview',function(){
             	$('#light').css('display','block');
             	$('#fade').css('display','block');

@@ -6,7 +6,10 @@
 
 package test.morsecode;
 
+import io.znz.jsite.visa.service.TelecodeService;
+
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -102,6 +105,10 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
+		TelecodeService ser = new TelecodeService();
+		Map<String, String> telecode = ser.getTelecode("中文");
+		System.out.println(telecode);
+
 		Main test = new Main();
 		System.out.println("1、请输入你所需的信息...");
 		Scanner in = new Scanner(System.in);

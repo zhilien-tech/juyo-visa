@@ -7,7 +7,10 @@ import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,16 +19,31 @@ import org.springframework.stereotype.Service;
 @Service
 public class TelecodeService {
 
+	private static final Log log = Logs.get();
+
+	private static final String URL = "http://apps.chasedream.com/chinese-commercial-code/";
+	private static final String ID_STATE = "__VIEWSTATE";
+	private static final String ID_VALIDATION = "__EVENTVALIDATION";
+
+	/**
+	 * 汉字电码查询
+	 * __VIEWSTATE与__EVENTVALIDATION参数会变化，
+	 * 因此需要先获取页面的参数，再执行查询调用
+	 *
+	 */
 	public Map<String, String> getTelecode(String text) {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
-			Document doc = Jsoup
-					.connect("http://apps.chasedream.com/chinese-commercial-code/")
-					.data("__VIEWSTATE",
-							"+G/K9QEX4dZxWoxB9lcWorw37rapNKW3lSdaRA6IoaeC2bNLwZobBwjIXZQ0t5lAECR4DYQROnwTXoOh0u+xQxhw0By2Ynhd2AC2gyFFJH8NHVznxrJff9kM8YgIlAIKpwcjnz6moOeXgLS16w5RMejZzumjM2xclCvOimG/pWu66nxv0MnvB3VZMRohGBlSU00GpJzfmxh/x4hS49yz8fa574fx9LBXbX8V4osEfSMUKtHLPalCgmwqzoOubDPFV9YX3puLEeRvuwN8cLuA2hAhLDCRPcs5SW77G3nwhxz0GgIj1o5Jx5r9AAg9uMre")
-					.data("__VIEWSTATEGENERATOR", "4A91A8BF")
-					.data("__EVENTVALIDATION",
-							"Vl5QNQ5dPK/4hAvixyiUvxHVneXYjk8Is9VGKa3R2La7A58p5cM8IzhelQ/ngkI/4Fy6BjI3RGuDabBlvu77V3VfJy5+918fU3E6EV1KGIaVDBLAo9lH/rdtbazeoc+LheMEbJYDPPnObz3dPQiASQ==")
+			log.info("电码查询中...");
+			Document fetchDoc = Jsoup.connect(URL).get();
+			Element stateElem = fetchDoc.getElementById(ID_STATE);
+			String state = stateElem.val();
+
+			Element validElem = fetchDoc.getElementById(ID_VALIDATION);
+			String validation = validElem.val();
+
+			Document doc = Jsoup.connect(URL).timeout(10000).data("__VIEWSTATE", state)
+					.data("__VIEWSTATEGENERATOR", "4A91A8BF").data("__EVENTVALIDATION", validation)
 					.data("txtInput", text).data("btnSearch", "查询").post();
 			Elements elements = doc.getElementsByTag("td");
 			int size = elements.size();

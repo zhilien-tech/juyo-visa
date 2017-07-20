@@ -426,7 +426,7 @@ public class NewOrderJaPanController {
 						nutDao.update(newPeerPersionEntity);
 					} else {*/
 				if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
-					boolean relation = newPeerPersionEntity.isIsmainproposer();
+					boolean relation = newPeerPersionEntity.getIsMainProposer();
 					newPeerPersionEntity.setOrder_jp_id(orderOld.getId());
 					String xing = newPeerPersionEntity.getXing();
 					String name = newPeerPersionEntity.getName();
@@ -474,7 +474,7 @@ public class NewOrderJaPanController {
 						nutDao.update(customer);
 					}
 					newPeerPersionEntity = dbDao.insert(newPeerPersionEntity);
-					boolean relation = newPeerPersionEntity.isIsmainproposer();
+					boolean relation = newPeerPersionEntity.getIsMainProposer();
 					if (!Util.isEmpty(relation) && relation == true) {
 						newPeerPersionEntity.setRelationproposer(newPeerPersionEntity.getId());
 

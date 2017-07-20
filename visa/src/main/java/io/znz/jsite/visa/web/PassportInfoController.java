@@ -10,11 +10,14 @@ import io.znz.jsite.base.BaseController;
 import io.znz.jsite.base.bean.ResultObject;
 import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.util.Const;
+import io.znz.jsite.download.UploadService;
 import io.znz.jsite.exception.JSiteException;
 import io.znz.jsite.visa.dto.NewCustomerJpDto;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
 
+import java.io.InputStream;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +29,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
@@ -44,6 +50,9 @@ public class PassportInfoController extends BaseController {
 
 	@Autowired
 	protected Dao nutDao;
+
+	@Autowired
+	private UploadService qiniuUploadService;//文件上传
 
 	/**
 	 * 回显美国护照信息数据
@@ -119,6 +128,7 @@ public class PassportInfoController extends BaseController {
 			customer.setVisaoffice(cusdto.getPassportsendoffice());//签发机关
 			customer.setPassportbooknum(cusdto.getPassportbooknum());//护照本号码
 			customer.setPassportreadnum(cusdto.getPassportreadnum());//护照机读码
+			customer.setPhoneurl(cusdto.getPhoneurl());//照片路径
 		}
 		return customer;
 	}
@@ -149,8 +159,44 @@ public class PassportInfoController extends BaseController {
 			cus.setPassportsendoffice(customer.getVisaoffice());//签发机关
 			cus.setPassportbooknum(customer.getPassportbooknum());//护照本号码
 			cus.setPassportreadnum(customer.getPassportreadnum());//护照机读码
+			cus.setPhoneurl(customer.getPhoneurl());//照片路径
 			nutDao.updateIgnoreNull(cus);
 		}
 		return ResultObject.success("修改成功");
+	}
+
+	/**
+	 * 文件上传
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "uploadFile")
+	@ResponseBody
+	public Object uploadFile(HttpServletRequest request) throws Exception {
+		request.setCharacterEncoding(io.znz.jsite.visa.util.Const.CHARACTER_ENCODING_PROJECT);//字符编码为utf-8
+		String url = null;
+		//将当前上下文初始化给  CommonsMutipartResolver （多部分解析器）
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession()
+				.getServletContext());
+		//检查form中是否有enctype="multipart/form-data"
+		if (multipartResolver.isMultipart(request)) {
+			//将request变成多部分request
+			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+			//获取multiRequest 中所有的文件名
+			Iterator iter = multiRequest.getFileNames();
+			while (iter.hasNext()) {
+				//一次遍历所有文件
+				MultipartFile file = multiRequest.getFile(iter.next().toString());
+				if (file != null) {
+					String originalFilename = file.getOriginalFilename();
+					String ext = originalFilename.substring(originalFilename.indexOf(".") + 1,
+							originalFilename.length());
+					InputStream is = file.getInputStream();
+					String shortUrl = qiniuUploadService.uploadImage(is, ext, null);
+					url = io.znz.jsite.visa.util.Const.IMAGES_SERVER_ADDR + shortUrl;
+				}
+			}
+		}
+		return url;
 	}
 }
