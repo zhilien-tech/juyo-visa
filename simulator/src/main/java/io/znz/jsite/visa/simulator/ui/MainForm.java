@@ -191,7 +191,7 @@ public class MainForm extends JPanel {
 					ResultObject<Map, Object> ro = JSON.parseObject(json, ResultObject.class);
 					if (ro.getCode() == ResultObject.ResultCode.SUCCESS) {
 						final String oid = String.valueOf(ro.getAttributes().get("oid"));
-						String image = getBaseUrl() + String.valueOf(ro.getAttributes().get("avatar"));
+						String image = String.valueOf(ro.getAttributes().get("avatar"));
 						SwingUtilities.invokeLater(new Runnable() {
 							@Override
 							public void run() {

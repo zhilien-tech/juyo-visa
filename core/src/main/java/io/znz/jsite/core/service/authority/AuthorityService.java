@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ import com.uxuexi.core.db.util.DbSqlUtil;
  * @author   崔建斌
  * @Date	 2017年7月10日 	 
  */
-@Service("authority")
+@Service("authorityViewService")
 public class AuthorityService extends NutzBaseService {
 	/**
 	 * 查询当前登录公司拥有的所有功能
@@ -52,5 +53,14 @@ public class AuthorityService extends NutzBaseService {
 			}
 		});
 		return allModule;
+	}
+
+	/**
+	 * 根据请求路径查询功能
+	 * @param requestPath
+	 * @return
+	 */
+	public FunctionEntity findFuctionByRequestPath(String requestPath) {
+		return dbDao.fetch(FunctionEntity.class, Cnd.where("url", "LIKE", "%" + requestPath + "%"));
 	}
 }
