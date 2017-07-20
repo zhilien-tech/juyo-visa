@@ -143,6 +143,14 @@
 
     <!-- 自定义拦截请求链接链配置 -->
     <mvc:interceptors>
+    	<!-- 自定义拦截器做权限的处理 -->
+		<!-- <mvc:interceptor>
+			<mvc:mapping path="/visa/*"/>
+			<mvc:mapping path="/visa/*/*"/>
+			<mvc:mapping path="/res/*/*"/>
+			<mvc:mapping path="/**"/>
+			<bean class="io.znz.jsite.core.interceptor.LoginInterceptor"/>
+		</mvc:interceptor> -->
         <mvc:interceptor>
             <mvc:mapping path="/*/*/create"/>
             <mvc:mapping path="/*/*/delete/*"/>
@@ -154,7 +162,7 @@
             <mvc:mapping path="/*"/>
             <bean class="io.znz.jsite.core.interceptor.SiteInterceptor"/>
         </mvc:interceptor>
-	<!-- 自定义拦截器做权限的处理 -->
+		<!-- 自定义拦截器做权限的处理 -->
 		<mvc:interceptor>
 			<!-- <mvc:mapping path="/visa/*"/>
 			<mvc:mapping path="/visa/*/*"/> -->

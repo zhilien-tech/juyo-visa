@@ -42,6 +42,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
 import com.uxuexi.core.db.util.DbSqlUtil;
@@ -221,15 +222,150 @@ public class LoginController extends BaseController {
 										+ "&logintype=" + logintype + "&empList=" + jsonEncode;
 							} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype
 									&& UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {//游客身份登录
-								return "redirect:" + to + "?auth=8,9,16,7," + str + "&username=" + fullname
-										+ "&logintype=" + logintype + "&tourist=1";
+								List<FunctionEntity> funList = Lists.newArrayList();
+								//我的签证
+								FunctionEntity usaf1 = new FunctionEntity();
+								usaf1.setId(7);
+								usaf1.setParentId(0);
+								usaf1.setFunName("我的签证");
+								usaf1.setLevel(1);
+								usaf1.setCreateTime(new Date());
+								usaf1.setRemark("我的签证");
+								usaf1.setSort(7);
+								funList.add(usaf1);
+								//办理中签证
+								FunctionEntity usaf2 = new FunctionEntity();
+								usaf2.setId(8);
+								usaf2.setParentId(7);
+								usaf2.setFunName("办理中签证");
+								usaf2.setUrl("myvisa/transactVisa/visaNationList.html");
+								usaf2.setLevel(2);
+								usaf2.setCreateTime(new Date());
+								usaf2.setRemark("办理中签证");
+								usaf2.setSort(8);
+								funList.add(usaf2);
+								//我的资料
+								FunctionEntity usaf3 = new FunctionEntity();
+								usaf3.setId(9);
+								usaf3.setParentId(0);
+								usaf3.setFunName("我的资料");
+								usaf3.setLevel(1);
+								usaf3.setCreateTime(new Date());
+								usaf3.setRemark("我的资料");
+								usaf3.setSort(9);
+								funList.add(usaf3);
+								if (!Util.isEmpty(usacreatetime)) {//美国游客权限
+									//美国护照信息
+									FunctionEntity usaf4 = new FunctionEntity();
+									usaf4.setId(10);
+									usaf4.setParentId(9);
+									usaf4.setFunName("护照信息");
+									usaf4.setUrl("personal/passportInfo/passportInfoList.html");
+									usaf4.setLevel(2);
+									usaf4.setCreateTime(new Date());
+									usaf4.setRemark("美国护照信息");
+									usaf4.setSort(10);
+									funList.add(usaf4);
+									//美国基本信息
+									FunctionEntity usaf5 = new FunctionEntity();
+									usaf5.setId(11);
+									usaf5.setParentId(9);
+									usaf5.setFunName("基本信息");
+									usaf5.setUrl("personal/basicInfo/basicInfoList.html");
+									usaf5.setLevel(2);
+									usaf5.setCreateTime(new Date());
+									usaf5.setRemark("美国基本信息");
+									usaf5.setSort(11);
+									funList.add(usaf5);
+									//美国签证信息
+									FunctionEntity usaf6 = new FunctionEntity();
+									usaf6.setId(12);
+									usaf6.setParentId(9);
+									usaf6.setFunName("签证信息");
+									usaf6.setUrl("personal/visaInfo/visaInfoList.html");
+									usaf6.setLevel(2);
+									usaf6.setCreateTime(new Date());
+									usaf6.setRemark("美国签证信息");
+									usaf6.setSort(12);
+									funList.add(usaf6);
+								} else if (!Util.isEmpty(jpcreatetime)) {
+									//日本护照信息
+									FunctionEntity jpf1 = new FunctionEntity();
+									jpf1.setId(13);
+									jpf1.setParentId(9);
+									jpf1.setFunName("护照信息");
+									jpf1.setUrl("personal/passportInfo/passportJPInfoList.html");
+									jpf1.setLevel(2);
+									jpf1.setCreateTime(new Date());
+									jpf1.setRemark("日本护照信息");
+									jpf1.setSort(13);
+									funList.add(jpf1);
+									//日本基本信息
+									FunctionEntity jpf2 = new FunctionEntity();
+									jpf2.setId(14);
+									jpf2.setParentId(9);
+									jpf2.setFunName("基本信息");
+									jpf2.setUrl("personal/basicInfo/basicJPInfoList.html");
+									jpf2.setLevel(2);
+									jpf2.setCreateTime(new Date());
+									jpf2.setRemark("日本基本信息");
+									jpf2.setSort(14);
+									funList.add(jpf2);
+									//日本签证信息
+									FunctionEntity jpf3 = new FunctionEntity();
+									jpf3.setId(15);
+									jpf3.setParentId(9);
+									jpf3.setFunName("签证信息");
+									jpf3.setUrl("personal/visaInfo/JPvisaInfoList.html");
+									jpf3.setLevel(2);
+									jpf3.setCreateTime(new Date());
+									jpf3.setRemark("日本签证信息");
+									jpf3.setSort(15);
+									funList.add(jpf3);
+								}
+								//密码修改
+								FunctionEntity passf = new FunctionEntity();
+								passf.setId(16);
+								passf.setParentId(9);
+								passf.setFunName("修改密码");
+								passf.setUrl("personal/modifyPassword/modifyPassword.html");
+								passf.setLevel(2);
+								passf.setCreateTime(new Date());
+								passf.setRemark("修改密码");
+								passf.setSort(16);
+								funList.add(passf);
+								String json = Json.toJson(funList,
+										JsonFormat.compact().setDateFormat("yyyy-MM-dd HH:mm:ss"));
+								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));
+								return "redirect:" + to + "?auth=7,8,9,16," + str + "&username=" + fullname
+										+ "&logintype=" + logintype + "&empList=" + jsonEncode;
 							} else if (UserLoginEnum.SUPERMAN.intKey() == 3
-									&& UserLoginEnum.SUPERMAN.intKey() == userType) {
+									&& UserLoginEnum.SUPERMAN.intKey() == userType) {//超级管理员登录
+								List<FunctionEntity> superAdministratorFunction = loginAuthorityService
+										.superAdministratorFunction();
+								String json = Json.toJson(superAdministratorFunction, JsonFormat.compact()
+										.setDateFormat("yyyy-MM-dd HH:mm:ss"));
+								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));
 								return "redirect:" + to + "?auth=0," + str + "&username=" + fullname + "&logintype="
-										+ logintype + "&tourist=3";
-							} else if (UserLoginEnum.ADMIN.intKey() == 4 && UserLoginEnum.ADMIN.intKey() == userType) {
+										+ logintype + "&empList=" + jsonEncode;
+							} else if (UserLoginEnum.ADMIN.intKey() == 4 && UserLoginEnum.ADMIN.intKey() == userType) {//平台用户
+								List<FunctionEntity> funList = Lists.newArrayList();
+								//公司管理
+								FunctionEntity comf = new FunctionEntity();
+								comf.setId(4);
+								comf.setParentId(0);
+								comf.setFunName("公司管理");
+								comf.setUrl("company/companylist.html");
+								comf.setLevel(1);
+								comf.setCreateTime(new Date());
+								comf.setRemark("公司管理");
+								comf.setSort(4);
+								funList.add(comf);
+								String json = Json.toJson(funList,
+										JsonFormat.compact().setDateFormat("yyyy-MM-dd HH:mm:ss"));
+								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));
 								return "redirect:" + to + "?auth=4," + "&username=" + fullname + "&logintype=" + 4
-										+ "&tourist=2";
+										+ "&empList=" + jsonEncode;
 							} else {
 
 								model.addFlashAttribute("error", "登录身份错误,请重试!");
