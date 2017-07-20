@@ -111,9 +111,9 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label for="passport_code">护照号:<!-- <span style="color: red">*</span> --></label>
+                                        <label for="passport_code">护照号:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="passport_code" data-bind="value:customer.passport" class="k-textbox"
+                                            <input id="passport_code" data-bind="value:customer.passport" class="k-textbox" required validationMessage="护照号不能为空" name="passport"
                                                    style="width: 100%;text-transform:uppercase;"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -139,9 +139,9 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label for="signed_at">护照签发日期:<!-- <span style="color: red">*</span> --></label>
+                                        <label for="signed_at">护照签发日期:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="signed_at" style="width: 100%;" data-role="datepicker"
+                                            <input id="signed_at" style="width: 100%;" data-role="datepicker" required validationMessage="护照签发日期不能为空" name="passportsenddate"
                                                    data-bind="value:customer.passportsenddate,events:{change:onDateChange}"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -149,9 +149,9 @@
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label for="expire_at">护照有效日期:<!-- <span style="color: red">*</span> --></label>
+                                        <label for="expire_at">护照有效日期:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="expire_at" style="width: 100%;" data-role="datepicker"
+                                            <input id="expire_at" style="width: 100%;" data-role="datepicker" required validationMessage="护照有效日期不能为空" name="passporteffectdate"
                                                    data-bind="value:customer.passporteffectdate,events:{change:onDateChange}"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -162,10 +162,10 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label for="province_signed_en">护照签发省份（拼音）:<!-- <span
-                                                style="color: red">*</span> --></label>
+                                        <label for="province_signed_en">护照签发省份（拼音）:<span
+                                                style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="province_signed_en" data-bind="value:customer.passportsendprovice"
+                                            <input id="province_signed_en" data-bind="value:customer.passportsendprovice"   required validationMessage="护照签发省份（拼音）不能为空" name="passportsendprovice"
                                                    class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -175,7 +175,7 @@
                                     <div class="form-group">
                                         <label for="city_signed_en">护照签发城市（拼音）:<!-- <span style="color: red">*</span> --></label>
                                         <div class='input-group'>
-                                            <input id="city_signed_en" data-bind="value:customer.passportsendcity"
+                                            <input id="city_signed_en" data-bind="value:customer.passportsendcity"   required validationMessage="护照签发城市（拼音）不能为空" name="passportsendcity"
                                                    class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -251,7 +251,7 @@
                                                     data-text-field="text"
                                                     data-value-field="value"
                                                     data-bind="value:customer.nowcountry,source:countries"
-                                                    style="width: 100%;"></select>
+                                                    style="width: 100%;" required validationMessage="办理人国籍不能为空" name="nowcountry"></select>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -260,7 +260,7 @@
                                     <div class="form-group">
                                         <label for="home_province_en">居住省份（拼音）:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="home_province_en" data-bind="value:customer.nowprovince"
+                                            <input id="home_province_en" data-bind="value:customer.nowprovince" required validationMessage="居住省份（拼音）不能为空" name="nowprovince"
                                                    class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -270,7 +270,7 @@
                                     <div class="form-group">
                                         <label for="home_city_en">居住城市（拼音）:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="home_city_en" data-bind="value:customer.nowcity" class="k-textbox"
+                                            <input id="home_city_en" data-bind="value:customer.nowcity" class="k-textbox" required validationMessage="居住城市（拼音）不能为空" name="nowcity"
                                                    style="width: 100%;text-transform:uppercase;"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -291,7 +291,7 @@
                                 </div>
                                 <div class="col-xs-4">
                                     <div class="form-group">
-                                        <label for="home_phone">家庭电话:<span style="color: red">*</span></label>
+                                        <label for="home_phone">家庭电话:<!-- <span style="color: red">*</span> --></label>
                                         <div class='input-group'>
                                             <input id="home_phone" data-bind="value:customer.familyphone" class="k-textbox"
                                                    style="width: 100%;"/>
@@ -343,7 +343,7 @@
                                     <div class="form-group">
                                         <label for="home_post_code">邮编:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="home_post_code" data-bind="value:customer.zipcode" class="k-textbox"
+                                            <input id="home_post_code" data-bind="value:customer.zipcode" class="k-textbox" required validationMessage="邮编不能为空" name="zipcode"
                                                    style="width: 100%;" placeholder="住址的邮编"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -357,7 +357,7 @@
                                         <label for="home_address_en_1">住址的房间/单元/楼号/门牌号（英文），填写中文自动翻译:<span
                                                 style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="home_address_en_1" class="k-textbox" style="width: 100%;"
+                                            <input id="home_address_en_1" class="k-textbox" style="width: 100%;" required validationMessage="住址的房间/单元/楼号/门牌号（英文）不能为空" name="addressmallen"
                                                    data-bind="value:customer.addressmallen"
                                                    placeholder="住址的房间/单元/楼号/门牌号（英文），填写中文自动翻译"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
@@ -369,8 +369,8 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="home_address_en_2">住址的街道/区/县名称，不包括省份（（英文），填写中文自动翻译:<span
-                                                style="color: red">*</span></label>
+                                        <label for="home_address_en_2">住址的街道/区/县名称，不包括省份（（英文），填写中文自动翻译:<!-- <span
+                                                style="color: red">*</span> --></label>
                                         <div class='input-group'>
                                             <input id="home_address_en_2" class="k-textbox" style="width: 100%;"
                                                    data-bind="value:customer.addressbigen"
