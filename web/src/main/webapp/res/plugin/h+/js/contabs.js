@@ -340,12 +340,16 @@ $(function () {
 			    // 关闭全部
 			    $('.J_tabCloseAll').on('click', function () {
 			        $('.page-tabs-content').children("[data-id]").not(":first").each(function () {
-			            $('.J_iframe[data-id="' + $(this).data('id') + '"]').remove();
+			            //$('.J_iframe[data-id="' + $(this).data('id') + '"]').remove();
+			        	$('.J_iframe[src="' + $(this).data('id') + '"]').remove();
 			            $(this).remove();
+			            console.log("66666____:"+$(this).attr('src'));
 			        });
 			        $('.page-tabs-content').children("[data-id]:first").each(function () {
-			            $('.J_iframe[data-id="' + $(this).data('id') + '"]').show();
+			            //$('.J_iframe[data-id="' + $(this).data('id') + '"]').show();
+			        	$('.J_iframe[src="' + $(this).data('id') + '"]').show();
 			            $(this).addClass("active");
+			            console.log("88888____:"+$(this).attr('src'));
 			        });
 			        $('.page-tabs-content').css("margin-left", "0");
 			    });
