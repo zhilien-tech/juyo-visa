@@ -322,9 +322,21 @@ $("#join_army").change(function () {
 //信息保存
 var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
 $("#saveCustomerData").on("click",function(){
+	
+    //验证————————————————————————————————————
+    $('.k-tooltip-validation').each(function(){
+    	var verificationText=$(this).text().trim();//获取验证的文字信息
+    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
+    	labelVal = labelVal.split(":");
+    	labelVal.pop();
+    	labelVal = labelVal.join(":");//截取 :之前的信息
+    	console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
+    });
+    //end 验证————————————————————————————————
+	
 	if(validatable.validate()){
 		 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
-	viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
+		 viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
 	/*var error=JSON.stringify(map);
 	if(error.length>15){
 		
@@ -339,25 +351,21 @@ $("#saveCustomerData").on("click",function(){
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){
 			 if(indexnew!=null){
-					
-					layer.close(indexnew);
-					}
-			 
+				 layer.close(indexnew);
+			 }
 			 console.log(result);
 			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			 parent.layer.close(index);
 			 window.parent.successCallback('1');
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown){
-		 if(indexnew!=null){
-				
-				layer.close(indexnew);
-				}
-		 
+			 if(indexnew!=null){
+				 layer.close(indexnew);
+			 }
 			 console.log(XMLHttpRequest);
 			 console.log(textStatus);
 			 console.log(errorThrown);
-            layer.msg('保存失败!',{time:2000});
+             layer.msg('保存失败!',{time:2000});
          }
 	});
 	}
@@ -386,14 +394,12 @@ $("#saveCustomerData").on("click",function(){
 */
 //通过或者拒绝的方法
 function agreeOrRefuse(flag){
-	
-/*	
-	viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
+	 /*viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
 	 viewModel.set("customer.errorinfo",JSON.stringify(map));*/
 	 var error=JSON.stringify(map);
 	 map.clear();
-	var id=viewModel.get("customer.id");
-	$.ajax({
+	 var id=viewModel.get("customer.id");
+	 $.ajax({
 		 type: "POST",
 		 url: "/visa/newcustomer/agreeOrRefuse?flag="+flag+"&customerid="+id+"&error="+error,
 		 success: function (result){
@@ -406,7 +412,7 @@ function agreeOrRefuse(flag){
 			 console.log(XMLHttpRequest);
 			 console.log(textStatus);
 			 console.log(errorThrown);
-            layer.msg('操作失败!',{time:2000});
+             layer.msg('操作失败!',{time:2000});
          }
 	});
 }
@@ -416,7 +422,7 @@ $(function () {
     var oid = $.queryString("cid");
     if (oid) {
         $.getJSON("/visa/newcustomer/showDetail?customerid=" + oid, function (resp) {
-        	viewModel.set("customer", $.extend(true, dafaults, resp));
+        viewModel.set("customer", $.extend(true, dafaults, resp));
         	
         	/*预览 按钮*/
             $("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
@@ -458,18 +464,13 @@ $(function () {
             		var a = map1[key];//获取到 错误信息 数据
             		for(var i=0;i<a.length;i++){
             			var reasonnew=a[i].key;//获取到  错误信息 字段名称
-            			
             			$('label').each(function(){
             				var labelText=$(this).text();//获取 页面上所有的字段 名称
             				labelText = labelText.split(":");
             				labelText.pop();
             				labelText = labelText.join(":");//截取 :之前的信息
             				for(var i=0;i<reasonnew.length;i++){
-            					///console.log("labelText的值：==="+labelText);
-            					///console.log("reasonnew[i]的值：==="+reasonnew);
             					if(labelText==reasonnew){
-            						///console.log("labelText的值：==="+labelText);
-                					///console.log("reasonnew[i]的值：==="+reasonnew);
             						$(this).next().find('input').css('border-color','#f17474');///input
             						$(this).next().find('.k-state-default').css('border-color','#f17474');//data(span)
             						$(this).next().find('.k-dropdown').css('border-color','#f17474');//select(span)
@@ -481,11 +482,6 @@ $(function () {
             	}
             	/*----end 小灯泡 回显----*/
         	
-            	
-            	
         });
-        
     }
-    
-    
 });
