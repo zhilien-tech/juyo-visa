@@ -104,12 +104,89 @@ $(function () {
             $(this).attr('data-index', index);
         }
     });
-    $(function(){
-    	menuItem();
-    });
+    
+    for(var i=1;i<25;i++){
+		$("#"+i).hide();
+	}
+	var tourist=$.queryString("tourist");
+	if(tourist==1){//游客
+		var flag=$.queryString("auth");
+		alert(flag);
+    	var num=flag.split(",");
+    	for(var i=0;i<num.length;i++){
+    		$("#"+num[i]).show();
+    	}
+	}else if(tourist==2){//平台管理员
+		var flag=$.queryString("auth");
+    	var num=flag.split(",");
+    	for(var i=0;i<num.length;i++){
+    		$("#"+num[i]).show();
+    	}
+	}else if(tourist==3){//超级管理员
+		for(var i=1;i<25;i++){
+    		$("#"+i).show();
+    	}
+	}else{
+    	//公司管理员登录
+    	var empList=$.queryString("empList");
+    	var emp=JSON.parse(JSON.parse($.base64.atob(decodeURI(empList),true))); 
+    	///console.log(emp)
+    	
+    	for(var i=0;i<emp.length;i++){
+    		$("#"+emp[i].id).show();
+    	}
+    	var html="";
+    	for(var i=0;i<emp.length;i++){
+    		if(emp[i].parentId==0){
+    			var a=0;
+    			for(var m=i;m<emp.length;m++){
+    				if(emp[m].parentId==emp[i].id){
+    					a++;
+    				}
+    			}
+    			if(a>0){
+    				html+='<li><a href="javascript:;" class="J_menuItem1" id="'+emp[i].id+'"><i class="fa fa-building"></i><span class="nav-label" >'+emp[i].funName+'</span><span class="fa arrow"></span></a>'
+                	html+='<ul class="nav nav-second-level">';
+    	    		for(var j=i+1;j<emp.length;j++){
+    	    			if(emp[i].id==emp[j].parentId){
+    	    				html+='<li><a class="J_menuItem" href="'+emp[j].url+'" id="'+emp[j].id+'">'+emp[j].funName+'</a></li>'
+    	                   ///console.log("第"+j+"次:"+html);
+    	    			}
+    	    		}
+    	    		html+= '</ul>';
+           			html+='</li>';
+    			}else{
+    				html+='<li><a href="'+emp[i].url+'" class="J_menuItem" id="'+emp[i].id+'"><span class="nav-label" >'+emp[i].funName+'</span></a>'
+           			html+='</li>';
+    			}
+    		}
+    	}
+		$("#side-menu").append(html);
+	}
+    
+	$('.nav-second-level').hide();
+	$('.J_menuItem1').on('click', function(){
+		$(this).next().toggle('100');
+		$(this).parent().siblings().find('ul').hide('100');
+	});
     //点击 左菜单栏项 触发 function
     function menuItem() {
+
+    		//left menu Highlight----------------------------------
+        	if(typeof(Storage) !== "undefined") {
+        		var thisId=$(this).attr('id');
+        		if(thisId!=undefined){
+        			 sessionStorage.clickcountIdValue = thisId;
+        			 $('#'+sessionStorage.clickcountIdValue).addClass("menuHighlight").parent().siblings('li').find('a').removeClass("menuHighlight");
+        			 $('#'+sessionStorage.clickcountIdValue).parent().parent().parent().siblings('li').find('.J_menuItem').removeClass("menuHighlight");
+        		}
+        		$(this).parent().siblings().find('ul').hide('100');
+        	} else {
+        	    alert("抱歉！您的浏览器不支持 Web Storage 请联系相关技术人员！");
+        	}
+        	//end left menu Highlight------------------------------
     	
+
         // 获取标识数据
         var dataUrl = $(this).attr('href'),//左菜单栏 对应的路径
         	dataIndex = $(this).data('index'),//左菜单栏 下标
@@ -117,20 +194,22 @@ $(function () {
             flag = true;
         if (dataUrl == undefined || $.trim(dataUrl).length == 0) return false;
         
-        /*var str1 = '<iframe class="J_iframe" name="iframe' + dataIndex + '" width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataUrl + '" seamless></iframe>';
-        $('.J_mainContent').find('iframe.J_iframe').hide().parents('.J_mainContent').append(str1);*/
-        
         // 选项卡菜单已存在
         $('.J_menuTab').each(function () {
-        	 
             if ($(this).data('id') == dataUrl){
                 if (!$(this).hasClass('active')){
                     $(this).addClass('active').siblings('.J_menuTab').removeClass('active');
                     scrollToTab(this);
                     
                     // 显示tab对应的内容区
-                    $('.J_mainContent .J_iframe').each(function () {
-                        if ($(this).data('id') == dataUrl){
+                    $('.J_mainContent .J_iframe').each(function(){
+                        /*if ($(this).data('id') == dataUrl){
+                            $(this).show().siblings('.J_iframe').hide();
+                            return false;
+                        }//07-19 10:00*/
+                    	//console.log("$(this).attr('src')的值为：__________"+$(this).attr('src'));
+                    	//console.log("dataUrl的值为：__________"+dataUrl);
+                    	if ($(this).attr('src') == dataUrl){
                             $(this).show().siblings('.J_iframe').hide();
                             return false;
                         }
@@ -170,8 +249,8 @@ $(function () {
     }
     
     //点击 左菜单栏项 触发
-   // $('.J_menuItem').on('click', menuItem);
-    $('.J_menuItem').click(menuItem);
+    $('.J_menuItem').on('click', menuItem);
+    //$('.J_menuItem').click(menuItem);
     // 关闭选项卡菜单
     function closeTab() {
         var closeTabId = $(this).parents('.J_menuTab').data('id');

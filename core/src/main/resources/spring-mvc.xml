@@ -143,33 +143,34 @@
 
     <!-- 自定义拦截请求链接链配置 -->
     <mvc:interceptors>
-    	<!-- 自定义拦截器做权限的处理 -->
-		<!-- <mvc:interceptor>
-			<mvc:mapping path="/visa/*"/>
-			<mvc:mapping path="/visa/*/*"/>
-			<mvc:mapping path="/res/*/*"/>
+    	<!-- 登录拦截器 -->
+		<mvc:interceptor>
+			<!-- 需要拦截的路径 必须放在第一个 -->
 			<mvc:mapping path="/**"/>
+			<!-- 不拦截的路径 -->
+			<mvc:exclude-mapping path="/login/**"/>
+			<mvc:exclude-mapping path="/index.html"/>
+			<mvc:exclude-mapping path="/main.html"/>
 			<bean class="io.znz.jsite.core.interceptor.LoginInterceptor"/>
-		</mvc:interceptor> -->
-        <mvc:interceptor>
-            <mvc:mapping path="/*/*/create"/>
-            <mvc:mapping path="/*/*/delete/*"/>
-            <mvc:mapping path="/*/*/update"/>
-            <mvc:mapping path="/*/*/upload"/>
-            <bean class="io.znz.jsite.core.interceptor.LogInterceptor"/>
-        </mvc:interceptor>
+		</mvc:interceptor>
+        <!-- 
         <mvc:interceptor>
             <mvc:mapping path="/*"/>
             <bean class="io.znz.jsite.core.interceptor.SiteInterceptor"/>
-        </mvc:interceptor>
-		<!-- 自定义拦截器做权限的处理 -->
-		<mvc:interceptor>
-			<!-- <mvc:mapping path="/visa/*"/>
-			<mvc:mapping path="/visa/*/*"/> -->
-			<mvc:mapping path="/res/*/*"/>
-		<mvc:mapping path="/**"/>
-			<ref bean="loginInterceptor"/>
+        </mvc:interceptor> -->
+        
+        <!-- 权限拦截器 -->
+        <mvc:interceptor>
+			<!-- 需要拦截的路径 必须放在第一个 -->
+			<mvc:mapping path="/**"/>
+			
+			<!-- 不拦截的路径 -->
+			<mvc:exclude-mapping path="/login/**"/> 
+			<mvc:exclude-mapping path="/index.html"/>
+			<mvc:exclude-mapping path="/main.html"/>
+			<bean class="io.znz.jsite.core.interceptor.AuthorityInterceptor"/>
 		</mvc:interceptor>
+		
     </mvc:interceptors>
     <!-- 定义无需Controller的url<->view直接映射 -->
     <import resource="spring-route.xml"/>

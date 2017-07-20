@@ -110,6 +110,8 @@ public class NewCustomerJpDto {
 	private String passportreadnum;
 	//姓名电报码
 	private String nameTelegramCode;
+	//照片路径
+	private String phoneurl;
 
 	private NewWorkinfoJpEntity workinfo;
 
