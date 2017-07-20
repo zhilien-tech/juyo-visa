@@ -27,6 +27,7 @@ public class Scenic {
 	private Integer id;
 	private String name;
 	@Column(name = "name_jp")
+	@org.nutz.dao.entity.annotation.Column("name_jp")
 	private String nameJP;
 	private String city;
 

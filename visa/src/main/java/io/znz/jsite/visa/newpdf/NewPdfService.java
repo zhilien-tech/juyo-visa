@@ -28,6 +28,8 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeFieldType;
 import org.springframework.stereotype.Service;
 
+import com.uxuexi.core.common.util.Util;
+
 @Service
 public class NewPdfService {
 
@@ -77,8 +79,11 @@ public class NewPdfService {
 					NewTripplanJpEntity prev = trips.get(trips.size() - 1);
 					if (prev.getHotelid() == trip.getHotelid()) {
 						DateTime dt = new DateTime(trip.getNowdate());
-						dt = dt.withField(DateTimeFieldType.hourOfDay(), trip.getOuttime().getHours());
-						dt = dt.withField(DateTimeFieldType.minuteOfHour(), trip.getOuttime().getMinutes());
+						if (!Util.isEmpty(trip.getOuttime())) {
+
+							dt = dt.withField(DateTimeFieldType.hourOfDay(), trip.getOuttime().getHours());
+							dt = dt.withField(DateTimeFieldType.minuteOfHour(), trip.getOuttime().getMinutes());
+						}
 						prev.setOuttime(dt.toDate());
 					} else {
 						trips.add(trip);
