@@ -481,6 +481,7 @@ public class BasicInfoController extends BaseController {
 			customer.setVisaoffice(cusdto.getPassportsendoffice());//签发机关
 			customer.setPassportbooknum(cusdto.getPassportbooknum());//护照本号码
 			customer.setPassportreadnum(cusdto.getPassportreadnum());//护照机读码
+			customer.setPhoneurl(cusdto.getPhoneurl());//照片地址
 		}
 		//我有曾用名
 		List<NewOldnameJpEntity> father = dbDao.query(NewOldnameJpEntity.class,
@@ -562,6 +563,7 @@ public class BasicInfoController extends BaseController {
 			cus.setPassportsendoffice(customer.getVisaoffice());//签发机关
 			cus.setPassportbooknum(customer.getPassportbooknum());//护照本号码
 			cus.setPassportreadnum(customer.getPassportreadnum());//护照机读码
+			cus.setPhoneurl(customer.getPhoneurl());//照片地址
 			nutDao.updateIgnoreNull(cus);
 		}
 		//我有曾用名

@@ -9,6 +9,16 @@ window.onload = function(){
 	 $.getJSON(localhostPaht +'/visa/passportinfo/listPassport', function (resp) {
      	viewModel.set("customer", $.extend(true, dafaults, resp));
      });
+	 //预览 按钮
+     $("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
+     $(document).on('click','#preview',function(){
+     	$('#light').css('display','block');
+     	$('#fade').css('display','block');
+     	var phoneurl=viewModel.get("customer.phoneurl");
+     	if(phoneurl!=null&&phoneurl!=''){
+     		$("#imgId").attr('src',phoneurl);
+     	}
+     });
 }
 
 var firstPart ;
@@ -18,6 +28,8 @@ var country;
 var countrystatus;
 //页面加载时初始化各个组件
 $(function(){
+	//初始化上传按钮
+	uploadFile();
 	var aa = $.queryString("typeId");//得到签证进度在填写资料时跳转页面传来的参数
 	if(aa == null || aa == "" || aa == undefined){//表示不是从签证进度跳转而来
 		$("#nextStepBtn").hide();//隐藏下一步按钮
@@ -171,7 +183,7 @@ function successCallback(id){
 }
 //护照信息编辑保存
 $("#updatePassportSave").on("click",function(){
-	console.log(JSON.stringify(viewModel.customer));
+	//console.log(JSON.stringify(viewModel.customer));
 	$.ajax({
 		 type: "POST",
 		 url: "/visa/passportinfo/updatePassportSave",
@@ -181,9 +193,9 @@ $("#updatePassportSave").on("click",function(){
 			 layer.msg("修改成功",{time:2000});
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-			 console.log(XMLHttpRequest);
-			 console.log(textStatus);
-			 console.log(errorThrown);
+			 //console.log(XMLHttpRequest);
+			 //console.log(textStatus);
+			 //console.log(errorThrown);
              layer.msg('保存失败!',{time:2000});
          }
 	});
@@ -203,10 +215,70 @@ $("#nextStepBtn").click(function(){
 				  +escape(JSON.stringify(thirdPart))+"&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-			 console.log(XMLHttpRequest);
-			 console.log(textStatus);
-			 console.log(errorThrown);
+			 //console.log(XMLHttpRequest);
+			 //console.log(textStatus);
+			//console.log(errorThrown);
              layer.msg('保存失败!',{time:2000});
          }
 	});
 });
+//文件上传
+function uploadFile(){
+	var index=null;
+	$.fileupload1 = $('#uploadFile').uploadify({
+		'auto' : true,//选择文件后自动上传
+		'formData' : {
+			'fcharset' : 'uft-8'
+		},
+		'buttonText' : '上传',//按钮显示的文字
+		'fileSizeLimit' : '3000MB',
+		'fileTypeDesc' : '文件',//在浏览窗口底部的文件类型下拉菜单中显示的文本
+		 'fileTypeExts' : '*.png;*.jpg; *.jpeg; *.gif;',//上传文件的类型
+		'swf' : '/res/upload/uploadify.swf',//指定swf文件
+		'multi' : false,//multi设置为true将允许多文件上传
+		'successTimeout' : 1800, 
+		'uploader' : localhostPaht+'/visa/passportinfo/uploadFile',
+		//下面的例子演示如何获取到vid
+		'onUploadStart':function(file){
+			index = layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+		},
+		 'onUploadSuccess': function(file, data, response) {
+			 console.log(JSON.stringify(file));
+			 //console.log(data);
+			 //console.log(response);
+			 if(index!=null){
+				layer.close(index);
+			 }
+			 /*显示 预览 按钮*/
+		    viewModel.set("customer.phoneurl",data);
+            $("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
+            $(document).on('click','#preview',function(){
+	           	$('#light').css('display','block');
+	           	$('#fade').css('display','block');
+	           	var phoneurl=viewModel.get("customer.phoneurl");
+	           	if(phoneurl!=null&&phoneurl!=''){
+	           		$("#imgId").attr('src',phoneurl);
+	           	}
+           });
+		},
+       //加上此句会重写onSelectError方法【需要重写的事件】
+       'overrideEvents': ['onSelectError', 'onDialogClose'],
+       //返回一个错误，选择文件的时候触发
+       'onSelectError':function(file, errorCode, errorMsg){
+       	//console.log(errorMsg);
+           switch(errorCode) {
+               case -110:
+                   alert("文件 ["+file.name+"] 大小超出系统限制！");
+                   break;
+               case -120:
+                   alert("文件 ["+file.name+"] 大小异常！");
+                   break;
+               case -130:
+                   alert("文件 ["+file.name+"] 类型不正确！");
+                   break;
+           }
+       },
+       'onUploadError':function(file, errorCode, errorMsg, errorString){
+       }
+	});
+}

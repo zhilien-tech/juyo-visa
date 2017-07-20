@@ -54,6 +54,7 @@ import com.uxuexi.core.db.util.DbSqlUtil;
  */
 @Controller
 @Qualifier("loginController")
+@RequestMapping("login")
 public class LoginController extends BaseController {
 
 	@Autowired
@@ -141,6 +142,7 @@ public class LoginController extends BaseController {
 		String kaptchaExpected = (String) request.getSession().getAttribute(
 				com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
 		if (!Util.isEmpty(captcha)) {
+			List<FunctionEntity> functions = Lists.newArrayList();
 			if (captcha.equalsIgnoreCase(kaptchaExpected) || "8888".equals(captcha)) {
 				EmployeeEntity fetch = dbDao.fetch(EmployeeEntity.class, Cnd.where("telephone", "=", username));
 				if (!Util.isEmpty(fetch)) {
@@ -204,25 +206,22 @@ public class LoginController extends BaseController {
 						if (username.equals(telephone) && newpass.equals(pwd)) {//username为页面传来的用户名
 							if (UserLoginEnum.PERSONNEL.intKey() == logintype
 									&& UserLoginEnum.PERSONNEL.intKey() == userType) {//普通工作人员登录
-								List<FunctionEntity> employeeLoginFunction = loginAuthorityService
-										.employeeLoginFunction(userId, request);
-								String json = Json.toJson(employeeLoginFunction,
+								functions = loginAuthorityService.employeeLoginFunction(userId, request);
+								String json = Json.toJson(functions,
 										JsonFormat.compact().setDateFormat("yyyy-MM-dd HH:mm:ss"));
 								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));
 								return "redirect:" + to + "?auth=2,3,6,7," + str + "&username=" + fullname
 										+ "&logintype=" + logintype + "&empList=" + jsonEncode;
 							} else if (UserLoginEnum.PERSONNEL.intKey() == logintype
 									&& UserLoginEnum.COMPANY_ADMIN.intKey() == userType) {//公司管理员员登录
-								List<FunctionEntity> companyFunctions = authority
-										.getCompanyFunctions(comJob.getComId());
-								String json = Json.toJson(companyFunctions,
+								functions = authority.getCompanyFunctions(comJob.getComId());
+								String json = Json.toJson(functions,
 										JsonFormat.compact().setDateFormat("yyyy-MM-dd HH:mm:ss"));
 								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));
 								return "redirect:" + to + "?auth=2,3,6,7," + str + "&username=" + fullname
 										+ "&logintype=" + logintype + "&empList=" + jsonEncode;
 							} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype
 									&& UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {//游客身份登录
-								List<FunctionEntity> funList = Lists.newArrayList();
 								//我的签证
 								FunctionEntity usaf1 = new FunctionEntity();
 								usaf1.setId(7);
@@ -232,7 +231,7 @@ public class LoginController extends BaseController {
 								usaf1.setCreateTime(new Date());
 								usaf1.setRemark("我的签证");
 								usaf1.setSort(7);
-								funList.add(usaf1);
+								functions.add(usaf1);
 								//办理中签证
 								FunctionEntity usaf2 = new FunctionEntity();
 								usaf2.setId(8);
@@ -243,7 +242,7 @@ public class LoginController extends BaseController {
 								usaf2.setCreateTime(new Date());
 								usaf2.setRemark("办理中签证");
 								usaf2.setSort(8);
-								funList.add(usaf2);
+								functions.add(usaf2);
 								//我的资料
 								FunctionEntity usaf3 = new FunctionEntity();
 								usaf3.setId(9);
@@ -253,7 +252,7 @@ public class LoginController extends BaseController {
 								usaf3.setCreateTime(new Date());
 								usaf3.setRemark("我的资料");
 								usaf3.setSort(9);
-								funList.add(usaf3);
+								functions.add(usaf3);
 								if (!Util.isEmpty(usacreatetime)) {//美国游客权限
 									//美国护照信息
 									FunctionEntity usaf4 = new FunctionEntity();
@@ -265,7 +264,7 @@ public class LoginController extends BaseController {
 									usaf4.setCreateTime(new Date());
 									usaf4.setRemark("美国护照信息");
 									usaf4.setSort(10);
-									funList.add(usaf4);
+									functions.add(usaf4);
 									//美国基本信息
 									FunctionEntity usaf5 = new FunctionEntity();
 									usaf5.setId(11);
@@ -276,7 +275,7 @@ public class LoginController extends BaseController {
 									usaf5.setCreateTime(new Date());
 									usaf5.setRemark("美国基本信息");
 									usaf5.setSort(11);
-									funList.add(usaf5);
+									functions.add(usaf5);
 									//美国签证信息
 									FunctionEntity usaf6 = new FunctionEntity();
 									usaf6.setId(12);
@@ -287,7 +286,7 @@ public class LoginController extends BaseController {
 									usaf6.setCreateTime(new Date());
 									usaf6.setRemark("美国签证信息");
 									usaf6.setSort(12);
-									funList.add(usaf6);
+									functions.add(usaf6);
 								} else if (!Util.isEmpty(jpcreatetime)) {
 									//日本护照信息
 									FunctionEntity jpf1 = new FunctionEntity();
@@ -299,7 +298,7 @@ public class LoginController extends BaseController {
 									jpf1.setCreateTime(new Date());
 									jpf1.setRemark("日本护照信息");
 									jpf1.setSort(13);
-									funList.add(jpf1);
+									functions.add(jpf1);
 									//日本基本信息
 									FunctionEntity jpf2 = new FunctionEntity();
 									jpf2.setId(14);
@@ -310,7 +309,7 @@ public class LoginController extends BaseController {
 									jpf2.setCreateTime(new Date());
 									jpf2.setRemark("日本基本信息");
 									jpf2.setSort(14);
-									funList.add(jpf2);
+									functions.add(jpf2);
 									//日本签证信息
 									FunctionEntity jpf3 = new FunctionEntity();
 									jpf3.setId(15);
@@ -321,7 +320,7 @@ public class LoginController extends BaseController {
 									jpf3.setCreateTime(new Date());
 									jpf3.setRemark("日本签证信息");
 									jpf3.setSort(15);
-									funList.add(jpf3);
+									functions.add(jpf3);
 								}
 								//密码修改
 								FunctionEntity passf = new FunctionEntity();
@@ -333,23 +332,21 @@ public class LoginController extends BaseController {
 								passf.setCreateTime(new Date());
 								passf.setRemark("修改密码");
 								passf.setSort(16);
-								funList.add(passf);
-								String json = Json.toJson(funList,
+								functions.add(passf);
+								String json = Json.toJson(functions,
 										JsonFormat.compact().setDateFormat("yyyy-MM-dd HH:mm:ss"));
 								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));
 								return "redirect:" + to + "?auth=7,8,9,16," + str + "&username=" + fullname
 										+ "&logintype=" + logintype + "&empList=" + jsonEncode;
 							} else if (UserLoginEnum.SUPERMAN.intKey() == 3
 									&& UserLoginEnum.SUPERMAN.intKey() == userType) {//超级管理员登录
-								List<FunctionEntity> superAdministratorFunction = loginAuthorityService
-										.superAdministratorFunction();
-								String json = Json.toJson(superAdministratorFunction, JsonFormat.compact()
-										.setDateFormat("yyyy-MM-dd HH:mm:ss"));
+								functions = loginAuthorityService.superAdministratorFunction();
+								String json = Json.toJson(functions,
+										JsonFormat.compact().setDateFormat("yyyy-MM-dd HH:mm:ss"));
 								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));
 								return "redirect:" + to + "?auth=0," + str + "&username=" + fullname + "&logintype="
 										+ logintype + "&empList=" + jsonEncode;
 							} else if (UserLoginEnum.ADMIN.intKey() == 4 && UserLoginEnum.ADMIN.intKey() == userType) {//平台用户
-								List<FunctionEntity> funList = Lists.newArrayList();
 								//公司管理
 								FunctionEntity comf = new FunctionEntity();
 								comf.setId(4);
@@ -360,8 +357,8 @@ public class LoginController extends BaseController {
 								comf.setCreateTime(new Date());
 								comf.setRemark("公司管理");
 								comf.setSort(4);
-								funList.add(comf);
-								String json = Json.toJson(funList,
+								functions.add(comf);
+								String json = Json.toJson(functions,
 										JsonFormat.compact().setDateFormat("yyyy-MM-dd HH:mm:ss"));
 								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));
 								return "redirect:" + to + "?auth=4," + "&username=" + fullname + "&logintype=" + 4
@@ -380,8 +377,8 @@ public class LoginController extends BaseController {
 
 			} else {
 				model.addFlashAttribute("error", "验证码错误,请重试!");
-
 			}
+			request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 		}
 		String error = Encodes.encodeBase64(JSON.toJSONString(model.getFlashAttributes()));
 		model.addAttribute("e", error);
