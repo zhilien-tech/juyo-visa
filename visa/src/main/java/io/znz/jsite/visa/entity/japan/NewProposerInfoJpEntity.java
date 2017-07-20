@@ -58,4 +58,8 @@ public class NewProposerInfoJpEntity implements Serializable {
 	@Comment("姓名")
 	private String fullname;
 
+	public boolean getIsMainProposer() {
+		return this.ismainproposer;
+	}
+
 }
