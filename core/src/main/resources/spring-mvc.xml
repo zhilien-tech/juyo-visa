@@ -151,6 +151,7 @@
 			<mvc:exclude-mapping path="/login/**"/>
 			<mvc:exclude-mapping path="/index.html"/>
 			<mvc:exclude-mapping path="/main.html"/>
+			<mvc:exclude-mapping path="/visa/simulator/**"/>
 			<bean class="io.znz.jsite.core.interceptor.LoginInterceptor"/>
 		</mvc:interceptor>
         <!-- 

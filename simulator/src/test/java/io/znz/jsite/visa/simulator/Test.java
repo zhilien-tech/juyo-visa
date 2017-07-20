@@ -1,4 +1,4 @@
-package io.znz.jsite.visa.simulator;
+package io.znz.jsite.visa.simulator ;
 
 import com.alibaba.fastjson.JSON;
 import io.znz.jsite.visa.simulator.util.HttpClientUtil;

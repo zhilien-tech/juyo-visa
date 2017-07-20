@@ -179,8 +179,8 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 		c.setProvince(n.getNowprovince());
 		c.setCity(n.getNowcity());
 
-		c.setMobile(n.getPhone()); //手机
-		c.setPhone(n.getFamilyphone()); //座机
+		c.setMobile(n.getFamilyphone()); //第二联系电话
+		c.setPhone(n.getPhone()); //手机     第一联系电话
 		c.setEmail(n.getEmail()); //邮箱 
 
 		c.setAddress(n.getAddressbig());
