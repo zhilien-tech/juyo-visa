@@ -41,8 +41,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		//从session中取出当前登录用户信息
 		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute(Const.SESSION_NAME);
 		if (Util.isEmpty(user)) {
-			request.getRequestDispatcher("/index.html").forward(request, response);
-			response.sendRedirect("/");
+			//request.getRequestDispatcher("/index.html").forward(request, response);
+			response.sendRedirect("/index.html");
 			return false;
 		}
 		return true;

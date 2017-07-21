@@ -315,9 +315,56 @@ $("#join_army").change(function () {
     	viewModel.clear("customer.army");
     }
 });*/
+//=====================kendoui自定义验证开始====================
+/*$(function(){
+	$("#aaaa").kendoValidator({
+		validateOnBlur: true,
+		rules: {
+	      customRule1: function(input) {
+	    	  if(input.is("[name=idcard]")) {
+	    		  var fullComName = $("#card_id").val();
+	    		  if(fullComName==null || fullComName==""){
+		    		  return false;
+	    		  }
+	    	  }
+	    	  return true;
+	      },
+	      customRule2: function(input) {
+	    	  if(input.is("[name=idcard]")) {
+	    		  var customerSource = $("#card_id").val();
+	    		  //15位数身份证正则表达式
+	    		    var arg1 = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/;
+	    		    //18位数身份证正则表达式
+	    		    var arg2 = /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[A-Z])$/;
+	    		    if (customerSource.match(arg1) == null && customerSource.match(arg2) == null) {
+	    		        return false;
+	    		    }
+	    		    else {
+	    		        return true;
+	    		    }
+	    	  }
+	    	  return true;
+	      }
+	},
+		//自定义验证消息
+		messages: {
+			customRule1: "身份证不能为空",
+			customRule2: "身份证格式不正确"
+			
+		  }
+			
+	});
+
+});*/
 
 
 
+
+
+
+
+
+//=====================kendoui自定义验证结束====================
 //存放空的数组
 var emptyNum=[];
 //存放格式错误的数组
