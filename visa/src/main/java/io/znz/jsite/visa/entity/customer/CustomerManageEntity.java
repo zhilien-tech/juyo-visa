@@ -26,10 +26,10 @@ public class CustomerManageEntity {
 	@Column
 	@Id(auto = true)
 	@Comment("主键")
-	private Integer id;
+	private long id;
 	@Column
-	@Comment("序号")
-	private Integer serialNumber;
+	@Comment("公司id")
+	private long comId;
 	@Column
 	@Comment("公司全名")
 	private String fullComName;

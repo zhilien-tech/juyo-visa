@@ -22,9 +22,9 @@ import com.uxuexi.core.web.form.AddForm;
 @EqualsAndHashCode(callSuper = true)
 public class CustomerAddForm extends AddForm {
 	//主键
-	private Integer id;
+	private long id;
 	//序号
-	private Integer serialNumber;
+	private long comId;
 	//公司全名
 	private String fullComName;
 	//客户来源

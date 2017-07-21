@@ -7,13 +7,15 @@
 package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.BaseController;
+import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
+import io.znz.jsite.core.util.Const;
 import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
 import io.znz.jsite.visa.forms.customerform.CustomerAddForm;
 import io.znz.jsite.visa.forms.customerform.CustomerSqlForm;
 import io.znz.jsite.visa.forms.customerform.CustomerUpdateForm;
 import io.znz.jsite.visa.service.CustomerViewService;
 
-import java.util.Date;
+import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -27,10 +29,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
-import com.uxuexi.core.web.util.FormUtil;
 
 /**
  * 客户管理控制类
@@ -55,7 +58,13 @@ public class CustomerManageContrller extends BaseController {
 	 */
 	@RequestMapping(value = "customerlist")
 	@ResponseBody
-	public Object customerlist(@RequestBody CustomerSqlForm sqlForm) {
+	public Object customerlist(@RequestBody CustomerSqlForm sqlForm, final HttpSession session) {
+		//通过session获取公司的id
+		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		long comId = company.getComId();//得到公司的id
+		if (!Util.isEmpty(comId)) {
+			sqlForm.setComId(comId);
+		}
 		Pager pager = new Pager();
 		pager.setPageNumber(sqlForm.getPageNumber());
 		pager.setPageSize(sqlForm.getPageSize());
@@ -76,13 +85,10 @@ public class CustomerManageContrller extends BaseController {
 	 * 添加数据操作
 	 * @param addForm
 	 */
-	@RequestMapping(value = "addData")
+	@RequestMapping(value = "addData", method = RequestMethod.POST)
 	@ResponseBody
-	@POST
-	public Object addData(CustomerAddForm addForm) {
-		addForm.setCreateTime(new Date());
-		CustomerManageEntity cusdto = FormUtil.add(dbDao, addForm, CustomerManageEntity.class);
-		return cusdto;
+	public Object addData(CustomerAddForm addForm, final HttpSession session) {
+		return customerViewService.addData(addForm, session);
 	}
 
 	/**
