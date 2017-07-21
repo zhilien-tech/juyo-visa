@@ -28,6 +28,7 @@ var countries = new kendo.data.DataSource({
         }
     }),
     dafaults = {
+			gender:0,
 			birthcountry:"CHIN",
 			nowcountry:"CHIN",
 			passportlose:{
@@ -317,24 +318,20 @@ $("#join_army").change(function () {
 
 
 
-
+//存放空的数组
+var emptyNum=[];
+//存放格式错误的数组
+var errorNum=[];
 
 //信息保存
 var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
 $("#saveCustomerData").on("click",function(){
-	
-    //验证————————————————————————————————————
-    $('.k-tooltip-validation').each(function(){
-    	var verificationText=$(this).text().trim();//获取验证的文字信息
-    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
-    	labelVal = labelVal.split(":");
-    	labelVal.pop();
-    	labelVal = labelVal.join(":");//截取 :之前的信息
-    	console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
-    });
-    //end 验证————————————————————————————————
+ 
 	
 	if(validatable.validate()){
+		//清空验证的数组
+		emptyNum.splice(0,emptyNum.length);
+		errorNum.splice(0,errorNum.length);
 		 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 		 viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
 	/*var error=JSON.stringify(map);
@@ -368,6 +365,49 @@ $("#saveCustomerData").on("click",function(){
              layer.msg('保存失败!',{time:2000});
          }
 	});
+	}else{
+		   //验证————————————————————————————————————
+	    $('.k-tooltip-validation').each(function(){
+	    	var verificationText=$(this).text().trim();//获取验证的文字信息
+	    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
+	    	labelVal = labelVal.split(":");
+	    	labelVal.pop();
+	    	labelVal = labelVal.join(":");//截取 :之前的信息
+	    	var person=new Object();
+	    	person.text=labelVal;
+	    	person.error="";
+	    	if(verificationText.indexOf("不能为空")>0){
+	    		emptyNum.push(person);
+	    	}else{
+	    		errorNum.push(person);
+	    		
+	    	}
+	    	console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
+	    });
+	    //end 验证————————————————————————————————
+		
+		
+		
+		
+		var str="";
+		if(emptyNum.length>0){
+			
+			for(var i=0;i<emptyNum.length;i++){
+				str+=emptyNum[i].text+",";
+			}
+			str+="不能为空！"
+		}
+		if(errorNum.length>0){
+			
+			for(var i=0;i<errorNum.length;i++){
+				str+=errorNum[i].text+",";
+			}
+			str+="格式不正确！";
+		}
+		$.layer.alert(str);
+		//用完清空
+		emptyNum.splice(0,emptyNum.length);
+		errorNum.splice(0,errorNum.length);
 	}
 });
 
@@ -423,6 +463,25 @@ $(function () {
     if (oid) {
         $.getJSON("/visa/newcustomer/showDetail?customerid=" + oid, function (resp) {
         	viewModel.set("customer", $.extend(true, dafaults, resp));
+        	//设置默认值
+        	var birthcountry=viewModel.get("customer.birthcountry");
+			if(birthcountry!=null&&birthcountry!=''){
+			}else{
+				viewModel.set("customer.birthcountry","CHIN");
+				
+			}
+			var nowcountry=viewModel.get("customer.nowcountry");
+			if(nowcountry!=null&&nowcountry!=''){
+			}else{
+				viewModel.set("customer.nowcountry","CHIN");
+				
+			}
+			var sendcountry=viewModel.get("customer.passportlose.sendcountry");
+			if(sendcountry!=null&&sendcountry!=''){
+			}else{
+				
+				viewModel.set("customer.passportlose.sendcountry","CHIN");
+			}
         	var phoneurl=viewModel.get("customer.phoneurl");
         	if(phoneurl!=null&&phoneurl!=''){
         		$("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');

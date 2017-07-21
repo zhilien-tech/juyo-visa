@@ -78,7 +78,7 @@ $(function () {
 		    				}
 		    			}
 		    			if(a>0){
-		    				html+='<li><a href="javascript:;" class="J_menuItem1" id="'+emp[i].id+'"><i class="fa fa-building"></i><span class="nav-label" >'+emp[i].funName+'</span><span class="fa arrow"></span></a>'
+		    				html+='<li><a href="javascript:;" class="J_menuItem1" id="'+emp[i].id+'"><i class="'+emp[i].portrait+'"></i><span class="nav-label" >'+emp[i].funName+'</span><span class="fa arrow"></span></a>'
 		                	html+='<ul class="nav nav-second-level">';
 		    	    		for(var j=i+1;j<emp.length;j++){
 		    	    			if(emp[i].id==emp[j].parentId){
@@ -88,7 +88,7 @@ $(function () {
 		    	    		html+= '</ul>';
 		           			html+='</li>';
 		    			}else{
-		    				html+='<li><a href="'+emp[i].url+'" class="J_menuItem" id="'+emp[i].id+'"><span class="nav-label" >'+emp[i].funName+'</span></a>'
+		    				html+='<li><a href="'+emp[i].url+'" class="J_menuItem" id="'+emp[i].id+'"><i class="'+emp[i].portrait+'"></i><span class="nav-label" >'+emp[i].funName+'</span></a>'
 		           			html+='</li>';
 		    			}
 		    		}

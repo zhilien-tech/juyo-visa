@@ -18,6 +18,7 @@ import io.znz.jsite.visa.entity.japan.NewProposerInfoJpEntity;
 import io.znz.jsite.visa.entity.japan.NewRecentlyintojpJpEntity;
 import io.znz.jsite.visa.entity.japan.NewWorkinfoJpEntity;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ibm.icu.text.SimpleDateFormat;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
 
@@ -57,7 +59,23 @@ public class NewCustomerJpService {
 
 	@Transactional(readOnly = true)
 	public Object save(NewCustomerJpEntity customer) {
+		//身份证号的截取
+		String idcard = customer.getIdcard();
+		if (!Util.isEmpty(idcard)) {
+			String birthday = idcard.substring(6, 14);
+			SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+			try {
+				Date parse = df.parse(birthday);
+				if (!Util.isEmpty(parse)) {
+					customer.setBirthday(parse);
+				}
+			} catch (ParseException e) {
 
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
+			}
+		}
 		String xing = customer.getChinesexing();
 		String name = customer.getChinesename();
 		if (!Util.isEmpty(xing) && !Util.isEmpty(name)) {
