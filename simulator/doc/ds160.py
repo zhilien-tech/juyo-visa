@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import time
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
