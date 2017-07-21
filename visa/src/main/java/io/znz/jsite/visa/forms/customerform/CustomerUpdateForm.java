@@ -22,8 +22,8 @@ import com.uxuexi.core.web.form.ModForm;
 @EqualsAndHashCode(callSuper = true)
 public class CustomerUpdateForm extends ModForm {
 
-	//序号
-	private Integer serialNumber;
+	//公司id
+	private long comId;
 	//公司全名
 	private String fullComName;
 	//客户来源

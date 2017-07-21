@@ -363,10 +363,66 @@ public class LoginController extends BaseController {
 								comf.setCreateTime(new Date());
 								comf.setRemark("公司管理");
 								comf.setSort(4);
+								comf.setPortrait("fa fa-building-o");
 								functions.add(comf);
 								/*String json = Json.toJson(functions,
 										JsonFormat.compact().setDateFormat("yyyy-MM-dd HH:mm:ss"));
 								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));*/
+								//系统设置
+								FunctionEntity sysfun = new FunctionEntity();
+								sysfun.setId(20);
+								sysfun.setParentId(0);
+								sysfun.setFunName("系统设置");
+								sysfun.setLevel(1);
+								sysfun.setCreateTime(new Date());
+								sysfun.setRemark("系统设置");
+								sysfun.setSort(20);
+								sysfun.setPortrait("fa fa-cogs");
+								functions.add(sysfun);
+								//照片参数
+								FunctionEntity photoparm = new FunctionEntity();
+								photoparm.setId(21);
+								photoparm.setParentId(20);
+								photoparm.setFunName("照片参数");
+								photoparm.setUrl("photo.html");
+								photoparm.setLevel(2);
+								photoparm.setCreateTime(new Date());
+								photoparm.setRemark("照片参数");
+								photoparm.setSort(21);
+								functions.add(photoparm);
+								//航班信息
+								FunctionEntity flyinfo = new FunctionEntity();
+								flyinfo.setId(22);
+								flyinfo.setParentId(20);
+								flyinfo.setFunName("航班信息");
+								flyinfo.setUrl("flight.html");
+								flyinfo.setLevel(2);
+								flyinfo.setCreateTime(new Date());
+								flyinfo.setRemark("航班信息");
+								flyinfo.setSort(22);
+								functions.add(flyinfo);
+								//酒店管理
+								FunctionEntity hotelmanage = new FunctionEntity();
+								hotelmanage.setId(23);
+								hotelmanage.setParentId(20);
+								hotelmanage.setFunName("航班信息");
+								hotelmanage.setUrl("hotel.html");
+								hotelmanage.setLevel(2);
+								hotelmanage.setCreateTime(new Date());
+								hotelmanage.setRemark("航班信息");
+								hotelmanage.setSort(23);
+								functions.add(hotelmanage);
+								//景点管理
+								FunctionEntity scenicmanage = new FunctionEntity();
+								scenicmanage.setId(24);
+								scenicmanage.setParentId(20);
+								scenicmanage.setFunName("景点管理");
+								scenicmanage.setUrl("scenic.html");
+								scenicmanage.setLevel(2);
+								scenicmanage.setCreateTime(new Date());
+								scenicmanage.setRemark("航班信息");
+								scenicmanage.setSort(24);
+								functions.add(scenicmanage);
 								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 								return "redirect:" + to + "?auth=4," + "&username=" + fullname + "&logintype=" + 4;
 							} else {

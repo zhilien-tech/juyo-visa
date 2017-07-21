@@ -57,7 +57,7 @@ public class NewOrderEntity {
 	@Column
 	private String remaker;
 	@Column
-	private int cus_management_id;
+	private long cus_management_id;
 	@Column
 	private int headcount;
 	private int visatype;

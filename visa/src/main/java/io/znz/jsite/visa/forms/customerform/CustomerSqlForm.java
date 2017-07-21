@@ -29,9 +29,9 @@ import com.uxuexi.core.common.util.Util;
 @EqualsAndHashCode(callSuper = true)
 public class CustomerSqlForm extends KenDoParamForm {
 	//主键
-	private Integer id;
+	private long id;
 	//序号
-	private Integer serialNumber;
+	private long comId;
 	//公司全名
 	private String fullComName;
 	//客户来源
@@ -71,7 +71,7 @@ public class CustomerSqlForm extends KenDoParamForm {
 			cnd.and("vcm.fullComName", "like", "%" + keyword + "%").or("vcm.linkman", "like", "%" + keyword + "%")
 					.or("vcm.telephone", "like", "%" + keyword + "%");
 		}
-
+		cnd.and("vcm.comId", "=", comId);
 		cnd.orderBy("vcm.createTime", "DESC");
 		return cnd;
 	}
