@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
     <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/>
 </head>
-<body>
+<body id="aaa">
 <div>
 	<!--搜索条件 模块-->
     <div class="Search">
@@ -699,7 +699,9 @@
                                     <div class="form-group">
                                         <label for="us_contact_address">美国联系地址:</label>
                                         <div class='input-group'>
-                                            <input id="us_contact_address" class="k-textbox" style="width: 100%;"
+                                            <input id="us_contact_address" class="k-textbox" 
+                                            	   style="width: 100%;"
+                                            	   required validationMessage="美国联系地址不能为空" name="detailaddress"
                                                    data-bind="value:customer.trip[0].detailaddress"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -714,8 +716,12 @@
                                     <div class="form-group">
                                         <label for="us_contact_phone">电话号码:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="us_contact_phone" class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.trip[0].phone"/>
+                                            <input id="us_contact_phone" 
+                                            	   class="k-textbox" style="width: 100%;"
+                                                   data-bind="value:customer.trip[0].phone" 
+                                                   required validationMessage="电话号码不能为空" name="phone"
+                                                   pattern="^[1][34578][0-9]{9}$"
+                                            />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -724,8 +730,10 @@
                                     <div class="form-group">
                                         <label for="us_contact_zip_code">电子邮件:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="us_contact_zip_code" class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.trip[0].linkzipcode"/>
+                                            <input  id="us_contact_zip_code" 
+                                            		class="k-textbox" style="width: 100%;"
+                                            		required validationMessage="电子邮件不能为空" name="linkzipcode"
+                                                    data-bind="value:customer.trip[0].linkzipcode"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -743,8 +751,10 @@
                                     <div class="form-group">
                                         <label for="f_last_name_cn">父亲姓:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="f_last_name_cn" class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.father.xing"/>
+                                            <input id="f_last_name_cn" class="k-textbox" 
+                                            	   style="width: 100%;" data-bind="value:customer.father.xing"
+                                            	   required validationMessage="父亲姓不能为空" name="xing"
+                                            />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -754,7 +764,9 @@
                                         <label for="f_first_name_cn">父亲名:<span style="color: red">*</span></label>
                                         <div class='input-group'>
                                             <input id="f_first_name_cn" class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.father.name"/>
+                                                   data-bind="value:customer.father.name"
+                                            	   required validationMessage="父亲名不能为空" name="name"
+                                            />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -782,8 +794,10 @@
                                     <div class="form-group">
                                         <label for="m_last_name_cn">母亲姓:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="m_last_name_cn" class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.mother.xing"/>
+                                            <input id="m_last_name_cn" class="k-textbox" 
+                                            	   style="width: 100%;" data-bind="value:customer.mother.xing"
+                                            	   required validationMessage="母亲姓不能为空" name="xing"
+                                            />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -792,8 +806,10 @@
                                     <div class="form-group">
                                         <label for="m_first_name_cn">母亲名:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="m_first_name_cn" class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.mother.name"/>
+                                            <input id="m_first_name_cn" class="k-textbox" 
+                                            	   style="width: 100%;" data-bind="value:customer.mother.name"
+                                            	   required validationMessage="母亲名不能为空" name="name"
+                                            />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>

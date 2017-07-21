@@ -453,10 +453,21 @@ $("#join_group").change(function () {
 $("#has_assist_apply").change(function () {
 	viewModel.set("customer.applicantproducer", $(this).is(':checked') ? " " : "");
 });
-
+/****************************************************表单验证***********************************************************/
 //签证信息保存
 $("#updatePassportSave").on("click",function(){
-	console.log(JSON.stringify(viewModel.customer));
+	var phone=document.getElementById("us_contact_phone");
+	alert(typeof phone);
+	phone.onblur=function(){
+	    if(phone.value){
+	    	phone.setCustomValidity("");//现将有输入时的提示设置为空
+	    }else if(phone.validity.valueMissing){
+	    	phone.setCustomValidity("电话号码不能为空");  
+	    };
+	    if(phone.validity.patternMismatch){ 
+	    	phone.setCustomValidity("电话号码格式有误");
+	    }
+	};
 	viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
 	$.ajax({
 		 type: "POST",

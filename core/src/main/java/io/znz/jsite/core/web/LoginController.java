@@ -233,6 +233,7 @@ public class LoginController extends BaseController {
 								usaf1.setCreateTime(new Date());
 								usaf1.setRemark("我的签证");
 								usaf1.setSort(7);
+								usaf1.setPortrait("fa fa-arrows-h");
 								functions.add(usaf1);
 								//办理中签证
 								FunctionEntity usaf2 = new FunctionEntity();
@@ -253,6 +254,7 @@ public class LoginController extends BaseController {
 								usaf3.setLevel(1);
 								usaf3.setCreateTime(new Date());
 								usaf3.setRemark("我的资料");
+								usaf3.setPortrait("fa fa-list-alt");
 								usaf3.setSort(9);
 								functions.add(usaf3);
 								if (!Util.isEmpty(usacreatetime)) {//美国游客权限
