@@ -33,6 +33,7 @@ public class NewOrderJapanSqlForm extends KenDoParamForm {
 	private Date end_time;
 	private String keywords;
 	private Integer state;
+	private long comId;
 
 	@Override
 	public Sql sql(SqlManager paramSqlManager) {
@@ -75,7 +76,9 @@ public class NewOrderJapanSqlForm extends KenDoParamForm {
 			SqlExpressionGroup e2 = Cnd.exps("vncj.status", "=", state);
 			cnd.and(e1).or(e2);
 		}
-
+		if (!Util.isEmpty(comId) && comId > 0) {
+			cnd.and("comId", "=", comId);
+		}
 		cnd.orderBy("vnoj.updatetime", "desc");
 		cnd.groupBy("vnoj.id");
 		return cnd;

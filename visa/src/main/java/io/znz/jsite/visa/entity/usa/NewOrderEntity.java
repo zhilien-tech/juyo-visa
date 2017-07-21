@@ -84,6 +84,8 @@ public class NewOrderEntity {
 	@Column
 	private int customerSource;//客户来源
 	@Column
+	private long comId;//客户来源
+	@Column
 	private Date createtime;
 	@Column
 	private Date updatetime;
