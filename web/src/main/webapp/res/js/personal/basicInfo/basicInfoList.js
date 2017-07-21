@@ -438,6 +438,9 @@ function saveBaseInfoData(){
 //点击下一步时跳转至签证信息
 $("#nextStepBtn").click(function(){
 	if(validatable.validate()){
+		//清空验证的数组
+		emptyNum.splice(0,emptyNum.length);
+		errorNum.splice(0,errorNum.length);
 		$.ajax({
 			 type: "POST",
 			 url: "/visa/basicinfo/updateBaseInfoData",
