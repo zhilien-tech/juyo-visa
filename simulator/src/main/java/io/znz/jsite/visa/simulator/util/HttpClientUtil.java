@@ -12,6 +12,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.http.HttpEntity;
@@ -80,15 +81,25 @@ public class HttpClientUtil {
 		return body;
 	}
 
-	public static String upload(String url, String file, String fileName) {
+	public static String upload(String url, File file, Map<String, String> params) {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost post = new HttpPost(url);
 		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 		builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-		File f = new File(file);
-		builder.addBinaryBody("file", f, ContentType.DEFAULT_BINARY, fileName);
-		builder.addTextBody("path", "ds160");
-		builder.addTextBody("rename", "false");
+
+		String fileName = file.getName();
+		builder.addBinaryBody("file", file, ContentType.DEFAULT_BINARY, fileName);
+
+		if (null != params && !params.isEmpty()) {
+			Set<String> keySet = params.keySet();
+			for (String key : keySet) {
+				String value = params.get(key);
+				if (null != value && !"".equals(value.trim())) {
+					builder.addTextBody(key, value);
+				}
+			}
+		}
+
 		HttpEntity entity = builder.build();
 		post.setEntity(entity);
 		String body = invoke(httpclient, post);

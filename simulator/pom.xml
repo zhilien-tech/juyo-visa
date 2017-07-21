@@ -20,6 +20,8 @@
         <joda-time.version>2.9.4</joda-time.version>
         <httpclient.version>4.5.1</httpclient.version>
         <xdocreport.version>2.0.0</xdocreport.version>
+        
+        <common.version>1.0.0</common.version>
     </properties>
 
     <!-- 设定主仓库，按设定顺序进行查找。 -->
@@ -42,7 +44,15 @@
 
 
     <dependencies>
-        <!-- 通用的工具包 -->
+    	<!-- 通用工具-->
+		<dependency>
+			<groupId>com.we</groupId>
+			<artifactId>we-core-common</artifactId>
+			<version>${common.version}</version>
+			<scope>compile</scope>
+		</dependency>
+    
+        <!-- apache工具包 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>

@@ -8,6 +8,7 @@ package io.znz.jsite.visa.simulator.service;
 
 import io.znz.jsite.base.NutzBaseService;
 import io.znz.jsite.base.bean.ResultObject;
+import io.znz.jsite.download.impl.QiniuUploadServiceImpl;
 import io.znz.jsite.exception.JSiteException;
 import io.znz.jsite.util.DateUtils;
 import io.znz.jsite.util.StringUtils;
@@ -63,6 +64,7 @@ import io.znz.jsite.visa.simulator.dto.TravelDto;
 import io.znz.jsite.visa.simulator.dto.UsaDto;
 import io.znz.jsite.visa.simulator.dto.WorkDto;
 
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -83,6 +85,7 @@ import org.nutz.log.Logs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -114,6 +117,23 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 
 	@Autowired
 	private TelecodeService telecodeService;
+
+	@Autowired
+	private QiniuUploadServiceImpl qiniuUploadService;
+
+	public Object usaUpload(final MultipartFile file, final long cid) {
+		String fileUrl = null;
+		try {
+			InputStream inputStream = file.getInputStream();
+			fileUrl = qiniuUploadService.uploadImage(inputStream, "zip", null);
+		} catch (Exception e) {
+			return ResultObject.fail("文件上传错误！");
+		}
+
+		//TODO  为客户设置文件地址，签证状态改为'已提交'
+
+		return ResultObject.success(fileUrl);
+	}
 
 	/**查询第一个可提交签证网站的客户信息*/
 	public ResultObject fetchCustomer4SimulatorUSA() {
