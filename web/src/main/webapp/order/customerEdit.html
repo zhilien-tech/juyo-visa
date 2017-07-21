@@ -46,7 +46,7 @@
                                     </div>
                                 </div>
                             </div>             
-                              <!--   上传测试   -->
+                              <!--  上传测试   -->
                               <div class="row">
                                 <div class="col-xs-12">
                                 	<div class="form-group">
@@ -141,8 +141,11 @@
                                     <div class="form-group">
                                         <label for="signed_at">护照签发日期:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="signed_at" style="width: 100%;" data-role="datepicker" required validationMessage="护照签发日期不能为空" name="passportsenddate"
+                                            <!-- <input id="signed_at" style="width: 100%;" data-role="datepicker" required validationMessage="护照签发日期不能为空" name="passportsenddate"
+                                                   data-bind="value:customer.passportsenddate,events:{change:onDateChange}"/> -->
+                                                   <input id="signed_at" style="width: 100%;" data-role="datepicker" required validationMessage="护照签发日期不能为空" name="passportsenddate"
                                                    data-bind="value:customer.passportsenddate,events:{change:onDateChange}"/>
+                                                   <span class="k-invalid-msg" data-for="passportsenddate" ></span><!-- 验证提示语 -->
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -151,8 +154,11 @@
                                     <div class="form-group">
                                         <label for="expire_at">护照有效日期:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="expire_at" style="width: 100%;" data-role="datepicker" required validationMessage="护照有效日期不能为空" name="passporteffectdate"
+                                            <!-- <input id="expire_at" style="width: 100%;" data-role="datepicker" required validationMessage="护照有效日期不能为空" name="passporteffectdate"
+                                                   data-bind="value:customer.passporteffectdate,events:{change:onDateChange}"/> -->
+                                                   <input id="expire_at" style="width: 100%;" data-role="datepicker" required validationMessage="护照有效日期不能为空" name="passporteffectdate"
                                                    data-bind="value:customer.passporteffectdate,events:{change:onDateChange}"/>
+                                                   <span class="k-invalid-msg" data-for="passporteffectdate" ></span><!-- 验证提示语 -->
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -3111,11 +3117,11 @@ $(function(){
 			index = layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 		},
 		 'onUploadSuccess': function(file, data, response) {
-			 console.log(file);
+			 ///console.log(file);
 			/* 	var jsonobj = eval('(' + data + ')');
 				var url  = jsonobj;//地址 */
-				console.log(data);
-			 console.log(response);
+				///console.log(data);
+			 ///console.log(response);
 			/*  alert(typeof data); */
 			 if(index!=null){
 					layer.close(index);
@@ -3129,7 +3135,7 @@ $(function(){
             	$('#fade').css('display','block');
             	var phoneurl=viewModel.get("customer.phoneurl");
             	if(phoneurl!=null&&phoneurl!=''){
-            		console.log("1111111====="+phoneurl);
+            		///console.log("1111111====="+phoneurl);
             		$("#imgId").attr('src',phoneurl);
             	}
             });
@@ -3138,7 +3144,7 @@ $(function(){
         'overrideEvents': ['onSelectError', 'onDialogClose'],
         //返回一个错误，选择文件的时候触发
         'onSelectError':function(file, errorCode, errorMsg){
-        	console.log(errorMsg);
+        	///console.log(errorMsg);
             switch(errorCode) {
                 case -110:
                     alert("文件 ["+file.name+"] 大小超出系统限制！");

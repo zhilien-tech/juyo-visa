@@ -429,7 +429,7 @@ $("#saveCustomerData").on("click",function(){
 	    		errorNum.push(person);
 	    		
 	    	}
-	    	console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
+	    	///console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
 	    });
 	    //end 验证————————————————————————————————
 		

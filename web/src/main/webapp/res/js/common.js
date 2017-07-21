@@ -192,28 +192,26 @@ function getListforMap()
         var tip = $(this);
         
         var labelName=tip.parents('.form-group').find("label").text();//获取对应的字段名称
-        //tip.find("i").toggleClass("fa-pulse fa-spinner fa-lightbulb-o");//变转圈圈效果~
         tip.toggleClass("yellow");//灯泡变为黄色
         var node = tip.parent().find(":text,select");
 
         var key=labelName.substring(0,labelName.indexOf(":"));
-        //if(tip.find("i").hasClass('fa-lightbulb-o')){
         if(tip.hasClass('yellow')){//变黄
-        	tip.prev().css('border-color','rgb(241, 116, 116)');//input 变红
+        	//tip.prev().css('border-color','rgb(241, 116, 116)');//input 变红
+        	tip.parent().find('input').css('border-color','rgb(241, 116, 116)');//input 变红
         	tip.prev().find('.k-dropdown-wrap').css('border-color','rgb(241, 116, 116)');//select 变红
-        	tip.prev().find('.k-picker-wrap').css('border-color','rgb(241, 116, 116)');//data 变红
+        	//tip.prev().find('.k-picker-wrap').css('border-color','rgb(241, 116, 116)');//data 变红
+        	tip.parent().find('.k-picker-wrap').css('border-color','rgb(241, 116, 116)');//data 变红
         	map.put(key,"1");
         	map[labelName]=1;
-        	//console.log(JSON.stringify(map));
         }else{//变灰
-        	tip.prev().css('border-color','#8f8f8f');//input 变灰
+        	//tip.prev().css('border-color','#8f8f8f');//input 变灰
+        	tip.parent().find('input').css('border-color','#8f8f8f');//input 变灰
         	tip.prev().find('.k-dropdown-wrap').css('border-color','#8f8f8f');//select 变灰
-        	tip.prev().find('.k-picker-wrap').css('border-color','#8f8f8f');//data 变灰
-        	
+        	//tip.prev().find('.k-picker-wrap').css('border-color','#8f8f8f');//data 变灰
+        	tip.parent().find('.k-picker-wrap').css('border-color','#8f8f8f');//data 变灰
         	tip.removeClass('yellow');
         	map.remove(key);
-        	//console.log(JSON.stringify(map));
-        	
         }
     });
     

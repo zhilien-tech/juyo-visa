@@ -328,6 +328,9 @@ var grid = $("#grid").kendoGrid({
         }
     ]
 }).data("kendoGrid");
+
+
+
 //页面刷新
 function successCallback(id){
 	//grid.GetJQuery().refresh();
