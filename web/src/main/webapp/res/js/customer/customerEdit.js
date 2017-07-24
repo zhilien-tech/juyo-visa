@@ -233,11 +233,11 @@ kendo.bind($(document.body), viewModel);
 
 //丢过护照
 $("#pp_lost").change(function () {
-	console.log("==1==="+JSON.stringify(viewModel.customer.passportlose));
+	///console.log("==1==="+JSON.stringify(viewModel.customer.passportlose));
 	var a={"sendcountry":"CHIN","customerid":0,"id":0,"passport":"","reason":"","reasonen":""};
 	var b={"sendcountry":"CHIN","customerid":0,"id":-1,"passport":"","reason":"","reasonen":""};
 	viewModel.set("customer.passportlose", $(this).is(':checked') ? a : b);
-	console.log("===2=="+JSON.stringify(viewModel.customer.passportlose));
+	///console.log("===2=="+JSON.stringify(viewModel.customer.passportlose));
 });
 /*$("#pp_lost").change(function () {
 	alert($(this).is(':checked'));
@@ -419,7 +419,7 @@ $("#saveCustomerData").on("click",function(){
 		viewModel.set("customer.errorinfo",JSON.stringify(map));
 		map.clear();
 	}*/
-		 console.log("====="+JSON.stringify(viewModel.customer));
+		 //console.log("====="+JSON.stringify(viewModel.customer));
 	$.ajax({
 		 type: "POST",
 		 url: "/visa/newcustomer/customerSave",
@@ -429,7 +429,7 @@ $("#saveCustomerData").on("click",function(){
 			 if(indexnew!=null){
 				 layer.close(indexnew);
 			 }
-			 console.log(result);
+			 //console.log(result);
 			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			 parent.layer.close(index);
 			 window.parent.successCallback('1');
@@ -438,9 +438,6 @@ $("#saveCustomerData").on("click",function(){
 			 if(indexnew!=null){
 				 layer.close(indexnew);
 			 }
-			 console.log(XMLHttpRequest);
-			 console.log(textStatus);
-			 console.log(errorThrown);
              layer.msg('保存失败!',{time:2000});
          }
 	});
