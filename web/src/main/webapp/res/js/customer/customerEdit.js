@@ -70,6 +70,7 @@ var countries = new kendo.data.DataSource({
 /*****************************************************
  * 数据绑定
  ****************************************************/
+var passportnum=0;
 var viewModel = kendo.observable({
     customer: dafaults,
     countries:countries,
@@ -180,10 +181,26 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-    	var oldPassportEnable = viewModel.get("customer.passportlose");
+    	/*var oldPassportEnable = viewModel.get("customer.passportlose");
     	var state = oldPassportEnable ? oldPassportEnable.length > 0 : false;
-        return state;
-       ///return viewModel.get("customer.passportlose");
+        return state;*/
+    	var a=viewModel.get("customer.passportlose.id");
+    	if(a>0){
+    		return true;
+    	}else if(a<0){
+    		return false;
+    	}else{
+    		if(passportnum<4){
+    			passportnum++;
+    			return false;
+    		}else{
+    			return true;
+    		}
+    		
+    	}
+    	return false;
+    	alert(111);
+       //return viewModel.get("customer.passportlose");
     },
     // 曾用名
     oldNameEnable: function () {
@@ -228,7 +245,11 @@ kendo.bind($(document.body), viewModel);
 
 //丢过护照
 $("#pp_lost").change(function () {
-	viewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
+	console.log("==1==="+JSON.stringify(viewModel.customer.passportlose));
+	var a={"sendcountry":"CHIN","customerid":0,"id":0,"passport":"","reason":"","reasonen":""};
+	var b={"sendcountry":"CHIN","customerid":0,"id":-1,"passport":"","reason":"","reasonen":""};
+	viewModel.set("customer.passportlose", $(this).is(':checked') ? a : b);
+	console.log("===2=="+JSON.stringify(viewModel.customer.passportlose));
 });
 /*$("#pp_lost").change(function () {
     if ($(this).is(':checked')) {
@@ -409,7 +430,7 @@ $("#saveCustomerData").on("click",function(){
 		viewModel.set("customer.errorinfo",JSON.stringify(map));
 		map.clear();
 	}*/
-	 //console.log(JSON.stringify(viewModel.customer));
+		 console.log("====="+JSON.stringify(viewModel.customer));
 	$.ajax({
 		 type: "POST",
 		 url: "/visa/newcustomer/customerSave",
