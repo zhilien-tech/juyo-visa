@@ -8,6 +8,8 @@ var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 window.onload = function(){
 	 $.getJSON(localhostPaht +'/visa/basicinfo/listBasicinfo', function (resp) {
      	viewModel.set("customer", $.extend(true, dafaults, resp));
+     	viewModel.set("customer.passporttype", 1);
+     	viewModel.set("customer.commhomeaddress.issuingCountry", "CHN");
      	//预览 按钮
 	   	 var phoneurl=viewModel.get("customer.phoneurl");
 	    	 if(phoneurl!=null&&phoneurl!=''){

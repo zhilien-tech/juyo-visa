@@ -10,6 +10,7 @@ window.onload = function(){
      	viewModel.set("customer", $.extend(true, dafaults, resp));
      	viewModel.set("customer.countrynum", "CHN");
      	viewModel.set("customer.passporttype", 1);
+     	viewModel.set("customer.visaoffice", "出入境管理局");
      	//预览 按钮
 	   	 var phoneurl=viewModel.get("customer.phoneurl");
 	    	 if(phoneurl!=null&&phoneurl!=''){
