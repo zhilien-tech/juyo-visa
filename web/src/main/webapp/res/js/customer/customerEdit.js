@@ -529,9 +529,14 @@ $(function () {
 				
 				viewModel.set("customer.passportlose.sendcountry","CHIN");
 			}
+			
+			var photoname= "<a id='downloadA' href='#'>"
+	             + viewModel.get("customer.photoname")
+	             + "</a>"
         	var phoneurl=viewModel.get("customer.phoneurl");
         	if(phoneurl!=null&&phoneurl!=''){
         		$("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
+        		$("#photoname").html(photoname);
         	}
 
         	/*预览 按钮*/

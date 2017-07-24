@@ -55,6 +55,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.collect.Lists;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
 import com.uxuexi.core.db.util.DbSqlUtil;
@@ -93,7 +94,7 @@ public class OrderController extends BaseController {
 	public Object list(@RequestBody KenDoTestSqlForm form, final HttpSession session) {
 		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
 		if (!Util.isEmpty(company)) {
-			long comId = company.getId();
+			long comId = company.getComId();
 			form.setComId(comId);
 		}
 		/*User user = UserUtil.getUser();
@@ -152,8 +153,17 @@ public class OrderController extends BaseController {
 	 */
 	@RequestMapping(value = "custominfo")
 	@ResponseBody
-	public Object custominfo() {
-		List<CustomerManageEntity> query = dbDao.query(CustomerManageEntity.class, null, null);
+	public Object custominfo(final HttpSession session) {
+		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		List<CustomerManageEntity> query = Lists.newArrayList();
+		if (!Util.isEmpty(company)) {
+			long comId = company.getComId();
+			Cnd cnd = Cnd.where("comId", "=", comId);
+			query = dbDao.query(CustomerManageEntity.class, cnd, null);
+		} else {
+
+			query = dbDao.query(CustomerManageEntity.class, null, null);
+		}
 		return query;
 	}
 
@@ -192,7 +202,7 @@ public class OrderController extends BaseController {
 	public Object orderSave(@RequestBody NewOrderEntity order, final HttpSession session) {
 		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
 		if (!Util.isEmpty(company)) {
-			long comId = company.getId();
+			long comId = company.getComId();
 			order.setComId(comId);
 		}
 		/*		CustomerManageEntity customermanage = order.getCustomermanage();

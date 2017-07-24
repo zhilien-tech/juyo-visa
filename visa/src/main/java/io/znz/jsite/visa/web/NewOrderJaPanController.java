@@ -116,7 +116,7 @@ public class NewOrderJaPanController {
 	public Object list(@RequestBody NewOrderJapanSqlForm form, final HttpSession session) {
 		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
 		if (!Util.isEmpty(company)) {
-			long comId = company.getId();
+			long comId = company.getComId();
 			form.setComId(comId);
 		}
 		Pager pager = new Pager();
@@ -162,7 +162,7 @@ public class NewOrderJaPanController {
 		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
 		if (!Util.isEmpty(company)) {
 
-			long comId = company.getId();
+			long comId = company.getComId();
 			order.setComId(comId);
 		}
 		//根据他们的id是否存在判断是更新还是删除
