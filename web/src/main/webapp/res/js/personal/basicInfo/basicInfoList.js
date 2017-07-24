@@ -8,10 +8,16 @@ var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 window.onload = function(){
 	 $.getJSON(localhostPaht +'/visa/basicinfo/listBasicinfo', function (resp) {
      	viewModel.set("customer", $.extend(true, dafaults, resp));
+     	viewModel.set("customer.passporttype", 1);
+     	viewModel.set("customer.commhomeaddress.issuingCountry", "CHN");
      	//预览 按钮
-	   	 var phoneurl=viewModel.get("customer.phoneurl");
+     	var photoname= '<a href="#">'
+            + viewModel.get("customer.photoname")
+            + '</a>'
+	   	var phoneurl=viewModel.get("customer.phoneurl");
 	    	 if(phoneurl!=null&&phoneurl!=''){
 	    		$("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
+	    		$("#photoname").html(photoname);
 	    	 }
 	        $(document).on('click','#preview',function(){
 	        	$('#light').css('display','block');
@@ -306,9 +312,9 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-    	var oldPassport = viewModel.get("customer.passportlose");
-    	var state = oldPassport ? oldPassport.length > 0 : false;
-        return state;
+    	//var oldPassport = viewModel.get("customer.passportlose");
+    	//var state = oldPassport ? oldPassport.length > 0 : false;
+        return viewModel.get("customer.passportlose");
     },
     // 曾用名
     oldNameEnable: function () {
@@ -339,7 +345,9 @@ kendo.bind($(document.body), viewModel);//数据绑定结束
 
 //丢过护照
 $("#pp_lost").change(function () {
-	viewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
+	//viewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
+	var a={"sendcountry":"CHN","customerid":0,"id":0,"passport":"","reason":"","reasonen":""};
+	viewModel.set("customer.passportlose", $(this).is(':checked') ? a : "");
 });
 //曾用名
 $("#has_used_name").change(function () {
@@ -385,6 +393,7 @@ function saveBaseInfoData(){
 		//清空验证的数组
 		emptyNum.splice(0,emptyNum.length);
 		errorNum.splice(0,errorNum.length);
+		alert(JSON.stringify(viewModel.customer));
 		$.ajax({
 			 type: "POST",
 			 url: "/visa/basicinfo/updateBaseInfoData",
@@ -516,14 +525,16 @@ function uploadFile(){
 			index = layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 		},
 		 'onUploadSuccess': function(file, data, response) {
-			 console.log(JSON.stringify(file));
-			 //console.log(data);
-			 //console.log(response);
+			 var fileName = file.name;//文件名称
+			 var photoname= '<a id="downloadA"  href="#">'
+		            + viewModel.get("customer.photoname")
+		            + '</a>'
 			 if(index!=null){
 				layer.close(index);
 			 }
 			 /*显示 预览 按钮*/
 		    viewModel.set("customer.phoneurl",data);
+		    viewModel.set("customer.photoname",photoname);
             $("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
             $(document).on('click','#preview',function(){
 	           	$('#light').css('display','block');
