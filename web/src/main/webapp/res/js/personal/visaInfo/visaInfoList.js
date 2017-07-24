@@ -20,6 +20,7 @@ $(function () {
 	//页面加载时回显签证信息
 	$.getJSON(localhostPaht +'/visa/visainfo/listvisainfo', function (resp) {
      	viewModel.set("customer", $.extend(true, dafaults, resp));
+     	//viewModel.set("customer.trip[0].paypersion", "我自己");
     });
 	//折叠板 效果初始化
     $("#panelbar").kendoPanelBar({
@@ -150,9 +151,7 @@ var countries = new kendo.data.DataSource({
 	        payCompany:{},
 	        fastMail:{},
 	        peerList:{},
-	        travelpurpose:{
-	        	travelPurpose:"旅游"
-	        },//赴美国旅行目的列表
+	        travelpurpose:{},//赴美国旅行目的列表
 	        travelplan:{},//是否制定了具体旅行计划
 	        relationship:{},//与你的关系
 	        travel: {
@@ -324,7 +323,7 @@ var viewModel = kendo.observable({
     },
     //是否加入一个团队或组织旅行
     joinTeamEnable: function () {
-    	return viewModel.get("customer.trip.teamname");
+    	return viewModel.get("customer.trip[0].teamname");
     },
     //你是否有其他亲属在美国
     relationEnable:function(){
