@@ -22,7 +22,7 @@
     	.container-fluid.k-content{margin-top: 15px;}
     </style>
 </head>
-<body>
+<body id="aaaa">
 <div>
     <div class="container-fluid" style="padding-bottom: 15px;">
         <div class="row">
@@ -134,6 +134,7 @@
                                                     data-text-field="text"
                                                     data-value-field="value"
                                                     data-bind="value:customer.customerSource,source:customersourceEnum"
+                                                   required validationMessage="客户来源不能为空" name="customerSource"
                                                     style="width: 100%;" onchange="comsource()"></select>
                                                     <!--   <input id="cus_source"  class="k-textbox"
                                                    style="width: 100%;" name="customerSource"/> -->
@@ -294,8 +295,8 @@
                                     <div class="form-group">
                                         <label for="usa_arrival_date">人数:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="usa_arrival_date" style="width: 100%;" class="k-textbox"
-                                                   name="headcount" data-bind="value:customer.headcount"/>
+                                            <input id="usa_arrival_date" type="number" style="width: 100%;" class="k-textbox" required validationMessage="人数不能为空" name="headcount"
+                                                   min="1" name="headcount" data-bind="value:customer.headcount"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -500,7 +501,7 @@
                                                     data-text-field="text"
                                                     data-value-field="value"
                                                     data-bind="value:customer.trip.intostate,source:states"
-                                                    style="width: 100%;"></select>
+                                                    style="width: 100%;"  required validationMessage="从美国哪个州入境不能为空" name="intostate"></select>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -509,7 +510,7 @@
                                     <div class="form-group">
                                         <label for="usa_city">入境城市:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="usa_city" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                            <input id="usa_city" class="k-textbox" style="width: 100%;text-transform:uppercase;" required validationMessage="入境城市不能为空" name="intocity"
                                                    data-bind="value:customer.trip.intocity"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -537,7 +538,7 @@
                                         <div class='input-group'>
                                             <input id="usa_address" onchange="translateZhToEn(this,'home_address_en_2')"
                                                    class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.trip.linkaddress"
+                                                   data-bind="value:customer.trip.linkaddress"  required validationMessage="联系地址不能为空" name="linkaddress"
                                                    placeholder="住址的房间/单元/楼号/门牌号，小区/社区（中文）"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -641,6 +642,7 @@
                                                     data-text-field="text"
                                                     data-value-field="value"
                                                     data-bind="value:customer.trip.linkstate,source:states"
+                                                    required validationMessage="联系人所在州不能为空" name="linkstate"
                                                     style="width: 100%;"></select>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -651,6 +653,7 @@
                                         <label for="us_contact_city">联系人所在城市:<span style="color: red">*</span></label>
                                         <div class='input-group'>
                                             <input id="us_contact_city" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                            required validationMessage="联系人所在城市不能为空" name="linkcity"
                                                    data-bind="value:customer.trip.linkcity"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -661,9 +664,9 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="us_contact_address">联系人详细地址:</label>
+                                        <label for="us_contact_address">联系人详细地址:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="us_contact_address" class="k-textbox" style="width: 100%;"
+                                            <input id="us_contact_address" class="k-textbox" style="width: 100%;" required validationMessage="联系人详细地址不能为空" name="detailaddress"
                                                    data-bind="value:customer.trip.detailaddress"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -684,9 +687,9 @@
                                 </div>
                                 <div class="col-xs-4">
                                     <div class="form-group">
-                                        <label for="us_contact_phone">电话:</label>
+                                        <label for="us_contact_phone">电话:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="us_contact_phone" class="k-textbox" style="width: 100%;"
+                                            <input id="us_contact_phone" class="k-textbox" style="width: 100%;" required validationMessage="电话不能为空" name="phone"
                                                    data-bind="value:customer.trip.phone"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -694,9 +697,9 @@
                                 </div>
                                 <div class="col-xs-4">
                                     <div class="form-group">
-                                        <label for="us_contact_email">邮箱:</label>
+                                        <label for="us_contact_email">邮箱:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="us_contact_email" class="k-textbox" style="width: 100%;"
+                                            <input id="us_contact_email" class="k-textbox" style="width: 100%;" required validationMessage="邮箱不能为空" name="email"
                                                    data-bind="value:customer.trip.email"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
