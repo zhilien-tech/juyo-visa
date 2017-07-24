@@ -178,22 +178,14 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-    	/*var oldPassportEnable = viewModel.get("customer.passportlose");
-    	var state = oldPassportEnable ? oldPassportEnable.length > 0 : false;
-        return state;*/
     	var a=viewModel.get("customer.passportlose.id");
-    	if(a>0){
-    		return true;
-    	}else if(a<0){
-    		return false;
-    	}else{
+    	if(a>0) return true;
+    	else if(a<0) return false;
+    	else{
     		if(passportnum<4){
     			passportnum++;
     			return false;
-    		}else{
-    			return true;
-    		}
-    		
+    		}else {return true};
     	}
     	return false;
        //return viewModel.get("customer.passportlose");
