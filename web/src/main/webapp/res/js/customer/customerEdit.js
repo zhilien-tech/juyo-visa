@@ -61,11 +61,8 @@ var countries = new kendo.data.DataSource({
 		"customer.languagelist":{},
 		"customer.visitedcountrylist":{},
 		"customer.workedplacelist":{},
-		"customer.relation":{
-			
-		},
+		"customer.relation":{},
 		"customer.teachinfo":{}
-		
 	};
 /*****************************************************
  * 数据绑定
@@ -96,7 +93,7 @@ var viewModel = kendo.observable({
         var all = viewModel.get(key);
         if (all) all.splice(0, all.length);
     },
- // 支付人
+    // 支付人
     payType: function (type) {
         return viewModel.get("customer.trip.paypersion") === type;
     },
@@ -180,10 +177,10 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-    	var oldPassportEnable = viewModel.get("customer.passportlose");
+    	/*var oldPassportEnable = viewModel.get("customer.passportlose");
     	var state = oldPassportEnable ? oldPassportEnable.length > 0 : false;
-        return state;
-       ///return viewModel.get("customer.passportlose");
+        return state;*/
+       return viewModel.get("customer.passportlose");
     },
     // 曾用名
     oldNameEnable: function () {
@@ -206,13 +203,18 @@ kendo.bind($(document.body), viewModel);
 
 //丢过护照
 $("#pp_lost").change(function () {
-	viewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
+	//viewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
+	///console.log("==1==="+JSON.stringify(viewModel.customer.passportlose));
+	var a={"sendcountry":"CHN","customerid":0,"id":0,"passport":"","reason":"","reasonen":""};
+	viewModel.set("customer.passportlose", $(this).is(':checked') ? a: "");
+	///console.log("===2=="+JSON.stringify(viewModel.customer.passportlose));
 });
 /*$("#pp_lost").change(function () {
+	alert($(this).is(':checked'));
     if ($(this).is(':checked')) {
-    	viewModel.add("customer.passportlose");
+    	viewModel.set("customer.passportlose");
     } else {
-    	viewModel.clear("customer.passportlose");
+    	viewModel.set("customer.passportlose");
     }
 });*/
 
