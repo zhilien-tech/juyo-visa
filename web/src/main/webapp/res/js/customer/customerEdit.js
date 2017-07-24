@@ -189,6 +189,28 @@ var viewModel = kendo.observable({
     oldNameEnable: function () {
     	var oldNameEnable = viewModel.get("customer.oldname");
     	var state = oldNameEnable ? oldNameEnable.length > 0 : false;
+    	if(state){
+    		$("input[oldname='oldname']").each(function(){
+    			var labelTxt=$(this).parent().prev().text().trim();
+    			labelTxt = labelTxt.split(":");
+    			labelTxt.pop();
+    			labelTxt = labelTxt.join(":");
+    			//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+    			$(this).attr('validationMessage',labelTxt+"不能为空");
+    			$(this).attr('required','required');
+    		});
+    	}else{
+    		$("input[oldname='oldname']").each(function(){
+    			var labelTxt=$(this).parent().prev().text().trim();
+    			labelTxt = labelTxt.split(":");
+    			labelTxt.pop();
+    			labelTxt = labelTxt.join(":");
+    			//$(this).removeAttr({requested:'requested',validationMessage:"不能为空"} );
+    			$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+    			$(this).removeAttr('required','required');
+    		});
+    		
+    	}
         return state;
         ///return viewModel.get("customer.oldname");
     },
