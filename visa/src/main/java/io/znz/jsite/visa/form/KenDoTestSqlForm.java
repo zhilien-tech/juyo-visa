@@ -33,6 +33,7 @@ public class KenDoTestSqlForm extends KenDoParamForm {
 	private Date end_time;
 	private String keywords;
 	private Integer state;
+	private long comId;
 
 	@Override
 	public Sql sql(SqlManager paramSqlManager) {
@@ -75,6 +76,9 @@ public class KenDoTestSqlForm extends KenDoParamForm {
 			SqlExpressionGroup e1 = Cnd.exps("vno.status", "=", state);
 			SqlExpressionGroup e2 = Cnd.exps("vnc.status", "=", state);
 			cnd.and(e1).or(e2);
+		}
+		if (!Util.isEmpty(comId) && comId > 0) {
+			cnd.and("comId", "=", comId);
 		}
 
 		cnd.orderBy("vno.updatetime", "desc");

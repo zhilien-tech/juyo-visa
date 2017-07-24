@@ -174,6 +174,9 @@ public class NewCustomerJpEntity implements Serializable {
 	@Comment("照片路径")
 	private String phoneurl;
 
+	@Column
+	@Comment("照片名字")
+	private String photoname;
 	private NewWorkinfoJpEntity workinfoJp;
 
 	private List<NewFinanceJpEntity> financeJpList;

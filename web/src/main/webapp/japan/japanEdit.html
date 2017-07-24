@@ -26,7 +26,7 @@
     	.addApplicantBtn span.k-link span.k-icon{display:none;}
     </style>
 </head>
-<body>
+<body id="aaaa">
 <div>
     <div class="container-fluid" style="padding-bottom: 15px;">
         <ul id="panelbar" class="col-xs-12" data-role="panelbar" data-expand-mode="single">
@@ -48,6 +48,7 @@
                                                     data-text-field="text"
                                                     data-value-field="value"
                                                     data-bind="value:customer.customerSource,source:customersourceEnum"
+                                                    required validationMessage="客户来源不能为空" name="customerSource"
                                                     style="width: 100%;" onchange="comsource();"></select>
                                                     <!--   <input id="cus_source"  class="k-textbox"
                                                    style="width: 100%;" name="customerSource"/> -->
@@ -176,6 +177,7 @@
                                         <label for="usa_arrival_date">人数:<span style="color: red">*</span></label>
                                         <div class='input-group'>
                                             <input id="usa_arrival_date" style="width: 100%;" class="k-textbox"
+                                            required validationMessage="人数不能为空" name="headnum"
                                                    name="headcount" data-bind="value:customer.headnum" />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -323,7 +325,8 @@
                                     <div class="form-group">
                                         <label for="usa_city">出行目的:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                            <input id="trippurpose" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+                                                  required validationMessage="出行目的不能为空" name="trippurpose"
                                                    data-bind="value:customer.tripJp.trippurpose"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>

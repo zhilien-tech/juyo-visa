@@ -55,6 +55,7 @@
 					      					<button id="uploadFile" name="file" type="file" class="btn btn-primary btn-sm" >上传</button>
 					      					<!-- <input type="file" name="file" id="file" class="btn btn-primary btn-sm" />  -->
 					      					<span id="completeFileName"></span>
+					      					<span id="photoname"></span>
 					      					<span id="yvlan"></span>
 					      				</div>
 					      			</div>
@@ -194,7 +195,8 @@
                                     <div class="form-group">
                                         <label for="card_id">身份证号:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="card_id" data-bind="value:customer.idcard" class="k-textbox" required validationMessage="身份证号不能为空" name="idcard"
+                                            <input id="card_id" type="text" data-bind="value:customer.idcard" class="k-textbox" name="idcard"
+                                            data-required-msg="身份证号不能为空" required  name="idcard" pattern="(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)" validationMessage="身份证号格式不正确"
                                                    style="width: 100%;"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -3116,6 +3118,10 @@ $(function(){
 			index = layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 		},
 		 'onUploadSuccess': function(file, data, response) {
+			 var fileName = file.name;//文件名称
+			var photoname= "<a id='downloadA' href='#'>"
+             + file.name
+             + "</a>"
 			 ///console.log(file);
 			/* 	var jsonobj = eval('(' + data + ')');
 				var url  = jsonobj;//地址 */
@@ -3127,8 +3133,10 @@ $(function(){
 			 }
 			 /*显示 预览 按钮*/
 			viewModel.set("customer.phoneurl",data);
+			viewModel.set("customer.photoname",photoname);
 			/*$("#yvlan").html('<a href="'+data+'">预览</a>'); */
             $("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
+			$("#photoname").html(photoname);
             $(document).on('click','#preview',function(){
             	$('#light').css('display','block');
             	$('#fade').css('display','block');

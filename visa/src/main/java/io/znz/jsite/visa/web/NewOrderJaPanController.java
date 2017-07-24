@@ -7,7 +7,9 @@
 package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.bean.ResultObject;
+import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
 import io.znz.jsite.core.service.MailService;
+import io.znz.jsite.core.util.Const;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 import io.znz.jsite.visa.bean.Flight;
@@ -50,6 +52,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.nutz.dao.Chain;
@@ -110,8 +113,12 @@ public class NewOrderJaPanController {
 
 	@RequestMapping(value = "list")
 	@ResponseBody
-	public Object list(@RequestBody NewOrderJapanSqlForm form) {
-
+	public Object list(@RequestBody NewOrderJapanSqlForm form, final HttpSession session) {
+		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		if (!Util.isEmpty(company)) {
+			long comId = company.getComId();
+			form.setComId(comId);
+		}
 		Pager pager = new Pager();
 		pager.setPageNumber(form.getPageNumber());
 		pager.setPageSize(form.getPageSize());
@@ -150,8 +157,14 @@ public class NewOrderJaPanController {
 	@RequestMapping(value = "orderJpsave")
 	@ResponseBody
 	@Transactional
-	public Object orderJpsave(@RequestBody NewOrderJpEntity order) {
+	public Object orderJpsave(@RequestBody NewOrderJpEntity order, final HttpSession session) {
 
+		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		if (!Util.isEmpty(company)) {
+
+			long comId = company.getComId();
+			order.setComId(comId);
+		}
 		//根据他们的id是否存在判断是更新还是删除
 		NewOrderJpEntity orderOld = order;
 		if (!Util.isEmpty(order.getId()) && order.getId() > 0) {
@@ -873,7 +886,7 @@ public class NewOrderJaPanController {
 		NewOrderJpEntity order = dbDao.fetch(NewOrderJpEntity.class, orderid);
 		CustomerManageEntity customerManage = dbDao.fetch(CustomerManageEntity.class, order.getCustomer_manager_id());
 		//发送邮件前进行游客信息的注册
-		String phone = customerManage.getTelephone();
+		String phone = "";
 		//给订单的第一个人也发送
 		/*String result = getMailContent(order, phone, null, customerManage);
 		if ("success".equalsIgnoreCase(result)) {
