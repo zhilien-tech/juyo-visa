@@ -8,6 +8,8 @@ var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 window.onload = function(){
 	 $.getJSON(localhostPaht +'/visa/passportinfo/listPassport', function (resp) {
      	viewModel.set("customer", $.extend(true, dafaults, resp));
+     	viewModel.set("customer.countrynum", "CHN");
+     	viewModel.set("customer.passporttype", 1);
      	//预览 按钮
 	   	 var phoneurl=viewModel.get("customer.phoneurl");
 	    	 if(phoneurl!=null&&phoneurl!=''){
@@ -131,6 +133,7 @@ states = new kendo.data.DataSource({
     }
 }),
 dafaults = {
+		countrynum:"CHN",
 		passporttype:1,
 		passportlose:{},
 		oldname:{},
@@ -173,6 +176,7 @@ var viewModel = kendo.observable({
 	states:states
 });
 kendo.bind($(document.body), viewModel);
+
 //事件提示
 function successCallback(id){
 	grid.dataSource.read();
