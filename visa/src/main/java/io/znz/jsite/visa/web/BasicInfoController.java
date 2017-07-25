@@ -301,18 +301,20 @@ public class BasicInfoController extends BaseController {
 		if (!Util.isEmpty(taxpayerauthenticat)) {
 			if (!Util.isEmpty(taxpayerauthenticat.getId()) && taxpayerauthenticat.getId() > 0) {
 				nutDao.update(taxpayerauthenticat);
+			} else {
+				taxpayerauthenticat.setCustomerId(customer.getId());
+				dbDao.insert(taxpayerauthenticat);
 			}
-		} else {
-			taxpayerauthenticat.setCustomerId(customer.getId());
-			dbDao.insert(taxpayerauthenticat);
 		}
 		//通信地址与家庭地址是否一致
 		CommunicatHomeAddressEntity commhomeaddress = customer.getCommhomeaddress();
 		if (!Util.isEmpty(commhomeaddress)) {
-			nutDao.update(commhomeaddress);
-		} else {
-			commhomeaddress.setCustomerId(customer.getId());
-			dbDao.insert(commhomeaddress);
+			if (!Util.isEmpty(commhomeaddress.getId()) && commhomeaddress.getId() > 0) {
+				nutDao.update(commhomeaddress);
+			} else {
+				commhomeaddress.setCustomerId(customer.getId());
+				dbDao.insert(commhomeaddress);
+			}
 		}
 		List<NewOldworksEntity> oldworkslist = customer.getOldworkslist();
 		if (!Util.isEmpty(oldworkslist) && oldworkslist.size() > 0) {
