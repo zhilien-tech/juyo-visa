@@ -207,6 +207,9 @@ var passportTypeEnum=[
 /*****************************************************
  * 数据绑定
  ****************************************************/
+var passportnum=0;
+var oldnamenum=0;
+var authenticatorcodeNum=0;
 var viewModel = kendo.observable({
     customer: dafaults,
     countries:countries,
@@ -215,7 +218,6 @@ var viewModel = kendo.observable({
     states:states,
     addOne: function (e) {
         var key = $.isString(e) ? e : $(e.target).data('params');
-        console.log(key);
         viewModel.get(key).push(keys[key]);
     },
     delOne: function (e) {
@@ -252,7 +254,6 @@ var viewModel = kendo.observable({
     //是否有直系亲属在美国
     hasFamilyInUSA: function () {
         var families = viewModel.get("customer.relation");
-        console.log(families);
         var state = families ? families.length > 0 : false;
         return state;
     },
@@ -314,13 +315,32 @@ var viewModel = kendo.observable({
     oldPassportEnable: function () {
     	//var oldPassport = viewModel.get("customer.passportlose");
     	//var state = oldPassport ? oldPassport.length > 0 : false;
-        return viewModel.get("customer.passportlose");
+    	var a=viewModel.get("customer.passportlose.id");
+    	if(a>0) return true;
+    	else if(a<0) return false;
+    	else{
+    		if(passportnum<4){
+    			passportnum++;
+    			return false;
+    		}else {return true};
+    	}
+    	return false;
     },
     // 曾用名
     oldNameEnable: function () {
-    	var beforeName = viewModel.get("customer.oldname");
+    	/*var beforeName = viewModel.get("customer.oldname");
     	var state = beforeName ? beforeName.length > 0 : false;
-        return state;
+        return state;*/
+    	var a=viewModel.get("customer.oldname.id");
+    	if(a>0) return true;
+    	else if(a<0) return false;
+    	else{
+    		if(oldnamenum<4){
+    			oldnamenum++;
+    			return false;
+    		}else {return true};
+    	}
+    	return false;
     },
     // 其他国家公民
     otherCountryEnable: function () {
@@ -330,9 +350,19 @@ var viewModel = kendo.observable({
     },
     //美国纳税人认证码
     usaAuthenticatorCode:function(){
-    	var authenticationCode=viewModel.get("customer.authenticatorcode");
-    	var state = authenticationCode ? authenticationCode.length > 0 : false;
-    	return state;
+    	var authenticationCode=viewModel.get("customer.taxpayerauthenticat");
+    	/*var state = authenticationCode ? authenticationCode.length > 0 : false;
+    	return state;*/
+    	var a=viewModel.get("customer.taxpayerauthenticat.id");
+    	if(a>0) return true;
+    	else if(a<0) return false;
+    	else{
+    		if(authenticatorcodeNum<4){
+    			authenticatorcodeNum++;
+    			return false;
+    		}else {return true};
+    	}
+    	return false;
     },
     //通信地址与家庭地址是否一致
     usaCommunicaHomeAddress:function(){
@@ -351,7 +381,9 @@ $("#pp_lost").change(function () {
 });
 //曾用名
 $("#has_used_name").change(function () {
-	viewModel.set("customer.oldname", $(this).is(':checked') ? " " : "");
+	var a={"customerid":0,"id":0,"oldname":"","oldnameen":"","oldxing":"","oldxingen":""};
+	var b={"customerid":0,"id":-1,"oldname":"","oldnameen":"","oldxing":"","oldxingen":""};
+	viewModel.set("customer.oldname", $(this).is(':checked') ? a : b);
 });
 //其他国家居民
 $("#has_pr").change(function () {
@@ -372,7 +404,10 @@ $("#same_as_home").change(function () {
 });
 //美国纳税人认证码
 $("#usa_authenticator_code").change(function () {
-	viewModel.set("customer.authenticatorcode", $(this).is(':checked') ? " " : "");
+	///viewModel.set("customer.authenticatorcode", $(this).is(':checked') ? " " : "");
+	var a={"city":"","country":"","createTime":null,"customerId":0,"homeAddress":"","id":0,"postCode":"","province":"","remark":"","status":0,"updateTime":null};
+	var b={"city":"","country":"","createTime":null,"customerId":0,"homeAddress":"","id":-1,"postCode":"","province":"","remark":"","status":0,"updateTime":null};
+	viewModel.set("customer.taxpayerauthenticat", $(this).is(':checked') ? a : b);
 });
 //通信地址与家庭地址是否一致
 $("#communica_home_address").change(function () {
@@ -393,7 +428,6 @@ function saveBaseInfoData(){
 		//清空验证的数组
 		emptyNum.splice(0,emptyNum.length);
 		errorNum.splice(0,errorNum.length);
-		alert(JSON.stringify(viewModel.customer));
 		$.ajax({
 			 type: "POST",
 			 url: "/visa/basicinfo/updateBaseInfoData",
@@ -422,7 +456,7 @@ function saveBaseInfoData(){
 	    	}else{
 	    		errorNum.push(person);
 	    	}
-	    	console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
+	    	///console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
 	    });
 	    //end 验证————————————————————————————————
 		var str="";
@@ -482,7 +516,7 @@ $("#nextStepBtn").click(function(){
 	    	}else{
 	    		errorNum.push(person);
 	    	}
-	    	console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
+	    	///console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
 	    });
 	    //end 验证————————————————————————————————
 		var str="";

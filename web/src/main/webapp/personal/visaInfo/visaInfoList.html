@@ -135,16 +135,16 @@
                                             		style="width: 100%;"
                                             		data-value-primitive="true"
                                                     data-bind="value:customer.trip[0].paypersion">
-                                                <option>我自己</option>
-                                                <option>其他人</option>
-                                                <option>公司/组织</option>
+                                                <option value="S">我自己</option>
+                                                <option value="O">其他人</option>
+                                                <option value="C">公司/组织</option>
                                             </select>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div data-bind="visible:payType('其他人')"><!-- data-bind="visible:payType('其他人')" -->
+                            <div data-bind="visible:payType('O')"><!-- data-bind="visible:payType('其他人')" -->
                                 <!--支付人姓-->
                                 <div class="row who_pay">
                                     <div class="col-xs-6">
@@ -239,7 +239,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div data-bind="visible:payType('公司/组织')"><!-- data-bind="visible:payType('公司/组织')" -->
+                            <div data-bind="visible:payType('C')"><!-- data-bind="visible:payType('公司/组织')" -->
                                 <!--付费公司名称(中文)-->
                                 <div class="row who_pay">
                                     <div class="col-xs-12">
@@ -316,7 +316,8 @@
                                                         data-value-primitive="true"
 	                                                    data-text-field="text"
 	                                                    data-value-field="value"
-                                                        data-bind="source:countries,value:customer.payCompany[0].comcountry"/>
+                                                        data-bind="source:countries,value:customer.payCompany[0].comcountry">
+                                                </select>
                                                 <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                             </div>
                                         </div>
