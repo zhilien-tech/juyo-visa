@@ -201,6 +201,9 @@ public class NewCustomerEntity implements Serializable {
 	@Column
 	@Comment("错误信息")
 	private String errorinfo;
+	@Column
+	@Comment("照片名字")
+	private String photoname;
 
 	@Column
 	@Comment("信息是否填写完毕")

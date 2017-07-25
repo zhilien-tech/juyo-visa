@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
     <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/>
 </head>
-<body>
+<body id="aaaa">
 <div>
 	<!--搜索条件 模块-->
     <div class="Search">
@@ -135,16 +135,16 @@
                                             		style="width: 100%;"
                                             		data-value-primitive="true"
                                                     data-bind="value:customer.trip[0].paypersion">
-                                                <option>我自己</option>
-                                                <option>其他人</option>
-                                                <option>公司/组织</option>
+                                                <option value="S">我自己</option>
+                                                <option value="O">其他人</option>
+                                                <option value="C">公司/组织</option>
                                             </select>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div data-bind="visible:payType('其他人')"><!-- data-bind="visible:payType('其他人')" -->
+                            <div data-bind="visible:payType('O')"><!-- data-bind="visible:payType('其他人')" -->
                                 <!--支付人姓-->
                                 <div class="row who_pay">
                                     <div class="col-xs-6">
@@ -239,7 +239,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div data-bind="visible:payType('公司/组织')"><!-- data-bind="visible:payType('公司/组织')" -->
+                            <div data-bind="visible:payType('C')"><!-- data-bind="visible:payType('公司/组织')" -->
                                 <!--付费公司名称(中文)-->
                                 <div class="row who_pay">
                                     <div class="col-xs-12">
@@ -316,7 +316,8 @@
                                                         data-value-primitive="true"
 	                                                    data-text-field="text"
 	                                                    data-value-field="value"
-                                                        data-bind="source:countries,value:customer.payCompany[0].comcountry"/>
+                                                        data-bind="source:countries,value:customer.payCompany[0].comcountry">
+                                                </select>
                                                 <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                             </div>
                                         </div>
@@ -458,14 +459,12 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="join_group"
-                                               class="check-box-label">是否加入一个团队或组织旅行:</label>
-                                        <input id='join_group'  data-bind="value:customer.trip[0].teamname"
-                                               class="mui-switch" type="checkbox"/>
+                                        <label for="join_group" class="check-box-label">是否加入一个团队或组织旅行:</label>
+                                        <input id='join_group'  data-bind="checked:joinTeamEnable" class="mui-switch" type="checkbox"/>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row join_group"  data-bind="visible:customer.trip[0].teamname" ><!-- data-bind="visible:customer.travel.team" -->
+                            <div class="row join_group"  data-bind="visible:joinTeamEnable" ><!-- data-bind="visible:customer.travel.team" -->
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <label for="join_group_name">团队名称:<span style="color: red">*</span></label>
@@ -699,7 +698,9 @@
                                     <div class="form-group">
                                         <label for="us_contact_address">美国联系地址:</label>
                                         <div class='input-group'>
-                                            <input id="us_contact_address" class="k-textbox" style="width: 100%;"
+                                            <input id="us_contact_address" class="k-textbox" 
+                                            	   style="width: 100%;"
+                                            	   required validationMessage="美国联系地址不能为空" name="detailaddress"
                                                    data-bind="value:customer.trip[0].detailaddress"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -714,8 +715,12 @@
                                     <div class="form-group">
                                         <label for="us_contact_phone">电话号码:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="us_contact_phone" class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.trip[0].phone"/>
+                                            <input id="us_contact_phone" 
+                                            	   class="k-textbox" style="width: 100%;"
+                                                   data-bind="value:customer.trip[0].phone" 
+                                                   required validationMessage="电话号码不能为空" name="phone"
+                                                   pattern="^[1][34578][0-9]{9}$"
+                                            />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -724,8 +729,10 @@
                                     <div class="form-group">
                                         <label for="us_contact_zip_code">电子邮件:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="us_contact_zip_code" class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.trip[0].linkzipcode"/>
+                                            <input  id="us_contact_zip_code" 
+                                            		class="k-textbox" style="width: 100%;"
+                                            		required validationMessage="电子邮件不能为空" name="linkzipcode"
+                                                    data-bind="value:customer.trip[0].email"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -743,8 +750,10 @@
                                     <div class="form-group">
                                         <label for="f_last_name_cn">父亲姓:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="f_last_name_cn" class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.father.xing"/>
+                                            <input id="f_last_name_cn" class="k-textbox" 
+                                            	   style="width: 100%;" data-bind="value:customer.father.xing"
+                                            	   required validationMessage="父亲姓不能为空" name="xing"
+                                            />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -754,7 +763,9 @@
                                         <label for="f_first_name_cn">父亲名:<span style="color: red">*</span></label>
                                         <div class='input-group'>
                                             <input id="f_first_name_cn" class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.father.name"/>
+                                                   data-bind="value:customer.father.name"
+                                            	   required validationMessage="父亲名不能为空" name="name"
+                                            />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -782,8 +793,9 @@
                                     <div class="form-group">
                                         <label for="m_last_name_cn">母亲姓:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="m_last_name_cn" class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.mother.xing"/>
+                                            <input id="m_last_name_cn" class="k-textbox" 
+                                            	   style="width: 100%;" data-bind="value:customer.mother.xing"
+                                            />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -792,8 +804,9 @@
                                     <div class="form-group">
                                         <label for="m_first_name_cn">母亲名:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="m_first_name_cn" class="k-textbox" style="width: 100%;"
-                                                   data-bind="value:customer.mother.name"/>
+                                            <input id="m_first_name_cn" class="k-textbox" 
+                                            	   style="width: 100%;" data-bind="value:customer.mother.name"
+                                            />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -1101,7 +1114,7 @@
 	                             <div class="col-xs-12">
 	                                  <div class="form-group">
 	                                        <label for="have_usa_dl" class="check-box-label">你是否就读过中学以上的学校:</label>
-	                                        <input id='have_usa_dl' data-bind=""
+	                                        <input id='have_usa_dl' data-bind="checked:hasSchool"
 	                                               class="mui-switch" type="checkbox"/>
 	                                  </div>
 	                              </div>

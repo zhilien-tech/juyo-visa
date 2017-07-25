@@ -8,10 +8,17 @@ var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 window.onload = function(){
 	 $.getJSON(localhostPaht +'/visa/passportinfo/listPassport', function (resp) {
      	viewModel.set("customer", $.extend(true, dafaults, resp));
+     	viewModel.set("customer.countrynum", "CHN");
+     	viewModel.set("customer.passporttype", 1);
+     	viewModel.set("customer.visaoffice", "出入境管理局");
      	//预览 按钮
-	   	 var phoneurl=viewModel.get("customer.phoneurl");
+     	var photoname= '<a href="#">'
+            + viewModel.get("customer.photoname")
+            + '</a>'
+	   	var phoneurl=viewModel.get("customer.phoneurl");
 	    	 if(phoneurl!=null&&phoneurl!=''){
 	    		$("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
+	    		$("#photoname").html(photoname);
 	    	 }
 	         $(document).on('click','#preview',function(){
 	        	$('#light').css('display','block');
@@ -131,6 +138,7 @@ states = new kendo.data.DataSource({
     }
 }),
 dafaults = {
+		countrynum:"CHN",
 		passporttype:1,
 		passportlose:{},
 		oldname:{},
@@ -173,6 +181,7 @@ var viewModel = kendo.observable({
 	states:states
 });
 kendo.bind($(document.body), viewModel);
+
 //事件提示
 function successCallback(id){
 	grid.dataSource.read();
@@ -184,46 +193,128 @@ function successCallback(id){
 		layer.msg("删除成功",{time:2000});
 	}
 }
+
+//存放空的数组
+var emptyNum=[];
+//存放格式错误的数组
+var errorNum=[];
+
 //护照信息编辑保存
+var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
 $("#updatePassportSave").on("click",function(){
-	//console.log(JSON.stringify(viewModel.customer));
-	$.ajax({
-		 type: "POST",
-		 url: "/visa/passportinfo/updatePassportSave",
-		 contentType:"application/json",
-		 data: JSON.stringify(viewModel.customer)+"",
-		 success: function (result){
-			 layer.msg("修改成功",{time:2000});
-		 },
-		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-			 //console.log(XMLHttpRequest);
-			 //console.log(textStatus);
-			 //console.log(errorThrown);
-             layer.msg('保存失败!',{time:2000});
-         }
-	});
+	if(validatable.validate()){
+		//清空验证的数组
+		emptyNum.splice(0,emptyNum.length);
+		errorNum.splice(0,errorNum.length);
+		$.ajax({
+			 type: "POST",
+			 url: "/visa/passportinfo/updatePassportSave",
+			 contentType:"application/json",
+			 data: JSON.stringify(viewModel.customer)+"",
+			 success: function (result){
+				 layer.msg("修改成功",{time:2000});
+			 },
+			 error: function(XMLHttpRequest, textStatus, errorThrown) {
+	             layer.msg('保存失败!',{time:2000});
+	         }
+		});
+	}else{
+		//验证————————————————————————————————————
+	    $('.k-tooltip-validation').each(function(){
+	    	var verificationText=$(this).text().trim();//获取验证的文字信息
+	    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
+	    	labelVal = labelVal.split(":");
+	    	labelVal.pop();
+	    	labelVal = labelVal.join(":");//截取 :之前的信息
+	    	var person=new Object();
+	    	person.text=labelVal;
+	    	person.error="";
+	    	if(verificationText.indexOf("不能为空")>0){
+	    		emptyNum.push(person);
+	    	}else{
+	    		errorNum.push(person);
+	    	}
+	    	console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
+	    });
+	    //end 验证————————————————————————————————
+		var str="";
+		if(emptyNum.length>0){
+			for(var i=0;i<emptyNum.length;i++){
+				str+=emptyNum[i].text+",";
+			}
+			str+="不能为空！"
+		}
+		if(errorNum.length>0){
+			for(var i=0;i<errorNum.length;i++){
+				str+=errorNum[i].text+",";
+			}
+			str+="格式不正确！";
+		}
+		$.layer.alert(str);
+		//用完清空
+		emptyNum.splice(0,emptyNum.length);
+		errorNum.splice(0,errorNum.length);
+	}
 });
 //点击下一步时跳转至基本信息
 $("#nextStepBtn").click(function(){
-	$.ajax({
-		 type: "POST",
-		 url: "/visa/passportinfo/updatePassportSave",
-		 contentType:"application/json",
-		 data: JSON.stringify(viewModel.customer)+"",
-		 success: function (result){
-			 layer.msg("操作成功",{time:2000});
-			 window.location.href='/personal/basicInfo/basicInfoList.html?typeId=1&firstPart='
-				  +escape(JSON.stringify(firstPart))+"&secondPart="
-				  +escape(JSON.stringify(secondPart))+"&thirdPart="
-				  +escape(JSON.stringify(thirdPart))+"&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
-		 },
-		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-			 //console.log(XMLHttpRequest);
-			 //console.log(textStatus);
-			//console.log(errorThrown);
-             layer.msg('保存失败!',{time:2000});
-         }
-	});
+	if(validatable.validate()){
+		//清空验证的数组
+		emptyNum.splice(0,emptyNum.length);
+		errorNum.splice(0,errorNum.length);
+		$.ajax({
+			 type: "POST",
+			 url: "/visa/passportinfo/updatePassportSave",
+			 contentType:"application/json",
+			 data: JSON.stringify(viewModel.customer)+"",
+			 success: function (result){
+				 layer.msg("操作成功",{time:2000});
+				 window.location.href='/personal/basicInfo/basicInfoList.html?typeId=1&firstPart='
+					  +escape(JSON.stringify(firstPart))+"&secondPart="
+					  +escape(JSON.stringify(secondPart))+"&thirdPart="
+					  +escape(JSON.stringify(thirdPart))+"&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
+			 },
+			 error: function(XMLHttpRequest, textStatus, errorThrown) {
+	             layer.msg('保存失败!',{time:2000});
+	         }
+		});
+	}else{
+		//验证————————————————————————————————————
+	    $('.k-tooltip-validation').each(function(){
+	    	var verificationText=$(this).text().trim();//获取验证的文字信息
+	    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
+	    	labelVal = labelVal.split(":");
+	    	labelVal.pop();
+	    	labelVal = labelVal.join(":");//截取 :之前的信息
+	    	var person=new Object();
+	    	person.text=labelVal;
+	    	person.error="";
+	    	if(verificationText.indexOf("不能为空")>0){
+	    		emptyNum.push(person);
+	    	}else{
+	    		errorNum.push(person);
+	    	}
+	    	console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
+	    });
+	    //end 验证————————————————————————————————
+		var str="";
+		if(emptyNum.length>0){
+			for(var i=0;i<emptyNum.length;i++){
+				str+=emptyNum[i].text+",";
+			}
+			str+="不能为空！"
+		}
+		if(errorNum.length>0){
+			for(var i=0;i<errorNum.length;i++){
+				str+=errorNum[i].text+",";
+			}
+			str+="格式不正确！";
+		}
+		$.layer.alert(str);
+		//用完清空
+		emptyNum.splice(0,emptyNum.length);
+		errorNum.splice(0,errorNum.length);
+	}
 });
 //文件上传
 function uploadFile(){
@@ -246,15 +337,18 @@ function uploadFile(){
 			index = layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 		},
 		 'onUploadSuccess': function(file, data, response) {
-			 console.log(JSON.stringify(file));
-			 //console.log(data);
-			 //console.log(response);
+			 var fileName = file.name;//文件名称
+			 var photoname= '<a id="downloadA"  href="#">'
+		            + viewModel.get("customer.photoname")
+		            + '</a>'
 			 if(index!=null){
 				layer.close(index);
 			 }
 			 /*显示 预览 按钮*/
 		    viewModel.set("customer.phoneurl",data);
+		    viewModel.set("customer.photoname",photoname);
             $("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
+            $("#photoname").html(photoname);
             $(document).on('click','#preview',function(){
 	           	$('#light').css('display','block');
 	           	$('#fade').css('display','block');

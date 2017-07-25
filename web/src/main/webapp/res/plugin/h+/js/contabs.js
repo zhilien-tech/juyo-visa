@@ -133,12 +133,6 @@ $(function () {
 			                    
 			                    // 显示tab对应的内容区
 			                    $('.J_mainContent .J_iframe').each(function(){
-			                        /*if ($(this).data('id') == dataUrl){
-			                            $(this).show().siblings('.J_iframe').hide();
-			                            return false;
-			                        }//07-19 10:00*/
-			                    	//console.log("$(this).attr('src')的值为：__________"+$(this).attr('src'));
-			                    	//console.log("dataUrl的值为：__________"+dataUrl);
 			                    	if ($(this).attr('src') == dataUrl){
 			                            $(this).show().siblings('.J_iframe').hide();
 			                            return false;
@@ -291,8 +285,8 @@ $(function () {
 			                    $(this).show().siblings('.J_iframe').hide();
 			                    return false;
 			                }*/
-			            	if($(this).data('id')=="home.html"){//由于 不知道从哪里取到的home.html路径 所以先暂时做此处理
-			            		if (currentId=="order/america.html"){//再此做了强制处理~
+			            	if($(this).data('id')=="home.html"){
+			            		if (currentId=="order/america.html"){
 			                        $(this).show().siblings('.J_iframe').hide();
 			                        return false;
 			                    }
@@ -304,11 +298,24 @@ $(function () {
 			            	}
 			            });
 			            $(this).addClass('active').siblings('.J_menuTab').removeClass('active');
-			            //var str1 = '<iframe class="J_iframe" width="100%" height="100%" src="' + currentId + '" frameborder="0" data-id="' + currentId + '" seamless></iframe>';
-			            //$('.J_mainContent').find('iframe.J_iframe').hide().parents('.J_mainContent').append(str1);
-			            
-			            
 			            scrollToTab(this);
+			            
+			            //左菜单栏和Tab选项卡对应 效果————————————————————————————
+			            var TabText=$(this).text().trim();
+			            //console.log(TabText);
+			            $('.J_menuItem').each(function(){
+			            	var menuText=$(this).text();
+			            	//console.log("___________"+menuText);
+			            	if(TabText==menuText && !$(this).hasClass('menuHighlight')){
+			            		$(this).addClass("menuHighlight");//对应的Menu添加高亮
+			            		$(this).parent().siblings().find('a').removeClass('menuHighlight');//同二级的兄弟 删除高亮
+			            		$(this).parents('ul.nav-second-level').show('300');//显示对应的二级展开
+			            		$(this).parent().parent().parent().siblings().find('ul').hide('300');//隐藏其他一级下的二级内容项
+			            		$(this).parent().parent().parent().siblings().find('.J_menuItem').removeClass('menuHighlight');
+			            		$(this).parent().siblings().find('ul').hide('300');//一级menu高亮时，把所以二级隐藏
+			            	}
+			            });
+			            //end 左菜单栏和Tab选项卡对应 效果———————————————————————————— 
 			        }
 			    }
 			    
@@ -320,13 +327,13 @@ $(function () {
 			    //刷新iframe
 			    function refreshTab() {
 			        var target = $('.J_iframe[data-id="' + $(this).data('id') + '"]');
-			        var url = target.attr('src');
-//			        //显示loading提示
-//			        var loading = layer.load();
-//			        target.attr('src', url).load(function () {
-//			            //关闭loading提示
-//			            layer.close(loading);
-//			        });
+			        /*var url = target.attr('src');
+			        //显示loading提示
+			        var loading = layer.load();
+			        target.attr('src', url).load(function () {
+			            //关闭loading提示
+			            layer.close(loading);
+			        });*/
 			    }
 
 			    $('.J_menuTabs').on('dblclick', '.J_menuTab', refreshTab);
@@ -339,12 +346,12 @@ $(function () {
 
 			    // 关闭全部
 			    $('.J_tabCloseAll').on('click', function () {
-			        $('.page-tabs-content').children("[data-id]").not(":first").each(function () {
-			            $('.J_iframe[data-id="' + $(this).data('id') + '"]').remove();
+			        $('.page-tabs-content').children("[data-id]").not(":first").each(function (){
+			        	$('.J_iframe[src="' + $(this).data('id') + '"]').remove();
 			            $(this).remove();
 			        });
 			        $('.page-tabs-content').children("[data-id]:first").each(function () {
-			            $('.J_iframe[data-id="' + $(this).data('id') + '"]').show();
+			        	$('.J_iframe[src="' + $(this).data('id') + '"]').show();
 			            $(this).addClass("active");
 			        });
 			        $('.page-tabs-content').css("margin-left", "0");

@@ -57,7 +57,7 @@ public class NewOrderEntity {
 	@Column
 	private String remaker;
 	@Column
-	private int cus_management_id;
+	private long cus_management_id;
 	@Column
 	private int headcount;
 	private int visatype;
@@ -83,6 +83,8 @@ public class NewOrderEntity {
 	private int status;
 	@Column
 	private int customerSource;//客户来源
+	@Column
+	private long comId;//客户来源
 	@Column
 	private Date createtime;
 	@Column

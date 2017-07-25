@@ -61,15 +61,13 @@ var countries = new kendo.data.DataSource({
 		"customer.languagelist":{},
 		"customer.visitedcountrylist":{},
 		"customer.workedplacelist":{},
-		"customer.relation":{
-			
-		},
+		"customer.relation":{},
 		"customer.teachinfo":{}
-		
 	};
 /*****************************************************
  * 数据绑定
  ****************************************************/
+var passportnum=0;
 var viewModel = kendo.observable({
     customer: dafaults,
     countries:countries,
@@ -96,7 +94,7 @@ var viewModel = kendo.observable({
         var all = viewModel.get(key);
         if (all) all.splice(0, all.length);
     },
- // 支付人
+    // 支付人
     payType: function (type) {
         return viewModel.get("customer.trip.paypersion") === type;
     },
@@ -180,15 +178,44 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-    	var oldPassportEnable = viewModel.get("customer.passportlose");
-    	var state = oldPassportEnable ? oldPassportEnable.length > 0 : false;
-        return state;
-       ///return viewModel.get("customer.passportlose");
+    	var a=viewModel.get("customer.passportlose.id");
+    	if(a>0) return true;
+    	else if(a<0) return false;
+    	else{
+    		if(passportnum<4){
+    			passportnum++;
+    			return false;
+    		}else {return true};
+    	}
+    	return false;
+       //return viewModel.get("customer.passportlose");
     },
     // 曾用名
     oldNameEnable: function () {
     	var oldNameEnable = viewModel.get("customer.oldname");
     	var state = oldNameEnable ? oldNameEnable.length > 0 : false;
+    	if(state){
+    		$("input[oldname='oldname']").each(function(){
+    			var labelTxt=$(this).parent().prev().text().trim();
+    			labelTxt = labelTxt.split(":");
+    			labelTxt.pop();
+    			labelTxt = labelTxt.join(":");
+    			//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+    			$(this).attr('validationMessage',labelTxt+"不能为空");
+    			$(this).attr('required','required');
+    		});
+    	}else{
+    		$("input[oldname='oldname']").each(function(){
+    			var labelTxt=$(this).parent().prev().text().trim();
+    			labelTxt = labelTxt.split(":");
+    			labelTxt.pop();
+    			labelTxt = labelTxt.join(":");
+    			//$(this).removeAttr({requested:'requested',validationMessage:"不能为空"} );
+    			$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+    			$(this).removeAttr('required','required');
+    		});
+    		
+    	}
         return state;
         ///return viewModel.get("customer.oldname");
     },
@@ -206,13 +233,18 @@ kendo.bind($(document.body), viewModel);
 
 //丢过护照
 $("#pp_lost").change(function () {
-	viewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
+	///console.log("==1==="+JSON.stringify(viewModel.customer.passportlose));
+	var a={"sendcountry":"CHIN","customerid":0,"id":0,"passport":"","reason":"","reasonen":""};
+	var b={"sendcountry":"CHIN","customerid":0,"id":-1,"passport":"","reason":"","reasonen":""};
+	viewModel.set("customer.passportlose", $(this).is(':checked') ? a : b);
+	///console.log("===2=="+JSON.stringify(viewModel.customer.passportlose));
 });
 /*$("#pp_lost").change(function () {
+	alert($(this).is(':checked'));
     if ($(this).is(':checked')) {
-    	viewModel.add("customer.passportlose");
+    	viewModel.set("customer.passportlose");
     } else {
-    	viewModel.clear("customer.passportlose");
+    	viewModel.set("customer.passportlose");
     }
 });*/
 
@@ -315,9 +347,56 @@ $("#join_army").change(function () {
     	viewModel.clear("customer.army");
     }
 });*/
+//=====================kendoui自定义验证开始====================
+/*$(function(){
+	$("#aaaa").kendoValidator({
+		validateOnBlur: true,
+		rules: {
+	      customRule1: function(input) {
+	    	  if(input.is("[name=idcard]")) {
+	    		  var fullComName = $("#card_id").val();
+	    		  if(fullComName==null || fullComName==""){
+		    		  return false;
+	    		  }
+	    	  }
+	    	  return true;
+	      },
+	      customRule2: function(input) {
+	    	  if(input.is("[name=idcard]")) {
+	    		  var customerSource = $("#card_id").val();
+	    		  //15位数身份证正则表达式
+	    		    var arg1 = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/;
+	    		    //18位数身份证正则表达式
+	    		    var arg2 = /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[A-Z])$/;
+	    		    if (customerSource.match(arg1) == null && customerSource.match(arg2) == null) {
+	    		        return false;
+	    		    }
+	    		    else {
+	    		        return true;
+	    		    }
+	    	  }
+	    	  return true;
+	      }
+	},
+		//自定义验证消息
+		messages: {
+			customRule1: "身份证不能为空",
+			customRule2: "身份证格式不正确"
+			
+		  }
+			
+	});
+
+});*/
 
 
 
+
+
+
+
+
+//=====================kendoui自定义验证结束====================
 //存放空的数组
 var emptyNum=[];
 //存放格式错误的数组
@@ -340,7 +419,7 @@ $("#saveCustomerData").on("click",function(){
 		viewModel.set("customer.errorinfo",JSON.stringify(map));
 		map.clear();
 	}*/
-	 //console.log(JSON.stringify(viewModel.customer));
+		 //console.log("====="+JSON.stringify(viewModel.customer));
 	$.ajax({
 		 type: "POST",
 		 url: "/visa/newcustomer/customerSave",
@@ -350,7 +429,7 @@ $("#saveCustomerData").on("click",function(){
 			 if(indexnew!=null){
 				 layer.close(indexnew);
 			 }
-			 console.log(result);
+			 //console.log(result);
 			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			 parent.layer.close(index);
 			 window.parent.successCallback('1');
@@ -359,9 +438,6 @@ $("#saveCustomerData").on("click",function(){
 			 if(indexnew!=null){
 				 layer.close(indexnew);
 			 }
-			 console.log(XMLHttpRequest);
-			 console.log(textStatus);
-			 console.log(errorThrown);
              layer.msg('保存失败!',{time:2000});
          }
 	});
@@ -382,7 +458,7 @@ $("#saveCustomerData").on("click",function(){
 	    		errorNum.push(person);
 	    		
 	    	}
-	    	console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
+	    	///console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
 	    });
 	    //end 验证————————————————————————————————
 		
@@ -482,9 +558,14 @@ $(function () {
 				
 				viewModel.set("customer.passportlose.sendcountry","CHIN");
 			}
+			
+			var photoname= "<a id='downloadA' href='#'>"
+	             + viewModel.get("customer.photoname")
+	             + "</a>"
         	var phoneurl=viewModel.get("customer.phoneurl");
         	if(phoneurl!=null&&phoneurl!=''){
         		$("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
+        		$("#photoname").html(photoname);
         	}
 
         	/*预览 按钮*/

@@ -20,6 +20,8 @@ $(function () {
 	//页面加载时回显签证信息
 	$.getJSON(localhostPaht +'/visa/visainfo/listvisainfo', function (resp) {
      	viewModel.set("customer", $.extend(true, dafaults, resp));
+     	//console.log(JSON.stringify(resp));
+     	//viewModel.set("customer.trip[0].paypersion", "我自己");
     });
 	//折叠板 效果初始化
     $("#panelbar").kendoPanelBar({
@@ -150,9 +152,7 @@ var countries = new kendo.data.DataSource({
 	        payCompany:{},
 	        fastMail:{},
 	        peerList:{},
-	        travelpurpose:{
-	        	travelPurpose:"旅游"
-	        },//赴美国旅行目的列表
+	        travelpurpose:{},//赴美国旅行目的列表
 	        travelplan:{},//是否制定了具体旅行计划
 	        relationship:{},//与你的关系
 	        travel: {
@@ -217,7 +217,13 @@ var viewModel = kendo.observable({
     },
     // 支付人
     payType: function (type) {
-        return  viewModel.get("customer.trip[0].paypersion")== type;
+    	console.log("viewModel.get('customer.trip[0].paypersion')的值为："+viewModel.get("customer.trip[0].paypersion"));
+    	console.log("type的值为："+type);
+    	var aa = viewModel.get("customer.trip[0].paypersion");
+    	if(aa==type){
+    		return true;
+    	}
+    	return  false;
     },
     // 婚姻状态
     spouseState: function (state) {
@@ -324,7 +330,7 @@ var viewModel = kendo.observable({
     },
     //是否加入一个团队或组织旅行
     joinTeamEnable: function () {
-    	return viewModel.get("customer.trip.teamname");
+    	return viewModel.get("customer.trip[0].teamname");
     },
     //你是否有其他亲属在美国
     relationEnable:function(){
@@ -447,7 +453,7 @@ $("#if_formulate_plan").change(function () {
 });
 //是否加入一个团队或组织旅行
 $("#join_group").change(function () {
-	viewModel.set("customer.trip.teamname", $(this).is(':checked') ? " " : "");
+	viewModel.set("customer.trip[0].teamname", $(this).is(':checked') ? " " : "");
 });
 //申请的制作者
 $("#has_assist_apply").change(function () {

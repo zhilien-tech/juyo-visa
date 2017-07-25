@@ -1,7 +1,7 @@
 /*customermanage_list_data*/
 SELECT
 	vcm.id,
-	vcm.serialNumber,
+	vcm.comId,
 	vcm.fullComName,
 	vcm.customerSource,
 	vcm.linkman,

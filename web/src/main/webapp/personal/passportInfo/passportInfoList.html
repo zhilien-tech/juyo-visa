@@ -26,7 +26,7 @@
     	#imgId{width:100%;height:100%;position: relative;top:-15px;}
     </style>
 </head>
-<body class="clear-scroll">
+<body id="aaaa" class="clear-scroll">
 	<!--搜索条件 模块-->
     <div class="Search">
       <div  class="col-xs-12">
@@ -47,6 +47,7 @@
 						<div class="upload-btn"> 
 							<button id="uploadFile" name="file" type="file" class="btn btn-primary btn-sm" >上传</button>
 							<span id="completeFileName"></span>
+							<span id="photoname"></span>
 							<span id="yvlan"></span>
 						</div>
 					</div>
@@ -103,7 +104,7 @@
             <div class="form-group">
                 <label for="ir_last_name_cn">中文姓:<span style="color: red">*</span></label>
                 <div class='input-group'>
-                    <input id="ir_last_name_cn" data-bind="value:customer.chinesexing" class="k-textbox" style="width: 100%;"/>
+                    <input id="ir_last_name_cn" name="chinesexing" data-bind="value:customer.chinesexing" required validationMessage="中文姓不能为空" class="k-textbox" style="width: 100%;"/>
                     <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                 </div>
             </div>
@@ -112,7 +113,7 @@
 	            <div class="form-group">
 	                <label for="ir_last_name_en">拼音:<span style="color: red">*</span></label>
 	                <div class='input-group'>
-	                    <input id="ir_last_name_en" data-bind="value:customer.chinesexingen" class="k-textbox"
+	                    <input id="ir_last_name_en" data-bind="value:customer.chinesexingen" required validationMessage="拼音不能为空" name="chinesexingen" class="k-textbox"
 	                           style="width: 100%;text-transform:uppercase;"/>
 	                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                </div>
@@ -123,7 +124,7 @@
                 <label for="ir_first_name_cn">中文名:<span style="color: red">*</span></label>
                 <div class='input-group'>
                     <input id="ir_first_name_cn" data-bind="value:customer.chinesename"
-                           class="k-textbox" style="width: 100%;"/>
+                           class="k-textbox" style="width: 100%;" required validationMessage="中文名不能为空" name="chinesename"/>
                     <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                 </div>
             </div>
@@ -133,7 +134,7 @@
 	                <label for="ir_first_name_en">拼音:<span style="color: red">*</span></label>
 	                <div class='input-group'>
 	                    <input id="ir_first_name_en" data-bind="value:customer.chinesenameen"
-	                           class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
+	                           class="k-textbox" style="width: 100%;text-transform:uppercase;" required validationMessage="拼音不能为空" name="chinesenameen"/>
 	                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                </div>
 	            </div>
@@ -142,7 +143,7 @@
                 <div class="form-group">
                     <label for="last_name_cn">护照号:</label>
                     <div class='input-group'>
-                      <input id="passport" type="text" data-bind="value:customer.passport" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="passport" type="text" data-bind="value:customer.passport" required validationMessage="护照号不能为空" name="passport" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
@@ -218,16 +219,22 @@
                 <div class="form-group">
                     <label for="last_name_cn">签发日期:</label>
                     <div class='input-group'>
-                       <input id="signedDate" style="width: 100%;" data-role="datepicker" data-bind="value:customer.passportsenddate,events:{change:onDateChange}"/>
+                       <input id="signedDate" style="width: 100%;" 
+                       		  data-role="datepicker" 
+                       		  data-bind="value:customer.passportsenddate,events:{change:onDateChange}"
+                       		  required validationMessage="护照签发日期不能为空" name="passportsenddate"/>
                        <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
              </div>
              <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="last_name_cn">签发地点（省份）:</label>
+                    <label for="last_name_cn">护照签发省份（拼音）:</label>
                     <div class='input-group'>
-                      <input id="passportsendprovice" type="text" data-bind="value:customer.passportsendprovice" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="passportsendprovice" type="text" 
+                      		 data-bind="value:customer.passportsendprovice" 
+                      		 required validationMessage="护照签发省份（拼音）不能为空" name="passportsendprovice"
+                      		 class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
@@ -242,7 +249,10 @@
                 <div class="form-group">
                     <label for="last_name_cn">有效期至:</label>
                     <div class='input-group'>
-                       <input id="validDate" style="width: 100%;" data-role="datepicker" data-bind="value:customer.passporteffectdate,events:{change:onDateChange}"/>
+                       <input id="validDate" style="width: 100%;" 
+                       		  data-role="datepicker" 
+                       		  required validationMessage="护照有效日期不能为空" name="passporteffectdate"
+                       		  data-bind="value:customer.passporteffectdate,events:{change:onDateChange}"/>
                        <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
