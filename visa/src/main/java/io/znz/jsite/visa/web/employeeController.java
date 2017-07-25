@@ -7,7 +7,9 @@
 package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.BaseController;
+import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
+import io.znz.jsite.core.enums.UserLoginEnum;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.visa.entity.job.JobEntity;
 import io.znz.jsite.visa.forms.employeeform.EmployeeAddForm;
@@ -55,7 +57,13 @@ public class employeeController extends BaseController {
 	public Object employeelist(@RequestBody EmployeeSqlForm sqlForm, final HttpSession session) {
 		//通过session获取公司的id
 		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		//从session中取出当前登录用户信息
+		EmployeeEntity user = (EmployeeEntity) session.getAttribute(Const.SESSION_NAME);
+		long usertype = user.getUserType();//得到用户类型
 		long comId = company.getComId();//得到公司的id
+		if (UserLoginEnum.PERSONNEL.intKey() == usertype) {
+			sqlForm.setAdminId(user.getId());
+		}
 		sqlForm.setComId(comId);
 		Pager pager = new Pager();
 		pager.setPageNumber(sqlForm.getPageNumber());

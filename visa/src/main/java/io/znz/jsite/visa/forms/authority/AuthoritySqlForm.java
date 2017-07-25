@@ -53,7 +53,7 @@ public class AuthoritySqlForm extends KenDoParamForm {
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
 		cnd.and("c.id", "=", comId);
-		cnd.and("f.parentId", "=", 0);
+		cnd.and("f.parentId", "!=", 0);
 		cnd.groupBy("d.id");
 		cnd.orderBy("d.createTime", "DESC");
 		return cnd;
