@@ -29,6 +29,8 @@ import com.uxuexi.core.common.util.Util;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class EmployeeSqlForm extends KenDoParamForm {
+	//主键
+	private long id;
 	//公司id
 	private long comId;
 	//用户姓名
@@ -63,9 +65,8 @@ public class EmployeeSqlForm extends KenDoParamForm {
 	private String salt;
 	//国家类型
 	private Integer countryType;
-
-	/**公司管理员id*/
-	private long adminId;
+	//父id
+	private long pId;
 
 	@Override
 	public Sql sql(SqlManager paramSqlManager) {
@@ -81,8 +82,8 @@ public class EmployeeSqlForm extends KenDoParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
-		if (!Util.isEmpty(adminId) && adminId != 0) {
-			cnd.and("e.id", "=", adminId);
+		if (!Util.isEmpty(pId) && pId != 0) {
+			cnd.and("e.pId", "=", id);
 		}
 		cnd.and("e.comId", "=", comId);
 		cnd.and("e.status", "=", UserJobStatusEnum.JOB.intKey());//在职

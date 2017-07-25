@@ -22,7 +22,7 @@ SELECT
 	e.updateTime,
 	e.remark,
 	e.countryType,
-	e.res3,
+	e.pId,
 	e.res4,
 	e.res5
 FROM
@@ -77,7 +77,7 @@ SELECT
 	e.updateTime,
 	e.remark,
 	e.countryType,
-	e.res3,
+	e.pId,
 	e.res4,
 	e.res5
 FROM
@@ -126,7 +126,7 @@ SELECT
 	e.updateTime,
 	e.remark,
 	e.countryType,
-	e.res3,
+	e.pId,
 	e.res4,
 	e.res5
 FROM

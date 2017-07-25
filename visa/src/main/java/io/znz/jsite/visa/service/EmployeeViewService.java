@@ -7,11 +7,11 @@
 package io.znz.jsite.visa.service;
 
 import io.znz.jsite.base.NutzBaseService;
+import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
-import io.znz.jsite.visa.entity.user.EmployeeEntity;
 import io.znz.jsite.visa.entity.user.SysUserEntity;
 import io.znz.jsite.visa.entity.userjobmap.UserJobMapEntity;
 import io.znz.jsite.visa.enums.UserDeleteStatusEnum;
@@ -81,6 +81,9 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 	public Object addUserData(EmployeeAddForm addForm, long jobId, final HttpSession session) {
 		//通过session获取公司的id
 		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		//从session中取出当前登录用户信息
+		EmployeeEntity user = (EmployeeEntity) session.getAttribute(Const.SESSION_NAME);
+		long pid = user.getId();
 		long comId = company.getComId();//得到公司的id
 		//查询出如果本公司下的某个员工离职了，再此入职让他的状态改为入职状态即可
 		Sql sqlUser = Sqls.create(sqlManager.get("employee_update_old_user"));
@@ -103,6 +106,7 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 			addForm.setUserType(UserTypeEnum.PERSONNEL.intKey());//工作人员身份
 			addForm.setDisableUserStatus(UserStatusEnum.VALID.intKey());//激活
 			addForm.setComId(comId);
+			addForm.setPId(pid);
 			//初始密码
 			byte[] salt = Digests.generateSalt(SALT_SIZE);
 			addForm.setSalt(Encodes.encodeHex(salt));

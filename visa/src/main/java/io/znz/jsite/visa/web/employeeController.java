@@ -59,10 +59,12 @@ public class employeeController extends BaseController {
 		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
 		//从session中取出当前登录用户信息
 		EmployeeEntity user = (EmployeeEntity) session.getAttribute(Const.SESSION_NAME);
+		long pid = user.getPId();//得到当前登录管理员id
 		long usertype = user.getUserType();//得到用户类型
 		long comId = company.getComId();//得到公司的id
+		sqlForm.setId(user.getId());
 		if (UserLoginEnum.PERSONNEL.intKey() == usertype) {
-			sqlForm.setAdminId(user.getId());
+			sqlForm.setPId(pid);
 		}
 		sqlForm.setComId(comId);
 		Pager pager = new Pager();

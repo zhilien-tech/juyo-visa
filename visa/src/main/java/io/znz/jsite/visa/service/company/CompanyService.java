@@ -80,6 +80,7 @@ public class CompanyService extends NutzBaseService<CompanyEntity> {
 		empForm.setUserType(UserLoginEnum.COMPANY_ADMIN.intKey());//工作人员类别
 		empForm.setTelephone(addForm.getAdminName());
 		empForm.setFullName(addForm.getAdminName());
+		empForm.setPId(0);
 		EmployeeEntity userAdd = dbDao.insert(empForm);
 		Integer empId = userAdd.getId();//得到用户id
 		//#########################添加公司信息###############################//
