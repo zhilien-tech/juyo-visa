@@ -20,6 +20,8 @@ $(function () {
 	//页面加载时回显签证信息
 	$.getJSON(localhostPaht +'/visa/visainfo/listvisainfo', function (resp) {
      	viewModel.set("customer", $.extend(true, dafaults, resp));
+     	//console.log(JSON.stringify(resp));
+     	//viewModel.set("customer.trip[0].paypersion", "我自己");
     });
 	//折叠板 效果初始化
     $("#panelbar").kendoPanelBar({
@@ -150,9 +152,7 @@ var countries = new kendo.data.DataSource({
 	        payCompany:{},
 	        fastMail:{},
 	        peerList:{},
-	        travelpurpose:{
-	        	travelPurpose:"旅游"
-	        },//赴美国旅行目的列表
+	        travelpurpose:{},//赴美国旅行目的列表
 	        travelplan:{},//是否制定了具体旅行计划
 	        relationship:{},//与你的关系
 	        travel: {
@@ -217,7 +217,13 @@ var viewModel = kendo.observable({
     },
     // 支付人
     payType: function (type) {
-        return  viewModel.get("customer.trip[0].paypersion")== type;
+    	console.log("viewModel.get('customer.trip[0].paypersion')的值为："+viewModel.get("customer.trip[0].paypersion"));
+    	console.log("type的值为："+type);
+    	var aa = viewModel.get("customer.trip[0].paypersion");
+    	if(aa==type){
+    		return true;
+    	}
+    	return  false;
     },
     // 婚姻状态
     spouseState: function (state) {
@@ -324,7 +330,7 @@ var viewModel = kendo.observable({
     },
     //是否加入一个团队或组织旅行
     joinTeamEnable: function () {
-    	return viewModel.get("customer.trip.teamname");
+    	return viewModel.get("customer.trip[0].teamname");
     },
     //你是否有其他亲属在美国
     relationEnable:function(){
@@ -447,128 +453,43 @@ $("#if_formulate_plan").change(function () {
 });
 //是否加入一个团队或组织旅行
 $("#join_group").change(function () {
-	viewModel.set("customer.trip.teamname", $(this).is(':checked') ? " " : "");
+	viewModel.set("customer.trip[0].teamname", $(this).is(':checked') ? " " : "");
 });
 //申请的制作者
 $("#has_assist_apply").change(function () {
 	viewModel.set("customer.applicantproducer", $(this).is(':checked') ? " " : "");
 });
-/****************************************************表单验证***********************************************************/
+
 //签证信息保存
-var emptyNum=[];
-//存放格式错误的数组
-var errorNum=[];
-var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
 $("#updatePassportSave").on("click",function(){
-	if(validatable.validate()){
-		//清空验证的数组
-		emptyNum.splice(0,emptyNum.length);
-		errorNum.splice(0,errorNum.length);
-		viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
-		$.ajax({
-			 type: "POST",
-			 url: "/visa/visainfo/updatePassportSave",
-			 contentType:"application/json",
-			 data: JSON.stringify(viewModel.customer)+"",
-			 success: function (result){
-				layer.msg('保存成功',{time:2000});
-			 },
-			 error: function(XMLHttpRequest, textStatus, errorThrown) {
-	            layer.msg('保存失败',{time:2000});
-	         }
-		});
-	}else{
-		//验证————————————————————————————————————
-	    $('.k-tooltip-validation').each(function(){
-	    	var verificationText=$(this).text().trim();//获取验证的文字信息
-	    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
-	    	labelVal = labelVal.split(":");
-	    	labelVal.pop();
-	    	labelVal = labelVal.join(":");//截取 :之前的信息
-	    	var person=new Object();
-	    	person.text=labelVal;
-	    	person.error="";
-	    	if(verificationText.indexOf("不能为空")>0){
-	    		emptyNum.push(person);
-	    	}else{
-	    		errorNum.push(person);
-	    	}
-	    	console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
-	    });
-	    //end 验证————————————————————————————————
-		var str="";
-		if(emptyNum.length>0){
-			for(var i=0;i<emptyNum.length;i++){
-				str+=emptyNum[i].text+",";
-			}
-			str+="不能为空！"
-		}
-		if(errorNum.length>0){
-			for(var i=0;i<errorNum.length;i++){
-				str+=errorNum[i].text+",";
-			}
-			str+="格式不正确！";
-		}
-		$.layer.alert(str);
-		//用完清空
-		emptyNum.splice(0,emptyNum.length);
-		errorNum.splice(0,errorNum.length);
-	}
+	console.log(JSON.stringify(viewModel.customer));
+	viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
+	$.ajax({
+		 type: "POST",
+		 url: "/visa/visainfo/updatePassportSave",
+		 contentType:"application/json",
+		 data: JSON.stringify(viewModel.customer)+"",
+		 success: function (result){
+			layer.msg('保存成功',{time:2000});
+		 },
+		 error: function(XMLHttpRequest, textStatus, errorThrown) {
+            layer.msg('保存失败',{time:2000});
+         }
+	});
 });
 //点击保存时
 $("#nextStepBtn").click(function(){
-	if(validatable.validate()){
-		//清空验证的数组
-		emptyNum.splice(0,emptyNum.length);
-		errorNum.splice(0,errorNum.length);
-		$.ajax({
-			 type: "POST",
-			 url: "/visa/visainfo/updatePassportSave",
-			 contentType:"application/json",
-			 data: JSON.stringify(viewModel.customer)+"",
-			 success: function (result){
-				layer.msg("保存成功",{time:2000});
-				 window.location.href='/myvisa/transactVisa/visaProgressImg.html?country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
-			 },
-			 error: function(XMLHttpRequest, textStatus, errorThrown) {
-	             layer.msg('保存失败',{time:2000});
-	         }
-		});
-	}else{
-		//验证————————————————————————————————————
-	    $('.k-tooltip-validation').each(function(){
-	    	var verificationText=$(this).text().trim();//获取验证的文字信息
-	    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
-	    	labelVal = labelVal.split(":");
-	    	labelVal.pop();
-	    	labelVal = labelVal.join(":");//截取 :之前的信息
-	    	var person=new Object();
-	    	person.text=labelVal;
-	    	person.error="";
-	    	if(verificationText.indexOf("不能为空")>0){
-	    		emptyNum.push(person);
-	    	}else{
-	    		errorNum.push(person);
-	    	}
-	    	console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
-	    });
-	    //end 验证————————————————————————————————
-		var str="";
-		if(emptyNum.length>0){
-			for(var i=0;i<emptyNum.length;i++){
-				str+=emptyNum[i].text+",";
-			}
-			str+="不能为空！"
-		}
-		if(errorNum.length>0){
-			for(var i=0;i<errorNum.length;i++){
-				str+=errorNum[i].text+",";
-			}
-			str+="格式不正确！";
-		}
-		$.layer.alert(str);
-		//用完清空
-		emptyNum.splice(0,emptyNum.length);
-		errorNum.splice(0,errorNum.length);
-	}
+	$.ajax({
+		 type: "POST",
+		 url: "/visa/visainfo/updatePassportSave",
+		 contentType:"application/json",
+		 data: JSON.stringify(viewModel.customer)+"",
+		 success: function (result){
+			layer.msg("保存成功",{time:2000});
+			 window.location.href='/myvisa/transactVisa/visaProgressImg.html?country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
+		 },
+		 error: function(XMLHttpRequest, textStatus, errorThrown) {
+             layer.msg('保存失败',{time:2000});
+         }
+	});
 });

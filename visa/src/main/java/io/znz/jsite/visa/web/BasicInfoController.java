@@ -299,7 +299,9 @@ public class BasicInfoController extends BaseController {
 		//美国纳税人认证码
 		TaxpayerAuthenticationCodeEntity taxpayerauthenticat = customer.getTaxpayerauthenticat();
 		if (!Util.isEmpty(taxpayerauthenticat)) {
-			nutDao.update(taxpayerauthenticat);
+			if (!Util.isEmpty(taxpayerauthenticat.getId()) && taxpayerauthenticat.getId() > 0) {
+				nutDao.update(taxpayerauthenticat);
+			}
 		} else {
 			taxpayerauthenticat.setCustomerId(customer.getId());
 			dbDao.insert(taxpayerauthenticat);

@@ -135,16 +135,16 @@
                                             		style="width: 100%;"
                                             		data-value-primitive="true"
                                                     data-bind="value:customer.trip[0].paypersion">
-                                                <option>我自己</option>
-                                                <option>其他人</option>
-                                                <option>公司/组织</option>
+                                                <option value="S">我自己</option>
+                                                <option value="O">其他人</option>
+                                                <option value="C">公司/组织</option>
                                             </select>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div data-bind="visible:payType('其他人')"><!-- data-bind="visible:payType('其他人')" -->
+                            <div data-bind="visible:payType('O')"><!-- data-bind="visible:payType('其他人')" -->
                                 <!--支付人姓-->
                                 <div class="row who_pay">
                                     <div class="col-xs-6">
@@ -239,7 +239,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div data-bind="visible:payType('公司/组织')"><!-- data-bind="visible:payType('公司/组织')" -->
+                            <div data-bind="visible:payType('C')"><!-- data-bind="visible:payType('公司/组织')" -->
                                 <!--付费公司名称(中文)-->
                                 <div class="row who_pay">
                                     <div class="col-xs-12">
@@ -316,7 +316,8 @@
                                                         data-value-primitive="true"
 	                                                    data-text-field="text"
 	                                                    data-value-field="value"
-                                                        data-bind="source:countries,value:customer.payCompany[0].comcountry"/>
+                                                        data-bind="source:countries,value:customer.payCompany[0].comcountry">
+                                                </select>
                                                 <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                             </div>
                                         </div>
@@ -458,14 +459,12 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="join_group"
-                                               class="check-box-label">是否加入一个团队或组织旅行:</label>
-                                        <input id='join_group'  data-bind="value:customer.trip[0].teamname"
-                                               class="mui-switch" type="checkbox"/>
+                                        <label for="join_group" class="check-box-label">是否加入一个团队或组织旅行:</label>
+                                        <input id='join_group'  data-bind="checked:joinTeamEnable" class="mui-switch" type="checkbox"/>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row join_group"  data-bind="visible:customer.trip[0].teamname" ><!-- data-bind="visible:customer.travel.team" -->
+                            <div class="row join_group"  data-bind="visible:joinTeamEnable" ><!-- data-bind="visible:customer.travel.team" -->
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <label for="join_group_name">团队名称:<span style="color: red">*</span></label>
@@ -733,7 +732,7 @@
                                             <input  id="us_contact_zip_code" 
                                             		class="k-textbox" style="width: 100%;"
                                             		required validationMessage="电子邮件不能为空" name="linkzipcode"
-                                                    data-bind="value:customer.trip[0].linkzipcode"/>
+                                                    data-bind="value:customer.trip[0].email"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -796,7 +795,6 @@
                                         <div class='input-group'>
                                             <input id="m_last_name_cn" class="k-textbox" 
                                             	   style="width: 100%;" data-bind="value:customer.mother.xing"
-                                            	   required validationMessage="母亲姓不能为空" name="xing"
                                             />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -808,7 +806,6 @@
                                         <div class='input-group'>
                                             <input id="m_first_name_cn" class="k-textbox" 
                                             	   style="width: 100%;" data-bind="value:customer.mother.name"
-                                            	   required validationMessage="母亲名不能为空" name="name"
                                             />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
