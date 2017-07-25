@@ -14,7 +14,7 @@ import com.uxuexi.core.common.enums.IEnum;
  * @Date	 2017年6月11日 	 
  */
 public enum OrderVisaAreaEnum implements IEnum {
-	dongbei(0, "东北"), huadong(1, "华东"), huanan(2, "华南");
+	BEIJING(0, "北京"), SHANGHAI(1, "上海"), GUANGZHOU(2, "广州"), CHENGDU(3, "成都"), SHENYANG(4, "沈阳");
 	private int key;
 	private String value;
 

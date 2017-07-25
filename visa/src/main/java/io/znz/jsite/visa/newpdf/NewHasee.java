@@ -147,8 +147,20 @@ public class NewHasee extends NewTemplate {
 
 			map.put("stay", (diffDays(startDate, endDate) + 1) + "天");//停留周期
 			//受理日和发给日没有入口？？？？
-			map.put("startDate", df4.format(order.getSenddate()));//受理日
-			map.put("endDate", df4.format(order.getOutdate()));//发给日
+			if (!Util.isEmpty(order.getSenddate())) {
+
+				map.put("startDate", df4.format(order.getSenddate()));//受理日
+			} else {
+				map.put("startDate", "");//受理日
+
+			}
+			if (!Util.isEmpty(order.getOutdate())) {
+				map.put("endDate", df4.format(order.getOutdate()));//发给日
+
+			} else {
+				map.put("endDate", "");//发给日
+
+			}
 
 			map.put("autograph", "北京神舟国际旅行社集团有限公司出境旅游公司");//最后的签名
 			map.put("createDate", df3.format(new Date()));//介绍日期
@@ -594,7 +606,7 @@ public class NewHasee extends NewTemplate {
 			}
 			document.add(table);
 			//文字添加
-			{
+			/*{
 				String text = String.format("会社名：%s", "dhfasdf");
 				Paragraph p = new Paragraph(text, font);
 				p.setSpacingBefore(5);
@@ -626,7 +638,7 @@ public class NewHasee extends NewTemplate {
 				p.setIndentationRight(20);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
-			}
+			}*/
 
 			//添加盖章
 			document.add(getSeal());
