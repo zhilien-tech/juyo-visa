@@ -10,9 +10,12 @@ import io.znz.jsite.visa.simulator.service.SimulateViewService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 
@@ -37,6 +40,24 @@ public class SimulateController {
 	@ResponseBody
 	public Object fetchUSA() {
 		return simulateViewService.fetchCustomer4SimulatorUSA();
+	}
+
+	/**
+	 * 将准备提交的任务修改为'提交中'
+	 */
+	@RequestMapping(value = "ds160/{cid}", method = RequestMethod.GET)
+	@ResponseBody
+	public Object ds160(@PathVariable Long cid) {
+		return simulateViewService.ds160(cid);
+	}
+
+	/**
+	 * 美国，签证文件上传，上传成功 将签证状态改为已提交使馆
+	 */
+	@RequestMapping(value = "usaUpload/{cid}", method = RequestMethod.POST)
+	@ResponseBody
+	public Object usaUpload(@RequestParam(required = false) MultipartFile file, @PathVariable Long cid) {
+		return simulateViewService.usaUpload(file, cid);
 	}
 
 }

@@ -2,15 +2,11 @@
 var countrylist=[
     {text:"美国",value:0},
     {text:"日本",value:1},
-   
-    
   ];
 //性别
 var genderlist=[
                  {text:"男",value:1},
                  {text:"女",value:0},
-                 
-                 
                  ];
 //状态listorder
 var statuslist=[
@@ -29,7 +25,6 @@ var statuslist=[
                 {text:"拒签",value:12},
                 {text:"完成",value:13},
                 {text:"EVUS",value:14}
-                
               ];
 //注册命令
 function regCmd(command) {
@@ -381,6 +376,16 @@ function successCallback(id){
 $(function(){
 	$("#start_time").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});
 	$("#end_time").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});
+	// 点击 下载 按钮时 触发
+	$(document).on('click','.k-grid-download',function(){
+			layer.open({
+	            type: 2,
+	            title: '下载',
+	            area: ['450px', '300px'],
+	            shadeClose: true,
+	            content: '/order/download.html'
+	        });
+	});
 });
 /*//点击触发日历
 $().click(function(
