@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>下载-日本</title>
+    <link rel="stylesheet" href="/res/plugin/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.common.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.office365.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/res/css/colors.min.css"/>
+    <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
+    <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/><!--修改的样式-->
+</head>
+<body>
+<div>
+    <div class="container-fluid" style="padding-top: 15px;">
+        <div class="row">
+            <div class="col-xs-12 padding-0">
+                <ul id="panelbar">
+                    <li>
+                    	<form id="addForm" method="post">
+	                        <div class="container-fluid">
+	                        
+	                        	<!-- 送签社-->
+	                            <div class="row">
+	                                <div class="col-xs-12">
+	                                    <div class="form-group">
+	                                        <label for="gender">送签社:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                            <select id="songqianShe" style="width: 100%;"
+	                                                    data-role="dropdownlist"
+	                                                    data-value-primitive="true"
+	                                                    data-bind=" ">
+	                                                <option value="1">日本株式会社金通商事</option>
+	                                                <option value="0">日本三全水饺株式会社</option>
+	                                            </select>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+								<!-- end 送签社 -->
+								
+								<!-- 地接社 -->
+	                            <div class="row">
+	                                <div class="col-xs-12">
+	                                    <div class="form-group">
+	                                        <label for="gender">地接社:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                            <select id="dijieShe" style="width: 100%;"
+	                                                    data-role="dropdownlist"
+	                                                    data-value-primitive="true"
+	                                                    data-bind=" ">
+	                                                <option value="1">聚优国际（北京）旅行社</option>
+	                                                <option value="0">聚优国际（上海）旅行社</option>
+	                                            </select>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+								<!-- end 地接社 -->
+
+	                      </div>
+	                   </form>   
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row" data-bind="visible:showToolBar">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <button id="" class="k-primary k-button col-xs-12">确定下载</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!--引入 js 库文件-->
+<script src="/res/plugin/template.js"></script>
+<script src="/res/plugin/jquery.min.js"></script>
+<script src="/res/plugin/layer/layer.js"></script>
+<script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
+<script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
+<script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
+<script src="/res/js/common.js"></script>
+<script src="/res/plugin/webtoolkit.md5.js"></script>
+<script src="/res/js/idcard.js"></script>
+
+<script type="text/javascript">
+$(function(){
+	$("#songqianShe").kendoDropDownList();//初始化 送签社
+	$("#dijieShe").kendoDropDownList(); //初始化 地接社
+});
+</script>
+</html>

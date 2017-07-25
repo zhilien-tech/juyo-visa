@@ -6,6 +6,8 @@ package io.znz.jsite.visa.simulator.ui;
 
 import io.znz.jsite.visa.simulator.util.HttpClientUtil;
 import io.znz.jsite.visa.simulator.util.ResultObject;
+import io.znz.jsite.visa.simulator.util.ZFile;
+import io.znz.jsite.visa.simulator.util.ZipUtils;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -20,14 +22,19 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.IdentityHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.prefs.Preferences;
+import java.util.zip.ZipOutputStream;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -52,6 +59,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import com.jgoodies.forms.factories.Borders;
 
 /**
@@ -60,6 +68,9 @@ import com.jgoodies.forms.factories.Borders;
 public class MainForm extends JPanel {
 
 	private static final String TASK_FETCH_URI = "visa/simulator/fetch";
+
+	private static final String TASK_SUBMITING_URI = "visa/simulator/ds160/";
+	private static final String VISA_UPLOAD_URI = "visa/simulator/usaUpload/";
 	//	private static final String TASK_FETCH_URI = "visa/customer/fetch";
 
 	private static final String HISTORY = "history";
@@ -225,6 +236,15 @@ public class MainForm extends JPanel {
 							String cmd = "python " + pyFile.getText() + " " + target.getAbsolutePath();
 							command.setText(cmd);
 							exe(command.getText());
+
+							//提交ds160
+							String ds160rs = HttpClientUtil.get(getBaseUrl() + TASK_SUBMITING_URI + oid);
+							ResultObject<Map, Object> ds160ro = JSON.parseObject(ds160rs, ResultObject.class);
+							if (ds160ro.getCode() == ResultObject.ResultCode.SUCCESS) {
+								log("任务码:" + oid + " 提交中...");
+							} else {
+								JOptionPane.showMessageDialog(new JLabel(), ds160ro.getMsg());
+							}
 							log("准备任务码为" + oid + "的上传文件");
 							log("总计用时:" + ((System.currentTimeMillis() - startTime) / 1000) + "秒");
 						} else {
@@ -282,28 +302,55 @@ public class MainForm extends JPanel {
 			@Override
 			public void run() {
 				String files[] = resultFiles.getText().split(";");
-				IdentityHashMap map = new IdentityHashMap();
-				for (String file : files) {
-					String fileName = new File(file).getName();
-					//如果是 pdf 则重命名为任务 ID
-					if (fileName.toLowerCase().endsWith(".pdf"))
-						fileName = tid + ".pdf";
-					String json = HttpClientUtil.upload(getBaseUrl() + "upload", file, fileName);
-					ResultObject<String, ?> ro = JSON.parseObject(json, ResultObject.class);
-					if (ro.getCode() == ResultObject.ResultCode.SUCCESS) {
-						log(fileName + "上传成功!");
-						map.put(new String("file"), ro.getData());
-					} else {
-						log(fileName + "上传失败,原因:" + ro.getMsg());
+
+				List<ZFile> zfiles = Lists.newArrayList();
+				for (String f : files) {
+					File file = new File(f);
+					InputStream is;
+					try {
+						is = new FileInputStream(file);
+						String fileName = file.getName();
+
+						ZFile zf = new ZFile();
+						zf.setInput(is);
+						zf.setFileName(fileName);
+						zf.setRelativePathInZip("/" + tid);
+						zfiles.add(zf);
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
 					}
 				}
-				String json = HttpClientUtil.post(getBaseUrl() + "visa/customer/finish/" + tid, map);
-				ResultObject<String, ?> ro = JSON.parseObject(json, ResultObject.class);
-				if (ro.getCode() == ResultObject.ResultCode.SUCCESS) {
-					log("任务码为" + tid + "的任务执行完毕");
-				} else {
-					log("任务码为" + tid + "的任务执行失败,请核实后再尝试,原因:" + ro.getMsg());
+
+				File tmp = new File(System.getProperty("user.dir") + "/tmp");
+				if (!tmp.exists())
+					tmp.mkdirs();
+
+				try {
+					String zipPath = System.getProperty("user.dir") + "/tmp/" + tid + ".zip";
+					ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipPath));
+
+					//将文件进行打包(将数据写入zos)
+					ZipUtils.zipFile(zfiles, zos);
+					zos.flush();
+					zos.close();
+
+					File zipFile = new File(zipPath);
+
+					IdentityHashMap params = new IdentityHashMap();
+					String json = HttpClientUtil.upload(getBaseUrl() + VISA_UPLOAD_URI + tid, zipFile, params);
+					ResultObject<String, ?> ro = JSON.parseObject(json, ResultObject.class);
+					if (ro.getCode() == ResultObject.ResultCode.SUCCESS) {
+						log("任务码为" + tid + "的任务执行完毕");
+					} else {
+						log("任务码为" + tid + "的任务执行失败,请核实后再尝试,原因:" + ro.getMsg());
+					}
+
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
+
 				executeTask.setEnabled(true);
 				upload.setEnabled(true);
 				taskId.setText("");//清空任务码

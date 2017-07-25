@@ -8,6 +8,7 @@ package io.znz.jsite.visa.simulator.service;
 
 import io.znz.jsite.base.NutzBaseService;
 import io.znz.jsite.base.bean.ResultObject;
+import io.znz.jsite.download.impl.QiniuUploadServiceImpl;
 import io.znz.jsite.exception.JSiteException;
 import io.znz.jsite.util.DateUtils;
 import io.znz.jsite.util.StringUtils;
@@ -63,6 +64,7 @@ import io.znz.jsite.visa.simulator.dto.TravelDto;
 import io.znz.jsite.visa.simulator.dto.UsaDto;
 import io.znz.jsite.visa.simulator.dto.WorkDto;
 
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -76,13 +78,16 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.joda.time.DateTime;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.pager.Pager;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -114,6 +119,70 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 
 	@Autowired
 	private TelecodeService telecodeService;
+
+	@Autowired
+	private QiniuUploadServiceImpl qiniuUploadService;
+
+	@Transactional
+	public Object usaUpload(final MultipartFile file, final Long cid) {
+
+		if (Util.isEmpty(cid)) {
+			return ResultObject.fail("任务id不能为空！");
+		}
+
+		NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, cid);
+		if (Util.isEmpty(customer)) {
+			return ResultObject.fail("任务不存在！");
+		}
+
+		String visaFile = null;
+		try {
+			InputStream inputStream = file.getInputStream();
+			visaFile = qiniuUploadService.uploadImage(inputStream, "zip", null);
+
+			Integer status = customer.getStatus();
+			//验证提交状态
+			if (Util.isEmpty(status) || OrderVisaApproStatusEnum.submiting.intKey() != status) {
+				return ResultObject.fail("已提交ds160的任务方可进行文件上传！");
+			}
+
+			//为客户设置文件地址，签证状态改为'已提交'
+			customer.setStatus(OrderVisaApproStatusEnum.submited.intKey());
+			customer.setVisaFile(visaFile);
+			dbDao.update(customer);
+		} catch (Exception e) {
+			return ResultObject.fail("文件上传失败,请稍后重试！");
+		}
+		return ResultObject.success(visaFile);
+	}
+
+	@Transactional
+	public Object ds160(final Long cid) {
+
+		if (Util.isEmpty(cid)) {
+			return ResultObject.fail("任务id不能为空！");
+		}
+
+		NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, cid);
+		if (Util.isEmpty(customer)) {
+			return ResultObject.fail("任务不存在！");
+		}
+
+		try {
+			Integer status = customer.getStatus();
+			//验证提交状态
+			if (Util.isEmpty(status) || OrderVisaApproStatusEnum.readySubmit.intKey() != status) {
+				return ResultObject.fail("准备提交使馆的任务方可提交ds160！");
+			}
+
+			//签证状态改为'提交中'
+			dbDao.update(NewCustomerEntity.class, Chain.make("status", OrderVisaApproStatusEnum.submiting.intKey()),
+					Cnd.where("id", "=", cid));
+		} catch (Exception e) {
+			return ResultObject.fail("ds160提交失败,请稍后重试！");
+		}
+		return ResultObject.success(customer);
+	}
 
 	/**查询第一个可提交签证网站的客户信息*/
 	public ResultObject fetchCustomer4SimulatorUSA() {
