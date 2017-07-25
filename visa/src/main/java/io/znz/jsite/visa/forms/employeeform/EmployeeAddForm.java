@@ -61,8 +61,8 @@ public class EmployeeAddForm extends AddForm {
 	private String salt;
 	//国家类型
 	private Integer countryType;
-	//预留字段3
-	private String res3;
+	//父id
+	private long pId;
 	//预留字段4
 	private String res4;
 	//预留字段5

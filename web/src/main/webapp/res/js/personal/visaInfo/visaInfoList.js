@@ -20,8 +20,6 @@ $(function () {
 	//页面加载时回显签证信息
 	$.getJSON(localhostPaht +'/visa/visainfo/listvisainfo', function (resp) {
      	viewModel.set("customer", $.extend(true, dafaults, resp));
-     	//console.log(JSON.stringify(resp));
-     	//viewModel.set("customer.trip[0].paypersion", "我自己");
     });
 	//折叠板 效果初始化
     $("#panelbar").kendoPanelBar({
@@ -78,7 +76,6 @@ $(function () {
 		if(thirdPart!=null&&thirdPart!=''){
 			
 			for(var i=0;i<thirdPart.length;i++){
-				//console.log(labelText+"==="+firstPart[i]);
 				if(labelText==thirdPart[i]){
 					$(this).next().find('input').css('border-color','#f17474');
 					$(this).next().find('.k-state-default').css('border-color','#f17474');//select(span)
@@ -184,6 +181,7 @@ var countries = new kendo.data.DataSource({
 /*****************************************************
  * 数据绑定
  ****************************************************/
+travelpurposeNum=0;
 var viewModel = kendo.observable({
     customer: dafaults,
     countries:countries,
@@ -217,8 +215,6 @@ var viewModel = kendo.observable({
     },
     // 支付人
     payType: function (type) {
-    	console.log("viewModel.get('customer.trip[0].paypersion')的值为："+viewModel.get("customer.trip[0].paypersion"));
-    	console.log("type的值为："+type);
     	var aa = viewModel.get("customer.trip[0].paypersion");
     	if(aa==type){
     		return true;
@@ -318,9 +314,19 @@ var viewModel = kendo.observable({
     },
     //赴美国旅行目的列表
     travelPurposeEnable: function () {
-    	var objectiveList = viewModel.get("customer.travelpurpose");
+    	/*var objectiveList = viewModel.get("customer.travelpurpose");
     	var state = objectiveList ? objectiveList.length > 0 : false;
-        return state;
+        return state;*/
+        var a=viewModel.get("customer.travelpurpose.id");
+    	if(a>0) return true;
+    	else if(a<0) return false;
+    	else{
+    		if(travelpurposeNum<4){
+    			travelpurposeNum++;
+    			return false;
+    		}else {return true};
+    	}
+    	return false;
     },
     //是否制定了具体旅行计划
     travelPlanEnable: function () {
@@ -445,7 +451,10 @@ $("#join_army").change(function () {
 
 //赴美国旅行目的列表
 $("#travel_purpose").change(function () {
-	viewModel.set("customer.travelpurpose", $(this).is(':checked') ? " " : "");
+	//viewModel.set("customer.travelpurpose", $(this).is(':checked') ? " " : "");
+	var a={"createTime":null,"customerId":0,"id":0,"orderId":0,"remark":"","status":0,"travelPurpose":"旅游","travelSpecificPurpose":"","updateTime":null};
+	var b={"createTime":null,"customerId":0,"id":-1,"orderId":0,"remark":"","status":0,"travelPurpose":"旅游","travelSpecificPurpose":"","updateTime":null};
+	viewModel.set("customer.travelpurpose", $(this).is(':checked') ? a : b);
 });
 //是否制定了具体旅行计划
 $("#if_formulate_plan").change(function () {
@@ -462,7 +471,6 @@ $("#has_assist_apply").change(function () {
 
 //签证信息保存
 $("#updatePassportSave").on("click",function(){
-	console.log(JSON.stringify(viewModel.customer));
 	viewModel.set("customer.relation.indirect",viewModel.get("customer.relation.indirect"));
 	$.ajax({
 		 type: "POST",

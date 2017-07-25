@@ -4,6 +4,17 @@ package io.znz.jsite.visa.simulator.util;
  * Created by Chaly on 2017/3/11.
  */
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -17,156 +28,169 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-
-import java.io.*;
-import java.util.*;
 
 public class HttpClientUtil {
 
-    /**
-     * 发送post请求
-     *
-     * @param url
-     * @param params
-     * @return
-     */
-    public static String post(String url, IdentityHashMap<String, String> params) {
-        DefaultHttpClient httpclient = new DefaultHttpClient();
-        String body = null;
+	/**
+	 * 发送post请求
+	 *
+	 * @param url
+	 * @param params
+	 * @return
+	 */
+	public static String post(String url, IdentityHashMap<String, String> params) {
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		String body = null;
 
-        HttpPost post = postForm(url, params);
+		HttpPost post = postForm(url, params);
 
-        body = invoke(httpclient, post);
+		body = invoke(httpclient, post);
 
-        httpclient.getConnectionManager().shutdown();
+		try {
+			httpclient.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-        return body;
-    }
+		return body;
+	}
 
-    /**
-     * 发送get请求
-     *
-     * @param url
-     * @return
-     */
-    public static String get(String url) {
-        DefaultHttpClient httpclient = new DefaultHttpClient();
-        String body = null;
+	/**
+	 * 发送get请求
+	 *
+	 * @param url
+	 * @return
+	 */
+	public static String get(String url) {
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		String body = null;
 
-        HttpGet get = new HttpGet(url);
-        body = invoke(httpclient, get);
+		HttpGet get = new HttpGet(url);
+		body = invoke(httpclient, get);
 
-        httpclient.getConnectionManager().shutdown();
+		try {
+			httpclient.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-        return body;
-    }
+		return body;
+	}
 
+	public static String upload(String url, File file, Map<String, String> params) {
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		HttpPost post = new HttpPost(url);
+		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+		builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
-    public static String upload(String url, String file, String fileName) {
-        DefaultHttpClient httpclient = new DefaultHttpClient();
-        HttpPost post = new HttpPost(url);
-        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-        File f = new File(file);
-        builder.addBinaryBody("file", f, ContentType.DEFAULT_BINARY, fileName);
-        builder.addTextBody("path", "ds160");
-        builder.addTextBody("rename", "false");
-        HttpEntity entity = builder.build();
-        post.setEntity(entity);
-        String body = invoke(httpclient, post);
-        return body;
-    }
+		String fileName = file.getName();
+		builder.addBinaryBody("file", file, ContentType.DEFAULT_BINARY, fileName);
 
-    public static final int cache = 10 * 1024;
+		if (null != params && !params.isEmpty()) {
+			Set<String> keySet = params.keySet();
+			for (String key : keySet) {
+				String value = params.get(key);
+				if (null != value && !"".equals(value.trim())) {
+					builder.addTextBody(key, value);
+				}
+			}
+		}
 
-    public static String download(String url, String filePath) {
-        try {
-            HttpClient client = new DefaultHttpClient();
-            HttpGet httpget = new HttpGet(url);
-            HttpResponse response = client.execute(httpget);
+		HttpEntity entity = builder.build();
+		post.setEntity(entity);
+		String body = invoke(httpclient, post);
+		return body;
+	}
 
-            HttpEntity entity = response.getEntity();
-            InputStream is = entity.getContent();
-            File file = new File(filePath);
-            file.getParentFile().mkdirs();
-            FileOutputStream fileout = new FileOutputStream(file);
-            /**
-             * 根据实际运行效果 设置缓冲区大小
-             */
-            byte[] buffer = new byte[cache];
-            int ch = 0;
-            while ((ch = is.read(buffer)) != -1) {
-                fileout.write(buffer, 0, ch);
-            }
-            is.close();
-            fileout.flush();
-            fileout.close();
+	public static final int cache = 10 * 1024;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+	public static String download(String url, String filePath) {
+		try {
+			CloseableHttpClient client = HttpClients.createDefault();
+			HttpGet httpget = new HttpGet(url);
+			HttpResponse response = client.execute(httpget);
 
-    private static String invoke(DefaultHttpClient httpclient, HttpUriRequest httpost) {
-        HttpResponse response = sendRequest(httpclient, httpost);
-        String body = paseResponse(response);
-        return body;
-    }
+			HttpEntity entity = response.getEntity();
+			InputStream is = entity.getContent();
+			File file = new File(filePath);
+			file.getParentFile().mkdirs();
+			FileOutputStream fileout = new FileOutputStream(file);
+			/**
+			 * 根据实际运行效果 设置缓冲区大小
+			 */
+			byte[] buffer = new byte[cache];
+			int ch = 0;
+			while ((ch = is.read(buffer)) != -1) {
+				fileout.write(buffer, 0, ch);
+			}
+			is.close();
+			fileout.flush();
+			fileout.close();
 
-    private static String paseResponse(HttpResponse response) {
-        HttpEntity entity = response.getEntity();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-        String charset = EntityUtils.getContentCharSet(entity);
+	private static String invoke(HttpClient httpclient, HttpUriRequest httpost) {
+		HttpResponse response = sendRequest(httpclient, httpost);
+		String body = paseResponse(response);
+		return body;
+	}
 
-        String body = null;
-        try {
-            body = EntityUtils.toString(entity);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+	private static String paseResponse(HttpResponse response) {
+		HttpEntity entity = response.getEntity();
+		ContentType contentType = ContentType.getOrDefault(entity);
+		Charset charset = contentType.getCharset();
 
-        return body;
-    }
+		String body = null;
+		try {
+			body = EntityUtils.toString(entity, charset);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-    private static HttpResponse sendRequest(DefaultHttpClient httpclient, HttpUriRequest httpost) {
-        HttpResponse response = null;
+		return body;
+	}
 
-        try {
-            response = httpclient.execute(httpost);
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return response;
-    }
+	private static HttpResponse sendRequest(HttpClient httpclient, HttpUriRequest httpost) {
+		HttpResponse response = null;
 
-    private static HttpPost postForm(String url, IdentityHashMap<String, String> params) {
+		try {
+			response = httpclient.execute(httpost);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return response;
+	}
 
-        HttpPost httpost = new HttpPost(url);
-        List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-        // 需要传一个token
-        //httpost.setHeader("token", "c7a4e021-6527-11e6-96be-fcaa14c3021a1");
-        Set<String> keySet = params.keySet();
-        for (String key : keySet) {
-            nvps.add(new BasicNameValuePair(key, params.get(key)));
-        }
+	private static HttpPost postForm(String url, IdentityHashMap<String, String> params) {
 
-        try {
-            httpost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+		HttpPost httpost = new HttpPost(url);
+		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		// 需要传一个token
+		//httpost.setHeader("token", "c7a4e021-6527-11e6-96be-fcaa14c3021a1");
+		Set<String> keySet = params.keySet();
+		for (String key : keySet) {
+			nvps.add(new BasicNameValuePair(key, params.get(key)));
+		}
 
-        return httpost;
-    }
+		try {
+			httpost.setEntity(new UrlEncodedFormEntity(nvps, Charset.forName("UTF-8")));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return httpost;
+	}
 
 }
-

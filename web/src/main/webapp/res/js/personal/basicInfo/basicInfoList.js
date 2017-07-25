@@ -210,6 +210,7 @@ var passportTypeEnum=[
 var passportnum=0;
 var oldnamenum=0;
 var authenticatorcodeNum=0;
+var communicahomeaddressNum=0;
 var viewModel = kendo.observable({
     customer: dafaults,
     countries:countries,
@@ -350,8 +351,8 @@ var viewModel = kendo.observable({
     },
     //美国纳税人认证码
     usaAuthenticatorCode:function(){
-    	var authenticationCode=viewModel.get("customer.taxpayerauthenticat");
-    	/*var state = authenticationCode ? authenticationCode.length > 0 : false;
+    	/*var authenticationCode=viewModel.get("customer.taxpayerauthenticat");
+    	var state = authenticationCode ? authenticationCode.length > 0 : false;
     	return state;*/
     	var a=viewModel.get("customer.taxpayerauthenticat.id");
     	if(a>0) return true;
@@ -366,9 +367,19 @@ var viewModel = kendo.observable({
     },
     //通信地址与家庭地址是否一致
     usaCommunicaHomeAddress:function(){
-    	var addressUnified=viewModel.get("customer.communicahomeaddress");
+    	/*var addressUnified=viewModel.get("customer.commhomeaddress");
     	var state = addressUnified ? addressUnified.length > 0 : false;
-    	return state;
+    	return state;*/
+    	var a=viewModel.get("customer.commhomeaddress.id");
+    	if(a>0) return true;
+    	else if(a<0) return false;
+    	else{
+    		if(communicahomeaddressNum<4){
+    			communicahomeaddressNum++;
+    			return false;
+    		}else {return true};
+    	}
+    	return false;
     }
 });
 kendo.bind($(document.body), viewModel);//数据绑定结束
@@ -411,7 +422,10 @@ $("#usa_authenticator_code").change(function () {
 });
 //通信地址与家庭地址是否一致
 $("#communica_home_address").change(function () {
-	viewModel.set("customer.communicahomeaddress", $(this).is(':checked') ? " " : "");
+	//viewModel.set("customer.commhomeaddress", $(this).is(':checked') ? " " : "");
+	var a={"createTime":null,"customerId":0,"email":"","expirationDate":null,"id":0,"issueDate":null,"issuingCity":"","issuingCountry":"CHN","issuingLocalCountry":"","issuingProvince":"","mainPhoneNum":"","minorPhoneNum":"","passportBookNum":"","passportNumber":"","passportType":0,"remark":"","status":0,"updateTime":null,"workPhoneNum":""};
+	var b={"createTime":null,"customerId":0,"email":"","expirationDate":null,"id":-1,"issueDate":null,"issuingCity":"","issuingCountry":"CHN","issuingLocalCountry":"","issuingProvince":"","mainPhoneNum":"","minorPhoneNum":"","passportBookNum":"","passportNumber":"","passportType":0,"remark":"","status":0,"updateTime":null,"workPhoneNum":""};
+	viewModel.set("customer.commhomeaddress", $(this).is(':checked') ? a : b);
 });
 /*------------------------------------------------end container---------------------------------------------------*/
 
