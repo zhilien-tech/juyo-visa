@@ -593,6 +593,40 @@ public class NewHasee extends NewTemplate {
 				}
 			}
 			document.add(table);
+			//文字添加
+			{
+				String text = String.format("会社名：%s", "dhfasdf");
+				Paragraph p = new Paragraph(text, font);
+				p.setSpacingBefore(5);
+				p.setIndentationRight(20);
+				p.setAlignment(Paragraph.ALIGN_RIGHT);
+				document.add(p);
+			}
+			{
+				String text = String.format("住  所：%s", "sdfasdf");
+				Paragraph p = new Paragraph(text, font);
+				p.setSpacingBefore(5);
+				p.setIndentationRight(20);
+				p.setAlignment(Paragraph.ALIGN_RIGHT);
+				document.add(p);
+			}
+
+			{
+				String text = String.format("担当者：%s", "崔建平");
+				Paragraph p = new Paragraph(text, font);
+				p.setSpacingBefore(5);
+				p.setIndentationRight(20);
+				p.setAlignment(Paragraph.ALIGN_RIGHT);
+				document.add(p);
+			}
+			{
+				String text = String.format("电话：%s", "88888888");
+				Paragraph p = new Paragraph(text, font);
+				p.setSpacingBefore(5);
+				p.setIndentationRight(20);
+				p.setAlignment(Paragraph.ALIGN_RIGHT);
+				document.add(p);
+			}
 
 			//添加盖章
 			document.add(getSeal());
@@ -957,8 +991,11 @@ public class NewHasee extends NewTemplate {
 			if (!Util.isEmpty(trip.getHotelid())) {
 
 				Hotel hotel = this.dbdao.fetch(Hotel.class, Long.valueOf(trip.getHotelid()));
-				map.put("hotel", hotel.getNameJP() + "\n" + hotel.getAddressJP() + "\n" + hotel.getPhone());
-				map.put("city", hotel.getCity());
+				if (!Util.isEmpty(hotel)) {
+
+					map.put("hotel", hotel.getNameJP() + "\n" + hotel.getAddressJP() + "\n" + hotel.getPhone());
+					map.put("city", hotel.getCity());
+				}
 			}
 			map.put("guest", guest);
 			DateTime dt = new DateTime(trip.getNowdate());
