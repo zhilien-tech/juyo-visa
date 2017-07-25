@@ -68,6 +68,9 @@ import com.jgoodies.forms.factories.Borders;
 public class MainForm extends JPanel {
 
 	private static final String TASK_FETCH_URI = "visa/simulator/fetch";
+
+	private static final String TASK_SUBMITING_URI = "visa/simulator/ds160/";
+	private static final String VISA_UPLOAD_URI = "visa/simulator/usaUpload/";
 	//	private static final String TASK_FETCH_URI = "visa/customer/fetch";
 
 	private static final String HISTORY = "history";
@@ -233,6 +236,15 @@ public class MainForm extends JPanel {
 							String cmd = "python " + pyFile.getText() + " " + target.getAbsolutePath();
 							command.setText(cmd);
 							exe(command.getText());
+
+							//提交ds160
+							String ds160rs = HttpClientUtil.get(getBaseUrl() + TASK_SUBMITING_URI + oid);
+							ResultObject<Map, Object> ds160ro = JSON.parseObject(ds160rs, ResultObject.class);
+							if (ds160ro.getCode() == ResultObject.ResultCode.SUCCESS) {
+								log("任务码:" + oid + " 提交中...");
+							} else {
+								JOptionPane.showMessageDialog(new JLabel(), ds160ro.getMsg());
+							}
 							log("准备任务码为" + oid + "的上传文件");
 							log("总计用时:" + ((System.currentTimeMillis() - startTime) / 1000) + "秒");
 						} else {
@@ -325,8 +337,7 @@ public class MainForm extends JPanel {
 					File zipFile = new File(zipPath);
 
 					IdentityHashMap params = new IdentityHashMap();
-					String json = HttpClientUtil.upload(getBaseUrl() + "visa/simulator/usaUpload/" + tid, zipFile,
-							params);
+					String json = HttpClientUtil.upload(getBaseUrl() + VISA_UPLOAD_URI + tid, zipFile, params);
 					ResultObject<String, ?> ro = JSON.parseObject(json, ResultObject.class);
 					if (ro.getCode() == ResultObject.ResultCode.SUCCESS) {
 						log("任务码为" + tid + "的任务执行完毕");

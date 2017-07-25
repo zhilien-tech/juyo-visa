@@ -210,6 +210,10 @@ public class NewCustomerEntity implements Serializable {
 	@Comment("照片路径")
 	private String phoneurl;
 
+	@Column
+	@Comment("签证文件")
+	private String visaFile;
+
 	private NewPassportloseEntity passportlose;
 
 	private NewOldnameEntity oldname;
