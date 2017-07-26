@@ -16,7 +16,7 @@ public class Simulator extends JFrame {
 		this.setSize(800, 600);
 		this.setLocationRelativeTo(rootPane);//居中
 		this.setVisible(true);
-		this.setTitle("签手世界");
+		this.setTitle("优悦签");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
