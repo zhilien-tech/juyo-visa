@@ -243,15 +243,15 @@ var grid = $("#grid").kendoGrid({
                 container.hide().prev().hide();
             }
         },*/
-        {field: 'comfullname', title: '公司名称', width: 90,template: "<span class='ellipsis' title='#=data.comfullname#'>#=data.comfullname?data.comfullname:''#</span>"},
-        {field: 'address', title: '住所',template: "<span class='ellipsis' title='#=data.address#'>#=data.address?data.address:''#</span>"},
-        {field: 'linkman', title: '担当者',},
-        {field: 'phone', title: '携带电话',format: "{0: yyyy-MM-dd }",},
-        {field: 'telephone', title: 'TEL', values: ["美国", "日本"], width: 80,},
-        {field: 'fax', title: 'FAX', width: 80,},
-        {field: 'comtype', title: '旅行社',values:comlist, width: 80,},
+        {field: 'comfullname', title: '公司名称', width: 170,template: "<span class='ellipsis' title='#=data.comfullname#'>#=data.comfullname?data.comfullname:''#</span>"},
+        {field: 'address', title: '住所',width:170,template: "<span class='ellipsis' title='#=data.address#'>#=data.address?data.address:''#</span>"},
+        {field: 'linkman', title: '担当者',width:100,},
+        {field: 'phone', title: '携带电话',width:120,format: "{0: yyyy-MM-dd }",},
+        {field: 'telephone', title: 'TEL',width:120, values: ["美国", "日本"],},
+        {field: 'fax', title: 'FAX', width:120,},
+        {field: 'comtype', title: '旅行社',values:comlist, width:170,},
         {
-            title: "操作", width: 280,
+            title: "操作", width: 80,
             command: [
                 {name: "modify", imageClass:false, text: " 编辑"},
               /*  {name: "shareall", imageClass:false, text: "批量分享"},
