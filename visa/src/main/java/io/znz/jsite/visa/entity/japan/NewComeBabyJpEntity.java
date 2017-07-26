@@ -76,4 +76,20 @@ public class NewComeBabyJpEntity implements Serializable {
 	@Comment("印章名字")
 	private String sealName;
 
+	@Column
+	@Comment("地接社公司全称")
+	private String landcomFullName;
+
+	@Column
+	@Comment("地接社公司地址")
+	private String landaddress;
+
+	@Column
+	@Comment("地接社联系人")
+	private String landlinkman;
+
+	@Column
+	@Comment("地接社电话")
+	private String landtelephone;
+
 }
