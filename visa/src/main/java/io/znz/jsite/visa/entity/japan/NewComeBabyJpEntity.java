@@ -1,6 +1,7 @@
 package io.znz.jsite.visa.entity.japan;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -91,5 +92,12 @@ public class NewComeBabyJpEntity implements Serializable {
 	@Column
 	@Comment("地接社电话")
 	private String landtelephone;
+	@Column
+	@Comment("创建时间")
+	private Date createTime;
+
+	@Column
+	@Comment("更新时间")
+	private Date updateTime;
 
 }
