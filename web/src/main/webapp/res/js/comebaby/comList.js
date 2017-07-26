@@ -141,7 +141,7 @@ function regCmd(command) {
                     layer.open({
                         type: 2,
                         title: '编辑订单',
-                        area: ['950px', '600px'],
+                        area: ['550px', '610px'],
                         shadeClose: true,
                         content: '/japanZhaobaoInfo/japanZhaobaoInfoEdit.html?cid=' + data.id + "&check=true"
                     });
@@ -154,7 +154,7 @@ function regCmd(command) {
                 	layer.open({
                 		type: 2,
                 		title: '编辑客户信息',
-                		area: ['950px', '600px'],
+                		area: ['550px', '600px'],
                 		shadeClose: true,
                 		content: '/japanZhaobaoInfo/japanZhaobaoInfoEdit.html?cid=' + data.id + "&check=true"
                 	});
