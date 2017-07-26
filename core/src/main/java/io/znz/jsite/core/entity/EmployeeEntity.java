@@ -79,8 +79,8 @@ public class EmployeeEntity {
 	@Comment("国家类型")
 	private Integer countryType;
 	@Column
-	@Comment("预留字段3")
-	private String res3;
+	@Comment("父id")
+	private long pId;
 	@Column
 	@Comment("预留字段4")
 	private String res4;

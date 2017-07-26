@@ -19,6 +19,8 @@ import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 
+import com.uxuexi.core.common.util.Util;
+
 /**
  * 员工管理sqlForm
  * @author   崔建斌
@@ -27,6 +29,8 @@ import org.nutz.dao.sql.Sql;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class EmployeeSqlForm extends KenDoParamForm {
+	//主键
+	private long id;
 	//公司id
 	private long comId;
 	//用户姓名
@@ -61,6 +65,8 @@ public class EmployeeSqlForm extends KenDoParamForm {
 	private String salt;
 	//国家类型
 	private Integer countryType;
+	//父id
+	private long pId;
 
 	@Override
 	public Sql sql(SqlManager paramSqlManager) {
@@ -76,6 +82,9 @@ public class EmployeeSqlForm extends KenDoParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
+		if (!Util.isEmpty(pId) && pId != 0) {
+			cnd.and("e.pId", "=", id);
+		}
 		cnd.and("e.comId", "=", comId);
 		cnd.and("e.status", "=", UserJobStatusEnum.JOB.intKey());//在职
 		cnd.and("d.deptName", "!=", "公司管理部");

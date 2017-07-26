@@ -37,8 +37,8 @@
 	                                            <select id="state" name=" " style="width:100%; height: 29.82px; border-color: #c9c9c9;"
 	                                                    data-role="dropdownlist"
 	                                                    data-value-primitive="true"
-	                                                    data-bind="">
-	                                                <option value="1" selected="selected">送签社</option>
+	                                                    data-bind="value:customer.comType">
+	                                                <option value="1">送签社</option>
 	                                                <option value="2">地接社</option>
 	                                            </select>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
@@ -54,7 +54,7 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="" name="" type="text" class="k-textbox" placeholder="" style="width: 100%;"/>
+	                                            <input id="" name="" type="text" class="k-textbox" placeholder="" style="width: 100%;" data-bind="value:customer.comFullName"/>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -68,7 +68,7 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">住所:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="" name="" type="text" class="k-textbox" placeholder="" style="width: 100%;"/>
+	                                            <input id="" name="" type="text" class="k-textbox" placeholder="" style="width: 100%;" data-bind="value:customer.address"/>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -77,12 +77,12 @@
 								<!-- end 住所 -->
 								
 								<!-- 担当者/携帯电话/TEL/FAX -->
-	                            <div class="row">
+	                            <div class="row songqianshe-div">
 	                                <div class="col-xs-6 ">
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">担当者:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="" name="" type="text" class="k-textbox" placeholder="" style="width: 100%;"/>
+	                                            <input id="" name="" type="text" class="k-textbox" placeholder="" style="width: 100%;" data-bind="value:customer.linkman"/>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -91,7 +91,7 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">携帯电话:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="" name="" type="text" class="k-textbox" placeholder="" style="width: 100%;"/>
+	                                            <input id="" name="" type="text" class="k-textbox" placeholder="" style="width: 100%;" data-bind="value:customer.phone"/>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -100,7 +100,7 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">TEL:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="" name="" type="text" class="k-textbox" placeholder="" style="width: 100%;"/>
+	                                            <input id="" name="" type="text" class="k-textbox" placeholder="" style="width: 100%;" data-bind="value:customer.telephone"/>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -109,13 +109,36 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">FAX:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="" name="" type="text" class="k-textbox" placeholder="" style="width: 100%;"/>
+	                                            <input id="" name="" type="text" class="k-textbox" placeholder="" style="width: 100%;" data-bind="value:customer.Fax"/>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
 	                                </div>
 	                            </div>
 								<!-- end 担当者/携帯电话/TEL/FAX -->
+								
+								<!-- 担当者/TEL -->
+	                            <div class="row dijieshe-div">
+	                                <div class="col-xs-6 ">
+	                                    <div class="form-group">
+	                                        <label for="last_name_cn">担当者:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                            <input id="" name="" type="text" class="k-textbox" placeholder="" style="width: 100%;" data-bind=""/>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="col-xs-6">
+	                                    <div class="form-group">
+	                                        <label for="last_name_cn">TEL:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                            <input id="" name="" type="text" class="k-textbox" placeholder="" style="width: 100%;" data-bind=""/>
+	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+								<!-- end 担当者/TEL -->
 								
 								<!-- 上传公司公章Button -->
 	                            <div class="row companyChopDiv" style="margin-top:15px;">
@@ -140,10 +163,10 @@
                 </ul>
             </div>
         </div>
-        <div class="row" data-bind="visible:showToolBar">
+        <div class="row" >
             <div class="col-xs-12">
                 <div class="form-group">
-                    <button id="saveBtn" class="k-primary k-button col-xs-12"><i class="fa fa-save"></i> 保存</button>
+                    <button id="saveBtn" class="k-primary k-button col-xs-12" onclick="ordersave();"><i class="fa fa-save"></i> 保存</button>
                 </div>
             </div>
         </div>
@@ -160,19 +183,21 @@
 <script src="/res/js/common.js"></script>
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
+<script src="/res/js/comebaby/comEdit.js"></script>
 <script type="text/javascript">
 $(function(){
 	$('.companyChopDiv').hide();//上传公司公章部分 默认隐藏
+	$('.dijieshe-div').hide();
 	$('#state').change(function(){
 		var stateInfo=$(this).find("option:selected").text();
 		if(stateInfo=="地接社"){
-			$('.PortableIpone').hide();//隐藏携带电话
-			$('.FAX').hide();//隐藏FAX
+			$('.dijieshe-div').show();//显示 地接社：担当者/TEL 
 			$('.companyChopDiv').show();//显示 上传公司公章部分
+			$('.songqianshe-div').hide();//隐藏 送签社：担当者/携带电话/TEL/FAX
 		}else if(stateInfo=="送签社"){
-			$('.PortableIpone').show();//显示携带电话
-			$('.FAX').show();//显示FAX
+			$('.songqianshe-div').show();//显示 送签社：担当者/携带电话/TEL/FAX
 			$('.companyChopDiv').hide();//隐藏 上传公司公章部分
+			$('.dijieshe-div').hide();//隐藏  地接社：担当者/TEL
 		}
 	});
 });

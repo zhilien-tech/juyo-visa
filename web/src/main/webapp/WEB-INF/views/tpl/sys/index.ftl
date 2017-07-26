@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
 
-    <title>签手世界</title>
+    <title>优悦签</title>
 
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html"/>

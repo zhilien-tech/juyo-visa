@@ -1,10 +1,10 @@
 /**
- * CustomerSqlForm.java
- * io.znz.jsite.visa.forms
+ * ComeBabySqlForm.java
+ * io.znz.jsite.visa.forms.comebaby
  * Copyright (c) 2017, 北京科技有限公司版权所有.
 */
 
-package io.znz.jsite.visa.forms.authority;
+package io.znz.jsite.visa.forms.comebaby;
 
 import io.znz.jsite.visa.form.KenDoParamForm;
 import lombok.Data;
@@ -15,28 +15,20 @@ import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 
+import com.uxuexi.core.common.util.Util;
+
 /**
- * 权限管理sqlForm
- * @author   崔建斌
- * @Date	 2017年6月9日 	 
+ * TODO(这里用一句话描述这个类的作用)
+ * <p>
+ * TODO(这里描述这个类补充说明 – 可选)
+ *
+ * @author   孙斌
+ * @Date	 2017年7月25日 	 
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class AuthoritySqlForm extends KenDoParamForm {
-	//主键
-	private long id;
-	//公司id
+public class ComeBabySqlForm extends KenDoParamForm {
 	private long comId;
-	//部门id
-	private long deptId;
-	//部门名称
-	private String deptName;
-	//职位id
-	private long jobId;
-	//职位名称
-	private String jobName;
-
-	private String keyword;
 
 	@Override
 	public Sql sql(SqlManager paramSqlManager) {
@@ -44,7 +36,7 @@ public class AuthoritySqlForm extends KenDoParamForm {
 		 * 默认使用了当前form关联entity的单表查询sql,如果是多表复杂sql，
 		 * 请使用sqlManager获取自定义的sql，并设置查询条件
 		 */
-		String sqlString = paramSqlManager.get("authority_list");
+		String sqlString = paramSqlManager.get("comebaby_list");
 		Sql sql = Sqls.create(sqlString);
 		sql.setCondition(cnd());
 		return sql;
@@ -52,10 +44,10 @@ public class AuthoritySqlForm extends KenDoParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
-		cnd.and("c.id", "=", comId);
-		cnd.and("f.parentId", "!=", 0);
-		cnd.groupBy("d.id");
-		cnd.orderBy("d.createTime", "DESC");
+		if (!Util.isEmpty(comId) && comId > 0) {
+			cnd.and("comId", "=", comId);
+		}
+
 		return cnd;
 	}
 }
