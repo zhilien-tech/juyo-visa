@@ -143,7 +143,7 @@ function regCmd(command) {
                         title: '编辑订单',
                         area: ['950px', '600px'],
                         shadeClose: true,
-                        content: '/m/americaEdit.html?cid=' + data.id + "&check=true"
+                        content: '/japanZhaobaoInfo/japanZhaobaoInfoEdit.html?cid=' + data.id + "&check=true"
                     });
                     break;
                 case "customerEdit":
@@ -156,7 +156,7 @@ function regCmd(command) {
                 		title: '编辑客户信息',
                 		area: ['950px', '600px'],
                 		shadeClose: true,
-                		content: '/order/customerEdit.html?cid=' + data.id + "&check=true"
+                		content: '/japanZhaobaoInfo/japanZhaobaoInfoEdit.html?cid=' + data.id + "&check=true"
                 	});
                 	break;
                 default:

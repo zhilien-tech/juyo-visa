@@ -6,8 +6,10 @@
 
 package io.znz.jsite.visa.web;
 
+import io.znz.jsite.base.bean.ResultObject;
 import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
 import io.znz.jsite.core.util.Const;
+import io.znz.jsite.visa.entity.japan.NewComeBabyJpEntity;
 import io.znz.jsite.visa.forms.comebaby.ComeBabySqlForm;
 import io.znz.jsite.visa.service.comebaby.ComeBabyService;
 
@@ -46,7 +48,7 @@ public class ComeBabyController {
 	private ComeBabyService comeBabyService;
 
 	/**
-	 * 回显美国基本信息数据
+	 * 日本招宝信息页展示
 	 * @param request
 	 */
 	@RequestMapping(value = "comeList")
@@ -62,6 +64,43 @@ public class ComeBabyController {
 		pager.setPageSize(form.getPageSize());
 		Pagination listPage = comeBabyService.listPage(form, pager);
 		return comeBabyService.listPage(form, pager);
+	}
+
+	/**
+	 * 日本招宝保存
+	 * @param request
+	 */
+	@RequestMapping(value = "comesave")
+	@ResponseBody
+	public Object comesave(@RequestBody NewComeBabyJpEntity comebaby, final HttpSession session) {
+		Long id = comebaby.getId();
+		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		if (!Util.isEmpty(company)) {
+			long comId = company.getComId();
+			comebaby.setComId(comId);
+		}
+		if (!Util.isEmpty(id) && id.intValue() > 0) {
+
+			dbDao.update(comebaby, null);
+		} else {
+			dbDao.insert(comebaby);
+		}
+		return ResultObject.success("添加成功");
+	}
+
+	/**
+	 * 日本招宝编辑
+	 * @param request
+	 */
+	@RequestMapping(value = "comefetch")
+	@ResponseBody
+	public Object comefetch(long comeid) {
+
+		NewComeBabyJpEntity fetch = dbDao.fetch(NewComeBabyJpEntity.class, comeid);
+		if (Util.isEmpty(fetch)) {
+			fetch = new NewComeBabyJpEntity();
+		}
+		return fetch;
 	}
 
 }

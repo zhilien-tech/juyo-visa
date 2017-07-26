@@ -38,7 +38,7 @@ public class NewComeBabyJpEntity implements Serializable {
 
 	@Column
 	@Comment("公司id")
-	private Integer comId;
+	private Long comId;
 
 	@Column
 	@Comment("公司类型")
