@@ -24,7 +24,7 @@ var countries = new kendo.data.DataSource({
             read: {
                 url: "/res/json/country_japan.json",
                 dataType: "json"
-            }
+                }
         }
     }),
     states = new kendo.data.DataSource({
@@ -180,8 +180,6 @@ $("#saveCustomerData").on("click",function(){
 		//清空验证的数组
 		emptyNum.splice(0,emptyNum.length);
 		errorNum.splice(0,errorNum.length);
-		
-		
 		///console.log(JSON.stringify(viewModel.customer));
 		/*var error=JSON.stringify(map);
 		if(error.length>15){
@@ -197,7 +195,6 @@ $("#saveCustomerData").on("click",function(){
 			 data: JSON.stringify(viewModel.customer)+"",
 			 success: function (result){
 				 if(indexnew!=null){
-						
 						layer.close(indexnew);
 						}
 				 
@@ -234,7 +231,7 @@ $("#saveCustomerData").on("click",function(){
 	    		errorNum.push(person);
 	    		
 	    	}
-	    	console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
+	    	//console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
 	    });
 	    //end 验证————————————————————————————————
 		
@@ -274,7 +271,7 @@ function agreeOrRefuse(flag){
 		 type: "POST",
 		 url: "/visa/newcustomerjp/agreeOrRefuse?flag="+flag+"&customerid="+id+"&error="+error,
 		 success: function (result){
-			 console.log(result);
+			 ///console.log(result);
 			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			 parent.layer.close(index);
 			 window.parent.successCallback('3');
