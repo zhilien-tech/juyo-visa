@@ -1118,12 +1118,28 @@ public class OrderController extends BaseController {
 				.replace("${logininfo}", "").replace("${gender}", "先生/女士");
 		String result = mailService.send(email, html, "签证资料录入", MailService.Type.HTML);
 
-		/*	String result = getMailContent(order, phone, null, customerManage);
 		if ("success".equalsIgnoreCase(result)) {
 			dbDao.update(NewOrderEntity.class, Chain.make("sharecountmany", order.getSharecountmany() + 1),
 					Cnd.where("id", "=", orderid));
 			//成功以后分享次数加1
-		}*/
+			List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
+					Cnd.where("orderid", "=", orderid), null);
+			if (!Util.isEmpty(query) && query.size() > 0) {
+
+				for (NewCustomerOrderEntity newCustomerOrderEntity : query) {
+					if (!Util.isEmpty(newCustomerOrderEntity)) {
+
+						NewCustomerEntity fetch = dbDao.fetch(NewCustomerEntity.class,
+								newCustomerOrderEntity.getCustomerid());
+						if (!Util.isEmpty(fetch)) {
+
+							fetch.setStatus(OrderVisaApproStatusEnum.writeInfo.intKey());
+							dbDao.update(fetch, null);
+						}
+					}
+				}
+			}
+		}
 
 		return ResultObject.success(result);
 	}
