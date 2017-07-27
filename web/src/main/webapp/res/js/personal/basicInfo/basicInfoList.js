@@ -6,28 +6,61 @@ var localhostPaht = curWwwPath.substring(0,pos);
 var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 //页面加载时回显基本信息
 window.onload = function(){
-	 $.getJSON(localhostPaht +'/visa/basicinfo/listBasicinfo', function (resp) {
-     	viewModel.set("customer", $.extend(true, dafaults, resp));
-     	viewModel.set("customer.passporttype", 1);
-     	viewModel.set("customer.commhomeaddress.issuingCountry", "CHN");
-     	//预览 按钮
-     	var photoname= '<a href="#">'
-            + viewModel.get("customer.photoname")
-            + '</a>'
-	   	var phoneurl=viewModel.get("customer.phoneurl");
-	    	 if(phoneurl!=null&&phoneurl!=''){
-	    		$("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
-	    		$("#photoname").html(photoname);
-	    	 }
-	        $(document).on('click','#preview',function(){
-	        	$('#light').css('display','block');
-	        	$('#fade').css('display','block');
-	        	var phoneurl=viewModel.get("customer.phoneurl");
-	        	if(phoneurl!=null&&phoneurl!=''){
-	        		$("#imgId").attr('src',phoneurl);
-	        	}
-	        });
-     });
+	var logintype1=$.queryString("logintype");
+	var after;
+	if(logintype1==5){
+		var country = JSON.parse(unescape($.queryString("country")));
+		after=localhostPaht +'/visa/basicinfo/listBasicinfo?logintype=5&customerId1='+country.id;
+		$.getJSON(after, function (resp) {
+			viewModel.set("customer", $.extend(true, dafaults, resp));
+			viewModel.set("customer.passporttype", 1);
+			viewModel.set("customer.commhomeaddress.issuingCountry", "CHN");
+			//预览 按钮
+			var photoname= '<a href="#">'
+				+ viewModel.get("customer.photoname")
+				+ '</a>'
+				var phoneurl=viewModel.get("customer.phoneurl");
+			if(phoneurl!=null&&phoneurl!=''){
+				$("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
+				$("#photoname").html(photoname);
+			}
+			$(document).on('click','#preview',function(){
+				$('#light').css('display','block');
+				$('#fade').css('display','block');
+				var phoneurl=viewModel.get("customer.phoneurl");
+				if(phoneurl!=null&&phoneurl!=''){
+					$("#imgId").attr('src',phoneurl);
+				}
+			});
+		});
+	}else{
+		after=localhostPaht +'/visa/basicinfo/listBasicinfo';
+		
+		$.getJSON(after, function (resp) {
+			viewModel.set("customer", $.extend(true, dafaults, resp));
+			viewModel.set("customer.passporttype", 1);
+			viewModel.set("customer.commhomeaddress.issuingCountry", "CHN");
+			//预览 按钮
+			var photoname= '<a href="#">'
+				+ viewModel.get("customer.photoname")
+				+ '</a>'
+				var phoneurl=viewModel.get("customer.phoneurl");
+			if(phoneurl!=null&&phoneurl!=''){
+				$("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
+				$("#photoname").html(photoname);
+			}
+			$(document).on('click','#preview',function(){
+				$('#light').css('display','block');
+				$('#fade').css('display','block');
+				var phoneurl=viewModel.get("customer.phoneurl");
+				if(phoneurl!=null&&phoneurl!=''){
+					$("#imgId").attr('src',phoneurl);
+				}
+			});
+		});
+	}
+	
+	
 }
 
 var firstPart ;
@@ -492,23 +525,43 @@ function saveBaseInfoData(){
 		errorNum.splice(0,errorNum.length);
 	}
 }
+var logintype;
 //点击下一步时跳转至签证信息
 $("#nextStepBtn").click(function(){
+	
+	
+	logintype=$.queryString("logintype");
+	var after;
+	var before;
+	if(logintype==5){
+		after="/visa/basicinfo/updateBaseInfoData?logintype=5";
+		before='/personal/visaInfo/visaInfoList.html?logintype=5&typeId=1&firstPart='
+			  +escape(JSON.stringify(firstPart))+"&secondPart="
+			  +escape(JSON.stringify(secondPart))+"&thirdPart="
+			  +escape(JSON.stringify(thirdPart))+"&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus+"&orderId="+$.queryString('orderId');
+	}else{
+		after="/visa/basicinfo/updateBaseInfoData";
+		before='/personal/visaInfo/visaInfoList.html?typeId=1&firstPart='
+			  +escape(JSON.stringify(firstPart))+"&secondPart="
+			  +escape(JSON.stringify(secondPart))+"&thirdPart="
+			  +escape(JSON.stringify(thirdPart))+"&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
+		
+	}
+	
+	
+	
 	if(validatable.validate()){
 		//清空验证的数组
 		emptyNum.splice(0,emptyNum.length);
 		errorNum.splice(0,errorNum.length);
 		$.ajax({
 			 type: "POST",
-			 url: "/visa/basicinfo/updateBaseInfoData",
+			 url: after,
 			 contentType:"application/json",
 			 data: JSON.stringify(viewModel.customer)+"",
 			 success: function (result){
 				layer.msg("操作成功",{time:2000});
-				window.location.href='/personal/visaInfo/visaInfoList.html?typeId=1&firstPart='
-					  +escape(JSON.stringify(firstPart))+"&secondPart="
-					  +escape(JSON.stringify(secondPart))+"&thirdPart="
-					  +escape(JSON.stringify(thirdPart))+"&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
+				window.location.href=before;
 			 },
 			 error: function(XMLHttpRequest, textStatus, errorThrown) {
 	             layer.msg('操作失败',{time:2000});

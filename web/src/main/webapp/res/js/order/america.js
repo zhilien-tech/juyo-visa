@@ -91,7 +91,7 @@ function regCmd(command) {
                 case "shareall":
                 	if (!(data = select(e))) return;
                 	 var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
-                	$.getJSON("/visa/order/shareall?type=order&orderid=" + data.id, {}, function (resp) {
+                	$.getJSON("/visa/order/shareallnew?type=order&orderid=" + data.id, {}, function (resp) {
                 		if (resp.code === "SUCCESS") {
                 			if(index!=null){
         						
