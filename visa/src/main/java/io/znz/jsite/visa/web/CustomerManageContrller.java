@@ -7,7 +7,9 @@
 package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.BaseController;
+import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
+import io.znz.jsite.core.enums.UserLoginEnum;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
 import io.znz.jsite.visa.forms.customerform.CustomerAddForm;
@@ -64,6 +66,13 @@ public class CustomerManageContrller extends BaseController {
 		long comId = company.getComId();//得到公司的id
 		if (!Util.isEmpty(comId)) {
 			sqlForm.setComId(comId);
+		}
+		//从session中取出当前登录用户信息
+		EmployeeEntity user = (EmployeeEntity) session.getAttribute(Const.SESSION_NAME);
+		long pid = user.getId();//得到当前登录用户id
+		long usertype = user.getUserType();//得到用户类型
+		if (UserLoginEnum.PERSONNEL.intKey() == usertype) {//普通工作人员
+			sqlForm.setPId(pid);
 		}
 		Pager pager = new Pager();
 		pager.setPageNumber(sqlForm.getPageNumber());

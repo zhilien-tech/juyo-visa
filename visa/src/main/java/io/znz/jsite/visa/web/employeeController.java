@@ -17,6 +17,9 @@ import io.znz.jsite.visa.forms.employeeform.EmployeeSqlForm;
 import io.znz.jsite.visa.forms.employeeform.EmployeeUpdateForm;
 import io.znz.jsite.visa.service.EmployeeViewService;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
@@ -29,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
 
 /**
@@ -88,13 +90,15 @@ public class employeeController extends BaseController {
 	 */
 	@RequestMapping(value = "selectJobName")
 	@ResponseBody
-	public Object selectJobName(String deptId) {
+	public Object selectJobName(String deptId, HttpServletRequest request) {
 		Long parseLong = null;
-		if (!Util.isEmpty(deptId)) {
+		List<JobEntity> jobList = null;
+		if (!"null".equals(deptId) && !"0".equals(deptId) && !"undefined".equals(deptId) && !"".equals(deptId)) {
 			parseLong = Long.parseLong(deptId);
+			//根据前端传过来的部门id查询出职位
+			jobList = dbDao.query(JobEntity.class, Cnd.where("deptId", "=", parseLong), null);
 		}
-		//根据前端传过来的部门id查询出职位
-		return dbDao.query(JobEntity.class, Cnd.where("deptId", "=", parseLong), null);
+		return jobList;
 	}
 
 	/**

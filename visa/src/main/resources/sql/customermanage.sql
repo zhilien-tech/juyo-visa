@@ -11,7 +11,7 @@ SELECT
 	vcm.createTime,
 	vcm.updateTime,
 	vcm.remark,
-	vcm.res1,
+	vcm.pId,
 	vcm.res2,
 	vcm.res3,
 	vcm.res4,

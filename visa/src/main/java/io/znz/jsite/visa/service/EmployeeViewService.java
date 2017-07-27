@@ -9,6 +9,7 @@ package io.znz.jsite.visa.service;
 import io.znz.jsite.base.NutzBaseService;
 import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
+import io.znz.jsite.core.entity.department.DepartmentEntity;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
@@ -59,7 +60,7 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 	 * @param session
 	 */
 	public Object queryDept(final HttpSession session) {
-		Map<String, Object> obj = Maps.newHashMap();
+		//Map<String, Object> obj = Maps.newHashMap();
 		//通过session获取公司的id
 		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
 		long comId = company.getComId();//得到公司的id
@@ -68,9 +69,11 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 		cnd.and("d.comId", "=", comId);
 		cnd.and("d.deptName", "!=", "公司管理部");
 		cnd.and("d.deptName", "!=", "");
-		List<Record> queryList = dbDao.query(sql, cnd, null);
-		obj.put("queryList", queryList);
-		return obj;
+		sql.setCondition(cnd);
+		List<DepartmentEntity> queryList = DbSqlUtil.query(dbDao, DepartmentEntity.class, sql, null);
+		//		List<Record> queryList = dbDao.query(sql, cnd, null);
+		//		obj.put("queryList", queryList);
+		return queryList;
 	}
 
 	/**
