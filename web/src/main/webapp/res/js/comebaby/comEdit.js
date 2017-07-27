@@ -28,6 +28,7 @@ var countries = new kendo.data.DataSource({
         }
     }),
     dafaults = {
+	comType:1
 };
 /*****************************************************
  * 数据绑定
@@ -54,7 +55,6 @@ kendo.bind($(document.body), viewModel);
 
 //信息保存
 function ordersave(){
-	alert(JSON.stringify(viewModel.customer));
 	 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 			 $.ajax({
 				 type: "POST",
@@ -86,7 +86,54 @@ $(function () {
     if (oid) {
         $.getJSON("/visa/comebaby/comefetch?comeid=" + oid, function (resp) {
         	viewModel.set("customer", $.extend(true, dafaults, resp));
+        	var a=viewModel.get("customer.comType");
+        	if(a!=null&&a!=''){
+        		$("#state").val(a);
+        		if(a==1){
+        			$("#3").hide();
+        			$("#4").hide();
+        			$('#1').show();
+        			$('#2').show();
+        			$('.songqianshe-div').show();//显示 送签社：担当者/携带电话/TEL/FAX
+        			$('.companyChopDiv').hide();//隐藏 上传公司公章部分
+        			$('.dijieshe-div').hide();//隐藏  地接社：担当者/TEL
+        		}else if(a==2){
+        			$('.dijieshe-div').show();//显示 地接社：担当者/TEL 
+        			$('.companyChopDiv').show();//显示 上传公司公章部分
+        			$('.songqianshe-div').hide();//隐藏 送签社：担当者/携带电话/TEL/FAX
+        			$('#1').hide();
+        			$('#2').hide();
+        			$("#3").show();
+        			$("#4").show();
+        			var sealUrl=viewModel.get("customer.sealUrl");
+        			if(sealUrl!=null&&sealUrl!=''){
+        				
+        				$("#img").attr('src',sealUrl);
+        			}
+        		}
+        	}
+        	
         	
         });
+    }else{
+    	var a=1
+    	$("#state").val(a);
+		if(a==1){
+			$("#3").hide();
+			$("#4").hide();
+			$('#1').show();
+			$('#2').show();
+			$('.songqianshe-div').show();//显示 送签社：担当者/携带电话/TEL/FAX
+			$('.companyChopDiv').hide();//隐藏 上传公司公章部分
+			$('.dijieshe-div').hide();//隐藏  地接社：担当者/TEL
+		}else if(a==2){
+			$('.dijieshe-div').show();//显示 地接社：担当者/TEL 
+			$('.companyChopDiv').show();//显示 上传公司公章部分
+			$('.songqianshe-div').hide();//隐藏 送签社：担当者/携带电话/TEL/FAX
+			$('#1').hide();
+			$('#2').hide();
+			$("#3").show();
+			$("#4").show();
+		}
     }
 });

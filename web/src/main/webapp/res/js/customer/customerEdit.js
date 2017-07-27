@@ -68,6 +68,7 @@ var countries = new kendo.data.DataSource({
  * 数据绑定
  ****************************************************/
 var passportnum=0;
+var oldNameEnableNum=0;
 var viewModel = kendo.observable({
     customer: dafaults,
     countries:countries,
@@ -144,10 +145,11 @@ var viewModel = kendo.observable({
     },
     //参过军
     joinArmy: function () {
-        ///var state = viewModel.get("customer.army");
-    	var joinArmy = viewModel.get("customer.army");
-        var state = joinArmy ? joinArmy.length > 0 : false;
-        return state;
+    	//var joinArmy = viewModel.get("customer.army");
+    	var state = viewModel.get("customer.army.armydo")|| viewModel.get("customer.army.armyname")
+    			 || viewModel.get("customer.army.armytype")|| viewModel.get("customer.army.country")
+    			 || viewModel.get("customer.army.enddate")|| viewModel.get("customer.army.startdate");
+    	return state;
     },
     //工作信息详情
     hasWorkDetail: function (state) {
@@ -192,8 +194,7 @@ var viewModel = kendo.observable({
     },
     // 曾用名
     oldNameEnable: function () {
-    	var oldNameEnable = viewModel.get("customer.oldname");
-    	var state = oldNameEnable ? oldNameEnable.length > 0 : false;
+    	var state = viewModel.get("customer.oldname.oldname") || viewModel.get("customer.oldname.oldnameen") || viewModel.get("customer.oldname.oldxing") || viewModel.get("customer.oldname.oldxingen");
     	if(state){
     		$("input[oldname='oldname']").each(function(){
     			var labelTxt=$(this).parent().prev().text().trim();
@@ -216,7 +217,7 @@ var viewModel = kendo.observable({
     		});
     		
     	}
-        return state;
+    	return state;
         ///return viewModel.get("customer.oldname");
     },
     // 其他国家公民
@@ -239,26 +240,18 @@ $("#pp_lost").change(function () {
 	viewModel.set("customer.passportlose", $(this).is(':checked') ? a : b);
 	///console.log("===2=="+JSON.stringify(viewModel.customer.passportlose));
 });
-/*$("#pp_lost").change(function () {
-	alert($(this).is(':checked'));
-    if ($(this).is(':checked')) {
-    	viewModel.set("customer.passportlose");
-    } else {
-    	viewModel.set("customer.passportlose");
-    }
-});*/
 
 //曾用名
 $("#has_used_name").change(function () {
-	viewModel.set("customer.oldname", $(this).is(':checked') ? " " : "");
+	/*var a={"customerid":0,"id":0,"oldname":"","oldnameen":"","oldxing":"","oldxingen":""};
+	var b={"customerid":0,"id":-1,"oldname":"","oldnameen":"","oldxing":"","oldxingen":""};
+	viewModel.set("customer.oldname", $(this).is(':checked') ? a : b);*/
+	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.oldname.oldname", value);
+    viewModel.set("customer.oldname.oldnameen", value);
+    viewModel.set("customer.oldname.oldxing", value);
+    viewModel.set("customer.oldname.oldxingen", value);
 });
-/*$("#has_used_name").change(function () {
-    if ($(this).is(':checked')) {
-    	viewModel.add("customer.oldname");
-    } else {
-    	viewModel.clear("customer.oldname");
-    }
-});*/
 
 //其他国家居民
 $("#has_pr").change(function () {
@@ -338,7 +331,14 @@ $("#has_never_educated").change(function () {
  ****************************************************/
 /*我曾参军*/
 $("#join_army").change(function () {
-	viewModel.set("customer.army", $(this).is(':checked') ? " " : "");
+	//viewModel.set("customer.army", $(this).is(':checked') ? " " : "");
+	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.army.armydo", value);
+    viewModel.set("customer.army.armyname", value);
+    viewModel.set("customer.army.armytype", value);
+    viewModel.set("customer.army.country", value);
+    viewModel.set("customer.army.enddate", value);
+    viewModel.set("customer.army.startdate", value);
 });
 /*$("#join_army").change(function () {
     if ($(this).is(':checked')) {

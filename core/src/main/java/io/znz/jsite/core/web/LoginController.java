@@ -453,8 +453,8 @@ public class LoginController extends BaseController {
 	 */
 	@RequestMapping(value = "loginfunctions", method = RequestMethod.POST)
 	@ResponseBody
-	public Object loginfunctions(HttpServletRequest request) {
-		return authorityViewService.loginfunctions(request);
+	public Object loginfunctions(HttpServletRequest request, String logintype, String orderId) {
+		return authorityViewService.loginfunctions(request, logintype, orderId);
 	}
 
 	/**

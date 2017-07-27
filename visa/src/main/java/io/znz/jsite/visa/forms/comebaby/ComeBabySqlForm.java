@@ -45,9 +45,9 @@ public class ComeBabySqlForm extends KenDoParamForm {
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
 		if (!Util.isEmpty(comId) && comId > 0) {
-			cnd.and("comId", "=", comId);
+			cnd.and("c.comId", "=", comId);
 		}
-
+		cnd.orderBy("c.updateTime", "desc");
 		return cnd;
 	}
 }

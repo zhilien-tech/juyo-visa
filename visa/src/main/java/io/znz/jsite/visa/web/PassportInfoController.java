@@ -17,6 +17,7 @@ import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
 
 import java.io.InputStream;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -60,21 +61,27 @@ public class PassportInfoController extends BaseController {
 	 */
 	@RequestMapping(value = "listPassport")
 	@ResponseBody
-	public Object listPassport(HttpServletRequest request) {
-		//根据当前登录用户id查询出个人信息
-		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute(Const.SESSION_NAME);
-		long userId = 0;
-		if (user == null) {
-			throw new JSiteException("请登录后再试!");
-		}
-		if (!Util.isEmpty(user)) {
-			userId = user.getId();
-		}
+	public Object listPassport(HttpServletRequest request, String customerId) {
+		if (Util.isEmpty(customerId)) {
 
-		List<NewCustomerEntity> usalist = dbDao.query(NewCustomerEntity.class, Cnd.where("empid", "=", user.getId())
-				.orderBy("createtime", "desc"), null);
-		NewCustomerEntity customer = usalist.get(0);
-		return customer;
+			//根据当前登录用户id查询出个人信息
+			EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute(Const.SESSION_NAME);
+			long userId = 0;
+			if (user == null) {
+				throw new JSiteException("请登录后再试!");
+			}
+			if (!Util.isEmpty(user)) {
+				userId = user.getId();
+			}
+
+			List<NewCustomerEntity> usalist = dbDao.query(NewCustomerEntity.class, Cnd
+					.where("empid", "=", user.getId()).orderBy("createtime", "desc"), null);
+			NewCustomerEntity customer = usalist.get(0);
+			return customer;
+		} else {
+			NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, Long.valueOf(customerId));
+			return customer;
+		}
 	}
 
 	/**
@@ -85,6 +92,7 @@ public class PassportInfoController extends BaseController {
 	@RequestMapping(value = "updatePassportSave")
 	@ResponseBody
 	public Object updatePassportSave(@RequestBody NewCustomerEntity customer) {
+		customer.setUpdatetime(new Date());
 		dbDao.update(customer, null);
 		return ResultObject.success("修改成功");
 	}

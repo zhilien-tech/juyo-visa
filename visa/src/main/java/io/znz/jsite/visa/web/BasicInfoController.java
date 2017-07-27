@@ -78,9 +78,10 @@ public class BasicInfoController extends BaseController {
 	 */
 	@RequestMapping(value = "listBasicinfo")
 	@ResponseBody
-	public Object listBasicinfo(HttpServletRequest request) {
+	public Object listBasicinfo(HttpServletRequest request, String customerId1) {
 		//从session中取出当前登录用户信息
-		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute(Const.SESSION_NAME);
+		NewCustomerEntity customer = null;
+		/*EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute(Const.SESSION_NAME);
 		long userId = 0;
 		if (user == null) {
 			throw new JSiteException("请登录后再试!");
@@ -91,9 +92,26 @@ public class BasicInfoController extends BaseController {
 		//NewCustomerEntity customer = dbDao.fetch(NewCustomerEntity.class, Cnd.where("empid", "=", userId));
 		List<NewCustomerEntity> usalist = dbDao.query(NewCustomerEntity.class, Cnd.where("empid", "=", user.getId())
 				.orderBy("createtime", "desc"), null);
-		NewCustomerEntity customer = null;
 		if (!Util.isEmpty(usalist)) {
 			customer = usalist.get(0);
+		}*/
+		if (Util.isEmpty(customerId1)) {
+
+			//根据当前登录用户id查询出个人信息
+			EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute(Const.SESSION_NAME);
+			long userId = 0;
+			if (user == null) {
+				throw new JSiteException("请登录后再试!");
+			}
+			if (!Util.isEmpty(user)) {
+				userId = user.getId();
+			}
+
+			List<NewCustomerEntity> usalist = dbDao.query(NewCustomerEntity.class, Cnd
+					.where("empid", "=", user.getId()).orderBy("createtime", "desc"), null);
+			customer = usalist.get(0);
+		} else {
+			customer = dbDao.fetch(NewCustomerEntity.class, Long.valueOf(customerId1));
 		}
 		long customerId = 0;
 		if (!Util.isEmpty(customer)) {
