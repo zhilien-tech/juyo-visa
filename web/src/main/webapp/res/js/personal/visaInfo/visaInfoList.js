@@ -18,9 +18,32 @@ var countrystatus;
 //初始化页面组件
 $(function () {
 	//页面加载时回显签证信息
-	$.getJSON(localhostPaht +'/visa/visainfo/listvisainfo', function (resp) {
-     	viewModel.set("customer", $.extend(true, dafaults, resp));
-    });
+	var logintype1=$.queryString("logintype");
+	var after;
+	if(logintype1==5){
+		var country = JSON.parse(unescape($.queryString("country")));
+		/*$.ajax({
+			 type: "POST",
+			 url: '/visa/visainfo/listvisainfo?customerId1='+country.id,
+			 contentType:"application/json",
+			 data: "",
+			 success: function (result){
+				layer.msg("保存成功",{time:2000});
+				 window.location.href=before;
+			 },
+			 error: function(XMLHttpRequest, textStatus, errorThrown) {
+	             layer.msg('保存失败',{time:2000});
+	         }
+		});*/
+		$.getJSON(localhostPaht +'/visa/visainfo/listvisainfo?logintype=5&customerId1='+country.id, function (resp) {
+			viewModel.set("customer", $.extend(true, dafaults, resp));
+		});
+	}else{
+		
+		$.getJSON(localhostPaht +'/visa/visainfo/listvisainfo', function (resp) {
+			viewModel.set("customer", $.extend(true, dafaults, resp));
+		});
+	}
 	//折叠板 效果初始化
     $("#panelbar").kendoPanelBar({
          expandMode: "single" //设置展开模式只能展开单个
@@ -503,15 +526,33 @@ $("#updatePassportSave").on("click",function(){
 	});
 });
 //点击保存时
+var logintype;
 $("#nextStepBtn").click(function(){
+	var country = JSON.parse(unescape($.queryString("country")));
+	
+	logintype=$.queryString("logintype");
+	var after;
+	var before;
+	if(logintype==5){
+		after="/visa/visainfo/updatePassportSave?logintype=5";
+		before='/myvisa/transactVisa/visaNationList.html?logintype=5&country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus+"&orderId="+$.queryString('orderId');
+	}else{
+		after="/visa/visainfo/updatePassportSave";
+		before='/myvisa/transactVisa/visaProgressImg.html?country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
+		
+	}
+	
+	
+	
+	
 	$.ajax({
 		 type: "POST",
-		 url: "/visa/visainfo/updatePassportSave",
+		 url: after,
 		 contentType:"application/json",
 		 data: JSON.stringify(viewModel.customer)+"",
 		 success: function (result){
 			layer.msg("保存成功",{time:2000});
-			 window.location.href='/myvisa/transactVisa/visaProgressImg.html?country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
+			 window.location.href=before;
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
              layer.msg('保存失败',{time:2000});

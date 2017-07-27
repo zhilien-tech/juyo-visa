@@ -1081,6 +1081,53 @@ public class OrderController extends BaseController {
 		return ResultObject.success("添加成功");
 	}
 
+	/**
+	//	 * 将订单完善连接分享到用户邮箱或者手机
+	//	 *批量分享每个人看见自己的
+	//	 * @param request
+	//	 * @param oid     订单ID
+	//	 */
+	@RequestMapping(value = "shareallnew")
+	@ResponseBody
+	public Object shareallnew(HttpServletRequest request, long orderid, String type) throws IOException {
+
+		NewOrderEntity order = dbDao.fetch(NewOrderEntity.class, orderid);
+		int customerSource = order.getCustomerSource();
+		String email = "";
+		if (OrderJapancustomersourceEnum.zhike.intKey() == customerSource) {
+			List<NewCustomerresourceEntity> query = dbDao.query(NewCustomerresourceEntity.class,
+					Cnd.where("order_id", "=", orderid), null);
+			if (!Util.isEmpty(query) && query.size() > 0) {
+
+				email = query.get(0).getEmail();
+			}
+		} else {
+			CustomerManageEntity customerManage = dbDao.fetch(CustomerManageEntity.class, order.getCus_management_id());
+			email = customerManage.getEmail();
+		}
+		//发送邮件前进行游客信息的注册
+		String phone = "";
+		List<String> lines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("mailmany.html"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : lines) {
+			tmp.append(line);
+		}
+
+		String html = tmp.toString().replace("${name}", "").replace("${oid}", order.getOrdernumber())
+				.replace("${href}", "http://127.0.0.1:8080//main.html?logintype=5&orderId=" + orderid)
+				.replace("${logininfo}", "").replace("${gender}", "先生/女士");
+		String result = mailService.send(email, html, "签证资料录入", MailService.Type.HTML);
+
+		/*	String result = getMailContent(order, phone, null, customerManage);
+		if ("success".equalsIgnoreCase(result)) {
+			dbDao.update(NewOrderEntity.class, Chain.make("sharecountmany", order.getSharecountmany() + 1),
+					Cnd.where("id", "=", orderid));
+			//成功以后分享次数加1
+		}*/
+
+		return ResultObject.success(result);
+	}
+
 	private Customer contains(List<Customer> customers, Customer customer) {
 		for (Customer c : customers) {
 			if (c.getId().equals(customer.getId())) {

@@ -57,7 +57,9 @@ $(function () {
     		$("#"+i).show();
     	}
 	}else{*/
-		var url = '/login/loginfunctions';
+    var logintype=$.queryString('logintype');
+    var orderId=$.queryString('orderId');
+		var url = '/login/loginfunctions?logintype='+logintype+"&orderId="+orderId;
 		$.ajax({
 			url : url,
 			type : "POST",
