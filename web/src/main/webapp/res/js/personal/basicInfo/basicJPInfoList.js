@@ -293,17 +293,27 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-    	var oldPassportEnable = viewModel.get("customer.passportlose");
+    	/*var oldPassportEnable = viewModel.get("customer.passportlose");
         var state = oldPassportEnable ? oldPassportEnable.length > 0 : false;
-        return state;
+        return state;*/
         //return viewModel.get("customer.passportlose");
+    	var state = viewModel.get("customer.passportlose.passport") 
+		|| viewModel.get("customer.passportlose.reason")
+		|| viewModel.get("customer.passportlose.reasonen");
+		//|| viewModel.get("customer.passportlose.sendcountry")
+    	return state;
     },
     // 曾用名
     oldNameEnable: function () {
-    	var oldNameEnable = viewModel.get("customer.oldname");
+    	/*var oldNameEnable = viewModel.get("customer.oldname");
         var state = oldNameEnable ? oldNameEnable.length > 0 : false;
-        return state;
+        return state;*/
         ///return viewModel.get("customer.oldname");
+    	var state = viewModel.get("customer.oldname.oldname") 
+		|| viewModel.get("customer.oldname.oldnameen")
+		|| viewModel.get("customer.oldname.oldxing")
+		|| viewModel.get("customer.oldname.oldxingen");
+    	return state;
     },
     // 其他国家公民
     otherCountryEnable: function () {
@@ -313,28 +323,51 @@ var viewModel = kendo.observable({
     },
     //美国纳税人认证码
     usaAuthenticatorCode:function(){
-    	var usaAuthenticatorCode = viewModel.get("customer.authenticatorcode");
+    	/*var usaAuthenticatorCode = viewModel.get("customer.authenticatorcode");
         var state = usaAuthenticatorCode ? usaAuthenticatorCode.length > 0 : false;
-        return state;
+        return state;*/
     	///return viewModel.get("customer.authenticatorcode");
+    	var state = viewModel.get("customer.taxpayerauthenticat.city") 
+		|| viewModel.get("customer.taxpayerauthenticat.country")
+		|| viewModel.get("customer.taxpayerauthenticat.homeAddress")
+		|| viewModel.get("customer.taxpayerauthenticat.postCode")
+		|| viewModel.get("customer.taxpayerauthenticat.province");
+    	return state;
     },
     //通信地址与家庭地址是否一致
     usaCommunicaHomeAddress:function(){
-    	var usaCommunicaHomeAddress = viewModel.get("customer.communicahomeaddress");
+    	/*var usaCommunicaHomeAddress = viewModel.get("customer.communicahomeaddress");
         var state = usaCommunicaHomeAddress ? usaCommunicaHomeAddress.length > 0 : false;
-        return state;
+        return state;*/
     	///return viewModel.get("customer.communicahomeaddress");
+    	var state = viewModel.get("customer.commhomeaddress.mainPhoneNum") 
+		|| viewModel.get("customer.commhomeaddress.minorPhoneNum")//undefined
+		|| viewModel.get("customer.commhomeaddress.workPhoneNum")//undefined
+		|| viewModel.get("customer.commhomeaddress.email")
+		|| viewModel.get("customer.commhomeaddress.issuingCity")
+		|| viewModel.get("customer.commhomeaddress.passportType");
+    	//|| viewModel.get("customer.commhomeaddress.issuingCountry")
+    	return state;
     }
 });
 kendo.bind($(document.body), viewModel);//数据绑定结束
 
 //丢过护照
 $("#pp_lost").change(function () {
-	viewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
+	//viewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
+	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.passportlose.passport", value);
+    viewModel.set("customer.passportlose.reason", value);
+    viewModel.set("customer.passportlose.reasonen", value);
 });
 //曾用名
 $("#has_used_name").change(function () {
-	viewModel.set("customer.oldname", $(this).is(':checked') ? " " : "");
+	//viewModel.set("customer.oldname", $(this).is(':checked') ? " " : "");
+	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.oldname.oldname", value);
+    viewModel.set("customer.oldname.oldnameen", value);
+    viewModel.set("customer.oldname.oldxing", value);
+    viewModel.set("customer.oldname.oldxingen", value);
 });
 //其他国家居民
 $("#has_pr").change(function () {
@@ -355,11 +388,25 @@ $("#same_as_home").change(function () {
 });
 //美国纳税人认证码
 $("#usa_authenticator_code").change(function () {
-	viewModel.set("customer.authenticatorcode", $(this).is(':checked') ? " " : "");
+	//viewModel.set("customer.authenticatorcode", $(this).is(':checked') ? " " : "");
+	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.taxpayerauthenticat.city", value);
+    viewModel.set("customer.taxpayerauthenticat.country", value);
+    viewModel.set("customer.taxpayerauthenticat.homeAddress", value);
+    viewModel.set("customer.taxpayerauthenticat.postCode", value);
+    viewModel.set("customer.taxpayerauthenticat.province", value);
 });
 //通信地址与家庭地址是否一致
 $("#communica_home_address").change(function () {
-	viewModel.set("customer.communicahomeaddress", $(this).is(':checked') ? " " : "");
+	//viewModel.set("customer.communicahomeaddress", $(this).is(':checked') ? " " : "");
+	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.commhomeaddress.mainPhoneNum", value);
+    viewModel.set("customer.commhomeaddress.minorPhoneNum", value);
+    viewModel.set("customer.commhomeaddress.workPhoneNum", value);
+    viewModel.set("customer.commhomeaddress.email", value);
+    viewModel.set("customer.commhomeaddress.issuingCity", value);
+    //viewModel.set("customer.commhomeaddress.issuingCountry", value);
+    viewModel.set("customer.commhomeaddress.passportType", value);
 });
 /*------------------------------------------------end container---------------------------------------------------*/
 /**********************************************
