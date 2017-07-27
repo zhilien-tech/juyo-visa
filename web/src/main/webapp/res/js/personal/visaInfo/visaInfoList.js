@@ -258,6 +258,7 @@ var viewModel = kendo.observable({
     //是否有直系亲属在美国
     hasFamilyInUSA: function () {
         var families = viewModel.get("customer.relation");
+        //console.log(families.length);
         var state = families ? families.length > 0 : false;
         return state;
     },
@@ -290,8 +291,16 @@ var viewModel = kendo.observable({
     },
     //参过军
     joinArmy: function () {
-        var joinArmy = viewModel.get("customer.army");
+        /*var joinArmy = viewModel.get("customer.army");
+        console.log(JSON.stringify(joinArmy));
         var state = joinArmy ? joinArmy.length > 0 : false;
+        return state;*/
+        var state = viewModel.get("customer.army.startdate") 
+        		 || viewModel.get("customer.army.enddate")
+        		 || viewModel.get("customer.army.country")
+        		 || viewModel.get("customer.army.armydo")
+        		 || viewModel.get("customer.army.armyname")
+        		 || viewModel.get("customer.army.armytype");
         return state;
     },
     //工作信息详情
@@ -377,8 +386,20 @@ var viewModel = kendo.observable({
     },
     //申请的制作者
     assistApplyEnable: function () {
-    	var assistApplyEnable = viewModel.get("customer.applicantproducer");
+    	/*var assistApplyEnable = viewModel.get("customer.applicantproducer");
+    	console.log(JSON.stringify(assistApplyEnable));
     	var state = assistApplyEnable ? assistApplyEnable.length > 0 : false;
+        return state;*/
+        
+        var state = viewModel.get("customer.applicantproducer.producerName")
+					|| viewModel.get("customer.applicantproducer.producerXing")
+					|| viewModel.get("customer.applicantproducer.organizeName")
+					|| viewModel.get("customer.applicantproducer.addressDetails")
+					|| viewModel.get("customer.applicantproducer.city")
+					|| viewModel.get("customer.applicantproducer.province")
+					|| viewModel.get("customer.applicantproducer.postCode")
+					|| viewModel.get("customer.applicantproducer.country")
+					|| viewModel.get("customer.applicantproducer.relation");
         return state;
     }
 });
@@ -479,7 +500,14 @@ $("#has_never_educated").change(function () {
  ****************************************************/
 /*我曾参军*/
 $("#join_army").change(function () {
-	viewModel.set("customer.army", $(this).is(':checked') ? " " : "");
+	//viewModel.set("customer.army", $(this).is(':checked') ? " " : "");
+	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.army.armydo", value);
+    viewModel.set("customer.army.armyname", value);
+    viewModel.set("customer.army.armytype", value);
+    viewModel.set("customer.army.country", value);
+    viewModel.set("customer.army.enddate", value);
+    viewModel.set("customer.army.startdate", value);
 });
 
 //赴美国旅行目的列表
@@ -506,7 +534,17 @@ $("#join_group").change(function () {
 });
 //申请的制作者
 $("#has_assist_apply").change(function () {
-	viewModel.set("customer.applicantproducer", $(this).is(':checked') ? " " : "");
+	//viewModel.set("customer.applicantproducer", $(this).is(':checked') ? " " : "");
+	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.applicantproducer.producerName", value);
+    viewModel.set("customer.applicantproducer.producerXing", value);
+    viewModel.set("customer.applicantproducer.organizeName", value);
+    viewModel.set("customer.applicantproducer.addressDetails", value);
+    viewModel.set("customer.applicantproducer.city", value);
+    viewModel.set("customer.applicantproducer.province", value);
+    viewModel.set("customer.applicantproducer.postCode", value);
+    viewModel.set("customer.applicantproducer.country", value);
+    viewModel.set("customer.applicantproducer.relation", value);
 });
 
 //签证信息保存

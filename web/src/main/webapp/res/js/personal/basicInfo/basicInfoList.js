@@ -347,8 +347,8 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-    	var oldPassport = viewModel.get("customer.passportlose");
-    	console.log(JSON.stringify(oldPassport));
+    	/*var oldPassport = viewModel.get("customer.passportlose");
+    	console.log(JSON.stringify(oldPassport));*/
     	//var state = oldPassport ? oldPassport.length > 0 : false;
     	/*var a=viewModel.get("customer.passportlose.id");
     	if(a>0) return true;
@@ -363,8 +363,8 @@ var viewModel = kendo.observable({
     	
     	var state = viewModel.get("customer.passportlose.passport") 
 		|| viewModel.get("customer.passportlose.reason")
-		|| viewModel.get("customer.passportlose.reasonen")
-		|| viewModel.get("customer.passportlose.sendcountry");
+		|| viewModel.get("customer.passportlose.reasonen");
+		//|| viewModel.get("customer.passportlose.sendcountry")
     	return state;
     },
     // 曾用名
@@ -444,8 +444,8 @@ var viewModel = kendo.observable({
 		|| viewModel.get("customer.commhomeaddress.workPhoneNum")//undefined
 		|| viewModel.get("customer.commhomeaddress.email")
 		|| viewModel.get("customer.commhomeaddress.issuingCity")
-		|| viewModel.get("customer.commhomeaddress.issuingCountry")
 		|| viewModel.get("customer.commhomeaddress.passportType");
+    	//|| viewModel.get("customer.commhomeaddress.issuingCountry")
     	return state;
     }
 });
@@ -460,7 +460,7 @@ $("#pp_lost").change(function () {
     viewModel.set("customer.passportlose.passport", value);
     viewModel.set("customer.passportlose.reason", value);
     viewModel.set("customer.passportlose.reasonen", value);
-    viewModel.set("customer.passportlose.sendcountry", value);
+    //viewModel.set("customer.passportlose.sendcountry", value);
 });
 //曾用名
 $("#has_used_name").change(function () {
@@ -513,7 +513,7 @@ $("#communica_home_address").change(function () {
     viewModel.set("customer.commhomeaddress.workPhoneNum", value);
     viewModel.set("customer.commhomeaddress.email", value);
     viewModel.set("customer.commhomeaddress.issuingCity", value);
-    viewModel.set("customer.commhomeaddress.issuingCountry", value);
+    //viewModel.set("customer.commhomeaddress.issuingCountry", value);
     viewModel.set("customer.commhomeaddress.passportType", value);
 	
 });
