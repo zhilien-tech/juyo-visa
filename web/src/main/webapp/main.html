@@ -748,7 +748,7 @@
         }else{
         	if(logintype==5){
         		
-        	$('.J_iframe').attr('src','myvisa/transactVisa/visaNationList.html?logintype=5'); 
+        	$('.J_iframe').attr('src','myvisa/transactVisa/visaNationList.html?logintype=5&orderId='+$.queryString('orderId')); 
     		$('#homePage').html('<a href="javascript:;" class="active J_menuTab" data-id="myvisa/transactVisa/visaNationList.html?logintype=5">办理中签证 </a>');
         	}else{
         		
