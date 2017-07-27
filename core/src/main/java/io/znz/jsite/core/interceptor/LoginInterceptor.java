@@ -34,6 +34,28 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		String requestUri = request.getRequestURL().toString();
 		String contextPath = request.getContextPath();
 		String url = requestUri.substring(contextPath.length());
+		String queryString = request.getQueryString();
+		if (!Util.isEmpty(url)) {
+			if (url.contains(".map")) {
+				return true;
+			}
+		}
+		if (!Util.isEmpty(url)) {
+			if (url.contains(".ttf")) {
+				return true;
+			}
+		}
+		if (!Util.isEmpty(url)) {
+			if (url.contains(".woff2")) {
+				return true;
+			}
+		}
+		if (!Util.isEmpty(queryString)) {
+			boolean contains = queryString.contains("logintype=5");
+			if (contains) {
+				return true;
+			}
+		}
 		//String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
 		/*if (nowurl.equals(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/")) {
 			return true;

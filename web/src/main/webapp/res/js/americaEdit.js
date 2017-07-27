@@ -140,9 +140,14 @@ var viewModel = kendo.observable({
         var all = viewModel.get(key);
         if (all) all.splice(0, all.length);
     },
- // 支付人
+    //支付人
     payType: function (type) {
         return viewModel.get("customer.trip.paypersion") === type;
+    },
+    //您是否作为一个团队或组织去旅行
+    joinTeam: function (type) {
+    	var state = viewModel.get("customer.trip.teamname");
+    	return state;
     },
 });
 kendo.bind($(document.body), viewModel);
@@ -153,7 +158,7 @@ kendo.bind($(document.body), viewModel);
 /*****************************************************
  * 开始出行信息
  ****************************************************/
-//是否参团
+//您是否作为一个团队或组织去旅行
 $("#join_group").change(function () {
 	viewModel.set("customer.trip.teamname", $(this).is(':checked') ? " " : "");
 });
@@ -456,7 +461,7 @@ function ordersave(){
 	    		errorNum.push(person);
 	    		
 	    	}
-	    	console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
+	    	//console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
 	    });
 	    //end 验证————————————————————————————————
 		

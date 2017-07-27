@@ -1,6 +1,7 @@
 package io.znz.jsite.visa.entity.japan;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -38,7 +39,7 @@ public class NewComeBabyJpEntity implements Serializable {
 
 	@Column
 	@Comment("公司id")
-	private Integer comId;
+	private Long comId;
 
 	@Column
 	@Comment("公司类型")
@@ -75,5 +76,28 @@ public class NewComeBabyJpEntity implements Serializable {
 	@Column
 	@Comment("印章名字")
 	private String sealName;
+
+	@Column
+	@Comment("地接社公司全称")
+	private String landcomFullName;
+
+	@Column
+	@Comment("地接社公司地址")
+	private String landaddress;
+
+	@Column
+	@Comment("地接社联系人")
+	private String landlinkman;
+
+	@Column
+	@Comment("地接社电话")
+	private String landtelephone;
+	@Column
+	@Comment("创建时间")
+	private Date createTime;
+
+	@Column
+	@Comment("更新时间")
+	private Date updateTime;
 
 }

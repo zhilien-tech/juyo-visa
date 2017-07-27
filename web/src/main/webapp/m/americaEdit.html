@@ -468,10 +468,10 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="join_group"
-                                               class="check-box-label">您是否作为一个团队或组织去旅行:</label>
-                                        <input id='join_group'  data-bind="value:customer.trip.teamname"
-                                               class="mui-switch" type="checkbox"/>
+                                        <label for="join_group" class="check-box-label">您是否作为一个团队或组织去旅行:</label>
+                                        <!-- <input id='join_group'  data-bind="value:customer.trip.teamname"
+                                               class="mui-switch" type="checkbox"/> -->
+                                        <input id='join_group'  data-bind="checked:joinTeam" class="mui-switch" type="checkbox"/>
                                     </div>
                                 </div>
                             </div>

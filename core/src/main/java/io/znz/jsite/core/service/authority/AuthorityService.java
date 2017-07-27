@@ -12,6 +12,7 @@ import io.znz.jsite.core.util.Const;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.util.DbSqlUtil;
 
@@ -73,10 +75,48 @@ public class AuthorityService extends NutzBaseService {
 	 * @param request
 	 * @param functions
 	 */
-	public Object loginfunctions(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		//功能session
-		List<FunctionEntity> functions = (List<FunctionEntity>) session.getAttribute(Const.AUTHS_KEY);
+	public Object loginfunctions(HttpServletRequest request, String logintype, String orderId) {
+		List<FunctionEntity> functions = Lists.newArrayList();
+		if ("5".equals(logintype)) {
+			//我的签证
+			FunctionEntity usaf1 = new FunctionEntity();
+			usaf1.setId(7);
+			usaf1.setParentId(0);
+			usaf1.setFunName("我的签证");
+			usaf1.setLevel(1);
+			usaf1.setCreateTime(new Date());
+			usaf1.setRemark("我的签证");
+			usaf1.setSort(7);
+			usaf1.setPortrait("fa fa-arrows-h");
+			functions.add(usaf1);
+			//办理中签证
+			FunctionEntity usaf2 = new FunctionEntity();
+			usaf2.setId(8);
+			usaf2.setParentId(7);
+			usaf2.setFunName("办理中签证");
+			usaf2.setUrl("myvisa/transactVisa/visaNationList.html?logintype=5&orderId=" + orderId);
+			usaf2.setLevel(2);
+			usaf2.setCreateTime(new Date());
+			usaf2.setRemark("办理中签证");
+			usaf2.setSort(8);
+			functions.add(usaf2);
+			//			//我的资料
+			//			FunctionEntity usaf3 = new FunctionEntity();
+			//			usaf3.setId(9);
+			//			usaf3.setParentId(0);
+			//			usaf3.setFunName("我的资料");
+			//			usaf3.setLevel(1);
+			//			usaf3.setCreateTime(new Date());
+			//			usaf3.setRemark("我的资料");
+			//			usaf3.setPortrait("fa fa-list-alt");
+			//			usaf3.setSort(9);
+			//			functions.add(usaf3);
+		} else {
+
+			HttpSession session = request.getSession();
+			//功能session
+			functions = (List<FunctionEntity>) session.getAttribute(Const.AUTHS_KEY);
+		}
 		return functions;
 	}
 }

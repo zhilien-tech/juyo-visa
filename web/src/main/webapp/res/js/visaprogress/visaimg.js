@@ -34,16 +34,29 @@ var thirdPart=[];
 var writebasicinfo=0;
 var country;
 var countrystatus;
+var logintype;
 $(function(){
 	 //country=JSON.parse($.queryString("country"));
     country = JSON.parse(unescape($.queryString("country")));
     countrystatus=$.queryString("countrystatus");
-    if(countrystatus != "" && countrystatus != null && countrystatus == 1){//1表示进入日本的签证状态
-    	$('#writeResourceJump').attr('href','/personal/passportInfo/passportJPInfoList.html?typeId=1&country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus); 
-
-    }else if(countrystatus != "" && countrystatus != null && countrystatus == 0){
-    	$('#writeResourceJump').attr('href','/personal/passportInfo/passportInfoList.html?typeId=1&country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus); 
-
+    logintype=$.queryString("logintype");
+    if(logintype==5){
+    	if(countrystatus != "" && countrystatus != null && countrystatus == 1){//1表示进入日本的签证状态
+    		$('#writeResourceJump').attr('href','/personal/passportInfo/passportJPInfoList.html?logintype=5&typeId=1&country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus+"&orderId="+$.queryString('orderId')); 
+    		
+    	}else if(countrystatus != "" && countrystatus != null && countrystatus == 0){
+    		$('#writeResourceJump').attr('href','/personal/passportInfo/passportInfoList.html?logintype=5&typeId=1&country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus+"&orderId="+$.queryString('orderId')); 
+    		
+    	}
+    }else{
+    	
+    	if(countrystatus != "" && countrystatus != null && countrystatus == 1){//1表示进入日本的签证状态
+    		$('#writeResourceJump').attr('href','/personal/passportInfo/passportJPInfoList.html?typeId=1&country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus); 
+    		
+    	}else if(countrystatus != "" && countrystatus != null && countrystatus == 0){
+    		$('#writeResourceJump').attr('href','/personal/passportInfo/passportInfoList.html?typeId=1&country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus); 
+    		
+    	}
     }
     //alert(unescape($.queryString("country")));
     if(country!=null&&country!=''){

@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.beust.jcommander.internal.Maps;
+import com.google.common.collect.Lists;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
 
@@ -59,41 +60,66 @@ public class NewVisaProgressController {
 	 */
 	@RequestMapping(value = "country")
 	@ResponseBody
-	public Object list(HttpServletRequest request) {
-		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute(Const.SESSION_NAME);
-		//美国
-		List<NewCustomerEntity> usalist = dbDao.query(NewCustomerEntity.class, Cnd.where("empid", "=", user.getId())
-				.orderBy("createtime", "desc"), null);
+	public Object list(HttpServletRequest request, String logintype, String orderId) {
+		if ("5".equals(logintype)) {
+			List<NewCustomerEntity> usalist = Lists.newArrayList();
+			if (!Util.isEmpty(orderId)) {
+				List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
+						Cnd.where("orderid", "=", orderId), null);
+				if (!Util.isEmpty(query) && query.size() > 0) {
+					for (NewCustomerOrderEntity CustomerOrderEntity : query) {
+						if (!Util.isEmpty(CustomerOrderEntity)) {
+							NewCustomerEntity fetch = dbDao.fetch(NewCustomerEntity.class,
+									CustomerOrderEntity.getCustomerid());
+							usalist.add(fetch);
+						}
+					}
 
-		//日本
-		List<NewCustomerJpEntity> japanlist = dbDao.query(NewCustomerJpEntity.class,
-				Cnd.where("empid", "=", user.getId()).orderBy("createtime", "desc"), null);
-		/*Map<String, Integer> map = Maps.newHashMap();
-		if (!Util.isEmpty(japanlist) && !Util.isEmpty(usalist)) {
+				}
+			}
+			Map<String, Object> map = Maps.newHashMap();
+			map.put("usa", usalist);
+			map.put("japan", "");
+			map.put("tourist", 1);
+
+			return map;
+		} else {
+
+			EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute(Const.SESSION_NAME);
+			//美国
+			List<NewCustomerEntity> usalist = dbDao.query(NewCustomerEntity.class, Cnd
+					.where("empid", "=", user.getId()).orderBy("createtime", "desc"), null);
+
+			//日本
+			List<NewCustomerJpEntity> japanlist = dbDao.query(NewCustomerJpEntity.class,
+					Cnd.where("empid", "=", user.getId()).orderBy("createtime", "desc"), null);
+			/*Map<String, Integer> map = Maps.newHashMap();
+			if (!Util.isEmpty(japanlist) && !Util.isEmpty(usalist)) {
 			map.put("usa", usalist.get(0).getId());
 			map.put("japan", Integer.valueOf(japanlist.get(0).getId() + ""));
 
-		} else if (Util.isEmpty(japanlist) && !Util.isEmpty(usalist)) {
+			} else if (Util.isEmpty(japanlist) && !Util.isEmpty(usalist)) {
 			map.put("usa", usalist.get(0).getId());
 
-		} else if (!Util.isEmpty(japanlist) && Util.isEmpty(usalist)) {
+			} else if (!Util.isEmpty(japanlist) && Util.isEmpty(usalist)) {
 			map.put("japan", Integer.valueOf(japanlist.get(0).getId() + ""));
 
-		}*/
-		Map<String, Object> map = Maps.newHashMap();
-		if (!Util.isEmpty(japanlist) && !Util.isEmpty(usalist)) {
-			map.put("usa", usalist.get(0));
-			map.put("japan", japanlist.get(0));
+			}*/
+			Map<String, Object> map = Maps.newHashMap();
+			if (!Util.isEmpty(japanlist) && !Util.isEmpty(usalist)) {
+				map.put("usa", usalist.get(0));
+				map.put("japan", japanlist.get(0));
 
-		} else if (Util.isEmpty(japanlist) && !Util.isEmpty(usalist)) {
-			map.put("usa", usalist.get(0));
+			} else if (Util.isEmpty(japanlist) && !Util.isEmpty(usalist)) {
+				map.put("usa", usalist.get(0));
 
-		} else if (!Util.isEmpty(japanlist) && Util.isEmpty(usalist)) {
-			map.put("japan", japanlist.get(0));
+			} else if (!Util.isEmpty(japanlist) && Util.isEmpty(usalist)) {
+				map.put("japan", japanlist.get(0));
 
+			}
+
+			return map;
 		}
-
-		return map;
 	}
 
 	/**

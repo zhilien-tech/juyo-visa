@@ -233,10 +233,6 @@ public class MainForm extends JPanel {
 						//执行命令行
 						File python = new File(pyFile.getText());
 						if (python.exists()) {
-							String cmd = "python " + pyFile.getText() + " " + target.getAbsolutePath();
-							command.setText(cmd);
-							exe(command.getText());
-
 							//提交ds160
 							String ds160rs = HttpClientUtil.get(getBaseUrl() + TASK_SUBMITING_URI + oid);
 							ResultObject<Map, Object> ds160ro = JSON.parseObject(ds160rs, ResultObject.class);
@@ -245,6 +241,11 @@ public class MainForm extends JPanel {
 							} else {
 								JOptionPane.showMessageDialog(new JLabel(), ds160ro.getMsg());
 							}
+
+							String cmd = "python " + pyFile.getText() + " " + target.getAbsolutePath();
+							command.setText(cmd);
+							exe(command.getText());
+
 							log("准备任务码为" + oid + "的上传文件");
 							log("总计用时:" + ((System.currentTimeMillis() - startTime) / 1000) + "秒");
 						} else {
@@ -314,7 +315,7 @@ public class MainForm extends JPanel {
 						ZFile zf = new ZFile();
 						zf.setInput(is);
 						zf.setFileName(fileName);
-						zf.setRelativePathInZip("/" + tid);
+						zf.setRelativePathInZip(tid + "/");
 						zfiles.add(zf);
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
@@ -369,8 +370,8 @@ public class MainForm extends JPanel {
 			sb.append(file.getAbsolutePath()).append(";");
 			tmp.append(StringUtils.substringAfterLast(file.getName(), "."));
 		}
-		if (files.length != 2 || !tmp.toString().matches("(?=.*pdf)(?=.*dat)^.*$")) {
-			JOptionPane.showMessageDialog(new JLabel(), "文件必须是pdf和dat两个文件!");
+		if (!tmp.toString().matches("(?=.*pdf)(?=.*dat)^.*$")) {
+			JOptionPane.showMessageDialog(new JLabel(), "文件必须是pdf或dat类型!");
 			return;
 		}
 		if (StringUtils.isNotBlank(sb)) {

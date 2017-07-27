@@ -13,8 +13,6 @@ var passporttype=[
                  {text:"普通",value:1},
                  {text:"公务",value:3},
                  {text:"其他",value:4},
-                
-                 
                ];
 function translateZhToEn(from, to) {
     $.getJSON("/translate/google", {q: $(from).val()}, function (result) {
@@ -26,7 +24,7 @@ var countries = new kendo.data.DataSource({
             read: {
                 url: "/res/json/country_japan.json",
                 dataType: "json"
-            }
+                }
         }
     }),
     states = new kendo.data.DataSource({
@@ -65,8 +63,6 @@ var countries = new kendo.data.DataSource({
         "customer.financeJpList": {},
         "customer.orthercountryJpList": {},
         "customer.recentlyintojpJpList": {}
-       
-        
     }
 /*****************************************************
  * 数据绑定
@@ -112,17 +108,16 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-        ///return viewModel.get("customer.oldpassportJp");
-    	var oldPassportEnable = viewModel.get("customer.oldpassportJp");
-    	var state = oldPassportEnable ? oldPassportEnable.length > 0 : false;
-        return state;
+    	///console.log("旧护照:"+JSON.stringify(viewModel.get("customer.oldpassportJp")));
+    	var state = viewModel.get("customer.oldpassportJp.passport") || viewModel.get("customer.oldpassportJp.reason")
+		 || viewModel.get("customer.oldpassportJp.reasonen") || viewModel.get("customer.oldpassportJp.sendcountry");
+    	return state;
     },
     // 曾用名
     oldNameEnable: function () {
-        ///return viewModel.get("customer.oldnameJp");
-    	var oldNameEnable = viewModel.get("customer.oldnameJp");
-    	var state = oldNameEnable ? oldNameEnable.length > 0 : false;
-        return state;
+    	var state = viewModel.get("customer.oldnameJp.oldname") || viewModel.get("customer.oldnameJp.oldnameen")
+        		 || viewModel.get("customer.oldnameJp.oldxing") || viewModel.get("customer.oldnameJp.oldxingen");
+    	return state;
     },
     // 其他国家公民
     otherCountryEnable: function () {
@@ -150,18 +145,19 @@ kendo.bind($(document.body), viewModel);
 
 //丢过护照
 $("#pp_lost").change(function () {
-	///viewviewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
-	viewModel.set("customer.oldpassportJp", $(this).is(':checked') ? " " : "");
+	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.oldpassportJp.passport", value);
+    viewModel.set("customer.oldpassportJp.reason", value);
+    viewModel.set("customer.oldpassportJp.reasonen", value);
+    viewModel.set("customer.oldpassportJp.sendcountry", value);
 });
 //曾用名
 $("#has_used_name").change(function () {
-   /*///if ($(this).is(':checked')) {
-        viewModel.add("customer.oldName");
-    } else {
-        viewModel.clear("customer.oldName");
-    }*/
-	/*viewviewModel.set("customer.oldname", $(this).is(':checked') ? " " : "");*/
-	viewModel.set("customer.oldnameJp", $(this).is(':checked') ? " " : "");
+	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.oldnameJp.oldname", value);
+    viewModel.set("customer.oldnameJp.oldnameen", value);
+    viewModel.set("customer.oldnameJp.oldxing", value);
+    viewModel.set("customer.oldnameJp.oldxingen", value);
 });
 //其他国家居民
 $("#has_pr").change(function () {
@@ -171,10 +167,6 @@ $("#has_pr").change(function () {
         viewModel.clearAll("customer.orthercountryJpList");
     }
 });
-
-
-
-
 
 //存放空的数组
 var emptyNum=[];
@@ -188,9 +180,7 @@ $("#saveCustomerData").on("click",function(){
 		//清空验证的数组
 		emptyNum.splice(0,emptyNum.length);
 		errorNum.splice(0,errorNum.length);
-		
-		
-		console.log(JSON.stringify(viewModel.customer));
+		///console.log(JSON.stringify(viewModel.customer));
 		/*var error=JSON.stringify(map);
 		if(error.length>15){
 			
@@ -205,11 +195,10 @@ $("#saveCustomerData").on("click",function(){
 			 data: JSON.stringify(viewModel.customer)+"",
 			 success: function (result){
 				 if(indexnew!=null){
-						
 						layer.close(indexnew);
 						}
 				 
-				 console.log(result);
+				 ///console.log(result);
 				 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 				 parent.layer.close(index);
 				 window.parent.successCallback('1');
@@ -242,11 +231,9 @@ $("#saveCustomerData").on("click",function(){
 	    		errorNum.push(person);
 	    		
 	    	}
-	    	console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
+	    	//console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
 	    });
 	    //end 验证————————————————————————————————
-		
-		
 		
 		
 		var str="";
@@ -275,22 +262,16 @@ $("#saveCustomerData").on("click",function(){
 
 //通过或者拒绝的方法
 function agreeOrRefuse(flag){
-	
-	
-	
 	/* viewModel.set("customer.errorinfo",JSON.stringify(map));*/
 	 var error=JSON.stringify(map);
 	 map.clear();
-	
-	
-	
 	
 	var id=viewModel.get("customer.id");
 	$.ajax({
 		 type: "POST",
 		 url: "/visa/newcustomerjp/agreeOrRefuse?flag="+flag+"&customerid="+id+"&error="+error,
 		 success: function (result){
-			 console.log(result);
+			 ///console.log(result);
 			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			 parent.layer.close(index);
 			 window.parent.successCallback('3');
@@ -377,7 +358,6 @@ $(function () {
         });
     }
 	 if(indexnew!=null){
-			
 			layer.close(indexnew);
-			}
+	 }
 });

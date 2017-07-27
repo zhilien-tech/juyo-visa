@@ -42,7 +42,28 @@ public class AuthorityInterceptor extends HandlerInterceptorAdapter {
 		String requestUri = request.getRequestURL().toString();
 		String contextPath = request.getContextPath();
 		String url = requestUri.substring(contextPath.length());
-
+		String queryString = request.getQueryString();
+		if (!Util.isEmpty(url)) {
+			if (url.contains(".map")) {
+				return true;
+			}
+		}
+		if (!Util.isEmpty(url)) {
+			if (url.contains(".map")) {
+				return true;
+			}
+		}
+		if (!Util.isEmpty(url)) {
+			if (url.contains(".ttf")) {
+				return true;
+			}
+		}
+		if (!Util.isEmpty(queryString)) {
+			boolean contains = queryString.contains("logintype=5");
+			if (contains) {
+				return true;
+			}
+		}
 		boolean isAllowed = true;
 		//获取访问路径，去掉参数
 		String requestPath = request.getServletPath();

@@ -63,6 +63,7 @@ import io.znz.jsite.visa.simulator.dto.TogetherDto;
 import io.znz.jsite.visa.simulator.dto.TravelDto;
 import io.znz.jsite.visa.simulator.dto.UsaDto;
 import io.znz.jsite.visa.simulator.dto.WorkDto;
+import io.znz.jsite.visa.util.Const;
 
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -138,7 +139,7 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 		String visaFile = null;
 		try {
 			InputStream inputStream = file.getInputStream();
-			visaFile = qiniuUploadService.uploadImage(inputStream, "zip", null);
+			visaFile = Const.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, "zip", null);
 
 			Integer status = customer.getStatus();
 			//验证提交状态
