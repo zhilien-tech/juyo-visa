@@ -19,7 +19,6 @@ import io.znz.jsite.visa.service.EmployeeViewService;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
@@ -90,7 +89,7 @@ public class employeeController extends BaseController {
 	 */
 	@RequestMapping(value = "selectJobName")
 	@ResponseBody
-	public Object selectJobName(String deptId, HttpServletRequest request) {
+	public Object selectJobName(String deptId) {
 		Long parseLong = null;
 		List<JobEntity> jobList = null;
 		if (!"null".equals(deptId) && !"0".equals(deptId) && !"undefined".equals(deptId) && !"".equals(deptId)) {
@@ -149,5 +148,16 @@ public class employeeController extends BaseController {
 	@ResponseBody
 	public boolean initpassword(Integer userId) {
 		return employeeViewService.initpassword(userId);
+	}
+
+	/**
+	 * 手机号唯一性校验
+	 * @param telephone
+	 * @param session
+	 */
+	@RequestMapping(value = "checktelephone")
+	@ResponseBody
+	public boolean checktelephone(String telephone, HttpSession session) {
+		return employeeViewService.checktelephone(telephone, session);
 	}
 }

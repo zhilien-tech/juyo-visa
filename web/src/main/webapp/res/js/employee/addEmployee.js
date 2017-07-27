@@ -12,8 +12,13 @@ $(document).ready(function() {
                 }
             }
         },
-        change: onChange
+        change:onChange
     }).data("kendoDropDownList");
+	
+	var jobs = $("#jobId").kendoDropDownList({
+		optionLabel: "--请选择职位--"
+    }).data("kendoDropDownList");
+	
 	//联动出职位信息
 	function onChange() {
 		var jobs = $("#jobId").kendoDropDownList({
@@ -33,9 +38,25 @@ $(document).ready(function() {
 	    }).data("kendoDropDownList");
 	}
 });
-
-
-
+//验证手机号唯一性
+function checktelephone(){
+	var telephone = $("#telephoneId").val();
+	$.ajax({
+		type : "POST",
+		url : '/visa/employeemanage/checktelephone',
+		data : {
+			telephone:telephone
+		},
+		success : function(data) {
+			if(data=="true"){
+				layer.msg('此号码已被使用');
+			}
+		},
+		error : function(request) {
+			layer.msg('验证失败');
+		}
+	});
+}
 
 
 

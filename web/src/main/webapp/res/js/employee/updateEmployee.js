@@ -21,7 +21,6 @@ $(document).ready(function() {
 	var uid = GetQueryString("uid");
 	var dptid = GetQueryString("deptId");
 	var jbId = GetQueryString("jobId");
-	
 	$("#uid").val(uid);
 	$("#depts").val(dptid);
 	
@@ -41,19 +40,6 @@ $(document).ready(function() {
 			$('#landlineId').val(userinfo.landline);
 			$('#emailId').val(userinfo.email);
 			display(userinfo.disableuserstatus);
-			//部门职位信息
-			/*var deptjobinfo = data.userDeptList;
-			var str = '<option value="">--请选择--</option>';
-			for(var i=0;i<deptjobinfo.length;i++){
-				var deptId = deptjobinfo[i].id;
-				var deptName = deptjobinfo[i].deptname;
-				if(deptId==userinfo.deptid){
-					str += '<option value="'+deptId+'" selected="selected">'+deptName+'</option>';
-				}else{
-					str += '<option value="'+deptId+'">'+deptName+'</option>';
-				}
-			}
-				$('#depts').html(str);*/
 		},
 		error : function(request) {
 			layer.msg('更新失败');
@@ -75,6 +61,7 @@ $(document).ready(function() {
         },
         change: onChange
     }).data("kendoDropDownList");
+	
 	//联动出职位信息
 	function onChange() {
 		var jobs = $("#jobId").kendoDropDownList({
@@ -96,9 +83,6 @@ $(document).ready(function() {
 });
 
 $(function(){
-	var jbname = unescape($.queryString("jobName"));
-	alert(jbname);
-	$("#jobId").val(jbname);
 	var jobs = $("#jobId").kendoDropDownList({
         optionLabel: "--请选择职位--",
         dataTextField: "jobName",
@@ -114,6 +98,7 @@ $(function(){
             }
         }
     }).data("kendoDropDownList");
+	jobs.value($.queryString("jobId"));//设置选中职位名称
 });
 
 
