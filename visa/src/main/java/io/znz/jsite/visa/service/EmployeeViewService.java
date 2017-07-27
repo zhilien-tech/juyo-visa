@@ -9,6 +9,7 @@ package io.znz.jsite.visa.service;
 import io.znz.jsite.base.NutzBaseService;
 import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
+import io.znz.jsite.core.entity.department.DepartmentEntity;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
@@ -16,7 +17,6 @@ import io.znz.jsite.visa.entity.user.SysUserEntity;
 import io.znz.jsite.visa.entity.userjobmap.UserJobMapEntity;
 import io.znz.jsite.visa.enums.UserDeleteStatusEnum;
 import io.znz.jsite.visa.enums.UserJobStatusEnum;
-import io.znz.jsite.visa.enums.UserStatusEnum;
 import io.znz.jsite.visa.enums.UserTypeEnum;
 import io.znz.jsite.visa.forms.employeeform.EmployeeAddForm;
 import io.znz.jsite.visa.forms.employeeform.EmployeeUpdateForm;
@@ -59,7 +59,7 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 	 * @param session
 	 */
 	public Object queryDept(final HttpSession session) {
-		Map<String, Object> obj = Maps.newHashMap();
+		//Map<String, Object> obj = Maps.newHashMap();
 		//通过session获取公司的id
 		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
 		long comId = company.getComId();//得到公司的id
@@ -68,9 +68,11 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 		cnd.and("d.comId", "=", comId);
 		cnd.and("d.deptName", "!=", "公司管理部");
 		cnd.and("d.deptName", "!=", "");
-		List<Record> queryList = dbDao.query(sql, cnd, null);
-		obj.put("queryList", queryList);
-		return obj;
+		sql.setCondition(cnd);
+		List<DepartmentEntity> queryList = DbSqlUtil.query(dbDao, DepartmentEntity.class, sql, null);
+		//		List<Record> queryList = dbDao.query(sql, cnd, null);
+		//		obj.put("queryList", queryList);
+		return queryList;
 	}
 
 	/**
@@ -104,7 +106,7 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 			addForm.setCreateTime(new Date());
 			addForm.setStatus(UserJobStatusEnum.JOB.intKey());//在职
 			addForm.setUserType(UserTypeEnum.PERSONNEL.intKey());//工作人员身份
-			addForm.setDisableUserStatus(UserStatusEnum.VALID.intKey());//激活
+			addForm.setDisableUserStatus(UserDeleteStatusEnum.NO.intKey());//未删除
 			addForm.setComId(comId);
 			addForm.setPId(pid);
 			//初始密码
@@ -225,7 +227,7 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 	@Aop("txDb")
 	public boolean deleteUserData(Integer userId) {
 		if (!Util.isEmpty(userId)) {
-			dbDao.update(EmployeeEntity.class, Chain.make("status", UserDeleteStatusEnum.YES.intKey()),
+			dbDao.update(EmployeeEntity.class, Chain.make("disableUserStatus", UserDeleteStatusEnum.YES.intKey()),
 					Cnd.where("id", "=", userId));
 		}
 		return true;
@@ -247,5 +249,19 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 					Cnd.where("id", "=", userId));
 		}
 		return true;
+	}
+
+	public boolean checktelephone(String telephone, final HttpSession session) {
+		//根据当前登录用户id查询出个人信息
+		EmployeeEntity user = (EmployeeEntity) session.getAttribute(Const.SESSION_NAME);
+		long userId = user.getId();
+		EmployeeEntity fetch = null;
+		if (!Util.isEmpty(userId)) {
+			fetch = dbDao.fetch(EmployeeEntity.class, Cnd.where("telephone", "=", telephone));
+		}
+		if (!Util.isEmpty(fetch)) {
+			return true;
+		}
+		return false;
 	}
 }

@@ -58,8 +58,8 @@ public class CustomerManageEntity {
 	@Comment("备注")
 	private String remark;
 	@Column
-	@Comment("预留字段1")
-	private String res1;
+	@Comment("父id")
+	private long pId;
 	@Column
 	@Comment("预留字段2")
 	private String res2;

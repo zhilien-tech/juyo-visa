@@ -85,16 +85,18 @@
 	                                        <!-- <select id="deptId" name="deptId" onchange="loadSelectJob();" class="form-control input-sm inputWidth">
 					                        </select> -->
 					                        <div class='input-group'>
-	                                            <select id="deptId"
+	                                            <!-- <select id="deptId"
 	                                                    data-role="dropdownlist"
 	                                                    data-filter="startswith"
 	                                                    data-suggest="true"
 	                                                    data-auto-bind="true"
 	                                                    data-value-primitive="true"
-	                                                    data-text-field="text"
-	                                                    data-value-field="value"
-	                                                    data-bind=""
-	                                                    style="width: 100%;" required validationMessage=" " name="deptId"></select>
+	                                                    data-text-field="deptName"
+	                                                    data-value-field="id"
+	                                                    onchange="loadSelectJob();"
+	                                                    data-bind="value:deptName,source:proposers"
+	                                                    style="width: 100%;" required validationMessage="所属部门不能为空" name="deptName"></select> -->
+	                                            <input id="depts" name="deptId" style="width: 100%;"> 
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -110,16 +112,17 @@
 		                                        <!-- <select id="jobId" name="jobId"  class="form-control input-sm inputWidth">
 						              			</select> -->
 						              		<div class='input-group'>
-	                                            <select id="jobId"
+	                                            <!-- <select id="jobId"
 	                                                    data-role="dropdownlist"
 	                                                    data-filter="startswith"
 	                                                    data-suggest="true"
 	                                                    data-auto-bind="true"
 	                                                    data-value-primitive="true"
-	                                                    data-text-field="text"
-	                                                    data-value-field="value"
-	                                                    data-bind=""
-	                                                    style="width: 100%;" required validationMessage=" " name="jobId"></select>
+	                                                    data-text-field="jobName"
+	                                                    data-value-field="id"
+	                                                    data-bind="source:proposersjob"
+	                                                    style="width: 100%;" required validationMessage=" " name="jobName"></select> -->
+	                                            <input id="jobId" name="jobId" style="width: 100%;">
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 		                                	</div>
@@ -133,8 +136,8 @@
 	                                                    data-role="dropdownlist"
 	                                                    data-value-primitive="true"
 	                                                    data-bind="value:customer.travel.period">
-	                                                <option value="1" selected="selected">否</option>
-	                                                <option value="2">是</option>
+	                                                <option value="0" selected="selected">否</option>
+	                                                <option value="1">是</option>
 	                                            </select>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
@@ -176,30 +179,14 @@
 <script src="/res/js/common.js"></script>
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
-<script src="/res/js/employee/employeelist.js"></script>
+<script src="/res/js/projectpath/projectpath.js"></script>
 <!-- <script src="/res/js/wintone.js?v=4"></script> -->
+<script src="/res/js/employee/updateEmployee.js"></script>
 <script src="/res/plugin/layer/layer.js"></script>
 <script type="text/javascript">
-loadSelectDept();
-//回显数据
-function GetQueryString(name)
-{
-     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-     var r = window.location.search.substr(1).match(reg);
-     if(r!=null)return  unescape(r[2]); return null;
-}
-//是否禁用用户回显
-function display(optionID){
-   var all_options = document.getElementById("disableUserStatusId").options;
-   for (i=0; i<all_options.length; i++){
-      if (all_options[i].value == optionID)  // 根据option标签的ID来进行判断  测试的代码这里是两个等号
-      {
-         all_options[i].selected = true;
-      }
-   }
-}
+//loadSelectDept();
 //循环出部门下拉框
-function loadSelectDept(){
+/* function loadSelectDept(){
 	$.ajax({
 		url : localhostPaht+'/visa/employeemanage/queryDeptName',
 		success : function(data) {
@@ -218,9 +205,34 @@ function loadSelectDept(){
 			
 		}
 	});
-}
+} */
+
 //根据部门id联动查询职位
-function loadSelectJob(){
+/*function loadSelectJob(){
+	//联动出职位
+	var deptId = $("#deptId").val();
+	$.ajax({
+		url : localhostPaht+'/visa/employeemanage/selectJobName?deptId='+deptId,
+		success : function(data) {
+			var data = JSON.parse(data);
+			for (var i = 0; i < data.length; i++) {
+				var job = new Object();
+				job.id=data[i].id;
+				job.jobName=data[i].jobName;
+				proposersjob.push(job);
+			}
+			
+		},
+		error : function(request) {
+			
+		}
+	});
+} */
+
+
+
+//根据部门id联动查询职位
+/* function loadSelectJob(){
 	var deptId = $("#deptId").val();
 	var jobId = GetQueryString("jobId");
 	$.ajax({
@@ -242,49 +254,12 @@ function loadSelectJob(){
 			
 		}
 	});
-}
-//调用方法
-var uid = GetQueryString("uid");
-$("#uid").val(uid);
-$.ajax({
-	type : "POST",
-	url : localhostPaht +'/visa/employeemanage/updateData',
-	data : {
-		uid:uid
-	},
-	success : function(data) {
-		var data=JSON.parse(data);
-		var userinfo = data.one;
-		//用户信息
-		$('#fullNameId').val(userinfo.fullname);
-		$('#telephoneId').val(userinfo.telephone);
-		$('#qqId').val(userinfo.qq);
-		$('#landlineId').val(userinfo.landline);
-		$('#emailId').val(userinfo.email);
-		display(userinfo.disableuserstatus);
-		//部门职位信息
-		var deptjobinfo = data.userDeptList;
-		var str = '<option value="">--请选择--</option>';
-		for(var i=0;i<deptjobinfo.length;i++){
-			var deptId = deptjobinfo[i].id;
-			var deptName = deptjobinfo[i].deptname;
-			if(deptId==userinfo.deptid){
-				str += '<option value="'+deptId+'" selected="selected">'+deptName+'</option>';
-			}else{
-				str += '<option value="'+deptId+'">'+deptName+'</option>';
-			}
-		}
-			$('#deptId').html(str);
-	},
-	error : function(request) {
-		layer.msg('更新失败');
-	}
-});
+} */
 //编辑保存
 $("#saveBtn").click(function(){
 	$.ajax({
 		type : "POST",
-		url : localhostPaht +'/visa/employeemanage/updateUserData',
+		url : '/visa/employeemanage/updateUserData',
 		data : $('#updateForm').serialize(),// 你的formid
 		success : function(data) {
 			layer.load(1, {
@@ -307,7 +282,7 @@ $("#deleteFlagId").click(function(){
 	    shade: false //不显示遮罩
 	}, function(){
 		// 点击确定之后
-		var url = localhostPaht +'/visa/employeemanage/deleteUserData';
+		var url = '/visa/employeemanage/deleteUserData';
 		$.ajax({
 			type : 'POST',
 			data : {
@@ -364,9 +339,9 @@ $("#initPasswordId").click(function(){
 	});
 });
 
-$(function(){
+/* $(function(){
 	$('#deptId').kendoDropDownList();//所属部门 初始化
 	$('#jobId').kendoDropDownList();//用户职位 初始化
-});
+}); */
 </script>
 </html>

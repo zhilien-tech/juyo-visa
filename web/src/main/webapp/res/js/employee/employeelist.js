@@ -29,7 +29,7 @@ function regCmd(command) {
                         title: '基本资料',
                         maxmin: true, //开启最大化最小化按钮
                         area: ['750px', '500px'],
-                        content: '/employee/updateEmployee.html?uid=' + data.id+'&deptId='+data.deptid+'&jobId='+data.jobid
+                        content: '/employee/updateEmployee.html?uid=' + data.id+'&deptId='+data.deptid+'&jobId='+data.jobid+'&jobName='+escape(data.jobname)
                     });
                     break;
                 default:

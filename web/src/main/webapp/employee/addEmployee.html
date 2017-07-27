@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
     <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/><!--修改的样式-->
 </head>
-<body onload="document.getElementById('fullNameId').focus()">
+<body id="aaaa" onload="document.getElementById('fullNameId').focus()">
 <div>
     <div class="container-fluid" style="padding-top: 15px;">
         <div class="row">
@@ -29,7 +29,9 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">用户姓名:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="fullNameId" name="fullName" type="text" class="k-textbox" placeholder="请输入用户姓名" style="width: 100%;"/>
+	                                            <input id="fullNameId" name="fullName" type="text" 
+	                                            	   class="k-textbox" placeholder="请输入用户姓名" style="width: 100%;"
+	                                            	   required validationMessage="用户姓名不能为空"/>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -38,7 +40,10 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_en">用户名/手机号:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="telephoneId" name="telephone" placeholder="请输入用户名/手机号" type="text"  class="k-textbox" style="width: 100%;"/>
+	                                            <input id="telephoneId" name="telephone" placeholder="请输入用户名/手机号" 
+	                                            	   onblur="checktelephone()"
+	                                            	   type="text"  class="k-textbox" style="width: 100%;"
+	                                            	   required validationMessage="用户名/手机号不能为空"/>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -81,19 +86,24 @@
 	                                <div class="col-xs-6">
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">所属部门:<span style="color: red">*</span></label>
-	                                        <!-- <select id="deptId" name="deptId" onchange="loadSelectJob();" class="form-control input-sm inputWidth">
-					                        </select> -->
+	                                        <!-- <div class='input-group'>
+		                                        <select id="deptId" name="deptId" onchange="loadSelectJob();" class="form-control input-sm inputWidth">
+						                        </select> 
+						                        <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+					                        </div> -->
 					                         <div class='input-group'>
-	                                            <select id="deptId"
+	                                            <!-- <select id="deptId"
 	                                                    data-role="dropdownlist"
 	                                                    data-filter="startswith"
 	                                                    data-suggest="true"
 	                                                    data-auto-bind="true"
 	                                                    data-value-primitive="true"
-	                                                    data-text-field="text"
-	                                                    data-value-field="value"
-	                                                    data-bind=""
-	                                                    style="width: 100%;" required validationMessage=" " name="deptId"></select>
+	                                                    data-text-field="deptName"
+	                                                    data-value-field="id"
+	                                                    onchange="loadSelectJob();"
+	                                                    data-bind="value:deptName,source:proposers"
+	                                                    style="width: 100%;" required validationMessage="所属部门不能为空" name="deptName"></select> -->
+	                                            <input id="depts" name="deptId" style="width: 100%;"> 
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -102,27 +112,31 @@
 	                            <!-- end 电子邮箱/所属部门 -->
 	                            <!-- 用户职位/用户是否禁用 -->
 								<div class="row">
-	                               <!--  <div class="col-xs-6">
+	                                <!-- <div class="col-xs-6">
 	                                    <div class="form-group">
 	                                    <label for="last_name_cn">用户职位:<span style="color: red">*</span></label>
-	                                        <select id="jobId" name="jobId"  class="form-control input-sm inputWidth">
-					              			</select>
+	                                    	<div class='input-group'>
+		                                        <select id="jobId" name="jobId"  class="form-control input-sm inputWidth">
+						              			</select>
+						              			<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                		</div>
 	                                	</div>
 	                            	</div> -->
 	                            	<div class="col-xs-6">
 	                                    <div class="form-group">
 		                                    <label for="last_name_cn">用户职位:<span style="color: red">*</span></label>
 		                                    <div class='input-group'>
-	                                            <select id="jobId"
+	                                            <!-- <select id="jobId"
 	                                                    data-role="dropdownlist"
 	                                                    data-filter="startswith"
 	                                                    data-suggest="true"
 	                                                    data-auto-bind="true"
 	                                                    data-value-primitive="true"
-	                                                    data-text-field="text"
-	                                                    data-value-field="value"
-	                                                    data-bind=""
-	                                                    style="width: 100%;" required validationMessage=" " name="jobId"></select>
+	                                                    data-text-field="jobName"
+	                                                    data-value-field="id"
+	                                                    data-bind="source:proposersjob"
+	                                                    style="width: 100%;" required validationMessage="用户职位不能为空" name="jobName"></select> -->
+	                                            <input id="jobId" name="jobId" style="width: 100%;"> 
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                	</div>
@@ -135,8 +149,8 @@
 	                                                    data-role="dropdownlist"
 	                                                    data-value-primitive="true"
 	                                                    data-bind="value:customer.travel.period">
-	                                                <option value="1" selected="selected">否</option>
-	                                                <option value="2">是</option>
+	                                                <option value="0" selected="selected">否</option>
+	                                                <option value="1">是</option>
 	                                            </select>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
@@ -169,33 +183,74 @@
 <script src="/res/js/common.js"></script>
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
+<script src="/res/js/projectpath/projectpath.js"></script>
 <!-- <script src="/res/js/wintone.js?v=4"></script> -->
-<script src="/res/js/employee/employeelist.js"></script>
+<!-- <script src="/res/js/employee/employeelist.js"></script> -->
 <script src="/res/js/employee/addEmployee.js"></script>
 <script type="text/javascript">
-$(function(){
-	$('#deptId').kendoDropDownList();//所属部门 初始化
-	$('#jobId').kendoDropDownList();//用户职位 初始化
-});
 //添加保存
+//存放空的数组
+var emptyNum=[];
+//存放格式错误的数组
+var errorNum=[];
+var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
 $("#saveBtn").click(function(){
-	$.ajax({
-		type : "POST",
-		url : localhostPaht +'/visa/employeemanage/addUserData',
-		data : $('#addForm').serialize(),// 你的formid
-		success : function(data) {
-			layer.load(1, {
-				 shade: [0.1,'#fff'] //0.1透明度的白色背景
-			});
-			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-		    parent.layer.close(index);
-		    window.parent.successCallback('1');
-		},
-		error : function(request) {
-			layer.msg('添加失败');
+	if(validatable.validate()){
+		//清空验证的数组
+		emptyNum.splice(0,emptyNum.length);
+		errorNum.splice(0,errorNum.length);
+		$.ajax({
+			type : "POST",
+			url : localhostPaht +'/visa/employeemanage/addUserData',
+			data : $('#addForm').serialize(),// 你的formid
+			success : function(data) {
+				layer.load(1, {
+					 shade: [0.1,'#fff'] //0.1透明度的白色背景
+				});
+				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			    parent.layer.close(index);
+			    window.parent.successCallback('1');
+			},
+			error : function(request) {
+				layer.msg('添加失败');
+			}
+		});
+	}else{
+		//验证————————————————————————————————————
+	    $('.k-tooltip-validation').each(function(){
+	    	var verificationText=$(this).text().trim();//获取验证的文字信息
+	    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
+	    	labelVal = labelVal.split(":");
+	    	labelVal.pop();
+	    	labelVal = labelVal.join(":");//截取 :之前的信息
+	    	var person=new Object();
+	    	person.text=labelVal;
+	    	person.error="";
+	    	if(verificationText.indexOf("不能为空")>0){
+	    		emptyNum.push(person);
+	    	}else{
+	    		errorNum.push(person);
+	    	}
+	    });
+	    //end 验证————————————————————————————————
+		var str="";
+		if(emptyNum.length>0){
+			for(var i=0;i<emptyNum.length;i++){
+				str+=emptyNum[i].text+",";
+			}
+			str+="不能为空！"
 		}
-	});
+		if(errorNum.length>0){
+			for(var i=0;i<errorNum.length;i++){
+				str+=errorNum[i].text+",";
+			}
+			str+="格式不正确！";
+		}
+		$.layer.alert(str);
+		//用完清空
+		emptyNum.splice(0,emptyNum.length);
+		errorNum.splice(0,errorNum.length);
+	}
 });
-
 </script>
 </html>
