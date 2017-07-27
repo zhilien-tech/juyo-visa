@@ -314,9 +314,10 @@ var viewModel = kendo.observable({
     },
     // 旧护照
     oldPassportEnable: function () {
-    	//var oldPassport = viewModel.get("customer.passportlose");
+    	var oldPassport = viewModel.get("customer.passportlose");
+    	console.log(JSON.stringify(oldPassport));
     	//var state = oldPassport ? oldPassport.length > 0 : false;
-    	var a=viewModel.get("customer.passportlose.id");
+    	/*var a=viewModel.get("customer.passportlose.id");
     	if(a>0) return true;
     	else if(a<0) return false;
     	else{
@@ -325,14 +326,26 @@ var viewModel = kendo.observable({
     			return false;
     		}else {return true};
     	}
-    	return false;
+    	return false;*/
+    	
+    	var state = viewModel.get("customer.passportlose.passport") 
+		|| viewModel.get("customer.passportlose.reason")
+		|| viewModel.get("customer.passportlose.reasonen")
+		|| viewModel.get("customer.passportlose.sendcountry");
+    	return state;
     },
     // 曾用名
     oldNameEnable: function () {
+    	///console.log("曾用名:_____"+JSON.stringify(beforeName));
+    	var state = viewModel.get("customer.oldname.oldname") 
+    				|| viewModel.get("customer.oldname.oldnameen")
+    				|| viewModel.get("customer.oldname.oldxing")
+    				|| viewModel.get("customer.oldname.oldxingen");
+    	return state;
     	/*var beforeName = viewModel.get("customer.oldname");
     	var state = beforeName ? beforeName.length > 0 : false;
         return state;*/
-    	var a=viewModel.get("customer.oldname.id");
+    	/*var a=viewModel.get("customer.oldname.id");
     	if(a>0) return true;
     	else if(a<0) return false;
     	else{
@@ -341,7 +354,7 @@ var viewModel = kendo.observable({
     			return false;
     		}else {return true};
     	}
-    	return false;
+    	return false; // 07-27*/
     },
     // 其他国家公民
     otherCountryEnable: function () {
@@ -351,10 +364,17 @@ var viewModel = kendo.observable({
     },
     //美国纳税人认证码
     usaAuthenticatorCode:function(){
+    	//console.log("美国纳税人认证码:_____"+JSON.stringify(authenticationCode));
+    	var state = viewModel.get("customer.taxpayerauthenticat.city") 
+					|| viewModel.get("customer.taxpayerauthenticat.country")
+					|| viewModel.get("customer.taxpayerauthenticat.homeAddress")
+					|| viewModel.get("customer.taxpayerauthenticat.postCode")
+					|| viewModel.get("customer.taxpayerauthenticat.province");
+    	return state;
     	/*var authenticationCode=viewModel.get("customer.taxpayerauthenticat");
     	var state = authenticationCode ? authenticationCode.length > 0 : false;
     	return state;*/
-    	var a=viewModel.get("customer.taxpayerauthenticat.id");
+    	/*var a=viewModel.get("customer.taxpayerauthenticat.id");
     	if(a>0) return true;
     	else if(a<0) return false;
     	else{
@@ -363,15 +383,15 @@ var viewModel = kendo.observable({
     			return false;
     		}else {return true};
     	}
-    	return false;
+    	return false;*/
     },
     //通信地址与家庭地址是否一致
     usaCommunicaHomeAddress:function(){
     	/*var addressUnified=viewModel.get("customer.commhomeaddress");
     	var state = addressUnified ? addressUnified.length > 0 : false;
     	return state;*/
-    	var a=viewModel.get("customer.commhomeaddress.id");
-    	if(a>0) return true;
+    	//var a=viewModel.get("customer.commhomeaddress");
+    	/*if(a>0) return true;
     	else if(a<0) return false;
     	else{
     		if(communicahomeaddressNum<4){
@@ -379,7 +399,21 @@ var viewModel = kendo.observable({
     			return false;
     		}else {return true};
     	}
-    	return false;
+    	return false;*/
+    	/*var issuingCountry=viewModel.get("customer.commhomeaddress.issuingCountry");
+    	if(issuingCountry=="CHN"){
+    		return issuingCountry=undefined;
+    	}else{
+    		return issuingCountry;
+    	}*/
+    	var state = viewModel.get("customer.commhomeaddress.mainPhoneNum") 
+		|| viewModel.get("customer.commhomeaddress.minorPhoneNum")//undefined
+		|| viewModel.get("customer.commhomeaddress.workPhoneNum")//undefined
+		|| viewModel.get("customer.commhomeaddress.email")
+		|| viewModel.get("customer.commhomeaddress.issuingCity")
+		|| viewModel.get("customer.commhomeaddress.issuingCountry")
+		|| viewModel.get("customer.commhomeaddress.passportType");
+    	return state;
     }
 });
 kendo.bind($(document.body), viewModel);//数据绑定结束
@@ -387,14 +421,21 @@ kendo.bind($(document.body), viewModel);//数据绑定结束
 //丢过护照
 $("#pp_lost").change(function () {
 	//viewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
-	var a={"sendcountry":"CHN","customerid":0,"id":0,"passport":"","reason":"","reasonen":""};
-	viewModel.set("customer.passportlose", $(this).is(':checked') ? a : "");
+	/*var a={"sendcountry":"CHN","customerid":0,"id":0,"passport":"","reason":"","reasonen":""};
+	viewModel.set("customer.passportlose", $(this).is(':checked') ? a : "");*/
+	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.passportlose.passport", value);
+    viewModel.set("customer.passportlose.reason", value);
+    viewModel.set("customer.passportlose.reasonen", value);
+    viewModel.set("customer.passportlose.sendcountry", value);
 });
 //曾用名
 $("#has_used_name").change(function () {
-	var a={"customerid":0,"id":0,"oldname":"","oldnameen":"","oldxing":"","oldxingen":""};
-	var b={"customerid":0,"id":-1,"oldname":"","oldnameen":"","oldxing":"","oldxingen":""};
-	viewModel.set("customer.oldname", $(this).is(':checked') ? a : b);
+	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.oldname.oldname", value);
+    viewModel.set("customer.oldname.oldnameen", value);
+    viewModel.set("customer.oldname.oldxing", value);
+    viewModel.set("customer.oldname.oldxingen", value);
 });
 //其他国家居民
 $("#has_pr").change(function () {
@@ -415,17 +456,33 @@ $("#same_as_home").change(function () {
 });
 //美国纳税人认证码
 $("#usa_authenticator_code").change(function () {
+	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.taxpayerauthenticat.city", value);
+    viewModel.set("customer.taxpayerauthenticat.country", value);
+    viewModel.set("customer.taxpayerauthenticat.homeAddress", value);
+    viewModel.set("customer.taxpayerauthenticat.postCode", value);
+    viewModel.set("customer.taxpayerauthenticat.province", value);
 	///viewModel.set("customer.authenticatorcode", $(this).is(':checked') ? " " : "");
-	var a={"city":"","country":"","createTime":null,"customerId":0,"homeAddress":"","id":0,"postCode":"","province":"","remark":"","status":0,"updateTime":null};
+	/*var a={"city":"","country":"","createTime":null,"customerId":0,"homeAddress":"","id":0,"postCode":"","province":"","remark":"","status":0,"updateTime":null};
 	var b={"city":"","country":"","createTime":null,"customerId":0,"homeAddress":"","id":-1,"postCode":"","province":"","remark":"","status":0,"updateTime":null};
-	viewModel.set("customer.taxpayerauthenticat", $(this).is(':checked') ? a : b);
+	viewModel.set("customer.taxpayerauthenticat", $(this).is(':checked') ? a : b);*/
 });
 //通信地址与家庭地址是否一致
 $("#communica_home_address").change(function () {
 	//viewModel.set("customer.commhomeaddress", $(this).is(':checked') ? " " : "");
-	var a={"createTime":null,"customerId":0,"email":"","expirationDate":null,"id":0,"issueDate":null,"issuingCity":"","issuingCountry":"CHN","issuingLocalCountry":"","issuingProvince":"","mainPhoneNum":"","minorPhoneNum":"","passportBookNum":"","passportNumber":"","passportType":0,"remark":"","status":0,"updateTime":null,"workPhoneNum":""};
+	/*var a={"createTime":null,"customerId":0,"email":"","expirationDate":null,"id":0,"issueDate":null,"issuingCity":"","issuingCountry":"CHN","issuingLocalCountry":"","issuingProvince":"","mainPhoneNum":"","minorPhoneNum":"","passportBookNum":"","passportNumber":"","passportType":0,"remark":"","status":0,"updateTime":null,"workPhoneNum":""};
 	var b={"createTime":null,"customerId":0,"email":"","expirationDate":null,"id":-1,"issueDate":null,"issuingCity":"","issuingCountry":"CHN","issuingLocalCountry":"","issuingProvince":"","mainPhoneNum":"","minorPhoneNum":"","passportBookNum":"","passportNumber":"","passportType":0,"remark":"","status":0,"updateTime":null,"workPhoneNum":""};
-	viewModel.set("customer.commhomeaddress", $(this).is(':checked') ? a : b);
+	viewModel.set("customer.commhomeaddress", $(this).is(':checked') ? a : b);*/
+	
+	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.commhomeaddress.mainPhoneNum", value);
+    viewModel.set("customer.commhomeaddress.minorPhoneNum", value);
+    viewModel.set("customer.commhomeaddress.workPhoneNum", value);
+    viewModel.set("customer.commhomeaddress.email", value);
+    viewModel.set("customer.commhomeaddress.issuingCity", value);
+    viewModel.set("customer.commhomeaddress.issuingCountry", value);
+    viewModel.set("customer.commhomeaddress.passportType", value);
+	
 });
 /*------------------------------------------------end container---------------------------------------------------*/
 

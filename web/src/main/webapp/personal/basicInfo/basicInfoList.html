@@ -713,7 +713,7 @@
                 <div class="form-group">
                     <label for="email">电子邮箱:</label>
                     <div class='input-group'>
-                      <input id="email" type="text" data-bind="value:customer.email" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="email" type="text" data-bind="value:customer.commhomeaddress.email" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
@@ -732,7 +732,7 @@
                                data-value-primitive="true"
                                data-text-field="text"
                                data-value-field="value"
-                               data-bind="value:customer.passporttype,source:passportTypeEnum" >
+                               data-bind="value:customer.commhomeaddress.passportType,source:passportTypeEnum" >
                        </select>
                        <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
@@ -769,7 +769,7 @@
                 <div class="form-group">
                     <label for="issuingCity">签发地城市:</label>
                     <div class='input-group'>
-                      <input id="issuingCity" type="text" data-bind="value:customer.passportsendcity" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="issuingCity" type="text" data-bind="value:customer.commhomeaddress.issuingCity" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>

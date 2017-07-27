@@ -315,9 +315,10 @@ var viewModel = kendo.observable({
     //赴美国旅行目的列表
     travelPurposeEnable: function () {
     	/*var objectiveList = viewModel.get("customer.travelpurpose");
+    	console.log(JSON.stringify(objectiveList));
     	var state = objectiveList ? objectiveList.length > 0 : false;
         return state;*/
-        var a=viewModel.get("customer.travelpurpose.id");
+        /*var a=viewModel.get("customer.travelpurpose.id");
     	if(a>0) return true;
     	else if(a<0) return false;
     	else{
@@ -326,13 +327,22 @@ var viewModel = kendo.observable({
     			return false;
     		}else {return true};
     	}
-    	return false;
+    	return false;*/
+    	var state = viewModel.get("customer.travelpurpose.travelPurpose")|| viewModel.get("customer.travelpurpose.travelSpecificPurpose");
+    	return state;
     },
     //是否制定了具体旅行计划
     travelPlanEnable: function () {
-    	var travelPlan = viewModel.get("customer.travelplan");
+    	/*var travelPlan = viewModel.get("customer.travelplan");
+    	console.log(JSON.stringify(travelPlan));
     	var state = travelPlan ? travelPlan.length > 0 : false;
+    	return state;*/
+    	
+    	var state = viewModel.get("customer.travelplan.arrivaledDate")
+    				|| viewModel.get("customer.travelplan.pauseTime")
+    				|| viewModel.get("customer.travelplan.pausePlace");
     	return state;
+    	
     },
     //是否加入一个团队或组织旅行
     joinTeamEnable: function () {
@@ -452,13 +462,20 @@ $("#join_army").change(function () {
 //赴美国旅行目的列表
 $("#travel_purpose").change(function () {
 	//viewModel.set("customer.travelpurpose", $(this).is(':checked') ? " " : "");
-	var a={"createTime":null,"customerId":0,"id":0,"orderId":0,"remark":"","status":0,"travelPurpose":"旅游","travelSpecificPurpose":"","updateTime":null};
+	/*var a={"createTime":null,"customerId":0,"id":0,"orderId":0,"remark":"","status":0,"travelPurpose":"旅游","travelSpecificPurpose":"","updateTime":null};
 	var b={"createTime":null,"customerId":0,"id":-1,"orderId":0,"remark":"","status":0,"travelPurpose":"旅游","travelSpecificPurpose":"","updateTime":null};
-	viewModel.set("customer.travelpurpose", $(this).is(':checked') ? a : b);
+	viewModel.set("customer.travelpurpose", $(this).is(':checked') ? a : b);*/
+	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.travelpurpose.travelPurpose", value);
+    viewModel.set("customer.travelpurpose.travelSpecificPurpose", value);
 });
 //是否制定了具体旅行计划
 $("#if_formulate_plan").change(function () {
-	viewModel.set("customer.travelplan", $(this).is(':checked') ? " " : "");
+	//viewModel.set("customer.travelplan", $(this).is(':checked') ? " " : "");
+	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.travelplan.arrivaledDate", value);
+    viewModel.set("customer.travelplan.pauseTime", value);
+    viewModel.set("customer.travelplan.pausePlace", value);
 });
 //是否加入一个团队或组织旅行
 $("#join_group").change(function () {
