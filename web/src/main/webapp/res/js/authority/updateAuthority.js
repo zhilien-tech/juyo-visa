@@ -155,6 +155,11 @@ function setFunc(){
    $("#jobJson").val(jobJson) ;
 }
 //修改保存
+//存放空的数组
+var emptyNum=[];
+//存放格式错误的数组
+var errorNum=[];
+var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
 $("#saveDeptJob").click(function(){
 	setFunc();//设置功能
 	var _deptName = $("input#deptNameId").val();
@@ -171,23 +176,60 @@ $("#saveDeptJob").click(function(){
 		layer.msg("职位不能为空且至少存在一个") ;
 		return false ;
 	}
-	$.ajax({
-		type : "POST",
-		url : localhostPaht +'/visa/authority/updateAuthoritySave',
-		//contentType: "application/json",
-		dataType: "json",
-		data : {
-			deptName:_deptName,
-			jobJson:_jobJson,
-			deptId:_dptid
-		},
-		success : function(data) {
-			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			parent.layer.close(index);
-			window.parent.successCallback('2');
-		},
-		error : function(request) {
-			layer.msg("职位不能为空且至少存在一个");
+	if(validatable.validate()){
+		$.ajax({
+			type : "POST",
+			url : localhostPaht +'/visa/authority/updateAuthoritySave',
+			dataType: "json",
+			data : {
+				deptName:_deptName,
+				jobJson:_jobJson,
+				deptId:_dptid
+			},
+			success : function(data) {
+				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				parent.layer.close(index);
+				window.parent.successCallback('2');
+			},
+			error : function(request) {
+				layer.msg("职位不能为空且至少存在一个");
+			}
+		});
+	}else{
+		//验证————————————————————————————————————
+	    $('.k-tooltip-validation').each(function(){
+	    	var verificationText=$(this).text().trim();//获取验证的文字信息
+	    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
+	    	labelVal = labelVal.split(":");
+	    	labelVal.pop();
+	    	labelVal = labelVal.join(":");//截取 :之前的信息
+	    	var person=new Object();
+	    	person.text=labelVal;
+	    	person.error="";
+	    	if(verificationText.indexOf("不能为空")>0){
+	    		emptyNum.push(person);
+	    	}else{
+	    		errorNum.push(person);
+	    	}
+	    });
+	    //end 验证————————————————————————————————
+		var str="";
+		if(emptyNum.length>0){
+			for(var i=0;i<emptyNum.length;i++){
+				alert(emptyNum[i].text);
+				str+=emptyNum[i].text+",";
+			}
+			str+="不能为空！"
 		}
-	});
+		if(errorNum.length>0){
+			for(var i=0;i<errorNum.length;i++){
+				str+=errorNum[i].text+",";
+			}
+			str+="格式不正确！";
+		}
+		$.layer.alert(str);
+		//用完清空
+		emptyNum.splice(0,emptyNum.length);
+		errorNum.splice(0,errorNum.length);
+	}
 });

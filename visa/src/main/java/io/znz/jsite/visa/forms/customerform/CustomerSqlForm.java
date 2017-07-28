@@ -51,6 +51,9 @@ public class CustomerSqlForm extends KenDoParamForm {
 	//备注
 	private String remark;
 
+	//父id
+	private long pId;
+
 	private String keyword;
 
 	@Override
@@ -70,6 +73,9 @@ public class CustomerSqlForm extends KenDoParamForm {
 		if (!Util.isEmpty(keyword)) {
 			cnd.and("vcm.fullComName", "like", "%" + keyword + "%").or("vcm.linkman", "like", "%" + keyword + "%")
 					.or("vcm.telephone", "like", "%" + keyword + "%");
+		}
+		if (!Util.isEmpty(pId) && pId != 0) {
+			cnd.and("vcm.pId", "=", pId);
 		}
 		cnd.and("vcm.comId", "=", comId);
 		cnd.orderBy("vcm.createTime", "DESC");

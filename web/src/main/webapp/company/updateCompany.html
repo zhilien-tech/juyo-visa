@@ -18,7 +18,7 @@
     	.input-group{width:100%;}/*由于删掉小灯泡 宽度出现问题 此处理设置所有input、select等宽度等于父类*/
     </style>
 </head>
-<body>
+<body id="aaaa">
 <div>
     <div class="container-fluid" style="padding-top: 15px;">
         <div class="row">
@@ -33,7 +33,9 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="comNameId" name="comName" type="text"  class="k-textbox" style="width: 100%;"/>
+	                                            <input id="comNameId" name="comName" type="text"  
+	                                            required validationMessage="公司全称不能为空"
+	                                            class="k-textbox" style="width: 100%;"/>
 	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
@@ -45,7 +47,9 @@
 	                                        <label for="last_name_cn">用户名:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
 	                                        	<input id="adminId" name="adminId" type="hidden" value="">
-	                                            <input id="adminNameId" name="adminName" type="text" class="k-textbox" style="width: 100%;"/>
+	                                            <input id="adminNameId" name="adminName" 
+	                                            required validationMessage="用户名不能为空"
+	                                            type="text" class="k-textbox" style="width: 100%;"/>
 	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
@@ -54,7 +58,9 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">联系人:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="connectId" name="connect" required pattern="^[1][34578][0-9]{9}$" validationMessage="手机号码格式错误" type="text" class="k-textbox" style="width: 100%;"/>
+	                                            <input id="connectId" name="connect" 
+	                                            required validationMessage="联系人不能为空"
+	                                            type="text" class="k-textbox" style="width: 100%;"/>
 	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
@@ -63,18 +69,18 @@
 								<div class="row">
 	                                <div class="col-xs-6">
 	                                    <div class="form-group">
-	                                        <label for="last_name_cn">联系电话:<span style="color: red">*</span></label>
+	                                        <label for="last_name_cn">联系电话:</label>
 	                                        <div class='input-group'>
-	                                            <input id="mobileId" name="mobile" type="text" class="k-textbox" style="width: 100%;"/>
+	                                            <input id="mobileId" name="mobile" oninput="checkTelephone()" type="text" class="k-textbox" style="width: 100%;"/>
 	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
 	                                <div class="col-xs-6">
 	                                    <div class="form-group">
-	                                        <label for="last_name_cn">联系邮箱:<span style="color: red">*</span></label>
+	                                        <label for="last_name_cn">联系邮箱:</label>
 	                                        <div class='input-group'>
-	                                            <input id="emailId" name="email" required pattern="^[1][34578][0-9]{9}$" validationMessage="手机号码格式错误" type="text" class="k-textbox" style="width: 100%;"/>
+	                                            <input id="emailId" name="email" type="text" class="k-textbox" style="width: 100%;"/>
 	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
@@ -83,7 +89,7 @@
 								<div class="row">
 	                                <div class="col-xs-6">
 	                                    <div class="form-group">
-	                                        <label for="last_name_cn">座机电话:<span style="color: red">*</span></label>
+	                                        <label for="last_name_cn">座机电话:</label>
 	                                        <div class='input-group'>
 	                                            <input id="landLineId" name="landLine" type="text" class="k-textbox" style="width: 100%;"/>
 	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
@@ -94,7 +100,9 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">地址:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="addressId" name="address" required pattern="^[1][34578][0-9]{9}$" validationMessage="手机号码格式错误" type="text" class="k-textbox" style="width: 100%;"/>
+	                                            <input id="addressId" name="address" 
+	                                            required validationMessage="地址不能为空"
+	                                            type="text" class="k-textbox" style="width: 100%;"/>
 	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
@@ -143,87 +151,6 @@
 <script src="/res/js/common.js"></script>
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
+<script src="/res/js/company/updatecompany.js"></script>
 <script src="/res/js/projectpath/projectpath.js"></script>
-<script type="text/javascript">
-//回显数据
-function GetQueryString(name)
-{
-     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-     var r = window.location.search.substr(1).match(reg);
-     if(r!=null)return  unescape(r[2]); return null;
-}
-// 调用方法
-var comId = GetQueryString("comId");
-var adminId = GetQueryString("adminId");
-$("#comId").val(comId);
-$("#adminId").val(adminId);
-$.ajax({
-	type : "POST",
-	url : localhostPaht +'/visa/company/updatecompany',
-	data : {
-		comId:comId,
-		adminId:adminId
-	},
-	success : function(data) {
-		var data=JSON.parse(data);
-		$('#comNameId').val(data.comName);
-		$('#adminNameId').val(data.adminName);
-		$('#connectId').val(data.connect);
-		$('#mobileId').val(data.mobile);
-		$('#emailId').val(data.email);
-		$('#landLineId').val(data.landLine);
-		$('#addressId').val(data.address);
-	},
-	error : function(request) {
-		layer.msg('添加失败');
-	}
-});
-//更新保存
-$("#updateCompanySave").click(function(){
-	$.ajax({
-		type : "POST",
-		url : localhostPaht +'/visa/company/updateCompanySave',
-		data : $('#updateForm').serialize(),// 你的formid
-		success : function(data) {
-			layer.load(1, {
-				 shade: [0.1,'#fff'] //0.1透明度的白色背景
-			});
-			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-		    parent.layer.close(index);
-		    window.parent.successCallback('2');
-		},
-		error : function(request) {
-			layer.msg('添加失败');
-		}
-	});
-});
-//删除数据
-$("#deleteFlagId").click(function(){
-	var comId =  $("#comId").val();
-	layer.confirm("您确认删除信息吗？", {
-	    btn: ["是","否"], //按钮
-	    shade: false //不显示遮罩
-	}, function(){
-		// 点击确定之后
-		var url = localhostPaht +'/visa/company/deleteCompany';
-		$.ajax({
-			type : 'POST',
-			data : {
-				comId : comId
-			},
-			url : url,
-			success : function(data) {
-				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			    parent.layer.close(index);
-			    window.parent.successCallback('3');
-			},
-			error : function(xhr) {
-				layer.msg("操作失败", "", 3000);
-			}
-		});
-	}, function(){
-	    // 取消之后不用处理
-	});
-});
-</script>
 </html>

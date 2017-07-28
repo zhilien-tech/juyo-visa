@@ -73,7 +73,7 @@ $(function(){
 		
 		$.ajax({
 			 type: "POST",
-			 url: "/visa/progress/ordernumber?customerid="+customerid+"&countrystatus="+countrystatus,
+			 url: "/visa/progress/ordernumber?logintype=5&customerid="+customerid+"&countrystatus="+countrystatus,
 			 contentType: "application/json",
 			 dataType: "json",
 			 success: function (result) {
@@ -293,7 +293,7 @@ function timeapply(){
 		    shadeClose: false,
 		    title: '改签时间申请',
 		    area: ['400px', '470px'],
-		    content: '/myvisa/transactVisa/changeTimeApply.html',
+		    content: '/myvisa/transactVisa/changeTimeApply.html?logintype=5',
 		    /*end: function(){//添加完页面点击返回的时候自动加载表格数据
 		    	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 				parent.layer.close(index);
@@ -302,5 +302,11 @@ function timeapply(){
 }
 
 function jump(){
-	window.location.href='/myvisa/transactVisa/visaNationPersonal.html?country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
+	if($.queryString('logintype')==5){
+		
+		window.location.href="/myvisa/transactVisa/visaNationPersonal.html?country="+$.queryString('countrylist')+"&countrystatus=0&tourist=1&logintype=5&orderId="+$.queryString('orderId');
+	}else{
+		
+		window.location.href='/myvisa/transactVisa/visaNationPersonal.html?country='+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
+	}
 }

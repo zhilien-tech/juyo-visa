@@ -7,6 +7,7 @@
 package io.znz.jsite.visa.service;
 
 import io.znz.jsite.base.NutzBaseService;
+import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
@@ -41,6 +42,10 @@ public class CustomerViewService extends NutzBaseService<CustomerManageEntity> {
 		//通过session获取公司的id
 		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
 		long comId = company.getComId();//得到公司的id
+		//从session中取出当前登录用户信息
+		EmployeeEntity user = (EmployeeEntity) session.getAttribute(Const.SESSION_NAME);
+		long pId = user.getId();
+		addForm.setPId(pId);
 		addForm.setComId(comId);
 		addForm.setCreateTime(new Date());
 		CustomerManageEntity cusdto = FormUtil.add(dbDao, addForm, CustomerManageEntity.class);

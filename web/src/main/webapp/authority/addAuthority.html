@@ -28,7 +28,7 @@
     	.line {border-bottom-width: 0;}
     </style>
 </head>
-<body onload="document.getElementById('deptNameId').focus()">
+<body id="aaaa" onload="document.getElementById('deptNameId').focus()">
 <div>
     <div class="container-fluid" style="padding-top: 15px;">
         <div class="row">
@@ -49,7 +49,9 @@
 						                 	<input id="jobJson" name="jobJson" type="hidden" value=""/>
 						                   <li><label class=" text-right">部门名称：</label></li>
 						                   <li class="li-input">
-						                   		<input id="deptNameId" name="deptName" type="text" class="k-textbox inputText" placeholder="请输入部门名称">
+						                   		<input id="deptNameId" name="deptName"  type="text" 
+						                   		class="k-textbox inputText" placeholder="请输入部门名称"
+						                   		required validationMessage="部门名称不能为空" />
 							                    <span class="prompt">*</span>
 							                    <button type="button" class="btn btn-primary btn-sm btnPadding" id="addJob">添加职位</button>
 						                   </li>

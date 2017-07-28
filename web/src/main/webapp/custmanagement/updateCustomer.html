@@ -18,7 +18,7 @@
     	.input-group{width:100%;}/*由于删掉小灯泡 宽度出现问题 此处理设置所有input、select等宽度等于父类*/
     </style>
 </head>
-<body>
+<body id="aaaa">
 <div>
     <div class="container-fluid" style="padding-top: 15px;">
         <div class="row">
@@ -33,7 +33,9 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="fullComNameId" name="fullComName" type="text"  class="k-textbox" style="width: 100%;"/>
+	                                            <input id="fullComNameId" name="fullComName" type="text"  
+	                                            required validationMessage="公司全称不能为空"
+	                                            class="k-textbox" style="width: 100%;"/>
 	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
@@ -44,6 +46,7 @@
 	                                        <div class='input-group'>
 	                                            <select id="customerSourceId" name="customerSource" style="width: 100%; height: 29.81px;"
 	                                                    data-role="dropdownlist"
+	                                                    required validationMessage="客户来源不能为空"
 	                                                    data-value-primitive="true">
 	                                                    <option value="">请选择客户来源</option>
 	                                                    <option value ="1">线上</option>
@@ -62,8 +65,10 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">联系人:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="linkmanId" name="linkman" type="text"  value="" class="k-textbox" style="width: 100%;"/>
-	                                           <!--  <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
+	                                            <input id="linkmanId" name="linkman" type="text"  value="" 
+	                                            required validationMessage="联系不能为空"
+	                                            class="k-textbox" style="width: 100%;"/>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -71,7 +76,9 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">手机:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="telephoneId" name="telephone" type="text"  value="" class="k-textbox" style="width: 100%;"/>
+	                                            <input id="telephoneId" name="telephone" type="text"  value="" 
+	                                            required validationMessage="手机不能为空"
+	                                            class="k-textbox" style="width: 100%;"/>
 	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
@@ -80,7 +87,9 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">邮箱:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="emailId" name="email" type="text" value="" class="k-textbox" style="width: 100%;"/>
+	                                            <input id="emailId" name="email" type="text" value="" 
+	                                            required validationMessage="邮箱不能为空"
+	                                            class="k-textbox" style="width: 100%;"/>
 	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
@@ -115,95 +124,8 @@
 <script src="/res/js/common.js"></script>
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
+<script src="/res/js/customermanage/updatecustomer.js"></script>
+<script src="/res/js/projectpath/projectpath.js"></script>
 <!-- <script src="/res/js/usa.js"></script> -->
 <!-- <script src="/res/js/wintone.js?v=4"></script> -->
-<script type="text/javascript">
-var curWwwPath = window.document.location.href;  
-var pathName =  window.document.location.pathname;  
-var pos = curWwwPath.indexOf(pathName);  
-var localhostPaht = curWwwPath.substring(0,pos);  
-var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
-//回显数据
-function GetQueryString(name)
-{
-     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-     var r = window.location.search.substr(1).match(reg);
-     if(r!=null)return  unescape(r[2]); return null;
-}
-//客户来源回显
-function display(optionID){
-   var all_options = document.getElementById("customerSourceId").options;
-   for (i=0; i<all_options.length; i++){
-      if (all_options[i].value == optionID)  // 根据option标签的ID来进行判断  测试的代码这里是两个等号
-      {
-         all_options[i].selected = true;
-      }
-   }
-}
-// 调用方法
-var cid = GetQueryString("cid");
-$("#cid").val(cid);
-$.ajax({
-	type : "POST",
-	url : localhostPaht +'/visa/customermanagement/updateData',
-	data : {
-		cid:cid
-	},// 你的formid
-	success : function(data) {
-		var data=JSON.parse(data);
-		$('#fullComNameId').val(data.fullComName);
-		display(data.customerSource);
-		$('#linkmanId').val(data.linkman);
-		$('#telephoneId').val(data.telephone);
-		$('#emailId').val(data.email);
-	},
-	error : function(request) {
-		layer.msg('添加失败');
-	}
-});
-//更新保存
-$("#updateCusSave").click(function(){
-	var fullComName = $("#fullComNameId").val();
-	var customerSource = $('#customerSourceId').find("option:selected").text();
-	var linkman = $("#linkmanId").val();
-	var telephone = $("#telephoneId").val();
-	var email = $("#emailId").val();
-	if(fullComName == null || fullComName== ""){
-		layer.msg('公司名称不能为空');
-		return false;
-	}
-	if(customerSource == null || customerSource== ""){
-		layer.msg('客户来源不能为空');
-		return false;
-	}
-	if(linkman == null || linkman== ""){
-		layer.msg('联系人不能为空');
-		return false;
-	}
-	if(telephone == null || telephone== ""){
-		layer.msg('手机号码不能为空');
-		return false;
-	}
-	if(email == null || email== ""){
-		layer.msg('邮箱不能为空');
-		return false;
-	}
-	$.ajax({
-		type : "POST",
-		url : localhostPaht +'/visa/customermanagement/updateDataSave',
-		data : $('#updateForm').serialize(),// 你的formid
-		success : function(data) {
-			layer.load(1, {
-				 shade: [0.1,'#fff'] //0.1透明度的白色背景
-			});
-			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-		    parent.layer.close(index);
-		    window.parent.successCallback('2');
-		},
-		error : function(request) {
-			layer.msg('添加失败');
-		}
-	});
-});
-</script>
 </html>
