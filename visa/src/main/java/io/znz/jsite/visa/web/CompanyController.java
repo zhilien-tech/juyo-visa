@@ -9,14 +9,12 @@ package io.znz.jsite.visa.web;
 import io.znz.jsite.base.BaseController;
 import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.visa.entity.company.CompanyEntity;
-import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
 import io.znz.jsite.visa.forms.companyform.CompanySqlForm;
 import io.znz.jsite.visa.service.company.CompanyService;
 
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.pager.Pager;
-import org.nutz.mvc.annotation.POST;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -96,11 +94,10 @@ public class CompanyController extends BaseController {
 	 * 手机号码唯一性校验
 	 * @param telephone
 	 */
-	@RequestMapping(value = "checkTelephone")
+	@RequestMapping(value = "checkTelephone", method = RequestMethod.POST)
 	@ResponseBody
-	@POST
-	public Boolean checkTelephone(String telephone) {
-		int count = nutDao.count(CustomerManageEntity.class, Cnd.where("telephone", "=", telephone));
+	public boolean checkTelephone(String mobile) {
+		int count = nutDao.count(CompanyEntity.class, Cnd.where("mobile", "=", mobile));
 		if (count > 0) {
 			return false;
 		} else {
