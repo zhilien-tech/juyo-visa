@@ -99,7 +99,7 @@ $(function () {
 				$('.nav-second-level').hide();
 				$('.J_menuItem1').on('click', function(){
 					$(this).next().toggle('100');
-					$(this).parent().siblings().find('ul').hide('100');
+					//$(this).parent().siblings().find('ul').hide('100');//同级其他同胞隐藏
 				});
 				//点击 左菜单栏项 触发 function
 			    function menuItem() {
