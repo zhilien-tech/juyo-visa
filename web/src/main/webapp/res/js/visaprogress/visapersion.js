@@ -8,7 +8,7 @@ $(function(){
 	 $("#single").hide();
 	 /*alert(unescape($.queryString("country")));*/
 	 if(tourist==1){
-		 console.log(JSON.stringify(country));
+		 //console.log(JSON.stringify(country));
 		 for(var i=0;i<country.length;i++){
 			 console.log(JSON.stringify(country[i]));
 			 var html='<a href="javascript:void(0)" onclick="intoprogressImgnew('+country[i].id+');" id="single'+country[i].id+'">'+
