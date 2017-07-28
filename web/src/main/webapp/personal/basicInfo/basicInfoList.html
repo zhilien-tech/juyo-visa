@@ -28,6 +28,7 @@
     	#imgId{width:100%;height:100%;position: relative;top:-15px;}
     	.container{position: relative;top: 47px;}
     	.Search{position: fixed;padding: 8px 0;}
+    	.input-group{width:100%;}/*由于删掉小灯泡 宽度出现问题 此处理设置所有input、select等宽度等于父类*/
     </style>
 </head>
 <body id="aaaa" class="clear-scroll">
@@ -123,7 +124,7 @@
                          <div class='input-group'>
                              <input id="old_usrname_cn" data-bind="value:customer.oldname.oldxing"
                                     class="k-textbox" style="width: 100%;"/>
-                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                             <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                          </div>
                      </div>
                  </div>
@@ -133,7 +134,7 @@
                          <div class='input-group'>
                              <input id="old_usrname_en" data-bind="value:customer.oldname.oldxingen"
                                     class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                             <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                          </div>
                      </div>
                  </div>
@@ -144,7 +145,7 @@
                          <div class='input-group'>
                              <input id="old_given_name_cn" data-bind="value:customer.oldname.oldname"
                                     class="k-textbox" style="width: 100%;"/>
-                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                             <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                          </div>
                      </div>
                  </div>
@@ -154,7 +155,7 @@
                          <div class='input-group'>
                              <input id="old_given_name_en" data-bind="value:customer.oldname.oldnameen"
                                     class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                             <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                          </div>
                      </div>
                  </div>
@@ -180,7 +181,7 @@
 	                               <option value="2">离异</option>
 	                               <option value="3">丧偶</option>
 	                           </select>
-	                           <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                           <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                       </div>
 	                   </div>
 	                </div>
@@ -203,7 +204,7 @@
 		                                    data-text-field="text"
 		                                    data-value-field="value"
 		                                    data-bind="value:customer.spouse.splitcountry,source:countries"/>
-		                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+		                             <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 		                         </div>
 		                     </div>
 		                 </div>
@@ -213,7 +214,7 @@
 		                         <div class='input-group'>
 		                             <input id="s_divorce_date" data-role="datepicker" style="width: 100%;"
 		                                    data-bind="value:customer.spouse.splitdate"/>
-		                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+		                             <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 		                         </div>
 		                     </div>
 		                 </div>
@@ -229,7 +230,7 @@
 		                             <input id="s_divorce_why_cn" class="k-textbox" style="width: 100%;"
 		                                    onchange="translateZhToEn(this,'s_divorce_why')"
 		                                    data-bind="value:customer.spouse.splitreason"/>
-		                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+		                             <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 		                         </div>
 		                     </div>
 		                 </div>
@@ -243,7 +244,7 @@
 		                         <div class='input-group'>
 		                             <input id="s_divorce_why" class="k-textbox" style="width: 100%;"
 		                                    data-bind="value:customer.spouse.splitreasonen"/>
-		                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+		                             <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 		                         </div>
 		                     </div>
 		                 </div>
@@ -257,7 +258,7 @@
 	                               <div class='input-group'>
 	                                   <input id="s_marriage_date" data-role="datepicker"
 	                                          data-bind="value:customer.spouse.marrydate" style="width: 100%;"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -270,7 +271,7 @@
 	                               <div class='input-group'>
 	                                   <input id="s_last_name_cn" class="k-textbox" style="width: 100%;"
 	                                          data-bind="value:customer.spouse.spousexing"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -280,7 +281,7 @@
 	                               <div class='input-group'>
 	                                   <input id="s_last_name_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
 	                                          data-bind="value:customer.spouse.spousexingen"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -293,7 +294,7 @@
 	                               <div class='input-group'>
 	                                   <input id="s_first_name_cn" class="k-textbox" style="width: 100%;"
 	                                          data-bind="value:customer.spouse.spousename"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -303,7 +304,7 @@
 	                               <div class='input-group'>
 	                                   <input id="s_first_name_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
 	                                          data-bind="value:customer.spouse.spousenameen"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -322,7 +323,7 @@
 	                                          data-text-field="text"
 	                                          data-value-field="value"
 	                                          data-bind="value:customer.spouse.spousecountry,source:countries"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -332,7 +333,7 @@
 	                               <div class='input-group'>
 	                                   <input id="s_birthday" data-role="datepicker"
 	                                          data-bind="value:customer.spouse.spousebirthday" style="width: 100%;"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -354,7 +355,7 @@
 	                                          data-text-field="text"
 	                                          data-value-field="value"
 	                                          data-bind="value:customer.spouse.spousebirthcountry,source:countries"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -366,7 +367,7 @@
 	                               <div class='input-group'>
 	                                   <input id="s_birth_province_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
 	                                          data-bind="value:customer.spouse.spousebirthprevince"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -378,7 +379,7 @@
 	                               <div class='input-group'>
 	                                   <input id="s_birth_city_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
 	                                          data-bind="value:customer.spouse.spousebirthcity"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -400,7 +401,7 @@
 	                                          data-text-field="text"
 	                                          data-value-field="value"
 	                                          data-bind="value:customer.spouse.spousenowcountry,source:countries"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -412,7 +413,7 @@
 	                               <div class='input-group'>
 	                                   <input id="s_at_province_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
 	                                          data-bind="value:customer.spouse.spousenowprevince"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -424,7 +425,7 @@
 	                               <div class='input-group'>
 	                                   <input id="s_at_city_en" class="k-textbox" style="width: 100%;text-transform:uppercase;"
 	                                          data-bind="value:customer.spouse.spousenowcity"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -452,7 +453,7 @@
 	                                          onchange="translateZhToEn(this,'s_at_address_en')"
 	                                          data-bind="value:customer.spouse.spouselinkaddress"
 	                                          placeholder="住址的房间/单元/楼号/门牌号，小区/社区（中文）"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -462,7 +463,7 @@
 	                               <div class='input-group'>
 	                                   <input id="s_at_post_code" class="k-textbox" style="width: 100%;"
 	                                          data-bind="value:customer.spouse.spousezipcode" placeholder="住址的邮编"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -478,7 +479,7 @@
 	                                   <input id="s_at_address_en" class="k-textbox" style="width: 100%;"
 	                                          data-bind="value:customer.spouse.spouselinkaddressen"
 	                                          placeholder="住址的房间/单元/楼号/门牌号（英文），填写中文自动翻译"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -494,7 +495,7 @@
 	                                   <input id="s_unit_name_cn" class="k-textbox" style="width: 100%;"
 	                                          onchange="translateZhToEn(this,'s_unit_name_en')"
 	                                          data-bind="value:customer.spouse.spouseunitname"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -504,7 +505,7 @@
 	                               <div class='input-group'>
 	                                   <input id="s_unit_phone" class="k-textbox" style="width: 100%;"
 	                                          data-bind="value:customer.spouse.spouseunitphone"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -517,7 +518,7 @@
 	                               <div class='input-group'>
 	                                   <input id="s_unit_name_en" class="k-textbox" style="width: 100%;"
 	                                          data-bind="value:customer.spouse.spouseunitnameen"/>
-	                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                               </div>
 	                           </div>
 	                       </div>
@@ -537,7 +538,7 @@
                        		  required validationMessage="出生日期不能为空"
                        		  data-bind="value:customer.birthdate,events:{change:onDateChange}"/>
                         <span class="k-invalid-msg" data-for="birthdate" ></span><!-- 验证提示语 -->
-                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
              </div>
@@ -549,7 +550,7 @@
                       		 data-bind="value:customer.idcard" name="idcard"
                       		 required validationMessage="身份证号码不能为空"
                       		 class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                      <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
              </div>
@@ -558,7 +559,7 @@
                     <label for="last_name_cn">出生地点（省份）:</label>
                     <div class='input-group'>
                       <input id="" type="text" data-bind="value:customer.birthprovince" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                      <span class=''><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
              </div> -->
@@ -630,7 +631,7 @@
                     <label for="authenticator_address">家庭地址:</label>
                     <div class='input-group'>
                       <input id="authenticator_address" type="text" data-bind="value:customer.taxpayerauthenticat.homeAddress" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                      <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
              </div>
@@ -639,7 +640,7 @@
                     <label for="authenticator_city">城市:</label>
                     <div class='input-group'>
                       <input id="authenticator_city" type="text" data-bind="value:customer.taxpayerauthenticat.city" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                      <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
              </div>
@@ -648,7 +649,7 @@
                     <label for="authenticator_province">省份:</label>
                     <div class='input-group'>
                       <input id="authenticator_province" type="text" data-bind="value:customer.taxpayerauthenticat.province" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                      <!-- <span class=''><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
              </div>
@@ -657,7 +658,7 @@
                     <label for="authenticator_post_code">邮编:</label>
                     <div class='input-group'>
                       <input id="authenticator_post_code" type="text" data-bind="value:customer.taxpayerauthenticat.postCode" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                      <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
              </div>
@@ -666,7 +667,7 @@
                     <label for="authenticator_country">国家:</label>
                     <div class='input-group'>
                       <input id="authenticator_country" type="text" data-bind="value:customer.taxpayerauthenticat.country" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                      <!-- <span class=''><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
              </div>
@@ -689,7 +690,7 @@
                     <label for="mainPhoneNum">主要电话号码:</label>
                     <div class='input-group'>
                       <input id="mainPhoneNum" type="text" data-bind="value:customer.commhomeaddress.mainPhoneNum" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                      <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
              </div>
@@ -698,7 +699,7 @@
                     <label for="minorPhoneNum">次要电话号码:</label>
                     <div class='input-group'>
                       <input id="minorPhoneNum" type="text" data-bind="value:customer.commhomeaddress.minorPhoneNum" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                      <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
              </div>
@@ -707,7 +708,7 @@
                     <label for="workPhoneNum">工作电话号码:</label>
                     <div class='input-group'>
                       <input id="workPhoneNum" type="text" data-bind="value:customer.commhomeaddress.workPhoneNum" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                      <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
              </div>
@@ -716,7 +717,7 @@
                     <label for="email">电子邮箱:</label>
                     <div class='input-group'>
                       <input id="email" type="text" data-bind="value:customer.commhomeaddress.email" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                      <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
              </div>
@@ -736,7 +737,7 @@
                                data-value-field="value"
                                data-bind="value:customer.commhomeaddress.passportType,source:passportTypeEnum" >
                        </select>
-                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
              </div>
@@ -763,7 +764,7 @@
                     <label for="issuingCountry">签发国家:</label>
                     <div class='input-group'>
                       <input id="issuingCountry" type="text" data-bind="value:customer.commhomeaddress.issuingCountry" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                      <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
              </div>
@@ -772,7 +773,7 @@
                     <label for="issuingCity">签发地城市:</label>
                     <div class='input-group'>
                       <input id="issuingCity" type="text" data-bind="value:customer.commhomeaddress.issuingCity" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
-                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                      <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
              </div>
@@ -828,7 +829,7 @@
                                  data-value-field="value"
                                  data-bind="value:customer.passportlose.sendcountry,source:countries"
                                  style="width: 100%;">
-                          <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                          <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                       </div>
                   </div>
               </div>
@@ -839,7 +840,7 @@
                           <input id="old_passport" class="k-textbox" style="width: 100%;text-transform:uppercase;"
                                  data-bind="value:customer.passportlose.passport"
                                  placeholder="护照号码格式必需是 E/G 开头后接8位数字，如忘记可不填"/>
-                          <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                          <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                       </div>
                   </div>
               </div>
@@ -850,7 +851,7 @@
                           <input id="pp_lost_why_cn" data-bind="value:customer.passportlose.reason"
                                  onchange="translateZhToEn(this,'pp_lost_why_en')"
                                  class="k-textbox" style="width: 100%;"/>
-                          <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                          <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                       </div>
                   </div>
               </div>
@@ -861,7 +862,7 @@
                           <input id="pp_lost_why_en" data-bind="value:customer.passportlose.reasonen"
                                  class="k-textbox"
                                  style="width: 100%;"/>
-                          <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                          <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                       </div>
                   </div>
               </div>
@@ -896,7 +897,7 @@
                            data-text-field="text"
                            data-value-field="value"
                            data-bind="value:country,source:countries"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -919,7 +920,7 @@
                 <div class='input-group'>
                     <input id="ir_last_name_cn_#:data.uid#" data-bind="value:xing" class="k-textbox"
                            style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -929,7 +930,7 @@
                 <div class='input-group'>
                     <input id="ir_last_name_en_#:data.uid#" data-bind="value:xingen" class="k-textbox"
                            style="width: 100%;text-transform:uppercase;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -940,7 +941,7 @@
                 <div class='input-group'>
                     <input id="ir_first_name_cn_#:data.uid#" data-bind="value:name"
                            class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -950,7 +951,7 @@
                 <div class='input-group'>
                     <input id="ir_first_name_en_#:data.uid#" data-bind="value:nameen"
                            class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -969,7 +970,7 @@
                         <option value="1">子女</option>
                         <option value="2">兄弟/姐妹</option>
                     </select>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -984,7 +985,7 @@
                         <option value="2">非移民</option>
                         <option value="3">其他</option>
                     </select>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -993,7 +994,7 @@
                 <label for="ir_address_#:data.uid#">在美地址:</label>
                 <div class='input-group'>
                     <input id="ir_address_#:data.uid#" data-bind="value:usaaddress" class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1002,7 +1003,7 @@
                 <label for="ir_phone_#:data.uid#">美国电话:</label>
                 <div class='input-group'>
                     <input id="ir_phone_#:data.uid#" data-bind="value:usaphone" class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1024,7 +1025,7 @@
                 <label for="to_usa_date_#:data.uid#">入境美国时间:</label>
                 <div class='input-group'>
                     <input id='to_usa_date_#:data.uid#' style="width: 100%;" data-role="datepicker" data-bind="value:intousadate"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1034,7 +1035,7 @@
                 <div class='input-group'>
                     <input id="to_usa_date_stay_#:data.uid#" style="width: 100%;"
                            data-role="numerictextbox" data-min="1" data-bind="value:stayday"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1051,7 +1052,7 @@
                         <option>月</option>
                         <option>年</option>
                     </select>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1074,7 +1075,7 @@
                 <div class='input-group'>
                     <input id="start_date_#:data.uid#" data-role="datepicker" data-bind="value:startdate"
                            style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1083,7 +1084,7 @@
                 <label for="end_date_#:data.uid#">结束日期:<span style="color: red">*</span></label>
                 <div class='input-group'>
                     <input id="end_date_#:data.uid#" data-role="datepicker" data-bind="value:enddate" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1093,7 +1094,7 @@
                 <div class='input-group'>
                     <input id="school_name_cn_#:data.uid#" onchange="translateZhToEn(this,'school_name_en_#:data.uid#')"
                            data-bind="value:schoolname" class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1102,7 +1103,7 @@
                 <label for="school_phone_#:data.uid#">学校电话:</label>
                 <div class='input-group'>
                     <input id="school_phone_#:data.uid#" data-bind="value:schoolphone" class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1111,7 +1112,7 @@
                 <label for="school_name_en_#:data.uid#">学校名称（英文），填写中文自动翻译:<span style="color: red">*</span></label>
                 <div class='input-group'>
                     <input id="school_name_en_#:data.uid#" data-bind="value:schoolnameen" class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1128,7 +1129,7 @@
                            data-text-field="text"
                            data-value-field="value"
                            data-bind="value:country,source:countries"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1138,7 +1139,7 @@
                 <div class='input-group'>
                     <input id="school_province_en_#:data.uid#" data-bind="value:prevince"
                            class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1148,7 +1149,7 @@
                 <div class='input-group'>
                     <input id="school_city_en_#:data.uid#" data-bind="value:city"
                            class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1159,7 +1160,7 @@
                     <input id="school_address_cn_1_#:data.uid#"
                            onchange="translateZhToEn(this,'school_address_en_#:data.uid#')"
                            data-bind="value:schooladdresssmall" class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1169,7 +1170,7 @@
                 <div class='input-group'>
                     <input id="school_zip_code_#:data.uid#" data-bind="value:zipcode"
                            class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1180,7 +1181,7 @@
                     <input id="school_address_cn_2_#:data.uid#"
                            onchange="translateZhToEn(this,'school_address_en_2_#:data.uid#')"
                            data-bind="value:schooladdressbig" class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1193,7 +1194,7 @@
                 <div class='input-group'>
                     <input id="school_address_en_#:data.uid#" data-bind="value:schooladdresssmallen"
                            class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1206,7 +1207,7 @@
                 <div class='input-group'>
                     <input id="school_address_en_2_#:data.uid#" data-bind="value:schooladdressbigen"
                            class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1217,7 +1218,7 @@
                     <input id="school_specialty_cn_#:data.uid#"
                            onchange="translateZhToEn(this,'school_specialty_en_#:data.uid#')"
                            data-bind="value:major" class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1227,7 +1228,7 @@
                 <div class='input-group'>
                     <input id="school_specialty_en_#:data.uid#" data-bind="value:majoren"
                            class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1249,7 +1250,7 @@
                 <div class='input-group'>
                     <input id="org_start_date_#:data.uid#" data-role="datepicker"
                            data-bind="value:startdate" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1259,7 +1260,7 @@
                 <div class='input-group'>
                     <input id="org_end_date_#:data.uid#" data-role="datepicker"
                            data-bind="value:enddate" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1270,7 +1271,7 @@
                     <input id="org_company_name_cn_#:data.uid#" data-bind="value:unitname"
                            onchange="translateZhToEn(this,'org_company_name_en_#:data.uid#')"
                            class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1280,7 +1281,7 @@
                 <div class='input-group'>
                     <input id="org_phone_#:data.uid#" data-bind="value:phone"
                            class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1293,7 +1294,7 @@
                 <div class='input-group'>
                     <input id="org_company_name_en_#:data.uid#" data-bind="value:unitnameen"
                            class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1310,7 +1311,7 @@
                            data-text-field="text"
                            data-value-field="value"
                            data-bind="value:country,source:countries"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1320,7 +1321,7 @@
                 <div class='input-group'>
                     <input id="org_province_en_#:data.uid#" data-bind="value:prevince"
                            class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1330,7 +1331,7 @@
                 <div class='input-group'>
                     <input id="org_city_en_#:data.uid#" data-bind="value:city"
                            class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1343,7 +1344,7 @@
                 <div class='input-group'>
                     <input id="org_address_cn_1_#:data.uid#" onchange="translateZhToEn(this,'org_address_en_#:data.uid#')"
                            data-bind="value:unitaddresssmall" class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1353,7 +1354,7 @@
                 <div class='input-group'>
                     <input id="org_zip_code_#:data.uid#" data-bind="value:zipcode" class="k-textbox"
                            style="width: 100%;text-transform:uppercase;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1363,7 +1364,7 @@
                 <div class='input-group'>
                     <input id="org_address_cn_2_#:data.uid#" onchange="translateZhToEn(this,'org_address_en_2_#:data.uid#')"
                            data-bind="value:unitaddressbigen" class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1372,7 +1373,7 @@
                 <label for="org_address_en_#:data.uid#">公司地址的门牌号/房间/单元/楼宇（英文），填写中文自动翻译:</label>
                 <div class='input-group'>
                     <input id="org_address_en_#:data.uid#" data-bind="value:unitaddresssmallen" class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1382,7 +1383,7 @@
                 <div class='input-group'>
                     <input id="org_address_en_2_#:data.uid#" data-bind="value:unitaddressbigen"
                            class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1393,7 +1394,7 @@
                     <input id="org_position_cn_#:data.uid#" data-bind="value:job" class="k-textbox"
                            onchange="translateZhToEn(this,'org_position_en_#:data.uid#')"
                            style="width: 100%;text-transform:uppercase;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1402,7 +1403,7 @@
                 <label for="org_position_en_#:data.uid#">职位（英文），填写中文自动翻译:<span style="color: red">*</span></label>
                 <div class='input-group'>
                     <input id="org_position_en_#:data.uid#" data-bind="value:joben" class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1412,7 +1413,7 @@
                 <div class='input-group'>
                     <input id="a_last_name_cn_#:data.uid#" data-bind="value:chargexing" class="k-textbox"
                            style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1422,7 +1423,7 @@
                 <div class='input-group'>
                     <input id="a_last_name_en_#:data.uid#" data-bind="value:chargexingen"
                            class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1432,7 +1433,7 @@
                 <div class='input-group'>
                     <input id="a_first_name_cn_#:data.uid#" data-bind="value:chargename"
                            class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1442,7 +1443,7 @@
                 <div class='input-group'>
                     <input id="a_first_name_en_#:data.uid#" data-bind="value:chargenameen"
                            class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1452,7 +1453,7 @@
                 <div class='input-group'>
                     <input id="org_duty_cn_#:data.uid#" onchange="translateZhToEn(this,'org_duty_en_#:data.uid#')"
                            class="k-textbox" data-bind="value:workduty" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1461,7 +1462,7 @@
                 <label for="org_duty_en_#:data.uid#">工作职责（英文），填写中文自动翻译:</label>
                 <div class='input-group'>
                     <input id="org_duty_en_#:data.uid#" data-bind="value:workdutyen" class="k-textbox" style="width: 100%;"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1490,7 +1491,7 @@
                         <option value="3">西班牙语</option>
                         <option value="4">意大利语</option>
                     </select>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1518,7 +1519,7 @@
                            data-text-field="text"
                            data-value-field="value"
                            data-bind="value:country,source:countries"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                   <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>
@@ -1539,7 +1540,7 @@
                 <div class='input-group'>
                     <input id="charitable_#:data.uid#" data-bind="value:workedplace" class="k-textbox" style="width: 100%;"
                            placeholder="职业协会/社团/慈善机构"/>
-                    <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    <!--<span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>-->
                 </div>
             </div>
         </div>

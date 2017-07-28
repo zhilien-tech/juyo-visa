@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/><!--修改的样式-->
     <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
     <link rel="stylesheet" href="/common/tld.jsp" />
+    <style type="text/css">
+    	.input-group{width:100%;}/*由于删掉小灯泡 宽度出现问题 此处理设置所有input、select等宽度等于父类*/
+    </style>
 </head>
 <body onload="document.getElementById('fullComNameId').focus()">
 <div>
@@ -31,7 +34,7 @@
 	                                        <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
 	                                            <input id="fullComNameId" name="fullComName" type="text" placeholder="请输入公司名称" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -49,7 +52,7 @@
 	                                                <option value="3">直客</option>
 	                                                <option value="4">线下</option>
 	                                            </select>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -60,7 +63,7 @@
 	                                        <label for="last_name_cn">联系人:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
 	                                            <input id="linkmanId" name="linkman" type="text" placeholder="请输入联系人" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -69,7 +72,7 @@
 	                                        <label for="last_name_cn">手机:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
 	                                            <input id="telephoneId" name="telephone" required pattern="^[1][34578][0-9]{9}$" validationMessage="手机号码格式错误" type="text" placeholder="请输入手机号" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -78,7 +81,7 @@
 	                                        <label for="last_name_cn">邮箱:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
 	                                            <input id="emailId" name="email" type="text" required pattern="^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$" validationMessage="邮箱格式不正确" placeholder="请输入邮箱" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
