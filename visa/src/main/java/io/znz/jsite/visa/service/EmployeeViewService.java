@@ -251,17 +251,16 @@ public class EmployeeViewService extends NutzBaseService<SysUserEntity> {
 		return true;
 	}
 
-	public boolean checktelephone(String telephone, final HttpSession session) {
-		//根据当前登录用户id查询出个人信息
-		EmployeeEntity user = (EmployeeEntity) session.getAttribute(Const.SESSION_NAME);
-		long userId = user.getId();
-		EmployeeEntity fetch = null;
-		if (!Util.isEmpty(userId)) {
-			fetch = dbDao.fetch(EmployeeEntity.class, Cnd.where("telephone", "=", telephone));
-		}
-		if (!Util.isEmpty(fetch)) {
+	/**
+	 * 手机号码唯一性校验
+	 * @param telephone
+	 */
+	public boolean checktelephone(String telephone) {
+		int count = nutDao.count(EmployeeEntity.class, Cnd.where("telephone", "=", telephone));
+		if (count > 0) {
+			return false;
+		} else {
 			return true;
 		}
-		return false;
 	}
 }

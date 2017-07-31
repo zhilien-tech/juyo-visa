@@ -6,6 +6,7 @@ var localhostPaht = curWwwPath.substring(0,pos);
 var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 //页面加载时回显基本信息
 window.onload = function(){
+	var indexnew= layer.load(1, {shade: [0.1,'#fff']});//菊花加载效果
 	var logintype1=$.queryString("logintype");
 	var after;
 	if(logintype1==5){
@@ -32,10 +33,13 @@ window.onload = function(){
 					$("#imgId").attr('src',phoneurl);
 				}
 			});
+			//菊花加载完毕
+			if(indexnew!=null){
+				layer.close(indexnew);
+			}
 		});
 	}else{
 		after=localhostPaht +'/visa/basicinfo/listBasicinfo';
-		
 		$.getJSON(after, function (resp) {
 			viewModel.set("customer", $.extend(true, dafaults, resp));
 			viewModel.set("customer.passporttype", 1);
@@ -58,9 +62,11 @@ window.onload = function(){
 				}
 			});
 		});
+		//菊花加载完毕
+		if(indexnew!=null){
+			layer.close(indexnew);
+		}
 	}
-	
-	
 }
 
 var firstPart ;
@@ -369,7 +375,7 @@ var viewModel = kendo.observable({
     },
     // 曾用名
     oldNameEnable: function () {
-    	///console.log("曾用名:_____"+JSON.stringify(beforeName));
+    	//console.log("曾用名:_____"+JSON.stringify(viewModel.get("customer.oldname")));
     	var state = viewModel.get("customer.oldname.oldname") 
     				|| viewModel.get("customer.oldname.oldnameen")
     				|| viewModel.get("customer.oldname.oldxing")
@@ -417,6 +423,7 @@ var viewModel = kendo.observable({
     		}else {return true};
     	}
     	return false;*/
+    	
     },
     //通信地址与家庭地址是否一致
     usaCommunicaHomeAddress:function(){
@@ -446,6 +453,7 @@ var viewModel = kendo.observable({
 		|| viewModel.get("customer.commhomeaddress.issuingCity")
 		|| viewModel.get("customer.commhomeaddress.passportType");
     	//|| viewModel.get("customer.commhomeaddress.issuingCountry")
+    	//alert(state);
     	return state;
     }
 });
@@ -528,6 +536,7 @@ var emptyNum=[];
 var errorNum=[];
 var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
 function saveBaseInfoData(){
+	var indexnew= layer.load(1, {shade: [0.1,'#fff']});//菊花加载效果
 	if(validatable.validate()){
 		//清空验证的数组
 		emptyNum.splice(0,emptyNum.length);
@@ -544,6 +553,10 @@ function saveBaseInfoData(){
 	             layer.msg('保存失败',{time:2000});
 	         }
 		});
+		//菊花加载完毕
+		if(indexnew!=null){
+			layer.close(indexnew);
+		}
 	}else{
 		//验证————————————————————————————————————
 	    $('.k-tooltip-validation').each(function(){
@@ -562,6 +575,10 @@ function saveBaseInfoData(){
 	    	}
 	    	///console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
 	    });
+	    //菊花加载完毕
+		if(indexnew!=null){
+			layer.close(indexnew);
+		}
 	    //end 验证————————————————————————————————
 		var str="";
 		if(emptyNum.length>0){
@@ -585,8 +602,6 @@ function saveBaseInfoData(){
 var logintype;
 //点击下一步时跳转至签证信息
 $("#nextStepBtn").click(function(){
-	
-	
 	logintype=$.queryString("logintype");
 	var after;
 	var before;
@@ -602,11 +617,7 @@ $("#nextStepBtn").click(function(){
 			  +escape(JSON.stringify(firstPart))+"&secondPart="
 			  +escape(JSON.stringify(secondPart))+"&thirdPart="
 			  +escape(JSON.stringify(thirdPart))+"&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
-		
 	}
-	
-	
-	
 	if(validatable.validate()){
 		//清空验证的数组
 		emptyNum.splice(0,emptyNum.length);
@@ -640,7 +651,6 @@ $("#nextStepBtn").click(function(){
 	    	}else{
 	    		errorNum.push(person);
 	    	}
-	    	///console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
 	    });
 	    //end 验证————————————————————————————————
 		var str="";

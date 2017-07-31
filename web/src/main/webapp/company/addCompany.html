@@ -15,8 +15,11 @@
     <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/><!--修改的样式-->
     <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
     <link rel="stylesheet" href="/common/tld.jsp" />
+    <style type="text/css">
+    	.input-group{width:100%;}/*由于删掉小灯泡 宽度出现问题 此处理设置所有input、select等宽度等于父类*/
+    </style>
 </head>
-<body onload="document.getElementById('comNameId').focus()">
+<body id="aaaa" onload="document.getElementById('comNameId').focus()">
 <div>
     <div class="container-fluid" style="padding-top: 15px;">
         <div class="row">
@@ -30,8 +33,10 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="comNameId" name="comName" type="text" placeholder="请输入公司名称" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <input id="comNameId" name="comName" type="text" 
+	                                            required validationMessage="公司全称不能为空"
+	                                            placeholder="请输入公司名称" class="k-textbox" style="width: 100%;"/>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -41,8 +46,10 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">用户名:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="adminNameId" name="adminName" type="text" placeholder="请输入用户名" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <input id="adminNameId" name="adminName" type="text" 
+	                                            required validationMessage="用户名不能为空"
+	                                            placeholder="请输入用户名" class="k-textbox" style="width: 100%;"/>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -50,8 +57,10 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">联系人:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="connectId" name="connect" type="text" placeholder="请输入联系人" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <input id="connectId" name="connect" type="text" placeholder="请输入联系人" 
+	                                            required validationMessage="联系人不能为空"
+	                                            class="k-textbox" style="width: 100%;"/>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -59,19 +68,20 @@
 								<div class="row">
 	                                <div class="col-xs-6">
 	                                    <div class="form-group">
-	                                        <label for="last_name_cn">联系电话:<span style="color: red">*</span></label>
+	                                        <label for="last_name_cn">联系电话:</label>
 	                                        <div class='input-group'>
-	                                            <input id="mobileId" name="mobile" type="text" placeholder="请输入联系电话" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <input id="mobileId" name="mobile" type="text" oninput="checkTelephone()" placeholder="请输入联系电话" class="k-textbox" style="width: 100%;"/>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
 	                                <div class="col-xs-6">
 	                                    <div class="form-group">
-	                                        <label for="last_name_cn">联系邮箱:<span style="color: red">*</span></label>
+	                                        <label for="last_name_cn">联系邮箱:</label>
 	                                        <div class='input-group'>
-	                                            <input id="emailId" name="email" type="text" placeholder="请输入联系邮箱" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <input id="emailId" name="email" type="text" oninput="checkEmail()" 
+	                                             placeholder="请输入联系邮箱" class="k-textbox" style="width: 100%;"/>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -79,10 +89,10 @@
 								<div class="row">
 	                                <div class="col-xs-6">
 	                                    <div class="form-group">
-	                                        <label for="last_name_cn">座机电话:<span style="color: red">*</span></label>
+	                                        <label for="last_name_cn">座机电话:</label>
 	                                        <div class='input-group'>
 	                                            <input id="landLineId" name="landLine" type="text" placeholder="请输入座机电话" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -90,8 +100,10 @@
 	                                    <div class="form-group">
 	                                        <label for="last_name_cn">地址:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <input id="addressId" name="address" type="text" placeholder="请输入地址" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <input id="addressId" name="address" type="text" 
+	                                            required validationMessage="地址不能为空"
+	                                            placeholder="请输入地址" class="k-textbox" style="width: 100%;"/>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -133,50 +145,7 @@
 <script src="/res/js/common.js"></script>
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
+<script src="/res/js/company/addcompany.js"></script>
 <!-- <script src="/res/js/wintone.js?v=4"></script> -->
 <script src="/res/js/projectpath/projectpath.js"></script>
-<script type="text/javascript">
-//唯一性校验
-/* function checkTelephone(){
-	var telephone = $("#telephoneId").val();
-	$.ajax({
-		type : "POST",
-		url : localhostPaht +'/visa/customermanagement/checkTelephone',
-		data : {
-			telephone:telephone
-		},
-		success : function(data) {
-			if(data=="false"){
-				layer.msg('手机号码已存在');
-				return false;
-			}
-		},
-		error : function(request) {
-			layer.msg('手机号码格式有误');
-		}
-	});
-}
-function getMessage(input) {
-    return input.data("message");
-} */
-//添加保存
-$("#companySave").click(function(){
-	$.ajax({
-		type : "POST",
-		url : localhostPaht +'/visa/company/addcompany',
-		data : $('#addForm').serialize(),// 你的formid
-		success : function(data) {
-			layer.load(1, {
-				 shade: [0.1,'#fff'] //0.1透明度的白色背景
-			});
-			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-		    parent.layer.close(index);
-		    window.parent.successCallback('1');
-		},
-		error : function(request) {
-			layer.msg('添加失败');
-		}
-	});
-});
-</script>
 </html>

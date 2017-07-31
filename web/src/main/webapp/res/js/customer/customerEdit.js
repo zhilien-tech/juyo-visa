@@ -194,7 +194,10 @@ var viewModel = kendo.observable({
     },
     // 曾用名
     oldNameEnable: function () {
-    	var state = viewModel.get("customer.oldname.oldname") || viewModel.get("customer.oldname.oldnameen") || viewModel.get("customer.oldname.oldxing") || viewModel.get("customer.oldname.oldxingen");
+    	var state = viewModel.get("customer.oldname.oldname")
+    			 || viewModel.get("customer.oldname.oldnameen") 
+    			 || viewModel.get("customer.oldname.oldxing") 
+    			 || viewModel.get("customer.oldname.oldxingen");
     	if(state){
     		$("input[oldname='oldname']").each(function(){
     			var labelTxt=$(this).parent().prev().text().trim();
@@ -444,21 +447,24 @@ $("#saveCustomerData").on("click",function(){
 	}else{
 		   //验证————————————————————————————————————
 	    $('.k-tooltip-validation').each(function(){
-	    	var verificationText=$(this).text().trim();//获取验证的文字信息
-	    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
-	    	labelVal = labelVal.split(":");
-	    	labelVal.pop();
-	    	labelVal = labelVal.join(":");//截取 :之前的信息
-	    	var person=new Object();
-	    	person.text=labelVal;
-	    	person.error="";
-	    	if(verificationText.indexOf("不能为空")>0){
-	    		emptyNum.push(person);
-	    	}else{
-	    		errorNum.push(person);
-	    		
+	    	var none=$(this).css("display")=="none";//获取 判断验证提示隐藏
+	    	if(!none){
+		    	var verificationText=$(this).text().trim();//获取验证的文字信息
+		    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
+		    	labelVal = labelVal.split(":");
+		    	labelVal.pop();
+		    	labelVal = labelVal.join(":");//截取 :之前的信息
+		    	var person=new Object();
+		    	person.text=labelVal;
+		    	person.error="";
+		    	if(verificationText.indexOf("不能为空")>0){
+		    		emptyNum.push(person);
+		    	}else{
+		    		errorNum.push(person);
+		    		
+		    	}
+		    	///console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
 	    	}
-	    	///console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
 	    });
 	    //end 验证————————————————————————————————
 		
@@ -602,7 +608,7 @@ $(function () {
         		/*----小灯泡 回显----*/
             	var reason=viewModel.get("customer.errorinfo");
             	var map1=new Map();
-            	map1=eval("("+reason+")");
+            	map1=eval('(' +reason+ ')');
             	for (var key in map1){
             		var a = map1[key];//获取到 错误信息 数据
             		for(var i=0;i<a.length;i++){

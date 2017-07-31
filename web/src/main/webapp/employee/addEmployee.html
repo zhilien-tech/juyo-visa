@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="/res/css/colors.min.css"/>
     <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
     <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/><!--修改的样式-->
+    <style type="text/css">
+    	.input-group{width:100%;}/*由于删掉小灯泡 宽度出现问题 此处理设置所有input、select等宽度等于父类*/
+    </style>
 </head>
 <body id="aaaa" onload="document.getElementById('fullNameId').focus()">
 <div>
@@ -32,7 +35,7 @@
 	                                            <input id="fullNameId" name="fullName" type="text" 
 	                                            	   class="k-textbox" placeholder="请输入用户姓名" style="width: 100%;"
 	                                            	   required validationMessage="用户姓名不能为空"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -41,10 +44,10 @@
 	                                        <label for="last_name_en">用户名/手机号:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
 	                                            <input id="telephoneId" name="telephone" placeholder="请输入用户名/手机号" 
-	                                            	   onblur="checktelephone()"
+	                                            	   oninput="checktelephone()"
 	                                            	   type="text"  class="k-textbox" style="width: 100%;"
 	                                            	   required validationMessage="用户名/手机号不能为空"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -57,7 +60,7 @@
 	                                        <label for="last_name_cn">联系QQ:</label>
 	                                        <div class='input-group'>
 	                                            <input id="qqId" name="qq" type="text" placeholder="请输入联系QQ"  class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -66,7 +69,7 @@
 	                                        <label for="last_name_cn">座机号码:</label>
 	                                        <div class='input-group'>
 	                                            <input id="landlineId" name="landline" placeholder="请输入座机号码" type="text" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -79,7 +82,7 @@
 	                                        <label for="last_name_cn">电子邮箱:</label>
 	                                        <div class='input-group'>
 	                                            <input id="emailId" name="email"  placeholder="请输入电子邮箱" type="text" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -98,13 +101,13 @@
 	                                                    data-suggest="true"
 	                                                    data-auto-bind="true"
 	                                                    data-value-primitive="true"
-	                                                    data-text-field="deptName"
-	                                                    data-value-field="id"
-	                                                    onchange="loadSelectJob();"
-	                                                    data-bind="value:deptName,source:proposers"
-	                                                    style="width: 100%;" required validationMessage="所属部门不能为空" name="deptName"></select> -->
-	                                            <input id="depts" name="deptId" style="width: 100%;"> 
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                                    data-text-field="text"
+	                                                    data-value-field="value"
+	                                                    data-bind=""
+	                                                    style="width: 100%;" required validationMessage=" " name="deptId"></select>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
+	                                            <input id="depts" name="deptId" required validationMessage="所属部门不能为空" style="width: 100%;">
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -132,12 +135,13 @@
 	                                                    data-suggest="true"
 	                                                    data-auto-bind="true"
 	                                                    data-value-primitive="true"
-	                                                    data-text-field="jobName"
-	                                                    data-value-field="id"
-	                                                    data-bind="source:proposersjob"
-	                                                    style="width: 100%;" required validationMessage="用户职位不能为空" name="jobName"></select> -->
-	                                            <input id="jobId" name="jobId" style="width: 100%;"> 
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                                    data-text-field="text"
+	                                                    data-value-field="value"
+	                                                    data-bind=""
+	                                                    style="width: 100%;" required validationMessage=" " name="jobId"></select>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
+	                                           	<input id="jobId" name="jobId" required validationMessage="用户职位不能为空" style="width: 100%;">
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                	</div>
 	                            	</div>
@@ -152,7 +156,7 @@
 	                                                <option value="0" selected="selected">否</option>
 	                                                <option value="1">是</option>
 	                                            </select>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                               	 </div>
@@ -187,70 +191,4 @@
 <!-- <script src="/res/js/wintone.js?v=4"></script> -->
 <!-- <script src="/res/js/employee/employeelist.js"></script> -->
 <script src="/res/js/employee/addEmployee.js"></script>
-<script type="text/javascript">
-//添加保存
-//存放空的数组
-var emptyNum=[];
-//存放格式错误的数组
-var errorNum=[];
-var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
-$("#saveBtn").click(function(){
-	if(validatable.validate()){
-		//清空验证的数组
-		emptyNum.splice(0,emptyNum.length);
-		errorNum.splice(0,errorNum.length);
-		$.ajax({
-			type : "POST",
-			url : localhostPaht +'/visa/employeemanage/addUserData',
-			data : $('#addForm').serialize(),// 你的formid
-			success : function(data) {
-				layer.load(1, {
-					 shade: [0.1,'#fff'] //0.1透明度的白色背景
-				});
-				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			    parent.layer.close(index);
-			    window.parent.successCallback('1');
-			},
-			error : function(request) {
-				layer.msg('添加失败');
-			}
-		});
-	}else{
-		//验证————————————————————————————————————
-	    $('.k-tooltip-validation').each(function(){
-	    	var verificationText=$(this).text().trim();//获取验证的文字信息
-	    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
-	    	labelVal = labelVal.split(":");
-	    	labelVal.pop();
-	    	labelVal = labelVal.join(":");//截取 :之前的信息
-	    	var person=new Object();
-	    	person.text=labelVal;
-	    	person.error="";
-	    	if(verificationText.indexOf("不能为空")>0){
-	    		emptyNum.push(person);
-	    	}else{
-	    		errorNum.push(person);
-	    	}
-	    });
-	    //end 验证————————————————————————————————
-		var str="";
-		if(emptyNum.length>0){
-			for(var i=0;i<emptyNum.length;i++){
-				str+=emptyNum[i].text+",";
-			}
-			str+="不能为空！"
-		}
-		if(errorNum.length>0){
-			for(var i=0;i<errorNum.length;i++){
-				str+=errorNum[i].text+",";
-			}
-			str+="格式不正确！";
-		}
-		$.layer.alert(str);
-		//用完清空
-		emptyNum.splice(0,emptyNum.length);
-		errorNum.splice(0,errorNum.length);
-	}
-});
-</script>
 </html>

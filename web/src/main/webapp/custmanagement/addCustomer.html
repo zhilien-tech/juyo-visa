@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/><!--修改的样式-->
     <link rel="stylesheet" href="/res/plugin/mui-switch.css"/>
     <link rel="stylesheet" href="/common/tld.jsp" />
+    <style type="text/css">
+    	.input-group{width:100%;}/*由于删掉小灯泡 宽度出现问题 此处理设置所有input、select等宽度等于父类*/
+    </style>
 </head>
 <body id="aaaa" onload="document.getElementById('fullComNameId').focus()">
 <div>
@@ -34,7 +37,7 @@
 	                                            	   placeholder="请输入公司名称" class="k-textbox" 
 	                                            	   required validationMessage="公司全称不能为空"
 	                                            	   style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -53,7 +56,7 @@
 	                                                <option value="3">直客</option>
 	                                                <option value="4">线下</option>
 	                                            </select>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -66,7 +69,7 @@
 	                                            <input id="linkmanId" name="linkman" type="text" placeholder="请输入联系人" 
 	                                            required validationMessage="联系不能为空"
 	                                            class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -77,7 +80,7 @@
 	                                            <input id="telephoneId" name="telephone" 
 	                                            required validationMessage="手机不能为空"
 	                                            type="text" placeholder="请输入手机号" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -88,7 +91,7 @@
 	                                            <input id="emailId" name="email" type="text" 
 	                                            required validationMessage="邮箱不能为空"
 	                                            placeholder="请输入邮箱" class="k-textbox" style="width: 100%;"/>
-	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -121,155 +124,7 @@
 <script src="/res/js/common.js"></script>
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
+<script src="/res/js/customermanage/addcustomer.js"></script>
 <!-- <script src="/res/js/wintone.js?v=4"></script> -->
 <script src="/res/js/projectpath/projectpath.js"></script>
-<script type="text/javascript">
-//验证输入内容不能为空
-$("#addForm").kendoValidator({
-	validateOnBlur: true,
-	rules: {
-      customRule1: function(input) {
-    	  if(input.is("[name=fullComName]")) {
-    		  var fullComName = $("#fullComNameId").val();
-    		  if(fullComName==null || fullComName==""){
-	    		  return false;
-    		  }
-    	  }
-    	  return true;
-      },
-      customRule2: function(input) {
-    	  if(input.is("[name=customerSource]")) {
-    		  var customerSource = $('#customerSourceId').find("option:selected").text();
-    		  if(customerSource == null || customerSource== ""){
-    			   return false;
-    		  }
-    	  }
-    	  return true;
-      },
-      customRule3: function(input) {
-    	  if(input.is("[name=linkman]")) {
-    		  var linkman = $("#linkmanId").val();
-    		  if(linkman == null || linkman== ""){
-    				return false;
-    			}
-    	  }
-    	  return true;
-      },
-      customRule4: function(input) {
-    	  if(input.is("[name=telephone]")) {
-    		  var telephone = $("#telephoneId").val();
-    		  if(telephone == null || telephone== ""){
-    				return false;
-    			}
-    	  }
-    	  return true;
-      },
-      customRule5: function(input) {
-          if(input.is("[name=email]")) {
-        	  var email = $("#emailId").val();
-        	  if(email == null || email== ""){
-        			return false;
-        		}
-          }
-          return true;
-      }
-},
-	//自定义验证消息
-	messages: {
-		customRule1: "公司名称不能为空",
-		customRule2: "客户来源不能为空",
-		customRule3: "联系人不能为空",
-		customRule4: "手机号不能为空",
-		customRule5: "邮箱不能为空"
-	  }
-		
-});
-//唯一性校验
-/* function checkTelephone(){
-	var telephone = $("#telephoneId").val();
-	$.ajax({
-		type : "POST",
-		url : localhostPaht +'/visa/customermanagement/checkTelephone',
-		data : {
-			telephone:telephone
-		},
-		success : function(data) {
-			if(data=="false"){
-				layer.msg('手机号码已存在');
-				return false;
-			}
-		},
-		error : function(request) {
-			layer.msg('手机号码格式有误');
-		}
-	});
-}
-function getMessage(input) {
-    return input.data("message");
-} */
-//添加保存
-//存放空的数组
-var emptyNum=[];
-//存放格式错误的数组
-var errorNum=[];
-var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
-$("#customerSave").click(function(){
-	if(validatable.validate()){
-		//清空验证的数组
-		emptyNum.splice(0,emptyNum.length);
-		errorNum.splice(0,errorNum.length);
-		$.ajax({
-			type : "POST",
-			url : localhostPaht +'/visa/customermanagement/addData',
-			data : $('#addForm').serialize(),// 你的formid
-			success : function(data) {
-				layer.load(1, {
-					 shade: [0.1,'#fff'] //0.1透明度的白色背景
-				});
-				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			    parent.layer.close(index);
-			    window.parent.successCallback('1');
-			},
-			error : function(request) {
-				layer.msg('添加失败');
-			}
-		});
-	}else{
-		//验证————————————————————————————————————
-	    $('.k-tooltip-validation').each(function(){
-	    	var verificationText=$(this).text().trim();//获取验证的文字信息
-	    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
-	    	labelVal = labelVal.split(":");
-	    	labelVal.pop();
-	    	labelVal = labelVal.join(":");//截取 :之前的信息
-	    	var person=new Object();
-	    	person.text=labelVal;
-	    	person.error="";
-	    	if(verificationText.indexOf("不能为空")>0){
-	    		emptyNum.push(person);
-	    	}else{
-	    		errorNum.push(person);
-	    	}
-	    });
-	    //end 验证————————————————————————————————
-		var str="";
-		if(emptyNum.length>0){
-			for(var i=0;i<emptyNum.length;i++){
-				str+=emptyNum[i].text+",";
-			}
-			str+="不能为空！"
-		}
-		if(errorNum.length>0){
-			for(var i=0;i<errorNum.length;i++){
-				str+=errorNum[i].text+",";
-			}
-			str+="格式不正确！";
-		}
-		$.layer.alert(str);
-		//用完清空
-		emptyNum.splice(0,emptyNum.length);
-		errorNum.splice(0,errorNum.length);
-	}
-});
-</script>
 </html>

@@ -157,7 +157,7 @@ public class employeeController extends BaseController {
 	 */
 	@RequestMapping(value = "checktelephone")
 	@ResponseBody
-	public boolean checktelephone(String telephone, HttpSession session) {
-		return employeeViewService.checktelephone(telephone, session);
+	public boolean checktelephone(String telephone) {
+		return employeeViewService.checktelephone(telephone);
 	}
 }
