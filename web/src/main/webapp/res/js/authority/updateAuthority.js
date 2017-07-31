@@ -12,6 +12,7 @@ var treeIndex = 0 ;
 //功能表的list
 var functionlist;
 $(function () {
+	var indexnew= layer.load(1, {shade: [0.1,'#fff']});//菊花加载效果
 	//ztree初始配置
     var setting = {
 			check: {
@@ -78,7 +79,10 @@ $(function () {
 			
 		}
 	});
-   
+	//菊花加载完毕
+	if(indexnew!=null){
+		layer.close(indexnew);
+	}
 	//部门职位 添加职位
     $('#addJob').click(function(){
     	$(".job_container .ztree").hide();

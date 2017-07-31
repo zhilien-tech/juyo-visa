@@ -6,12 +6,11 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <!--角色选择跳转页面-->
-    <mvc:view-controller path="guide" view-name="/sys/guide"/>
-
-    <!--API展示-->
-    <mvc:view-controller path="${adminPath}/swagger" view-name="sys/swagger.ftl"/>
-    <!--测试页面-->
-    <mvc:view-controller path="${adminPath}/test" view-name="sys/test.ftl"/>
+    <!--
+    	定义无需Controller的url<->view直接映射,常用于配置首页跳转,页面分发等
+    -->
+    <!--  
+    <mvc:view-controller path="" view-name=""/>
+	-->
 
 </beans>

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	//var aa = $('#jobId').kendoDropDownList().data("kendoDropDownList");//用户职位 初始化
+	var indexnew= layer.load(1, {shade: [0.1,'#fff']});//菊花加载效果
 	//回显数据
 	function GetQueryString(name)
 	{
@@ -79,6 +79,10 @@ $(document).ready(function() {
 	            }
 	        }
 	    }).data("kendoDropDownList");
+	}
+	//菊花加载完毕
+	if(indexnew!=null){
+		layer.close(indexnew);
 	}
 });
 

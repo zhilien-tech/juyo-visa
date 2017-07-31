@@ -20,6 +20,49 @@ function checkTelephone(){
 		}
 	});
 }
+
+/*function checkEmail(){
+	$("#aaaa").kendoValidator({
+		//validateOnBlur: true,
+		validateOnInput: true,
+		rules: {
+	      customRule1: function(input) {
+	    	  //alert(11);
+	    	  if(input.is("[name=email]")) {
+	    		  var email = $("#emailId").val();
+	    		  if(email==null || email==""){
+		    		  return false;
+	    		  }
+	    	  }
+	    	  return true;
+	      },
+	      customRule2: function(input) {
+	    	  if(input.is("[name=email]")) {
+	    		  var companySource = $("#emailId").val();
+	    		  //邮箱验证正则表达式
+	    		    var pattern = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
+	    		    if (companySource.match(pattern)) {
+	    		        return false;
+	    		    }
+	    		    else {
+	    		        return true;
+	    		    }
+	    	  }
+	    	  return true;
+	      }
+	},
+		//自定义验证消息
+		messages: {
+			customRule1: "邮箱不能为空aaa",
+			customRule2: "邮箱格式不正确"
+		  }
+	});
+}*/
+
+
+
+
+
 //添加保存
 //存放空的数组
 var emptyNum=[];
