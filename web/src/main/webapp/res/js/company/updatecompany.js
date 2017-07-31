@@ -1,3 +1,43 @@
+$(function(){
+	var indexnew= layer.load(1, {shade: [0.1,'#fff']});//菊花加载效果
+	//回显数据
+	function GetQueryString(name)
+	{
+	     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	     var r = window.location.search.substr(1).match(reg);
+	     if(r!=null)return  unescape(r[2]); return null;
+	}
+	// 调用方法
+	var comId = GetQueryString("comId");
+	var adminId = GetQueryString("adminId");
+	$("#comId").val(comId);
+	$("#adminId").val(adminId);
+	$.ajax({
+		type : "POST",
+		url : '/visa/company/updatecompany',
+		data : {
+			comId:comId,
+			adminId:adminId
+		},
+		success : function(data) {
+			var data=JSON.parse(data);
+			$('#comNameId').val(data.comName);
+			$('#adminNameId').val(data.adminName);
+			$('#connectId').val(data.connect);
+			$('#mobileId').val(data.mobile);
+			$('#emailId').val(data.email);
+			$('#landLineId').val(data.landLine);
+			$('#addressId').val(data.address);
+		},
+		error : function(request) {
+			layer.msg('添加失败');
+		}
+	});
+	//菊花加载完毕
+	if(indexnew!=null){
+		layer.close(indexnew);
+	}
+});
 //手机号唯一性校验
 function checkTelephone(){
 	var mobile = $("#mobileId").val();
@@ -20,39 +60,7 @@ function checkTelephone(){
 		}
 	});
 }
-//回显数据
-function GetQueryString(name)
-{
-     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-     var r = window.location.search.substr(1).match(reg);
-     if(r!=null)return  unescape(r[2]); return null;
-}
-// 调用方法
-var comId = GetQueryString("comId");
-var adminId = GetQueryString("adminId");
-$("#comId").val(comId);
-$("#adminId").val(adminId);
-$.ajax({
-	type : "POST",
-	url : '/visa/company/updatecompany',
-	data : {
-		comId:comId,
-		adminId:adminId
-	},
-	success : function(data) {
-		var data=JSON.parse(data);
-		$('#comNameId').val(data.comName);
-		$('#adminNameId').val(data.adminName);
-		$('#connectId').val(data.connect);
-		$('#mobileId').val(data.mobile);
-		$('#emailId').val(data.email);
-		$('#landLineId').val(data.landLine);
-		$('#addressId').val(data.address);
-	},
-	error : function(request) {
-		layer.msg('添加失败');
-	}
-});
+
 //更新保存
 //存放空的数组
 var emptyNum=[];
