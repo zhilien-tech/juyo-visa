@@ -194,7 +194,10 @@ var viewModel = kendo.observable({
     },
     // 曾用名
     oldNameEnable: function () {
-    	var state = viewModel.get("customer.oldname.oldname") || viewModel.get("customer.oldname.oldnameen") || viewModel.get("customer.oldname.oldxing") || viewModel.get("customer.oldname.oldxingen");
+    	var state = viewModel.get("customer.oldname.oldname")
+    			 || viewModel.get("customer.oldname.oldnameen") 
+    			 || viewModel.get("customer.oldname.oldxing") 
+    			 || viewModel.get("customer.oldname.oldxingen");
     	if(state){
     		$("input[oldname='oldname']").each(function(){
     			var labelTxt=$(this).parent().prev().text().trim();
@@ -605,7 +608,7 @@ $(function () {
         		/*----小灯泡 回显----*/
             	var reason=viewModel.get("customer.errorinfo");
             	var map1=new Map();
-            	map1=eval("("+reason+")");
+            	map1=eval('(' +reason+ ')');
             	for (var key in map1){
             		var a = map1[key];//获取到 错误信息 数据
             		for(var i=0;i<a.length;i++){

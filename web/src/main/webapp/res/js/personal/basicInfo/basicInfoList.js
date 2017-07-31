@@ -369,7 +369,7 @@ var viewModel = kendo.observable({
     },
     // 曾用名
     oldNameEnable: function () {
-    	///console.log("曾用名:_____"+JSON.stringify(beforeName));
+    	//console.log("曾用名:_____"+JSON.stringify(viewModel.get("customer.oldname")));
     	var state = viewModel.get("customer.oldname.oldname") 
     				|| viewModel.get("customer.oldname.oldnameen")
     				|| viewModel.get("customer.oldname.oldxing")
@@ -417,6 +417,7 @@ var viewModel = kendo.observable({
     		}else {return true};
     	}
     	return false;*/
+    	
     },
     //通信地址与家庭地址是否一致
     usaCommunicaHomeAddress:function(){
@@ -446,6 +447,7 @@ var viewModel = kendo.observable({
 		|| viewModel.get("customer.commhomeaddress.issuingCity")
 		|| viewModel.get("customer.commhomeaddress.passportType");
     	//|| viewModel.get("customer.commhomeaddress.issuingCountry")
+    	//alert(state);
     	return state;
     }
 });
@@ -585,8 +587,6 @@ function saveBaseInfoData(){
 var logintype;
 //点击下一步时跳转至签证信息
 $("#nextStepBtn").click(function(){
-	
-	
 	logintype=$.queryString("logintype");
 	var after;
 	var before;
@@ -602,10 +602,7 @@ $("#nextStepBtn").click(function(){
 			  +escape(JSON.stringify(firstPart))+"&secondPart="
 			  +escape(JSON.stringify(secondPart))+"&thirdPart="
 			  +escape(JSON.stringify(thirdPart))+"&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
-		
 	}
-	
-	
 	
 	if(validatable.validate()){
 		//清空验证的数组
