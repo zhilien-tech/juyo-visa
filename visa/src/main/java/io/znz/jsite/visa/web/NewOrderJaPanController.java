@@ -17,6 +17,7 @@ import io.znz.jsite.visa.bean.Hotel;
 import io.znz.jsite.visa.bean.Scenic;
 import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
 import io.znz.jsite.visa.entity.delivery.NewDeliveryJapanEntity;
+import io.znz.jsite.visa.entity.japan.NewComeBabyJpEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerOrderJpEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerresourceJpEntity;
@@ -35,6 +36,7 @@ import io.znz.jsite.visa.entity.japan.NewWorkinfoJpEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
 import io.znz.jsite.visa.entity.usa.NewOrderEntity;
 import io.znz.jsite.visa.entity.user.EmployeeEntity;
+import io.znz.jsite.visa.enums.CompanyTypeEnum;
 import io.znz.jsite.visa.enums.GenderEnum;
 import io.znz.jsite.visa.enums.OrderJapancustomersourceEnum;
 import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
@@ -225,7 +227,7 @@ public class NewOrderJaPanController {
 			order.setUpdatetime(new Date());
 
 			//生成订单号
-			SimpleDateFormat smf = new SimpleDateFormat("yyyyMMdd");
+			SimpleDateFormat smf = new SimpleDateFormat("yyMMdd");
 			String format = smf.format(new Date());
 			String sqlString = sqlManager.get("neworderjapan_ordernum");
 			Sql sql = Sqls.create(sqlString);
@@ -233,7 +235,7 @@ public class NewOrderJaPanController {
 			int sum = 1;
 			if (!Util.isEmpty(query) && query.size() > 0) {
 				String string = query.get(0).getString("ordernumber");
-				int a = Integer.valueOf(string.substring(11, string.length()));
+				int a = Integer.valueOf(string.substring(9, string.length()));
 				sum += a;
 			}
 			String sum1 = "";
@@ -248,7 +250,7 @@ public class NewOrderJaPanController {
 				sum1 = "" + sum;
 
 			}
-			String ordernum = format + "JP" + sum1;
+			String ordernum = format + "-JP" + sum1;
 
 			order.setOrdernumber(ordernum);
 			//设置为日本
@@ -1229,10 +1231,53 @@ public class NewOrderJaPanController {
 	 */
 	@RequestMapping(value = "export")
 	@ResponseBody
-	public Object export(HttpServletResponse resp, long orderid) throws IOException {
+	public Object export(HttpServletResponse resp, long orderid, long sendComId, long landComId) throws IOException {
 		NewOrderJpEntity order = dbDao.fetch(NewOrderJpEntity.class, orderid);
-		CustomerManageEntity customerManageEntity = dbDao.fetch(CustomerManageEntity.class,
-				Long.valueOf(order.getCustomer_manager_id()));
+		if (!Util.isEmpty(order)) {
+
+			dbDao.update(NewOrderJpEntity.class, Chain.make("sendComId", sendComId).add("landComId", landComId),
+					Cnd.where("id", "=", order.getId()));
+			order = dbDao.fetch(NewOrderJpEntity.class, order.getId());
+		}
+
+		//		CustomerManageEntity customerManageEntity = null;
+		//		if(){
+		//			
+		//		}
+		//		dbDao.fetch(CustomerManageEntity.class,
+		//				Long.valueOf(order.getCustomer_manager_id()));
+		//		
+		CustomerManageEntity customerManageEntity = null;
+		int customerSource = order.getCustomerSource();
+		if (!Util.isEmpty(customerSource) && customerSource > 0) {
+			if (customerSource == OrderJapancustomersourceEnum.zhike.intKey()) {
+				List<NewCustomerresourceJpEntity> customerresourceJp = dbDao.query(NewCustomerresourceJpEntity.class,
+						Cnd.where("order_jp_id", "=", orderid), null);
+				if (!Util.isEmpty(customerresourceJp) && customerresourceJp.size() > 0) {
+					order.setCustomerresourceJp(customerresourceJp.get(0));
+					customerManageEntity = new CustomerManageEntity();
+					customerManageEntity.setTelephone(customerresourceJp.get(0).getTelephone());
+					customerManageEntity.setLinkman(customerresourceJp.get(0).getLinkman());
+					customerManageEntity.setEmail(customerresourceJp.get(0).getEmail());
+					customerManageEntity.setFullComName(customerresourceJp.get(0).getFullComName());
+					order.setCustomermanage(customerManageEntity);
+				}
+			} else {
+				//if (!Util.isEmpty(customermanage)) {
+
+				customerManageEntity = dbDao.fetch(CustomerManageEntity.class,
+						Long.valueOf(order.getCustomer_manager_id()));
+				if (!Util.isEmpty(customerManageEntity)) {
+					order.setCustomermanage(customerManageEntity);
+					NewCustomerresourceJpEntity customerresourceJp = new NewCustomerresourceJpEntity();
+					order.setCustomerresourceJp(customerresourceJp);
+				}
+
+				//}
+
+			}
+		}
+
 		if (!Util.isEmpty(customerManageEntity)) {
 			order.setCustomermanage(customerManageEntity);
 		}
@@ -1311,7 +1356,20 @@ public class NewOrderJaPanController {
 			return ResultObject.fail("订单不存在!");
 		}
 		byte[] bytes = newPdfService.export(order).toByteArray();
-		String fileName = URLEncoder.encode(customerManageEntity.getLinkman() + "-" + orderid + ".zip", "UTF-8");
+		String str = "";
+		customerSource = order.getCustomerSource();
+		if (customerSource == OrderJapancustomersourceEnum.zhike.intKey()) {
+			List<NewCustomerresourceJpEntity> query2 = dbDao.query(NewCustomerresourceJpEntity.class,
+					Cnd.where("order_jp_id", "=", orderid), null);
+			if (!Util.isEmpty(query2) && query2.size() > 0) {
+				str = query2.get(0).getLinkman();
+			}
+		} else {
+			if (!Util.isEmpty(customerManageEntity)) {
+				str = customerManageEntity.getLinkman();
+			}
+		}
+		String fileName = URLEncoder.encode(str + "-" + order.getOrdernumber() + ".zip", "UTF-8");
 		resp.setContentType("application/zip");
 		resp.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
 		IOUtils.write(bytes, resp.getOutputStream());
@@ -1543,4 +1601,45 @@ public class NewOrderJaPanController {
 		return query;
 		/*	return query;*/
 	}
+
+	@RequestMapping(value = "downloadselect")
+	@ResponseBody
+	public Object downloadselect(String orderid) {
+		if ("" == orderid || null == orderid || "null".equals(orderid)) {
+			orderid = 0 + "";
+		}
+		long orderId = Long.valueOf(orderid);
+		NewOrderJpEntity order = dbDao.fetch(NewOrderJpEntity.class, orderId);
+		return order;
+	}
+
+	@RequestMapping(value = "downloadselectsave")
+	@ResponseBody
+	public Object downloadselectsave(@RequestBody NewOrderJpEntity order) {
+		if (!Util.isEmpty(order)) {
+			dbDao.update(order, null);
+		}
+		return ResultObject.success("保存成功");
+	}
+
+	@RequestMapping(value = "downloadselectfind")
+	@ResponseBody
+	public Object downloadselectfind(int a, final HttpSession session) {
+		List<NewComeBabyJpEntity> comeList = Lists.newArrayList();
+		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		if (!Util.isEmpty(company)) {
+			long comId = company.getComId();
+			if (a == 1) {
+				comeList = dbDao.query(NewComeBabyJpEntity.class,
+						Cnd.where("comType", "=", CompanyTypeEnum.send.intKey()).and("comId", "=", comId), null);
+
+			} else if (a == 2) {
+				comeList = dbDao.query(NewComeBabyJpEntity.class,
+						Cnd.where("comType", "=", CompanyTypeEnum.land.intKey()).and("comId", "=", comId), null);
+
+			}
+		}
+		return comeList;
+	}
+
 }

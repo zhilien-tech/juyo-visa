@@ -43,6 +43,7 @@ var startcity=[
                         {text:"那霸",value:6}
                         ];
 var defaults = {
+		visatype:0,
 		customermanage:{},
 		tripJp:{
 			oneormore:0,

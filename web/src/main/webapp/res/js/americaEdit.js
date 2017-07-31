@@ -487,6 +487,8 @@ function ordersave(){
 		//用完清空
 		emptyNum.splice(0,emptyNum.length);
 		errorNum.splice(0,errorNum.length);
+		alert(JSON.stringify(emptyNum));
+		alert(JSON.stringify(errorNum));
 	}
 }
 

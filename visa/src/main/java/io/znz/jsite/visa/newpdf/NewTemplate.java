@@ -18,6 +18,7 @@ import io.znz.jsite.visa.enums.GenderEnum;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -248,12 +249,46 @@ public abstract class NewTemplate {
 		}
 	}
 
-	public Image getSeal() throws IOException, BadElementException {
+	public Image getSeal(String address, int n) throws IOException, BadElementException {
+
+		URL url = new URL(address);
 		//添加盖章
-		Image img = Image.getInstance(getClass().getClassLoader().getResource(getPrefix() + "seal.jpg"));
+		//Image img = Image.getInstance(getClass().getClassLoader().getResource(getPrefix() + "sealnew.jpg"));
+		Image img = Image.getInstance(url);
 		img.setAlignment(Image.RIGHT);
-		img.scaleToFit(400, 200);//大小
-		img.setIndentationRight(30);
+		//		img.scaleToFit(400, 200);//大小
+		img.scaleToFit(80, 40);//大小
+		//img.setIndentationRight(200);
+
+		if (n <= 1) {
+
+			img.setAbsolutePosition(345, 630);
+		} else {
+
+			img.setAbsolutePosition(345, 630 - 35 * (n - 1));
+		}
+		img.setAlignment(Paragraph.ALIGN_RIGHT);
+		return img;
+	}
+
+	public Image getSeal1(String address, int n) throws IOException, BadElementException {
+
+		URL url = new URL(address);
+		//添加盖章
+		//Image img = Image.getInstance(getClass().getClassLoader().getResource(getPrefix() + "sealnew.jpg"));
+		Image img = Image.getInstance(url);
+		img.setAlignment(Image.RIGHT);
+		//		img.scaleToFit(400, 200);//大小
+		img.scaleToFit(80, 40);//大小
+		//img.setIndentationRight(200);
+		img.setRotation(800);
+		if (n <= 1) {
+
+			img.setAbsolutePosition(345, 600);
+		} else {
+
+			img.setAbsolutePosition(345, 600 - 32 * (n - 1));
+		}
 		img.setAlignment(Paragraph.ALIGN_RIGHT);
 		return img;
 	}

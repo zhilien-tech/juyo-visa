@@ -256,7 +256,7 @@ public class OrderController extends BaseController {
 			order.setUpdatetime(new Date());
 
 			//生成订单号
-			SimpleDateFormat smf = new SimpleDateFormat("yyyyMMdd");
+			SimpleDateFormat smf = new SimpleDateFormat("yyMMdd");
 			String format = smf.format(new Date());
 			String sqlString = sqlManager.get("orderlist_ordernum");
 			Sql sql = Sqls.create(sqlString);
@@ -264,7 +264,7 @@ public class OrderController extends BaseController {
 			int sum = 1;
 			if (!Util.isEmpty(query) && query.size() > 0) {
 				String string = query.get(0).getString("ordernumber");
-				int a = Integer.valueOf(string.substring(11, string.length()));
+				int a = Integer.valueOf(string.substring(9, string.length()));
 				sum += a;
 			}
 			String sum1 = "";
@@ -279,7 +279,7 @@ public class OrderController extends BaseController {
 				sum1 = "" + sum;
 
 			}
-			String ordernum = format + "US" + sum1;
+			String ordernum = format + "-US" + sum1;
 
 			order.setOrdernumber(ordernum);
 
@@ -1114,7 +1114,7 @@ public class OrderController extends BaseController {
 		}
 
 		String html = tmp.toString().replace("${name}", "").replace("${oid}", order.getOrdernumber())
-				.replace("${href}", "http://127.0.0.1:8080//main.html?logintype=5&orderId=" + orderid)
+				.replace("${href}", "http://218.244.148.21:9004//main.html?logintype=5&orderId=" + orderid)
 				.replace("${logininfo}", "").replace("${gender}", "先生/女士");
 		String result = mailService.send(email, html, "签证资料录入", MailService.Type.HTML);
 
