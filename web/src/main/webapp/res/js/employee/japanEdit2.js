@@ -44,6 +44,7 @@ var startcity=[
                         ];
 var defaults = {
 		visatype:0,
+		area:0,
 		customermanage:{},
 		tripJp:{
 			oneormore:0,

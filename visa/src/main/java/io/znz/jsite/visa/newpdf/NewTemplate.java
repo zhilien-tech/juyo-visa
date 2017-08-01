@@ -232,12 +232,16 @@ public abstract class NewTemplate {
 			PdfCopy copy = new PdfCopy(document, out);
 			document.open();
 			for (int i = 0; i < list.size(); i++) {
-				PdfReader reader = new PdfReader(list.get(i).toByteArray());
-				int n = reader.getNumberOfPages();
-				for (int j = 1; j <= n; j++) {
-					document.newPage();
-					PdfImportedPage page = copy.getImportedPage(reader, j);
-					copy.addPage(page);
+				ByteArrayOutputStream byteArrayOutputStream = list.get(i);
+				if (!Util.isEmpty(byteArrayOutputStream)) {
+
+					PdfReader reader = new PdfReader(list.get(i).toByteArray());
+					int n = reader.getNumberOfPages();
+					for (int j = 1; j <= n; j++) {
+						document.newPage();
+						PdfImportedPage page = copy.getImportedPage(reader, j);
+						copy.addPage(page);
+					}
 				}
 			}
 			document.close();
@@ -494,24 +498,37 @@ public abstract class NewTemplate {
 					endFlightnum = tripJp.getReturnflightnum();
 				}
 			}
+			DateTime dtEntry = null;
+			DateTime dtDepart = null;
+			if (!Util.isEmpty(startDate)) {
 
-			DateTime dtEntry = new DateTime(startDate);
-			if (dtEntry.isBeforeNow()) {
-				throw new JSiteException("入境时间不能在当前时间之前!");
+				dtEntry = new DateTime(startDate);
+				if (dtEntry.isBeforeNow()) {
+					throw new JSiteException("入境时间不能在当前时间之前!");
+				}
+				map.put("topmostSubform[0].Page1[0].#area[21].T68[2]", df1.format(startDate));
 			}
-			DateTime dtDepart = new DateTime(endDate);
-			if (dtDepart.isBefore(startDate.getTime())) {
-				throw new JSiteException("出境时间不能在入境时间之前!");
+			if (!Util.isEmpty(endDate)) {
+
+				dtDepart = new DateTime(endDate);
+				if (dtDepart.isBefore(startDate.getTime())) {
+					throw new JSiteException("出境时间不能在入境时间之前!");
+				}
+				map.put("topmostSubform[0].Page1[0].#area[21].T68[3]", df1.format(endDate));
 			}
+			if (!Util.isEmpty(dtEntry) && !Util.isEmpty(dtDepart)) {
 
-			map.put("topmostSubform[0].Page1[0].#area[21].T68[2]", df1.format(startDate));
-			map.put("topmostSubform[0].Page1[0].#area[21].T68[3]", df1.format(endDate));
-			map.put("topmostSubform[0].Page1[0].T66[0]", (Days.daysBetween(dtEntry, dtDepart).getDays() + 1) + "天");
+				map.put("topmostSubform[0].Page1[0].T66[0]", (Days.daysBetween(dtEntry, dtDepart).getDays() + 1) + "天");
+			}
+			if (!Util.isEmpty(startFlightnum)) {
 
-			Flight flight = dbdao.fetch(Flight.class, Long.valueOf(startFlightnum));
+				Flight flight = dbdao.fetch(Flight.class, Long.valueOf(startFlightnum));
+				if (!Util.isEmpty(flight)) {
+					map.put("topmostSubform[0].Page1[0].#area[15].#area[16].T68[0]", filter(flight.getToCity()));
+					map.put("topmostSubform[0].Page1[0].#area[15].#area[16].T68[1]", filter(flight.getLine()));
 
-			map.put("topmostSubform[0].Page1[0].#area[15].#area[16].T68[0]", filter(flight.getToCity()));
-			map.put("topmostSubform[0].Page1[0].#area[15].#area[16].T68[1]", filter(flight.getLine()));
+				}
+			}
 
 			map.put("topmostSubform[0].Page1[0].T0[1]", filter(customer.getAddresssmall()));
 			map.put("topmostSubform[0].Page1[0].#area[17].#area[18].T97[0]", filter(customer.getFamilyphone()));
