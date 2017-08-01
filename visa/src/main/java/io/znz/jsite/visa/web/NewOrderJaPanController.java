@@ -620,6 +620,23 @@ public class NewOrderJaPanController {
 								 long intervalMs = todayMs - returnMs;*/
 
 							order.setTripplanJpList(tripplanJpListnew);
+							if (!Util.isEmpty(tripplanJpListnew) && tripplanJpListnew.size() > 0) {
+								for (NewTripplanJpEntity newPeerPersionEntity : tripplanJpListnew) {
+									List<Scenic> scenics = newPeerPersionEntity.getScenics();
+									String viewid = "";
+									for (Scenic scenic : scenics) {
+										viewid += scenic.getId() + ",";
+									}
+									newPeerPersionEntity.setViewid(viewid);
+									/*	if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
+											nutDao.update(newPeerPersionEntity);
+										} else {*/
+									newPeerPersionEntity.setOrder_jp_id(orderOld.getId());
+
+									dbDao.insert(newPeerPersionEntity);
+									//}
+								}
+							}
 						}
 					}
 				} else if (oneormore2 == 1) {

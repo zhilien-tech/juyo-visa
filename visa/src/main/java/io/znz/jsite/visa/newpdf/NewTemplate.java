@@ -254,47 +254,53 @@ public abstract class NewTemplate {
 	}
 
 	public Image getSeal(String address, int n) throws IOException, BadElementException {
+		if (!Util.isEmpty(address)) {
 
-		URL url = new URL(address);
-		//添加盖章
-		//Image img = Image.getInstance(getClass().getClassLoader().getResource(getPrefix() + "sealnew.jpg"));
-		Image img = Image.getInstance(url);
-		img.setAlignment(Image.RIGHT);
-		//		img.scaleToFit(400, 200);//大小
-		img.scaleToFit(80, 40);//大小
-		//img.setIndentationRight(200);
+			URL url = new URL(address);
+			//添加盖章
+			//Image img = Image.getInstance(getClass().getClassLoader().getResource(getPrefix() + "sealnew.jpg"));
+			Image img = Image.getInstance(url);
+			img.setAlignment(Image.RIGHT);
+			//		img.scaleToFit(400, 200);//大小
+			img.scaleToFit(80, 40);//大小
+			//img.setIndentationRight(200);
 
-		if (n <= 1) {
+			if (n <= 1) {
 
-			img.setAbsolutePosition(345, 630);
-		} else {
+				img.setAbsolutePosition(345, 630);
+			} else {
 
-			img.setAbsolutePosition(345, 630 - 35 * (n - 1));
+				img.setAbsolutePosition(345, 630 - 35 * (n - 1));
+			}
+			img.setAlignment(Paragraph.ALIGN_RIGHT);
+			return img;
 		}
-		img.setAlignment(Paragraph.ALIGN_RIGHT);
-		return img;
+		return null;
 	}
 
 	public Image getSeal1(String address, int n) throws IOException, BadElementException {
+		if (!Util.isEmpty(address)) {
 
-		URL url = new URL(address);
-		//添加盖章
-		//Image img = Image.getInstance(getClass().getClassLoader().getResource(getPrefix() + "sealnew.jpg"));
-		Image img = Image.getInstance(url);
-		img.setAlignment(Image.RIGHT);
-		//		img.scaleToFit(400, 200);//大小
-		img.scaleToFit(80, 40);//大小
-		//img.setIndentationRight(200);
-		img.setRotation(800);
-		if (n <= 1) {
+			URL url = new URL(address);
+			//添加盖章
+			//Image img = Image.getInstance(getClass().getClassLoader().getResource(getPrefix() + "sealnew.jpg"));
+			Image img = Image.getInstance(url);
+			img.setAlignment(Image.RIGHT);
+			//		img.scaleToFit(400, 200);//大小
+			img.scaleToFit(80, 40);//大小
+			//img.setIndentationRight(200);
+			img.setRotation(800);
+			if (n <= 1) {
 
-			img.setAbsolutePosition(345, 600);
-		} else {
+				img.setAbsolutePosition(345, 600);
+			} else {
 
-			img.setAbsolutePosition(345, 600 - 32 * (n - 1));
+				img.setAbsolutePosition(345, 600 - 32 * (n - 1));
+			}
+			img.setAlignment(Paragraph.ALIGN_RIGHT);
+			return img;
 		}
-		img.setAlignment(Paragraph.ALIGN_RIGHT);
-		return img;
+		return null;
 	}
 
 	public NewCustomerJpEntity getMaster(NewOrderJpEntity order) {
