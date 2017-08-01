@@ -17,6 +17,7 @@ import io.znz.jsite.visa.bean.Hotel;
 import io.znz.jsite.visa.bean.Scenic;
 import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
 import io.znz.jsite.visa.entity.delivery.NewDeliveryJapanEntity;
+import io.znz.jsite.visa.entity.japan.NewComeBabyJpEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerOrderJpEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerresourceJpEntity;
@@ -35,6 +36,7 @@ import io.znz.jsite.visa.entity.japan.NewWorkinfoJpEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
 import io.znz.jsite.visa.entity.usa.NewOrderEntity;
 import io.znz.jsite.visa.entity.user.EmployeeEntity;
+import io.znz.jsite.visa.enums.CompanyTypeEnum;
 import io.znz.jsite.visa.enums.GenderEnum;
 import io.znz.jsite.visa.enums.OrderJapancustomersourceEnum;
 import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
@@ -225,7 +227,7 @@ public class NewOrderJaPanController {
 			order.setUpdatetime(new Date());
 
 			//生成订单号
-			SimpleDateFormat smf = new SimpleDateFormat("yyyyMMdd");
+			SimpleDateFormat smf = new SimpleDateFormat("yyMMdd");
 			String format = smf.format(new Date());
 			String sqlString = sqlManager.get("neworderjapan_ordernum");
 			Sql sql = Sqls.create(sqlString);
@@ -233,7 +235,7 @@ public class NewOrderJaPanController {
 			int sum = 1;
 			if (!Util.isEmpty(query) && query.size() > 0) {
 				String string = query.get(0).getString("ordernumber");
-				int a = Integer.valueOf(string.substring(11, string.length()));
+				int a = Integer.valueOf(string.substring(9, string.length()));
 				sum += a;
 			}
 			String sum1 = "";
@@ -248,7 +250,7 @@ public class NewOrderJaPanController {
 				sum1 = "" + sum;
 
 			}
-			String ordernum = format + "JP" + sum1;
+			String ordernum = format + "-JP" + sum1;
 
 			order.setOrdernumber(ordernum);
 			//设置为日本
@@ -550,100 +552,172 @@ public class NewOrderJaPanController {
 				//}
 			}
 		} else {
-			/*Calendar cNow = Calendar.getInstance();
-			 Calendar cReturnDate = Calendar.getInstance();
-			 cNow.setTime(startdate);
-			 cReturnDate.setTime(enddate);
-			 
-			 long todayMs = cNow.getTimeInMillis();
-			 long returnMs = cReturnDate.getTimeInMillis();
-			 long intervalMs = todayMs - returnMs;*/
-			/*
-						Date nowdate = startdate;
-						Calendar cal = Calendar.getInstance();
-						cal.setTime(nowdate);
-						int daynum = (int) ((enddate.getTime() - startdate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
-						List<Hotel> hotellist = dbDao.query(Hotel.class, Cnd.where("city", "=", arrivecity), null);
-						List<Scenic> sceniclist = dbDao.query(Scenic.class, Cnd.where("city", "=", arrivecity), null);
-						for (int i = 0; i < daynum; i++) {
-							NewTripplanJpEntity t = new NewTripplanJpEntity();
-							Calendar cal1 = Calendar.getInstance();
-							cal1.setTime(nowdate);
-							t.setDaynum(i + 1);
-							t.setCity(arrivecity);
-							t.setNowdate(nowdate);
-							if (i < hotellist.size()) {
+			NewTripJpEntity tripJp1 = order.getTripJp();
+			if (!Util.isEmpty(tripJp1.getOneormore())) {
+				int oneormore2 = tripJp1.getOneormore().intValue();
+				if (oneormore2 == 0) {
+					if (!Util.isEmpty(tripJp1.getStartdate())) {
+						List<NewTripplanJpEntity> query = dbDao.query(NewTripplanJpEntity.class,
+								Cnd.where("order_jp_id", "=", order.getId()), null);
+						if (query.size() > 0) {
 
-								t.setHotelid(hotellist.get(i).getId());
+						} else {
+							startdate = null;
+							enddate = null;
+							arrivecity = null;
+							tripJp = order.getTripJp();
+							tripplanJpList = order.getTripplanJpList();
+							List<NewTripplanJpEntity> tripplanJpListnew = Lists.newArrayList();
+
+							if (!Util.isEmpty(tripJp)) {
+
+								if (tripJp.getOneormore() == 0) {
+									startdate = tripJp.getStartdate();
+									enddate = tripJp.getReturndate();
+									arrivecity = tripJp.getArrivecity();
+									this.daytotal = (int) ((enddate.getTime() - startdate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+									tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+									this.daynum = 1;
+								}
+
 							}
-							if (i < sceniclist.size()) {
+							oneormore = tripJp.getOneormore();
 
-								t.setViewid(sceniclist.get(i).getId() + ",");
+							dateplanJpList = order.getDateplanJpList();
+							if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
+
+								if (oneormore == 1) {
+									this.daytotal = (int) ((dateplanJpList.get(dateplanJpList.size() - 1)
+											.getStartdate().getTime() - dateplanJpList.get(0).getStartdate().getTime()) / (24 * 60 * 60 * 1000)) + 1;
+									for (int i = 0; i < dateplanJpList.size(); i++) {
+										if (i < dateplanJpList.size() - 1) {
+
+											startdate = dateplanJpList.get(i).getStartdate();
+											enddate = dateplanJpList.get(i + 1).getStartdate();
+											arrivecity = dateplanJpList.get(i).getArrivecity();
+											if (i < dateplanJpList.size() - 2) {
+												Calendar cal = Calendar.getInstance();
+												cal.setTime(enddate);
+												cal.add(Calendar.DATE, -1);
+												enddate = cal.getTime();
+											}
+											tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+										}
+									}
+									this.daynum = 1;
+								}
 							}
+							/*	if (!Util.isEmpty(tripplanJpList) && tripplanJpList.size() > 0) {
+								
+							} else {
+								Calendar cNow = Calendar.getInstance();
+								 Calendar cReturnDate = Calendar.getInstance();
+								 cNow.setTime(startdate);
+								 cReturnDate.setTime(enddate);
+								 
+								 long todayMs = cNow.getTimeInMillis();
+								 long returnMs = cReturnDate.getTimeInMillis();
+								 long intervalMs = todayMs - returnMs;*/
 
-							t.setHometype(0);
-							t.setHomenum(1);
-							t.setHomeday(1);
-							t.setIntime(nowdate);
-							cal1.set(Calendar.DAY_OF_MONTH, nowdate.getDate() + 1);
-							t.setOrder_jp_id(orderOld.getId());
-							t.setOuttime(cal1.getTime());
-							t.setBreakfast(1);
-							t.setDinner(1);
-
-							dbDao.insert(t);
-							cal.set(Calendar.DAY_OF_MONTH, nowdate.getDate() + 1);
-							nowdate = cal.getTime();
-						}*/
-
-			Date startdate1 = null;
-			Date enddate1 = null;
-			String arrivecity1 = null;
-			NewTripJpEntity tripJp1 = orderOld.getTripJp();
-			List<NewTripplanJpEntity> tripplanJpList1 = orderOld.getTripplanJpList();
-			List<NewTripplanJpEntity> tripplanJpListnew1 = Lists.newArrayList();
-
-			if (!Util.isEmpty(tripJp1)) {
-
-				if (tripJp1.getOneormore() == 0) {
-					startdate1 = tripJp1.getStartdate();
-					enddate1 = tripJp1.getReturndate();
-					this.daytotal = (int) ((enddate1.getTime() - startdate1.getTime()) / (24 * 60 * 60 * 1000)) + 1;
-					arrivecity1 = tripJp1.getArrivecity();
-					tripplan(orderOld, startdate1, enddate1, arrivecity1, tripplanJpListnew1);
-					this.daynum = 1;
-				}
-
-			}
-			Integer oneormore1 = tripJp1.getOneormore();
-
-			List<NewDateplanJpEntity> dateplanJpList1 = orderOld.getDateplanJpList();
-			if (!Util.isEmpty(dateplanJpList1) && dateplanJpList1.size() > 0) {
-				//this.daynum = (int) ((dateplanJpList1.get(0).getStartdate().getTime() - dateplanJpList1.get(0).getReturndate().getTime()) / (24 * 60 * 60 * 1000)) + 1;
-				if (oneormore1 == 1) {
-					this.daytotal = (int) ((dateplanJpList1.get(dateplanJpList1.size() - 1).getStartdate().getTime() - dateplanJpList1
-							.get(0).getStartdate().getTime()) / (24 * 60 * 60 * 1000)) + 1;
-					for (int i = 0; i < dateplanJpList1.size(); i++) {
-						if (i < dateplanJpList1.size() - 1) {
-							startdate1 = dateplanJpList1.get(i).getStartdate();
-							enddate1 = dateplanJpList1.get(i + 1).getStartdate();
-							if (i < dateplanJpList1.size() - 2) {
-								Calendar cal = Calendar.getInstance();
-								cal.setTime(enddate1);
-								cal.add(Calendar.DATE, -1);
-								enddate1 = cal.getTime();
-							}
-							arrivecity1 = dateplanJpList1.get(i).getArrivecity();
-							tripplan(orderOld, startdate1, enddate1, arrivecity1, tripplanJpListnew1);
+							order.setTripplanJpList(tripplanJpListnew);
 						}
 					}
-					this.daynum = 1;
+				} else if (oneormore2 == 1) {
+
+					List<NewDateplanJpEntity> query = dbDao.query(NewDateplanJpEntity.class,
+							Cnd.where("trip_jp_id", "=", tripJp1.getId()), null);
+					if (!Util.isEmpty(query) && query.size() > 0) {
+						if (!Util.isEmpty(query.get(0).getStartdate())) {
+							List<NewTripplanJpEntity> query1 = dbDao.query(NewTripplanJpEntity.class,
+									Cnd.where("order_jp_id", "=", order.getId()), null);
+							if (query1.size() > 0) {
+
+							} else {
+								startdate = null;
+								enddate = null;
+								arrivecity = null;
+								tripJp = order.getTripJp();
+								tripplanJpList = order.getTripplanJpList();
+								List<NewTripplanJpEntity> tripplanJpListnew = Lists.newArrayList();
+
+								if (!Util.isEmpty(tripJp)) {
+
+									if (tripJp.getOneormore() == 0) {
+										startdate = tripJp.getStartdate();
+										enddate = tripJp.getReturndate();
+										arrivecity = tripJp.getArrivecity();
+										this.daytotal = (int) ((enddate.getTime() - startdate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+										tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+										this.daynum = 1;
+									}
+
+								}
+								oneormore = tripJp.getOneormore();
+
+								dateplanJpList = order.getDateplanJpList();
+								if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
+
+									if (oneormore == 1) {
+										this.daytotal = (int) ((dateplanJpList.get(dateplanJpList.size() - 1)
+												.getStartdate().getTime() - dateplanJpList.get(0).getStartdate()
+												.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+										for (int i = 0; i < dateplanJpList.size(); i++) {
+											if (i < dateplanJpList.size() - 1) {
+
+												startdate = dateplanJpList.get(i).getStartdate();
+												enddate = dateplanJpList.get(i + 1).getStartdate();
+												arrivecity = dateplanJpList.get(i).getArrivecity();
+												if (i < dateplanJpList.size() - 2) {
+													Calendar cal = Calendar.getInstance();
+													cal.setTime(enddate);
+													cal.add(Calendar.DATE, -1);
+													enddate = cal.getTime();
+												}
+												tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+											}
+										}
+										this.daynum = 1;
+									}
+								}
+								/*	if (!Util.isEmpty(tripplanJpList) && tripplanJpList.size() > 0) {
+									
+								} else {
+									Calendar cNow = Calendar.getInstance();
+									 Calendar cReturnDate = Calendar.getInstance();
+									 cNow.setTime(startdate);
+									 cReturnDate.setTime(enddate);
+									 
+									 long todayMs = cNow.getTimeInMillis();
+									 long returnMs = cReturnDate.getTimeInMillis();
+									 long intervalMs = todayMs - returnMs;*/
+
+								order.setTripplanJpList(tripplanJpListnew);
+								if (!Util.isEmpty(tripplanJpListnew) && tripplanJpListnew.size() > 0) {
+									for (NewTripplanJpEntity newPeerPersionEntity : tripplanJpListnew) {
+										List<Scenic> scenics = newPeerPersionEntity.getScenics();
+										String viewid = "";
+										for (Scenic scenic : scenics) {
+											viewid += scenic.getId() + ",";
+										}
+										newPeerPersionEntity.setViewid(viewid);
+										/*	if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
+												nutDao.update(newPeerPersionEntity);
+											} else {*/
+										newPeerPersionEntity.setOrder_jp_id(orderOld.getId());
+
+										dbDao.insert(newPeerPersionEntity);
+										//}
+									}
+								}
+							}
+
+						}
+					}
+
 				}
+
 			}
-			for (NewTripplanJpEntity newDateplanJpEntity : tripplanJpListnew1) {
-				newDateplanJpEntity.setOrder_jp_id(orderOld.getId());
-			}
-			dbDao.insert(tripplanJpListnew1);
+
 		}
 		return ResultObject.success("添加成功");
 	}
@@ -1229,10 +1303,53 @@ public class NewOrderJaPanController {
 	 */
 	@RequestMapping(value = "export")
 	@ResponseBody
-	public Object export(HttpServletResponse resp, long orderid) throws IOException {
+	public Object export(HttpServletResponse resp, long orderid, long sendComId, long landComId) throws IOException {
 		NewOrderJpEntity order = dbDao.fetch(NewOrderJpEntity.class, orderid);
-		CustomerManageEntity customerManageEntity = dbDao.fetch(CustomerManageEntity.class,
-				Long.valueOf(order.getCustomer_manager_id()));
+		if (!Util.isEmpty(order)) {
+
+			dbDao.update(NewOrderJpEntity.class, Chain.make("sendComId", sendComId).add("landComId", landComId),
+					Cnd.where("id", "=", order.getId()));
+			order = dbDao.fetch(NewOrderJpEntity.class, order.getId());
+		}
+
+		//		CustomerManageEntity customerManageEntity = null;
+		//		if(){
+		//			
+		//		}
+		//		dbDao.fetch(CustomerManageEntity.class,
+		//				Long.valueOf(order.getCustomer_manager_id()));
+		//		
+		CustomerManageEntity customerManageEntity = null;
+		int customerSource = order.getCustomerSource();
+		if (!Util.isEmpty(customerSource) && customerSource > 0) {
+			if (customerSource == OrderJapancustomersourceEnum.zhike.intKey()) {
+				List<NewCustomerresourceJpEntity> customerresourceJp = dbDao.query(NewCustomerresourceJpEntity.class,
+						Cnd.where("order_jp_id", "=", orderid), null);
+				if (!Util.isEmpty(customerresourceJp) && customerresourceJp.size() > 0) {
+					order.setCustomerresourceJp(customerresourceJp.get(0));
+					customerManageEntity = new CustomerManageEntity();
+					customerManageEntity.setTelephone(customerresourceJp.get(0).getTelephone());
+					customerManageEntity.setLinkman(customerresourceJp.get(0).getLinkman());
+					customerManageEntity.setEmail(customerresourceJp.get(0).getEmail());
+					customerManageEntity.setFullComName(customerresourceJp.get(0).getFullComName());
+					order.setCustomermanage(customerManageEntity);
+				}
+			} else {
+				//if (!Util.isEmpty(customermanage)) {
+
+				customerManageEntity = dbDao.fetch(CustomerManageEntity.class,
+						Long.valueOf(order.getCustomer_manager_id()));
+				if (!Util.isEmpty(customerManageEntity)) {
+					order.setCustomermanage(customerManageEntity);
+					NewCustomerresourceJpEntity customerresourceJp = new NewCustomerresourceJpEntity();
+					order.setCustomerresourceJp(customerresourceJp);
+				}
+
+				//}
+
+			}
+		}
+
 		if (!Util.isEmpty(customerManageEntity)) {
 			order.setCustomermanage(customerManageEntity);
 		}
@@ -1311,7 +1428,20 @@ public class NewOrderJaPanController {
 			return ResultObject.fail("订单不存在!");
 		}
 		byte[] bytes = newPdfService.export(order).toByteArray();
-		String fileName = URLEncoder.encode(customerManageEntity.getLinkman() + "-" + orderid + ".zip", "UTF-8");
+		String str = "";
+		customerSource = order.getCustomerSource();
+		if (customerSource == OrderJapancustomersourceEnum.zhike.intKey()) {
+			List<NewCustomerresourceJpEntity> query2 = dbDao.query(NewCustomerresourceJpEntity.class,
+					Cnd.where("order_jp_id", "=", orderid), null);
+			if (!Util.isEmpty(query2) && query2.size() > 0) {
+				str = query2.get(0).getLinkman();
+			}
+		} else {
+			if (!Util.isEmpty(customerManageEntity)) {
+				str = customerManageEntity.getLinkman();
+			}
+		}
+		String fileName = URLEncoder.encode(str + "-" + order.getOrdernumber() + ".zip", "UTF-8");
 		resp.setContentType("application/zip");
 		resp.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
 		IOUtils.write(bytes, resp.getOutputStream());
@@ -1321,68 +1451,154 @@ public class NewOrderJaPanController {
 	@RequestMapping(value = "autogenerate")
 	@ResponseBody
 	public Object autogenerate(@RequestBody NewOrderJpEntity order) {
-		if (!Util.isEmpty(order.getId()) && order.getId() > 0) {
+		NewTripJpEntity tripJp1 = order.getTripJp();
+		if (!Util.isEmpty(tripJp1.getOneormore())) {
+			int oneormore2 = tripJp1.getOneormore().intValue();
+			if (oneormore2 == 0) {
+				if (!Util.isEmpty(tripJp1.getStartdate())) {
+					List<NewTripplanJpEntity> query = dbDao.query(NewTripplanJpEntity.class,
+							Cnd.where("order_jp_id", "=", order.getId()), null);
+					if (query.size() > 0) {
 
-		} else {
-			Date startdate = null;
-			Date enddate = null;
-			String arrivecity = null;
-			NewTripJpEntity tripJp = order.getTripJp();
-			List<NewTripplanJpEntity> tripplanJpList = order.getTripplanJpList();
-			List<NewTripplanJpEntity> tripplanJpListnew = Lists.newArrayList();
+					} else {
+						Date startdate = null;
+						Date enddate = null;
+						String arrivecity = null;
+						NewTripJpEntity tripJp = order.getTripJp();
+						List<NewTripplanJpEntity> tripplanJpList = order.getTripplanJpList();
+						List<NewTripplanJpEntity> tripplanJpListnew = Lists.newArrayList();
 
-			if (!Util.isEmpty(tripJp)) {
+						if (!Util.isEmpty(tripJp)) {
 
-				if (tripJp.getOneormore() == 0) {
-					startdate = tripJp.getStartdate();
-					enddate = tripJp.getReturndate();
-					arrivecity = tripJp.getArrivecity();
-					this.daytotal = (int) ((enddate.getTime() - startdate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
-					tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
-					this.daynum = 1;
-				}
-
-			}
-			Integer oneormore = tripJp.getOneormore();
-
-			List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
-			if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
-
-				if (oneormore == 1) {
-					this.daytotal = (int) ((dateplanJpList.get(dateplanJpList.size() - 1).getStartdate().getTime() - dateplanJpList
-							.get(0).getStartdate().getTime()) / (24 * 60 * 60 * 1000)) + 1;
-					for (int i = 0; i < dateplanJpList.size(); i++) {
-						if (i < dateplanJpList.size() - 1) {
-
-							startdate = dateplanJpList.get(i).getStartdate();
-							enddate = dateplanJpList.get(i + 1).getStartdate();
-							arrivecity = dateplanJpList.get(i).getArrivecity();
-							if (i < dateplanJpList.size() - 2) {
-								Calendar cal = Calendar.getInstance();
-								cal.setTime(enddate);
-								cal.add(Calendar.DATE, -1);
-								enddate = cal.getTime();
+							if (tripJp.getOneormore() == 0) {
+								startdate = tripJp.getStartdate();
+								enddate = tripJp.getReturndate();
+								arrivecity = tripJp.getArrivecity();
+								this.daytotal = (int) ((enddate.getTime() - startdate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+								tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+								this.daynum = 1;
 							}
-							tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
-						}
-					}
-					this.daynum = 1;
-				}
-			}
-			/*	if (!Util.isEmpty(tripplanJpList) && tripplanJpList.size() > 0) {
-				
-			} else {
-				Calendar cNow = Calendar.getInstance();
-				 Calendar cReturnDate = Calendar.getInstance();
-				 cNow.setTime(startdate);
-				 cReturnDate.setTime(enddate);
-				 
-				 long todayMs = cNow.getTimeInMillis();
-				 long returnMs = cReturnDate.getTimeInMillis();
-				 long intervalMs = todayMs - returnMs;*/
 
-			order.setTripplanJpList(tripplanJpListnew);
+						}
+						Integer oneormore = tripJp.getOneormore();
+
+						List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
+						if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
+
+							if (oneormore == 1) {
+								this.daytotal = (int) ((dateplanJpList.get(dateplanJpList.size() - 1).getStartdate()
+										.getTime() - dateplanJpList.get(0).getStartdate().getTime()) / (24 * 60 * 60 * 1000)) + 1;
+								for (int i = 0; i < dateplanJpList.size(); i++) {
+									if (i < dateplanJpList.size() - 1) {
+
+										startdate = dateplanJpList.get(i).getStartdate();
+										enddate = dateplanJpList.get(i + 1).getStartdate();
+										arrivecity = dateplanJpList.get(i).getArrivecity();
+										if (i < dateplanJpList.size() - 2) {
+											Calendar cal = Calendar.getInstance();
+											cal.setTime(enddate);
+											cal.add(Calendar.DATE, -1);
+											enddate = cal.getTime();
+										}
+										tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+									}
+								}
+								this.daynum = 1;
+							}
+						}
+						/*	if (!Util.isEmpty(tripplanJpList) && tripplanJpList.size() > 0) {
+							
+						} else {
+							Calendar cNow = Calendar.getInstance();
+							 Calendar cReturnDate = Calendar.getInstance();
+							 cNow.setTime(startdate);
+							 cReturnDate.setTime(enddate);
+							 
+							 long todayMs = cNow.getTimeInMillis();
+							 long returnMs = cReturnDate.getTimeInMillis();
+							 long intervalMs = todayMs - returnMs;*/
+
+						order.setTripplanJpList(tripplanJpListnew);
+					}
+				}
+			} else if (oneormore2 == 1) {
+
+				List<NewDateplanJpEntity> query = dbDao.query(NewDateplanJpEntity.class,
+						Cnd.where("trip_jp_id", "=", tripJp1.getId()), null);
+				if (!Util.isEmpty(query) && query.size() > 0) {
+					if (!Util.isEmpty(query.get(0).getStartdate())) {
+						List<NewTripplanJpEntity> query1 = dbDao.query(NewTripplanJpEntity.class,
+								Cnd.where("order_jp_id", "=", order.getId()), null);
+						if (query1.size() > 0) {
+
+						} else {
+							Date startdate = null;
+							Date enddate = null;
+							String arrivecity = null;
+							NewTripJpEntity tripJp = order.getTripJp();
+							List<NewTripplanJpEntity> tripplanJpList = order.getTripplanJpList();
+							List<NewTripplanJpEntity> tripplanJpListnew = Lists.newArrayList();
+
+							if (!Util.isEmpty(tripJp)) {
+
+								if (tripJp.getOneormore() == 0) {
+									startdate = tripJp.getStartdate();
+									enddate = tripJp.getReturndate();
+									arrivecity = tripJp.getArrivecity();
+									this.daytotal = (int) ((enddate.getTime() - startdate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+									tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+									this.daynum = 1;
+								}
+
+							}
+							Integer oneormore = tripJp.getOneormore();
+
+							List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
+							if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
+
+								if (oneormore == 1) {
+									this.daytotal = (int) ((dateplanJpList.get(dateplanJpList.size() - 1)
+											.getStartdate().getTime() - dateplanJpList.get(0).getStartdate().getTime()) / (24 * 60 * 60 * 1000)) + 1;
+									for (int i = 0; i < dateplanJpList.size(); i++) {
+										if (i < dateplanJpList.size() - 1) {
+
+											startdate = dateplanJpList.get(i).getStartdate();
+											enddate = dateplanJpList.get(i + 1).getStartdate();
+											arrivecity = dateplanJpList.get(i).getArrivecity();
+											if (i < dateplanJpList.size() - 2) {
+												Calendar cal = Calendar.getInstance();
+												cal.setTime(enddate);
+												cal.add(Calendar.DATE, -1);
+												enddate = cal.getTime();
+											}
+											tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+										}
+									}
+									this.daynum = 1;
+								}
+							}
+							/*	if (!Util.isEmpty(tripplanJpList) && tripplanJpList.size() > 0) {
+								
+							} else {
+								Calendar cNow = Calendar.getInstance();
+								 Calendar cReturnDate = Calendar.getInstance();
+								 cNow.setTime(startdate);
+								 cReturnDate.setTime(enddate);
+								 
+								 long todayMs = cNow.getTimeInMillis();
+								 long returnMs = cReturnDate.getTimeInMillis();
+								 long intervalMs = todayMs - returnMs;*/
+
+							order.setTripplanJpList(tripplanJpListnew);
+						}
+
+					}
+				}
+
+			}
+
 		}
+
 		return order;
 	}
 
@@ -1543,4 +1759,45 @@ public class NewOrderJaPanController {
 		return query;
 		/*	return query;*/
 	}
+
+	@RequestMapping(value = "downloadselect")
+	@ResponseBody
+	public Object downloadselect(String orderid) {
+		if ("" == orderid || null == orderid || "null".equals(orderid)) {
+			orderid = 0 + "";
+		}
+		long orderId = Long.valueOf(orderid);
+		NewOrderJpEntity order = dbDao.fetch(NewOrderJpEntity.class, orderId);
+		return order;
+	}
+
+	@RequestMapping(value = "downloadselectsave")
+	@ResponseBody
+	public Object downloadselectsave(@RequestBody NewOrderJpEntity order) {
+		if (!Util.isEmpty(order)) {
+			dbDao.update(order, null);
+		}
+		return ResultObject.success("保存成功");
+	}
+
+	@RequestMapping(value = "downloadselectfind")
+	@ResponseBody
+	public Object downloadselectfind(int a, final HttpSession session) {
+		List<NewComeBabyJpEntity> comeList = Lists.newArrayList();
+		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		if (!Util.isEmpty(company)) {
+			long comId = company.getComId();
+			if (a == 1) {
+				comeList = dbDao.query(NewComeBabyJpEntity.class,
+						Cnd.where("comType", "=", CompanyTypeEnum.send.intKey()).and("comId", "=", comId), null);
+
+			} else if (a == 2) {
+				comeList = dbDao.query(NewComeBabyJpEntity.class,
+						Cnd.where("comType", "=", CompanyTypeEnum.land.intKey()).and("comId", "=", comId), null);
+
+			}
+		}
+		return comeList;
+	}
+
 }

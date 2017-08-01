@@ -33,24 +33,34 @@ public class Flight {
 	@org.nutz.dao.entity.annotation.Id
 	private Integer id;
 	@Column(name = "`from`")
+	@org.nutz.dao.entity.annotation.Column("from")
 	private String from;//起飞机场
 	@Column(name = "`to`")
+	@org.nutz.dao.entity.annotation.Column("to")
 	private String to;//降落机场
+	@org.nutz.dao.entity.annotation.Column("company")
 	private String company;//航空公司
+	@org.nutz.dao.entity.annotation.Column("line")
 	private String line;//航班号
 	@Temporal(TemporalType.TIME)
 	@JSONField(format = "HH:mm")
+	@org.nutz.dao.entity.annotation.Column("departure")
 	private Date departure;//起飞时间
 	@JSONField(format = "HH:mm")
 	@Temporal(TemporalType.TIME)
+	@org.nutz.dao.entity.annotation.Column("landing")
 	private Date landing;//着陆时间
 	@Column(name = "from_terminal")
+	@org.nutz.dao.entity.annotation.Column("from_terminal")
 	private String fromTerminal;//起飞航站楼
 	@Column(name = "to_terminal")
+	@org.nutz.dao.entity.annotation.Column("to_terminal")
 	private String toTerminal;//降落航站楼
 	@Column(name = "from_city")
+	@org.nutz.dao.entity.annotation.Column("from_city")
 	private String fromCity;//起飞城市
 	@Column(name = "to_city")
+	@org.nutz.dao.entity.annotation.Column("to_city")
 	private String toCity;//降落城市
 
 	public Integer getId() {
