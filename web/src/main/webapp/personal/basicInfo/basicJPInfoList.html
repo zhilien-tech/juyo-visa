@@ -31,7 +31,7 @@
     	.input-group{width:100%;}/*由于删掉小灯泡 宽度出现问题 此处理设置所有input、select等宽度等于父类*/
     </style>
 </head>
-<body class="clear-scroll">
+<body id="aaaa" class="clear-scroll">
 	<!--搜索条件 模块-->
     <div class="Search">
       <div  class="col-xs-12">
@@ -122,8 +122,8 @@
                      <div class="form-group">
                          <label for="old_usrname_cn">曾用姓:<span style="color: red">*</span></label>
                          <div class='input-group'>
-                             <input id="old_usrname_cn" data-bind="value:customer.oldname.oldxing"
-                                    class="k-textbox" style="width: 100%;"/>
+                             <input id="old_usrname_cn" data-bind="value:customer.oldnameJp.oldxing"
+                                    class="k-textbox" style="width: 100%;" oldname="oldname" name="oldxing"/>
                              <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                          </div>
                      </div>
@@ -132,8 +132,8 @@
                      <div class="form-group">
                          <label for="old_usrname_en">拼音:<span style="color: red">*</span></label>
                          <div class='input-group'>
-                             <input id="old_usrname_en" data-bind="value:customer.oldname.oldxingen"
-                                    class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
+                             <input id="old_usrname_en" data-bind="value:customer.oldnameJp.oldxingen"
+                                    class="k-textbox" style="width: 100%;text-transform:uppercase;" oldname="oldname" name="oldxingen"/>
                              <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                          </div>
                      </div>
@@ -143,8 +143,8 @@
                      <div class="form-group">
                          <label for="old_given_name_cn">曾用名:<span style="color: red">*</span></label>
                          <div class='input-group'>
-                             <input id="old_given_name_cn" data-bind="value:customer.oldname.oldname"
-                                    class="k-textbox" style="width: 100%;"/>
+                             <input id="old_given_name_cn" data-bind="value:customer.oldnameJp.oldname"
+                                    class="k-textbox" style="width: 100%;" oldname="oldname" name="oldname"/>
                              <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                          </div>
                      </div>
@@ -153,8 +153,8 @@
                      <div class="form-group">
                          <label for="old_given_name_en">拼音:<span style="color: red">*</span></label>
                          <div class='input-group'>
-                             <input id="old_given_name_en" data-bind="value:customer.oldname.oldnameen"
-                                    class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
+                             <input id="old_given_name_en" data-bind="value:customer.oldnameJp.oldnameen"
+                                    class="k-textbox" style="width: 100%;text-transform:uppercase;" oldname="oldname" name="oldnameen"/>
                              <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                          </div>
                      </div>
@@ -548,18 +548,22 @@
            <div class="row">
              <div class="col-xs-4">
                 <div class="form-group">
-                    <label for="last_name_cn">出生日期:</label>
+                    <label for="last_name_cn">出生日期:<span style="color: red">*</span></label>
                     <div class='input-group'>
-                       <input id="birthDate" style="width: 100%;" data-role="datepicker" data-bind="value:customer.birthday,events:{change:onDateChange}"/>
+                       <input id="birthDate" style="width: 100%;" data-role="datepicker" 
+                       data-bind="value:customer.birthday,events:{change:onDateChange}"
+                       required validationMessage="出生日期不能为空" name="birthday" />
                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
              </div>
               <div class="col-xs-8">
                 <div class="form-group">
-                    <label for="last_name_cn">身份证号:</label>
+                    <label for="last_name_cn">身份证号:<span style="color: red">*</span></label>
                     <div class='input-group'>
-                      <input id="" type="text" data-bind="value:customer.idcard" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="" type="text" data-bind="value:customer.idcard" class="k-textbox k-state-disabled" 
+                      required validationMessage="身份证号不能为空" name="idcard"
+                      style="width: 100%;" disabled/>
                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
@@ -628,13 +632,13 @@
            <div class="row">
              <div class="col-xs-12">
                 <div class="form-group">
-                   <label for="usa_authenticator_code" class="check-box-label">日本纳税人认证码:</label>
-                   <input id='usa_authenticator_code' data-bind="checked:usaAuthenticatorCode" class="mui-switch" type="checkbox"/>
+                   <label for="jp_authenticator_code" class="check-box-label">日本纳税人认证码:</label>
+                   <input id='jp_authenticator_code' data-bind="checked:jpAuthenticatorCode" class="mui-switch" type="checkbox"/>
                 </div>
              </div>
            </div>
            <!-- 日本纳税人认证码 显示/隐藏 -->
-           <div class="row usa_authenticator_code" data-bind="visible:usaAuthenticatorCode">
+           <div class="row jp_authenticator_code" data-bind="visible:jpAuthenticatorCode">
            	 <div class="col-xs-12">
                 <div class="form-group">
                     <label for="authenticator_address">家庭地址:</label>
@@ -675,8 +679,18 @@
                 <div class="form-group">
                     <label for="authenticator_country">国家:</label>
                     <div class='input-group'>
-                      <input id="authenticator_country" type="text" data-bind="value:customer.taxpayerauthenticat.country" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <!-- <input id="authenticator_country" type="text" data-bind="value:customer.taxpayerauthenticat.country" class="k-textbox k-state-disabled" style="width: 100%;" disabled/> -->
                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
+                      <select id="home_nationality"
+                                data-role="dropdownlist"
+                                data-filter="startswith"
+                                data-suggest="true"
+                                data-auto-bind="true"
+                                data-value-primitive="true"
+                                data-text-field="text"
+                                data-value-field="value"
+                                data-bind="value:customer.taxpayerauthenticat.country,source:countries"
+                                style="width: 100%;" ></select>
                     </div>
                 </div>
              </div>
@@ -772,8 +786,18 @@
                 <div class="form-group">
                     <label for="issuingCountry">签发国家:</label>
                     <div class='input-group'>
-                      <input id="issuingCountry" type="text" data-bind="value:customer.commhomeaddress.issuingCountry" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <!-- <input id="issuingCountry" type="text" data-bind="value:customer.commhomeaddress.issuingCountry" class="k-textbox k-state-disabled" style="width: 100%;" disabled/> -->
                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
+                    	<select id="home_commhomeaddress_nationality"
+                                data-role="dropdownlist"
+                                data-filter="startswith"
+                                data-suggest="true"
+                                data-auto-bind="true"
+                                data-value-primitive="true"
+                                data-text-field="text"
+                                data-value-field="value"
+                                data-bind="value:customer.commhomeaddress.issuingCountry,source:countries"
+                                style="width: 100%;" ></select>
                     </div>
                 </div>
              </div>

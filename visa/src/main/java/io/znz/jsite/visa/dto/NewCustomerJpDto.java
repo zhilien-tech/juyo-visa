@@ -102,8 +102,6 @@ public class NewCustomerJpDto {
 	private String countrynum;
 	//出生日期
 	private Date birthdate;
-	//签发机关
-	private String visaoffice;
 	//护照本号码
 	private String passportbooknum;
 	//护照机读码
@@ -119,7 +117,7 @@ public class NewCustomerJpDto {
 
 	private NewOldpassportJpEntity passportlose;
 
-	private NewOldnameJpEntity oldname;
+	private NewOldnameJpEntity oldnameJp;
 
 	private List<NewOrthercountryJpEntity> orthercountrylist;
 

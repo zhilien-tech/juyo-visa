@@ -29,10 +29,10 @@ var countries = new kendo.data.DataSource({
     }),
     dafaults = {
 			gender:0,
-			birthcountry:"CHIN",
-			nowcountry:"CHIN",
+			birthcountry:"CHN",
+			nowcountry:"CHN",
 			passportlose:{
-				sendcountry:"CHIN"
+				sendcountry:"CHN"
 			},
 			oldname:{},
 			orthercountrylist:[],
@@ -238,8 +238,8 @@ kendo.bind($(document.body), viewModel);
 //丢过护照
 $("#pp_lost").change(function () {
 	///console.log("==1==="+JSON.stringify(viewModel.customer.passportlose));
-	var a={"sendcountry":"CHIN","customerid":0,"id":0,"passport":"","reason":"","reasonen":""};
-	var b={"sendcountry":"CHIN","customerid":0,"id":-1,"passport":"","reason":"","reasonen":""};
+	var a={"sendcountry":"CHN","customerid":0,"id":0,"passport":"","reason":"","reasonen":""};
+	var b={"sendcountry":"CHN","customerid":0,"id":-1,"passport":"","reason":"","reasonen":""};
 	viewModel.set("customer.passportlose", $(this).is(':checked') ? a : b);
 	///console.log("===2=="+JSON.stringify(viewModel.customer.passportlose));
 });
@@ -549,20 +549,20 @@ $(function () {
         	var birthcountry=viewModel.get("customer.birthcountry");
 			if(birthcountry!=null&&birthcountry!=''){
 			}else{
-				viewModel.set("customer.birthcountry","CHIN");
+				viewModel.set("customer.birthcountry","CHN");
 				
 			}
 			var nowcountry=viewModel.get("customer.nowcountry");
 			if(nowcountry!=null&&nowcountry!=''){
 			}else{
-				viewModel.set("customer.nowcountry","CHIN");
+				viewModel.set("customer.nowcountry","CHN");
 				
 			}
 			var sendcountry=viewModel.get("customer.passportlose.sendcountry");
 			if(sendcountry!=null&&sendcountry!=''){
 			}else{
 				
-				viewModel.set("customer.passportlose.sendcountry","CHIN");
+				viewModel.set("customer.passportlose.sendcountry","CHN");
 			}
 			
 			var photoname= "<a id='downloadA' href='#'>"

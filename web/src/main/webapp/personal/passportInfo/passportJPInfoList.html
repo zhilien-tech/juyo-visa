@@ -29,7 +29,7 @@
     	.input-group{width:100%;}/*由于删掉小灯泡 宽度出现问题 此处理设置所有input、select等宽度等于父类*/
     </style>
 </head>
-<body class="clear-scroll">
+<body id="aaaa" class="clear-scroll">
 	<!--搜索条件 模块-->
     <div class="Search">
       <div  class="col-xs-12">
@@ -59,8 +59,8 @@
            <div class="row">
              <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="last_name_cn">类型:</label>
-                    <!-- <div class='input-group'>
+                    <label for="last_name_cn">护照类型:</label>
+                    <div class='input-group'>
                        <select id="passporttype" style="width: 100%;"
                                data-role="dropdownlist"
                                data-filter="startswith"
@@ -72,11 +72,11 @@
                                data-bind="value:customer.passporttype,source:passportTypeEnum" >
                        </select>
                        <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
-                    </div> -->
-                    <div class='input-group'>
-                      <input id="passportType" type="text" data-bind="" value="旅游护照" class="k-textbox k-state-disabled" style="width: 100%;" disabled />
-                      <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
+                    <!-- <div class='input-group'>
+                      <input id="passportType" type="text" data-bind="" value="旅游护照" class="k-textbox k-state-disabled" style="width: 100%;" disabled />
+                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    </div> -->
                 </div>
              </div>
              <div class="col-xs-6">
@@ -106,7 +106,9 @@
             <div class="form-group">
                 <label for="ir_last_name_cn">中文姓:<span style="color: red">*</span></label>
                 <div class='input-group'>
-                    <input id="ir_last_name_cn" data-bind="value:customer.chinesexing" class="k-textbox" style="width: 100%;"/>
+                    <input id="ir_last_name_cn" data-bind="value:customer.chinesexing" 
+                    required validationMessage="中文姓不能为空" name="chinesexing"
+                    class="k-textbox" style="width: 100%;"/>
                     <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                 </div>
             </div>
@@ -115,8 +117,9 @@
 	            <div class="form-group">
 	                <label for="ir_last_name_en">拼音:<span style="color: red">*</span></label>
 	                <div class='input-group'>
-	                    <input id="ir_last_name_en" data-bind="value:customer.chinesexingen" class="k-textbox"
-	                           style="width: 100%;text-transform:uppercase;"/>
+	                    <input id="ir_last_name_en" data-bind="value:customer.chinesexingen"
+	                    required validationMessage="拼音不能为空" name="chinesexingen"
+	                     class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
 	                    <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                </div>
 	            </div>
@@ -126,6 +129,7 @@
                 <label for="ir_first_name_cn">中文名:<span style="color: red">*</span></label>
                 <div class='input-group'>
                     <input id="ir_first_name_cn" data-bind="value:customer.chinesename"
+                    required validationMessage="中文名不能为空" name="chinesename"
                            class="k-textbox" style="width: 100%;"/>
                     <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                 </div>
@@ -136,6 +140,7 @@
 	                <label for="ir_first_name_en">拼音:<span style="color: red">*</span></label>
 	                <div class='input-group'>
 	                    <input id="ir_first_name_en" data-bind="value:customer.chinesenameen"
+	                    required validationMessage="拼音不能为空" name="chinesenameen"
 	                           class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
 	                    <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                </div>
@@ -143,9 +148,11 @@
 	        </div>
              <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="last_name_cn">护照号:</label>
+                    <label for="last_name_cn">护照号码:</label>
                     <div class='input-group'>
-                      <input id="passport" type="text" data-bind="value:customer.passport" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="passport" type="text" data-bind="value:customer.passport" 
+                      required validationMessage="公司全称不能为空" name="passport"
+                      class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
@@ -180,11 +187,27 @@
            <!--性别/国籍-->
            <div class="row">
              <div class="col-xs-6">
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="last_name_cn">国籍:</label>
                     <div class='input-group'>
                       <input id="nationality" type="text" data-bind="value:customer.birthcountry,source:countries" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
-                      <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
+                      <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                    </div>
+                </div> -->
+                <div class="form-group">
+                    <label for="home_nationality">国籍:<span style="color: red">*</span></label>
+                    <div class='input-group'><!-- required validationMessage="办理人国籍不能为空" name="nowcountry" -->
+                        <select id="home_nationality"
+                                data-role="dropdownlist"
+                                data-filter="startswith"
+                                data-suggest="true"
+                                data-auto-bind="true"
+                                data-value-primitive="true"
+                                data-text-field="text"
+                                data-value-field="value"
+                                data-bind="value:customer.docountry,source:countries"
+                                style="width: 100%;" ></select>
+                        <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                     </div>
                 </div>
              </div>
@@ -248,7 +271,8 @@
                 <div class="form-group">
                     <label for="last_name_cn">签发机关:</label>
                     <div class='input-group'>
-                      <input id="signOrganization" type="text" data-bind="value:customer.visaoffice" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="signOrganization" type="text" data-bind="value:customer.passportsendoffice" 
+                      class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
