@@ -430,39 +430,39 @@ function ordersave(){
 				 data: JSON.stringify(viewModel.customer),
 				 success: function (result) {
 					 if(indexnew!=null){
-							
 							layer.close(indexnew);
-							}
-					 
-					 console.log(result.code);
+					 }
+					 //console.log(result.code);
 					 if(result.code=="SUCCESS"){
 						 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						 //$.layer.closeAll();
 						 parent.layer.close(index);
 						 window.parent.successCallback('1');
-						 
 					 }
 				 }
 			 });
 	}else{
 		   //验证————————————————————————————————————
 	    $('.k-tooltip-validation').each(function(){
-	    	var verificationText=$(this).text().trim();//获取验证的文字信息
-	    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
-	    	labelVal = labelVal.split(":");
-	    	labelVal.pop();
-	    	labelVal = labelVal.join(":");//截取 :之前的信息
-	    	var person=new Object();
-	    	person.text=labelVal;
-	    	person.error="";
-	    	if(verificationText.indexOf("不能为空")>0){
-	    		emptyNum.push(person);
-	    	}else{
-	    		errorNum.push(person);
-	    		
-	    	}
-	    	//console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
-	    });
+	    	var none=$(this).css("display")=="none";//获取 判断验证提示隐藏
+		    	if(!none){
+		    		var verificationText=$(this).text().trim();//获取验证的文字信息
+			    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
+			    	labelVal = labelVal.split(":");
+			    	labelVal.pop();
+			    	labelVal = labelVal.join(":");//截取 :之前的信息
+			    	var person=new Object();
+			    	person.text=labelVal;
+			    	person.error="";
+			    	if(verificationText.indexOf("不能为空")>0){
+			    		emptyNum.push(person);
+			    	}else{
+			    		errorNum.push(person);
+			    		
+			    	}
+			    	//console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
+		    	}
+	    	});
 	    //end 验证————————————————————————————————
 		
 		
@@ -487,6 +487,8 @@ function ordersave(){
 		//用完清空
 		emptyNum.splice(0,emptyNum.length);
 		errorNum.splice(0,errorNum.length);
+		alert(JSON.stringify(emptyNum));
+		alert(JSON.stringify(errorNum));
 	}
 }
 

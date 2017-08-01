@@ -158,7 +158,7 @@ function regCmd(command) {
                     break;
                 case "download":
                 	 if (!(data = select(e))) return;
-                     $.fileDownload("/visa/neworderjp/export?orderid=" + data.id, {
+                   /*  $.fileDownload("/visa/neworderjp/export?orderid=" + data.id, {
                          successCallback: function (url) {
                              $.layer.alert('文件不存在 :' + url);
                          },
@@ -169,7 +169,18 @@ function regCmd(command) {
                              var json = JSON.parse(html);
                              $.layer.alert(json.msg);
                          }
-                     });
+                     });*/
+                	 layer.open({
+         	            type: 2,
+         	            title: '下载',
+         	            area: ['450px', '300px'],
+         	            shadeClose: true,
+         	            content: '/order/download.html?cid='+data.id,
+         	           end: function(){//添加完页面点击返回的时候自动加载表格数据
+         	    	    	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+         	    			parent.layer.close(index);
+         	    	    }
+         	        });
                      break;
              
                 default:
@@ -370,22 +381,18 @@ function successCallback(id){
 		  layer.msg("修改成功",{time: 2000});
 	  }else if(id == '3'){
 		  layer.msg("操作成功",{time: 2000});
-	  }
+	  }else if(id == '4'){
+	layer.msg("准备下载,请稍候",{time: 2000});
+}
   }
 //页面加载时加载日历
 $(function(){
 	$("#start_time").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});
 	$("#end_time").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});
 	// 点击 下载 按钮时 触发
-	$(document).on('click','.k-grid-download',function(){
-			layer.open({
-	            type: 2,
-	            title: '下载',
-	            area: ['450px', '300px'],
-	            shadeClose: true,
-	            content: '/order/download.html'
-	        });
-	});
+/*	$(document).on('click','.k-grid-download',function(){
+			
+	});*/
 });
 /*//点击触发日历
 $().click(function(

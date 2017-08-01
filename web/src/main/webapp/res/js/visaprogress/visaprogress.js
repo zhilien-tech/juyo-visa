@@ -37,7 +37,7 @@ $(function(){
 
 function intopersion(country){
 	if(tourist==1&&country=='usa'){
-		window.location.href="/myvisa/transactVisa/visaNationPersonal.html?country="+escape(JSON.stringify(usa))+"&countrystatus=0&tourist=1&logintype=5&orderId="+$.queryString('orderId');
+		window.location.href="/myvisa/transactVisa/visaNationPersonal.html?countrystatus=0&tourist=1&logintype=5&orderId="+$.queryString('orderId');
 		return;
 	}
 	if(country=='japan'){
