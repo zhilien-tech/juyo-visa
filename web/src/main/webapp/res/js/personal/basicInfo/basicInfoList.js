@@ -148,7 +148,7 @@ $(function(){
 	country = JSON.parse(unescape($.queryString("country")));
     countrystatus=$.queryString("countrystatus");
 	/*-------------------------小灯泡 效果--------------------------*/
-	firstPart = JSON.parse(unescape($.queryString("firstPart")));//获取 错误 信息
+	/*firstPart = JSON.parse(unescape($.queryString("firstPart")));//获取 错误 信息
 	secondPart = JSON.parse(unescape($.queryString("secondPart")));//获取 错误 信息
 	thirdPart = JSON.parse(unescape($.queryString("thirdPart")));//获取 错误 信息
 	$('label').each(function(){
@@ -166,7 +166,7 @@ $(function(){
 					}
 				}
 			}
-	});
+	});*/
 	/*-------------------------end 小灯泡 效果--------------------------*/
 });
 /*------------------------------------------------container---------------------------------------------------*/
@@ -375,7 +375,8 @@ var viewModel = kendo.observable({
     },
     // 曾用名
     oldNameEnable: function () {
-    	//console.log("曾用名:_____"+JSON.stringify(viewModel.get("customer.oldname")));
+    	var oldnames = JSON.stringify(viewModel.get("customer.oldnameJp.oldname"));
+    	console.log("曾用名:_____"+oldnames);
     	var state = viewModel.get("customer.oldname.oldname") 
     				|| viewModel.get("customer.oldname.oldnameen")
     				|| viewModel.get("customer.oldname.oldxing")

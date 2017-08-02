@@ -183,6 +183,7 @@ var countries = new kendo.data.DataSource({
 		"customer.recentlyintojpJpList":{}
 	}
 ;
+
 //护照类型
 var passportTypeEnum=[
     {text:"旅游护照",value:1}
@@ -323,6 +324,8 @@ var viewModel = kendo.observable({
     		oldxingens = oldxingens.replace(/\s+/g,"");
     	}
     	console.log(oldnames);*/
+    	var oldnames = JSON.stringify(viewModel.get("customer.oldnameJp.oldname"));
+    	console.log("曾用名:_____"+oldnames);
     	var state = viewModel.get("customer.oldnameJp.oldname")
 		|| viewModel.get("customer.oldnameJp.oldnameen")
 		|| viewModel.get("customer.oldnameJp.oldxing")
