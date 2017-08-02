@@ -1032,7 +1032,7 @@
 <!-- 主申请人 模板 -->
 <script id="tpl_customer" type="text/html">
 <li class="k-item k-state-default k-first k-last k-state-highlight">
-    <span class="k-link span-Title" id="ismainproposer_#:data.id#">#:data.ismainproposer?'主申请人':'副申请人'#(#:data.xing+data.name#)<span class="k-icon k-i-arrow-60-down k-panelbar-collapse"></span></span>
+    <span class="k-link span-Title" id="ismainproposer_#:data.id#">#:data.isMainProposer?'主申请人':'副申请人'#(#:data.xing+data.name#)<span class="k-icon k-i-arrow-60-down k-panelbar-collapse"></span></span>
     <div class="container-fluid k-content" style="padding-top: 15px;padding-bottom: 15px;">
         <div class="row">
             <div class="col-xs-3">
@@ -1064,7 +1064,7 @@
                 <div class="form-group">
                     <label>主申请人:</label>
                     <div class="onoffswitch">
-                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main_#:data.uid#" data-bind="checked:ismainproposer,click:changeismainproposer">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main_#:data.uid#" data-bind="checked:isMainProposer,click:changeismainproposer">
                         <label class="onoffswitch-label" for="main_#:data.uid#">
                             <span class="onoffswitch-inner"></span>
                             <span class="onoffswitch-switch"></span>
@@ -1073,7 +1073,7 @@
                 </div>
             </div>
         </div>
-        <div class="row" data-bind="invisible:ismainproposer">
+        <div class="row" data-bind="invisible:isMainProposer">
             <div class="col-xs-6">
                 <div class="form-group">
                     <label>关联的主申请人:</label>
