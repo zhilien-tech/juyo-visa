@@ -4,6 +4,19 @@ var pathName =  window.document.location.pathname;
 var pos = curWwwPath.indexOf(pathName);  
 var localhostPaht = curWwwPath.substring(0,pos);  
 var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+//获取系统当前日期
+var myDate = new Date();
+var year = myDate.getFullYear();//获取完整的年份(4位,1970-????)
+var month = myDate.getMonth();//获取当前月份(0-11,0代表1月)
+var day = myDate.getDate();//获取当前日(1-31)
+var seperator = "-";//日期分隔符
+if (month >= 1 && month <= 9) {
+month = "0" + month;
+}
+if (day >= 0 && day <= 9) {
+	day = "0" + day;
+}
+var currentdate = year+seperator+month+seperator+day;
 //页面加载时回显护照信息
 window.onload = function(){
 	 $.getJSON(localhostPaht +'/visa/passportinfo/listJPPassport', function (resp) {
@@ -17,6 +30,24 @@ window.onload = function(){
 		viewModel.set("customer.countrynum", "CHN");
 		viewModel.set("customer.passportsendoffice", "出入境管理局");
      	viewModel.set("customer.passporttype", 1);
+     	//得到当前用户签证有效日期
+     	var passporteffectdate = viewModel.get("customer.passporteffectdate");
+     	if(passporteffectdate != "" && passporteffectdate != null && passporteffectdate != undefined){
+     		var passporteffectdate=passporteffectdate.substring(0,10);
+     	}
+     	
+     	//日期差
+		passporteffectdate = passporteffectdate.split(seperator);
+		currentdate = currentdate.split(seperator);
+		var strDateS = new Date(passporteffectdate[0] + "/" + passporteffectdate[1] + "/" + passporteffectdate[2]);
+		//alert(strDateS);
+		var strDateE = new Date(currentdate[0] + "/" + currentdate[1] + "/" + currentdate[2]);
+		var intDay = (strDateE-strDateS)/(1000*3600*24);
+//		alert(intDay);
+     	//当前系统时间和签证有效日期对比
+     	/*if(){
+     		
+     	}*/
      	//预览 按钮
    	   /*var phoneurl=viewModel.get("customer.phoneurl");
     	 if(phoneurl!=null&&phoneurl!=''){
@@ -46,16 +77,22 @@ $(function(){
 	if(aa == null || aa == "" || aa == undefined){//表示不是从签证进度跳转而来
 		$("#nextStepBtn").hide();//隐藏下一步按钮
 		$("#back").hide();//隐藏返回按钮
-		$("#gender").kendoDropDownList({enable:false});//性别 状态 下拉框初始化
+		$("#gender").kendoDropDownList({enable:false});//性别状态下拉框不可编辑
+		$("#passporttype").kendoDropDownList({enable:false});//护照类型下拉框不可编辑
+		$("#home_docountry").kendoDropDownList({enable:false});//国籍下拉框不可编辑
 		$("#birthDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//出生日期
 		$("#signedDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//签发日期
 		$("#signedDate").data("kendoDatePicker").enable(false);//签发日期 不可编辑
 		$("#validDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//有效期至
 		$("#validDate").data("kendoDatePicker").enable(false);//有效期至 不可编辑 
+		$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
+		$(".input-group input").attr("disabled");//添加 不可编辑的属性
 		//操作 编辑 按钮时
 		$(".editBtn").click(function(){
 			$(this).addClass("hide");//编辑 按钮隐藏
 			$("#gender").data("kendoDropDownList").enable(true);//性别 状态为 可编辑
+			$("#passporttype").data("kendoDropDownList").enable(true);//护照类型下拉框可编辑
+			$("#home_docountry").data("kendoDropDownList").enable(true);//国籍下拉框可编辑
 			$(".cancelBtn").removeClass("hide");//取消 按钮显示
 			$(".saveBtn").removeClass("hide");//保存 按钮显示
 			$(".input-group .k-textbox").removeClass("k-state-disabled");//删除 不可编辑的边框颜色
@@ -73,6 +110,9 @@ $(function(){
 			$(".input-group input").attr("disabled");//添加 不可编辑的属性
 			$("#signedDate").data("kendoDatePicker").enable(false);//签发日期 不可编辑
 			$("#validDate").data("kendoDatePicker").enable(false);//有效期至 不可编辑 
+			$("#passporttype").kendoDropDownList({enable:false});//护照类型下拉框不可编辑
+			$("#home_docountry").kendoDropDownList({enable:false});//国籍下拉框不可编辑
+			$("#gender").kendoDropDownList({enable:false});//性别状态下拉框不可编辑
 		});
 		
 		//操作 保存 按钮时

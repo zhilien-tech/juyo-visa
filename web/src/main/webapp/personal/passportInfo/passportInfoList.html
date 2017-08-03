@@ -144,7 +144,7 @@
 	        </div>
              <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="last_name_cn">护照号:</label>
+                    <label for="last_name_cn">护照号码:<span style="color: red">*</label>
                     <div class='input-group'>
                       <input id="passport" type="text" data-bind="value:customer.passport" required validationMessage="护照号不能为空" name="passport" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
@@ -190,8 +190,18 @@
                 <div class="form-group">
                     <label for="last_name_cn">国籍:</label>
                     <div class='input-group'>
-                      <input id="nationality" type="text" data-bind="value:customer.birthcountry,source:countries" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <!-- <input id="nationality" type="text" data-bind="value:customer.birthcountry,source:countries" class="k-textbox k-state-disabled" style="width: 100%;" disabled/> -->
                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
+                      <select id="home_nationality"
+                                data-role="dropdownlist"
+                                data-filter="startswith"
+                                data-suggest="true"
+                                data-auto-bind="true"
+                                data-value-primitive="true"
+                                data-text-field="text"
+                                data-value-field="value"
+                                data-bind="value:customer.nowcountry,source:countries"
+                                style="width: 100%;" ></select>
                     </div>
                 </div>
              </div>

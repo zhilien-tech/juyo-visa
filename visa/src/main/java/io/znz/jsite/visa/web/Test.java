@@ -6,6 +6,10 @@
 
 package io.znz.jsite.visa.web;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 /**
  * TODO(这里用一句话描述这个类的作用)
  * <p>
@@ -20,8 +24,11 @@ public class Test {
 	private static final int SALT_SIZE = 8; //盐长度
 
 	public static void main(String[] args) {
-		int a = 5;
-		int b = (int) Math.ceil(a / 2.0);
-		System.out.println(b);
+		List a = Lists.newArrayList();
+		while (true) {
+			Test t = new Test();
+			a.add(t);
+			System.out.println(a.toString());
+		}
 	}
 }

@@ -666,8 +666,18 @@
                 <div class="form-group">
                     <label for="authenticator_country">国家:</label>
                     <div class='input-group'>
-                      <input id="authenticator_country" type="text" data-bind="value:customer.taxpayerauthenticat.country" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <!-- <input id="authenticator_country" type="text" data-bind="value:customer.taxpayerauthenticat.country" class="k-textbox k-state-disabled" style="width: 100%;" disabled/> -->
                       <!-- <span class=''><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
+                      <select id=authenticator_country
+                                data-role="dropdownlist"
+                                data-filter="startswith"
+                                data-suggest="true"
+                                data-auto-bind="true"
+                                data-value-primitive="true"
+                                data-text-field="text"
+                                data-value-field="value"
+                                data-bind="value:customer.taxpayerauthenticat.country,source:countries"
+                                style="width: 100%;" ></select>
                     </div>
                 </div>
              </div>
@@ -763,8 +773,18 @@
                 <div class="form-group">
                     <label for="issuingCountry">签发国家:</label>
                     <div class='input-group'>
-                      <input id="issuingCountry" type="text" data-bind="value:customer.commhomeaddress.issuingCountry" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <!-- <input id="issuingCountry" type="text" data-bind="value:customer.commhomeaddress.issuingCountry" class="k-textbox k-state-disabled" style="width: 100%;" disabled/> -->
                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
+                      <select id="home_commhomeaddress_nationality"
+                                data-role="dropdownlist"
+                                data-filter="startswith"
+                                data-suggest="true"
+                                data-auto-bind="true"
+                                data-value-primitive="true"
+                                data-text-field="text"
+                                data-value-field="value"
+                                data-bind="value:customer.commhomeaddress.issuingCountry,source:countries"
+                                style="width: 100%;" ></select>
                     </div>
                 </div>
              </div>
