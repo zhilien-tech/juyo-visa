@@ -158,6 +158,7 @@ $(function () {
     //如果有传递ID就是修改
     var oid = $.queryString("cid");
     if (oid) {
+    	//招宝信息 编辑页面
         $.getJSON("/visa/comebaby/comefetch?comeid=" + oid, function (resp) {
         	viewModel.set("customer", $.extend(true, dafaults, resp));
         	var a=viewModel.get("customer.comType");
@@ -229,10 +230,11 @@ $(function () {
         	
         });
     }else{
+    	//招宝信息 添加页面
     	$("#deleteBtn").hide();
+    	$('#saveBtn').parent().parent().attr('class','col-xs-12');
     	
-    	
-    	var a=1
+    	var a=1;
     	$("#state").val(a);
 		if(a==1){
 			$("#3").hide();
