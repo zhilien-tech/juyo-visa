@@ -1118,8 +1118,8 @@
                             <div class="row">
 	                             <div class="col-xs-12">
 	                                  <div class="form-group">
-	                                        <label for="have_usa_dl" class="check-box-label">你是否就读过中学以上的学校:</label>
-	                                        <input id='have_usa_dl' data-bind="checked:hasSchool"
+	                                        <label for="has_never_educated" class="check-box-label">你是否就读过中学以上的学校:</label>
+	                                        <input id='has_never_educated' data-bind="checked:hasSchool"
 	                                               class="mui-switch" type="checkbox"/>
 	                                  </div>
 	                              </div>
@@ -1127,7 +1127,7 @@
                             <!-- end 你是否就读过中学以上的学校 -->
                             
                             <!-- 学校名称/学校地址 -->
-                            <div class="row">
+                            <div class="row school" data-bind="visible:hasSchool">
                             	<div class="col-xs-6">
                                    <div class="form-group">
                                        <label for="school_name_cn">学校名称:</label>
@@ -1152,7 +1152,7 @@
                             <!-- end 学校名称/学校地址 -->
                             
                             <!-- 城市/省份/邮编 -->
-                            <div class="row">
+                            <div class="row school" data-bind="visible:hasSchool">
                             	<div class="col-xs-4">
                                    <div class="form-group">
                                        <label for="school_city_en">城市:</label>
@@ -1187,7 +1187,7 @@
                             <!-- end 城市/省份/邮编 -->
                             
                             <!-- 所学专业/参加学习日期/结束学习日期 -->
-                            <div class="row">
+                            <div class="row school" data-bind="visible:hasSchool">
                             	<div class="col-xs-4">
                                    <div class="form-group">
                                        <label for="school_specialty_cn">所学专业:</label>
