@@ -108,6 +108,7 @@
                 <div class='input-group'>
                     <input id="ir_last_name_cn" data-bind="value:customer.chinesexing" 
                     required validationMessage="中文姓不能为空" name="chinesexing"
+                    oninput="translateZhToEn(this,'ir_last_name_en')"
                     class="k-textbox" style="width: 100%;"/>
                     <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                 </div>
@@ -117,7 +118,7 @@
 	            <div class="form-group">
 	                <label for="ir_last_name_en">拼音:<span style="color: red">*</span></label>
 	                <div class='input-group'>
-	                    <input id="ir_last_name_en" data-bind="value:customer.chinesexingen"
+	                    <input id="ir_last_name_en" data-bind="value:customer.chinesexing"
 	                    required validationMessage="拼音不能为空" name="chinesexingen"
 	                     class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
 	                    <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
@@ -130,6 +131,7 @@
                 <div class='input-group'>
                     <input id="ir_first_name_cn" data-bind="value:customer.chinesename"
                     required validationMessage="中文名不能为空" name="chinesename"
+                    oninput="translateZhToEn(this,'ir_first_name_en')"
                            class="k-textbox" style="width: 100%;"/>
                     <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                 </div>
@@ -139,7 +141,7 @@
 	            <div class="form-group">
 	                <label for="ir_first_name_en">拼音:<span style="color: red">*</span></label>
 	                <div class='input-group'>
-	                    <input id="ir_first_name_en" data-bind="value:customer.chinesenameen"
+	                    <input id="ir_first_name_en" data-bind="value:customer.chinesename"
 	                    required validationMessage="拼音不能为空" name="chinesenameen"
 	                           class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
 	                    <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
@@ -266,9 +268,11 @@
            <div class="row">
            	<div class="col-xs-6">
                 <div class="form-group">
-                    <label for="last_name_cn">有效期至:</label>
-                    <div class='input-group'>
-                       <input id="validDate" style="width: 100%;" data-role="datepicker" data-bind="value:customer.passporteffectdate,events:{change:onDateChange}"/>
+                    <label for="last_name_cn">有效期至:<span style="color: red">*</span></label>
+                    <div class='input-group effectiveDate'>
+                       <input id="validDate" style="width: 100%;" data-role="datepicker" 
+                       required validationMessage="有效期至不能为空" name="passporteffectdate"
+                       data-bind="value:customer.passporteffectdate,events:{change:onDateChange}"/>
                        <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
