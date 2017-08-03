@@ -15,14 +15,12 @@ import io.znz.jsite.visa.forms.customerform.CustomerAddForm;
 import io.znz.jsite.visa.forms.customerform.CustomerUpdateForm;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.nutz.dao.Cnd;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.Lists;
+import com.uxuexi.core.common.util.BeanUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.util.FormUtil;
 
@@ -66,33 +64,17 @@ public class CustomerViewService extends NutzBaseService<CustomerManageEntity> {
 	 * @param updateForm
 	 * @return 
 	 */
-	public Object updateDataSave(CustomerUpdateForm updateForm) {
-		//查询出当前数据库中已存在的数据
-		List<CustomerManageEntity> before = dbDao.query(CustomerManageEntity.class,
-				Cnd.where("id", "=", updateForm.getId()), null);
-		Long comId = null;
-		if (!Util.isEmpty(before)) {
-			for (CustomerManageEntity c : before) {
-				comId = c.getComId();
-			}
+	public Object updateDataSave(CustomerUpdateForm updateForm, final HttpSession session) {
+		//通过session获取公司的id
+		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
+		long comId = company.getComId();//得到公司的id
+		if (!Util.isEmpty(updateForm)) {
+			updateForm.setUpdateTime(new Date());
+			updateForm.setComId(comId);
 		}
-		//欲更新为
-		List<CustomerManageEntity> after = Lists.newArrayList();
-		if (!Util.isEmpty(before)) {
-			for (CustomerManageEntity t : before) {
-				CustomerManageEntity m = new CustomerManageEntity();
-				m.setFullComName(updateForm.getFullComName());
-				m.setCustomerSource(updateForm.getCustomerSource());
-				m.setLinkman(updateForm.getLinkman());
-				m.setTelephone(updateForm.getTelephone());
-				m.setEmail(updateForm.getEmail());
-				m.setCreateTime(t.getCreateTime());
-				m.setUpdateTime(new Date());
-				m.setComId(comId);
-				after.add(m);
-			}
-		}
-		dbDao.updateRelations(before, after);
+		CustomerManageEntity m = new CustomerManageEntity();
+		BeanUtil.copyProperties(updateForm, m);
+		this.updateIgnoreNull(m);//更新用户表中的数据
 		return null;
 	}
 }

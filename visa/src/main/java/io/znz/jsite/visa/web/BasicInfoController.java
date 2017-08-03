@@ -44,6 +44,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -554,7 +555,8 @@ public class BasicInfoController extends BaseController {
 	@ResponseBody
 	public Object updateBaseJPInfoData(@RequestBody NewCustomerJpDto customer, HttpServletRequest request) {
 		//从session中取出当前登录用户信息
-		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute(Const.SESSION_NAME);
+		HttpSession session = request.getSession();
+		EmployeeEntity user = (EmployeeEntity) session.getAttribute(Const.SESSION_NAME);
 		long userId = 0;
 		if (user == null) {
 			throw new JSiteException("请登录后再试!");

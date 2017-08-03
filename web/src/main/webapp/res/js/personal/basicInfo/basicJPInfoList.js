@@ -192,6 +192,7 @@ var passportTypeEnum=[
  * 数据绑定
  ****************************************************/
 var taxpayerauthenticatNum=0;
+var oldnameNum=0;
 var viewModel = kendo.observable({
     customer: dafaults,
     countries:countries,
@@ -310,28 +311,18 @@ var viewModel = kendo.observable({
     // 曾用名
     oldNameEnable: function () {
     	/*var oldNameEnable = viewModel.get("customer.oldname");
-        var state = oldNameEnable ? oldNameEnable.length > 0 : false;
-        return state;*/
+        var state = oldNameEnable ? oldNameEnable.length > 0 : false;*/
+        /* return state;*/
         ///return viewModel.get("customer.oldname");
+    	
     	/*var oldnames = JSON.stringify(viewModel.get("customer.oldnameJp.oldname"));
-    	var oldnameens =JSON.stringify(viewModel.get("customer.oldnameJp.oldnameen"));
-    	var oldxings =JSON.stringify(viewModel.get("customer.oldnameJp.oldxing"));
-    	var oldxingens =JSON.stringify(viewModel.get("customer.oldnameJp.oldxingen"));
-    	if(oldnames==" " || oldnameens==" " || oldxings==" " || oldxingens==" "){
-    		oldnames = oldnames.replace(/\s+/g,"");
-    		oldnameens = oldnameens.replace(/\s+/g,"");
-    		oldxings = oldxings.replace(/\s+/g,"");
-    		oldxingens = oldxingens.replace(/\s+/g,"");
-    	}
-    	console.log(oldnames);*/
-    	var oldnames = JSON.stringify(viewModel.get("customer.oldnameJp.oldname"));
-    	console.log("曾用名:_____"+oldnames);
     	var state = viewModel.get("customer.oldnameJp.oldname")
 		|| viewModel.get("customer.oldnameJp.oldnameen")
 		|| viewModel.get("customer.oldnameJp.oldxing")
-		|| viewModel.get("customer.oldnameJp.oldxingen");
-    	//开关下面字段验证
-    	if(state){
+		|| viewModel.get("customer.oldnameJp.oldxingen");*/
+        
+    	var a=viewModel.get("customer.oldname.id");
+    	if(a>0){
     		$("input[oldname='oldname']").each(function(){
     			var labelTxt=$(this).parent().prev().text().trim();
     			labelTxt = labelTxt.split(":");
@@ -340,7 +331,9 @@ var viewModel = kendo.observable({
 				$(this).attr('validationMessage',labelTxt+"不能为空");
     			$(this).attr('required','required');
     		});
-    	}else{
+    		return true;
+    	}
+    	else if(a<0){
     		$("input[oldname='oldname']").each(function(){
     			var labelTxt=$(this).parent().prev().text().trim();
     			labelTxt = labelTxt.split(":");
@@ -349,8 +342,33 @@ var viewModel = kendo.observable({
 				$(this).removeAttr('validationMessage',labelTxt+"不能为空");
     			$(this).removeAttr('required','required');
     		});
+    		return false;
+    	} 
+    	else{
+    		if(oldnameNum<4){
+    			oldnameNum++;
+    			$("input[oldname='oldname']").each(function(){
+        			var labelTxt=$(this).parent().prev().text().trim();
+        			labelTxt = labelTxt.split(":");
+        			labelTxt.pop();
+        			labelTxt = labelTxt.join(":");
+    				$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+        			$(this).removeAttr('required','required');
+        		});
+    			return false;
+    		}else {
+    			$("input[oldname='oldname']").each(function(){
+        			var labelTxt=$(this).parent().prev().text().trim();
+        			labelTxt = labelTxt.split(":");
+        			labelTxt.pop();
+        			labelTxt = labelTxt.join(":");
+    				$(this).attr('validationMessage',labelTxt+"不能为空");
+        			$(this).attr('required','required');
+        		});
+    			return true
+    		};
     	}
-    	return state;
+    	return false;
     },
     // 其他国家公民
     otherCountryEnable: function () {
@@ -431,11 +449,16 @@ $("#pp_lost").change(function () {
 //曾用名
 $("#has_used_name").change(function () {
 //	viewModel.set("customer.oldname", $(this).is(':checked') ? " " : "");
-	var value = $(this).is(':checked') ? " " : "";
+	
+	/*var value = $(this).is(':checked') ? " " : "";
     viewModel.set("customer.oldnameJp.oldname", value);
     viewModel.set("customer.oldnameJp.oldnameen", value);
     viewModel.set("customer.oldnameJp.oldxing", value);
-    viewModel.set("customer.oldnameJp.oldxingen", value);
+    viewModel.set("customer.oldnameJp.oldxingen", value);*/
+    
+    var a={"customer_jp_id":0,"id":0,"oldname":"","oldnameen":"","oldxing":"","oldxingen":""};
+	var b={"customer_jp_id":0,"id":-1,"oldname":"","oldnameen":"","oldxing":"","oldxingen":""};
+	viewModel.set("customer.oldname", $(this).is(':checked') ? a : b);
 });
 //其他国家居民
 $("#has_pr").change(function () {

@@ -116,8 +116,8 @@ public class CustomerManageContrller extends BaseController {
 	 */
 	@RequestMapping(value = "updateDataSave")
 	@ResponseBody
-	public Object updateDataSave(CustomerUpdateForm updateForm) {
-		return customerViewService.updateDataSave(updateForm);
+	public Object updateDataSave(CustomerUpdateForm updateForm, final HttpSession session) {
+		return customerViewService.updateDataSave(updateForm, session);
 	}
 
 	/**
