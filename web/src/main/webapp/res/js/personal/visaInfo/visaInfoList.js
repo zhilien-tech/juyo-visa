@@ -286,6 +286,7 @@ var viewModel = kendo.observable({
     //教育信息
     hasSchool: function () {
         var schools = viewModel.get("customer.teachinfo");
+        //console.log(JSON.stringify(schools));
         var state = schools ? schools.length > 0 : false;
         return state;
     },
