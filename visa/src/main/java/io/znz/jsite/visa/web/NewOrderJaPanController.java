@@ -50,6 +50,8 @@ import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -144,7 +146,8 @@ public class NewOrderJaPanController {
 		String sqlString = sqlManager.get("newcustomerjapan_list");
 		Sql sql = Sqls.create(sqlString);
 		sql.setParam("orderId", orderId);
-		List<NewCustomerEntity> query = DbSqlUtil.query(dbDao, NewCustomerEntity.class, sql);
+		List<NewCustomerJpEntity> query = DbSqlUtil.query(dbDao, NewCustomerJpEntity.class, sql);
+
 		return query;
 	}
 
@@ -920,16 +923,18 @@ public class NewOrderJaPanController {
 		List<EmployeeEntity> query = dbDao.query(EmployeeEntity.class,
 				Cnd.where("telephone", "=", phone).and("userType", "=", UserTypeEnum.TOURIST_IDENTITY.intKey()), null);
 		employeeEntity.setPassword(pwd);
+		boolean isexist = false;
 		if (!Util.isEmpty(query) && query.size() > 0) {
-			employeeEntity.setId(query.get(0).getId());
-			try {
-				nutDao.update(employeeEntity);
-			} catch (Exception e) {
+			/*	employeeEntity.setId(query.get(0).getId());
+				try {
+					nutDao.update(employeeEntity);
+				} catch (Exception e) {
 
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 
-			}
+				}*/
+			isexist = true;
 		} else {
 
 			employeeEntity = dbDao.insert(employeeEntity);
@@ -942,9 +947,16 @@ public class NewOrderJaPanController {
 			genderStr = "先生";
 
 		}
+		String logininfo = "";
+		if (isexist) {
+
+			logininfo += "用户名:" + phone;
+		} else {
+			logininfo += "用户名:" + phone + "密码:" + temp;
+		}
 		String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
 				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://218.244.148.21:9004/")
-				.replace("${logininfo}", "用户名:" + phone + "密码:" + temp).replace("${gender}", genderStr);
+				.replace("${logininfo}", logininfo).replace("${gender}", genderStr);
 		String result = mailService.send(customer.getEmail(), html, "签证资料录入", MailService.Type.HTML);
 		if ("success".equalsIgnoreCase(result)) {
 			//成功以后分享次数加1
@@ -1070,25 +1082,43 @@ public class NewOrderJaPanController {
 								EmployeeEntity.class,
 								Cnd.where("telephone", "=", phone).and("userType", "=",
 										UserTypeEnum.TOURIST_IDENTITY.intKey()), null);
+						boolean isexist = false;
 						if (!Util.isEmpty(query1) && query1.size() > 0) {
-							employeeEntity.setId(query1.get(0).getId());
-							nutDao.update(employeeEntity);
+							/*	employeeEntity.setId(query1.get(0).getId());
+								nutDao.update(employeeEntity);*/
+							isexist = true;
 						} else {
 
 							employeeEntity = dbDao.insert(employeeEntity);
+							order.setUserid(employeeEntity.getId());
+							dbDao.update(order, null);
 						}
-						order.setUserid(employeeEntity.getId());
-						dbDao.update(order, null);
 
-						customerinfo += "用户名:" + phone + "密码:" + temp + "<br\\>";
+						if (isexist) {
+
+							customerinfo += "用户名:" + phone;
+						} else {
+							customerinfo += "用户名:" + phone + "密码:" + temp + "<br\\>";
+						}
 						/*result = getMailContent(order, phone, customer, null);*/
 						//if ("success".equalsIgnoreCase(result)) {
 						//成功以后分享次数加1
-						dbDao.update(
-								NewCustomerJpEntity.class,
-								Chain.make("sharecount", customer.getSharecount() + 1)
-										.add("status", OrderVisaApproStatusEnum.writeInfo.intKey())
-										.add("empid", employeeEntity.getId()), Cnd.where("id", "=", customer.getId()));
+						if (isexist) {
+
+							dbDao.update(
+									NewCustomerJpEntity.class,
+									Chain.make("sharecount", customer.getSharecount() + 1).add("status",
+											OrderVisaApproStatusEnum.writeInfo.intKey()),
+									Cnd.where("id", "=", customer.getId()));
+						} else {
+
+							dbDao.update(
+									NewCustomerJpEntity.class,
+									Chain.make("sharecount", customer.getSharecount() + 1)
+											.add("status", OrderVisaApproStatusEnum.writeInfo.intKey())
+											.add("empid", employeeEntity.getId()),
+									Cnd.where("id", "=", customer.getId()));
+						}
 						if (Util.isEmpty(order.getSharenum())) {
 							order.setSharenum(0);
 						}
@@ -1141,15 +1171,17 @@ public class NewOrderJaPanController {
 								EmployeeEntity.class,
 								Cnd.where("telephone", "=", phone).and("userType", "=",
 										UserTypeEnum.TOURIST_IDENTITY.intKey()), null);
+						boolean isexist = false;//用来判断是更新还是新增
 						if (!Util.isEmpty(query1) && query1.size() > 0) {
-							employeeEntity.setId(query1.get(0).getId());
-							nutDao.update(employeeEntity);
+							isexist = true;
+							/*employeeEntity.setId(query1.get(0).getId());
+							nutDao.update(employeeEntity);*/
 						} else {
 
 							employeeEntity = dbDao.insert(employeeEntity);
+							order.setUserid(employeeEntity.getId());
+							dbDao.update(order, null);
 						}
-						order.setUserid(employeeEntity.getId());
-						dbDao.update(order, null);
 
 						Integer gender = customer.getGender();
 						String genderStr = "";
@@ -1159,22 +1191,39 @@ public class NewOrderJaPanController {
 							genderStr = "先生";
 
 						}
+						String logininfo = "";
+						if (isexist) {
+
+							logininfo += "用户名:" + phone;
+						} else {
+							logininfo += "用户名:" + phone + "密码:" + temp;
+						}
 						String html = tmp.toString()
 								.replace("${name}", customer.getChinesexing() + customer.getChinesename())
 								.replace("${oid}", order.getOrdernumber())
-								.replace("${href}", "http://218.244.148.21:9004/")
-								.replace("${logininfo}", "用户名:" + phone + "密码:" + temp).replace("${gender}", genderStr);
+								.replace("${href}", "http://218.244.148.21:9004/").replace("${logininfo}", logininfo)
+								.replace("${gender}", genderStr);
 						String result = mailService.send(customer.getEmail(), html, "签证资料录入", MailService.Type.HTML);
 
 						/*result = getMailContent(order, phone, customer, null);*/
 						if ("success".equalsIgnoreCase(result)) {
 							//成功以后分享次数加1
-							dbDao.update(
-									NewCustomerJpEntity.class,
-									Chain.make("sharecount", customer.getSharecount() + 1)
-											.add("status", OrderVisaApproStatusEnum.writeInfo.intKey())
-											.add("empid", employeeEntity.getId()),
-									Cnd.where("id", "=", customer.getId()));
+							if (isexist) {
+
+								dbDao.update(
+										NewCustomerJpEntity.class,
+										Chain.make("sharecount", customer.getSharecount() + 1).add("status",
+												OrderVisaApproStatusEnum.writeInfo.intKey()),
+										Cnd.where("id", "=", customer.getId()));
+							} else {
+
+								dbDao.update(
+										NewCustomerJpEntity.class,
+										Chain.make("sharecount", customer.getSharecount() + 1)
+												.add("status", OrderVisaApproStatusEnum.writeInfo.intKey())
+												.add("empid", employeeEntity.getId()),
+										Cnd.where("id", "=", customer.getId()));
+							}
 							if (Util.isEmpty(order.getSharenum())) {
 								order.setSharenum(0);
 							}
@@ -1440,6 +1489,31 @@ public class NewOrderJaPanController {
 				customerJpList.add(customer);
 			}
 		}
+		Collections.sort(customerJpList, new Comparator<NewCustomerJpEntity>() {
+
+			@Override
+			public int compare(NewCustomerJpEntity o1, NewCustomerJpEntity o2) {
+				String timeO1 = o1.getChinesefullname();
+				String timeO2 = o2.getChinesefullname();
+				if (!Util.isEmpty(timeO1) && !Util.isEmpty(timeO2)) {
+					return timeO2.compareTo(timeO1);
+				}
+
+				if (timeO1 == null && timeO2 == null) {
+					return 0;
+				}
+				if (timeO1 == null) {
+					return -1;
+				}
+				if (timeO2 == null) {
+					return -1;
+				}
+				return 0;
+
+			}
+
+		});
+
 		order.setCustomerJpList(customerJpList);
 		if (order == null) {
 			return ResultObject.fail("订单不存在!");

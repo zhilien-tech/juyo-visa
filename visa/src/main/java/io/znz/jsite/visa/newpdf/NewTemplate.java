@@ -262,15 +262,22 @@ public abstract class NewTemplate {
 			Image img = Image.getInstance(url);
 			img.setAlignment(Image.RIGHT);
 			//		img.scaleToFit(400, 200);//大小
-			img.scaleToFit(80, 40);//大小
+			img.scaleToFit(400, 200);//大小
 			//img.setIndentationRight(200);
 
-			if (n <= 1) {
+			/*if (n <= 1) {
 
 				img.setAbsolutePosition(345, 630);
 			} else {
 
 				img.setAbsolutePosition(345, 630 - 35 * (n - 1));
+			}*/
+			if (n <= 1) {
+
+				img.setAbsolutePosition(350, 540);
+			} else {
+
+				img.setAbsolutePosition(350, 540 - 37 * (n - 1));
 			}
 			img.setAlignment(Paragraph.ALIGN_RIGHT);
 			return img;
@@ -287,17 +294,24 @@ public abstract class NewTemplate {
 			Image img = Image.getInstance(url);
 			img.setAlignment(Image.RIGHT);
 			//		img.scaleToFit(400, 200);//大小
-			img.scaleToFit(80, 40);//大小
+			img.scaleToFit(400, 200);//大小
 			//img.setIndentationRight(200);
 			img.setRotation(800);
 			if (n <= 1) {
 
-				img.setAbsolutePosition(345, 600);
+				img.setAbsolutePosition(350, 510);
 			} else {
 
-				img.setAbsolutePosition(345, 600 - 32 * (n - 1));
+				img.setAbsolutePosition(350, 510 - 34 * (n - 1));
 			}
-			img.setAlignment(Paragraph.ALIGN_RIGHT);
+			/*			if (n <= 1) {
+							
+							img.setAbsolutePosition(345, 600);
+						} else {
+							
+							img.setAbsolutePosition(345, 600 - 32 * (n - 1));
+						}
+			*/img.setAlignment(Paragraph.ALIGN_RIGHT);
 			return img;
 		}
 		return null;

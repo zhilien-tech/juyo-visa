@@ -704,7 +704,7 @@ public class NewHasee extends NewTemplate {
 				}
 				Paragraph p = new Paragraph(text, font);
 				p.setSpacingBefore(5);
-				p.setIndentationRight(200);
+				p.setIndentationRight(100);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}
@@ -718,7 +718,7 @@ public class NewHasee extends NewTemplate {
 				}
 				Paragraph p = new Paragraph(text, font);
 				p.setSpacingBefore(5);
-				p.setIndentationRight(200);
+				p.setIndentationRight(100);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}
@@ -733,7 +733,7 @@ public class NewHasee extends NewTemplate {
 				}
 				Paragraph p = new Paragraph(text, font);
 				p.setSpacingBefore(5);
-				p.setIndentationRight(200);
+				p.setIndentationRight(100);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}
@@ -748,7 +748,7 @@ public class NewHasee extends NewTemplate {
 				}
 				Paragraph p = new Paragraph(text, font);
 				p.setSpacingBefore(5);
-				p.setIndentationRight(200);
+				p.setIndentationRight(100);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}
@@ -915,7 +915,7 @@ public class NewHasee extends NewTemplate {
 				}
 				Paragraph p = new Paragraph(text, font);
 				p.setSpacingBefore(5);
-				p.setIndentationRight(200);
+				p.setIndentationRight(100);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}
@@ -929,7 +929,7 @@ public class NewHasee extends NewTemplate {
 				}
 				Paragraph p = new Paragraph(text, font);
 				p.setSpacingBefore(5);
-				p.setIndentationRight(200);
+				p.setIndentationRight(100);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}
@@ -944,7 +944,7 @@ public class NewHasee extends NewTemplate {
 				}
 				Paragraph p = new Paragraph(text, font);
 				p.setSpacingBefore(5);
-				p.setIndentationRight(200);
+				p.setIndentationRight(100);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}
@@ -959,7 +959,7 @@ public class NewHasee extends NewTemplate {
 				}
 				Paragraph p = new Paragraph(text, font);
 				p.setSpacingBefore(5);
-				p.setIndentationRight(200);
+				p.setIndentationRight(100);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}

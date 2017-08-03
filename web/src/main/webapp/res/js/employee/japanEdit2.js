@@ -756,6 +756,7 @@ $(function () {
         	for(var i=0;i<proposerInfoJpList.length;i++){
         		var ismain=proposerInfoJpList[i].ismainproposer;
         		if(ismain){
+//        			viewModel.set("customer.proposerInfoJpList["+i+ "].ismainproposer",true);
         			var person=new Object();
         	    	person.text=proposerInfoJpList[i].fullname;
         	    	person.value=proposerInfoJpList[i].id;
@@ -801,11 +802,16 @@ $(function () {
 				$(".companyFullName").show();
 				$('.ZKcompanyFullName').addClass("hide");// 隐藏 直客状态下的  公司全称
 			}
+			if(indexnew!=null){
+				layer.close(indexnew);
+			}
         });
+    }else{
+    	if(indexnew!=null){
+    		layer.close(indexnew);
+    	}
+    	
     }
-    if(indexnew!=null){
-		layer.close(indexnew);
-	}
     
    //comsource();//客户来源 状态 模块加载
    
