@@ -1,5 +1,7 @@
 package io.znz.jsite.visa.entity.japan;
 
+import io.znz.jsite.visa.zidingyienum.GetComment;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -39,6 +41,7 @@ public class NewComeBabyJpEntity implements Serializable {
 
 	@Column
 	@Comment("公司id")
+	@GetComment(name = "公司id")
 	private Long comId;
 
 	@Column
@@ -47,10 +50,12 @@ public class NewComeBabyJpEntity implements Serializable {
 
 	@Column
 	@Comment("公司全称")
+	@GetComment(name = "公司全称")
 	private String comFullName;
 
 	@Column
 	@Comment("公司地址")
+	@GetComment(name = "公司地址")
 	private String address;
 
 	@Column
