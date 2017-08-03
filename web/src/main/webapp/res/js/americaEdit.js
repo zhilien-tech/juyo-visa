@@ -487,14 +487,13 @@ function ordersave(){
 		//用完清空
 		emptyNum.splice(0,emptyNum.length);
 		errorNum.splice(0,errorNum.length);
-		alert(JSON.stringify(emptyNum));
-		alert(JSON.stringify(errorNum));
 	}
 }
 
 $(function () {
     //如果有传递ID就是修改
     var oid = $.queryString("cid");
+    var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
     if (oid) {
         $.getJSON("/visa/order/showDetail?orderid=" + oid, function (resp) {
         	viewModel.set("customer", $.extend(true, dafaults, resp));
@@ -523,6 +522,13 @@ $(function () {
 				$('.companyFullName').removeClass('hide');//显示 默认显示的 其他状态下的 公司全称
 				$('.ZKcompanyFullName').addClass('hide');//隐藏   默认显示的  直客  公司全称
 			}
+			if(indexnew!=null){
+				layer.close(indexnew);
+			}
         });
+    }else{
+    	if(indexnew!=null){
+			layer.close(indexnew);
+		}
     }
 });

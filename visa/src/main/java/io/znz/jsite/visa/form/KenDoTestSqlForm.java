@@ -52,15 +52,18 @@ public class KenDoTestSqlForm extends KenDoParamForm {
 		if (!Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
 			SqlExpressionGroup e1 = Cnd.exps("vno.sendtime", ">=", start_time).and("vno.sendtime", "<=", end_time);
 			SqlExpressionGroup e2 = Cnd.exps("vno.outtime", ">=", start_time).and("vno.outtime", "<=", end_time);
-			cnd.and(e1).or(e2);
+			//cnd.and(e1).or(e2);
+			cnd.and(e1.or(e2));
 		} else if (Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
 			SqlExpressionGroup e1 = Cnd.exps("vno.sendtime", "<=", end_time);
 			SqlExpressionGroup e2 = Cnd.exps("vno.outtime", "<=", end_time);
-			cnd.and(e1).or(e2);
+			//cnd.and(e1).or(e2);
+			cnd.and(e1.or(e2));
 		} else if (!Util.isEmpty(start_time) && Util.isEmpty(end_time)) {
 			SqlExpressionGroup e1 = Cnd.exps("vno.sendtime", ">=", start_time);
 			SqlExpressionGroup e2 = Cnd.exps("vno.outtime", ">=", start_time);
-			cnd.and(e1).or(e2);
+			//cnd.and(e1).or(e2);
+			cnd.and(e1.or(e2));
 		}
 		if (!Util.isEmpty(keywords)) {
 			SqlExpressionGroup e1 = Cnd.exps("vno.ordernumber", "like", "%" + keywords + "%");
@@ -70,12 +73,14 @@ public class KenDoTestSqlForm extends KenDoParamForm {
 			SqlExpressionGroup e5 = Cnd.exps("vcm.linkman", "like", "%" + keywords + "%");
 			SqlExpressionGroup e6 = Cnd.exps("vnc.phone", "like", "%" + keywords + "%");
 			//SqlExpressionGroup e6 = Cnd.exps("vo.id", "like", keywords);
-			cnd.and(e1).or(e2).or(e3).or(e4).or(e5).or(e6);
+			//cnd.and(e1).or(e2).or(e3).or(e4).or(e5).or(e6);
+			cnd.and(e1.or(e2).or(e3).or(e4).or(e5).or(e6));
 		}
 		if (!Util.isEmpty(state) && state > 0) {
 			SqlExpressionGroup e1 = Cnd.exps("vno.status", "=", state);
 			SqlExpressionGroup e2 = Cnd.exps("vnc.status", "=", state);
-			cnd.and(e1).or(e2);
+			//cnd.and(e1).or(e2);
+			cnd.and(e1.or(e2));
 		}
 		if (!Util.isEmpty(comId) && comId > 0) {
 			cnd.and("comId", "=", comId);

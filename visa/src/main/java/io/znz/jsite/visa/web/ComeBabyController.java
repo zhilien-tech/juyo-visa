@@ -167,4 +167,17 @@ public class ComeBabyController {
 
 	}
 
+	/**
+	 * 日本招宝删除
+	 * @param request
+	 */
+	@RequestMapping(value = "delete")
+	@ResponseBody
+	public Object delete(long comeid) {
+
+		if (!Util.isEmpty(comeid) && comeid > 0) {
+			dbDao.delete(NewComeBabyJpEntity.class, comeid);
+		}
+		return ResultObject.success("删除成功");
+	}
 }

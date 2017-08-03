@@ -183,6 +183,7 @@ var countries = new kendo.data.DataSource({
 		"customer.recentlyintojpJpList":{}
 	}
 ;
+
 //护照类型
 var passportTypeEnum=[
     {text:"旅游护照",value:1}
@@ -309,15 +310,17 @@ var viewModel = kendo.observable({
     },
     // 曾用名
     oldNameEnable: function () {
-    	var oldNameEnable = viewModel.get("customer.oldname");
-        var state = oldNameEnable ? oldNameEnable.length > 0 : false;
+    	/*var oldNameEnable = viewModel.get("customer.oldname");
+        var state = oldNameEnable ? oldNameEnable.length > 0 : false;*/
         /* return state;*/
         ///return viewModel.get("customer.oldname");
     	
-    	/*var state = viewModel.get("customer.oldnameJp.oldname")
+    	/*var oldnames = JSON.stringify(viewModel.get("customer.oldnameJp.oldname"));
+    	var state = viewModel.get("customer.oldnameJp.oldname")
 		|| viewModel.get("customer.oldnameJp.oldnameen")
 		|| viewModel.get("customer.oldnameJp.oldxing")
 		|| viewModel.get("customer.oldnameJp.oldxingen");*/
+        
     	var a=viewModel.get("customer.oldname.id");
     	if(a>0){
     		$("input[oldname='oldname']").each(function(){
@@ -366,13 +369,6 @@ var viewModel = kendo.observable({
     		};
     	}
     	return false;
-    	//开关下面字段验证
-    	/*if(state){
-    		
-    	}else{
-    		
-    	}
-    	return state;*/
     },
     // 其他国家公民
     otherCountryEnable: function () {

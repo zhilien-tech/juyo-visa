@@ -545,8 +545,10 @@ public class OrderController extends BaseController {
 		List<EmployeeEntity> query = dbDao.query(EmployeeEntity.class,
 				Cnd.where("telephone", "=", phone).and("userType", "=", UserTypeEnum.TOURIST_IDENTITY.intKey()), null);
 		employeeEntity.setPassword(pwd);
+		boolean isexist = false;
 		if (!Util.isEmpty(query) && query.size() > 0) {
-			employeeEntity.setId(query.get(0).getId());
+			isexist = true;
+			/*employeeEntity.setId(query.get(0).getId());
 			try {
 				nutDao.update(employeeEntity);
 			} catch (Exception e) {
@@ -554,7 +556,7 @@ public class OrderController extends BaseController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 
-			}
+			}*/
 		} else {
 
 			employeeEntity = dbDao.insert(employeeEntity);
@@ -567,17 +569,33 @@ public class OrderController extends BaseController {
 			genderStr = "先生";
 
 		}
+		String logininfo = "";
+		if (isexist) {
+
+			logininfo += "用户名:" + phone;
+		} else {
+			logininfo += "用户名:" + phone + "密码:" + temp;
+		}
 		String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
 				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://218.244.148.21:9004/")
-				.replace("${logininfo}", "用户名:" + phone + "密码:" + temp).replace("${gender}", genderStr);
+				.replace("${logininfo}", logininfo).replace("${gender}", genderStr);
 		String result = mailService.send(customer.getEmail(), html, "签证资料录入", MailService.Type.HTML);
 		if ("success".equalsIgnoreCase(result)) {
 			//成功以后分享次数加1
-			dbDao.update(
-					NewCustomerEntity.class,
-					Chain.make("sharecount", customer.getSharecount() + 1)
-							.add("status", OrderVisaApproStatusEnum.writeInfo.intKey())
-							.add("empid", employeeEntity.getId()), Cnd.where("id", "=", customer.getId()));
+			if (isexist) {
+
+				dbDao.update(
+						NewCustomerEntity.class,
+						Chain.make("sharecount", customer.getSharecount() + 1).add("status",
+								OrderVisaApproStatusEnum.writeInfo.intKey()), Cnd.where("id", "=", customer.getId()));
+			} else {
+
+				dbDao.update(
+						NewCustomerEntity.class,
+						Chain.make("sharecount", customer.getSharecount() + 1)
+								.add("status", OrderVisaApproStatusEnum.writeInfo.intKey())
+								.add("empid", employeeEntity.getId()), Cnd.where("id", "=", customer.getId()));
+			}
 
 			return ResultObject.success(result);
 		} else {

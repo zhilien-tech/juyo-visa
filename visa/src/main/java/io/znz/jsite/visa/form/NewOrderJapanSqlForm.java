@@ -52,15 +52,18 @@ public class NewOrderJapanSqlForm extends KenDoParamForm {
 		if (!Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
 			SqlExpressionGroup e1 = Cnd.exps("vnoj.senddate", ">=", start_time).and("vnoj.senddate", "<=", end_time);
 			SqlExpressionGroup e2 = Cnd.exps("vnoj.outdate", ">=", start_time).and("vnoj.outdate", "<=", end_time);
-			cnd.and(e1).or(e2);
+//			cnd.and(e1).or(e2);
+			cnd.and(e1.or(e2));
 		} else if (Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
 			SqlExpressionGroup e1 = Cnd.exps("vnoj.senddate", "<=", end_time);
 			SqlExpressionGroup e2 = Cnd.exps("vnoj.outdate", "<=", end_time);
-			cnd.and(e1).or(e2);
+//			cnd.and(e1).or(e2);
+			cnd.and(e1.or(e2));
 		} else if (!Util.isEmpty(start_time) && Util.isEmpty(end_time)) {
 			SqlExpressionGroup e1 = Cnd.exps("vnoj.senddate", ">=", start_time);
 			SqlExpressionGroup e2 = Cnd.exps("vnoj.outdate", ">=", start_time);
-			cnd.and(e1).or(e2);
+//			cnd.and(e1).or(e2);
+			cnd.and(e1.or(e2));
 		}
 		if (!Util.isEmpty(keywords)) {
 			SqlExpressionGroup e1 = Cnd.exps("vnoj.ordernumber", "like", "%" + keywords + "%");
@@ -69,12 +72,14 @@ public class NewOrderJapanSqlForm extends KenDoParamForm {
 			SqlExpressionGroup e4 = Cnd.exps("vcm.email", "like", "%" + keywords + "%");
 			SqlExpressionGroup e5 = Cnd.exps("vcm.linkman", "like", "%" + keywords + "%");
 			SqlExpressionGroup e6 = Cnd.exps("vncj.phone", "like", "%" + keywords + "%");
-			cnd.and(e1).or(e2).or(e3).or(e4).or(e5).or(e6);
+//			cnd.and(e1).or(e2).or(e3).or(e4).or(e5).or(e6);
+			cnd.and(e1.or(e2).or(e3).or(e4).or(e5).or(e6));
 		}
 		if (!Util.isEmpty(state) && state > 0) {
 			SqlExpressionGroup e1 = Cnd.exps("vnoj.status", "=", state);
 			SqlExpressionGroup e2 = Cnd.exps("vncj.status", "=", state);
-			cnd.and(e1).or(e2);
+//			cnd.and(e1).or(e2);
+			cnd.and(e1.or(e2));
 		}
 		if (!Util.isEmpty(comId) && comId > 0) {
 			cnd.and("comId", "=", comId);

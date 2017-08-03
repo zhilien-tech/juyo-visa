@@ -42,6 +42,7 @@ var startcity=[
                         ];
 var defaults = {
 		visatype:0,
+		area:0,
 		customermanage:{},
 		tripJp:{
 			oneormore:0,
@@ -92,11 +93,8 @@ keys = {
 			outtime:"",
 			breakfast:"",
 			dinner:""
-
 		},
-		"customer.proposerInfoJpList":{
-			
-		}
+		"customer.proposerInfoJpList":{}
 },
 flights = new kendo.data.DataSource({
     serverFiltering: true,
@@ -256,26 +254,20 @@ var viewModel = kendo.observable({
    		   				//alert(proposer.istogetherlinkman);
    		   				if(proposer.id==e.data.id){
    		   				//proposer.istogetherlinkman=false;
-   		   			viewModel.set("customer.proposerInfoJpList["+i+"].istogetherlinkman",false);
-
+   		   				viewModel.set("customer.proposerInfoJpList["+i+"].istogetherlinkman",false);
    		   				}
    		   				//console.log(JSON.stringify(proposer));
    		   			}
    					viewModel.set("customer.proposerInfoJpList",proposerInfoJpList);
    					///console.log(JSON.stringify(proposerInfoJpList));
-   					
    				});
-   				
    			}
-   			
    		}
-    	  
-    	  
     },
     changeismainproposer:function(e){
-    	console.log(e.data.id);
-    	console.log(e.data);
-    	console.log(e.data.fullname);
+    	///console.log(e.data.id);
+    	///console.log(e.data);
+    	///console.log(e.data.fullname);
     	var person=new Object();
     	person.text=e.data.xing+e.data.name;
     	person.value=e.data.id;
@@ -288,8 +280,8 @@ var viewModel = kendo.observable({
     			proposersnew.push(person);
     			viewModel.set("proposers",proposersnew);
     			var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
-    			console.log(proposerInfoJpList);
-    		/*	for(var m=0;m<proposerInfoJpList.length;m++){
+    			///console.log(proposerInfoJpList);
+    		    /*for(var m=0;m<proposerInfoJpList.length;m++){
     				if(proposerInfoJpList[m].id==e.data.id){
     					viewModel.set("customer.proposerInfoJpList["+m+"].ismainproposer",true);
 					}
@@ -310,11 +302,10 @@ var viewModel = kendo.observable({
     	}
     },
     updateData:function(e){
-    	
 	    	var person=new Object();
 	    	person.text=(e.data.xing+''+e.data.name);
 	    	person.value=e.data.id;
-//	    	alert(e.data.ismainproposer);
+	    	//alert(e.data.ismainproposer);
 	    	if(e.data.ismainproposer){
 	    		for(var i=0;i<proposersnew.length;i++){
 					if(proposersnew[i].value+""==(e.data.id)+""){
@@ -333,11 +324,10 @@ var viewModel = kendo.observable({
 			}
     },
     updateData1:function(e){
-    	
     	var person=new Object();
     	person.text=(e.data.xing+''+e.data.name);
     	person.value=e.data.id;
-//    	alert(e.data.ismainproposer);
+    	alert(e.data.ismainproposer);
     	if(e.data.ismainproposer){
     		for(var i=0;i<proposersnew.length;i++){
 				if(proposersnew[i].value+""==(e.data.id)+""){
@@ -354,21 +344,21 @@ var viewModel = kendo.observable({
 			}
 			viewModel.set("proposers",proposersnew);
 		}
-},
-abab:function(){
-	viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
-},
-baba:function(e){
-	var a=viewModel.get("customer.dateplanJpList");
-	console.log(JSON.stringify(a));
-	for(var i=0;i<a.length;i++){
-		if(a[i].arrivecity==e.data.arrivecity){
-			var b=i+1;
-			viewModel.set("customer.dateplanJpList["+b+"].startcity",e.data.arrivecity);
+    },
+    abab:function(){
+    	viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
+    },
+    baba:function(e){
+		var a=viewModel.get("customer.dateplanJpList");
+		console.log(JSON.stringify(a));
+		for(var i=0;i<a.length;i++){
+			if(a[i].arrivecity==e.data.arrivecity){
+				var b=i+1;
+				viewModel.set("customer.dateplanJpList["+b+"].startcity",e.data.arrivecity);
+			}
 		}
-	}
-	console.log(e.data.arrivecity);
-}
+		///console.log(e.data.arrivecity);
+    }
 });
 kendo.bind($(document.body), viewModel);
 
@@ -656,9 +646,8 @@ function orderJpsave(){
 						 console.log(result.code);
 						 if(result.code=="SUCCESS"){
 							 if(indexnew!=null){
-									
 									layer.close(indexnew);
-									}
+							 }
 							 
 							 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 							 //$.layer.closeAll();
@@ -697,7 +686,6 @@ function orderJpsave(){
 		    		emptyNum.push(person);
 		    	}else{
 		    		errorNum.push(person);
-		    		
 		    	}
 		    	//console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
 	    	}
@@ -707,14 +695,12 @@ function orderJpsave(){
 		
 		var str="";
 		if(emptyNum.length>0){
-			
 			for(var i=0;i<emptyNum.length;i++){
 				str+=emptyNum[i].text+",";
 			}
 			str+="不能为空！"
 		}
 		if(errorNum.length>0){
-			
 			for(var i=0;i<errorNum.length;i++){
 				str+=errorNum[i].text+",";
 			}
@@ -725,7 +711,6 @@ function orderJpsave(){
 		emptyNum.splice(0,emptyNum.length);
 		errorNum.splice(0,errorNum.length);
 	}
-	 
 }
 
 $(function () {
@@ -740,33 +725,32 @@ $(function () {
         	var reason=viewModel.get("customer.errorinfo");
         	var map=new Map();
         	map=eval("("+reason+")");
-        	console.log("map的值为："+map);
+        	///console.log("map的值为："+map);
         	for (var key in map){
         		var a = map[key];//获取到 错误信息 数据
         		for(var i=0;i<a.length;i++){
         			var reasonnew=a[i].key+",";//获取到  错误信息 字段名称
-        			console.log("reasonnew的值为："+reasonnew);
+        			///console.log("reasonnew的值为："+reasonnew);
         		}
         	}
         	/*----end 小灯泡 回显----*/
-        	console.log();
         	
         	var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
         	for(var i=0;i<proposerInfoJpList.length;i++){
         		var ismain=proposerInfoJpList[i].ismainproposer;
         		if(ismain){
+//        			viewModel.set("customer.proposerInfoJpList["+i+ "].ismainproposer",true);
         			var person=new Object();
         	    	person.text=proposerInfoJpList[i].fullname;
         	    	person.value=proposerInfoJpList[i].id;
         	    	
         	    	proposersnew.push(person);
-//        			alert(JSON.stringify(proposersnew));
+        	    	//alert(JSON.stringify(proposersnew));
         			viewModel.set("proposers",proposersnew);
         		}
         	}
         	var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
         	if(proposerInfoJpList.length>0){
-        		
         		$(".mainApplicant").hide();
         	}
         	if(viewModel.get("customer.tripJp.oneormore")==1){
@@ -800,14 +784,17 @@ $(function () {
 				$(".companyFullName").show();
 				$('.ZKcompanyFullName').addClass("hide");// 隐藏 直客状态下的  公司全称
 			}
+			if(indexnew!=null){
+				layer.close(indexnew);
+			}
         });
+    }else{
+    	if(indexnew!=null){
+    		layer.close(indexnew);
+    	}
+    	
     }
-    if(indexnew!=null){
-		layer.close(indexnew);
-	}
-    
    //comsource();//客户来源 状态 模块加载
-   
 });
 
    $("#DuoCheng_WangFan").change(function(){
@@ -914,9 +901,8 @@ $(function () {
 
 					color.value(result.customermanage.id);
 					 if(indexnew!=null){
-							
 							layer.close(indexnew);
-							}
+					 }
 			 },
 			 error: function(XMLHttpRequest, textStatus, errorThrown){
 				 if(indexnew!=null){
@@ -926,7 +912,7 @@ $(function () {
 					 console.log(textStatus);
 					 console.log(errorThrown);
 		           /* layer.msg('失败!',{time:2000});*/
-		         }
+		     }
 		 });
    	}
    	
@@ -981,14 +967,10 @@ $(function () {
      		 });
    			 $(".mainApplicant").hide();//隐藏 span标签的 主申请人
    		}
-   		
-   		
    	}
-   	
    	
    	function togetherlinkman(){
    		if(true){
-   			
    			var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
    			/*console.log(JSON.stringify(proposerInfoJpList));*/
    			var porposernow;
