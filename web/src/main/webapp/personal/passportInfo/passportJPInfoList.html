@@ -71,7 +71,7 @@
                                data-value-field="value"
                                data-bind="value:customer.passporttype,source:passportTypeEnum" >
                        </select>
-                       <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                     <!-- <div class='input-group'>
                       <input id="passportType" type="text" data-bind="" value="旅游护照" class="k-textbox k-state-disabled" style="width: 100%;" disabled />
@@ -148,7 +148,7 @@
 	        </div>
              <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="last_name_cn">护照号码:</label>
+                    <label for="last_name_cn">护照号码:<span style="color: red">*</span></label>
                     <div class='input-group'>
                       <input id="passport" type="text" data-bind="value:customer.passport" 
                       required validationMessage="公司全称不能为空" name="passport"
@@ -168,12 +168,13 @@
              </div> -->
              <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="last_name_cn">性别:</label>
+                    <label for="last_name_cn">性别:<span style="color: red">*</span></label>
                     <div class='input-group'>
                        <select id="gender" style="width: 100%;"
                                data-role="dropdownlist"
                                data-value-primitive="true"
-                               data-bind="value:customer.gender" >
+                               data-bind="value:customer.gender" 
+                               required validationMessage="性别不能为空" name="gender">
                                <option value="1">男</option>
                                <option value="0">女</option>
                        </select>
@@ -195,9 +196,9 @@
                     </div>
                 </div> -->
                 <div class="form-group">
-                    <label for="home_nationality">国籍:<span style="color: red">*</span></label>
+                    <label for="home_docountry">国籍:<span style="color: red">*</span></label>
                     <div class='input-group'><!-- required validationMessage="办理人国籍不能为空" name="nowcountry" -->
-                        <select id="home_nationality"
+                        <select id="home_docountry"
                                 data-role="dropdownlist"
                                 data-filter="startswith"
                                 data-suggest="true"
@@ -206,8 +207,9 @@
                                 data-text-field="text"
                                 data-value-field="value"
                                 data-bind="value:customer.docountry,source:countries"
+                                required validationMessage="国籍不能为空" name="docountry"
                                 style="width: 100%;" ></select>
-                        <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+                        <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
              </div>
@@ -236,18 +238,22 @@
            <div class="row">
 			 <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="last_name_cn">护照签发日期:</label>
+                    <label for="last_name_cn">护照签发日期:<span style="color: red">*</span></label>
                     <div class='input-group'>
-                       <input id="signedDate" style="width: 100%;" data-role="datepicker" data-bind="value:customer.passportsenddate,events:{change:onDateChange}"/>
+                       <input id="signedDate" style="width: 100%;" data-role="datepicker" 
+                       required validationMessage="护照签发日期不能为空" name="passportsenddate"
+                       data-bind="value:customer.passportsenddate,events:{change:onDateChange}"/>
                        <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
              </div>
              <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="last_name_cn">签发地点（省份）:</label>
+                    <label for="last_name_cn">签发地点（省份）:<span style="color: red">*</span></label>
                     <div class='input-group'>
-                      <input id="passportsendprovice" type="text" data-bind="value:customer.passportsendprovice" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="passportsendprovice" type="text" 
+                      required validationMessage="签发地点（省份）不能为空" name="passportsendprovice"
+                      data-bind="value:customer.passportsendprovice" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>

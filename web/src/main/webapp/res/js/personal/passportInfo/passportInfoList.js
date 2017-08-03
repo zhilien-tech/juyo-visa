@@ -6,8 +6,6 @@ var localhostPaht = curWwwPath.substring(0,pos);
 var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 //页面加载时回显护照信息
 window.onload = function(){
-	
-	
 	var logintype1=$.queryString("logintype");
 	var after;
 	if(logintype1==5){
@@ -15,6 +13,12 @@ window.onload = function(){
 		after=localhostPaht +'/visa/passportinfo/listPassport?logintype=5&customerId='+country.id;
 		$.getJSON(after, function (resp) {
 			viewModel.set("customer", $.extend(true, dafaults, resp));
+			//设置默认值
+	     	var nowcountry=viewModel.get("customer.nowcountry");
+			if(nowcountry!=null&&nowcountry!=''){
+			}else{
+				viewModel.set("customer.nowcountry","CHN");
+			}
 			viewModel.set("customer.countrynum", "CHN");
 			viewModel.set("customer.passporttype", 1);
 			viewModel.set("customer.visaoffice", "出入境管理局");
@@ -38,9 +42,15 @@ window.onload = function(){
 		});
 	}else{
 		after=localhostPaht +'/visa/passportinfo/listPassport';
-		
 		$.getJSON(after, function (resp) {
 			viewModel.set("customer", $.extend(true, dafaults, resp));
+			console.log(JSON.stringify(resp));
+			//设置默认值
+	     	var nowcountry=viewModel.get("customer.nowcountry");
+			if(nowcountry!=null&&nowcountry!=''){
+			}else{
+				viewModel.set("customer.nowcountry","CHN");
+			}
 			viewModel.set("customer.countrynum", "CHN");
 			viewModel.set("customer.passporttype", 1);
 			viewModel.set("customer.visaoffice", "出入境管理局");
