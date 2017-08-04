@@ -9,14 +9,14 @@ var myDate = new Date();
 var year = myDate.getFullYear();//获取完整的年份(4位,1970-????)
 var month = myDate.getMonth();//获取当前月份(0-11,0代表1月)
 var day = myDate.getDate();//获取当前日(1-31)
-var seperator = "-";//日期分隔符
+var seperator = "/";//日期分隔符
 if (month >= 1 && month <= 9) {
 month = "0" + month;
 }
 if (day >= 0 && day <= 9) {
 	day = "0" + day;
 }
-var currentdate = year+seperator+month+seperator+day;
+var currentdate = year+seperator+month+seperator+day;//当前系统日期
 //页面加载时回显护照信息
 window.onload = function(){
 	 $.getJSON(localhostPaht +'/visa/passportinfo/listJPPassport', function (resp) {
@@ -35,19 +35,22 @@ window.onload = function(){
      	if(passporteffectdate != "" && passporteffectdate != null && passporteffectdate != undefined){
      		var passporteffectdate=passporteffectdate.substring(0,10);
      	}
-     	
      	//日期差
-		passporteffectdate = passporteffectdate.split(seperator);
-		currentdate = currentdate.split(seperator);
-		var strDateS = new Date(passporteffectdate[0] + "/" + passporteffectdate[1] + "/" + passporteffectdate[2]);
-		//alert(strDateS);
-		var strDateE = new Date(currentdate[0] + "/" + currentdate[1] + "/" + currentdate[2]);
-		var intDay = (strDateE-strDateS)/(1000*3600*24);
-//		alert(intDay);
+     	var dateDifference =null;
+		var a=myDate.getTime();//系统日期
+		var b=new Date(Date.parse((passporteffectdate+"").replace(/-/g, "/"))).getTime();//签证有效日期
+		var daynum=(a-b)/(1000*3600*24);
+		if(daynum<0){
+			dateDifference = Math.ceil(-daynum);
+		}else if(daynum>0){
+			dateDifference = -(Math.floor(-daynum));
+		}
      	//当前系统时间和签证有效日期对比
-     	/*if(){
-     		
-     	}*/
+     	if(dateDifference<180){
+     		$('.effectiveDate').append("<span class='k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照已过期,请及时更换</span>");
+     	}else if(180<dateDifference<240){
+     		$('.effectiveDate').append("<span class='k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照即将过期，请及时更换</span>");
+     	}
      	//预览 按钮
    	   /*var phoneurl=viewModel.get("customer.phoneurl");
     	 if(phoneurl!=null&&phoneurl!=''){
@@ -156,10 +159,14 @@ $(function(){
 			}
 	}); */
 	/*-------------------------end 小灯泡 效果--------------------------*/
-	
-	
 });
-
+//翻译
+function translateZhToEn(from, to) {
+    $.getJSON("/translate/google", {q: $(from).val()}, function (result) {
+        $("#" + to).val(result.data).change();
+    });
+}
+//国家
 var countries = new kendo.data.DataSource({
     transport: {
         read: {

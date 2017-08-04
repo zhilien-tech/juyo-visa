@@ -424,7 +424,7 @@ public class LoginController extends BaseController {
 								scenicmanage.setSort(24);
 								functions.add(scenicmanage);
 								//日志记录
-								FunctionEntity logfun = new FunctionEntity();
+								/*FunctionEntity logfun = new FunctionEntity();
 								logfun.setId(26);
 								logfun.setParentId(0);
 								logfun.setFunName("日志记录");
@@ -434,7 +434,7 @@ public class LoginController extends BaseController {
 								logfun.setRemark("日志记录");
 								logfun.setSort(26);
 								logfun.setPortrait("fa fa-building-o");
-								functions.add(logfun);
+								functions.add(logfun);*/
 								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 								return "redirect:" + to + "?auth=4," + "&username=" + fullname + "&logintype=" + 4;
 							} else {
