@@ -30,8 +30,9 @@ window.onload = function(){
 		viewModel.set("customer.countrynum", "CHN");
 		viewModel.set("customer.passportsendoffice", "出入境管理局");
      	viewModel.set("customer.passporttype", 1);
+     	
      	//得到当前用户签证有效日期
-     	var passporteffectdate = viewModel.get("customer.passporteffectdate");
+     	/*var passporteffectdate = viewModel.get("customer.passporteffectdate");
      	if(passporteffectdate != "" && passporteffectdate != null && passporteffectdate != undefined){
      		var passporteffectdate=passporteffectdate.substring(0,10);
      	}
@@ -50,7 +51,7 @@ window.onload = function(){
      		$('.effectiveDate').append("<span class='k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照已过期,请及时更换</span>");
      	}else if(180<dateDifference<240){
      		$('.effectiveDate').append("<span class='k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照即将过期，请及时更换</span>");
-     	}
+     	}*/
      	//预览 按钮
    	   /*var phoneurl=viewModel.get("customer.phoneurl");
     	 if(phoneurl!=null&&phoneurl!=''){

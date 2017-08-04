@@ -297,7 +297,7 @@ $(function () {
         	viewModel.set("customer.passporttype", 1);
         	
         	//获取系统当前日期
-        	var myDate = new Date();
+        	/*var myDate = new Date();
         	//得到当前用户签证有效日期
          	var passporteffectdate = viewModel.get("customer.passporteffectdate");
          	if(passporteffectdate != "" && passporteffectdate != null && passporteffectdate != undefined){
@@ -318,7 +318,7 @@ $(function () {
          		$('.effectiveDate .k-datepicker').append("<span class='k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照已过期,请及时更换</span>");
          	}else if(180<dateDifference<240){
          		$('.effectiveDate .k-datepicker').append("<span class='k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照即将过期，请及时更换</span>");
-         	}
+         	}*/
         	
         	
       /*  	var reason=viewModel.get("customer.errorinfo");
