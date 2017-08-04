@@ -13,9 +13,7 @@ var customersourceEnum=[
     {text:"直客",value:3},
     {text:"线下",value:4}
   ];
-var proposersnew=[
-                       
-                        ];
+var proposersnew=[];
 var proposers=new kendo.data.DataSource({
     serverFiltering: true,
     transport: {
@@ -460,6 +458,20 @@ $(function () {
     	$('.k-content').removeClass("div-context");
     	$(this).parent().siblings().find('.span-Title').removeClass('k-state-selected');
     });
+    
+    //订单信息 签证类型
+    $('.dongliuXian').hide();
+    $('.dongSanXian').hide();
+    $('select[name="visatype"]').change(function(){
+    	var selVal=$(this).val();
+    	if(selVal==2){//状态为 东三县
+    		$('.dongSanXian').show();
+    		$('.dongliuXian').hide();
+    	}else if(selVal==3){//状态为 东六县
+    		$('.dongSanXian').hide();
+    		$('.dongliuXian').show();
+    	}
+    });
 });
 
 $(function () {
@@ -739,7 +751,7 @@ $(function () {
         	for(var i=0;i<proposerInfoJpList.length;i++){
         		var ismain=proposerInfoJpList[i].ismainproposer;
         		if(ismain){
-//        			viewModel.set("customer.proposerInfoJpList["+i+ "].ismainproposer",true);
+        			//viewModel.set("customer.proposerInfoJpList["+i+ "].ismainproposer",true);
         			var person=new Object();
         	    	person.text=proposerInfoJpList[i].fullname;
         	    	person.value=proposerInfoJpList[i].id;
