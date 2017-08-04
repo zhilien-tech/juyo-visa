@@ -5,7 +5,8 @@
  * 
  * 
  */
-
+var sixnum=[];
+var threenum=[];
 //客户来源
 var customersourceEnum=[
     {text:"线上",value:1},
@@ -645,6 +646,28 @@ function orderJpsave(){
 		//清空验证的数组
 		emptyNum.splice(0,emptyNum.length);
 		errorNum.splice(0,errorNum.length);
+		//对东三县东六县的值进行处理
+		var visatype=viewModel.get("customer.visatype");
+		if(visatype==3){
+			var sixnumstr="";
+			for(var i=0;i<sixnum.length;i++){
+				sixnumstr+=sixnum[i]+",";
+			}
+			viewModel.set("customer.threenum","");
+			viewModel.set("customer.sixnum",sixnumstr);
+		}else if(visatype==2){
+			var threenumstr="";
+				for(var i=0;i<threenum.length;i++){
+					threenumstr+=threenum[i]+",";
+				}
+				viewModel.set("customer.sixnum","");
+				viewModel.set("customer.threenum",threenumstr);
+		}else{
+			viewModel.set("customer.sixnum","");
+			viewModel.set("customer.threenum","");
+			
+		}
+		
 				 console.log(JSON.stringify(viewModel.customer));
 				 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 					
@@ -733,6 +756,42 @@ $(function () {
         $.getJSON("/visa/neworderjp/showDetail?orderid=" + oid, function (resp) {
         	//console.log(JSON.stringify(resp));
         	viewModel.set("customer", $.extend(true, defaults, resp));
+        	
+        	//对东三县和东六县的处理
+        	var visatype=viewModel.get("customer.visatype");
+    		if(visatype==3){
+    			var sixnumstr=viewModel.get("customer.sixnum");
+    			$('.dongSanXian').hide();
+        		$('.dongliuXian').show();
+    			if(sixnumstr!=null&&sixnumstr!=''){
+    				
+    				var result=sixnumstr.split(",");
+    				for(var i=0;i<result.length;i++){
+    					$("#"+result[i]).attr("checked", true);
+    				}
+    			}
+    			
+    		}else if(visatype==2){
+    			var threenumstr=viewModel.get("customer.threenum");
+    			$('.dongSanXian').show();
+        		$('.dongliuXian').hide();
+    			if(threenumstr!=null&&threenumstr!=''){
+    				
+    				var result=threenumstr.split(",");
+    				for(var i=0;i<result.length;i++){
+    					$("#"+result[i]+"t").attr("checked", true);
+    				}
+    			}
+    		}else{
+    			$('.dongSanXian').hide();
+        		$('.dongliuXian').hide();
+    		}
+        	
+        	
+        	
+        	
+        	
+        	
         	/*----小灯泡 回显----*/
         	var reason=viewModel.get("customer.errorinfo");
         	var map=new Map();
@@ -1009,6 +1068,32 @@ $(function () {
    	}
    	
 function linkcityone(){
-	alert(viewModel.get("customer.tripJp.arrivecity"));
+//	alert(viewModel.get("customer.tripJp.arrivecity"));
 	viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
 }
+Array.prototype.removeByValue = function(val) {
+	  for(var i=0; i<this.length; i++) {
+	    if(this[i] == val) {
+	      this.splice(i, 1);
+	      break;
+	    }
+	  }
+	}
+
+function addSix(a,num){
+	if($(a).is(':checked')){
+		sixnum.push(num);
+//		alert(JSON.stringify(sixnum));
+	}else{
+		sixnum.removeByValue(sixnum);
+	}
+}
+function addthree(a,num){
+	if($(a).is(':checked')){
+		threenum.push(num);
+//		alert(JSON.stringify(threenum));
+	}else{
+		threenum.removeByValue(threenum);
+	}
+}
+
