@@ -25,6 +25,8 @@
     	.k-state-hover{background-color: #ccc !important;}
     	.addApplicantBtn span.k-link span.k-icon{display:none;}
     	.input-group{width:100%;}/*由于删掉小灯泡 宽度出现问题 此处理设置所有input、select等宽度等于父类*/
+    	.check input{width: 16px;height: 16px;position: relative;top: 3px;}
+    	.check label{margin-right: 22.6px;}
     </style>
 </head>
 <body id="aaaa">
@@ -304,7 +306,7 @@
                                 </div>
                             </div>
                             <!-- 备注 -->
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <label for="us_contact_first_name_cn">备注:</label>
@@ -312,11 +314,49 @@
                                             <input id="us_contact_first_name_cn"
                                                    data-bind="value:customer.remark"
                                                    class="k-textbox" style="width: 100%;" name="remaker"/>
-                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
+                            </div> -->
+                            
+                            <!-- 沖縄県/青森県/岩手県/宮城県/秋田県/山形県/福島県 -->
+                            <div class="row dongliuXian">
+                                <div class="col-xs-12">
+                                    <div class="form-group check">
+                                    	<input type="checkbox" name="chongSheng">
+                                      	<label for="us_contact_first_name_cn">沖縄県</label>
+                                        <input type="checkbox" name="qingSen">
+                                        <label for="us_contact_first_name_cn">青森県</label>
+                                        <input type="checkbox" name="yanShou">
+                                        <label for="us_contact_first_name_cn">岩手県</label>
+                                        <input type="checkbox" name="gongCheng">
+                                        <label for="us_contact_first_name_cn">宮城県</label>
+                                        <input type="checkbox" name="qiuTian">
+                                        <label for="us_contact_first_name_cn">秋田県</label>
+                                        <input type="checkbox" name="shanXing">
+                                        <label for="us_contact_first_name_cn">山形県</label>
+                                        <input type="checkbox" name="fuDao">
+                                        <label for="us_contact_first_name_cn">福島県</label>
+                                    </div>
+                                </div>
                             </div>
+                            <!-- end 沖縄県/青森県/岩手県/宮城県/秋田県/山形県/福島県 -->
+                            
+                            <!-- 岩手県/宮城県/福島県 -->
+                            <div class="row dongSanXian">
+                                <div class="col-xs-12">
+                                    <div class="form-group check">
+                                        <input type="checkbox" name="yanShou">
+                                        <label for="us_contact_first_name_cn">岩手県</label>
+                                        <input type="checkbox" name="gongCheng">
+                                        <label for="us_contact_first_name_cn">宮城県</label>
+                                        <input type="checkbox" name="fuDao">
+                                        <label for="us_contact_first_name_cn">福島県</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end 岩手県/宮城県/福島県 -->
                         </div>
                     </li> 
             <li> 出行信息
