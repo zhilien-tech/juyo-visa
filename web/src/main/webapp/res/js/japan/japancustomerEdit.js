@@ -101,10 +101,10 @@ var viewModel = kendo.observable({
 		//当前系统时间和签证有效日期对比
 		if(dateDifference<180){
 			$('.msgg').remove();
-	 		$('#div11').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照已过期,请及时更换</span>");
+	 		$('#div11 .k-datepicker').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照已过期,请及时更换</span>");
 		}else if(dateDifference>180 && dateDifference<240){
 			$('.msgg').remove();
-	 		$('#div11').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照即将过期，请及时更换</span>");
+	 		$('#div11 .k-datepicker').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照即将过期，请及时更换</span>");
 		}else if(dateDifference>240){
 			$('.msgg').remove();
 			
