@@ -223,6 +223,11 @@ var viewModel = kendo.observable({
 	countries:countries,
 	passportTypeEnum:passportTypeEnum,
 	states:states
+	/*getPinYin:function(){
+		var name = viewModel.get("customer.chinesename");
+		var namePin = pinyinUtil.getPinyin(name, ' ', false, false);
+    	viewModel.set("customer.chinesenameen",namePin.toUpperCase());
+    }*/
 });
 kendo.bind($(document.body), viewModel);
 
@@ -438,4 +443,13 @@ function uploadFile(){
        'onUploadError':function(file, errorCode, errorMsg, errorString){
        }
 	});
+}
+//美国护照信息根据中文自动转为拼音
+function getPinYin(){
+	var name = $("#ir_last_name_cn").val();
+	var namePin = pinyinUtil.getPinyin(name, '', false, false);
+	var chinesename = $("#ir_first_name_cn").val();
+	var chinesenameen = pinyinUtil.getPinyin(chinesename, '', false, false);
+	viewModel.set("customer.chinesexingen",namePin.toUpperCase());
+	viewModel.set("customer.chinesenameen",chinesenameen.toUpperCase());
 }
