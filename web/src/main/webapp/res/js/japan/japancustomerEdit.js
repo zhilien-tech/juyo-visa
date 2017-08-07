@@ -73,6 +73,7 @@ var viewModel = kendo.observable({
     states: states,
     onDateChange: function (e) {
         var target = e.sender.element.attr("id");
+        console.log(target);
         var start = $("#signed_at").data("kendoDatePicker");
         var end = $("#expire_at").data("kendoDatePicker");
         if (target === "signed_at") {
