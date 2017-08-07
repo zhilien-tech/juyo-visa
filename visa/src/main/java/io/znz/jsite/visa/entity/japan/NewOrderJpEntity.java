@@ -107,6 +107,12 @@ public class NewOrderJpEntity implements Serializable {
 	@Column
 	@Comment("客户来源")
 	private long landComId;
+	@Column
+	@Comment("东六县保存的具体内容")
+	private String sixnum;
+	@Column
+	@Comment("东三县保存的具体内容")
+	private String threenum;
 
 	private CustomerManageEntity customermanage;
 

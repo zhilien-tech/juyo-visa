@@ -19,7 +19,6 @@ window.onload = function(){
 		viewModel.set("customer.countrynum", "CHN");
 		viewModel.set("customer.passportsendoffice", "出入境管理局");
      	viewModel.set("customer.passporttype", 1);
-     	//得到当前用户签证有效日期
      	
      	//得到护照有限期限
         var passporteffectdate = viewModel.get("customer.passporteffectdate")+"";
@@ -42,8 +41,6 @@ window.onload = function(){
     	}else if(dateDifference>240){
     		$(".msgg").remove();
     	}
-     	
-     	
      	//预览 按钮
    	   /*var phoneurl=viewModel.get("customer.phoneurl");
     	 if(phoneurl!=null&&phoneurl!=''){
