@@ -113,6 +113,36 @@ function regCmd(command) {
                 		}
                 	});
                 	break;
+                case "validate":
+                	if (!(data = select(e))) return;
+                	var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+                	$.getJSON("/visa/neworderjp/validate?type=order&orderid=" + data.id, {}, function (resp) {
+                		if (resp.code === "SUCCESS") {
+                			if(index!=null){
+                				
+                				layer.close(index);
+                			}
+                			/*	layer.confirm('发送成功，打开预览？', {
+                                btn: ['预览', '关闭']
+                            }, function (index, layero) {
+                                window.open("/delivery/deliveryJapan.html?oid="+data.id);
+                            }, function (index) {
+                                $.layer.closeAll();
+                            });*/
+                			
+                			layer.msg("等待递送！",{time: 2000});
+                		} else if(resp.code === "FAIL"){
+                			if(index!=null){
+                				
+                				layer.close(index);
+                			}
+                			$.layer.alert(resp.msg);
+                		}else{
+                			$.layer.alert(resp.msg);
+                			
+                		}
+                	});
+                	break;
                 case "noticeall":
                 	if (!(data = select(e))) return;
                 	 var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
