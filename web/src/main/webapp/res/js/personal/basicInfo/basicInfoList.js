@@ -4,6 +4,18 @@ var pathName =  window.document.location.pathname;
 var pos = curWwwPath.indexOf(pathName);  
 var localhostPaht = curWwwPath.substring(0,pos);  
 var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+
+//美国基本信息曾用名根据中文自动转为拼音
+function getPinYin(){
+	var oldxing = $("#old_usrname_cn").val();
+	var oldxingen = pinyinUtil.getPinyin(oldxing, '', false, false);
+	viewModel.set("customer.oldname.oldxingen",oldxingen.toUpperCase());
+	
+	var oldname = $("#old_given_name_cn").val();
+	var oldnameen = pinyinUtil.getPinyin(oldname, '', false, false);
+	viewModel.set("customer.oldname.oldnameen",oldnameen.toUpperCase());
+}
+
 //页面加载时回显基本信息
 window.onload = function(){
 	var indexnew= layer.load(1, {shade: [0.1,'#fff']});//菊花加载效果

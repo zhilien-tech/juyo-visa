@@ -19,6 +19,28 @@ function translateZhToEn(from, to) {
         $("#" + to).val(result.data).change();
     });
 }
+
+//日本订单用户信息 根据中文自动转为拼音
+function getPinYin(){
+	var chinesexing = $("#last_name_cn").val();
+	var chinesexingen = pinyinUtil.getPinyin(chinesexing, '', false, false);
+	viewModel.set("customer.chinesexingen",chinesexingen.toUpperCase());
+	
+	var chinesename = $("#first_name_cn").val();
+	var chinesenameen = pinyinUtil.getPinyin(chinesename, '', false, false);
+	viewModel.set("customer.chinesenameen",chinesenameen.toUpperCase());
+	
+	//曾用名
+	var oldname = $("#old_usrname_cn").val();
+	var oldxingen = pinyinUtil.getPinyin(oldname, '', false, false);
+	viewModel.set("customer.oldnameJp.oldxingen",oldxingen.toUpperCase());
+	
+	var oldnamePin = $("#old_given_name_cn").val();
+	var oldnameen = pinyinUtil.getPinyin(oldnamePin, '', false, false);
+	viewModel.set("customer.oldnameJp.oldnameen",oldnameen.toUpperCase());
+	
+}
+
 var countries = new kendo.data.DataSource({
         transport: {
             read: {

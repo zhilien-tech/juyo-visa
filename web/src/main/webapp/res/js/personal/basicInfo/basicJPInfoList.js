@@ -282,13 +282,7 @@ var viewModel = kendo.observable({
     },
     onDateChange: function (e) {
         var target = e.sender.element.attr("id");
-        var start = $("#signed_at").data("kendoDatePicker");
-        var end = $("#expire_at").data("kendoDatePicker");
-        if (target === "signed_at") {
-            end.min(start.value());
-        } else {
-            start.max(end.value());
-        }
+        var start = $("#birthDate").data("kendoDatePicker");
     },
     showSaveBtn: function () {
         return !$.queryString("check");
