@@ -234,15 +234,15 @@ function detailInit(e) {
 	          }
       },
         columns: [
-            {field: 'chinesefullname',title: '姓名',width:100},
-            {field: 'phone', title: '电话',width:100},
+            {field: 'chinesefullname',title: '姓名'},
+            {field: 'phone', title: '电话'},
             {field: 'passport', title: '护照号'},
-            {field: 'gender', title: '性别', width: 60,values:genderlist},
-            {field: 'sendtime', title: '送签时间',format: "{0: yyyy-MM-dd}"},
-            {field: 'outtime', title: '出签时间',format: "{0: yyyy-MM-dd}"},
+            {field: 'gender', title: '性别',values:genderlist},
+            /*{field: 'sendtime', title: '送签时间',format: "{0: yyyy-MM-dd}"},
+            {field: 'outtime', title: '出签时间',format: "{0: yyyy-MM-dd}"},*/
             {field: 'status', title: ' 状态',values:statuslist},
             { 
-                title: "操作", width:85,
+                title: "操作",
                 command: [
 
                     {name: "customerEdit1", imageClass:false, text: "编辑"},
@@ -352,12 +352,14 @@ var grid = $("#grid").kendoGrid({
             command: [
                 {name: "modify", imageClass:false, text: " 编辑"},
                 {name: "shareall", imageClass:false, text: "分享"},
-                {name: "delivery", imageClass:false, text: "递送"},
+                /*{name: "delivery", imageClass:false, text: "递送"},*/
+                {name: "validate", imageClass:false, text: "递送"},
                 {name: "download", imageClass:false, text: "下载"},
                 regCmd("modify"),
                 regCmd("shareall"),
                 regCmd("download"),
-                regCmd("delivery"),
+                /*regCmd("delivery"),*/
+                regCmd("validate"),
             ]
         }
     ]/*,
