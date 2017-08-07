@@ -4,6 +4,8 @@ var pathName =  window.document.location.pathname;
 var pos = curWwwPath.indexOf(pathName);  
 var localhostPaht = curWwwPath.substring(0,pos);  
 var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+//获取系统当前日期
+var myDate = new Date();
 //页面加载时回显护照信息
 window.onload = function(){
 	var logintype1=$.queryString("logintype");
@@ -22,6 +24,31 @@ window.onload = function(){
 			viewModel.set("customer.countrynum", "CHN");
 			viewModel.set("customer.passporttype", 1);
 			viewModel.set("customer.visaoffice", "出入境管理局");
+			
+			
+			//得到当前用户签证有效日期
+	     	var passporteffectdate = viewModel.get("customer.passporteffectdate");
+	     	if(passporteffectdate != "" && passporteffectdate != null && passporteffectdate != undefined){
+	     		var passporteffectdate=passporteffectdate.substring(0,10);
+	     	}
+	     	//日期差
+	     	var dateDifference =null;
+			var a=myDate.getTime();//系统日期
+			var b=new Date(Date.parse((passporteffectdate+"").replace(/-/g, "/"))).getTime();//签证有效日期
+			var daynum=(a-b)/(1000*3600*24);
+			if(daynum<0){
+				dateDifference = Math.ceil(-daynum);
+			}else if(daynum>0){
+				dateDifference = -(Math.floor(-daynum));
+			}
+			//当前系统时间和签证有效日期对比
+			if(dateDifference<180){
+		 		$('.effectiveDate').append("<span class='k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照已过期,请及时更换</span>");
+			}else if(dateDifference>180 && dateDifference<240){
+		 		$('.effectiveDate').append("<span class='k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照即将过期，请及时更换</span>");
+			}else if(dateDifference>240){}
+			
+			
 			//预览 按钮
 			var photoname= '<a href="#">'
 				+ viewModel.get("customer.photoname")
@@ -44,7 +71,6 @@ window.onload = function(){
 		after=localhostPaht +'/visa/passportinfo/listPassport';
 		$.getJSON(after, function (resp) {
 			viewModel.set("customer", $.extend(true, dafaults, resp));
-			console.log(JSON.stringify(resp));
 			//设置默认值
 	     	var nowcountry=viewModel.get("customer.nowcountry");
 			if(nowcountry!=null&&nowcountry!=''){
@@ -54,6 +80,31 @@ window.onload = function(){
 			viewModel.set("customer.countrynum", "CHN");
 			viewModel.set("customer.passporttype", 1);
 			viewModel.set("customer.visaoffice", "出入境管理局");
+			
+			//得到当前用户签证有效日期
+	     	var passporteffectdate = viewModel.get("customer.passporteffectdate");
+	     	if(passporteffectdate != "" && passporteffectdate != null && passporteffectdate != undefined){
+	     		var passporteffectdate=passporteffectdate.substring(0,10);
+	     	}
+	     	//日期差
+	     	var dateDifference =null;
+			var a=myDate.getTime();//系统日期
+			var b=new Date(Date.parse((passporteffectdate+"").replace(/-/g, "/"))).getTime();//签证有效日期
+			var daynum=(b-a)/(1000*3600*24);
+			
+			if(daynum<0){
+				dateDifference = 0;
+			}else if(daynum>0){
+				dateDifference = Math.ceil(daynum);
+			}
+			//当前系统时间和签证有效日期对比
+			if(dateDifference<180){
+		 		$('.effectiveDate').append("<span class='k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照已过期,请及时更换</span>");
+			}else if(dateDifference>180 && dateDifference<240){
+		 		$('.effectiveDate').append("<span class='k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照即将过期，请及时更换</span>");
+			}else if(dateDifference>240){}
+			
+			
 			//预览 按钮
 			var photoname= '<a href="#">'
 				+ viewModel.get("customer.photoname")
@@ -89,11 +140,14 @@ $(function(){
 		$("#nextStepBtn").hide();//隐藏下一步按钮
 		$("#back").hide();//隐藏返回按钮
 		$("#gender").kendoDropDownList({enable:false});//性别 状态 下拉框初始化 不可编辑
+		$("#home_nationality").kendoDropDownList({enable:false});//国籍下拉框初始化 不可编辑
 		$("#signedDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//签发日期
 		$("#validDate").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});//有效期至
 		$("#signedDate").data("kendoDatePicker").enable(false);//签发日期 不可编辑
 		$("#passporttype").kendoDropDownList({enable:false});//类型 状态为 不可编辑
 		$("#validDate").data("kendoDatePicker").enable(false);//有效期至 不可编辑 
+		$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
+		$(".input-group input").attr("disabled");//添加 不可编辑的属性
 		//操作 编辑 按钮时
 		$(".editBtn").click(function(){
 			$(this).addClass("hide");//编辑 按钮隐藏
@@ -102,6 +156,7 @@ $(function(){
 			$(".input-group .k-textbox").removeClass("k-state-disabled");//删除 不可编辑的边框颜色
 			$(".input-group input").removeAttr("disabled");//删除 不可编辑的属性
 			$("#gender").data("kendoDropDownList").enable(true);//性别 状态为 可编辑
+			$("#home_nationality").data("kendoDropDownList").enable(true);//国籍下拉框为可编辑
 			$("#passporttype").data("kendoDropDownList").enable(true);//类型 状态为可编辑
 			$("#signedDate").data("kendoDatePicker").enable(true);//签发日期 可编辑
 			$("#validDate").data("kendoDatePicker").enable(true);//有效期至 可编辑 
@@ -115,6 +170,7 @@ $(function(){
 			$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
 			$(".input-group input").attr("disabled");//添加 不可编辑的属性
 			$("#gender").kendoDropDownList({enable:false});//性别 状态为 不可编辑
+			$("#home_nationality").kendoDropDownList({enable:false});//国籍 状态为 不可编辑
 			$("#signedDate").data("kendoDatePicker").enable(false);//签发日期 不可编辑
 			$("#validDate").data("kendoDatePicker").enable(false);//有效期至 不可编辑 
 			$("#passporttype").data("kendoDropDownList").enable(false);//类型 状态为 不可编辑
@@ -128,6 +184,7 @@ $(function(){
 			$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
 			$(".input-group input").attr("disabled");//添加 不可编辑的属性
 			$("#gender").kendoDropDownList({enable:false});//性别 状态为 不可编辑
+			$("#home_nationality").kendoDropDownList({enable:false});//国籍状态为 不可编辑
 			$("#signedDate").data("kendoDatePicker").enable(false);//签发日期 不可编辑
 			$("#validDate").data("kendoDatePicker").enable(false);//有效期至 不可编辑 
 		});
@@ -257,6 +314,7 @@ $("#updatePassportSave").on("click",function(){
 			 data: JSON.stringify(viewModel.customer)+"",
 			 success: function (result){
 				 layer.msg("修改成功",{time:2000});
+				 location.reload();
 			 },
 			 error: function(XMLHttpRequest, textStatus, errorThrown) {
 	             layer.msg('保存失败!',{time:2000});
