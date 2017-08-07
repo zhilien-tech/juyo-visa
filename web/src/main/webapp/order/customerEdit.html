@@ -67,7 +67,7 @@
                                     <div class="form-group">
                                         <label for="last_name_cn">中文姓:<span style="color: red">*</span></label>
                                         <div class='input-group'><!-- required validationMessage="中文姓不能为空" name="chinesexing" -->
-                                            <input id="last_name_cn" type="text" data-bind="value:customer.chinesexing" class="k-textbox" style="width: 100%;" />
+                                            <input id="last_name_cn" type="text" data-bind="value:customer.chinesexing" class="k-textbox" oninput="getPinYin()" style="width: 100%;" />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -91,7 +91,7 @@
                                     <div class="form-group">
                                         <label for="first_name_cn">中文名:<span style="color: red">*</span></label>
                                         <div class='input-group'><!-- required validationMessage="中文名不能为空" name="chinesename" -->
-                                            <input id="first_name_cn" data-bind="value:customer.chinesename" class="k-textbox"
+                                            <input id="first_name_cn" data-bind="value:customer.chinesename" class="k-textbox" oninput="getPinYin()"
                                                    style="width: 100%;" />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -465,7 +465,7 @@
                                     <div class="form-group">
                                         <label for="old_usrname_cn">曾用姓:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="old_usrname_cn" data-bind="value:customer.oldname.oldxing"
+                                            <input id="old_usrname_cn" data-bind="value:customer.oldname.oldxing" oninput="getPinYin()"
                                                    class="k-textbox" style="width: 100%;" oldname="oldname" name="oldxing"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -488,7 +488,7 @@
                                     <div class="form-group">
                                         <label for="old_given_name_cn">曾用名:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="old_given_name_cn" data-bind="value:customer.oldname.oldname"
+                                            <input id="old_given_name_cn" data-bind="value:customer.oldname.oldname" oninput="getPinYin()"
                                                    class="k-textbox" style="width: 100%;" oldname="oldname" name="oldname" />
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -3084,6 +3084,8 @@
 <script src="/res/js/customer/customerEdit.js"></script>
 <script src="/res/upload/jquery.uploadify.min.js"></script>
 <script src="/res/js/projectpath/projectpath.js"></script>
+<script src="/res/js/pinyin/pinyin_dict_notone.js"></script>
+<script src="/res/js/pinyin/pinyinUtil.js"></script>
 <script type="text/javascript">
 $(function(){
 	//折叠板 效果初始化

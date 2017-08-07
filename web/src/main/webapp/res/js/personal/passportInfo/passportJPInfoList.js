@@ -4,19 +4,8 @@ var pathName =  window.document.location.pathname;
 var pos = curWwwPath.indexOf(pathName);  
 var localhostPaht = curWwwPath.substring(0,pos);  
 var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
-//获取系统当前日期
-var myDate = new Date();
-var year = myDate.getFullYear();//获取完整的年份(4位,1970-????)
-var month = myDate.getMonth();//获取当前月份(0-11,0代表1月)
-var day = myDate.getDate();//获取当前日(1-31)
-var seperator = "/";//日期分隔符
-if (month >= 1 && month <= 9) {
-month = "0" + month;
-}
-if (day >= 0 && day <= 9) {
-	day = "0" + day;
-}
-var currentdate = year+seperator+month+seperator+day;//当前系统日期
+
+var dateDifference =null;
 //页面加载时回显护照信息
 window.onload = function(){
 	 $.getJSON(localhostPaht +'/visa/passportinfo/listJPPassport', function (resp) {
@@ -31,27 +20,27 @@ window.onload = function(){
 		viewModel.set("customer.passportsendoffice", "出入境管理局");
      	viewModel.set("customer.passporttype", 1);
      	
-     	//得到当前用户签证有效日期
-     	/*var passporteffectdate = viewModel.get("customer.passporteffectdate");
-     	if(passporteffectdate != "" && passporteffectdate != null && passporteffectdate != undefined){
-     		var passporteffectdate=passporteffectdate.substring(0,10);
-     	}
+     	//得到护照有限期限
+        var passporteffectdate = viewModel.get("customer.passporteffectdate")+"";
      	//日期差
-     	var dateDifference =null;
-		var a=myDate.getTime();//系统日期
-		var b=new Date(Date.parse((passporteffectdate+"").replace(/-/g, "/"))).getTime();//签证有效日期
-		var daynum=(a-b)/(1000*3600*24);
-		if(daynum<0){
-			dateDifference = Math.ceil(-daynum);
-		}else if(daynum>0){
-			dateDifference = -(Math.floor(-daynum));
-		}
-     	//当前系统时间和签证有效日期对比
-     	if(dateDifference<180){
-     		$('.effectiveDate').append("<span class='k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照已过期,请及时更换</span>");
-     	}else if(180<dateDifference<240){
-     		$('.effectiveDate').append("<span class='k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照即将过期，请及时更换</span>");
-     	}*/
+     	var myDate = new Date();
+    	var a=myDate.getTime();//系统日期
+    	var b=new Date(Date.parse((passporteffectdate).replace(/-/g, "/"))).getTime();//签证有效日期
+    	var daynum=(b-a)/(1000*3600*24);
+    	if(daynum<0){
+    		dateDifference = 0;
+    	}else if(daynum>0){
+    		dateDifference = Math.ceil(daynum);
+    	}
+    	if(dateDifference<180){
+    		$(".msgg").remove();
+     		$('.effectiveDate').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照已过期,请及时更换</span>");
+    	}else if(dateDifference>180 && dateDifference<240){
+    		$(".msgg").remove();
+    		$('.effectiveDate').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照即将过期，请及时更换</span>");
+    	}else if(dateDifference>240){
+    		$(".msgg").remove();
+    	}
      	//预览 按钮
    	   /*var phoneurl=viewModel.get("customer.phoneurl");
     	 if(phoneurl!=null&&phoneurl!=''){
@@ -126,6 +115,11 @@ $(function(){
 			$(".editBtn").removeClass("hide");//编辑 按钮显示
 			$(".input-group .k-textbox").addClass("k-state-disabled");//添加 不可编辑的边框颜色
 			$(".input-group input").attr("disabled");//添加 不可编辑的属性
+			$("#signedDate").data("kendoDatePicker").enable(false);//签发日期 不可编辑
+			$("#validDate").data("kendoDatePicker").enable(false);//有效期至 不可编辑 
+			$("#passporttype").kendoDropDownList({enable:false});//护照类型下拉框不可编辑
+			$("#home_docountry").kendoDropDownList({enable:false});//国籍下拉框不可编辑
+			$("#gender").kendoDropDownList({enable:false});//性别状态下拉框不可编辑
 		});
 	}else if(aa == 1){//表示从签证进度跳转至此页面
 		$("#sex").kendoDropDownList({enable:true});//性别 状态 下拉框初始化可编辑
@@ -223,12 +217,42 @@ var viewModel = kendo.observable({
 	customer: dafaults,
 	countries:countries,
 	passportTypeEnum:passportTypeEnum,
-	states:states
+	states:states,
+	onDateChange: function (e) {
+        var target = e.sender.element.attr("id");
+        var start = $("#signedDate").data("kendoDatePicker");
+        var end = $("#validDate").data("kendoDatePicker");
+        if (target === "signedDate") {
+            end.min(start.value());
+        } else {
+            start.max(end.value());
+        }
+        //得到护照有限期限
+        var passporteffectdate = viewModel.get("customer.passporteffectdate")+"";
+     	//日期差
+     	var myDate = new Date();
+    	var a=myDate.getTime();//系统日期
+    	var b=new Date(Date.parse((passporteffectdate).replace(/-/g, "/"))).getTime();//签证有效日期
+    	var daynum=(b-a)/(1000*3600*24);
+    	if(daynum<0){
+    		dateDifference = 0;
+    	}else if(daynum>0){
+    		dateDifference = Math.ceil(daynum);
+    	}
+    	if(dateDifference<180){
+    		$(".msgg").remove();
+     		$('.effectiveDate').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照已过期,请及时更换</span>");
+    	}else if(dateDifference>180 && dateDifference<240){
+    		$(".msgg").remove();
+    		$('.effectiveDate').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照即将过期，请及时更换</span>");
+    	}else if(dateDifference>240){
+    		$(".msgg").remove();
+    	}
+    }
 });
 kendo.bind($(document.body), viewModel);
 //事件提示
 function successCallback(id){
-	grid.dataSource.read();
 	if(id == '1'){
 		layer.msg("添加成功",{time:2000});
 	}else if(id == '2'){
@@ -259,6 +283,7 @@ $("#updateJPPassportSave").on("click",function(){
 			 data: JSON.stringify(viewModel.customer)+"",
 			 success: function (result){
 				 layer.msg("修改成功",{time:2000});
+			     //location.reload();
 			 },
 			 error: function(XMLHttpRequest, textStatus, errorThrown) {
 	             layer.msg('保存失败!',{time:2000});

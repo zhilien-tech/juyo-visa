@@ -107,7 +107,9 @@
             <div class="form-group">
                 <label for="ir_last_name_cn">中文姓:<span style="color: red">*</span></label>
                 <div class='input-group'>
-                    <input id="ir_last_name_cn" name="chinesexing" data-bind="value:customer.chinesexing" required validationMessage="中文姓不能为空" class="k-textbox" style="width: 100%;"/>
+                    <input id="ir_last_name_cn" name="chinesexing" 
+                    data-bind="value:customer.chinesexing" required validationMessage="中文姓不能为空" oninput="getPinYin()"
+                    class="k-textbox" style="width: 100%;"/>
                     <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                 </div>
             </div>
@@ -127,7 +129,9 @@
                 <label for="ir_first_name_cn">中文名:<span style="color: red">*</span></label>
                 <div class='input-group'>
                     <input id="ir_first_name_cn" data-bind="value:customer.chinesename"
-                           class="k-textbox" style="width: 100%;" required validationMessage="中文名不能为空" name="chinesename"/>
+                           class="k-textbox" style="width: 100%;" required validationMessage="中文名不能为空" 
+                           oninput="getPinYin()"
+                           name="chinesename"/>
                     <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                 </div>
             </div>
@@ -144,9 +148,11 @@
 	        </div>
              <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="last_name_cn">护照号码:<span style="color: red">*</label>
+                    <label for="last_name_cn">护照号码:<span style="color: red">*</span></label>
                     <div class='input-group'>
-                      <input id="passport" type="text" data-bind="value:customer.passport" required validationMessage="护照号不能为空" name="passport" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <input id="passport" type="text" data-bind="value:customer.passport" 
+                      required validationMessage="护照号不能为空" name="passport" 
+                      class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
                 </div>
@@ -162,7 +168,7 @@
              </div> -->
              <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="last_name_cn">性别:</label>
+                    <label for="last_name_cn">性别:<span style="color: red">*</span></label>
                     <div class='input-group'>
                        <!-- <select id="gender" style="width: 100%;"
                                data-role="dropdownlist"
@@ -173,7 +179,8 @@
                                <option value="0">女</option>
                        </select> 2017/06/27/15:26-->
                        <select id="gender" style="width: 100%;"
-                               data-bind="value:customer.gender">
+                               data-bind="value:customer.gender"
+                               required validationMessage="性别不能为空" name="gender">
                                <option value="1">男</option>
                                <option value="0">女</option>
                        </select>
@@ -188,7 +195,7 @@
            <div class="row">
              <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="last_name_cn">国籍:</label>
+                    <label for="last_name_cn">国籍:<span style="color: red">*</span></label>
                     <div class='input-group'>
                       <!-- <input id="nationality" type="text" data-bind="value:customer.birthcountry,source:countries" class="k-textbox k-state-disabled" style="width: 100%;" disabled/> -->
                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
@@ -200,6 +207,7 @@
                                 data-value-primitive="true"
                                 data-text-field="text"
                                 data-value-field="value"
+                                required validationMessage="国籍不能为空" name="nowcountry"
                                 data-bind="value:customer.nowcountry,source:countries"
                                 style="width: 100%;" ></select>
                     </div>
@@ -261,8 +269,8 @@
            	<div class="col-xs-6">
                 <div class="form-group">
                     <label for="last_name_cn">有效期至:</label>
-                    <div class='input-group'>
-                       <input id="validDate" style="width: 100%;" 
+                    <div class='input-group effectiveDate'>
+                       <input id="validDate" style="width: 100%;"
                        		  data-role="datepicker" 
                        		  required validationMessage="护照有效日期不能为空" name="passporteffectdate"
                        		  data-bind="value:customer.passporteffectdate,events:{change:onDateChange}"/>
@@ -329,10 +337,13 @@
 <script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
 <script src="/res/js/common.js"></script>
 <script src="/res/upload/jquery.uploadify.min.js"></script>
+<script src="/res/js/pinyin/pinyin_dict_notone.js"></script>
+<script src="/res/js/pinyin/pinyinUtil.js"></script>
 <!-- <script src="/res/plugin/jquery.fileDownload.js"></script>
 <script src="/res/plugin/lightGallery/js/lightgallery.js"></script>
 <script src="/res/js/customermanage/customerlist.js"></script>
 <script src="/res/plugin/webtoolkit.md5.js"></script> -->
 <script src="/res/js/idcard.js"></script>
 <script src="/res/js/personal/passportInfo/passportInfoList.js"></script><!-- 本页面js -->
+
 </html>

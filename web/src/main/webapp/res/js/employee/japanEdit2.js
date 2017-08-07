@@ -471,6 +471,9 @@ $(function () {
     	}else if(selVal==3){//状态为 东六县
     		$('.dongSanXian').hide();
     		$('.dongliuXian').show();
+    	}else{
+    		$('.dongSanXian').hide();
+    		$('.dongliuXian').hide();
     	}
     });
 });

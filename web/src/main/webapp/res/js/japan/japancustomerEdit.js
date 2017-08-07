@@ -19,6 +19,28 @@ function translateZhToEn(from, to) {
         $("#" + to).val(result.data).change();
     });
 }
+
+//日本订单用户信息 根据中文自动转为拼音
+function getPinYin(){
+	var chinesexing = $("#last_name_cn").val();
+	var chinesexingen = pinyinUtil.getPinyin(chinesexing, '', false, false);
+	viewModel.set("customer.chinesexingen",chinesexingen.toUpperCase());
+	
+	var chinesename = $("#first_name_cn").val();
+	var chinesenameen = pinyinUtil.getPinyin(chinesename, '', false, false);
+	viewModel.set("customer.chinesenameen",chinesenameen.toUpperCase());
+	
+	//曾用名
+	var oldname = $("#old_usrname_cn").val();
+	var oldxingen = pinyinUtil.getPinyin(oldname, '', false, false);
+	viewModel.set("customer.oldnameJp.oldxingen",oldxingen.toUpperCase());
+	
+	var oldnamePin = $("#old_given_name_cn").val();
+	var oldnameen = pinyinUtil.getPinyin(oldnamePin, '', false, false);
+	viewModel.set("customer.oldnameJp.oldnameen",oldnameen.toUpperCase());
+	
+}
+
 var countries = new kendo.data.DataSource({
         transport: {
             read: {
@@ -74,6 +96,7 @@ var viewModel = kendo.observable({
     states: states,
     onDateChange: function (e) {
         var target = e.sender.element.attr("id");
+        console.log(target);
         var start = $("#signed_at").data("kendoDatePicker");
         var end = $("#expire_at").data("kendoDatePicker");
         if (target === "signed_at") {
@@ -102,10 +125,10 @@ var viewModel = kendo.observable({
 		//当前系统时间和签证有效日期对比
 		if(dateDifference<180){
 			$('.msgg').remove();
-	 		$('#div11').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照已过期,请及时更换</span>");
+	 		$('#div11 .k-datepicker').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照已过期,请及时更换</span>");
 		}else if(dateDifference>180 && dateDifference<240){
 			$('.msgg').remove();
-	 		$('#div11').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照即将过期，请及时更换</span>");
+	 		$('#div11 .k-datepicker').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照即将过期，请及时更换</span>");
 		}else if(dateDifference>240){
 			$('.msgg').remove();
 			
