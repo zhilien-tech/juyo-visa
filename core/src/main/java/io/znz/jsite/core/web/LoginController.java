@@ -141,7 +141,9 @@ public class LoginController extends BaseController {
 		}*/
 		String kaptchaExpected = (String) request.getSession().getAttribute(
 				com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
+
 		if (!Util.isEmpty(captcha)) {
+
 			List<FunctionEntity> functions = Lists.newArrayList();
 			if (captcha.equalsIgnoreCase(kaptchaExpected) || "8888".equals(captcha)) {
 				EmployeeEntity fetch = dbDao.fetch(EmployeeEntity.class, Cnd.where("telephone", "=", username));
@@ -452,6 +454,8 @@ public class LoginController extends BaseController {
 			} else {
 				model.addFlashAttribute("error", "验证码错误,请重试!");
 			}
+		} else {
+			model.addFlashAttribute("error", "验证码不能为空,请重试!");
 		}
 		String error = Encodes.encodeBase64(JSON.toJSONString(model.getFlashAttributes()));
 		model.addAttribute("e", error);

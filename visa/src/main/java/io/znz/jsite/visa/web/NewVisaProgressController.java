@@ -8,6 +8,7 @@ package io.znz.jsite.visa.web;
 
 import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.util.Const;
+import io.znz.jsite.util.DateUtils;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerOrderJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrderJpEntity;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.joda.time.DateTime;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.SqlManager;
@@ -55,15 +57,24 @@ public class NewVisaProgressController {
 	@Autowired
 	protected SqlManager sqlManager;
 
+	//48小时
+	private static final long HOURS_48 = 48;
+
 	/**
 	 * 列表查看订单信息
 	 */
 	@RequestMapping(value = "country")
 	@ResponseBody
-	public Object list(HttpServletRequest request, String logintype, String orderId) {
+	public Object list(HttpServletRequest request, String logintype, String orderId, String datetime) {
 		if ("5".equals(logintype)) {
 			List<NewCustomerEntity> usalist = Lists.newArrayList();
-			if (!Util.isEmpty(orderId)) {
+
+			//计算时间差
+			DateTime now = DateUtils.nowDateTime();
+			DateTime dateTime = DateUtils.string2DateTime(datetime, "");
+			long hours = DateUtils.hoursOfTwoTime(now, dateTime);
+
+			if (!Util.isEmpty(orderId) && hours <= HOURS_48) {
 				List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
 						Cnd.where("orderid", "=", orderId), null);
 				if (!Util.isEmpty(query) && query.size() > 0) {
