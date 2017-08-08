@@ -1,5 +1,7 @@
 $(function(){
-	//编辑页面
+	//列表页
+	
+	//编辑页
 	$('.editBtn').click(function(){
 		layer.open({
     		type: 2,

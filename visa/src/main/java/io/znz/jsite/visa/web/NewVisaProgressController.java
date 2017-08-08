@@ -28,9 +28,7 @@ import org.nutz.dao.Dao;
 import org.nutz.dao.SqlManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.beust.jcommander.internal.Maps;
@@ -83,7 +81,7 @@ public class NewVisaProgressController {
 				String datetime = infoList[3];
 
 				//计算时间差
-				DateTime now = DateUtils.nowDateTime();
+				DateTime now = DateUtils.string2DateTime(DateUtils.getDateTime(), "");
 				DateTime dateTime = DateUtils.string2DateTime(datetime, "");
 				long hours = DateUtils.hoursOfTwoTime(now, dateTime);
 				if (!Util.isEmpty(orderId) && hours <= HOURS_48) {

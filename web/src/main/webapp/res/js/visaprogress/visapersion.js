@@ -3,7 +3,6 @@ var countrystatus;
 var tourist;
 $(function(){
 	tourist=$.queryString("tourist");
-	alert($.queryString('secretMsg'));
 	 /*alert(unescape($.queryString("country")));*/
 	 if(tourist==1){
 		 //console.log(JSON.stringify(country));

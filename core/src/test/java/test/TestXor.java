@@ -20,13 +20,14 @@ public class TestXor {
 
 	public static void main(String[] args) {
 
-		String res = "oid&123&now&201012";
-		String key = "秘钥";
+		String res = "E4E2EFADBAB9BFADE5E4FCADB9BBBABCA6BBB3A6BBB3ABBABEB1BEBDB1BABE";
+		String key = "我是秘钥";
 		XORUtil instance = XORUtil.getInstance();
 		String xor_encodedStr = instance.encode(res, key);
 		System.out.println("文本加密：" + xor_encodedStr);
 		System.out.println("文本解密：" + instance.decode(xor_encodedStr, key));
-		String[] split = instance.decode(xor_encodedStr, key).split("&");
+		String[] split = instance.decode("E4E2EFADBAB9BFADE5E4FCADB9BBBABCA6BBB3A6BBB3ABBABEB1BEBDB1BABE", key).split(
+				"&");
 		for (String s : split) {
 			System.out.println(s);
 		}
