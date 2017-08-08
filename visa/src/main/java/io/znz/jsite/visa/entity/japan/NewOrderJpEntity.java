@@ -101,6 +101,24 @@ public class NewOrderJpEntity implements Serializable {
 	@Column
 	@Comment("客户来源")
 	private long comId;
+	@Column
+	@Comment("客户来源")
+	private long sendComId;
+	@Column
+	@Comment("客户来源")
+	private long landComId;
+	@Column
+	@Comment("东六县保存的具体内容")
+	private String sixnum;
+	@Column
+	@Comment("东三县保存的具体内容")
+	private String threenum;
+	@Column
+	@Comment("excel地址")
+	private String excelurl;
+	@Column
+	@Comment("文件地址")
+	private String fileurl;
 
 	private CustomerManageEntity customermanage;
 

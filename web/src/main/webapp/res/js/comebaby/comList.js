@@ -140,7 +140,7 @@ function regCmd(command) {
                     
                     layer.open({
                         type: 2,
-                        title: '编辑订单',
+                        title: '编辑-日本招宝信息',
                         area: ['550px', '610px'],
                         shadeClose: true,
                         content: '/japanZhaobaoInfo/japanZhaobaoInfoEdit.html?cid=' + data.id + "&check=true"
@@ -284,7 +284,11 @@ function successCallback(id){
 		  layer.msg("修改成功",{time: 2000});
 	  }else if(id == '3'){
 		  layer.msg("操作成功",{time: 2000});
-	  }
+	  }else if(id == '4'){
+	layer.msg("删除成功",{time: 2000});
+}else if(id == '5'){
+	layer.msg("删除失败",{time: 2000});
+}
   }
 //页面加载时加载日历
 /*$(function(){

@@ -69,7 +69,7 @@ $(function(){
 	country = JSON.parse(unescape($.queryString("country")));
     countrystatus=$.queryString("countrystatus");
 	/*-------------------------小灯泡 效果--------------------------*/
-	firstPartJP = JSON.parse(unescape($.queryString("firstPartJP")));//获取 错误 信息
+	/*firstPartJP = JSON.parse(unescape($.queryString("firstPartJP")));//获取 错误 信息
 	secondPartJP = JSON.parse(unescape($.queryString("secondPartJP")));//获取 错误 信息
 	thirdPartJP = JSON.parse(unescape($.queryString("thirdPartJP")));//获取 错误 信息
 	$('label').each(function(){
@@ -86,7 +86,7 @@ $(function(){
 					$(this).next().find('.input-group-addon').addClass('yellow');//小灯泡
 				}
 			}
-	});
+	});*/
 	/*-------------------------end 小灯泡 效果--------------------------*/
 	
 	

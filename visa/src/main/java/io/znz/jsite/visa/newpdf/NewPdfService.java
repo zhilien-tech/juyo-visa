@@ -72,26 +72,33 @@ public class NewPdfService {
 			//酒店确认单
 			List<NewTripplanJpEntity> trips = new ArrayList<NewTripplanJpEntity>();
 			//根据计划生产行程安排的表
-			for (NewTripplanJpEntity trip : order.getTripplanJpList()) {
-				if (trips.size() == 0) {
-					trips.add(trip);
-				} else {
-					NewTripplanJpEntity prev = trips.get(trips.size() - 1);
-					if (prev.getHotelid() == trip.getHotelid()) {
-						DateTime dt = new DateTime(trip.getNowdate());
-						if (!Util.isEmpty(trip.getOuttime())) {
+			List<NewTripplanJpEntity> tripplanJpList = order.getTripplanJpList();
+			if (!Util.isEmpty(tripplanJpList) && tripplanJpList.size() > 0) {
 
-							dt = dt.withField(DateTimeFieldType.hourOfDay(), trip.getOuttime().getHours());
-							dt = dt.withField(DateTimeFieldType.minuteOfHour(), trip.getOuttime().getMinutes());
-						}
-						prev.setOuttime(dt.toDate());
-					} else {
+				for (NewTripplanJpEntity trip : tripplanJpList) {
+					if (trips.size() == 0) {
 						trips.add(trip);
+					} else {
+						NewTripplanJpEntity prev = trips.get(trips.size() - 1);
+						if (prev.getHotelid() == trip.getHotelid()) {
+							DateTime dt = new DateTime(trip.getNowdate());
+							if (!Util.isEmpty(trip.getOuttime())) {
+
+								dt = dt.withField(DateTimeFieldType.hourOfDay(), trip.getOuttime().getHours());
+								dt = dt.withField(DateTimeFieldType.minuteOfHour(), trip.getOuttime().getMinutes());
+							}
+							prev.setOuttime(dt.toDate());
+						} else {
+							trips.add(trip);
+						}
 					}
 				}
 			}
-			for (NewTripplanJpEntity trip : trips) {
-				note.add(t.hotel(trip, guest.toString().toUpperCase()));
+			if (!Util.isEmpty(trips) && trips.size() > 0) {
+
+				for (NewTripplanJpEntity trip : trips) {
+					note.add(t.hotel(trip, guest.toString().toUpperCase()));
+				}
 			}
 			//关系表
 			note.add(t.relation(order));

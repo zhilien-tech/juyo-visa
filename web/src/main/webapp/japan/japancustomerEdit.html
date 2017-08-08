@@ -43,7 +43,7 @@
                                     <div class="form-group">
                                         <label for="last_name_cn">中文姓:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="last_name_cn" type="text" data-bind="value:customer.chinesexing" class="k-textbox" style="width: 100%;"/>
+                                            <input id="last_name_cn" type="text" data-bind="value:customer.chinesexing" class="k-textbox" oninput="getPinYin()" style="width: 100%;"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -64,7 +64,7 @@
                                     <div class="form-group">
                                         <label for="first_name_cn">中文名:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="first_name_cn" data-bind="value:customer.chinesename" class="k-textbox"
+                                            <input id="first_name_cn" data-bind="value:customer.chinesename" class="k-textbox" oninput="getPinYin()"
                                                    style="width: 100%;"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -135,7 +135,7 @@
                                 <div class="col-xs-6">
                                     <div class="form-group">
                                         <label for="expire_at">护照有效日期:<span style="color: red">*</span></label>
-                                        <div class='input-group'>
+                                        <div class='input-group effectiveDate' id="div11">
                                             <input id="expire_at" style="width: 100%;" data-role="datepicker"
                                                    data-bind="value:customer.passporteffectdate,events:{change:onDateChange}"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
@@ -388,7 +388,7 @@
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <label for="has_used_name" class="check-box-label">我有曾用名:</label>
-                                        <input id='has_used_name' data-bind="checked:oldNameEnable" class="mui-switch"
+                                        <input id='has_used_name' data-bind="checked:oldNameEnable" class="mui-switch" 
                                                type="checkbox"/>
                                     </div>
                                 </div>
@@ -399,7 +399,7 @@
                                     <div class="form-group">
                                         <label for="old_usrname_cn">曾用姓:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="old_usrname_cn" data-bind="value:customer.oldnameJp.oldxing"
+                                            <input id="old_usrname_cn" data-bind="value:customer.oldnameJp.oldxing" oninput="getPinYin()"
                                                    class="k-textbox" style="width: 100%;"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -420,7 +420,7 @@
                                     <div class="form-group">
                                         <label for="old_given_name_cn">曾用名:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="old_given_name_cn" data-bind="value:customer.oldnameJp.oldname"
+                                            <input id="old_given_name_cn" data-bind="value:customer.oldnameJp.oldname" oninput="getPinYin()"
                                                    class="k-textbox" style="width: 100%;"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
@@ -890,6 +890,8 @@
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
 <script src="/res/js/japan/japancustomerEdit.js"></script>
+<script src="/res/js/pinyin/pinyin_dict_notone.js"></script>
+<script src="/res/js/pinyin/pinyinUtil.js"></script>
 <script src="/res/js/wintone.js?v=4"></script>
 <script type="text/javascript">
 $(function(){

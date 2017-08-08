@@ -44,6 +44,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -500,7 +501,7 @@ public class BasicInfoController extends BaseController {
 			customer.setPassportsendprovice(cusdto.getPassportsendplace());//签发地点（省份）
 			customer.setPassportsendcity(cusdto.getPassportsendcity());//签发地城市
 			customer.setPassporteffectdate(cusdto.getPassporteffectdate());//有效期至
-			customer.setVisaoffice(cusdto.getPassportsendoffice());//签发机关
+			customer.setPassportsendoffice(cusdto.getPassportsendoffice());//签发机关
 			customer.setPassportbooknum(cusdto.getPassportbooknum());//护照本号码
 			customer.setPassportreadnum(cusdto.getPassportreadnum());//护照机读码
 			customer.setPhoneurl(cusdto.getPhoneurl());//照片地址
@@ -509,9 +510,9 @@ public class BasicInfoController extends BaseController {
 		List<NewOldnameJpEntity> father = dbDao.query(NewOldnameJpEntity.class,
 				Cnd.where("customer_jp_id", "=", customerId), null);
 		if (!Util.isEmpty(father) && father.size() > 0) {
-			customer.setOldname(father.get(0));
+			customer.setOldnameJp(father.get(0));
 		} else {
-			customer.setOldname(new NewOldnameJpEntity());
+			customer.setOldnameJp(new NewOldnameJpEntity());
 		}
 		//是否是其它国家/地区的永久居民
 		List<NewOrthercountryJpEntity> orthercountrylist = dbDao.query(NewOrthercountryJpEntity.class,
@@ -554,7 +555,8 @@ public class BasicInfoController extends BaseController {
 	@ResponseBody
 	public Object updateBaseJPInfoData(@RequestBody NewCustomerJpDto customer, HttpServletRequest request) {
 		//从session中取出当前登录用户信息
-		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute(Const.SESSION_NAME);
+		HttpSession session = request.getSession();
+		EmployeeEntity user = (EmployeeEntity) session.getAttribute(Const.SESSION_NAME);
 		long userId = 0;
 		if (user == null) {
 			throw new JSiteException("请登录后再试!");
@@ -582,14 +584,14 @@ public class BasicInfoController extends BaseController {
 			cus.setPassportsendplace(customer.getPassportsendprovice());//签发地点（省份）
 			cus.setPassportsendcity(customer.getPassportsendcity());//签发地城市
 			cus.setPassporteffectdate(customer.getPassporteffectdate());//有效期至
-			cus.setPassportsendoffice(customer.getVisaoffice());//签发机关
+			cus.setPassportsendoffice(customer.getPassportsendoffice());//签发机关
 			cus.setPassportbooknum(customer.getPassportbooknum());//护照本号码
 			cus.setPassportreadnum(customer.getPassportreadnum());//护照机读码
 			cus.setPhoneurl(customer.getPhoneurl());//照片地址
 			nutDao.updateIgnoreNull(cus);
 		}
 		//我有曾用名
-		NewOldnameJpEntity oldname = customer.getOldname();
+		NewOldnameJpEntity oldname = customer.getOldnameJp();
 		if (!Util.isEmpty(oldname)) {
 			if (!Util.isEmpty(oldname.getId()) && oldname.getId() > 0) {
 				nutDao.updateIgnoreNull(oldname);

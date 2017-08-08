@@ -19,6 +19,28 @@ function translateZhToEn(from, to) {
         $("#" + to).val(result.data).change();
     });
 }
+
+//日本订单用户信息 根据中文自动转为拼音
+function getPinYin(){
+	var chinesexing = $("#last_name_cn").val();
+	var chinesexingen = pinyinUtil.getPinyin(chinesexing, '', false, false);
+	viewModel.set("customer.chinesexingen",chinesexingen.toUpperCase());
+	
+	var chinesename = $("#first_name_cn").val();
+	var chinesenameen = pinyinUtil.getPinyin(chinesename, '', false, false);
+	viewModel.set("customer.chinesenameen",chinesenameen.toUpperCase());
+	
+	//曾用名
+	var oldname = $("#old_usrname_cn").val();
+	var oldxingen = pinyinUtil.getPinyin(oldname, '', false, false);
+	viewModel.set("customer.oldnameJp.oldxingen",oldxingen.toUpperCase());
+	
+	var oldnamePin = $("#old_given_name_cn").val();
+	var oldnameen = pinyinUtil.getPinyin(oldnamePin, '', false, false);
+	viewModel.set("customer.oldnameJp.oldnameen",oldnameen.toUpperCase());
+	
+}
+
 var countries = new kendo.data.DataSource({
         transport: {
             read: {
@@ -36,6 +58,7 @@ var countries = new kendo.data.DataSource({
         }
     }),
     dafaults = {
+	docountry:"CHN",
 	passporttype:1,
 	workinfoJp: {},
 	financeJpList:[],
@@ -73,6 +96,7 @@ var viewModel = kendo.observable({
     states: states,
     onDateChange: function (e) {
         var target = e.sender.element.attr("id");
+        console.log(target);
         var start = $("#signed_at").data("kendoDatePicker");
         var end = $("#expire_at").data("kendoDatePicker");
         if (target === "signed_at") {
@@ -80,6 +104,36 @@ var viewModel = kendo.observable({
         } else {
             start.max(end.value());
         }
+      //获取系统当前日期
+        var myDate = new Date();
+      //得到当前用户签证有效日期
+     	var passporteffectdate = viewModel.get("customer.passporteffectdate");
+     /*	alert(typeof passporteffectdate);
+     	if(passporteffectdate != "" && passporteffectdate != null && passporteffectdate != undefined){
+     		var passporteffectdate=JSON.stringify(passporteffectdate).substring(0,10);
+     	}*/
+     	//日期差
+     	var dateDifference =null;
+		var a=myDate.getTime();//系统日期
+		var b=passporteffectdate.getTime();//签证有效日期
+		var daynum=(b-a)/(1000*3600*24);
+		if(daynum<0){
+			dateDifference = 0;
+		}else if(daynum>0){
+			dateDifference = Math.ceil(daynum);
+		}
+		//当前系统时间和签证有效日期对比
+		if(dateDifference<180){
+			$('.msgg').remove();
+	 		$('#div11 .k-datepicker').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照已过期,请及时更换</span>");
+		}else if(dateDifference>180 && dateDifference<240){
+			$('.msgg').remove();
+	 		$('#div11 .k-datepicker').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照即将过期，请及时更换</span>");
+		}else if(dateDifference>240){
+			$('.msgg').remove();
+			
+		}
+        
     },
     showSaveBtn: function () {
         return !$.queryString("check");
@@ -217,21 +271,23 @@ $("#saveCustomerData").on("click",function(){
 	}else{
 		 //验证————————————————————————————————————
 	    $('.k-tooltip-validation').each(function(){
-	    	var verificationText=$(this).text().trim();//获取验证的文字信息
-	    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
-	    	labelVal = labelVal.split(":");
-	    	labelVal.pop();
-	    	labelVal = labelVal.join(":");//截取 :之前的信息
-	    	var person=new Object();
-	    	person.text=labelVal;
-	    	person.error="";
-	    	if(verificationText.indexOf("不能为空")>0){
-	    		emptyNum.push(person);
-	    	}else{
-	    		errorNum.push(person);
-	    		
+	    	var none=$(this).css("display")=="none";//获取 判断验证提示隐藏
+	    	if(!none){
+		    	var verificationText=$(this).text().trim();//获取验证的文字信息
+		    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
+		    	labelVal = labelVal.split(":");
+		    	labelVal.pop();
+		    	labelVal = labelVal.join(":");//截取 :之前的信息
+		    	var person=new Object();
+		    	person.text=labelVal;
+		    	person.error="";
+		    	if(verificationText.indexOf("不能为空")>0){
+		    		emptyNum.push(person);
+		    	}else{
+		    		errorNum.push(person);
+		    	}
+		    	//console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
 	    	}
-	    	//console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
 	    });
 	    //end 验证————————————————————————————————
 		
@@ -292,7 +348,45 @@ $(function () {
     if (oid) {
         $.getJSON("/visa/newcustomerjp/showDetail?customerid=" + oid, function (resp) {
         	viewModel.set("customer", $.extend(true, dafaults, resp));
-        	viewModel.set("customer.passporttype", 1);
+        	var passporttype=viewModel.get("customer.passporttype");
+        	if(passporttype!=""&&passporttype!=null){
+        		
+        	}else{0
+        		
+        		viewModel.set("customer.passporttype", 1);
+        	}
+        	var docountry=viewModel.get("customer.docountry");
+        	if(docountry!=""&&docountry!=null){
+        		
+        	}else{
+        		
+        		viewModel.set("customer.docountry", "CHN");
+        	}
+        	
+        	//获取系统当前日期
+        	/*var myDate = new Date();
+        	//得到当前用户签证有效日期
+         	var passporteffectdate = viewModel.get("customer.passporteffectdate");
+         	if(passporteffectdate != "" && passporteffectdate != null && passporteffectdate != undefined){
+         		var passporteffectdate=passporteffectdate.substring(0,10);
+         	}
+         	//日期差
+         	var dateDifference =null;
+    		var a=myDate.getTime();//系统日期
+    		var b=new Date(Date.parse((passporteffectdate+"").replace(/-/g, "/"))).getTime();//签证有效日期
+    		var daynum=(a-b)/(1000*3600*24);
+    		if(daynum<0){
+    			dateDifference = Math.ceil(-daynum);
+    		}else if(daynum>0){
+    			dateDifference = -(Math.floor(-daynum));
+    		}
+         	//当前系统时间和签证有效日期对比
+         	if(dateDifference<180){
+         		$('.effectiveDate .k-datepicker').append("<span class='k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照已过期,请及时更换</span>");
+         	}else if(180<dateDifference<240){
+         		$('.effectiveDate .k-datepicker').append("<span class='k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照即将过期，请及时更换</span>");
+         	}*/
+        	
         	
       /*  	var reason=viewModel.get("customer.errorinfo");
         	var map=new Map();
@@ -326,38 +420,43 @@ $(function () {
         	/*-------------------------小灯泡 回显---------------------*/
         	var reason=viewModel.get("customer.errorinfo");
         	var map=new Map();
-        	map=eval("("+reason+")");
-        	for (var key in map){
-        		var a = map[key];//获取到 错误信息 数据
-        		for(var i=0;i<a.length;i++){
-        			var reasonnew=a[i].key;//获取到  错误信息 字段名称
-        			
-        			$('label').each(function(){
-        				var labelText=$(this).text();//获取 页面上所有的字段 名称
-        				labelText = labelText.split(":");
-        				labelText.pop();
-        				labelText = labelText.join(":");//截取 :之前的信息
-        				for(var i=0;i<reasonnew.length;i++){
-        					///console.log("labelText的值：==="+labelText);
-        					///console.log("reasonnew[i]的值：==="+reasonnew);
-        					if(labelText==reasonnew){
+        	if(reason!=null&&reason!=''){
+        		
+        		map=eval("("+reason+")");
+        		for (var key in map){
+        			var a = map[key];//获取到 错误信息 数据
+        			for(var i=0;i<a.length;i++){
+        				var reasonnew=a[i].key;//获取到  错误信息 字段名称
+        				
+        				$('label').each(function(){
+        					var labelText=$(this).text();//获取 页面上所有的字段 名称
+        					labelText = labelText.split(":");
+        					labelText.pop();
+        					labelText = labelText.join(":");//截取 :之前的信息
+        					for(var i=0;i<reasonnew.length;i++){
         						///console.log("labelText的值：==="+labelText);
-            					///console.log("reasonnew[i]的值：==="+reasonnew);
-        						$(this).next().find('input').css('border-color','#f17474');///input
-        						$(this).next().find('.k-state-default').css('border-color','#f17474');//data(span)
-        						$(this).next().find('.k-dropdown').css('border-color','#f17474');//select(span)
-        						$(this).next().find('.input-group-addon').addClass('yellow');//小灯泡
+        						///console.log("reasonnew[i]的值：==="+reasonnew);
+        						if(labelText==reasonnew){
+        							///console.log("labelText的值：==="+labelText);
+        							///console.log("reasonnew[i]的值：==="+reasonnew);
+        							$(this).next().find('input').css('border-color','#f17474');///input
+        							$(this).next().find('.k-state-default').css('border-color','#f17474');//data(span)
+        							$(this).next().find('.k-dropdown').css('border-color','#f17474');//select(span)
+        							$(this).next().find('.input-group-addon').addClass('yellow');//小灯泡
+        						}
         					}
-        				}
-        			});
+        				});
+        			}
         		}
         	}
         	
+        	
+        	if(indexnew!=null){
+    			layer.close(indexnew);
+    	 }
         	/*--------------------------end 小灯泡 回显----------------------*/
         	
         });
     }
-	 if(indexnew!=null){
-			layer.close(indexnew);
-	 }
+	 
 });

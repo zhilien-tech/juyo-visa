@@ -7,7 +7,12 @@ var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 //页面加载时回显基本信息
 window.onload = function(){
 	 $.getJSON(localhostPaht +'/visa/basicinfo/basicJPInfoList', function (resp){
+		var indexnew= layer.load(1, {shade: [0.1,'#fff']});//菊花加载效果
      	viewModel.set("customer", $.extend(true, dafaults, resp));
+     	//菊花加载完毕
+		if(indexnew!=null){
+			layer.close(indexnew);
+		}
      	//预览 按钮
    	   /*var phoneurl=viewModel.get("customer.phoneurl");
     	 if(phoneurl!=null&&phoneurl!=''){
@@ -87,16 +92,14 @@ $(function(){
 	country = JSON.parse(unescape($.queryString("country")));
     countrystatus=$.queryString("countrystatus");
 	/*-------------------------小灯泡 效果--------------------------*/
-	firstPartJP = JSON.parse(unescape($.queryString("firstPartJP")));//获取 错误 信息
+	/*firstPartJP = JSON.parse(unescape($.queryString("firstPartJP")));//获取 错误 信息
 	secondPartJP = JSON.parse(unescape($.queryString("secondPartJP")));//获取 错误 信息
 	thirdPartJP = JSON.parse(unescape($.queryString("thirdPartJP")));//获取 错误 信息
 	$('label').each(function(){
-			
 			var labelText=$(this).text();//获取 页面上所有的字段 名称
 			labelText = labelText.split(":");
 			labelText.pop();
 			labelText = labelText.join(":");//截取 :之前的信息
-			
 			for(var i=0;i<secondPartJP.length;i++){
 				if(labelText==secondPartJP[i]){
 					$(this).next().find('input').css('border-color','#f17474');
@@ -104,7 +107,7 @@ $(function(){
 					$(this).next().find('.input-group-addon').addClass('yellow');//小灯泡
 				}
 			}
-	}); 
+	}); */
 	/*-------------------------end 小灯泡 效果--------------------------*/
 	
 	
@@ -140,8 +143,7 @@ var countries = new kendo.data.DataSource({
     }),
     dafaults = {
 			passportlose:{},
-			oldname:{},
-			authenticatorcode:{},
+			oldnameJp:{},
 			communicahomeaddress:{},
 			orthercountrylist:[],
 			father:{},
@@ -159,7 +161,7 @@ var countries = new kendo.data.DataSource({
 			army:{},
 			othernationality:[],
 			socialinsurancenum:{},
-			taxpayerauthenticat:{},
+			taxpayerauthenticat:{},//日本纳税人认证码
 			commhomeaddress:{},
 			financeJpList:[],
 			recentlyintojpJpList: []
@@ -181,6 +183,7 @@ var countries = new kendo.data.DataSource({
 		"customer.recentlyintojpJpList":{}
 	}
 ;
+
 //护照类型
 var passportTypeEnum=[
     {text:"旅游护照",value:1}
@@ -188,6 +191,8 @@ var passportTypeEnum=[
 /*****************************************************
  * 数据绑定
  ****************************************************/
+var taxpayerauthenticatNum=0;
+var oldnameNum=0;
 var viewModel = kendo.observable({
     customer: dafaults,
     countries:countries,
@@ -277,13 +282,7 @@ var viewModel = kendo.observable({
     },
     onDateChange: function (e) {
         var target = e.sender.element.attr("id");
-        var start = $("#signed_at").data("kendoDatePicker");
-        var end = $("#expire_at").data("kendoDatePicker");
-        if (target === "signed_at") {
-            end.min(start.value());
-        } else {
-            start.max(end.value());
-        }
+        var start = $("#birthDate").data("kendoDatePicker");
     },
     showSaveBtn: function () {
         return !$.queryString("check");
@@ -306,14 +305,64 @@ var viewModel = kendo.observable({
     // 曾用名
     oldNameEnable: function () {
     	/*var oldNameEnable = viewModel.get("customer.oldname");
-        var state = oldNameEnable ? oldNameEnable.length > 0 : false;
-        return state;*/
+        var state = oldNameEnable ? oldNameEnable.length > 0 : false;*/
+        /* return state;*/
         ///return viewModel.get("customer.oldname");
-    	var state = viewModel.get("customer.oldname.oldname") 
-		|| viewModel.get("customer.oldname.oldnameen")
-		|| viewModel.get("customer.oldname.oldxing")
-		|| viewModel.get("customer.oldname.oldxingen");
-    	return state;
+    	
+    	/*var oldnames = JSON.stringify(viewModel.get("customer.oldnameJp.oldname"));
+    	var state = viewModel.get("customer.oldnameJp.oldname")
+		|| viewModel.get("customer.oldnameJp.oldnameen")
+		|| viewModel.get("customer.oldnameJp.oldxing")
+		|| viewModel.get("customer.oldnameJp.oldxingen");*/
+        
+    	var a=viewModel.get("customer.oldname.id");
+    	if(a>0){
+    		$("input[oldname='oldname']").each(function(){
+    			var labelTxt=$(this).parent().prev().text().trim();
+    			labelTxt = labelTxt.split(":");
+    			labelTxt.pop();
+    			labelTxt = labelTxt.join(":");
+				$(this).attr('validationMessage',labelTxt+"不能为空");
+    			$(this).attr('required','required');
+    		});
+    		return true;
+    	}
+    	else if(a<0){
+    		$("input[oldname='oldname']").each(function(){
+    			var labelTxt=$(this).parent().prev().text().trim();
+    			labelTxt = labelTxt.split(":");
+    			labelTxt.pop();
+    			labelTxt = labelTxt.join(":");
+				$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+    			$(this).removeAttr('required','required');
+    		});
+    		return false;
+    	} 
+    	else{
+    		if(oldnameNum<4){
+    			oldnameNum++;
+    			$("input[oldname='oldname']").each(function(){
+        			var labelTxt=$(this).parent().prev().text().trim();
+        			labelTxt = labelTxt.split(":");
+        			labelTxt.pop();
+        			labelTxt = labelTxt.join(":");
+    				$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+        			$(this).removeAttr('required','required');
+        		});
+    			return false;
+    		}else {
+    			$("input[oldname='oldname']").each(function(){
+        			var labelTxt=$(this).parent().prev().text().trim();
+        			labelTxt = labelTxt.split(":");
+        			labelTxt.pop();
+        			labelTxt = labelTxt.join(":");
+    				$(this).attr('validationMessage',labelTxt+"不能为空");
+        			$(this).attr('required','required');
+        		});
+    			return true
+    		};
+    	}
+    	return false;
     },
     // 其他国家公民
     otherCountryEnable: function () {
@@ -321,18 +370,36 @@ var viewModel = kendo.observable({
         var state = otherCountry ? otherCountry.length > 0 : false;
         return state;
     },
-    //美国纳税人认证码
-    usaAuthenticatorCode:function(){
-    	/*var usaAuthenticatorCode = viewModel.get("customer.authenticatorcode");
-        var state = usaAuthenticatorCode ? usaAuthenticatorCode.length > 0 : false;
+    //日本纳税人认证码
+    jpAuthenticatorCode:function(){
+    	/*var jpAuthenticatorCode = viewModel.get("customer.taxpayerauthenticat");
+        var state = jpAuthenticatorCode ? jpAuthenticatorCode.length > 0 : false;
         return state;*/
-    	///return viewModel.get("customer.authenticatorcode");
+    	///return viewModel.get("customer.taxpayerauthenticat");
+    	var country=viewModel.get("customer.taxpayerauthenticat.country");
+    	if(country=="CHN"){
+    		country = "";
+    	}else{
+    		country = viewModel.get("customer.taxpayerauthenticat.country");
+    	}
     	var state = viewModel.get("customer.taxpayerauthenticat.city") 
-		|| viewModel.get("customer.taxpayerauthenticat.country")
+		|| country
 		|| viewModel.get("customer.taxpayerauthenticat.homeAddress")
 		|| viewModel.get("customer.taxpayerauthenticat.postCode")
 		|| viewModel.get("customer.taxpayerauthenticat.province");
     	return state;
+    	
+    	/*var a=viewModel.get("customer.taxpayerauthenticat.id");
+    	if(a>0) return true;
+    	else if(a<0) return false;
+    	else{
+    		if(taxpayerauthenticatNum<4){
+    			taxpayerauthenticatNum++;
+    			return false;
+    		}else {return true};
+    	}
+    	return false;*/
+    	
     },
     //通信地址与家庭地址是否一致
     usaCommunicaHomeAddress:function(){
@@ -340,34 +407,52 @@ var viewModel = kendo.observable({
         var state = usaCommunicaHomeAddress ? usaCommunicaHomeAddress.length > 0 : false;
         return state;*/
     	///return viewModel.get("customer.communicahomeaddress");
+    	var issuingCountry=viewModel.get("customer.commhomeaddress.issuingCountry");
+    	if(issuingCountry=="CHN"){
+    		issuingCountry = "";
+    	}else{
+    		issuingCountry = viewModel.get("customer.commhomeaddress.issuingCountry");
+    	}
+    	var passportType = viewModel.get("customer.commhomeaddress.passportType");
+    	if(passportType==1){
+    		passportType = "";
+    	}else{
+    		passportType = viewModel.get("customer.commhomeaddress.passportType");
+    	}
     	var state = viewModel.get("customer.commhomeaddress.mainPhoneNum") 
 		|| viewModel.get("customer.commhomeaddress.minorPhoneNum")//undefined
 		|| viewModel.get("customer.commhomeaddress.workPhoneNum")//undefined
 		|| viewModel.get("customer.commhomeaddress.email")
 		|| viewModel.get("customer.commhomeaddress.issuingCity")
-		|| viewModel.get("customer.commhomeaddress.passportType");
-    	//|| viewModel.get("customer.commhomeaddress.issuingCountry")
+		|| passportType
+    	|| issuingCountry;
     	return state;
     }
 });
 kendo.bind($(document.body), viewModel);//数据绑定结束
 
-//丢过护照
+//护照是否遗失过或被偷过
 $("#pp_lost").change(function () {
 	//viewModel.set("customer.passportlose", $(this).is(':checked') ? " " : "");
 	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.passportlose.sendcountry", "CHN");
     viewModel.set("customer.passportlose.passport", value);
     viewModel.set("customer.passportlose.reason", value);
     viewModel.set("customer.passportlose.reasonen", value);
 });
 //曾用名
 $("#has_used_name").change(function () {
-	//viewModel.set("customer.oldname", $(this).is(':checked') ? " " : "");
-	var value = $(this).is(':checked') ? " " : "";
-    viewModel.set("customer.oldname.oldname", value);
-    viewModel.set("customer.oldname.oldnameen", value);
-    viewModel.set("customer.oldname.oldxing", value);
-    viewModel.set("customer.oldname.oldxingen", value);
+//	viewModel.set("customer.oldname", $(this).is(':checked') ? " " : "");
+	
+	/*var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.oldnameJp.oldname", value);
+    viewModel.set("customer.oldnameJp.oldnameen", value);
+    viewModel.set("customer.oldnameJp.oldxing", value);
+    viewModel.set("customer.oldnameJp.oldxingen", value);*/
+    
+    var a={"customer_jp_id":0,"id":0,"oldname":"","oldnameen":"","oldxing":"","oldxingen":""};
+	var b={"customer_jp_id":0,"id":-1,"oldname":"","oldnameen":"","oldxing":"","oldxingen":""};
+	viewModel.set("customer.oldname", $(this).is(':checked') ? a : b);
 });
 //其他国家居民
 $("#has_pr").change(function () {
@@ -386,15 +471,19 @@ $("#same_as_home").change(function () {
     viewModel.set("customer.spouse.spouselinkaddress", value);
     viewModel.set("customer.spouse.spouselinkaddressen", value);
 });
-//美国纳税人认证码
-$("#usa_authenticator_code").change(function () {
-	//viewModel.set("customer.authenticatorcode", $(this).is(':checked') ? " " : "");
+//日本纳税人认证码
+$("#jp_authenticator_code").change(function () {
+	//viewModel.set("customer.taxpayerauthenticat", $(this).is(':checked') ? " " : "");
 	var value = $(this).is(':checked') ? " " : "";
     viewModel.set("customer.taxpayerauthenticat.city", value);
-    viewModel.set("customer.taxpayerauthenticat.country", value);
+    viewModel.set("customer.taxpayerauthenticat.country", "CHN");
     viewModel.set("customer.taxpayerauthenticat.homeAddress", value);
     viewModel.set("customer.taxpayerauthenticat.postCode", value);
     viewModel.set("customer.taxpayerauthenticat.province", value);
+    
+    /*var a={"city":"","country":"CHN","createTime":null,"customerId":0,"homeAddress":"","id":0,"postCode":"","province":"","remark":"","status":0,"updateTime":null};
+	var b={"city":"","country":"CHN","createTime":null,"customerId":0,"homeAddress":"","id":-1,"postCode":"","province":"","remark":"","status":0,"updateTime":null};
+	viewModel.set("customer.taxpayerauthenticat", $(this).is(':checked') ? a : b);*/
 });
 //通信地址与家庭地址是否一致
 $("#communica_home_address").change(function () {
@@ -405,45 +494,135 @@ $("#communica_home_address").change(function () {
     viewModel.set("customer.commhomeaddress.workPhoneNum", value);
     viewModel.set("customer.commhomeaddress.email", value);
     viewModel.set("customer.commhomeaddress.issuingCity", value);
-    //viewModel.set("customer.commhomeaddress.issuingCountry", value);
-    viewModel.set("customer.commhomeaddress.passportType", value);
+    viewModel.set("customer.commhomeaddress.issuingCountry", "CHN");
+    viewModel.set("customer.commhomeaddress.passportType", 1);
 });
 /*------------------------------------------------end container---------------------------------------------------*/
 /**********************************************
 *编辑保存日本基本信息
 **********************************************/
+//存放空的数组
+var emptyNum=[];
+//存放格式错误的数组
+var errorNum=[];
+//护照信息编辑保存
+var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
 function updateBaseJPInfoData(){
-	$.ajax({
-		 type: "POST",
-		 url: "/visa/basicinfo/updateBaseJPInfoData",
-		 contentType:"application/json",
-		 data: JSON.stringify(viewModel.customer)+"",
-		 success: function (result){
-			layer.msg("保存成功",{time:2000});
-		 },
-		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-             layer.msg('保存失败',{time:2000});
-         }
-	});
+	if(validatable.validate()){
+		//清空验证的数组
+		emptyNum.splice(0,emptyNum.length);
+		errorNum.splice(0,errorNum.length);
+		$.ajax({
+			 type: "POST",
+			 url: "/visa/basicinfo/updateBaseJPInfoData",
+			 contentType:"application/json",
+			 data: JSON.stringify(viewModel.customer)+"",
+			 success: function (result){
+				layer.msg("保存成功",{time:2000});
+			 },
+			 error: function(XMLHttpRequest, textStatus, errorThrown) {
+	            layer.msg('保存失败',{time:2000});
+	         }
+		});
+	}else{
+		//验证————————————————————————————————————
+	    $('.k-tooltip-validation').each(function(){
+	    	var verificationText=$(this).text().trim();//获取验证的文字信息
+	    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
+	    	labelVal = labelVal.split(":");
+	    	labelVal.pop();
+	    	labelVal = labelVal.join(":");//截取 :之前的信息
+	    	var person=new Object();
+	    	person.text=labelVal;
+	    	person.error="";
+	    	if(verificationText.indexOf("不能为空")>0){
+	    		emptyNum.push(person);
+	    	}else{
+	    		errorNum.push(person);
+	    	}
+	    });
+	    //end 验证————————————————————————————————
+		var str="";
+		if(emptyNum.length>0){
+			for(var i=0;i<emptyNum.length;i++){
+				str+=emptyNum[i].text+",";
+			}
+			str+="不能为空！"
+		}
+		if(errorNum.length>0){
+			for(var i=0;i<errorNum.length;i++){
+				str+=errorNum[i].text+",";
+			}
+			str+="格式不正确！";
+		}
+		$.layer.alert(str);
+		//用完清空
+		emptyNum.splice(0,emptyNum.length);
+		errorNum.splice(0,errorNum.length);
+	}
 }
 //点击下一步时跳转至日本签证信息
 $("#nextStepBtn").click(function(){
-	$.ajax({
-		 type: "POST",
-		 url: "/visa/basicinfo/updateBaseJPInfoData",
-		 contentType:"application/json",
-		 data: JSON.stringify(viewModel.customer)+"",
-		 success: function (result){
-			layer.msg("操作成功",{time:2000});
-			window.location.href='/personal/visaInfo/JPvisaInfoList.html?firstPartJP='
-				  +escape(JSON.stringify(firstPartJP))+"&secondPartJP="
-				  +escape(JSON.stringify(secondPartJP))+"&thirdPartJP="
-				  +escape(JSON.stringify(thirdPartJP))+"&typeId=1"+"&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
-		 },
-		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-             layer.msg('操作失败',{time:2000});
-         }
-	});
+	if(validatable.validate()){
+		//清空验证的数组
+		emptyNum.splice(0,emptyNum.length);
+		errorNum.splice(0,errorNum.length);
+		$.ajax({
+			 type: "POST",
+			 url: "/visa/basicinfo/updateBaseJPInfoData",
+			 contentType:"application/json",
+			 data: JSON.stringify(viewModel.customer)+"",
+			 success: function (result){
+				layer.msg("操作成功",{time:2000});
+				window.location.href='/personal/visaInfo/JPvisaInfoList.html?firstPartJP='
+					  +escape(JSON.stringify(firstPartJP))+"&secondPartJP="
+					  +escape(JSON.stringify(secondPartJP))+"&thirdPartJP="
+					  +escape(JSON.stringify(thirdPartJP))+"&typeId=1"+"&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
+			 },
+			 error: function(XMLHttpRequest, textStatus, errorThrown) {
+	             layer.msg('操作失败',{time:2000});
+	         }
+		});
+	}else{
+		//验证————————————————————————————————————
+	    $('.k-tooltip-validation').each(function(){
+	    	var verificationText=$(this).text().trim();//获取验证的文字信息
+	    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
+	    	labelVal = labelVal.split(":");
+	    	labelVal.pop();
+	    	labelVal = labelVal.join(":");//截取 :之前的信息
+	    	var person=new Object();
+	    	person.text=labelVal;
+	    	person.error="";
+	    	if(verificationText.indexOf("不能为空")>0){
+	    		emptyNum.push(person);
+	    	}else{
+	    		errorNum.push(person);
+	    	}
+	    });
+	    //菊花加载完毕
+		if(indexnew!=null){
+			layer.close(indexnew);
+		}
+	    //end 验证————————————————————————————————
+		var str="";
+		if(emptyNum.length>0){
+			for(var i=0;i<emptyNum.length;i++){
+				str+=emptyNum[i].text+",";
+			}
+			str+="不能为空！"
+		}
+		if(errorNum.length>0){
+			for(var i=0;i<errorNum.length;i++){
+				str+=errorNum[i].text+",";
+			}
+			str+="格式不正确！";
+		}
+		$.layer.alert(str);
+		//用完清空
+		emptyNum.splice(0,emptyNum.length);
+		errorNum.splice(0,errorNum.length);
+	}
 });
 //文件上传
 function uploadFile(){

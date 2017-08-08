@@ -256,7 +256,7 @@ public class OrderController extends BaseController {
 			order.setUpdatetime(new Date());
 
 			//生成订单号
-			SimpleDateFormat smf = new SimpleDateFormat("yyyyMMdd");
+			SimpleDateFormat smf = new SimpleDateFormat("yyMMdd");
 			String format = smf.format(new Date());
 			String sqlString = sqlManager.get("orderlist_ordernum");
 			Sql sql = Sqls.create(sqlString);
@@ -264,7 +264,7 @@ public class OrderController extends BaseController {
 			int sum = 1;
 			if (!Util.isEmpty(query) && query.size() > 0) {
 				String string = query.get(0).getString("ordernumber");
-				int a = Integer.valueOf(string.substring(11, string.length()));
+				int a = Integer.valueOf(string.substring(9, string.length()));
 				sum += a;
 			}
 			String sum1 = "";
@@ -279,7 +279,7 @@ public class OrderController extends BaseController {
 				sum1 = "" + sum;
 
 			}
-			String ordernum = format + "US" + sum1;
+			String ordernum = format + "-US" + sum1;
 
 			order.setOrdernumber(ordernum);
 
@@ -545,8 +545,10 @@ public class OrderController extends BaseController {
 		List<EmployeeEntity> query = dbDao.query(EmployeeEntity.class,
 				Cnd.where("telephone", "=", phone).and("userType", "=", UserTypeEnum.TOURIST_IDENTITY.intKey()), null);
 		employeeEntity.setPassword(pwd);
+		boolean isexist = false;
 		if (!Util.isEmpty(query) && query.size() > 0) {
-			employeeEntity.setId(query.get(0).getId());
+			isexist = true;
+			/*employeeEntity.setId(query.get(0).getId());
 			try {
 				nutDao.update(employeeEntity);
 			} catch (Exception e) {
@@ -554,7 +556,7 @@ public class OrderController extends BaseController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 
-			}
+			}*/
 		} else {
 
 			employeeEntity = dbDao.insert(employeeEntity);
@@ -567,17 +569,33 @@ public class OrderController extends BaseController {
 			genderStr = "先生";
 
 		}
+		String logininfo = "";
+		if (isexist) {
+
+			logininfo += "用户名:" + phone;
+		} else {
+			logininfo += "用户名:" + phone + "密码:" + temp;
+		}
 		String html = tmp.toString().replace("${name}", customer.getChinesexing() + customer.getChinesename())
 				.replace("${oid}", order.getOrdernumber()).replace("${href}", "http://218.244.148.21:9004/")
-				.replace("${logininfo}", "用户名:" + phone + "密码:" + temp).replace("${gender}", genderStr);
+				.replace("${logininfo}", logininfo).replace("${gender}", genderStr);
 		String result = mailService.send(customer.getEmail(), html, "签证资料录入", MailService.Type.HTML);
 		if ("success".equalsIgnoreCase(result)) {
 			//成功以后分享次数加1
-			dbDao.update(
-					NewCustomerEntity.class,
-					Chain.make("sharecount", customer.getSharecount() + 1)
-							.add("status", OrderVisaApproStatusEnum.writeInfo.intKey())
-							.add("empid", employeeEntity.getId()), Cnd.where("id", "=", customer.getId()));
+			if (isexist) {
+
+				dbDao.update(
+						NewCustomerEntity.class,
+						Chain.make("sharecount", customer.getSharecount() + 1).add("status",
+								OrderVisaApproStatusEnum.writeInfo.intKey()), Cnd.where("id", "=", customer.getId()));
+			} else {
+
+				dbDao.update(
+						NewCustomerEntity.class,
+						Chain.make("sharecount", customer.getSharecount() + 1)
+								.add("status", OrderVisaApproStatusEnum.writeInfo.intKey())
+								.add("empid", employeeEntity.getId()), Cnd.where("id", "=", customer.getId()));
+			}
 
 			return ResultObject.success(result);
 		} else {
@@ -1114,16 +1132,32 @@ public class OrderController extends BaseController {
 		}
 
 		String html = tmp.toString().replace("${name}", "").replace("${oid}", order.getOrdernumber())
-				.replace("${href}", "http://127.0.0.1:8080//main.html?logintype=5&orderId=" + orderid)
+				.replace("${href}", "http://218.244.148.21:9004//main.html?logintype=5&orderId=" + orderid)
 				.replace("${logininfo}", "").replace("${gender}", "先生/女士");
 		String result = mailService.send(email, html, "签证资料录入", MailService.Type.HTML);
 
-		/*	String result = getMailContent(order, phone, null, customerManage);
 		if ("success".equalsIgnoreCase(result)) {
 			dbDao.update(NewOrderEntity.class, Chain.make("sharecountmany", order.getSharecountmany() + 1),
 					Cnd.where("id", "=", orderid));
 			//成功以后分享次数加1
-		}*/
+			List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
+					Cnd.where("orderid", "=", orderid), null);
+			if (!Util.isEmpty(query) && query.size() > 0) {
+
+				for (NewCustomerOrderEntity newCustomerOrderEntity : query) {
+					if (!Util.isEmpty(newCustomerOrderEntity)) {
+
+						NewCustomerEntity fetch = dbDao.fetch(NewCustomerEntity.class,
+								newCustomerOrderEntity.getCustomerid());
+						if (!Util.isEmpty(fetch)) {
+
+							fetch.setStatus(OrderVisaApproStatusEnum.writeInfo.intKey());
+							dbDao.update(fetch, null);
+						}
+					}
+				}
+			}
+		}
 
 		return ResultObject.success(result);
 	}

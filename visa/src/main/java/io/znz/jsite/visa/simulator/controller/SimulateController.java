@@ -6,6 +6,7 @@
 
 package io.znz.jsite.visa.simulator.controller;
 
+import io.znz.jsite.visa.simulator.service.SimulateJapanViewService;
 import io.znz.jsite.visa.simulator.service.SimulateViewService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class SimulateController {
 
 	@Autowired
 	private SimulateViewService simulateViewService;
+	@Autowired
+	private SimulateJapanViewService simulateJapanViewService;
 
 	/**
 	 * 获取第一个已经审核完毕的任务提交到美国签证网站
@@ -60,4 +63,30 @@ public class SimulateController {
 		return simulateViewService.usaUpload(file, cid);
 	}
 
+	/**
+	 * 日本：获取第一个已经审核完毕的任务提交到日本签证网站
+	 */
+	@RequestMapping(value = "fetchJapan", method = RequestMethod.GET)
+	@ResponseBody
+	public Object fetchJapan() {
+		return simulateJapanViewService.fetchJapanOrder();
+	}
+
+	/**
+	 * 日本;将准备提交的任务修改为'提交中'
+	 */
+	@RequestMapping(value = "ds160Japan/{cid}", method = RequestMethod.GET)
+	@ResponseBody
+	public Object ds160Japan(@PathVariable Long cid) {
+		return simulateJapanViewService.ds160Japan(cid);
+	}
+
+	/**
+	 * 日本，签证文件上传，上传成功 将签证状态改为已提交使馆
+	 */
+	@RequestMapping(value = "UploadJapan/{cid}", method = RequestMethod.POST)
+	@ResponseBody
+	public Object UploadJapan(@RequestParam(required = false) MultipartFile file, @PathVariable Long cid) {
+		return simulateJapanViewService.UploadJapan(file, cid);
+	}
 }

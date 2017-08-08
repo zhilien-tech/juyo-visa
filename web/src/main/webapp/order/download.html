@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
     <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/><!--修改的样式-->
 </head>
-<body>
+<body id="aaaa">
 <div>
     <div class="container-fluid" style="padding-top: 15px;">
         <div class="row">
@@ -30,13 +30,23 @@
 	                                    <div class="form-group">
 	                                        <label for="gender">送签社:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <select id="songqianShe" style="width: 100%;"
+	                                           <!--  <select id="songqianShe" style="width: 100%;"
 	                                                    data-role="dropdownlist"
 	                                                    data-value-primitive="true"
 	                                                    data-bind=" ">
 	                                                <option value="1">日本株式会社金通商事</option>
 	                                                <option value="0">日本三全水饺株式会社</option>
-	                                            </select>
+	                                            </select> -->
+	                                               <select id="customerSource"
+                                                    data-role="dropdownlist"
+                                                    data-filter="startswith"
+                                                    data-suggest="true"
+                                                    data-auto-bind="true"
+                                                    data-value-primitive="true"
+                                                    data-text-field="comFullName"
+                                                    data-value-field="id"
+                                                    data-bind="value:customer.sendComId,source:sendCom"
+                                                    style="width: 100%;"></select>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -50,13 +60,23 @@
 	                                    <div class="form-group">
 	                                        <label for="gender">地接社:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                            <select id="dijieShe" style="width: 100%;"
+	                                           <!--  <select id="dijieShe" style="width: 100%;"
 	                                                    data-role="dropdownlist"
 	                                                    data-value-primitive="true"
 	                                                    data-bind=" ">
 	                                                <option value="1">聚优国际（北京）旅行社</option>
 	                                                <option value="0">聚优国际（上海）旅行社</option>
-	                                            </select>
+	                                            </select> -->
+	                                             <select id="land"
+                                                    data-role="dropdownlist"
+                                                    data-filter="startswith"
+                                                    data-suggest="true"
+                                                    data-auto-bind="true"
+                                                    data-value-primitive="true"
+                                                    data-text-field="landcomFullName"
+                                                    data-value-field="id"
+                                                    data-bind="value:customer.landComId,source:landCom"
+                                                    style="width: 100%;"></select>
 	                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 	                                        </div>
 	                                    </div>
@@ -70,10 +90,10 @@
                 </ul>
             </div>
         </div>
-        <div class="row" data-bind="visible:showToolBar">
+        <div class="row">
             <div class="col-xs-12">
                 <div class="form-group">
-                    <button id="" class="k-primary k-button col-xs-12">确定下载</button>
+                    <button id="" class="k-primary k-button col-xs-12" onclick="downloadsave();">确定下载</button>
                 </div>
             </div>
         </div>
@@ -83,13 +103,16 @@
 <!--引入 js 库文件-->
 <script src="/res/plugin/template.js"></script>
 <script src="/res/plugin/jquery.min.js"></script>
-<script src="/res/plugin/layer/layer.js"></script>
 <script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
 <script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
 <script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
 <script src="/res/js/common.js"></script>
+<script src="/res/plugin/jquery.fileDownload.js"></script>
+<script src="/res/plugin/lightGallery/js/lightgallery.js"></script>
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
+<script src="/res/js/download/downloadJp.js"></script>
+<script src="/res/plugin/layer/layer.js"></script>
 
 <script type="text/javascript">
 $(function(){

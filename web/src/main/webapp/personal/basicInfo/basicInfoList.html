@@ -122,7 +122,7 @@
                      <div class="form-group">
                          <label for="old_usrname_cn">曾用姓:<span style="color: red">*</span></label>
                          <div class='input-group'>
-                             <input id="old_usrname_cn" data-bind="value:customer.oldname.oldxing"
+                             <input id="old_usrname_cn" data-bind="value:customer.oldname.oldxing" oninput="getPinYin()"
                                     class="k-textbox" style="width: 100%;"/>
                              <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                          </div>
@@ -143,7 +143,7 @@
                      <div class="form-group">
                          <label for="old_given_name_cn">曾用名:<span style="color: red">*</span></label>
                          <div class='input-group'>
-                             <input id="old_given_name_cn" data-bind="value:customer.oldname.oldname"
+                             <input id="old_given_name_cn" data-bind="value:customer.oldname.oldname" oninput="getPinYin()"
                                     class="k-textbox" style="width: 100%;"/>
                              <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                          </div>
@@ -666,8 +666,18 @@
                 <div class="form-group">
                     <label for="authenticator_country">国家:</label>
                     <div class='input-group'>
-                      <input id="authenticator_country" type="text" data-bind="value:customer.taxpayerauthenticat.country" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <!-- <input id="authenticator_country" type="text" data-bind="value:customer.taxpayerauthenticat.country" class="k-textbox k-state-disabled" style="width: 100%;" disabled/> -->
                       <!-- <span class=''><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
+                      <select id=authenticator_country
+                                data-role="dropdownlist"
+                                data-filter="startswith"
+                                data-suggest="true"
+                                data-auto-bind="true"
+                                data-value-primitive="true"
+                                data-text-field="text"
+                                data-value-field="value"
+                                data-bind="value:customer.taxpayerauthenticat.country,source:countries"
+                                style="width: 100%;" ></select>
                     </div>
                 </div>
              </div>
@@ -763,8 +773,18 @@
                 <div class="form-group">
                     <label for="issuingCountry">签发国家:</label>
                     <div class='input-group'>
-                      <input id="issuingCountry" type="text" data-bind="value:customer.commhomeaddress.issuingCountry" class="k-textbox k-state-disabled" style="width: 100%;" disabled/>
+                      <!-- <input id="issuingCountry" type="text" data-bind="value:customer.commhomeaddress.issuingCountry" class="k-textbox k-state-disabled" style="width: 100%;" disabled/> -->
                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
+                      <select id="home_commhomeaddress_nationality"
+                                data-role="dropdownlist"
+                                data-filter="startswith"
+                                data-suggest="true"
+                                data-auto-bind="true"
+                                data-value-primitive="true"
+                                data-text-field="text"
+                                data-value-field="value"
+                                data-bind="value:customer.commhomeaddress.issuingCountry,source:countries"
+                                style="width: 100%;" ></select>
                     </div>
                 </div>
              </div>
@@ -1568,5 +1588,7 @@
 <script src="/res/js/customermanage/customerlist.js"></script> -->
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
+<script src="/res/js/pinyin/pinyin_dict_notone.js"></script>
+<script src="/res/js/pinyin/pinyinUtil.js"></script>
 <script src="/res/js/personal/basicInfo/basicInfoList.js"></script><!-- 本页面js -->
 </html>

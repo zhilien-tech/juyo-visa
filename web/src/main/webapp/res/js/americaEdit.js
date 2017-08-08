@@ -430,39 +430,39 @@ function ordersave(){
 				 data: JSON.stringify(viewModel.customer),
 				 success: function (result) {
 					 if(indexnew!=null){
-							
 							layer.close(indexnew);
-							}
-					 
-					 console.log(result.code);
+					 }
+					 //console.log(result.code);
 					 if(result.code=="SUCCESS"){
 						 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						 //$.layer.closeAll();
 						 parent.layer.close(index);
 						 window.parent.successCallback('1');
-						 
 					 }
 				 }
 			 });
 	}else{
 		   //验证————————————————————————————————————
 	    $('.k-tooltip-validation').each(function(){
-	    	var verificationText=$(this).text().trim();//获取验证的文字信息
-	    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
-	    	labelVal = labelVal.split(":");
-	    	labelVal.pop();
-	    	labelVal = labelVal.join(":");//截取 :之前的信息
-	    	var person=new Object();
-	    	person.text=labelVal;
-	    	person.error="";
-	    	if(verificationText.indexOf("不能为空")>0){
-	    		emptyNum.push(person);
-	    	}else{
-	    		errorNum.push(person);
-	    		
-	    	}
-	    	//console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
-	    });
+	    	var none=$(this).css("display")=="none";//获取 判断验证提示隐藏
+		    	if(!none){
+		    		var verificationText=$(this).text().trim();//获取验证的文字信息
+			    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
+			    	labelVal = labelVal.split(":");
+			    	labelVal.pop();
+			    	labelVal = labelVal.join(":");//截取 :之前的信息
+			    	var person=new Object();
+			    	person.text=labelVal;
+			    	person.error="";
+			    	if(verificationText.indexOf("不能为空")>0){
+			    		emptyNum.push(person);
+			    	}else{
+			    		errorNum.push(person);
+			    		
+			    	}
+			    	//console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
+		    	}
+	    	});
 	    //end 验证————————————————————————————————
 		
 		
@@ -493,6 +493,7 @@ function ordersave(){
 $(function () {
     //如果有传递ID就是修改
     var oid = $.queryString("cid");
+    var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
     if (oid) {
         $.getJSON("/visa/order/showDetail?orderid=" + oid, function (resp) {
         	viewModel.set("customer", $.extend(true, dafaults, resp));
@@ -521,6 +522,13 @@ $(function () {
 				$('.companyFullName').removeClass('hide');//显示 默认显示的 其他状态下的 公司全称
 				$('.ZKcompanyFullName').addClass('hide');//隐藏   默认显示的  直客  公司全称
 			}
+			if(indexnew!=null){
+				layer.close(indexnew);
+			}
         });
+    }else{
+    	if(indexnew!=null){
+			layer.close(indexnew);
+		}
     }
 });

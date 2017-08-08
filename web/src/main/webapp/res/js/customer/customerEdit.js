@@ -11,6 +11,27 @@ function translateZhToEn(from, to) {
     });
 }
 
+//美国订单用户信息 根据中文自动转为拼音
+function getPinYin(){
+	var chinesexing = $("#last_name_cn").val();
+	var chinesexingen = pinyinUtil.getPinyin(chinesexing, '', false, false);
+	viewModel.set("customer.chinesexingen",chinesexingen.toUpperCase());
+	
+	var chinesename = $("#first_name_cn").val();
+	var chinesenameen = pinyinUtil.getPinyin(chinesename, '', false, false);
+	viewModel.set("customer.chinesenameen",chinesenameen.toUpperCase());
+	
+	//曾用名
+	var oldname = $("#old_usrname_cn").val();
+	var oldxingen = pinyinUtil.getPinyin(oldname, '', false, false);
+	viewModel.set("customer.oldname.oldxingen",oldxingen.toUpperCase());
+	
+	var oldnamePin = $("#old_given_name_cn").val();
+	var oldnameen = pinyinUtil.getPinyin(oldnamePin, '', false, false);
+	viewModel.set("customer.oldname.oldnameen",oldnameen.toUpperCase());
+	
+}
+
 var countries = new kendo.data.DataSource({
         transport: {
             read: {
@@ -29,10 +50,10 @@ var countries = new kendo.data.DataSource({
     }),
     dafaults = {
 			gender:0,
-			birthcountry:"CHIN",
-			nowcountry:"CHIN",
+			birthcountry:"CHN",
+			nowcountry:"CHN",
 			passportlose:{
-				sendcountry:"CHIN"
+				sendcountry:"CHN"
 			},
 			oldname:{},
 			orthercountrylist:[],
@@ -194,7 +215,10 @@ var viewModel = kendo.observable({
     },
     // 曾用名
     oldNameEnable: function () {
-    	var state = viewModel.get("customer.oldname.oldname") || viewModel.get("customer.oldname.oldnameen") || viewModel.get("customer.oldname.oldxing") || viewModel.get("customer.oldname.oldxingen");
+    	var state = viewModel.get("customer.oldname.oldname")
+    			 || viewModel.get("customer.oldname.oldnameen") 
+    			 || viewModel.get("customer.oldname.oldxing") 
+    			 || viewModel.get("customer.oldname.oldxingen");
     	if(state){
     		$("input[oldname='oldname']").each(function(){
     			var labelTxt=$(this).parent().prev().text().trim();
@@ -235,8 +259,8 @@ kendo.bind($(document.body), viewModel);
 //丢过护照
 $("#pp_lost").change(function () {
 	///console.log("==1==="+JSON.stringify(viewModel.customer.passportlose));
-	var a={"sendcountry":"CHIN","customerid":0,"id":0,"passport":"","reason":"","reasonen":""};
-	var b={"sendcountry":"CHIN","customerid":0,"id":-1,"passport":"","reason":"","reasonen":""};
+	var a={"sendcountry":"CHN","customerid":0,"id":0,"passport":"","reason":"","reasonen":""};
+	var b={"sendcountry":"CHN","customerid":0,"id":-1,"passport":"","reason":"","reasonen":""};
 	viewModel.set("customer.passportlose", $(this).is(':checked') ? a : b);
 	///console.log("===2=="+JSON.stringify(viewModel.customer.passportlose));
 });
@@ -546,20 +570,20 @@ $(function () {
         	var birthcountry=viewModel.get("customer.birthcountry");
 			if(birthcountry!=null&&birthcountry!=''){
 			}else{
-				viewModel.set("customer.birthcountry","CHIN");
+				viewModel.set("customer.birthcountry","CHN");
 				
 			}
 			var nowcountry=viewModel.get("customer.nowcountry");
 			if(nowcountry!=null&&nowcountry!=''){
 			}else{
-				viewModel.set("customer.nowcountry","CHIN");
+				viewModel.set("customer.nowcountry","CHN");
 				
 			}
 			var sendcountry=viewModel.get("customer.passportlose.sendcountry");
 			if(sendcountry!=null&&sendcountry!=''){
 			}else{
 				
-				viewModel.set("customer.passportlose.sendcountry","CHIN");
+				viewModel.set("customer.passportlose.sendcountry","CHN");
 			}
 			
 			var photoname= "<a id='downloadA' href='#'>"
@@ -605,7 +629,7 @@ $(function () {
         		/*----小灯泡 回显----*/
             	var reason=viewModel.get("customer.errorinfo");
             	var map1=new Map();
-            	map1=eval("("+reason+")");
+            	map1=eval('(' +reason+ ')');
             	for (var key in map1){
             		var a = map1[key];//获取到 错误信息 数据
             		for(var i=0;i<a.length;i++){

@@ -25,6 +25,8 @@
     	.k-state-hover{background-color: #ccc !important;}
     	.addApplicantBtn span.k-link span.k-icon{display:none;}
     	.input-group{width:100%;}/*由于删掉小灯泡 宽度出现问题 此处理设置所有input、select等宽度等于父类*/
+    	.check input{width: 16px;height: 16px;position: relative;top: 3px;}
+    	.check label{margin-right: 22.6px;}
     </style>
 </head>
 <body id="aaaa">
@@ -214,9 +216,11 @@
                                                     data-value-primitive="true"
                                                      data-bind="value:customer.area"
                                                      name="area">
-                                                <option value="0">东北</option>
-                                                <option value="1">华东</option>
-                                                <option value="2">华南</option>
+                                          		<option value="0">北京</option>
+                                                <option value="1">上海</option>
+                                                <option value="2">广州</option>
+                                                <option value="3">成都</option>
+                                                <option value="4">沈阳</option>
                                             </select>
                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                                         </div>
@@ -302,7 +306,7 @@
                                 </div>
                             </div>
                             <!-- 备注 -->
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <label for="us_contact_first_name_cn">备注:</label>
@@ -310,11 +314,49 @@
                                             <input id="us_contact_first_name_cn"
                                                    data-bind="value:customer.remark"
                                                    class="k-textbox" style="width: 100%;" name="remaker"/>
-                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
+                                            <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
                                 </div>
+                            </div> -->
+                            
+                            <!-- 沖縄県/青森県/岩手県/宮城県/秋田県/山形県/福島県 -->
+                            <div class="row dongliuXian">
+                                <div class="col-xs-12">
+                                    <div class="form-group check">
+                                    	<input type="checkbox" name="chongSheng" onclick="addSix(this,47);" id="47">
+                                      	<label for="us_contact_first_name_cn">沖縄県</label>
+                                        <input type="checkbox" name="qingSen" onclick="addSix(this,2);" id="2">
+                                        <label for="us_contact_first_name_cn">青森県</label>
+                                        <input type="checkbox" name="yanShou" onclick="addSix(this,3);" id="3">
+                                        <label for="us_contact_first_name_cn">岩手県</label>
+                                        <input type="checkbox" name="gongCheng" onclick="addSix(this,4);" id="4">
+                                        <label for="us_contact_first_name_cn">宮城県</label>
+                                        <input type="checkbox" name="qiuTian" onclick="addSix(this,5);" id="5">
+                                        <label for="us_contact_first_name_cn">秋田県</label>
+                                        <input type="checkbox" name="shanXing" onclick="addSix(this,6);" id="6">
+                                        <label for="us_contact_first_name_cn">山形県</label>
+                                        <input type="checkbox" name="fuDao" onclick="addSix(this,7);" id="7">
+                                        <label for="us_contact_first_name_cn">福島県</label>
+                                    </div>
+                                </div>
                             </div>
+                            <!-- end 沖縄県/青森県/岩手県/宮城県/秋田県/山形県/福島県 -->
+                            
+                            <!-- 岩手県/宮城県/福島県 -->
+                            <div class="row dongSanXian">
+                                <div class="col-xs-12">
+                                    <div class="form-group check">
+                                        <input type="checkbox" name="yanShou" onclick="addthree(this,3);" id="3t">
+                                        <label for="us_contact_first_name_cn">岩手県</label>
+                                        <input type="checkbox" name="gongCheng" onclick="addthree(this,4);" id="4t">
+                                        <label for="us_contact_first_name_cn">宮城県</label>
+                                        <input type="checkbox" name="fuDao" onclick="addthree(this,7);" id="7t">
+                                        <label for="us_contact_first_name_cn">福島県</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end 岩手県/宮城県/福島県 -->
                         </div>
                     </li> 
             <li> 出行信息
@@ -1030,7 +1072,7 @@
 <!-- 主申请人 模板 -->
 <script id="tpl_customer" type="text/html">
 <li class="k-item k-state-default k-first k-last k-state-highlight">
-    <span class="k-link span-Title" id="ismainproposer_#:data.id#">#:data.ismainproposer?'主申请人':'副申请人'#(#:data.xing+data.name#)<span class="k-icon k-i-arrow-60-down k-panelbar-collapse"></span></span>
+    <span class="k-link span-Title" id="ismainproposer_#:data.id#">#:data.isMainProposer?'主申请人':'副申请人'#(#:data.xing+data.name#)<span class="k-icon k-i-arrow-60-down k-panelbar-collapse"></span></span>
     <div class="container-fluid k-content" style="padding-top: 15px;padding-bottom: 15px;">
         <div class="row">
             <div class="col-xs-3">
@@ -1062,7 +1104,7 @@
                 <div class="form-group">
                     <label>主申请人:</label>
                     <div class="onoffswitch">
-                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main_#:data.uid#" data-bind="checked:ismainproposer,click:changeismainproposer">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main_#:data.uid#" data-bind="checked:isMainProposer,click:changeismainproposer">
                         <label class="onoffswitch-label" for="main_#:data.uid#">
                             <span class="onoffswitch-inner"></span>
                             <span class="onoffswitch-switch"></span>
@@ -1071,7 +1113,7 @@
                 </div>
             </div>
         </div>
-        <div class="row" data-bind="invisible:ismainproposer">
+        <div class="row" data-bind="invisible:isMainProposer">
             <div class="col-xs-6">
                 <div class="form-group">
                     <label>关联的主申请人:</label>

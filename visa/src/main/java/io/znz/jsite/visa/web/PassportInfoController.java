@@ -128,12 +128,12 @@ public class PassportInfoController extends BaseController {
 			customer.setChinesenameen(cusdto.getChinesenameen());//中文名拼音
 			customer.setPassport(cusdto.getPassport());//护照号
 			customer.setGender(cusdto.getGender());//性别
-			customer.setBirthcountry(cusdto.getDocountry());//国籍
+			customer.setDocountry(cusdto.getDocountry());//国籍
 			customer.setBirthprovince(cusdto.getBirthprovince());//出生地点（省份）
 			customer.setPassportsenddate(cusdto.getPassportsenddate());//签发日期
 			customer.setPassportsendprovice(cusdto.getPassportsendplace());//签发地点（省份）
 			customer.setPassporteffectdate(cusdto.getPassporteffectdate());//有效期至
-			customer.setVisaoffice(cusdto.getPassportsendoffice());//签发机关
+			customer.setPassportsendoffice(cusdto.getPassportsendoffice());//签发机关
 			customer.setPassportbooknum(cusdto.getPassportbooknum());//护照本号码
 			customer.setPassportreadnum(cusdto.getPassportreadnum());//护照机读码
 			customer.setPhoneurl(cusdto.getPhoneurl());//照片路径
@@ -159,12 +159,12 @@ public class PassportInfoController extends BaseController {
 			cus.setChinesename(customer.getChinesename());//中文名
 			cus.setChinesenameen(customer.getChinesenameen());//中文名拼音
 			cus.setGender(customer.getGender());//性别
-			cus.setDocountry(customer.getBirthcountry());//国籍
+			cus.setDocountry(customer.getDocountry());//国籍
 			cus.setBirthprovince(customer.getBirthprovince());//出生地点（省份）
 			cus.setPassportsenddate(customer.getPassportsenddate());//签发日期
 			cus.setPassportsendplace(customer.getPassportsendprovice());//签发地点（省份）
 			cus.setPassporteffectdate(customer.getPassporteffectdate());//有效期至
-			cus.setPassportsendoffice(customer.getVisaoffice());//签发机关
+			cus.setPassportsendoffice(customer.getPassportsendoffice());//签发机关
 			cus.setPassportbooknum(customer.getPassportbooknum());//护照本号码
 			cus.setPassportreadnum(customer.getPassportreadnum());//护照机读码
 			cus.setPhoneurl(customer.getPhoneurl());//照片路径

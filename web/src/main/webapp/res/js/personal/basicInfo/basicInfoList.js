@@ -4,6 +4,18 @@ var pathName =  window.document.location.pathname;
 var pos = curWwwPath.indexOf(pathName);  
 var localhostPaht = curWwwPath.substring(0,pos);  
 var projectName = pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+
+//美国基本信息曾用名根据中文自动转为拼音
+function getPinYin(){
+	var oldxing = $("#old_usrname_cn").val();
+	var oldxingen = pinyinUtil.getPinyin(oldxing, '', false, false);
+	viewModel.set("customer.oldname.oldxingen",oldxingen.toUpperCase());
+	
+	var oldname = $("#old_given_name_cn").val();
+	var oldnameen = pinyinUtil.getPinyin(oldname, '', false, false);
+	viewModel.set("customer.oldname.oldnameen",oldnameen.toUpperCase());
+}
+
 //页面加载时回显基本信息
 window.onload = function(){
 	var indexnew= layer.load(1, {shade: [0.1,'#fff']});//菊花加载效果
@@ -148,7 +160,7 @@ $(function(){
 	country = JSON.parse(unescape($.queryString("country")));
     countrystatus=$.queryString("countrystatus");
 	/*-------------------------小灯泡 效果--------------------------*/
-	firstPart = JSON.parse(unescape($.queryString("firstPart")));//获取 错误 信息
+	/*firstPart = JSON.parse(unescape($.queryString("firstPart")));//获取 错误 信息
 	secondPart = JSON.parse(unescape($.queryString("secondPart")));//获取 错误 信息
 	thirdPart = JSON.parse(unescape($.queryString("thirdPart")));//获取 错误 信息
 	$('label').each(function(){
@@ -166,7 +178,7 @@ $(function(){
 					}
 				}
 			}
-	});
+	});*/
 	/*-------------------------end 小灯泡 效果--------------------------*/
 });
 /*------------------------------------------------container---------------------------------------------------*/
@@ -375,7 +387,8 @@ var viewModel = kendo.observable({
     },
     // 曾用名
     oldNameEnable: function () {
-    	///console.log("曾用名:_____"+JSON.stringify(beforeName));
+    	var oldnames = JSON.stringify(viewModel.get("customer.oldnameJp.oldname"));
+    	console.log("曾用名:_____"+oldnames);
     	var state = viewModel.get("customer.oldname.oldname") 
     				|| viewModel.get("customer.oldname.oldnameen")
     				|| viewModel.get("customer.oldname.oldxing")
@@ -403,9 +416,14 @@ var viewModel = kendo.observable({
     },
     //美国纳税人认证码
     usaAuthenticatorCode:function(){
-    	//console.log("美国纳税人认证码:_____"+JSON.stringify(authenticationCode));
+    	var country=viewModel.get("customer.taxpayerauthenticat.country");
+    	if(country=="CHN"){
+    		country = "";
+    	}else{
+    		country = viewModel.get("customer.taxpayerauthenticat.country");
+    	}
     	var state = viewModel.get("customer.taxpayerauthenticat.city") 
-					|| viewModel.get("customer.taxpayerauthenticat.country")
+					|| country
 					|| viewModel.get("customer.taxpayerauthenticat.homeAddress")
 					|| viewModel.get("customer.taxpayerauthenticat.postCode")
 					|| viewModel.get("customer.taxpayerauthenticat.province");
@@ -423,6 +441,7 @@ var viewModel = kendo.observable({
     		}else {return true};
     	}
     	return false;*/
+    	
     },
     //通信地址与家庭地址是否一致
     usaCommunicaHomeAddress:function(){
@@ -445,13 +464,26 @@ var viewModel = kendo.observable({
     	}else{
     		return issuingCountry;
     	}*/
+    	var issuingCountry=viewModel.get("customer.commhomeaddress.issuingCountry");
+    	if(issuingCountry=="CHN"){
+    		issuingCountry = "";
+    	}else{
+    		issuingCountry = viewModel.get("customer.commhomeaddress.issuingCountry");
+    	}
+    	var passportType = viewModel.get("customer.commhomeaddress.passportType");
+    	if(passportType==1){
+    		passportType = "";
+    	}else{
+    		passportType = viewModel.get("customer.commhomeaddress.passportType");
+    	}
     	var state = viewModel.get("customer.commhomeaddress.mainPhoneNum") 
 		|| viewModel.get("customer.commhomeaddress.minorPhoneNum")//undefined
 		|| viewModel.get("customer.commhomeaddress.workPhoneNum")//undefined
 		|| viewModel.get("customer.commhomeaddress.email")
-		|| viewModel.get("customer.commhomeaddress.issuingCity")
-		|| viewModel.get("customer.commhomeaddress.passportType");
+		|| issuingCountry
+		|| passportType;
     	//|| viewModel.get("customer.commhomeaddress.issuingCountry")
+    	//alert(state);
     	return state;
     }
 });
@@ -497,7 +529,7 @@ $("#same_as_home").change(function () {
 $("#usa_authenticator_code").change(function () {
 	var value = $(this).is(':checked') ? " " : "";
     viewModel.set("customer.taxpayerauthenticat.city", value);
-    viewModel.set("customer.taxpayerauthenticat.country", value);
+    viewModel.set("customer.taxpayerauthenticat.country", "CHN");
     viewModel.set("customer.taxpayerauthenticat.homeAddress", value);
     viewModel.set("customer.taxpayerauthenticat.postCode", value);
     viewModel.set("customer.taxpayerauthenticat.province", value);
@@ -519,8 +551,8 @@ $("#communica_home_address").change(function () {
     viewModel.set("customer.commhomeaddress.workPhoneNum", value);
     viewModel.set("customer.commhomeaddress.email", value);
     viewModel.set("customer.commhomeaddress.issuingCity", value);
-    //viewModel.set("customer.commhomeaddress.issuingCountry", value);
-    viewModel.set("customer.commhomeaddress.passportType", value);
+    viewModel.set("customer.commhomeaddress.issuingCountry", "CHN");
+    viewModel.set("customer.commhomeaddress.passportType", 1);
 	
 });
 /*------------------------------------------------end container---------------------------------------------------*/
@@ -615,7 +647,6 @@ $("#nextStepBtn").click(function(){
 			  +escape(JSON.stringify(firstPart))+"&secondPart="
 			  +escape(JSON.stringify(secondPart))+"&thirdPart="
 			  +escape(JSON.stringify(thirdPart))+"&country="+escape(JSON.stringify(country))+"&countrystatus="+countrystatus;
-		
 	}
 	if(validatable.validate()){
 		//清空验证的数组

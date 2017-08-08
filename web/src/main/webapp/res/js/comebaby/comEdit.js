@@ -52,9 +52,24 @@ var viewModel = kendo.observable({
     },
 });
 kendo.bind($(document.body), viewModel);
+//存放空的数组
+var emptyNum=[];
+//存放格式错误的数组
+var errorNum=[];
 
 //信息保存
+var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
+//信息保存
 function ordersave(){
+	var  imgurl=viewModel.get("customer.sealUrl");
+	var flag=true;
+	if(imgurl==null||imgurl==''){
+		flag=false;
+	}
+	if(validatable.validate()&&flag){
+		//清空验证的数组
+		emptyNum.splice(0,emptyNum.length);
+		errorNum.splice(0,errorNum.length);
 	 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 			 $.ajax({
 				 type: "POST",
@@ -78,12 +93,72 @@ function ordersave(){
 					 }
 				 }
 			 });
+			 
+			 
+	}else{
+		   //验证————————————————————————————————————
+	    $('.k-tooltip-validation').each(function(){
+	    	var none=$(this).css("display")=="none";//获取 判断验证提示隐藏
+	    	if(!none){
+		    	var verificationText=$(this).text().trim();//获取验证的文字信息
+		    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
+		    	labelVal = labelVal.split(":");
+		    	labelVal.pop();
+		    	labelVal = labelVal.join(":");//截取 :之前的信息
+		    	var person=new Object();
+		    	person.text=labelVal;
+		    	person.error="";
+		    	if(verificationText.indexOf("不能为空")>0){
+		    		emptyNum.push(person);
+		    	}else{
+		    		errorNum.push(person);
+		    		
+		    	}
+		    	///console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
+	    	}
+	    });
+	    //end 验证————————————————————————————————
+		
+		
+		
+		var  comType=viewModel.get("customer.comType");
+		
+		
+		var str="";
+		if(comType==2){
+			if(imgurl==null||imgurl==''){
+				str+="公司公章,";
+				if(validatable.validate()){
+					str+="不能为空！";
+				}
+			}
+		}
+		if(emptyNum.length>0){
+			
+			for(var i=0;i<emptyNum.length;i++){
+				str+=emptyNum[i].text+",";
+			}
+			str+="不能为空！"
+		}
+		if(errorNum.length>0){
+			
+			for(var i=0;i<errorNum.length;i++){
+				str+=errorNum[i].text+",";
+			}
+			str+="格式不正确！";
+		}
+		$.layer.alert(str);
+		//用完清空
+		emptyNum.splice(0,emptyNum.length);
+		errorNum.splice(0,errorNum.length);
+	}
 }
 
 $(function () {
     //如果有传递ID就是修改
     var oid = $.queryString("cid");
     if (oid) {
+    	//招宝信息 编辑页面
         $.getJSON("/visa/comebaby/comefetch?comeid=" + oid, function (resp) {
         	viewModel.set("customer", $.extend(true, dafaults, resp));
         	var a=viewModel.get("customer.comType");
@@ -97,6 +172,26 @@ $(function () {
         			$('.songqianshe-div').show();//显示 送签社：担当者/携带电话/TEL/FAX
         			$('.companyChopDiv').hide();//隐藏 上传公司公章部分
         			$('.dijieshe-div').hide();//隐藏  地接社：担当者/TEL
+        			
+        			
+        			$("input[send='send']").each(function(){
+        				var labelTxt=$(this).parent().prev().text().trim();
+        				labelTxt = labelTxt.split(":");
+        				labelTxt.pop();
+        				labelTxt = labelTxt.join(":");
+        				//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+        				$(this).attr('validationMessage',labelTxt+"不能为空");
+        				$(this).attr('required','required');
+        			});
+        			$("input[land='land']").each(function(){
+        				var labelTxt=$(this).parent().prev().text().trim();
+        				labelTxt = labelTxt.split(":");
+        				labelTxt.pop();
+        				labelTxt = labelTxt.join(":");
+        				//$(this).removeAttr({requested:'requested',validationMessage:"不能为空"} );
+        				$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+        				$(this).removeAttr('required','required');
+        			});
         		}else if(a==2){
         			$('.dijieshe-div').show();//显示 地接社：担当者/TEL 
         			$('.companyChopDiv').show();//显示 上传公司公章部分
@@ -110,13 +205,36 @@ $(function () {
         				
         				$("#img").attr('src',sealUrl);
         			}
+        			$("input[land='land']").each(function(){
+        				var labelTxt=$(this).parent().prev().text().trim();
+        				labelTxt = labelTxt.split(":");
+        				labelTxt.pop();
+        				labelTxt = labelTxt.join(":");
+        				//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+        				$(this).attr('validationMessage',labelTxt+"不能为空");
+        				$(this).attr('required','required');
+        			});
+        			$("input[send='send']").each(function(){
+        				var labelTxt=$(this).parent().prev().text().trim();
+        				labelTxt = labelTxt.split(":");
+        				labelTxt.pop();
+        				labelTxt = labelTxt.join(":");
+        				//$(this).removeAttr({requested:'requested',validationMessage:"不能为空"} );
+        				$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+        				$(this).removeAttr('required','required');
+        			});
+        			
         		}
         	}
         	
         	
         });
     }else{
-    	var a=1
+    	//招宝信息 添加页面
+    	$("#deleteBtn").hide();
+    	$('#saveBtn').parent().parent().attr('class','col-xs-12');
+    	
+    	var a=1;
     	$("#state").val(a);
 		if(a==1){
 			$("#3").hide();
@@ -126,6 +244,25 @@ $(function () {
 			$('.songqianshe-div').show();//显示 送签社：担当者/携带电话/TEL/FAX
 			$('.companyChopDiv').hide();//隐藏 上传公司公章部分
 			$('.dijieshe-div').hide();//隐藏  地接社：担当者/TEL
+			
+			$("input[send='send']").each(function(){
+				var labelTxt=$(this).parent().prev().text().trim();
+				labelTxt = labelTxt.split(":");
+				labelTxt.pop();
+				labelTxt = labelTxt.join(":");
+				//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+				$(this).attr('validationMessage',labelTxt+"不能为空");
+				$(this).attr('required','required');
+			});
+			$("input[land='land']").each(function(){
+				var labelTxt=$(this).parent().prev().text().trim();
+				labelTxt = labelTxt.split(":");
+				labelTxt.pop();
+				labelTxt = labelTxt.join(":");
+				//$(this).removeAttr({requested:'requested',validationMessage:"不能为空"} );
+				$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+				$(this).removeAttr('required','required');
+			});
 		}else if(a==2){
 			$('.dijieshe-div').show();//显示 地接社：担当者/TEL 
 			$('.companyChopDiv').show();//显示 上传公司公章部分
@@ -134,6 +271,102 @@ $(function () {
 			$('#2').hide();
 			$("#3").show();
 			$("#4").show();
+			$("input[land='land']").each(function(){
+				var labelTxt=$(this).parent().prev().text().trim();
+				labelTxt = labelTxt.split(":");
+				labelTxt.pop();
+				labelTxt = labelTxt.join(":");
+				//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+				$(this).attr('validationMessage',labelTxt+"不能为空");
+				$(this).attr('required','required');
+			});
+			$("input[send='send']").each(function(){
+				var labelTxt=$(this).parent().prev().text().trim();
+				labelTxt = labelTxt.split(":");
+				labelTxt.pop();
+				labelTxt = labelTxt.join(":");
+				//$(this).removeAttr({requested:'requested',validationMessage:"不能为空"} );
+				$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+				$(this).removeAttr('required','required');
+			});
+		
 		}
     }
 });
+
+
+function checknull(){
+	var a=viewModel.get("customer.comType");
+	if(a==2){
+		$("input[send='send']").each(function(){
+			var labelTxt=$(this).parent().prev().text().trim();
+			labelTxt = labelTxt.split(":");
+			labelTxt.pop();
+			labelTxt = labelTxt.join(":");
+			//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+			$(this).attr('validationMessage',labelTxt+"不能为空");
+			$(this).attr('required','required');
+		});
+		$("input[land='land']").each(function(){
+			var labelTxt=$(this).parent().prev().text().trim();
+			labelTxt = labelTxt.split(":");
+			labelTxt.pop();
+			labelTxt = labelTxt.join(":");
+			//$(this).removeAttr({requested:'requested',validationMessage:"不能为空"} );
+			$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+			$(this).removeAttr('required','required');
+		});
+	}else{
+		$("input[land='land']").each(function(){
+			var labelTxt=$(this).parent().prev().text().trim();
+			labelTxt = labelTxt.split(":");
+			labelTxt.pop();
+			labelTxt = labelTxt.join(":");
+			//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+			$(this).attr('validationMessage',labelTxt+"不能为空");
+			$(this).attr('required','required');
+		});
+		$("input[send='send']").each(function(){
+			var labelTxt=$(this).parent().prev().text().trim();
+			labelTxt = labelTxt.split(":");
+			labelTxt.pop();
+			labelTxt = labelTxt.join(":");
+			//$(this).removeAttr({requested:'requested',validationMessage:"不能为空"} );
+			$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+			$(this).removeAttr('required','required');
+		});
+		
+	}
+}
+
+//删除方法
+function deletecome(){
+	var oid = $.queryString("cid");
+	layer.confirm("您确认删除吗？", {
+	    btn: ["是","否"], //按钮
+	    shade: false //不显示遮罩
+	}, function(){
+		// 点击确定之后
+		var url = "/visa/comebaby/delete?comeid="+oid;
+		
+		$.ajax({
+			type : 'POST',
+			dataType : 'json',
+			url : url,
+			success : function(data) {
+				 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				 //$.layer.closeAll();
+				 parent.layer.close(index);
+				 window.parent.successCallback('4');
+			},
+			error : function(xhr) {
+				 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				 //$.layer.closeAll();
+				 parent.layer.close(index);
+				 window.parent.successCallback('5');
+			}
+		});
+	}, function(){
+	    // 取消之后不用处理
+	});
+}

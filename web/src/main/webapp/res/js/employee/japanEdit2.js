@@ -5,9 +5,8 @@
  * 
  * 
  */
-
-
-
+var sixnum=[];
+var threenum=[];
 //客户来源
 var customersourceEnum=[
     {text:"线上",value:1},
@@ -15,9 +14,7 @@ var customersourceEnum=[
     {text:"直客",value:3},
     {text:"线下",value:4}
   ];
-var proposersnew=[
-                       
-                        ];
+var proposersnew=[];
 var proposers=new kendo.data.DataSource({
     serverFiltering: true,
     transport: {
@@ -43,6 +40,8 @@ var startcity=[
                         {text:"那霸",value:6}
                         ];
 var defaults = {
+		visatype:0,
+		area:0,
 		customermanage:{},
 		tripJp:{
 			oneormore:0,
@@ -93,11 +92,8 @@ keys = {
 			outtime:"",
 			breakfast:"",
 			dinner:""
-
 		},
-		"customer.proposerInfoJpList":{
-			
-		}
+		"customer.proposerInfoJpList":{}
 },
 flights = new kendo.data.DataSource({
     serverFiltering: true,
@@ -257,26 +253,20 @@ var viewModel = kendo.observable({
    		   				//alert(proposer.istogetherlinkman);
    		   				if(proposer.id==e.data.id){
    		   				//proposer.istogetherlinkman=false;
-   		   			viewModel.set("customer.proposerInfoJpList["+i+"].istogetherlinkman",false);
-
+   		   				viewModel.set("customer.proposerInfoJpList["+i+"].istogetherlinkman",false);
    		   				}
    		   				//console.log(JSON.stringify(proposer));
    		   			}
    					viewModel.set("customer.proposerInfoJpList",proposerInfoJpList);
    					///console.log(JSON.stringify(proposerInfoJpList));
-   					
    				});
-   				
    			}
-   			
    		}
-    	  
-    	  
     },
     changeismainproposer:function(e){
-    	console.log(e.data.id);
-    	console.log(e.data);
-    	console.log(e.data.fullname);
+    	///console.log(e.data.id);
+    	///console.log(e.data);
+    	///console.log(e.data.fullname);
     	var person=new Object();
     	person.text=e.data.xing+e.data.name;
     	person.value=e.data.id;
@@ -289,8 +279,8 @@ var viewModel = kendo.observable({
     			proposersnew.push(person);
     			viewModel.set("proposers",proposersnew);
     			var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
-    			console.log(proposerInfoJpList);
-    		/*	for(var m=0;m<proposerInfoJpList.length;m++){
+    			///console.log(proposerInfoJpList);
+    		    /*for(var m=0;m<proposerInfoJpList.length;m++){
     				if(proposerInfoJpList[m].id==e.data.id){
     					viewModel.set("customer.proposerInfoJpList["+m+"].ismainproposer",true);
 					}
@@ -311,11 +301,10 @@ var viewModel = kendo.observable({
     	}
     },
     updateData:function(e){
-    	
 	    	var person=new Object();
 	    	person.text=(e.data.xing+''+e.data.name);
 	    	person.value=e.data.id;
-//	    	alert(e.data.ismainproposer);
+	    	//alert(e.data.ismainproposer);
 	    	if(e.data.ismainproposer){
 	    		for(var i=0;i<proposersnew.length;i++){
 					if(proposersnew[i].value+""==(e.data.id)+""){
@@ -334,11 +323,10 @@ var viewModel = kendo.observable({
 			}
     },
     updateData1:function(e){
-    	
     	var person=new Object();
     	person.text=(e.data.xing+''+e.data.name);
     	person.value=e.data.id;
-//    	alert(e.data.ismainproposer);
+    	alert(e.data.ismainproposer);
     	if(e.data.ismainproposer){
     		for(var i=0;i<proposersnew.length;i++){
 				if(proposersnew[i].value+""==(e.data.id)+""){
@@ -355,21 +343,21 @@ var viewModel = kendo.observable({
 			}
 			viewModel.set("proposers",proposersnew);
 		}
-},
-abab:function(){
-	viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
-},
-baba:function(e){
-	var a=viewModel.get("customer.dateplanJpList");
-	console.log(JSON.stringify(a));
-	for(var i=0;i<a.length;i++){
-		if(a[i].arrivecity==e.data.arrivecity){
-			var b=i+1;
-			viewModel.set("customer.dateplanJpList["+b+"].startcity",e.data.arrivecity);
+    },
+    abab:function(){
+    	viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
+    },
+    baba:function(e){
+		var a=viewModel.get("customer.dateplanJpList");
+		console.log(JSON.stringify(a));
+		for(var i=0;i<a.length;i++){
+			if(a[i].arrivecity==e.data.arrivecity){
+				var b=i+1;
+				viewModel.set("customer.dateplanJpList["+b+"].startcity",e.data.arrivecity);
+			}
 		}
-	}
-	console.log(e.data.arrivecity);
-}
+		///console.log(e.data.arrivecity);
+    }
 });
 kendo.bind($(document.body), viewModel);
 
@@ -470,6 +458,23 @@ $(function () {
     $(".k-header").click(function(){
     	$('.k-content').removeClass("div-context");
     	$(this).parent().siblings().find('.span-Title').removeClass('k-state-selected');
+    });
+    
+    //订单信息 签证类型
+    $('.dongliuXian').hide();
+    $('.dongSanXian').hide();
+    $('select[name="visatype"]').change(function(){
+    	var selVal=$(this).val();
+    	if(selVal==2){//状态为 东三县
+    		$('.dongSanXian').show();
+    		$('.dongliuXian').hide();
+    	}else if(selVal==3){//状态为 东六县
+    		$('.dongSanXian').hide();
+    		$('.dongliuXian').show();
+    	}else{
+    		$('.dongSanXian').hide();
+    		$('.dongliuXian').hide();
+    	}
     });
 });
 
@@ -644,6 +649,28 @@ function orderJpsave(){
 		//清空验证的数组
 		emptyNum.splice(0,emptyNum.length);
 		errorNum.splice(0,errorNum.length);
+		//对东三县东六县的值进行处理
+		var visatype=viewModel.get("customer.visatype");
+		if(visatype==3){
+			var sixnumstr="";
+			for(var i=0;i<sixnum.length;i++){
+				sixnumstr+=sixnum[i]+",";
+			}
+			viewModel.set("customer.threenum","");
+			viewModel.set("customer.sixnum",sixnumstr);
+		}else if(visatype==2){
+			var threenumstr="";
+				for(var i=0;i<threenum.length;i++){
+					threenumstr+=threenum[i]+",";
+				}
+				viewModel.set("customer.sixnum","");
+				viewModel.set("customer.threenum",threenumstr);
+		}else{
+			viewModel.set("customer.sixnum","");
+			viewModel.set("customer.threenum","");
+			
+		}
+		
 				 console.log(JSON.stringify(viewModel.customer));
 				 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 					
@@ -657,9 +684,8 @@ function orderJpsave(){
 						 console.log(result.code);
 						 if(result.code=="SUCCESS"){
 							 if(indexnew!=null){
-									
 									layer.close(indexnew);
-									}
+							 }
 							 
 							 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 							 //$.layer.closeAll();
@@ -684,37 +710,35 @@ function orderJpsave(){
 	}else{
 		  //验证————————————————————————————————————
 	    $('.k-tooltip-validation').each(function(){
-	    	var verificationText=$(this).text().trim();//获取验证的文字信息
-	    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
-	    	labelVal = labelVal.split(":");
-	    	labelVal.pop();
-	    	labelVal = labelVal.join(":");//截取 :之前的信息
-	    	var person=new Object();
-	    	person.text=labelVal;
-	    	person.error="";
-	    	if(verificationText.indexOf("不能为空")>0){
-	    		emptyNum.push(person);
-	    	}else{
-	    		errorNum.push(person);
-	    		
+	    	var none=$(this).css("display")=="none";//获取 判断验证提示隐藏
+	    	if(!none){
+	    		var verificationText=$(this).text().trim();//获取验证的文字信息
+		    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
+		    	labelVal = labelVal.split(":");
+		    	labelVal.pop();
+		    	labelVal = labelVal.join(":");//截取 :之前的信息
+		    	var person=new Object();
+		    	person.text=labelVal;
+		    	person.error="";
+		    	if(verificationText.indexOf("不能为空")>0){
+		    		emptyNum.push(person);
+		    	}else{
+		    		errorNum.push(person);
+		    	}
+		    	//console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
 	    	}
-	    	console.log("-获取验证的文字信息是："+verificationText+"                -获取验证信息 对应的label名称是："+labelVal);
 	    });
 	    //end 验证————————————————————————————————
 		
 		
-		
-		
 		var str="";
 		if(emptyNum.length>0){
-			
 			for(var i=0;i<emptyNum.length;i++){
 				str+=emptyNum[i].text+",";
 			}
 			str+="不能为空！"
 		}
 		if(errorNum.length>0){
-			
 			for(var i=0;i<errorNum.length;i++){
 				str+=errorNum[i].text+",";
 			}
@@ -725,7 +749,6 @@ function orderJpsave(){
 		emptyNum.splice(0,emptyNum.length);
 		errorNum.splice(0,errorNum.length);
 	}
-	 
 }
 
 $(function () {
@@ -736,39 +759,72 @@ $(function () {
         $.getJSON("/visa/neworderjp/showDetail?orderid=" + oid, function (resp) {
         	//console.log(JSON.stringify(resp));
         	viewModel.set("customer", $.extend(true, defaults, resp));
+        	
+        	//对东三县和东六县的处理
+        	var visatype=viewModel.get("customer.visatype");
+    		if(visatype==3){
+    			var sixnumstr=viewModel.get("customer.sixnum");
+    			$('.dongSanXian').hide();
+        		$('.dongliuXian').show();
+    			if(sixnumstr!=null&&sixnumstr!=''){
+    				
+    				var result=sixnumstr.split(",");
+    				for(var i=0;i<result.length;i++){
+    					$("#"+result[i]).attr("checked", true);
+    				}
+    			}
+    			
+    		}else if(visatype==2){
+    			var threenumstr=viewModel.get("customer.threenum");
+    			$('.dongSanXian').show();
+        		$('.dongliuXian').hide();
+    			if(threenumstr!=null&&threenumstr!=''){
+    				
+    				var result=threenumstr.split(",");
+    				for(var i=0;i<result.length;i++){
+    					$("#"+result[i]+"t").attr("checked", true);
+    				}
+    			}
+    		}else{
+    			$('.dongSanXian').hide();
+        		$('.dongliuXian').hide();
+    		}
+        	
+        	
+        	
+        	
+        	
+        	
         	/*----小灯泡 回显----*/
         	var reason=viewModel.get("customer.errorinfo");
         	var map=new Map();
         	map=eval("("+reason+")");
-        	console.log("map的值为："+map);
+        	///console.log("map的值为："+map);
         	for (var key in map){
         		var a = map[key];//获取到 错误信息 数据
         		for(var i=0;i<a.length;i++){
         			var reasonnew=a[i].key+",";//获取到  错误信息 字段名称
-        			console.log("reasonnew的值为："+reasonnew);
+        			///console.log("reasonnew的值为："+reasonnew);
         		}
         	}
         	/*----end 小灯泡 回显----*/
-        	console.log();
         	
         	var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
         	for(var i=0;i<proposerInfoJpList.length;i++){
         		var ismain=proposerInfoJpList[i].ismainproposer;
         		if(ismain){
+        			//viewModel.set("customer.proposerInfoJpList["+i+ "].ismainproposer",true);
         			var person=new Object();
         	    	person.text=proposerInfoJpList[i].fullname;
         	    	person.value=proposerInfoJpList[i].id;
         	    	
         	    	proposersnew.push(person);
-//        			alert(JSON.stringify(proposersnew));
+        	    	//alert(JSON.stringify(proposersnew));
         			viewModel.set("proposers",proposersnew);
         		}
         	}
-        	
-        	
         	var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
         	if(proposerInfoJpList.length>0){
-        		
         		$(".mainApplicant").hide();
         	}
         	if(viewModel.get("customer.tripJp.oneormore")==1){
@@ -802,15 +858,17 @@ $(function () {
 				$(".companyFullName").show();
 				$('.ZKcompanyFullName').addClass("hide");// 隐藏 直客状态下的  公司全称
 			}
+			if(indexnew!=null){
+				layer.close(indexnew);
+			}
         });
+    }else{
+    	if(indexnew!=null){
+    		layer.close(indexnew);
+    	}
+    	
     }
-    if(indexnew!=null){
-		
-		layer.close(indexnew);
-		}
-    
    //comsource();//客户来源 状态 模块加载
-   
 });
 
    $("#DuoCheng_WangFan").change(function(){
@@ -856,7 +914,6 @@ $(function () {
     		$('.WangFan').removeClass('hide');
     		$('.DuoCheng').addClass('hide');
     		
-    		
     		$.ajax({
       			 type: "POST",
       			 url: "/visa/neworderjp/autothree",
@@ -883,13 +940,8 @@ $(function () {
       					color.value(result.customermanage.id);
       					var color = $("#cus_linkman").data("kendoMultiSelect");
       					color.value(result.customermanage.id);
-      					
       			 }
       		 });
-       		
-    		
-    		
-    		
     	}
     });
 
@@ -923,21 +975,18 @@ $(function () {
 
 					color.value(result.customermanage.id);
 					 if(indexnew!=null){
-							
 							layer.close(indexnew);
-							}
+					 }
 			 },
 			 error: function(XMLHttpRequest, textStatus, errorThrown){
 				 if(indexnew!=null){
-						
 						layer.close(indexnew);
-						}
-				 
+				}
 					 console.log(XMLHttpRequest);
 					 console.log(textStatus);
 					 console.log(errorThrown);
 		           /* layer.msg('失败!',{time:2000});*/
-		         }
+		     }
 		 });
    	}
    	
@@ -992,14 +1041,10 @@ $(function () {
      		 });
    			 $(".mainApplicant").hide();//隐藏 span标签的 主申请人
    		}
-   		
-   		
    	}
-   	
    	
    	function togetherlinkman(){
    		if(true){
-   			
    			var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
    			/*console.log(JSON.stringify(proposerInfoJpList));*/
    			var porposernow;
@@ -1020,18 +1065,38 @@ $(function () {
    					alert(111);
    				},function(){
    					alert(222);
-   					
    				});
-   				
    			}
-   			
    		}
-   		
-   		
-   		
    	}
    	
 function linkcityone(){
-	alert(viewModel.get("customer.tripJp.arrivecity"));
+//	alert(viewModel.get("customer.tripJp.arrivecity"));
 	viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
 }
+Array.prototype.removeByValue = function(val) {
+	  for(var i=0; i<this.length; i++) {
+	    if(this[i] == val) {
+	      this.splice(i, 1);
+	      break;
+	    }
+	  }
+	}
+
+function addSix(a,num){
+	if($(a).is(':checked')){
+		sixnum.push(num);
+//		alert(JSON.stringify(sixnum));
+	}else{
+		sixnum.removeByValue(sixnum);
+	}
+}
+function addthree(a,num){
+	if($(a).is(':checked')){
+		threenum.push(num);
+//		alert(JSON.stringify(threenum));
+	}else{
+		threenum.removeByValue(threenum);
+	}
+}
+
