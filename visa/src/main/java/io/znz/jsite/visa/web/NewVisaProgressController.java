@@ -70,9 +70,10 @@ public class NewVisaProgressController {
 		if ("5".equals(logintype)) {
 			List<NewCustomerEntity> usalist = Lists.newArrayList();
 
-			XORUtil xor = XORUtil.getInstance();
-			String orderInfo = xor.encode(secretMsg, "我是秘钥");
-			String[] infoList = orderInfo.split("&");
+			String key = "我是秘钥";
+			XORUtil instance = XORUtil.getInstance();
+			String xor_encodedStr = instance.decode(secretMsg, key);
+			String[] infoList = xor_encodedStr.split("&");
 
 			if (infoList.length == 4) {
 

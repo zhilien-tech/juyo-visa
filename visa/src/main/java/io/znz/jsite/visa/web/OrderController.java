@@ -42,7 +42,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
-import org.joda.time.DateTime;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -1134,13 +1133,14 @@ public class OrderController extends BaseController {
 			tmp.append(line);
 		}
 
-		DateTime nowDateTime = DateUtils.nowDateTime();
+		String nowDateTime = DateUtils.getDateTime();
+		String key = "我是秘钥";
 		String orderInfo = "oid&" + orderid + "&now&" + nowDateTime;
-		XORUtil xor = XORUtil.getInstance();
-		String decode = xor.decode(orderInfo, "我是秘钥");
+		XORUtil instance = XORUtil.getInstance();
+		String xor_encodedStr = instance.encode(orderInfo, key);
 
 		String html = tmp.toString().replace("${name}", "").replace("${oid}", order.getOrdernumber())
-				.replace("${href}", "http://218.244.148.21:9004//main.html?logintype=5&secretMsg=" + decode)
+				.replace("${href}", "http://218.244.148.21:9004//main.html?logintype=5&secretMsg=" + xor_encodedStr)
 				.replace("${logininfo}", "").replace("${gender}", "先生/女士");
 		String result = mailService.send(email, html, "签证资料录入", MailService.Type.HTML);
 
