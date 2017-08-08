@@ -10,6 +10,9 @@ import io.znz.jsite.base.bean.ResultObject;
 import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
 import io.znz.jsite.core.service.MailService;
 import io.znz.jsite.core.util.Const;
+import io.znz.jsite.download.UploadService;
+import io.znz.jsite.exception.JSiteException;
+import io.znz.jsite.util.SpringUtil;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 import io.znz.jsite.visa.bean.Flight;
@@ -43,9 +46,15 @@ import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
 import io.znz.jsite.visa.enums.UserTypeEnum;
 import io.znz.jsite.visa.form.NewOrderJapanSqlForm;
 import io.znz.jsite.visa.newpdf.NewPdfService;
+import io.znz.jsite.visa.newpdf.NewTemplate;
 import io.znz.jsite.visa.service.NewOrderJaPanService;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -54,10 +63,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -102,6 +113,9 @@ public class NewOrderJaPanController {
 	protected Dao nutDao;
 	@Autowired
 	private NewPdfService newPdfService;
+
+	@Autowired
+	private UploadService qiniuUploadService;//文件上传
 	/**
 	 * 注入容器中的sqlManager对象，用于获取sql
 	 */
@@ -114,6 +128,9 @@ public class NewOrderJaPanController {
 	private int daynum = 1;//出行的天数
 
 	private int daytotal = 0;
+
+	private List<String> validateEmptyList = Lists.newArrayList();
+	private List<String> validateMsgList = Lists.newArrayList();
 
 	@RequestMapping(value = "list")
 	@ResponseBody
@@ -1891,4 +1908,351 @@ public class NewOrderJaPanController {
 		return comeList;
 	}
 
+	@RequestMapping(value = "validate")
+	@ResponseBody
+	public Object validate(long orderid, final HttpSession session) {
+		validateEmptyList.clear();
+		validateMsgList.clear();
+		if (!Util.isEmpty(orderid) && orderid > 0) {
+			List<NewCustomerOrderJpEntity> customerList = dbDao.query(NewCustomerOrderJpEntity.class,
+					Cnd.where("order_jp_id", "=", orderid), null);
+			if (!Util.isEmpty(customerList) && customerList.size() > 0) {
+
+				for (NewCustomerOrderJpEntity newCustomerOrderJpEntity : customerList) {
+
+					addValidate(newCustomerOrderJpEntity);
+				}
+
+			}
+		}
+		//处理出行信息中出入境时间
+		if (!Util.isEmpty(orderid) && orderid > 0) {
+			NewOrderJpEntity order = dbDao.fetch(NewOrderJpEntity.class, orderid);
+			List<NewTripJpEntity> list = dbDao.query(NewTripJpEntity.class, Cnd.where("order_jp_id", "=", orderid),
+					null);
+			if (!Util.isEmpty(list.get(0))) {
+				NewTripJpEntity tripJpEntity = list.get(0);
+				int oneormore = tripJpEntity.getOneormore();
+				if (oneormore == 0) {
+					Date startdate = tripJpEntity.getStartdate();
+					if (!Util.isEmpty(startdate)) {
+
+					} else {
+
+						validateEmptyList.add("出发日期");
+					}
+					Date returndate = tripJpEntity.getReturndate();
+					if (!Util.isEmpty(returndate)) {
+
+					} else {
+
+						validateEmptyList.add("返回日期");
+					}
+				} else if (oneormore == 1) {
+					List<NewDateplanJpEntity> dateplanList = dbDao.query(NewDateplanJpEntity.class,
+							Cnd.where("trip_jp_id", "=", tripJpEntity.getId()), null);
+					if (!Util.isEmpty(dateplanList) && dateplanList.size() > 0) {
+						Date startdate = dateplanList.get(0).getStartdate();
+						if (!Util.isEmpty(startdate)) {
+
+						} else {
+
+							validateEmptyList.add("出发日期");
+						}
+						Date returndate = dateplanList.get(dateplanList.size() - 1).getStartdate();
+						if (!Util.isEmpty(returndate)) {
+
+						} else {
+
+							validateEmptyList.add("返回日期");
+						}
+					}
+				}
+			}
+
+		}
+
+		String msg = "";
+		if (!Util.isEmpty(validateEmptyList) && validateEmptyList.size() > 0) {
+			if (!Util.isEmpty(validateEmptyList) && validateEmptyList.size() > 0) {
+				for (String string : validateEmptyList) {
+					msg += string + "、";
+				}
+				msg += "不能为空！";
+			}
+
+		}
+		if (Util.isEmpty(validateMsgList) && validateMsgList.size() > 0) {
+			for (String string : validateMsgList) {
+				msg += string;
+			}
+		}
+		if (Util.isEmpty(validateEmptyList) && Util.isEmpty(validateMsgList)) {
+			List<NewCustomerOrderJpEntity> customerOrderList = dbDao.query(NewCustomerOrderJpEntity.class,
+					Cnd.where("order_jp_id", "=", orderid), null);
+			//增加excel的上传
+			//=============================开始=========================================================
+			NewOrderJpEntity order = dbDao.fetch(NewOrderJpEntity.class, orderid);
+
+			//		CustomerManageEntity customerManageEntity = null;
+			//		if(){
+			//			
+			//		}
+			//		dbDao.fetch(CustomerManageEntity.class,
+			//				Long.valueOf(order.getCustomer_manager_id()));
+			//		
+			CustomerManageEntity customerManageEntity = null;
+			int customerSource = order.getCustomerSource();
+			if (!Util.isEmpty(customerSource) && customerSource > 0) {
+				if (customerSource == OrderJapancustomersourceEnum.zhike.intKey()) {
+					List<NewCustomerresourceJpEntity> customerresourceJp = dbDao.query(
+							NewCustomerresourceJpEntity.class, Cnd.where("order_jp_id", "=", orderid), null);
+					if (!Util.isEmpty(customerresourceJp) && customerresourceJp.size() > 0) {
+						order.setCustomerresourceJp(customerresourceJp.get(0));
+						customerManageEntity = new CustomerManageEntity();
+						customerManageEntity.setTelephone(customerresourceJp.get(0).getTelephone());
+						customerManageEntity.setLinkman(customerresourceJp.get(0).getLinkman());
+						customerManageEntity.setEmail(customerresourceJp.get(0).getEmail());
+						customerManageEntity.setFullComName(customerresourceJp.get(0).getFullComName());
+						order.setCustomermanage(customerManageEntity);
+					}
+				} else {
+					//if (!Util.isEmpty(customermanage)) {
+
+					customerManageEntity = dbDao.fetch(CustomerManageEntity.class,
+							Long.valueOf(order.getCustomer_manager_id()));
+					if (!Util.isEmpty(customerManageEntity)) {
+						order.setCustomermanage(customerManageEntity);
+						NewCustomerresourceJpEntity customerresourceJp = new NewCustomerresourceJpEntity();
+						order.setCustomerresourceJp(customerresourceJp);
+					}
+
+					//}
+
+				}
+			}
+
+			if (!Util.isEmpty(customerManageEntity)) {
+				order.setCustomermanage(customerManageEntity);
+			}
+			List<NewTripJpEntity> newTrips = dbDao.query(NewTripJpEntity.class, Cnd.where("order_jp_id", "=", orderid),
+					null);
+			if (!Util.isEmpty(newTrips) && newTrips.size() > 0) {
+				order.setTripJp(newTrips.get(0));
+				List<NewDateplanJpEntity> query = dbDao.query(NewDateplanJpEntity.class,
+						Cnd.where("trip_jp_id", "=", newTrips.get(0).getId()), null);
+				order.setDateplanJpList(query);
+			}
+			List<NewTripplanJpEntity> newPayPersionEntities = dbDao.query(NewTripplanJpEntity.class,
+					Cnd.where("order_jp_id", "=", orderid), null);
+			if (!Util.isEmpty(newPayPersionEntities) && newPayPersionEntities.size() > 0) {
+				order.setTripplanJpList(newPayPersionEntities);
+			}
+			List<NewFastmailJpEntity> newPayCompanyEntities = dbDao.query(NewFastmailJpEntity.class,
+					Cnd.where("order_jp_id", "=", orderid), null);
+			if (!Util.isEmpty(newPayCompanyEntities) && newPayCompanyEntities.size() > 0) {
+				order.setFastMail(newPayCompanyEntities.get(0));
+			}
+			List<NewCustomerJpEntity> customerJpList = Lists.newArrayList();
+			List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
+					Cnd.where("order_jp_id", "=", orderid), null);
+			for (NewCustomerOrderJpEntity newCustomerOrderJpEntity : query) {
+				NewCustomerJpEntity customer = dbDao.fetch(NewCustomerJpEntity.class,
+						newCustomerOrderJpEntity.getCustomer_jp_id());
+
+				List<NewWorkinfoJpEntity> passportlose = dbDao.query(NewWorkinfoJpEntity.class,
+						Cnd.where("customer_jp_id", "=", customer.getId()), null);
+				if (!Util.isEmpty(passportlose) && passportlose.size() > 0) {
+					customer.setWorkinfoJp(passportlose.get(0));
+				} else {
+					customer.setWorkinfoJp(new NewWorkinfoJpEntity());
+
+				}
+				List<NewOldpassportJpEntity> oldname = dbDao.query(NewOldpassportJpEntity.class,
+						Cnd.where("customer_jp_id", "=", customer.getId()), null);
+				if (!Util.isEmpty(oldname) && oldname.size() > 0) {
+					customer.setOldpassportJp(oldname.get(0));
+				} else {
+					customer.setOldpassportJp(new NewOldpassportJpEntity());
+				}
+				List<NewFinanceJpEntity> orthercountry = dbDao.query(NewFinanceJpEntity.class,
+						Cnd.where("customer_jp_id", "=", customer.getId()), null);
+				if (!Util.isEmpty(orthercountry) && orthercountry.size() > 0) {
+					customer.setFinanceJpList(orthercountry);
+				}
+				List<NewOldnameJpEntity> father = dbDao.query(NewOldnameJpEntity.class,
+						Cnd.where("customer_jp_id", "=", customer.getId()), null);
+				if (!Util.isEmpty(father) && father.size() > 0) {
+					customer.setOldnameJp(father.get(0));
+				} else {
+					customer.setOldnameJp(new NewOldnameJpEntity());
+
+				}
+
+				List<NewOrthercountryJpEntity> relation = dbDao.query(NewOrthercountryJpEntity.class,
+						Cnd.where("customer_jp_id", "=", customer.getId()), null);
+				if (!Util.isEmpty(relation) && relation.size() > 0) {
+					customer.setOrthercountryJpList(relation);
+				}
+
+				List<NewRecentlyintojpJpEntity> teachinfo = dbDao.query(NewRecentlyintojpJpEntity.class,
+						Cnd.where("customer_jp_id", "=", customer.getId()), null);
+				if (!Util.isEmpty(teachinfo) && teachinfo.size() > 0) {
+					customer.setRecentlyintojpJpList(teachinfo);
+				}
+
+				if (!Util.isEmpty(customer)) {
+					customerJpList.add(customer);
+				}
+			}
+			Collections.sort(customerJpList, new Comparator<NewCustomerJpEntity>() {
+
+				@Override
+				public int compare(NewCustomerJpEntity o1, NewCustomerJpEntity o2) {
+					String timeO1 = o1.getChinesefullname();
+					String timeO2 = o2.getChinesefullname();
+					if (!Util.isEmpty(timeO1) && !Util.isEmpty(timeO2)) {
+						return timeO2.compareTo(timeO1);
+					}
+
+					if (timeO1 == null && timeO2 == null) {
+						return 0;
+					}
+					if (timeO1 == null) {
+						return -1;
+					}
+					if (timeO2 == null) {
+						return -1;
+					}
+					return 0;
+
+				}
+
+			});
+
+			order.setCustomerJpList(customerJpList);
+			//设置日本excel的上传
+			NewTemplate t = SpringUtil.getBean(order.getTemplate());
+			File createTempFile = this.createTempFile(t.excel(order));
+			InputStream is = null;
+			try {
+				is = new FileInputStream(createTempFile);
+			} catch (FileNotFoundException e) {
+
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
+			}
+			String uploadImage = qiniuUploadService.uploadImage(is, "xlsx", null);
+			String url = io.znz.jsite.visa.util.Const.IMAGES_SERVER_ADDR + uploadImage;
+			order.setExcelurl(url);
+			dbDao.update(order, null);
+			//================================结束======================================================
+
+			for (NewCustomerOrderJpEntity newCustomerOrderJpEntity : customerOrderList) {
+				long customerid = newCustomerOrderJpEntity.getCustomer_jp_id();
+
+				dbDao.update(
+						NewCustomerJpEntity.class,
+						Chain.make("updatetime", new Date()).add("status",
+								OrderVisaApproStatusEnum.readySubmit.intKey()), Cnd.where("id", "=", customerid));
+
+			}
+
+			return ResultObject.success("无错误");
+		} else {
+			return ResultObject.fail(msg);
+
+		}
+		/*else {
+			List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
+					Cnd.where("order_jp_id", "=", orderid), null);
+
+			for (NewCustomerOrderJpEntity newCustomerOrderJpEntity : query) {
+				long customerid = newCustomerOrderJpEntity.getCustomer_jp_id();
+
+				dbDao.update(
+						NewCustomerJpEntity.class,
+						Chain.make("updatetime", new Date()).add("status",
+								OrderVisaApproStatusEnum.readySubmit.intKey()), Cnd.where("id", "=", customerid));
+
+			}
+
+			return ResultObject.success("无错误");
+		}*/
+
+	}
+
+	private void addValidate(NewCustomerOrderJpEntity newCustomerOrderJpEntity) {
+		long customer_jp_id = newCustomerOrderJpEntity.getCustomer_jp_id();
+		long orderid = newCustomerOrderJpEntity.getOrder_jp_id();
+		//每个客户的其他验证
+		if (!Util.isEmpty(customer_jp_id) && customer_jp_id > 0) {
+			NewCustomerJpEntity customer = dbDao.fetch(NewCustomerJpEntity.class, customer_jp_id);
+			String chinesename = customer.getChinesename();
+			if (!Util.isEmpty(chinesename)) {
+
+			} else {
+
+				validateEmptyList.add("中文名");
+			}
+			String chinesexing = customer.getChinesexing();
+			if (!Util.isEmpty(chinesexing)) {
+
+			} else {
+
+				validateEmptyList.add("中文姓");
+			}
+			String chinesenameen = customer.getChinesenameen();
+			if (!Util.isEmpty(chinesenameen)) {
+
+			} else {
+
+				validateEmptyList.add("中文名英文");
+			}
+			String chinesexingen = customer.getChinesexingen();
+			if (!Util.isEmpty(chinesexingen)) {
+
+			} else {
+
+				validateEmptyList.add("中文姓英文");
+			}
+			String nowcity = customer.getNowcity();
+
+			if (!Util.isEmpty(nowcity)) {
+
+			} else {
+
+				validateEmptyList.add("居住地城市");
+			}
+			Integer gender = customer.getGender();
+			if (!Util.isEmpty(gender)) {
+
+			} else {
+
+				validateEmptyList.add("性别");
+			}
+			Date birthdate = customer.getBirthday();
+			if (!Util.isEmpty(birthdate)) {
+
+			} else {
+
+				validateEmptyList.add("出生日期");
+			}
+		}
+
+	}
+
+	//生成临时文件
+	private File createTempFile(ByteArrayOutputStream out) {
+		try {
+			File tmp = new File(FileUtils.getTempDirectory() + "/" + UUID.randomUUID().toString() + ".tmp");
+			FileUtils.writeByteArrayToFile(tmp, out.toByteArray());
+			IOUtils.closeQuietly(out);
+			return tmp;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new JSiteException("临时文件输出异常!");
+		}
+	}
 }
