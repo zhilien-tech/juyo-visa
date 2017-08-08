@@ -28,7 +28,9 @@ import org.nutz.dao.Dao;
 import org.nutz.dao.SqlManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.beust.jcommander.internal.Maps;
@@ -74,10 +76,10 @@ public class NewVisaProgressController {
 			XORUtil instance = XORUtil.getInstance();
 			String xor_encodedStr = instance.decode(secretMsg, key);
 			String[] infoList = xor_encodedStr.split("&");
-
+			String orderId = null;
 			if (infoList.length == 4) {
 
-				String orderId = infoList[1];
+				orderId = infoList[1];
 				String datetime = infoList[3];
 
 				//计算时间差
@@ -105,7 +107,7 @@ public class NewVisaProgressController {
 			map.put("usa", usalist);
 			map.put("japan", "");
 			map.put("tourist", 1);
-
+			map.put("ordersid", orderId);
 			return map;
 		} else {
 

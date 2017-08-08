@@ -3,6 +3,7 @@ var countrystatus;
 var tourist;
 $(function(){
 	tourist=$.queryString("tourist");
+	alert($.queryString('secretMsg'));
 	 /*alert(unescape($.queryString("country")));*/
 	 if(tourist==1){
 		 //console.log(JSON.stringify(country));
@@ -18,7 +19,7 @@ $(function(){
 				 
 		 $.ajax({
 			 type: "POST",
-			 url: "/visa/progress/country?logintype="+$.queryString('logintype')+"&orderId="+$.queryString('orderId'),
+			 url: "/visa/progress/country?logintype="+$.queryString('logintype')+"&secretMsg="+$.queryString('secretMsg'),
 			 contentType: "application/json",
 			 dataType: "json",
 			 success: function (result) {
