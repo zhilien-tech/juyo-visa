@@ -58,6 +58,7 @@ var countries = new kendo.data.DataSource({
         }
     }),
     dafaults = {
+	docountry:"CHN",
 	passporttype:1,
 	workinfoJp: {},
 	financeJpList:[],
@@ -347,7 +348,20 @@ $(function () {
     if (oid) {
         $.getJSON("/visa/newcustomerjp/showDetail?customerid=" + oid, function (resp) {
         	viewModel.set("customer", $.extend(true, dafaults, resp));
-        	viewModel.set("customer.passporttype", 1);
+        	var passporttype=viewModel.get("customer.passporttype");
+        	if(passporttype!=""&&passporttype!=null){
+        		
+        	}else{0
+        		
+        		viewModel.set("customer.passporttype", 1);
+        	}
+        	var docountry=viewModel.get("customer.docountry");
+        	if(docountry!=""&&docountry!=null){
+        		
+        	}else{
+        		
+        		viewModel.set("customer.docountry", "CHN");
+        	}
         	
         	//获取系统当前日期
         	/*var myDate = new Date();
