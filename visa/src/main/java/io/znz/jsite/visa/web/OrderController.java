@@ -1135,19 +1135,13 @@ public class OrderController extends BaseController {
 		}
 
 		DateTime nowDateTime = DateUtils.nowDateTime();
-		String orderInfo = "&orderId=" + orderid + "&datetime=" + nowDateTime;
+		String orderInfo = "oid&" + orderid + "&now&" + nowDateTime;
 		XORUtil xor = XORUtil.getInstance();
 		String decode = xor.decode(orderInfo, "我是秘钥");
-		String encodeOInfo = xor.encode(decode, "我是秘钥");
 
-		String html = tmp
-				.toString()
-				.replace("${name}", "")
-				.replace("${oid}", order.getOrdernumber())
-				.replace(
-						"${href}",
-						"http://218.244.148.21:9004//main.html?logintype=5&orderId=" + orderid + "&datetime="
-								+ nowDateTime).replace("${logininfo}", "").replace("${gender}", "先生/女士");
+		String html = tmp.toString().replace("${name}", "").replace("${oid}", order.getOrdernumber())
+				.replace("${href}", "http://218.244.148.21:9004//main.html?logintype=5&secretMsg=" + decode)
+				.replace("${logininfo}", "").replace("${gender}", "先生/女士");
 		String result = mailService.send(email, html, "签证资料录入", MailService.Type.HTML);
 
 		if ("success".equalsIgnoreCase(result)) {

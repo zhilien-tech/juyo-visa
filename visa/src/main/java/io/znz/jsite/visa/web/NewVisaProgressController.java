@@ -9,6 +9,7 @@ package io.znz.jsite.visa.web;
 import io.znz.jsite.core.entity.EmployeeEntity;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.util.DateUtils;
+import io.znz.jsite.util.XORUtil;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerOrderJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrderJpEntity;
@@ -65,28 +66,39 @@ public class NewVisaProgressController {
 	 */
 	@RequestMapping(value = "country")
 	@ResponseBody
-	public Object list(HttpServletRequest request, String logintype, String orderId, String datetime) {
+	public Object list(HttpServletRequest request, String logintype, String secretMsg) {
 		if ("5".equals(logintype)) {
 			List<NewCustomerEntity> usalist = Lists.newArrayList();
 
-			//计算时间差
-			DateTime now = DateUtils.nowDateTime();
-			DateTime dateTime = DateUtils.string2DateTime(datetime, "");
-			long hours = DateUtils.hoursOfTwoTime(now, dateTime);
+			XORUtil xor = XORUtil.getInstance();
+			String orderInfo = xor.encode(secretMsg, "我是秘钥");
+			String[] infoList = orderInfo.split("&");
 
-			if (!Util.isEmpty(orderId) && hours <= HOURS_48) {
-				List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
-						Cnd.where("orderid", "=", orderId), null);
-				if (!Util.isEmpty(query) && query.size() > 0) {
-					for (NewCustomerOrderEntity CustomerOrderEntity : query) {
-						if (!Util.isEmpty(CustomerOrderEntity)) {
-							NewCustomerEntity fetch = dbDao.fetch(NewCustomerEntity.class,
-									CustomerOrderEntity.getCustomerid());
-							usalist.add(fetch);
+			if (infoList.length == 4) {
+
+				String orderId = infoList[1];
+				String datetime = infoList[3];
+
+				//计算时间差
+				DateTime now = DateUtils.nowDateTime();
+				DateTime dateTime = DateUtils.string2DateTime(datetime, "");
+				long hours = DateUtils.hoursOfTwoTime(now, dateTime);
+				if (!Util.isEmpty(orderId) && hours <= HOURS_48) {
+
+					List<NewCustomerOrderEntity> query = dbDao.query(NewCustomerOrderEntity.class,
+							Cnd.where("orderid", "=", orderId), null);
+					if (!Util.isEmpty(query) && query.size() > 0) {
+						for (NewCustomerOrderEntity CustomerOrderEntity : query) {
+							if (!Util.isEmpty(CustomerOrderEntity)) {
+								NewCustomerEntity fetch = dbDao.fetch(NewCustomerEntity.class,
+										CustomerOrderEntity.getCustomerid());
+								usalist.add(fetch);
+							}
 						}
-					}
 
+					}
 				}
+
 			}
 			Map<String, Object> map = Maps.newHashMap();
 			map.put("usa", usalist);
