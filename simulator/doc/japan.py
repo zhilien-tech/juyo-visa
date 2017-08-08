@@ -104,7 +104,7 @@ def _buttonByName(elmName,timeout=3600):
     _check_alert_to_close()
     logging.info("Waiting Button name: " + elmName)
     elm_btn_x = driver.find_element_by_name(elmName)
-	driver.execute_script("arguments[0].scrollIntoView();", target) #拖动到元素去
+    driver.execute_script("arguments[0].scrollIntoView();", elm_btn_x) #拖动到元素去
     elm_btn_x.click()
     logging.info("Click Button name: " + elmName)
 
@@ -246,6 +246,8 @@ _check_alert_to_close()
 
 #归国报告
 _wait_for_elm_by_id("container")
+driver.find_element_by_xpath("//li[@class='navi_04']").click()
+_wait_for_elm_by_id("container")
 driver.find_element_by_xpath("//li[@class='navi_01']").click()
 time.sleep(3)
 _wait_for_elm_by_id("container")
@@ -257,5 +259,4 @@ _wait_for_elm_by_id("container")
 _buttonByName("BTN_CHECK_x")
 
 _wait_for_elm_by_id("container")
-_buttonByName("BTN_CHECK_SUBMIT_x")
-
+#_buttonByName("BTN_CHECK_SUBMIT_x")
