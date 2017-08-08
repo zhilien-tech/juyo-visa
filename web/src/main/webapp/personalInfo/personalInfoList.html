@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>个人信息</title>
+    <link rel="stylesheet" href="/res/plugin/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.common.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.office365.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/res/css/colors.min.css"/>
+    <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
+    <link rel="stylesheet" href="/res/plugin/flag-icon/css/flag-icon.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/lightGallery/css/lightgallery.css"/>
+    <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/><!--修改的style-->
+    <link rel="stylesheet" href="/res/upload/uploadify.css"/>
+    <style type="text/css">
+    	.container{position: relative;top: 47px;}
+    	.Search{position: fixed;padding: 8px 0;}
+    	.personnalInfo-table{width:100%;border: solid 1px #e7eaec;}
+    	.personnalInfo-table tr{text-align: center;line-height: 40px;}
+    	.personnalInfo-table tr:nth-child(even){background-color: #f1f1f1;}
+    	.table-hover>tbody>tr:hover {background-color: #f4f4f4;}
+    </style>
+</head>
+<body id="aaaa" class="clear-scroll">
+	<!--搜索条件 模块-->
+    <div class="Search">
+      <div  class="col-xs-12">
+        <input type="button" class="btn btn-primary input-sm pull-right marginBtn editBtn" value="编辑">
+      	<!-- <input id="updatePassportSave" type="button" class="btn btn-primary input-sm pull-right marginBtn" value="修改密码"> -->
+      </div>
+    </div>
+    <!--end 搜索条件 模块-->
+	<div class="container">
+       <div class="col-xs-12" style="margin-top:15px;">
+            <table class="personnalInfo-table table-hover">
+            	<tr>
+            		<td>用户名称</td>
+            		<td>zhangsan666</td>
+            	</tr>
+            	<tr>
+            		<td>用户名/手机号码</td>
+            		<td>18532025250</td>
+            	</tr>
+            	<tr>
+            		<td>座机号码</td>
+            		<td>010-2563330</td>
+            	</tr>
+            	<tr>
+            		<td>联系QQ</td>
+            		<td>944561229</td>
+            	</tr>
+            	<tr>
+            		<td>电子邮箱</td>
+            		<td>944561229@qq.com</td>
+            	</tr>
+            	<tr>
+            		<td>所属部门</td>
+            		<td>奇葩王</td>
+            	</tr>
+            	<tr>
+            		<td>用户职位</td>
+            		<td>奇葩组长</td>
+            	</tr>
+            	<tr>
+            		<td>负责区域</td>
+            		<td>奇葩二组</td>
+            	</tr>
+            </table>
+        </div>
+	</div>
+</body>
+<!-- 引入JS文件 -->
+<script src="/res/plugin/jquery.min.js"></script>
+<script src="/res/plugin/layer/layer.js"></script>
+<script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
+<script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
+<script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
+<script src="/res/js/common.js"></script>
+<!-- <script src="/res/upload/jquery.uploadify.min.js"></script>
+<script src="/res/js/pinyin/pinyin_dict_notone.js"></script>
+<script src="/res/js/pinyin/pinyinUtil.js"></script>
+<script src="/res/js/idcard.js"></script> -->
+<script src="/res/js/personalInfo/personalInfoList.js"></script> <!-- 本页面js -->
+
+</html>
