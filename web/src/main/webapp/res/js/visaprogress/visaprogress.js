@@ -31,7 +31,7 @@ $(function(){
 					$("#usastatus").text("未完成");
 				}
 			}else{
-				window.location.href= "/login/logout";//修改成功之后跳到登录页面
+				window.location.href= "/login/logout";
 			}
 		 }
 	 });
