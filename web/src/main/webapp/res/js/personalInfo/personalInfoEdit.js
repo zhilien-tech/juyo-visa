@@ -30,6 +30,10 @@ $("#updateCusSave").on("click",function(){
 			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			 parent.layer.close(index);
 			 window.parent.successCallback('2');
+			 parent.location.reload(); 
+			 $.getJSON("/visa/personalinfo/personallist", function (resp) {
+			 	viewModel.set("personalInfo", $.extend(true, dafaults, resp));
+			 });
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown){
 			 if(indexnew!=null){
