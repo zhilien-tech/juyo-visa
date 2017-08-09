@@ -32,8 +32,6 @@ import com.uxuexi.core.web.base.page.Pagination;
 @Service
 public class PersonalInfoService extends NutzBaseService<EmployeeEntity> {
 
-	public static final int USER_TYPE = 2;
-
 	@Autowired
 	private PublicAuthorityService publicAuthorityService;
 
