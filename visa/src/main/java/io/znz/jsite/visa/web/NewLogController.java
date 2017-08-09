@@ -10,6 +10,7 @@ import io.znz.jsite.visa.entity.log.NewLogsEntity;
 
 import java.util.List;
 
+import org.nutz.dao.Cnd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,8 @@ public class NewLogController {
 	@RequestMapping(value = "list")
 	@ResponseBody
 	public Object list() {
-		List<NewLogsEntity> query = dbDao.query(NewLogsEntity.class, null, null);
+		List<NewLogsEntity> query = dbDao.query(NewLogsEntity.class,
+				Cnd.where("id", "!=", 0).orderBy("createTime", "desc"), null);
 		return query;
 	}
 }
