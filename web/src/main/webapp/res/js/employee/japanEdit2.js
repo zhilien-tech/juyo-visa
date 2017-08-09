@@ -377,11 +377,50 @@ function comsource(){
 			$("#selectno").show();
 			$(".companyFullName").hide();
 			$('.ZKcompanyFullName').removeClass("hide");// 显示 直客状态下的  公司全称
+			
+			
+			$("input[comResource='comResource']").each(function(){
+				var labelTxt=$(this).parent().prev().text().trim();
+				labelTxt = labelTxt.split(":");
+				labelTxt.pop();
+				labelTxt = labelTxt.join(":");
+				//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+				$(this).attr('validationMessage',labelTxt+"不能为空");
+				$(this).attr('required','required');
+			});
+			$("input[comManage='comManage']").each(function(){
+				var labelTxt=$(this).parent().prev().text().trim();
+				labelTxt = labelTxt.split(":");
+				labelTxt.pop();
+				labelTxt = labelTxt.join(":");
+				//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+				$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+				$(this).removeAttr('required','required');
+			});
 		}else{//其他的...
 			$("#select").show();
 			$("#selectno").hide();
 			$(".companyFullName").show();
 			$('.ZKcompanyFullName').addClass("hide");// 隐藏 直客状态下的  公司全称
+			
+			$("input[comManage='comManage']").each(function(){
+				var labelTxt=$(this).parent().prev().text().trim();
+				labelTxt = labelTxt.split(":");
+				labelTxt.pop();
+				labelTxt = labelTxt.join(":");
+				//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+				$(this).attr('validationMessage',labelTxt+"不能为空");
+				$(this).attr('required','required');
+			});
+			$("input[comResource='comResource']").each(function(){
+				var labelTxt=$(this).parent().prev().text().trim();
+				labelTxt = labelTxt.split(":");
+				labelTxt.pop();
+				labelTxt = labelTxt.join(":");
+				//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+				$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+				$(this).removeAttr('required','required');
+			});
 		}
 	}
 
@@ -436,6 +475,11 @@ $(function () {
     				viewModel.set("customer.customermanage.email",data.email);
     				var color = $("#cus_email").data("kendoMultiSelect");
     				color.value(data.id);
+    				//验证需要设置相关的值
+    				$("#cus_fullComName").val(data.fullComName);
+    				$("#cus_linkman").val(data.linkman);
+    				$("#cus_phone").val(data.telephone);
+    				$("#cus_email").val(data.email);
     			},
     			error : function(xhr) {
     			}
@@ -521,7 +565,11 @@ $(function () {
     				viewModel.set("customer.customermanage.email",data.email);
     				var color = $("#cus_email").data("kendoMultiSelect");
     				color.value(data.id);
-    				
+    				//验证需要设置相关的值
+    				$("#cus_fullComName").val(data.fullComName);
+    				$("#cus_linkman").val(data.linkman);
+    				$("#cus_phone").val(data.telephone);
+    				$("#cus_email").val(data.email);
     			},
     			error : function(xhr) {
     			}
@@ -576,6 +624,11 @@ $(function () {
     				viewModel.set("customer.customermanage.email",data.email);
     				var color = $("#cus_email").data("kendoMultiSelect");
     				color.value(data.id);
+    				//验证需要设置相关的值
+    				$("#cus_fullComName").val(data.fullComName);
+    				$("#cus_linkman").val(data.linkman);
+    				$("#cus_phone").val(data.telephone);
+    				$("#cus_email").val(data.email);
     			},
     			error : function(xhr) {
     			}
@@ -630,6 +683,11 @@ $(function () {
     				viewModel.set("customer.customermanage.email",data.email);
     				var color = $("#cus_email").data("kendoMultiSelect");
     				color.value(data.id);
+    				//验证需要设置相关的值
+    				$("#cus_fullComName").val(data.fullComName);
+    				$("#cus_linkman").val(data.linkman);
+    				$("#cus_phone").val(data.telephone);
+    				$("#cus_email").val(data.email);
     			},
     			error : function(xhr) {
     			}
@@ -852,11 +910,53 @@ $(function () {
 				$("#selectno").show();
 				$(".companyFullName").hide();
 				$('.ZKcompanyFullName').removeClass("hide");// 显示 直客状态下的  公司全称
+				
+				$("input[comResource='comResource']").each(function(){
+					var labelTxt=$(this).parent().prev().text().trim();
+					labelTxt = labelTxt.split(":");
+					labelTxt.pop();
+					labelTxt = labelTxt.join(":");
+					//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+					$(this).attr('validationMessage',labelTxt+"不能为空");
+					$(this).attr('required','required');
+				});
+				$("input[comManage='comManage']").each(function(){
+					var labelTxt=$(this).parent().prev().text().trim();
+					labelTxt = labelTxt.split(":");
+					labelTxt.pop();
+					labelTxt = labelTxt.join(":");
+					//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+					$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+					$(this).removeAttr('required','required');
+				});
 			}else{//其他的...
 				$("#select").show();
 				$("#selectno").hide();
 				$(".companyFullName").show();
 				$('.ZKcompanyFullName').addClass("hide");// 隐藏 直客状态下的  公司全称
+				//验证需要设置相关的值
+				$("#cus_fullComName").val(defaults.customermanage.fullComName);
+				$("#cus_linkman").val(defaults.customermanage.linkman);
+				$("#cus_phone").val(defaults.customermanage.telephone);
+				$("#cus_email").val(defaults.customermanage.email);
+				$("input[comManage='comManage']").each(function(){
+					var labelTxt=$(this).parent().prev().text().trim();
+					labelTxt = labelTxt.split(":");
+					labelTxt.pop();
+					labelTxt = labelTxt.join(":");
+					//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+					$(this).attr('validationMessage',labelTxt+"不能为空");
+					$(this).attr('required','required');
+				});
+				$("input[comResource='comResource']").each(function(){
+					var labelTxt=$(this).parent().prev().text().trim();
+					labelTxt = labelTxt.split(":");
+					labelTxt.pop();
+					labelTxt = labelTxt.join(":");
+					//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+					$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+					$(this).removeAttr('required','required');
+				});
 			}
 			if(indexnew!=null){
 				layer.close(indexnew);
