@@ -63,8 +63,14 @@ var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
 function ordersave(){
 	var  imgurl=viewModel.get("customer.sealUrl");
 	var flag=true;
-	if(imgurl==null||imgurl==''){
-		flag=false;
+	var  comType=viewModel.get("customer.comType");
+	
+	
+	if(comType==2){
+		
+		if(imgurl==null||imgurl==''){
+			flag=false;
+		}
 	}
 	if(validatable.validate()&&flag){
 		//清空验证的数组
