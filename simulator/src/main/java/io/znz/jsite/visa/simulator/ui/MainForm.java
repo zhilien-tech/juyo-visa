@@ -63,14 +63,14 @@ import com.google.common.collect.Lists;
 import com.jgoodies.forms.factories.Borders;
 
 /**
- * @author chaly
+ * @author 朱晓川
  */
 public class MainForm extends JPanel {
 
-	private static final String TASK_FETCH_URI = "visa/simulator/fetch";
+	private static final String TASK_FETCH_URI = "visa/simulator/fetchJapan";
 
-	private static final String TASK_SUBMITING_URI = "visa/simulator/ds160/";
-	private static final String VISA_UPLOAD_URI = "visa/simulator/usaUpload/";
+	private static final String TASK_SUBMITING_URI = "visa/simulator/ds160Japan/";
+	private static final String VISA_UPLOAD_URI = "visa/simulator/UploadJapan/";
 	//	private static final String TASK_FETCH_URI = "visa/customer/fetch";
 
 	private static final String HISTORY = "history";
@@ -79,9 +79,9 @@ public class MainForm extends JPanel {
 
 	public MainForm() {
 		initComponents();
-		pyFile.setText(System.getProperty("user.dir") + "/conf/ds160.py");
-		host.setText("127.0.0.1");
-		port.setText("8080");
+		pyFile.setText(System.getProperty("user.dir") + "/conf/japan.py");
+		host.setText("218.244.148.21");
+		port.setText("9004");
 	}
 
 	//拼接 url 地址
@@ -202,7 +202,7 @@ public class MainForm extends JPanel {
 					ResultObject<Map, Object> ro = JSON.parseObject(json, ResultObject.class);
 					if (ro.getCode() == ResultObject.ResultCode.SUCCESS) {
 						final String oid = String.valueOf(ro.getAttributes().get("oid"));
-						String image = String.valueOf(ro.getAttributes().get("avatar"));
+						String remoteFileUrl = String.valueOf(ro.getData().get("excelUrl"));
 						SwingUtilities.invokeLater(new Runnable() {
 							@Override
 							public void run() {
@@ -211,20 +211,20 @@ public class MainForm extends JPanel {
 						});
 
 						/*
-						 * 把用户的证件照以及签证的json数据信息保存到本地以供python脚本使用。
+						 * 把用户签证的json数据信息保存到本地以供python脚本使用。
 						 * 在用户当前工作目录内创建名为tmp的文件夹用于保存文件
 						 */
 						File tmp = new File(System.getProperty("user.dir") + "/tmp");
 						if (!tmp.exists())
 							tmp.mkdirs();
 
-						//保存头像
-						String imageFile = tmp.getAbsolutePath() + File.separator + oid + ".jpg";
-						HttpClientUtil.download(image, imageFile);
+						//保存名录excel文件
+						String excelFile = tmp.getAbsolutePath() + File.separator + oid + ".jpg";
+						HttpClientUtil.download(remoteFileUrl, excelFile);
 
 						//替换json 中的文件为绝对路径，保存json文件
-						ro.getData().put("ctl00_cphMain_imageFileUpload", imageFile);
-						log(imageFile);
+						ro.getData().put("ctl00_cphMain_imageFileUpload", excelFile);
+						log(excelFile);
 
 						File target = new File(tmp, oid + ".json");
 						FileUtils.writeStringToFile(target, JSON.toJSONString(ro.getData()));
@@ -264,29 +264,7 @@ public class MainForm extends JPanel {
 		}).start();
 	}
 
-	/**TODO  直接使用数据文件进行测试*/
-	private void useFile4Test() {
-
-		File tmp = new File(System.getProperty("user.dir") + "/tmp");
-		if (!tmp.exists())
-			tmp.mkdirs();
-		final String oid = "1348";
-		File target = new File(tmp, oid + ".json");
-
-		//执行命令行
-		File python = new File(pyFile.getText());
-		if (python.exists()) {
-			String cmd = "python " + pyFile.getText() + " " + target.getAbsolutePath();
-			command.setText(cmd);
-			exe(command.getText());
-			log("准备任务码为" + oid + "的上传文件");
-			log("总计用时:" + ((System.currentTimeMillis() - startTime) / 1000) + "秒");
-		} else {
-			JOptionPane.showMessageDialog(new JLabel(), "自动化脚本不存在");
-		}
-	}
-
-	//上传 DS160文件的按钮点击事件
+	//上传文件的按钮点击事件
 	private void uploadActionPerformed(ActionEvent e) {
 		if (StringUtils.isBlank(resultFiles.getText())) {
 			JOptionPane.showMessageDialog(new JLabel(), "请先选择上传文件!");

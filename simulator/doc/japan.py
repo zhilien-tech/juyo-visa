@@ -13,6 +13,7 @@ import sys
 import logging
 import json
 from pprint import pprint
+import os
 
 #函数定义  begin 
 #等待id为elm_id的元素可见
@@ -21,6 +22,13 @@ def _wait_for_elm_by_id(elm_id,timeout = 3600):
     logging.info("Waiting element shown, id: " + elm_id)
     element = WebDriverWait(driver, timeout).until(
         EC.visibility_of_element_located((By.ID, elm_id))
+    )
+
+def _wait_for_xpath(xpath,timeout = 3600):
+    _check_alert_to_close()
+    logging.info("Waiting for xpath: " + xpath)
+    element = WebDriverWait(driver, timeout).until(
+        EC.visibility_of_element_located((By.XPATH,xpath))
     )
 	
 def _wait_for_elm_by_name(name,timeout = 3600):
@@ -87,9 +95,8 @@ def _textInputById(elmId,val,timeout=3600,duplicate_substr=None):
 def _buttonById(elmId,timeout=3600):
     _check_alert_to_close()
     logging.info("Waiting Button id: " + elmId)
-    elm_btn_x = WebDriverWait(driver, timeout).until(
-        EC.presence_of_element_located((By.ID, elmId))
-    )
+    elm_btn_x = driver.find_element_by_id(elmId)
+    driver.execute_script("arguments[0].scrollIntoView();", elm_btn_x) #拖动到元素去
     elm_btn_x.click()
     logging.info("Click Button id: " + elmId)
 	
@@ -129,14 +136,18 @@ logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 data_json = None
 file_name = sys.argv[1]
 logging.info("Import json data from file : %s",file_name)
-with open(file_name) as data_file:
+with open(file_name,encoding="utf8") as data_file:
     data_json = json.load(data_file)
 
 # 打开火狐浏览器并且跳转到签证网站
 profileDir = "C:/Users/user/AppData/Roaming/Mozilla/Firefox/Profiles/e0dheleu.default"
 profile = webdriver.FirefoxProfile(profileDir)
-driver = webdriver.Firefox(profile)
+workDir=os.path.abspath(os.path.join(os.getcwd(), "../tmp"))
+pprint("workDir:" + workDir) 
+profile.set_preference("browser.download.dir",workDir)
+profile.set_preference("browser.helperApps.neverAsk.saveToDisk","application/octet-stream")
 
+driver = webdriver.Firefox(profile)
 driver.get("https://churenkyosystem.com/member/login.php")
 
 #1. login
@@ -178,11 +189,13 @@ elm_ipt_x.click()
 
 #申请人姓名
 answer = data_json["proposerNameCN"]
-_textInputByName("APPLICANT_NAME",answer)
+logging.info("proposerNameCN :%s",answer)
+elm_input = driver.find_element_by_name("APPLICANT_NAME")
+driver.execute_script("arguments[0].scrollIntoView();", elm_input)
+elm_input.send_keys(answer)
 
 answer = data_json["proposerNameEN"]
 _textInputByName("APPLICANT_PINYIN",answer)
-
 #人数
 answer = data_json["applicantCnt"]
 _textInputByName("NUMBER_OF_TOURISTS",answer)
@@ -225,6 +238,15 @@ driver.find_element_by_xpath("//li[@class='navi_01']").click()
 time.sleep(3)
 _wait_for_elm_by_id("container")
 logging.info("Load Page Title :%s",driver.title)
+answer = data_json["agentNo"]
+if not answer:
+    answer = "GTP-BJ-084-0"
+
+_textInputById("CHINA_AGENT_CODE",answer)
+_buttonByName("BTN_SEARCH_CHINA_AGENT")
+time.sleep(2)
+_wait_for_xpath("//input[@name='BTN_SEARCH_x']")
+_buttonByName("BTN_SEARCH_x")
 
 #名簿登録
 answer = data_json["proposerNameCN"]
@@ -245,13 +267,26 @@ _buttonByName("BTN_SUBMIT_x")
 _check_alert_to_close()
 
 #归国报告
-_wait_for_elm_by_id("container")
-driver.find_element_by_xpath("//li[@class='navi_04']").click()
-_wait_for_elm_by_id("container")
-driver.find_element_by_xpath("//li[@class='navi_01']").click()
 time.sleep(3)
-_wait_for_elm_by_id("container")
+_wait_for_xpath("//li[@class='navi_04']")
+driver.find_element_by_xpath("//li[@class='navi_04']").click()
 
+time.sleep(3)
+_wait_for_xpath("//li[@class='navi_01']")
+driver.find_element_by_xpath("//li[@class='navi_01']").click()
+_wait_for_elm_by_id("container")
+logging.info("Load Page Title :%s",driver.title)
+answer = data_json["agentNo"]
+if not answer:
+    answer = "GTP-BJ-084-0"
+
+_textInputById("CHINA_AGENT_CODE",answer)
+_buttonByName("BTN_SEARCH_CHINA_AGENT")
+time.sleep(2)
+_wait_for_xpath("//input[@name='BTN_SEARCH_x']")
+_buttonByName("BTN_SEARCH_x")
+
+_wait_for_elm_by_id("container")
 answer = data_json["proposerNameCN"]
 _wait_for_elm_by_id("container",3600)
 _buttonByCustomerName(answer,"帰国報告")
@@ -259,4 +294,28 @@ _wait_for_elm_by_id("container")
 _buttonByName("BTN_CHECK_x")
 
 _wait_for_elm_by_id("container")
-#_buttonByName("BTN_CHECK_SUBMIT_x")
+_buttonByName("BTN_CHECK_SUBMIT_x")
+
+#点击归国报告书表示
+_wait_for_elm_by_id("container")
+_check_alert_to_close()
+elm_btn = driver.find_element_by_xpath("//input[@name='BTN_BACK_x' and @value='帰国報告書の表示']")
+#拖动到元素去
+driver.execute_script("arguments[0].scrollIntoView();", elm_btn) 
+elm_btn.click()
+
+# 输出当前窗口句柄
+pprint("current handles:" + driver.current_window_handle) 
+# 获取当前窗口句柄集合
+handles = driver.window_handles
+
+#切换窗口
+for handle in handles:
+    if handle!=driver.current_window_handle:
+        driver.switch_to_window(handle)
+        pprint(driver.current_window_handle)  # 输出当前窗口句柄
+        break
+
+_wait_for_elm_by_id("download")
+_buttonById("download")
+_check_alert_to_close()
