@@ -135,8 +135,9 @@
                                                     data-text-field="text"
                                                     data-value-field="value"
                                                     data-bind="value:customer.customerSource,source:customersourceEnum"
-                                                   required validationMessage="客户来源不能为空" name="customerSource"
+                                                    required validationMessage="客户来源不能为空" name="customerSource"
                                                     style="width: 100%;" onchange="comsource()"></select>
+                                             <span class="k-invalid-msg" data-for="customerSource" ></span><!-- 验证提示语 -->
                                                     <!--   <input id="cus_source"  class="k-textbox"
                                                    style="width: 100%;" name="customerSource"/> -->
                                             <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
@@ -150,6 +151,7 @@
 		                                 <div class='input-group'>
 		                                    <input id="cus_fullComName" type="text" class="k-textbox" style="width: 100%;"
 		                                           data-bind="value:customer.customermanage.fullComName"  comManage="comManage" name="fullComName"/>
+		                                    <span class="k-invalid-msg" data-for="fullComName" ></span><!-- 验证提示语 -->
 		                                    <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 		                                 </div>
 		                            </div>
@@ -162,6 +164,7 @@
 		                                <div class='input-group'>
 		                                   <input id="cus_fullComName1" type="text" class="k-textbox" style="width: 100%;"
 		                                          data-bind="value:customer.customerresource.fullComName"  comResource="comResource" name="fullComNameresource"/>
+		                                   <span class="k-invalid-msg" data-for="fullComNameresource" ></span><!-- 验证提示语 -->
 		                                   <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 		                                </div>
 		                            </div>
@@ -179,6 +182,7 @@
 		                                        <div class='input-group'>
 		                                            <input id="cus_linkman" class="k-textbox" data-bind="value:customer.customermanage.linkman" comManage="comManage"
 		                                                   style="width: 100%;" name="linkman"/>
+		                                            <span class="k-invalid-msg" data-for="linkman" ></span><!-- 验证提示语 -->
 		                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 		                                        </div>
 		                                    </div>
@@ -189,6 +193,7 @@
 		                                        <div class='input-group'>
 		                                           <input id="cus_phone" name="telephone"  data-bind="value:customer.customermanage.telephone" comManage="comManage"
 		                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
+		                                           <span class="k-invalid-msg" data-for="telephone" ></span><!-- 验证提示语 -->
 		                                           <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 		                                        </div>
 		                                    </div>
@@ -199,6 +204,7 @@
 		                                        <div class='input-group'>
 		                                             <input id="cus_email" name="email" data-bind="value:customer.customermanage.email" comManage="comManage"
 		                                                   class="k-textbox" style="width: 100%;text-transform:uppercase;"/>
+		                                             <span class="k-invalid-msg" data-for="email" ></span><!-- 验证提示语 -->
 		                                                   <!-- <select class="k-textbox" style="width: 100%;text-transform:uppercase;" id="cus_email"></select> 
 		                                                   data-bind="value:customer.customermanage.email"
 		                                                   -->
