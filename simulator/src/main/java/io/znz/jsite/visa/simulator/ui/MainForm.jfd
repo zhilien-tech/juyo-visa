@@ -102,7 +102,7 @@ new FormModel {
 				"$alignTop": true
 			} ) {
 				name: "panel3"
-				"border": new javax.swing.border.CompoundBorder( new javax.swing.border.TitledBorder( "上传" ), &EmptyBorder0 new javax.swing.border.EmptyBorder( 5, 5, 5, 5 ) )
+				"border": new javax.swing.border.CompoundBorder( new javax.swing.border.TitledBorder( "上传帰国報告" ), &EmptyBorder0 new javax.swing.border.EmptyBorder( 5, 5, 5, 5 ) )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label5"
 					"text": "文件集"
@@ -110,7 +110,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JTextField" ) {
 					name: "resultFiles"
 					"editable": false
-					"toolTipText": "DS-160在线签证申请得到的 pdf 和 bat 文件"
+					"toolTipText": "在线签证申请得到的帰国報告文件"
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 				} )

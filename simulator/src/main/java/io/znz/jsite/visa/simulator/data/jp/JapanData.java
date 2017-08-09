@@ -26,7 +26,7 @@ public class JapanData {
 	private String agentNo = "GTP-BJ-084-0";
 
 	/**
-	 * 签证类型，个人1/数次N
+	 * 签证类型，个人2/数次N
 	 * @see JapanVisaType1Enum
 	 */
 	private String visaType1;

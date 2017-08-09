@@ -57,6 +57,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.nutz.lang.Files;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
@@ -219,13 +220,13 @@ public class MainForm extends JPanel {
 							tmp.mkdirs();
 
 						//保存名录excel文件
-						String excelFile = tmp.getAbsolutePath() + File.separator + oid + ".jpg";
-						HttpClientUtil.download(remoteFileUrl, excelFile);
+						String suffix = Files.getSuffix(remoteFileUrl);
+						String localExcelUrl = tmp.getAbsolutePath() + File.separator + oid + suffix;
+						HttpClientUtil.download(remoteFileUrl, localExcelUrl);
 
 						//替换json 中的文件为绝对路径，保存json文件
-						ro.getData().put("ctl00_cphMain_imageFileUpload", excelFile);
-						log(excelFile);
-
+						ro.getData().put("excelUrl", localExcelUrl);
+						log(localExcelUrl);
 						File target = new File(tmp, oid + ".json");
 						FileUtils.writeStringToFile(target, JSON.toJSONString(ro.getData()));
 						log("文件已保存至:" + target.getAbsolutePath());
@@ -337,9 +338,9 @@ public class MainForm extends JPanel {
 		}).start();
 	}
 
-	//选择 DS160文件的按钮点击事件
+	//选择上传文件的按钮点击事件
 	private void filesPickerActionPerformed(ActionEvent e) {
-		File files[] = openFilePicker("选择DS160文件(多选)", true, "pdf", "dat");
+		File files[] = openFilePicker("选择帰国報告文件", true, "pdf");
 		if (files.length == 0)
 			return;
 		StringBuilder sb = new StringBuilder();
@@ -348,8 +349,8 @@ public class MainForm extends JPanel {
 			sb.append(file.getAbsolutePath()).append(";");
 			tmp.append(StringUtils.substringAfterLast(file.getName(), "."));
 		}
-		if (!tmp.toString().matches("(?=.*pdf)(?=.*dat)^.*$")) {
-			JOptionPane.showMessageDialog(new JLabel(), "文件必须是pdf或dat类型!");
+		if (!tmp.toString().matches("(?=.*pdf)^.*$")) {
+			JOptionPane.showMessageDialog(new JLabel(), "文件必须是pdf类型!");
 			return;
 		}
 		if (StringUtils.isNotBlank(sb)) {
