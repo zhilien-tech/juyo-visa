@@ -20,10 +20,10 @@
     	.log-all .log-content li{line-height: 22px;color: #777;}
     </style>
 </head>
-<body class="clear-scroll" onload="document.getElementById('password').focus()">
+<body class="clear-scroll" ><!-- onload="document.getElementById('password').focus()" -->
 	<div class="container">
-      <div class="col-xs-12" style="margin-top: 15px;">
-      	<div class="log-all">
+      <div class="col-xs-12" style="margin-top: 15px;" id="add">
+      	<!-- <div class="log-all">
       		<p class="log-time">2017-08-02</p>
       		<ul class="log-content">
 	       		<li>1.更新了员工管理的删除、添加、编辑按钮的功能</li>
@@ -33,7 +33,7 @@
       	</div>
        	<div class="log-all">
       		<p class="log-time">2017-07-22</p>
-      		<ul class="log-content">
+      		<ul class="log-content" >
 	       		<li>1.更换了登录页面的风格</li>
 	       		<li>2.优化登录时，页面加载时间变短</li>
 	       		<li>3.优化美国下单部分的页面布局细节</li>
@@ -54,12 +54,13 @@
 	       		<li>1.更换了登录页面的风格</li>
 	       		<li>2.优化登录时，页面加载时间变短</li>
        		</ul>
-      	</div>
+      	</div> -->
       </div>
 	</div>
 </body>
 <!-- 引入JS文件 -->
 <script src="/res/plugin/jquery.min.js"></script>
+<script src="/res/js/log/log.js"></script>
 <!-- <script src="/res/plugin/template.js"></script> -->
 <!-- <script src="/res/plugin/layer/layer.js"></script>
 <script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
