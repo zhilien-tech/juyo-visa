@@ -214,7 +214,7 @@ public class LoginController extends BaseController {
 								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));*/
 								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 								return "redirect:" + to + "?auth=2,3,6,7," + str + "&username=" + fullname
-										+ "&logintype=" + logintype;
+										+ "&logintype=" + logintype + "&userType=" + userType;
 							} else if (UserLoginEnum.PERSONNEL.intKey() == logintype
 									&& UserLoginEnum.COMPANY_ADMIN.intKey() == userType) {//公司管理员员登录
 								functions = authorityViewService.getCompanyFunctions(comJob.getComId());
@@ -223,7 +223,7 @@ public class LoginController extends BaseController {
 								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));*/
 								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 								return "redirect:" + to + "?auth=2,3,6,7," + str + "&username=" + fullname
-										+ "&logintype=" + logintype;
+										+ "&logintype=" + logintype + "&userType=" + userType;
 							} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype
 									&& UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {//游客身份登录
 								//我的签证
@@ -344,7 +344,7 @@ public class LoginController extends BaseController {
 								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));*/
 								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 								return "redirect:" + to + "?auth=7,8,9,16," + str + "&username=" + fullname
-										+ "&logintype=" + logintype;
+										+ "&logintype=" + logintype + "&userType=" + userType;
 							} else if (UserLoginEnum.SUPERMAN.intKey() == 3
 									&& UserLoginEnum.SUPERMAN.intKey() == userType) {//超级管理员登录
 								functions = loginAuthorityService.superAdministratorFunction();
@@ -353,7 +353,7 @@ public class LoginController extends BaseController {
 								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));*/
 								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 								return "redirect:" + to + "?auth=0," + str + "&username=" + fullname + "&logintype="
-										+ logintype;
+										+ logintype + "&userType=" + userType;
 							} else if (UserLoginEnum.ADMIN.intKey() == 4 && UserLoginEnum.ADMIN.intKey() == userType) {//平台用户
 								//公司管理
 								FunctionEntity comf = new FunctionEntity();
@@ -438,7 +438,8 @@ public class LoginController extends BaseController {
 								logfun.setPortrait("fa fa-building-o");
 								functions.add(logfun);
 								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
-								return "redirect:" + to + "?auth=4," + "&username=" + fullname + "&logintype=" + 4;
+								return "redirect:" + to + "?auth=4," + "&username=" + fullname + "&logintype=" + 4
+										+ "&userType=" + userType;
 							} else {
 
 								model.addFlashAttribute("error", "登录身份错误,请重试!");

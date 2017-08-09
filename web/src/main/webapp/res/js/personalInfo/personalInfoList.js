@@ -1,4 +1,5 @@
 $(function(){
+	
 	//列表页
 	$.getJSON("/visa/personalinfo/personallist", function (resp) {
 		var fullname = resp.fullname;
@@ -39,7 +40,6 @@ $(function(){
 		
 		viewModel.set("personalInfo", $.extend(true, dafaults, resp));
 	});
-	
 	
 });
 var dafaults = {},

@@ -6,7 +6,7 @@ $(function(){
 	
 	
 });
-var dafaults = {},
+var dafaults = {};
 /*****************************************************
  * 数据绑定
  ****************************************************/
@@ -30,10 +30,8 @@ $("#updateCusSave").on("click",function(){
 			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			 parent.layer.close(index);
 			 window.parent.successCallback('2');
-			 parent.location.reload(); 
-			 $.getJSON("/visa/personalinfo/personallist", function (resp) {
-			 	viewModel.set("personalInfo", $.extend(true, dafaults, resp));
-			 });
+			 personalInfo();
+			 
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown){
 			 if(indexnew!=null){
@@ -43,6 +41,47 @@ $("#updateCusSave").on("click",function(){
          }
 	});
 });
+
+//刷新个人信息
+function personalInfo(){
+	$.getJSON("/visa/personalinfo/personallist", function (resp) {
+		var fullname = resp.fullname;
+		if(null == fullname){
+			fullname = "";
+		}
+		var telephone = resp.telephone;
+		if(null == telephone){
+			telephone = "";
+		}
+		var landline = resp.landline;
+		if(null == landline){
+			landline = "";
+		}
+		var qq = resp.qq;
+		if(null == qq){
+			qq = "";
+		}
+		var email = resp.email;
+		if(null == email){
+			email = "";
+		}
+		var deptname = resp.deptname;
+		if(null == deptname){
+			deptname = "";
+		}
+		var jobname = resp.jobname;
+		if(null == jobname){
+			jobname = "";
+		}
+		parent.$("#fullname").text(fullname);
+		parent.$("#telephone").text(telephone);
+		parent.$("#landline").text(landline);
+		parent.$("#qq").text(qq);
+		parent.$("#email").text(resp.email);
+		parent.$("#deptname").text(deptname);
+		parent.$("#jobname").text(jobname);
+	});
+}
 //校验邮箱格式
 /*function checkEmail(){
 	$("input[checkname='checkname']").each(function(){

@@ -32,14 +32,7 @@ import com.uxuexi.core.web.base.page.Pagination;
 @Service
 public class PersonalInfoService extends NutzBaseService<EmployeeEntity> {
 
-	public static final int HASH_INTERATIONS = 1024;
-	private static final int SALT_SIZE = 8; //盐长度
-	private static final String INIT_PASSWORD = "000000"; //初始密码
-
-	//管理员所在的部门
-	private static final String MANAGE_DEPART = "公司管理部";
-	//管理员职位
-	private static final String MANAGE_POSITION = "公司管理员";
+	public static final int USER_TYPE = 2;
 
 	@Autowired
 	private PublicAuthorityService publicAuthorityService;

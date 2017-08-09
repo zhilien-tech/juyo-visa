@@ -1,14 +1,28 @@
 /*personalInfo_list*/
 SELECT
+	d.deptName,
+	j.jobName,	
 	e.id,
+	e.comId,
 	e.fullName,
 	e.telephone,
+	e.`password`,
+	e.salt,
+	e.userType,
 	e.qq,
 	e.landline,
 	e.email,
-	d.deptName,
-	j.jobName,
-	e.`status`
+	e.department,
+	e.job,
+	e.disableUserStatus,
+	e.`status`,
+	e.createTime,
+	e.updateTime,
+	e.remark,
+	e.countryType,
+	e.pId,
+	e.res4,
+	e.res5
 FROM
 	visa_employee e
 INNER JOIN visa_new_emp_job uj ON e.id = uj.empId

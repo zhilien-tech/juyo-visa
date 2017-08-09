@@ -36,7 +36,7 @@
                             <span class="clear">
                                 <!-- <span class="block m-t-xs"><strong class="font-bold" id="name">iChaly</strong></span>
                                 <span class="text-muted text-xs block" id="role">普通用户</span> -->
-                                <a class="J_menuItem" href="personalInfo/personalInfoList.html" id="userId"></a>
+                                <a class="J_menuItem personalInfoA" href="personalInfo/personalInfoList.html" id="userId"></a>
                             </span>
                         </a>
                     </div>
@@ -721,6 +721,11 @@
     	} */
     	//显示登录人姓名
     	var username=$.queryString("username");
+    	var usertype=$.queryString("userType");
+    	if(usertype==2 || usertype==3 || usertype==4){
+    		$(".personalInfoA").removeAttr("href");
+    	}
+    	
     	if(username!=null&&username!=''){
     		
     	var j = JSON.parse($.base64.atob(decodeURI(username),true));
