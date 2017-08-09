@@ -119,7 +119,7 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 			map.put("visaAccount", "1507-001");
 			map.put("visaPasswd", "kintsu2017");
 			map.put("agentNo", "GTP-BJ-084-0");
-			map.put("visaType1", 1);
+			map.put("visaType1", "2");
 
 			/*	map.put("visaType2", );*/
 			if (!Util.isEmpty(customerList) && customerList.size() > 0) {
@@ -137,7 +137,7 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 					chinesenameen = "";
 				}
 				map.put("proposerNameEN", chinesexingen + chinesenameen);
-				map.put("applicantCnt", customerList.size() - 1);//除申请人之外的人数
+				map.put("applicantCnt", (customerList.size() - 1) + "");//除申请人之外的人数
 			}
 
 			if (!Util.isEmpty(order)) {
@@ -150,7 +150,7 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 			if (!Util.isEmpty(map)) {
 				ResultObject ro = ResultObject.success(map);
 
-				ro.addAttribute("oid", orderid);
+				ro.addAttribute("oid", orderid + "");
 
 				return ro;
 			}
@@ -173,15 +173,15 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 		try {
 			Integer status = order.getStatus();
 			//验证提交状态
-			if (Util.isEmpty(status) || OrderVisaApproStatusEnum.readySubmit.intKey() != status) {
-				return ResultObject.fail("准备提交使馆的任务方可提交ds160！");
+			if (Util.isEmpty(status) || OrderVisaApproStatusEnum.DS.intKey() != status) {
+				return ResultObject.fail("准备提交使馆的任务方可提交！");
 			}
 
 			//签证状态改为'提交中'
 			dbDao.update(NewOrderJpEntity.class, Chain.make("status", OrderVisaApproStatusEnum.submiting.intKey()),
 					Cnd.where("id", "=", cid));
 		} catch (Exception e) {
-			return ResultObject.fail("ds160提交失败,请稍后重试！");
+			return ResultObject.fail("提交失败,请稍后重试！");
 		}
 		return ResultObject.success(order);
 
@@ -205,7 +205,7 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 			Integer status = order.getStatus();
 			//验证提交状态
 			if (Util.isEmpty(status) || OrderVisaApproStatusEnum.submiting.intKey() != status) {
-				return ResultObject.fail("已提交ds160的任务方可进行文件上传！");
+				return ResultObject.fail("已提交的任务方可进行文件上传！");
 			}
 
 			//为客户设置文件地址，签证状态改为'已提交'
