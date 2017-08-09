@@ -18,7 +18,7 @@ $(function(){
 				 
 		 $.ajax({
 			 type: "POST",
-			 url: "/visa/progress/country?logintype="+$.queryString('logintype')+"&orderId="+$.queryString('orderId'),
+			 url: "/visa/progress/country?logintype="+$.queryString('logintype')+"&secretMsg="+$.queryString('secretMsg'),
 			 contentType: "application/json",
 			 dataType: "json",
 			 success: function (result) {
