@@ -38,8 +38,6 @@ $(function(){
 		$("#jobname").text(jobname);
 		
 		viewModel.set("personalInfo", $.extend(true, dafaults, resp));
-		//设置值
-		console.log(JSON.stringify(resp));
 	});
 	
 	
@@ -63,3 +61,13 @@ $('.editBtn').click(function(){
 		content: '/personalInfo/personalInfoEdit.html'
 	});
 });
+//事件提示
+function successCallback(id){
+	if(id == '1'){
+		layer.msg("添加成功",{time:2000});
+	}else if(id == '2'){
+		layer.msg("修改成功",{time:2000});
+	}else if(id == '3'){
+		layer.msg("删除成功",{time:2000});
+	}
+}
