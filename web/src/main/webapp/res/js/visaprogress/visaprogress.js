@@ -30,6 +30,8 @@ $(function(){
 				if(usa.status!=13){
 					$("#usastatus").text("未完成");
 				}
+			}else{
+				window.location.href= "/login/logout";
 			}
 		 }
 	 });
