@@ -310,6 +310,10 @@ public class BasicInfoController extends BaseController {
 		if (!Util.isEmpty(oldname)) {
 			if (!Util.isEmpty(oldname.getId()) && oldname.getId() > 0) {
 				nutDao.update(oldname);
+			} else if (!Util.isEmpty(oldname.getId()) && oldname.getId() < 0) {
+				List<NewOldnameEntity> query2 = dbDao.query(NewOldnameEntity.class,
+						Cnd.where("customerid", "=", customer.getId()), null);
+				dbDao.delete(query2);
 			} else {
 				oldname.setCustomerid(customer.getId());
 				dbDao.insert(oldname);
@@ -595,6 +599,10 @@ public class BasicInfoController extends BaseController {
 		if (!Util.isEmpty(oldname)) {
 			if (!Util.isEmpty(oldname.getId()) && oldname.getId() > 0) {
 				nutDao.updateIgnoreNull(oldname);
+			} else if (!Util.isEmpty(oldname.getId()) && oldname.getId() < 0) {
+				List<NewOldnameJpEntity> query = dbDao.query(NewOldnameJpEntity.class,
+						Cnd.where("customer_jp_id", "=", customer.getId()), null);
+				dbDao.delete(query);
 			} else {
 				oldname.setCustomer_jp_id(customer.getId());
 				dbDao.insert(oldname);

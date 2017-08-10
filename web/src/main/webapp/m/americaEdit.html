@@ -1290,20 +1290,20 @@
     <div class="row traveler traveler_row_#:data.uid#">
         <div class="col-xs-6">
             <div class="form-group">
-                <label for="traveler_last_name_cn_#:data.uid#">同行人姓:<span style="color: red">*</span></label>
+                <label for="peerxing#:data.uid#">同行人姓:<span style="color: red">*</span></label>
                 <div class='input-group'>
-                    <input id="traveler_last_name_cn_#:data.uid#"
+                    <input id="peerxing#:data.uid#"
                            class="k-textbox" style="width: 100%;"
-                           data-bind="value:peerxing"/>
+                           data-bind="value:peerxing,events:{input:onCheckpeer}"/>
                     <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                 </div>
             </div>
         </div>
         <div class="col-xs-6">
             <div class="form-group">
-                <label for="traveler_last_name_#:data.uid#">拼音:<span style="color: red">*</span></label>
+                <label for="peerxingen#:data.uid#">拼音:<span style="color: red">*</span></label>
                 <div class='input-group'>
-                    <input id="traveler_last_name_#:data.uid#"
+                    <input id="peerxingen#:data.uid#"
                            data-bind="value:peerxingen" class="k-textbox"
                            style="width: 100%;text-transform:uppercase;"/>
                     <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
@@ -1313,9 +1313,9 @@
         <!--名-->
         <div class="col-xs-6">
             <div class="form-group">
-                <label for="traveler_first_name_cn_#:data.uid#">同行人名:<span style="color: red">*</span></label>
+                <label for="peername#:data.uid#">同行人名:<span style="color: red">*</span></label>
                 <div class='input-group'>
-                    <input id="traveler_first_name_cn_#:data.uid#" data-bind="value:peername"
+                    <input id="peername#:data.uid#" data-bind="value:peername,events:{input:onCheckPeername}"
                            class="k-textbox" style="width: 100%;"/>
                     <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                 </div>
@@ -1323,9 +1323,9 @@
         </div>
         <div class="col-xs-6">
             <div class="form-group">
-                <label for="traveler_first_name_#:data.uid#">拼音:<span style="color: red">*</span></label>
+                <label for="peernameen#:data.uid#">拼音:<span style="color: red">*</span></label>
                 <div class='input-group'>
-                    <input id="traveler_first_name_#:data.uid#" data-bind="value:peernameen" class="k-textbox"
+                    <input id="peernameen#:data.uid#" data-bind="value:peernameen" class="k-textbox"
                            style="width: 100%;text-transform:uppercase;"/>
                     <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                 </div>
@@ -1531,6 +1531,8 @@
 <script src="/res/plugin/webtoolkit.md5.js"></script>
 <script src="/res/js/idcard.js"></script>
 <script src="/res/js/wintone.js?v=4"></script>
+<script src="/res/js/pinyin/pinyin_dict_notone.js"></script>
+<script src="/res/js/pinyin/pinyinUtil.js"></script>
 <script src="/res/js/americaEdit.js"></script>
 <script type="text/javascript">
 $(function(){

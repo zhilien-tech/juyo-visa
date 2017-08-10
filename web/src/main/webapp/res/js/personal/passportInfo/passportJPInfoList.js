@@ -451,3 +451,13 @@ function uploadFile(){
        }
 	});
 }
+//日本护照信息根据中文自动转为拼音
+function getPinYin(){
+	var name = $("#ir_last_name_cn").val();
+	var namePin = pinyinUtil.getPinyin(name, '', false, false);
+	viewModel.set("customer.chinesexingen",namePin.toUpperCase());
+	
+	var chinesename = $("#ir_first_name_cn").val();
+	var chinesenameen = pinyinUtil.getPinyin(chinesename, '', false, false);
+	viewModel.set("customer.chinesenameen",chinesenameen.toUpperCase());
+}

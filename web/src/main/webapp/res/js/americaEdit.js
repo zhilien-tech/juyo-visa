@@ -112,6 +112,58 @@ var viewModel = kendo.observable({
         if (togethers) state = togethers.length > 0;
         return state;
     },*/
+    onCheckpeer:function(e){//同行人姓和拼音
+    	//得到list对象
+    	var listobj = viewModel.get("customer.peerList");
+    	var peerxingobj = $("#peerxing"+e.data.uid).val();
+    	var aa = $("#peerxing"+e.data.uid).parent().parent().parent().next().find("input");
+    	var val1=peerxingobj;
+    	if(val1!=''&&val1!=null){
+    		var bb = pinyinUtil.getPinyin(val1, '', false, false);
+    		var val2=bb.toUpperCase();
+    		aa.val(val2);
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.peerxing == listobj[i].peerxing){
+    				viewModel.set("customer.peerList["+i+"].peerxingen",val2);
+    				return;
+    			}
+    		}
+    	}else{
+    		aa.val("");
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.peerxing == listobj[i].peerxing){
+    				viewModel.set("customer.peerList["+i+"].peerxingen","");
+    				return;
+    			}
+    		}
+    	}
+    },
+    onCheckPeername:function(e){//同行人名和拼音
+    	//得到list对象
+    	var listobj = viewModel.get("customer.peerList");
+    	var peernameobj = $("#peername"+e.data.uid).val();
+    	var aa = $("#peername"+e.data.uid).parent().parent().parent().next().find("input");
+    	var val1=peernameobj;
+    	if(val1!=''&&val1!=null){
+    		var bb = pinyinUtil.getPinyin(val1, '', false, false);
+    		var val2=bb.toUpperCase();
+    		aa.val(val2);
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.peername == listobj[i].peername){
+    				viewModel.set("customer.peerList["+i+"].peernameen",val2);
+    				return;
+    			}
+    		}
+    	}else{
+    		aa.val("");
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.peername == listobj[i].peername){
+    				viewModel.set("customer.peerList["+i+"].peernameen","");
+    				return;
+    			}
+    		}
+    	}
+    },
     addOne: function (e) {
     	 var key = $.isString(e) ? e : $(e.target).data('params');
          console.log(key);
