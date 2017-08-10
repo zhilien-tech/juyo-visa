@@ -240,11 +240,49 @@ function comsource(){
 		$("#selectno").show();
 		$('.companyFullName').addClass('hide');//隐藏 默认显示的 其他状态下的 公司全称
 		$('.ZKcompanyFullName').removeClass('hide');//显示   默认显示的  直客  公司全称
+		
+		$("input[comResource='comResource']").each(function(){
+			var labelTxt=$(this).parent().prev().text().trim();
+			labelTxt = labelTxt.split(":");
+			labelTxt.pop();
+			labelTxt = labelTxt.join(":");
+			//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+			$(this).attr('validationMessage',labelTxt+"不能为空");
+			$(this).attr('required','required');
+		});
+		$("input[comManage='comManage']").each(function(){
+			var labelTxt=$(this).parent().prev().text().trim();
+			labelTxt = labelTxt.split(":");
+			labelTxt.pop();
+			labelTxt = labelTxt.join(":");
+			//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+			$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+			$(this).removeAttr('required','required');
+		});
+
 	}else{//其他
 		$("#select").show();
 		$("#selectno").hide();
 		$('.companyFullName').removeClass('hide');//显示 默认显示的 其他状态下的 公司全称
 		$('.ZKcompanyFullName').addClass('hide');//隐藏   默认显示的  直客  公司全称
+		$("input[comManage='comManage']").each(function(){
+			var labelTxt=$(this).parent().prev().text().trim();
+			labelTxt = labelTxt.split(":");
+			labelTxt.pop();
+			labelTxt = labelTxt.join(":");
+			//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+			$(this).attr('validationMessage',labelTxt+"不能为空");
+			$(this).attr('required','required');
+		});
+		$("input[comResource='comResource']").each(function(){
+			var labelTxt=$(this).parent().prev().text().trim();
+			labelTxt = labelTxt.split(":");
+			labelTxt.pop();
+			labelTxt = labelTxt.join(":");
+			//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+			$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+			$(this).removeAttr('required','required');
+		});
 	}
 }
 
@@ -294,6 +332,11 @@ $(function () {
     				viewModel.set("customer.customermanage.email",data.email);
     				var color = $("#cus_email").data("kendoMultiSelect");
     				color.value(data.id);
+    				//验证需要设置相关的值
+    				$("#cus_fullComName").val(data.fullComName);
+    				$("#cus_linkman").val(data.linkman);
+    				$("#cus_phone").val(data.telephone);
+    				$("#cus_email").val(data.email);
     			},
     			error : function(xhr) {
     			}
@@ -345,7 +388,11 @@ $(function () {
     				viewModel.set("customer.customermanage.email",data.email);
     				var color = $("#cus_email").data("kendoMultiSelect");
     				color.value(data.id);
-    				
+    				//验证需要设置相关的值
+    				$("#cus_fullComName").val(data.fullComName);
+    				$("#cus_linkman").val(data.linkman);
+    				$("#cus_phone").val(data.telephone);
+    				$("#cus_email").val(data.email);
     			},
     			error : function(xhr) {
     			}
@@ -398,6 +445,11 @@ $(function () {
     				viewModel.set("customer.customermanage.email",data.email);
     				var color = $("#cus_email").data("kendoMultiSelect");
     				color.value(data.id);
+    				//验证需要设置相关的值
+    				$("#cus_fullComName").val(data.fullComName);
+    				$("#cus_linkman").val(data.linkman);
+    				$("#cus_phone").val(data.telephone);
+    				$("#cus_email").val(data.email);
     			},
     			error : function(xhr) {
     			}
@@ -450,6 +502,11 @@ $(function () {
     				viewModel.set("customer.customermanage.email",data.email);
     				var color = $("#cus_email").data("kendoMultiSelect");
     				color.value(data.id);
+    				//验证需要设置相关的值
+    				$("#cus_fullComName").val(data.fullComName);
+    				$("#cus_linkman").val(data.linkman);
+    				$("#cus_phone").val(data.telephone);
+    				$("#cus_email").val(data.email);
     			},
     			error : function(xhr) {
     			}
@@ -568,11 +625,59 @@ $(function () {
 				$("#selectno").show();
 				$('.companyFullName').addClass('hide');//隐藏 默认显示的 其他状态下的 公司全称
 				$('.ZKcompanyFullName').removeClass('hide');//显示   默认显示的  直客  公司全称
+				$("input[comResource='comResource']").each(function(){
+					var labelTxt=$(this).parent().prev().text().trim();
+					labelTxt = labelTxt.split(":");
+					labelTxt.pop();
+					labelTxt = labelTxt.join(":");
+					//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+					$(this).attr('validationMessage',labelTxt+"不能为空");
+					$(this).attr('required','required');
+				});
+				$("input[comManage='comManage']").each(function(){
+					var labelTxt=$(this).parent().prev().text().trim();
+					labelTxt = labelTxt.split(":");
+					labelTxt.pop();
+					labelTxt = labelTxt.join(":");
+					//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+					$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+					$(this).removeAttr('required','required');
+				});
+				//验证需要设置相关的值
+		/*		$("#cus_fullComName1").val(dafaults.customerresource.fullComName);
+				$("#cus_linkman1").val(dafaults.customerresource.linkman);
+				$("#cus_phone1").val(dafaults.customerresource.telephone);
+				$("#cus_email1").val(dafaults.customerresource.email);*/
 			}else{//其他
 				$("#select").show();
 				$("#selectno").hide();
 				$('.companyFullName').removeClass('hide');//显示 默认显示的 其他状态下的 公司全称
 				$('.ZKcompanyFullName').addClass('hide');//隐藏   默认显示的  直客  公司全称
+				//验证需要设置相关的值
+				$("#cus_fullComName").val(dafaults.customermanage.fullComName);
+				$("#cus_linkman").val(dafaults.customermanage.linkman);
+				$("#cus_phone").val(dafaults.customermanage.telephone);
+				$("#cus_email").val(dafaults.customermanage.email);
+				
+				
+				$("input[comManage='comManage']").each(function(){
+					var labelTxt=$(this).parent().prev().text().trim();
+					labelTxt = labelTxt.split(":");
+					labelTxt.pop();
+					labelTxt = labelTxt.join(":");
+					//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+					$(this).attr('validationMessage',labelTxt+"不能为空");
+					$(this).attr('required','required');
+				});
+				$("input[comResource='comResource']").each(function(){
+					var labelTxt=$(this).parent().prev().text().trim();
+					labelTxt = labelTxt.split(":");
+					labelTxt.pop();
+					labelTxt = labelTxt.join(":");
+					//$(this).attr({requested:'requested',validationMessage:"不能为空"} );
+					$(this).removeAttr('validationMessage',labelTxt+"不能为空");
+					$(this).removeAttr('required','required');
+				});
 			}
 			if(indexnew!=null){
 				layer.close(indexnew);

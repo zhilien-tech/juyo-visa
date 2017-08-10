@@ -5,6 +5,8 @@ import io.znz.jsite.base.bean.ResultObject;
 import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
 import io.znz.jsite.core.service.MailService;
 import io.znz.jsite.core.util.Const;
+import io.znz.jsite.util.DateUtils;
+import io.znz.jsite.util.XORUtil;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 import io.znz.jsite.visa.bean.Customer;
@@ -1131,8 +1133,14 @@ public class OrderController extends BaseController {
 			tmp.append(line);
 		}
 
+		String nowDateTime = DateUtils.getDateTime();
+		String key = "我是秘钥";
+		String orderInfo = "oid&" + orderid + "&now&" + nowDateTime;
+		XORUtil instance = XORUtil.getInstance();
+		String xor_encodedStr = instance.encode(orderInfo, key);
+
 		String html = tmp.toString().replace("${name}", "").replace("${oid}", order.getOrdernumber())
-				.replace("${href}", "http://218.244.148.21:9004//main.html?logintype=5&orderId=" + orderid)
+				.replace("${href}", "http://218.244.148.21:9004//main.html?logintype=5&secretMsg=" + xor_encodedStr)
 				.replace("${logininfo}", "").replace("${gender}", "先生/女士");
 		String result = mailService.send(email, html, "签证资料录入", MailService.Type.HTML);
 

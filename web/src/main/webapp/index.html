@@ -26,8 +26,8 @@
     <span class="systemlogo"></span>
 	<div class="nav-tabs-custom loginbox loginbox2">
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="#tabs_1" data-toggle="tab">用户登录</a></li>
-			<li><a href="#tabs_2" data-toggle="tab">游客</a></li>
+			<li class="active"><a href="#tabs_1" onclick="userClick();" data-toggle="tab">用户登录</a></li>
+			<li><a href="#tabs_2" onclick="visitorclick();" data-toggle="tab">游客</a></li>
 		</ul>
 		<div class="login_main_errortip">&nbsp;</div>
 			<div class="tab-content">
@@ -44,7 +44,8 @@
 			                        <input name="captcha" type="text" value="验证码" placeholder="验证码"/>
 			                    </span>
 			                    <cite>
-			                        <img alt="验证码" src="res/img/kaptcha.jpg" title="点击刷新"/>
+			                        <img id="VerificatCode1" alt="验证码" src="/login/captcha-image.html" title="点击刷新"/>
+<!-- 			                        <img id="VerificatCode1" alt="验证码" src="res/img/kaptcha.jpg" title="点击刷新"/> -->
 			                    </cite>
 			                </li>
 			                <li>
@@ -70,7 +71,8 @@
 			                        <input name="captcha" type="text" value="验证码" placeholder="验证码"/>
 			                    </span>
 			                    <cite>
-			                        <img alt="验证码" src="res/img/kaptcha.jpg" title="点击刷新"/>
+			                        <img id="VerificatCode2" alt="验证码" src="/login/captcha-image.html" title="点击刷新"/>
+<!-- 			                        <img id="VerificatCode2" alt="验证码" src="res/img/kaptcha.jpg" title="点击刷新"/> -->
 			                    </cite>
 			                </li>
 			                <li>

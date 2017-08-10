@@ -113,6 +113,36 @@ function regCmd(command) {
                 		}
                 	});
                 	break;
+                case "validate":
+                	if (!(data = select(e))) return;
+                	var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+                	$.getJSON("/visa/neworderjp/validate?type=order&orderid=" + data.id, {}, function (resp) {
+                		if (resp.code === "SUCCESS") {
+                			if(index!=null){
+                				
+                				layer.close(index);
+                			}
+                			/*	layer.confirm('发送成功，打开预览？', {
+                                btn: ['预览', '关闭']
+                            }, function (index, layero) {
+                                window.open("/delivery/deliveryJapan.html?oid="+data.id);
+                            }, function (index) {
+                                $.layer.closeAll();
+                            });*/
+                			
+                			layer.msg("等待递送！",{time: 2000});
+                		} else if(resp.code === "FAIL"){
+                			if(index!=null){
+                				
+                				layer.close(index);
+                			}
+                			$.layer.alert(resp.msg);
+                		}else{
+                			$.layer.alert(resp.msg);
+                			
+                		}
+                	});
+                	break;
                 case "noticeall":
                 	if (!(data = select(e))) return;
                 	 var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
@@ -234,15 +264,15 @@ function detailInit(e) {
 	          }
       },
         columns: [
-            {field: 'chinesefullname',title: '姓名',width:100},
-            {field: 'phone', title: '电话',width:100},
+            {field: 'chinesefullname',title: '姓名'},
+            {field: 'phone', title: '电话'},
             {field: 'passport', title: '护照号'},
-            {field: 'gender', title: '性别', width: 60,values:genderlist},
-            {field: 'sendtime', title: '送签时间',format: "{0: yyyy-MM-dd}"},
-            {field: 'outtime', title: '出签时间',format: "{0: yyyy-MM-dd}"},
+            {field: 'gender', title: '性别',values:genderlist},
+            /*{field: 'sendtime', title: '送签时间',format: "{0: yyyy-MM-dd}"},
+            {field: 'outtime', title: '出签时间',format: "{0: yyyy-MM-dd}"},*/
             {field: 'status', title: ' 状态',values:statuslist},
             { 
-                title: "操作", width:85,
+                title: "操作",
                 command: [
 
                     {name: "customerEdit1", imageClass:false, text: "编辑"},
@@ -352,12 +382,14 @@ var grid = $("#grid").kendoGrid({
             command: [
                 {name: "modify", imageClass:false, text: " 编辑"},
                 {name: "shareall", imageClass:false, text: "分享"},
-                {name: "delivery", imageClass:false, text: "递送"},
+                /*{name: "delivery", imageClass:false, text: "递送"},*/
+                {name: "validate", imageClass:false, text: "递送"},
                 {name: "download", imageClass:false, text: "下载"},
                 regCmd("modify"),
                 regCmd("shareall"),
                 regCmd("download"),
-                regCmd("delivery"),
+                /*regCmd("delivery"),*/
+                regCmd("validate"),
             ]
         }
     ]/*,

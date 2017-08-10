@@ -1,10 +1,13 @@
 var japan;
 var usa;
 var tourist;
+var ordersid;
+var secretMsg;
 $(function(){
+	 secretMsg = $.queryString('secretMsg');
 	 $.ajax({
 		 type: "POST",
-		 url: "/visa/progress/country?logintype="+$.queryString('logintype')+"&orderId="+$.queryString('orderId'),
+		 url: "/visa/progress/country?logintype="+$.queryString('logintype')+"&secretMsg="+secretMsg,
 		 contentType: "application/json",
 		 dataType: "json",
 		 success: function (result) {
@@ -12,7 +15,7 @@ $(function(){
 			japan=result.japan;
 			usa=result.usa;
 			tourist=result.tourist;
-			
+			ordersid = result.ordersid;
 			$("#usa").hide();
 			$("#japan").hide();
 			if(japan!=null&&japan!=''){
@@ -27,6 +30,8 @@ $(function(){
 				if(usa.status!=13){
 					$("#usastatus").text("未完成");
 				}
+			}else{
+				window.location.href= "/login/logout";
 			}
 		 }
 	 });
@@ -37,8 +42,9 @@ $(function(){
 
 function intopersion(country){
 	if(tourist==1&&country=='usa'){
-		window.location.href="/myvisa/transactVisa/visaNationPersonal.html?countrystatus=0&tourist=1&logintype=5&orderId="+$.queryString('orderId');
+		window.location.href="/myvisa/transactVisa/visaNationPersonal.html?countrystatus=0&tourist=1&logintype=5&secretMsg="+secretMsg;
 		return;
+		
 	}
 	if(country=='japan'){
 		

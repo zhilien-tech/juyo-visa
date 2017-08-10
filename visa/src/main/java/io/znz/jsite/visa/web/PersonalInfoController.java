@@ -7,20 +7,18 @@
 package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.BaseController;
-import io.znz.jsite.base.bean.ResultObject;
-import io.znz.jsite.visa.entity.user.SysUserEntity;
-import io.znz.jsite.visa.form.SysUserSqlForm;
+import io.znz.jsite.visa.forms.personalInfo.PersonalInfoSqlForm;
+import io.znz.jsite.visa.forms.personalInfo.PersonalInfoUpdateForm;
 import io.znz.jsite.visa.service.UserViewService;
+import io.znz.jsite.visa.service.personalInfo.PersonalInfoService;
 
-import org.nutz.dao.pager.Pager;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.alibaba.fastjson.JSON;
 
 /**
  * 个人信息控制类
@@ -33,6 +31,8 @@ public class PersonalInfoController extends BaseController {
 
 	@Autowired
 	private UserViewService userViewService;
+	@Autowired
+	private PersonalInfoService personalInfoService;
 
 	/**
 	 * 个人信息列表页展示
@@ -40,26 +40,17 @@ public class PersonalInfoController extends BaseController {
 	 */
 	@RequestMapping(value = "personallist")
 	@ResponseBody
-	private Object personallist(@RequestBody SysUserSqlForm form) {
-		Pager pager = new Pager();
-		pager.setPageNumber(form.getPageNumber());
-		pager.setPageSize(form.getPageSize());
-		return userViewService.listPage(form, pager);
-		//return userViewService.userListData();
+	private Object personallist(PersonalInfoSqlForm form, final HttpSession session) {
+		return personalInfoService.personallist(form, session);
 	}
 
 	/**
-	 * 数据展示
-	 * @param cid
+	 * 执行'修改操作'
 	 */
-	@RequestMapping(value = "show", method = RequestMethod.GET)
+	@RequestMapping(value = "personalUpdate", method = RequestMethod.POST)
 	@ResponseBody
-	public Object show(long cid) {
-		SysUserEntity one = userViewService.fetch(cid);
-		if (one == null) {
-			return ResultObject.fail("个人信息不存在,请核实后再试!");
-		}
-		String json = JSON.toJSONStringWithDateFormat(one, "yyyy-MM-dd");
-		return JSON.parseObject(json);
+	public Object updatePersonal(PersonalInfoUpdateForm updateForm) {
+		return personalInfoService.updatePersonal(updateForm);
 	}
+
 }
