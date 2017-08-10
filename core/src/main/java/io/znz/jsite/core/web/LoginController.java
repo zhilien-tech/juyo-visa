@@ -15,10 +15,14 @@ import io.znz.jsite.util.StringUtils;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 
+import java.awt.image.BufferedImage;
 import java.util.Date;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
@@ -39,9 +43,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import com.alibaba.fastjson.JSON;
+import com.google.code.kaptcha.Constants;
+import com.google.code.kaptcha.Producer;
 import com.google.common.collect.Lists;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
@@ -73,6 +80,13 @@ public class LoginController extends BaseController {
 	private SqlManager sqlManager;
 
 	public static final int HASH_INTERATIONS = 1024;
+
+	private Producer captchaProducer = null;
+
+	@Autowired
+	public void setCaptchaProducer(Producer captchaProducer) {
+		this.captchaProducer = captchaProducer;
+	}
 
 	/**
 	 * 登录页面.这页面不是实际的登录页,而是按照不同的规则进行跳转以达到多登录页的效果
@@ -485,5 +499,37 @@ public class LoginController extends BaseController {
 		status.setComplete();
 		SecurityUtils.getSubject().logout();
 		return "redirect:" + to;
+	}
+
+	/**
+	 * 生成验证码
+	 */
+	@RequestMapping("/captcha-image")
+	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		response.setDateHeader("Expires", 0);
+		// Set standard HTTP/1.1 no-cache headers.  
+		response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+		// Set IE extended HTTP/1.1 no-cache headers (use addHeader).  
+		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+		// Set standard HTTP/1.0 no-cache header.  
+		response.setHeader("Pragma", "no-cache");
+		// return a jpeg  
+		response.setContentType("image/jpeg");
+		// create the text for the image  
+		String capText = captchaProducer.createText();
+		// store the text in the session  
+		request.getSession().setAttribute(Constants.KAPTCHA_SESSION_KEY, capText);
+		// create the image with the text  
+		BufferedImage bi = captchaProducer.createImage(capText);
+		ServletOutputStream out = response.getOutputStream();
+		// write the data out  
+		ImageIO.write(bi, "jpg", out);
+		try {
+			out.flush();
+		} finally {
+			out.close();
+		}
+		return null;
 	}
 }
