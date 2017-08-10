@@ -4,6 +4,7 @@
 // 确保登录界面不在iframe框架中显示
 if (window != top) top.location.href = location.href;
 $(function () {
+	$("#VerificatCode").click();
     var e = $.Querystring("e");
     if(e){
         var j = JSON.parse($.base64.atob(decodeURI(e),true));
