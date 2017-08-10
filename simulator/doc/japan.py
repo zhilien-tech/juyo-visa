@@ -15,6 +15,11 @@ import json
 from pprint import pprint
 import os
 
+import urllib
+import urllib.request
+import urllib.error
+import requests
+
 #函数定义  begin 
 #等待id为elm_id的元素可见
 def _wait_for_elm_by_id(elm_id,timeout = 3600):
@@ -102,7 +107,9 @@ def _buttonById(elmId,timeout=3600):
 	
 #個人名簿登録
 def _buttonByCustomerName(customerName,buttonName="個人名簿登録"):
-    target=driver.find_element_by_xpath("//tr/td/div[contains(text(),'"+customerName+"')]/../../following-sibling::tr[1]/td/input[@value='"+buttonName+"']")
+    xpath="//tr/td/div[contains(text(),'"+customerName+"')]/../../following-sibling::tr[1]/td/input[@value='"+buttonName+"']"
+    _wait_for_xpath(xpath)
+    target=driver.find_element_by_xpath(xpath)
     driver.execute_script("arguments[0].scrollIntoView();", target) #拖动到可见的元素去
     target.click()
 	
@@ -123,6 +130,25 @@ def _radioBoxVisableByName(radioName,value,isSelectId1="false",timeout=3600):
     if isSelectId1:
         elm_ipt_x = driver.find_element_by_xpath("//body/descendant::input[@name='"+radioName+"'][1]") ;    
     elm_ipt_x.click()
+
+def callbackfunc(blocknum, blocksize, totalsize):
+    '''回调函数
+    @blocknum: 已经下载的数据块
+    @blocksize: 数据块的大小
+    @totalsize: 远程文件的大小
+    '''
+    global url
+    percent = 100.0 * blocknum * blocksize / totalsize
+    if percent > 100:
+        percent = 100
+    downsize=blocknum * blocksize
+    if downsize >= totalsize:
+    	downsize=totalsize
+    s ="%.2f%%"%(percent)+"====>"+"%.2f"%(downsize/1024/1024)+"M/"+"%.2f"%(totalsize/1024/1024)+"M \r"
+    sys.stdout.write(s)
+    sys.stdout.flush()
+    if percent == 100:
+        print('')
 	
 #函数定义  end
 #主流程开始
@@ -136,7 +162,7 @@ logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 data_json = None
 file_name = sys.argv[1]
 logging.info("Import json data from file : %s",file_name)
-with open(file_name,encoding="utf8") as data_file:
+with open(file_name) as data_file:
     data_json = json.load(data_file)
 
 # 打开火狐浏览器并且跳转到签证网站
@@ -144,7 +170,13 @@ profileDir = "C:/Users/user/AppData/Roaming/Mozilla/Firefox/Profiles/e0dheleu.de
 profile = webdriver.FirefoxProfile(profileDir)
 workDir=os.path.abspath(os.path.join(os.getcwd(), "../tmp"))
 pprint("workDir:" + workDir) 
+#自定义下载路径
 profile.set_preference("browser.download.dir",workDir)
+#使用自定义下载路径
+profile.set_preference('browser.download.folderList', 2) 
+#不显示下载管理器
+profile.set_preference('browser.download.manager.showWhenStarting', False) 
+#MIME
 profile.set_preference("browser.helperApps.neverAsk.saveToDisk","application/octet-stream")
 
 driver = webdriver.Firefox(profile)
@@ -175,7 +207,7 @@ logging.info("Load Page Title :%s",driver.title)
 #指定番号
 answer = data_json["agentNo"]
 if not answer:
-    answer = "GTP-BJ-084-0"
+    answer = "gtu-sh-057-0"
 
 _textInputById("CHINA_AGENT_CODE",answer)
 _buttonByName("BTN_SEARCH")
@@ -300,22 +332,42 @@ _buttonByName("BTN_CHECK_SUBMIT_x")
 _wait_for_elm_by_id("container")
 _check_alert_to_close()
 elm_btn = driver.find_element_by_xpath("//input[@name='BTN_BACK_x' and @value='帰国報告書の表示']")
-#拖动到元素去
 driver.execute_script("arguments[0].scrollIntoView();", elm_btn) 
 elm_btn.click()
 
-# 输出当前窗口句柄
-pprint("current handles:" + driver.current_window_handle) 
+#pdf下载页面
+time.sleep(3)
+
+#归国报告书下载地址
+download_url=""
 # 获取当前窗口句柄集合
 handles = driver.window_handles
-
 #切换窗口
 for handle in handles:
-    if handle!=driver.current_window_handle:
-        driver.switch_to_window(handle)
-        pprint(driver.current_window_handle)  # 输出当前窗口句柄
+    driver.switch_to_window(handle)
+    download_url = driver.current_url
+    pprint(download_url)  # 输出当前窗口url
+    if "download_return_report.php"  in download_url:
         break
 
-_wait_for_elm_by_id("download")
-_buttonById("download")
-_check_alert_to_close()
+task_id=sys.argv[2]
+pprint("task_id:" + task_id)
+pdf_name=workDir+"\\"+task_id+".pdf"	
+pprint("pdf_name:" + pdf_name)
+try:
+    pprint("download_url:" + download_url)
+    urllib.request.urlretrieve(download_url, pdf_name, callbackfunc)
+    pprint("[succ]download file successfully.")    
+except urllib.error.HTTPError as e: 
+    pprint(e)	
+time.sleep(2)
+#上传文件
+upload_url="http://218.244.148.21:9004/visa/simulator/UploadJapan/"	+ task_id
+files = {'file':open(pdf_name, 'rb')}
+data = {}
+resp = requests.post(upload_url, files=files, data = data)
+pprint(resp.text)
+result = json.loads(resp.text)
+if "SUCCESS" == result['code']:
+    pprint("上传成功，任务:" + task_id + "执行完毕")
+    driver.quit()

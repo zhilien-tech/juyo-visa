@@ -242,8 +242,8 @@ public class MainForm extends JPanel {
 							} else {
 								JOptionPane.showMessageDialog(new JLabel(), ds160ro.getMsg());
 							}
-
-							String cmd = "python " + pyFile.getText() + " " + target.getAbsolutePath();
+							//第三个参数为任务码
+							String cmd = "python " + pyFile.getText() + " " + target.getAbsolutePath() + " " + oid;
 							command.setText(cmd);
 							exe(command.getText());
 
