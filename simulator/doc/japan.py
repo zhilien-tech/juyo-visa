@@ -168,7 +168,7 @@ with open(file_name) as data_file:
 # 打开火狐浏览器并且跳转到签证网站
 profileDir = "C:/Users/user/AppData/Roaming/Mozilla/Firefox/Profiles/e0dheleu.default"
 profile = webdriver.FirefoxProfile(profileDir)
-workDir=os.path.abspath(os.path.join(os.getcwd(), "../tmp"))
+workDir=os.path.abspath(os.path.join(os.getcwd(), "./tmp"))
 pprint("workDir:" + workDir) 
 #自定义下载路径
 profile.set_preference("browser.download.dir",workDir)
@@ -340,15 +340,18 @@ time.sleep(3)
 
 #归国报告书下载地址
 download_url=""
-# 获取当前窗口句柄集合
-handles = driver.window_handles
-#切换窗口
-for handle in handles:
-    driver.switch_to_window(handle)
-    download_url = driver.current_url
-    pprint(download_url)  # 输出当前窗口url
-    if "download_return_report.php"  in download_url:
-        break
+flag = 1
+while flag == 1 :
+    # 获取当前窗口句柄集合
+    handles = driver.window_handles
+    #切换窗口
+    for handle in handles:
+        driver.switch_to_window(handle)
+        download_url = driver.current_url
+        pprint(download_url)  # 输出当前窗口url
+        if "download_return_report.php"  in download_url:
+            flag = 0
+            break
 
 task_id=sys.argv[2]
 pprint("task_id:" + task_id)
@@ -369,5 +372,5 @@ resp = requests.post(upload_url, files=files, data = data)
 pprint(resp.text)
 result = json.loads(resp.text)
 if "SUCCESS" == result['code']:
-    pprint("上传成功，任务:" + task_id + "执行完毕")
+    logging.info("上传成功，任务:" + task_id + "执行完毕")
     driver.quit()
