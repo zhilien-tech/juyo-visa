@@ -468,7 +468,7 @@
         <div class="col-xs-2">
             <div class="form-group">
                 <button data-bind="click:delOne" data-params="customer.otherCountry" class="k-button col-xs-12 k-button-icontext">
-                    <span class="k-icon k-i-close"></span>删除
+                    <span class="k-icon k-i-close" data-bind="click:delOne" data-params="customer.otherCountry"></span>删除
                 </button>
             </div>
         </div>
@@ -594,7 +594,7 @@
                     <label>操作:&nbsp;</label>
                     <button data-bind="click:delOne" data-params="order.trips"
                             class="k-button col-xs-12 k-button-icontext">
-                        <span class="k-icon k-i-close"></span>移除此行程
+                        <span class="k-icon k-i-close" data-bind="click:delOne" data-params="order.trips"></span>移除此行程
                     </button>
                 </div>
             </div>
@@ -642,7 +642,7 @@
         <div class="col-xs-2">
             <div class="form-group">
                 <button data-bind="click:delOne" data-params="customer.financeJpList" class="k-button col-xs-12 k-button-icontext">
-                    <span class="k-icon k-i-close"></span>删除
+                    <span class="k-icon k-i-close" data-bind="click:delOne" data-params="customer.financeJpList"></span>删除
                 </button>
             </div>
         </div>
