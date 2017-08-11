@@ -161,9 +161,11 @@ logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 #import JSON data file,从文件加载json数据，命令行的第二个参数为完整文件名
 data_json = None
 file_name = sys.argv[1]
-logging.info("Import json data from file : %s",file_name)
-with open(file_name) as data_file:
+logging.info("Import json data from file,use utf-8 : %s",file_name)
+#注意,json文件也请使用utf-8编码保存
+with open(file_name,encoding="utf-8") as data_file:
     data_json = json.load(data_file)
+    data_file.close()
 
 # 打开火狐浏览器并且跳转到签证网站
 profileDir = "C:/Users/user/AppData/Roaming/Mozilla/Firefox/Profiles/e0dheleu.default"

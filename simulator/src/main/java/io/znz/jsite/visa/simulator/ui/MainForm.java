@@ -69,6 +69,7 @@ import com.jgoodies.forms.factories.Borders;
 public class MainForm extends JPanel {
 
 	private static final String TASK_FETCH_URI = "visa/simulator/fetchJapan";
+	private static final String ENCODING = "UTF-8";
 
 	private static final String TASK_SUBMITING_URI = "visa/simulator/ds160Japan/";
 	private static final String VISA_UPLOAD_URI = "visa/simulator/UploadJapan/";
@@ -228,7 +229,8 @@ public class MainForm extends JPanel {
 						ro.getData().put("excelUrl", localExcelUrl);
 						log(localExcelUrl);
 						File target = new File(tmp, oid + ".json");
-						FileUtils.writeStringToFile(target, JSON.toJSONString(ro.getData()));
+						//保存json文件，使用UTF-8编码
+						FileUtils.writeStringToFile(target, JSON.toJSONString(ro.getData()), ENCODING);
 						log("文件已保存至:" + target.getAbsolutePath());
 
 						//执行命令行
