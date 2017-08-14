@@ -298,6 +298,58 @@ var viewModel = kendo.observable({
     		}
     	}
     },
+    onCheckFatherXing:function(e){
+    	//得到list对象
+    	var listobj = viewModel.get("customer.relation");
+    	var fatherxingobj = $("#fatherxing"+e.data.uid).val();
+    	var aa = $("#fatherxing"+e.data.uid).parent().parent().parent().next().find("input");
+    	var val1=fatherxingobj;
+    	if(val1!=''&&val1!=null){
+    		var bb = pinyinUtil.getPinyin(val1, '', false, false);
+    		var val2=bb.toUpperCase();
+    		aa.val(val2);
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.xing == listobj[i].xing){
+    				viewModel.set("customer.relation["+i+"].xingen",val2);
+    				return;
+    			}
+    		}
+    	}else{
+    		aa.val("");
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.xing == listobj[i].xing){
+    				viewModel.set("customer.relation["+i+"].xingen","");
+    				return;
+    			}
+    		}
+    	}
+    },
+    onCheckFatherName:function(e){
+    	//得到list对象
+    	var listobj = viewModel.get("customer.relation");
+    	var fathernameobj = $("#fathername"+e.data.uid).val();
+    	var aa = $("#fathername"+e.data.uid).parent().parent().parent().next().find("input");
+    	var val1=fathernameobj;
+    	if(val1!=''&&val1!=null){
+    		var bb = pinyinUtil.getPinyin(val1, '', false, false);
+    		var val2=bb.toUpperCase();
+    		aa.val(val2);
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.name == listobj[i].name){
+    				viewModel.set("customer.relation["+i+"].nameen",val2);
+    				return;
+    			}
+    		}
+    	}else{
+    		aa.val("");
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.name == listobj[i].name){
+    				viewModel.set("customer.relation["+i+"].nameen","");
+    				return;
+    			}
+    		}
+    	}
+    },
     hasTogether: function () {
         var togethers = viewModel.get("customer.travel.togethers");
         var state = false;
@@ -405,9 +457,9 @@ var viewModel = kendo.observable({
     },
     onDateChange: function (e) {
         var target = e.sender.element.attr("id");
-        var start = $("#signed_at").data("kendoDatePicker");
-        var end = $("#expire_at").data("kendoDatePicker");
-        if (target === "signed_at") {
+        var start = $("#arrivaledDate").data("kendoDatePicker");
+        var end = $("#pauseTime").data("kendoDatePicker");
+        if (target === "arrivaledDate") {
             end.min(start.value());
         } else {
             start.max(end.value());
