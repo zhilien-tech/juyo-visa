@@ -166,8 +166,7 @@ var viewModel = kendo.observable({
     },
     addOne: function (e) {
     	 var key = $.isString(e) ? e : $(e.target).data('params');
-         console.log(key);
-         console.log(keys[key]);
+         console.log(JSON.stringify(viewModel.get(key)));
          viewModel.get(key).push(keys[key]);
     },
     delOne: function (e) {

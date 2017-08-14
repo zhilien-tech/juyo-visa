@@ -280,8 +280,10 @@
                                     <div class="form-group">
                                         <label for="usa_arrival_date">人数:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="usa_arrival_date" type="number" style="width: 100%;" class="k-textbox" required validationMessage="人数不能为空" name="headcount"
-                                                   min="1" name="headcount" data-bind="value:customer.headcount"/>
+                                            <!-- <input id="usa_arrival_date" type="number" style="width: 100%;" class="k-textbox" required validationMessage="人数不能为空" name="headcount"
+                                                   min="1" name="headcount" data-bind="value:customer.headcount"/> -->
+                                            <input id="usa_arrival_date" style="width: 100%;" class="k-textbox" required validationMessage="人数不能为空" name="headcount"
+                                                   name="headcount" data-bind="value:customer.headcount"/>
                                             <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                                         </div>
                                     </div>
@@ -1044,7 +1046,6 @@
                                     </div>
                                 </div>
                             </div>
-                            
                             <div data-template="tpl_traveler" data-bind="source:customer.peerList"></div>
                             <div class="row traveler" data-bind="visible:hasTogether">
                                 <div class="col-xs-12">
