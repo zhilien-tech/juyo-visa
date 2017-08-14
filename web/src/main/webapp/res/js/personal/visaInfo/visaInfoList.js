@@ -350,15 +350,14 @@ var viewModel = kendo.observable({
     		}
     	}
     },
-    hasTogether: function () {
+    /*hasTogether: function () {
         var togethers = viewModel.get("customer.travel.togethers");
         var state = false;
         if (togethers) state = togethers.length > 0;
         return state;
-    },
+    },//08-14 14:30 注释*/
     addOne: function (e) {
         var key = $.isString(e) ? e : $(e.target).data('params');
-        console.log(JSON.stringify(viewModel.get(key)));
         viewModel.get(key).push(keys[key]);
     },
     delOne: function (e) {
