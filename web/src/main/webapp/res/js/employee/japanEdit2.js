@@ -105,6 +105,9 @@ flights = new kendo.data.DataSource({
         },
         parameterMap: function (options, type) {
             if (options.filter) {
+            	if(options.filter.filters[0]==null||options.filter.filters[0]==''||options.filter.filters[0]==undefined){
+            		return null;
+            	}
                 return {filter: options.filter.filters[0].value};
             }
         },

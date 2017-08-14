@@ -31,6 +31,7 @@ import org.nutz.dao.Dao;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
+import org.nutz.lang.Files;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -118,7 +119,7 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 
 			map.put("visaAccount", "1507-001");
 			map.put("visaPasswd", "kintsu2017");
-			map.put("agentNo", "GTP-BJ-084-0");
+			map.put("agentNo", "gtu-sh-057-0");
 			map.put("visaType1", "2");
 
 			/*	map.put("visaType2", );*/
@@ -200,7 +201,13 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 		String visaFile = null;
 		try {
 			InputStream inputStream = file.getInputStream();
-			visaFile = Const.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, "zip", null);
+			String originalFilename = file.getOriginalFilename();
+			String suffix = Files.getSuffix(originalFilename);
+			if (Util.isEmpty(suffix) || suffix.length() < 2) {
+				return ResultObject.fail("文件名错误");
+			}
+			suffix = suffix.substring(1);
+			visaFile = Const.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, suffix, null);
 
 			Integer status = order.getStatus();
 			//验证提交状态
