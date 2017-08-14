@@ -21,13 +21,28 @@ $(function(){
 		},
 		success : function(data) {
 			var data=JSON.parse(data);
-			$('#comNameId').val(data.comName);
-			$('#adminNameId').val(data.adminName);
-			$('#connectId').val(data.connect);
-			$('#mobileId').val(data.mobile);
-			$('#emailId').val(data.email);
-			$('#landLineId').val(data.landLine);
-			$('#addressId').val(data.address);
+			$('#comNameId').val(data.updatecompany.comName);
+			$('#adminNameId').val(data.updatecompany.adminName);
+			$('#connectId').val(data.updatecompany.connect);
+			$('#mobileId').val(data.updatecompany.mobile);
+			$('#emailId').val(data.updatecompany.email);
+			$('#landLineId').val(data.updatecompany.landLine);
+			$('#addressId').val(data.updatecompany.address);
+			var companytype = data.companytype;
+			var str = '<option value="">--请选择--</option>';
+			var sendname ="日本送签社";
+			var landname ="日本地接社";
+			for(var i=0;i<companytype.length;i++){
+				var comtypeId = companytype[i].comType;
+				if(comtypeId==data.updatecompany.comType){
+					str += '<option value="'+comtypeId+'" selected="selected">'+sendname+'</option>';
+					str += '<option value="'+comtypeId+'" selected="selected">'+landname+'</option>';
+				}else{
+					str += '<option value="'+comtypeId+'">'+sendname+'</option>';
+					str += '<option value="'+comtypeId+'">'+landname+'</option>';
+				}
+			}
+				$('#comTypeId').html(str);
 		},
 		error : function(request) {
 			layer.msg('添加失败');
@@ -68,6 +83,7 @@ var emptyNum=[];
 var errorNum=[];
 var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
 $("#updateCompanySave").click(function(){
+	alert($('#updateForm').serialize());
 	if(validatable.validate()){
 		//清空验证的数组
 		emptyNum.splice(0,emptyNum.length);
@@ -153,3 +169,11 @@ $("#deleteFlagId").click(function(){
 	    // 取消之后不用处理
 	});
 });
+function changetype(){
+	var typename = $("#comTypeId option:selected").text();
+	if(typename=="日本送签社"){
+		$("#comTypeId option:selected").val(1);
+	}else if(typename=="日本地接社"){
+		$("#comTypeId option:selected").val(2);
+	}
+}

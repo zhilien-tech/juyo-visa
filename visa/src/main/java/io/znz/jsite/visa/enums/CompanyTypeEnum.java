@@ -9,12 +9,12 @@ package io.znz.jsite.visa.enums;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * 军队枚举
+ * 公司类型枚举
  * @author   孙斌
  * @Date	 2017年6月11日 	 
  */
 public enum CompanyTypeEnum implements IEnum {
-	send(1, "送签社"), land(2, "地接社");
+	send(1, "日本送签社"), land(2, "日本地接社");
 	private int key;
 	private String value;
 

@@ -38,7 +38,7 @@ public class CompanyEntity {
 	private String comName;
 	@Column
 	@Comment("公司类型")
-	private Integer comType;
+	private long comType;
 	@Column
 	@Comment("备注")
 	private String remark;
