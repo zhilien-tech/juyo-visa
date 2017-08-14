@@ -28,9 +28,9 @@ var countries = new kendo.data.DataSource({
         }
     }),
     dafaults = {
-	visatype:0,
-	area:0,
-	paytype:0,
+		visatype:0,
+		area:0,
+		paytype:0,
         travel: {
             payer: "我自己",
             // 同行人
@@ -80,12 +80,8 @@ var countries = new kendo.data.DataSource({
         	remaker: "",
         	orderid: ""
 		},
-		payPersion:{
-			
-		},
-		payCompany:{
-			
-		},
+		payPersion:{},
+		payCompany:{},
 		customerresource:{}
     },
     keys = {
@@ -166,8 +162,6 @@ var viewModel = kendo.observable({
     },
     addOne: function (e) {
     	 var key = $.isString(e) ? e : $(e.target).data('params');
-         console.log(key);
-         console.log(keys[key]);
          viewModel.get(key).push(keys[key]);
     },
     delOne: function (e) {
@@ -177,16 +171,14 @@ var viewModel = kendo.observable({
     },
     // 是否有同行人
     hasTogether: function () {
-    	/*var togethers = viewModel.get("customer.peerList");
+    	var togethers = viewModel.get("customer.peerList");
         var state = false;
         if (togethers) state = togethers.length > 0;
-        return state;*/
-        /*viewModel.set("customer.ordernumber", $(this).is(':checked') ? " " : "");*/
-    	
-    	var togethers = viewModel.get("customer.peerList");
-        var state = togethers ? togethers.length > 0 : false;
         return state;
-        
+    	
+    	/*var togethers = viewModel.get("customer.peerList");
+        var state = togethers ? togethers.length > 0 : false;
+        return state;//08-14 14:30*/
     },
     clearAll: function (key) {
         var all = viewModel.get(key);

@@ -108,6 +108,8 @@ public class NewPdfService {
 			fileMap.put("照会.pdf", createTempFile(t.merge(note)));
 			//导出人员名单的电子表格
 			fileMap.put(t.getExcelFileName(order), createTempFile(t.excel(order)));
+			//导出日本提交成功的归国报告
+
 			//合并输出为一个压缩包
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			ZipArchiveOutputStream zip = new ZipArchiveOutputStream(out);
