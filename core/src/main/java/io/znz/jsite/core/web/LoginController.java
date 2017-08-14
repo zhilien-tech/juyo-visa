@@ -15,10 +15,14 @@ import io.znz.jsite.util.StringUtils;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 
+import java.awt.image.BufferedImage;
 import java.util.Date;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
@@ -39,9 +43,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import com.alibaba.fastjson.JSON;
+import com.google.code.kaptcha.Constants;
+import com.google.code.kaptcha.Producer;
 import com.google.common.collect.Lists;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
@@ -73,6 +80,13 @@ public class LoginController extends BaseController {
 	private SqlManager sqlManager;
 
 	public static final int HASH_INTERATIONS = 1024;
+
+	private Producer captchaProducer = null;
+
+	@Autowired
+	public void setCaptchaProducer(Producer captchaProducer) {
+		this.captchaProducer = captchaProducer;
+	}
 
 	/**
 	 * 登录页面.这页面不是实际的登录页,而是按照不同的规则进行跳转以达到多登录页的效果
@@ -141,7 +155,9 @@ public class LoginController extends BaseController {
 		}*/
 		String kaptchaExpected = (String) request.getSession().getAttribute(
 				com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
+
 		if (!Util.isEmpty(captcha)) {
+
 			List<FunctionEntity> functions = Lists.newArrayList();
 			if (captcha.equalsIgnoreCase(kaptchaExpected) || "8888".equals(captcha)) {
 				EmployeeEntity fetch = dbDao.fetch(EmployeeEntity.class, Cnd.where("telephone", "=", username));
@@ -212,7 +228,7 @@ public class LoginController extends BaseController {
 								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));*/
 								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 								return "redirect:" + to + "?auth=2,3,6,7," + str + "&username=" + fullname
-										+ "&logintype=" + logintype;
+										+ "&logintype=" + logintype + "&userType=" + userType;
 							} else if (UserLoginEnum.PERSONNEL.intKey() == logintype
 									&& UserLoginEnum.COMPANY_ADMIN.intKey() == userType) {//公司管理员员登录
 								functions = authorityViewService.getCompanyFunctions(comJob.getComId());
@@ -221,7 +237,7 @@ public class LoginController extends BaseController {
 								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));*/
 								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 								return "redirect:" + to + "?auth=2,3,6,7," + str + "&username=" + fullname
-										+ "&logintype=" + logintype;
+										+ "&logintype=" + logintype + "&userType=" + userType;
 							} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype
 									&& UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {//游客身份登录
 								//我的签证
@@ -342,7 +358,7 @@ public class LoginController extends BaseController {
 								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));*/
 								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 								return "redirect:" + to + "?auth=7,8,9,16," + str + "&username=" + fullname
-										+ "&logintype=" + logintype;
+										+ "&logintype=" + logintype + "&userType=" + userType;
 							} else if (UserLoginEnum.SUPERMAN.intKey() == 3
 									&& UserLoginEnum.SUPERMAN.intKey() == userType) {//超级管理员登录
 								functions = loginAuthorityService.superAdministratorFunction();
@@ -351,7 +367,7 @@ public class LoginController extends BaseController {
 								String jsonEncode = Encodes.encodeBase64(JSON.toJSONString(json));*/
 								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 								return "redirect:" + to + "?auth=0," + str + "&username=" + fullname + "&logintype="
-										+ logintype;
+										+ logintype + "&userType=" + userType;
 							} else if (UserLoginEnum.ADMIN.intKey() == 4 && UserLoginEnum.ADMIN.intKey() == userType) {//平台用户
 								//公司管理
 								FunctionEntity comf = new FunctionEntity();
@@ -424,7 +440,7 @@ public class LoginController extends BaseController {
 								scenicmanage.setSort(24);
 								functions.add(scenicmanage);
 								//日志记录
-								/*FunctionEntity logfun = new FunctionEntity();
+								FunctionEntity logfun = new FunctionEntity();
 								logfun.setId(26);
 								logfun.setParentId(0);
 								logfun.setFunName("日志记录");
@@ -434,9 +450,10 @@ public class LoginController extends BaseController {
 								logfun.setRemark("日志记录");
 								logfun.setSort(26);
 								logfun.setPortrait("fa fa-building-o");
-								functions.add(logfun);*/
+								functions.add(logfun);
 								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
-								return "redirect:" + to + "?auth=4," + "&username=" + fullname + "&logintype=" + 4;
+								return "redirect:" + to + "?auth=4," + "&username=" + fullname + "&logintype=" + 4
+										+ "&userType=" + userType;
 							} else {
 
 								model.addFlashAttribute("error", "登录身份错误,请重试!");
@@ -452,6 +469,8 @@ public class LoginController extends BaseController {
 			} else {
 				model.addFlashAttribute("error", "验证码错误,请重试!");
 			}
+		} else {
+			model.addFlashAttribute("error", "验证码不能为空,请重试!");
 		}
 		String error = Encodes.encodeBase64(JSON.toJSONString(model.getFlashAttributes()));
 		model.addAttribute("e", error);
@@ -480,5 +499,37 @@ public class LoginController extends BaseController {
 		status.setComplete();
 		SecurityUtils.getSubject().logout();
 		return "redirect:" + to;
+	}
+
+	/**
+	 * 生成验证码
+	 */
+	@RequestMapping("/captcha-image")
+	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		response.setDateHeader("Expires", 0);
+		// Set standard HTTP/1.1 no-cache headers.  
+		response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+		// Set IE extended HTTP/1.1 no-cache headers (use addHeader).  
+		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+		// Set standard HTTP/1.0 no-cache header.  
+		response.setHeader("Pragma", "no-cache");
+		// return a jpeg  
+		response.setContentType("image/jpeg");
+		// create the text for the image  
+		String capText = captchaProducer.createText();
+		// store the text in the session  
+		request.getSession().setAttribute(Constants.KAPTCHA_SESSION_KEY, capText);
+		// create the image with the text  
+		BufferedImage bi = captchaProducer.createImage(capText);
+		ServletOutputStream out = response.getOutputStream();
+		// write the data out  
+		ImageIO.write(bi, "jpg", out);
+		try {
+			out.flush();
+		} finally {
+			out.close();
+		}
+		return null;
 	}
 }

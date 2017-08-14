@@ -15,6 +15,43 @@ var secondPart ;
 var thirdPart ;
 var country;
 var countrystatus;
+
+//美国签证信息同行人员根据中文自动转为拼音
+/*function getPinYin(zz){
+	var divParent = $(zz).parent().parent().parent();
+	var divBrother = divParent.next();
+	var pinYinInput = divBrother.find('input');
+	var pinYinName = pinYinInput.attr("pinYinName");
+	var chinesexing = $(zz).val();
+	var chinesexingen = pinyinUtil.getPinyin(chinesexing, '', false, false);
+	//得到list对象
+	var listobj = viewModel.get("customer.peerList");
+	var aa = $(zz).parent().parent().parent().next().find("input");
+	var val1=$(zz).val();
+	if(val1!=''&&val1!=null){
+		var bb = pinyinUtil.getPinyin(val1, '', false, false);
+		var val2=bb.toUpperCase();
+		aa.val(val2);
+		for(var i=0;i<listobj.length;i++){
+			console.log("aa:"+aa.val());
+			alert(val1);
+			alert(listobj[i].peerxing);
+			console.log("listobj:"+listobj[i].peerxing);
+			if(aa.val() == listobj[i].peerxing){
+				viewModel.set("customer.peerList["+i+"].peerxingen",val2);
+			}
+		}
+		console.log(JSON.stringify(viewModel.get("customer.peerList")));
+	}else{
+		aa.val("");
+		for(var i=0;i<listobj.length;i++){
+			if(aa.peerxing == listobj[i].peerxing){
+				viewModel.set("customer.peerList["+i+"].peerxingen","");
+			}
+		}
+	}
+}*/
+
 //初始化页面组件
 $(function () {
 	//页面加载时回显签证信息
@@ -39,7 +76,6 @@ $(function () {
 			viewModel.set("customer", $.extend(true, dafaults, resp));
 		});
 	}else{
-		
 		$.getJSON(localhostPaht +'/visa/visainfo/listvisainfo', function (resp) {
 			viewModel.set("customer", $.extend(true, dafaults, resp));
 		});
@@ -210,6 +246,110 @@ var viewModel = kendo.observable({
     countries:countries,
     customersourceEnum:customersourceEnum,
     states:states,
+    onCheckpeer:function(e){//同行人姓和拼音
+    	//得到list对象
+    	var listobj = viewModel.get("customer.peerList");
+    	var peerxingobj = $("#peerxing"+e.data.uid).val();
+    	var aa = $("#peerxing"+e.data.uid).parent().parent().parent().next().find("input");
+    	var val1=peerxingobj;
+    	if(val1!=''&&val1!=null){
+    		var bb = pinyinUtil.getPinyin(val1, '', false, false);
+    		var val2=bb.toUpperCase();
+    		aa.val(val2);
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.peerxing == listobj[i].peerxing){
+    				viewModel.set("customer.peerList["+i+"].peerxingen",val2);
+    				return;
+    			}
+    		}
+    	}else{
+    		aa.val("");
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.peerxing == listobj[i].peerxing){
+    				viewModel.set("customer.peerList["+i+"].peerxingen","");
+    				return;
+    			}
+    		}
+    	}
+    },
+    onCheckPeername:function(e){//同行人名和拼音
+    	//得到list对象
+    	var listobj = viewModel.get("customer.peerList");
+    	var peernameobj = $("#peername"+e.data.uid).val();
+    	var aa = $("#peername"+e.data.uid).parent().parent().parent().next().find("input");
+    	var val1=peernameobj;
+    	if(val1!=''&&val1!=null){
+    		var bb = pinyinUtil.getPinyin(val1, '', false, false);
+    		var val2=bb.toUpperCase();
+    		aa.val(val2);
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.peername == listobj[i].peername){
+    				viewModel.set("customer.peerList["+i+"].peernameen",val2);
+    				return;
+    			}
+    		}
+    	}else{
+    		aa.val("");
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.peername == listobj[i].peername){
+    				viewModel.set("customer.peerList["+i+"].peernameen","");
+    				return;
+    			}
+    		}
+    	}
+    },
+    onCheckFatherXing:function(e){
+    	//得到list对象
+    	var listobj = viewModel.get("customer.relation");
+    	var fatherxingobj = $("#fatherxing"+e.data.uid).val();
+    	var aa = $("#fatherxing"+e.data.uid).parent().parent().parent().next().find("input");
+    	var val1=fatherxingobj;
+    	if(val1!=''&&val1!=null){
+    		var bb = pinyinUtil.getPinyin(val1, '', false, false);
+    		var val2=bb.toUpperCase();
+    		aa.val(val2);
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.xing == listobj[i].xing){
+    				viewModel.set("customer.relation["+i+"].xingen",val2);
+    				return;
+    			}
+    		}
+    	}else{
+    		aa.val("");
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.xing == listobj[i].xing){
+    				viewModel.set("customer.relation["+i+"].xingen","");
+    				return;
+    			}
+    		}
+    	}
+    },
+    onCheckFatherName:function(e){
+    	//得到list对象
+    	var listobj = viewModel.get("customer.relation");
+    	var fathernameobj = $("#fathername"+e.data.uid).val();
+    	var aa = $("#fathername"+e.data.uid).parent().parent().parent().next().find("input");
+    	var val1=fathernameobj;
+    	if(val1!=''&&val1!=null){
+    		var bb = pinyinUtil.getPinyin(val1, '', false, false);
+    		var val2=bb.toUpperCase();
+    		aa.val(val2);
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.name == listobj[i].name){
+    				viewModel.set("customer.relation["+i+"].nameen",val2);
+    				return;
+    			}
+    		}
+    	}else{
+    		aa.val("");
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.name == listobj[i].name){
+    				viewModel.set("customer.relation["+i+"].nameen","");
+    				return;
+    			}
+    		}
+    	}
+    },
     hasTogether: function () {
         var togethers = viewModel.get("customer.travel.togethers");
         var state = false;
@@ -317,9 +457,9 @@ var viewModel = kendo.observable({
     },
     onDateChange: function (e) {
         var target = e.sender.element.attr("id");
-        var start = $("#signed_at").data("kendoDatePicker");
-        var end = $("#expire_at").data("kendoDatePicker");
-        if (target === "signed_at") {
+        var start = $("#arrivaledDate").data("kendoDatePicker");
+        var end = $("#pauseTime").data("kendoDatePicker");
+        if (target === "arrivaledDate") {
             end.min(start.value());
         } else {
             start.max(end.value());
@@ -361,7 +501,14 @@ var viewModel = kendo.observable({
     		}else {return true};
     	}
     	return false;*/
-    	var state = viewModel.get("customer.travelpurpose.travelPurpose")|| viewModel.get("customer.travelpurpose.travelSpecificPurpose");
+    	var travelPurpose=viewModel.get("customer.travelpurpose.travelPurpose");
+    	if(travelPurpose=="旅游"){
+    		travelPurpose = "";
+    	}else{
+    		travelPurpose = viewModel.get("customer.travelpurpose.travelPurpose");
+    	}
+    	var state = travelPurpose
+    			 || viewModel.get("customer.travelpurpose.travelSpecificPurpose");
     	return state;
     },
     //是否制定了具体旅行计划
@@ -518,7 +665,7 @@ $("#travel_purpose").change(function () {
 	var b={"createTime":null,"customerId":0,"id":-1,"orderId":0,"remark":"","status":0,"travelPurpose":"旅游","travelSpecificPurpose":"","updateTime":null};
 	viewModel.set("customer.travelpurpose", $(this).is(':checked') ? a : b);*/
 	var value = $(this).is(':checked') ? " " : "";
-    viewModel.set("customer.travelpurpose.travelPurpose", value);
+    viewModel.set("customer.travelpurpose.travelPurpose", "旅游");
     viewModel.set("customer.travelpurpose.travelSpecificPurpose", value);
 });
 //是否制定了具体旅行计划

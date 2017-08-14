@@ -175,8 +175,8 @@
             </div>
             <div class="col-xs-12">
                 <div class="form-group">
-                    <button data-bind="click:delOne" class="k-button col-xs-12 k-button-icontext" data-params="order.customers">
-                        <span class="k-icon k-i-close"></span>移除这个申请人
+                    <button data-bind="click:delOne" data-params="order.customers" class="k-button col-xs-12 k-button-icontext">
+                        <span class="k-icon k-i-close" data-bind="click:delOne" data-params="order.customers"></span>移除这个申请人
                     </button>
                 </div>
             </div>

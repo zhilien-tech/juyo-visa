@@ -4,6 +4,11 @@
 // 确保登录界面不在iframe框架中显示
 if (window != top) top.location.href = location.href;
 $(function () {
+	/*$(".VerificatCode").click(function(){
+		 alert("vccc");
+	});*/
+	
+	
     var e = $.Querystring("e");
     if(e){
         var j = JSON.parse($.base64.atob(decodeURI(e),true));
@@ -25,8 +30,9 @@ $(function () {
     }, 100);
 
     $(".yzm cite img").on('click', function () {
-        $(this).attr("src", "res/img/kaptcha.jpg?t=" + Math.random());
+        $(this).attr("src", "/login/captcha-image.html?t=" + Math.random());
     });
+    
     $("input[name=username],input[name=password]").on('click', function () {
         $(this).val("");
     });
@@ -39,4 +45,14 @@ $(function () {
             $(this).val("验证码");
         }
     });
+    //document.getElementById("VerificatCode1").click();
+    $("#VerificatCode1").click();
+    
 });
+
+function userClick(){
+	$("#VerificatCode1").click();
+}
+function visitorclick(){
+	$("#VerificatCode2").click();
+}

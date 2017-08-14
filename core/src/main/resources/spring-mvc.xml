@@ -177,5 +177,26 @@
     <import resource="spring-route.xml"/>
 
     <import resource="classpath*:/**/*-spring-mvc.xml"/>
-
+    
+    
+    <!-- 验证码 -->
+	<bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">  
+        <property name="config">  
+            <bean class="com.google.code.kaptcha.util.Config">  
+                <constructor-arg>  
+                    <props>  
+                        <prop key="kaptcha.border">no</prop>  
+                        <prop key="kaptcha.image.width">228</prop>  
+                        <prop key="kaptcha.textproducer.font.size">60</prop>  
+                        <prop key="kaptcha.image.height">96</prop>  
+                        <prop key="kaptcha.textproducer.char.length">4</prop>  
+                        <prop key="kaptcha.background.clear.from">105,183,27</prop>  
+                        <prop key="kaptcha.background.clear.to">105,183,27</prop>  
+                        <prop key="kaptcha.textproducer.font.color">white</prop>  
+                        <prop key="kaptcha.noise.color">white</prop>  
+                    </props>  
+                </constructor-arg>  
+            </bean>  
+        </property>  
+    </bean>  
 </beans>

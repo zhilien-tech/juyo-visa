@@ -36,13 +36,12 @@
                             <span class="clear">
                                 <!-- <span class="block m-t-xs"><strong class="font-bold" id="name">iChaly</strong></span>
                                 <span class="text-muted text-xs block" id="role">普通用户</span> -->
-                                <a href="JavaScript:void(0);" onclick="window.location.href='/personal/passportInfo/passportInfoList.html'" id="userId"></a>
+                                <a class="J_menuItem personalInfoA" href="personalInfo/personalInfoList.html" id="userId"></a>
                             </span>
                         </a>
                     </div>
                     <div class="logo-element">JST</div>
                 </li>
-                <li id="6"><a class="J_menuItem" href="personalInfo/personalInfoList.html"><i class="fa fa-user"></i><span class="nav-label">个人信息</span></a></li>
                 <!--菜单列表-->
               <!--   <li>
                     <a href="#" id="1">
@@ -722,6 +721,11 @@
     	} */
     	//显示登录人姓名
     	var username=$.queryString("username");
+    	var usertype=$.queryString("userType");
+    	if(usertype==2 || usertype==3 || usertype==4){
+    		$(".personalInfoA").removeAttr("href");
+    	}
+    	
     	if(username!=null&&username!=''){
     		
     	var j = JSON.parse($.base64.atob(decodeURI(username),true));
@@ -749,7 +753,7 @@
         }else{
         	if(logintype==5){
         		
-        	$('.J_iframe').attr('src','myvisa/transactVisa/visaNationList.html?logintype=5&orderId='+$.queryString('orderId')); 
+        	$('.J_iframe').attr('src','myvisa/transactVisa/visaNationList.html?logintype=5&secretMsg='+$.queryString('secretMsg')); 
     		$('#homePage').html('<a href="javascript:;" class="active J_menuTab" data-id="myvisa/transactVisa/visaNationList.html?logintype=5">办理中签证 </a>');
         	}else{
         		
