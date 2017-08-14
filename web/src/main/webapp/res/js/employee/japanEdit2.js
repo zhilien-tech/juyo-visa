@@ -37,7 +37,8 @@ var startcity=[
                         {text:"名古屋",value:3},
                         {text:"大阪",value:4},
                         {text:"札幌",value:5},
-                        {text:"那霸",value:6}
+                        {text:"那霸",value:6},
+                        {text:"上海",value:7}
                         ];
 var defaults = {
 		visatype:0,
@@ -104,6 +105,9 @@ flights = new kendo.data.DataSource({
         },
         parameterMap: function (options, type) {
             if (options.filter) {
+            	if(options.filter.filters[0]==null||options.filter.filters[0]==''||options.filter.filters[0]==undefined){
+            		return null;
+            	}
                 return {filter: options.filter.filters[0].value};
             }
         },

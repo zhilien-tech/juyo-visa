@@ -28,9 +28,9 @@ var countries = new kendo.data.DataSource({
         }
     }),
     dafaults = {
-	visatype:0,
-	area:0,
-	paytype:0,
+		visatype:0,
+		area:0,
+		paytype:0,
         travel: {
             payer: "我自己",
             // 同行人
@@ -80,12 +80,8 @@ var countries = new kendo.data.DataSource({
         	remaker: "",
         	orderid: ""
 		},
-		payPersion:{
-			
-		},
-		payCompany:{
-			
-		},
+		payPersion:{},
+		payCompany:{},
 		customerresource:{}
     },
     keys = {
@@ -112,10 +108,60 @@ var viewModel = kendo.observable({
         if (togethers) state = togethers.length > 0;
         return state;
     },*/
+    onCheckpeer:function(e){//同行人姓和拼音
+    	//得到list对象
+    	var listobj = viewModel.get("customer.peerList");
+    	var peerxingobj = $("#peerxing"+e.data.uid).val();
+    	var aa = $("#peerxing"+e.data.uid).parent().parent().parent().next().find("input");
+    	var val1=peerxingobj;
+    	if(val1!=''&&val1!=null){
+    		var bb = pinyinUtil.getPinyin(val1, '', false, false);
+    		var val2=bb.toUpperCase();
+    		aa.val(val2);
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.peerxing == listobj[i].peerxing){
+    				viewModel.set("customer.peerList["+i+"].peerxingen",val2);
+    				return;
+    			}
+    		}
+    	}else{
+    		aa.val("");
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.peerxing == listobj[i].peerxing){
+    				viewModel.set("customer.peerList["+i+"].peerxingen","");
+    				return;
+    			}
+    		}
+    	}
+    },
+    onCheckPeername:function(e){//同行人名和拼音
+    	//得到list对象
+    	var listobj = viewModel.get("customer.peerList");
+    	var peernameobj = $("#peername"+e.data.uid).val();
+    	var aa = $("#peername"+e.data.uid).parent().parent().parent().next().find("input");
+    	var val1=peernameobj;
+    	if(val1!=''&&val1!=null){
+    		var bb = pinyinUtil.getPinyin(val1, '', false, false);
+    		var val2=bb.toUpperCase();
+    		aa.val(val2);
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.peername == listobj[i].peername){
+    				viewModel.set("customer.peerList["+i+"].peernameen",val2);
+    				return;
+    			}
+    		}
+    	}else{
+    		aa.val("");
+    		for(var i=0;i<listobj.length;i++){
+    			if(e.data.peername == listobj[i].peername){
+    				viewModel.set("customer.peerList["+i+"].peernameen","");
+    				return;
+    			}
+    		}
+    	}
+    },
     addOne: function (e) {
     	 var key = $.isString(e) ? e : $(e.target).data('params');
-         console.log(key);
-         console.log(keys[key]);
          viewModel.get(key).push(keys[key]);
     },
     delOne: function (e) {
@@ -125,16 +171,14 @@ var viewModel = kendo.observable({
     },
     // 是否有同行人
     hasTogether: function () {
-    	/*var togethers = viewModel.get("customer.peerList");
+    	var togethers = viewModel.get("customer.peerList");
         var state = false;
         if (togethers) state = togethers.length > 0;
-        return state;*/
-        /*viewModel.set("customer.ordernumber", $(this).is(':checked') ? " " : "");*/
-    	
-    	var togethers = viewModel.get("customer.peerList");
-        var state = togethers ? togethers.length > 0 : false;
         return state;
-        
+    	
+    	/*var togethers = viewModel.get("customer.peerList");
+        var state = togethers ? togethers.length > 0 : false;
+        return state;//08-14 14:30*/
     },
     clearAll: function (key) {
         var all = viewModel.get(key);
