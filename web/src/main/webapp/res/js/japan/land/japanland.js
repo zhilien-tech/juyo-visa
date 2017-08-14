@@ -10,21 +10,12 @@ var genderlist=[
                  ];
 //状态listorder
 var statuslist=[
-                {text:"下单",value:15},
-                {text:"已分享",value:1},
-                {text:"资料填写",value:2},
-                {text:"初审",value:3},
-                {text:"初审通过",value:4},
-                {text:"初审拒绝",value:5},
-                {text:"递送",value:17},
-/*                {text:"DS-160",value:7},
-                {text:"准备提交使馆",value:8},
-                {text:"已提交使馆",value:9},
-                {text:"约签",value:10},
-                {text:"返回",value:11},
-                {text:"拒签",value:12},
-                {text:"完成",value:13},
-                {text:"EVUS",value:14}*/
+     
+                {text:"发招宝中",value:18},
+                {text:"已发招宝",value:19},
+                {text:"发招宝失败",value:20},
+                {text:"归国报告",value:21},
+                {text:"归国报告失败",value:22}
               ];
 //注册命令
 function regCmd(command) {
@@ -249,7 +240,7 @@ function detailInit(e) {
                 read: {
                     /*type: "GET",*/
                     dataType: "json",
-                    url: "/visa/neworderjp/childList?type=customer&orderId=" + e.data.id ,
+                    url: "/visa/neworderjpland/childList?type=customer&orderId=" + e.data.id ,
                 }
             }
         },
@@ -264,13 +255,18 @@ function detailInit(e) {
 	          }
       },
         columns: [
-            {field: 'chinesefullname',title: '姓名'},
-            {field: 'phone', title: '电话'},
+            {field: 'chinesefullname',title: '氏名'},
+            {field: 'chinesefullname',title: 'ピンイン'},
+            {field: 'chinesefullname',title: '性別'},
+            {field: 'chinesefullname',title: '居住地域'},
+            {field: 'chinesefullname',title: '生年月日'},
+            {field: 'chinesefullname',title: '旅券番号'},
+          /*  {field: 'phone', title: '电话'},
             {field: 'passport', title: '护照号'},
             {field: 'gender', title: '性别',values:genderlist},
-            /*{field: 'sendtime', title: '送签时间',format: "{0: yyyy-MM-dd}"},
-            {field: 'outtime', title: '出签时间',format: "{0: yyyy-MM-dd}"},*/
-            {field: 'status', title: ' 状态',values:statuslist},
+            {field: 'sendtime', title: '送签时间',format: "{0: yyyy-MM-dd}"},
+            {field: 'outtime', title: '出签时间',format: "{0: yyyy-MM-dd}"},
+            {field: 'status', title: ' 状态',values:statuslist},*/
             { 
                 title: "操作",
                 command: [
@@ -315,7 +311,7 @@ var grid = $("#grid").kendoGrid({
             read: {
                 type: "POST",
                 dataType: "json",
-                url: "/visa/neworderjp/list",
+                url: "/visa/neworderjpland/list",
                 contentType: 'application/json;charset=UTF-8',
             },
             parameterMap: function (options, type) {
@@ -370,20 +366,21 @@ var grid = $("#grid").kendoGrid({
                 container.hide().prev().hide();
             }
         },
-        {field: 'linkman', title: '联系人', width: 90,template: "<span class='ellipsis' title='#=data.linkman#'>#=data.linkman?data.linkman:''#</span>"},
-        {field: 'telephone', title: '电话',template: "<span class='ellipsis' title='#=data.telephone#'>#=data.telephone?data.telephone:''#</span>"},
+        {field: 'completedNumber', title: '受付番号', width: 90,template: "<span class='ellipsis' title='#=data.linkman#'>#=data.linkman?data.linkman:''#</span>"},
+        {field: 'comFullName', title: '送签社',template: "<span class='ellipsis' title='#=data.telephone#'>#=data.telephone?data.telephone:''#</span>"},
+        {field: 'fullName', title: '操作人',  width: 75,},
+        {field: 'chinesefullname', title: '主申请人',  width: 75,},
+        {field: 'headnum', title: '人数',  width: 75,},
+        {field: 'visatype', title: '签证类型',  width: 75,},
         {field: 'senddate', title: '送签时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.senddate#'>#=data.senddate?kendo.toString(data.senddate, 'yyyy-MM-dd'):''#</span>"},
-        {field: 'outdate', title: '出签时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.outdate#'>#=data.outdate?kendo.toString(data.outdate, 'yyyy-MM-dd'):''#</span>"},
-        {field: 'headnum', title: '人数', values: ["美国", "日本"], width: 75,},
-        {field: 'countrytype', title: '国家', width: 80,values:countrylist},
+        {field: 'startdate', title: '出发时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.outdate#'>#=data.outdate?kendo.toString(data.outdate, 'yyyy-MM-dd'):''#</span>"},
+        {field: 'outdate', title: '返回时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.outdate#'>#=data.outdate?kendo.toString(data.outdate, 'yyyy-MM-dd'):''#</span>"},
+/*        {field: 'countrytype', title: '签证类型', width: 80,values:countrylist},*/
         {field: 'status', title: '状态',values:statuslist, width: 80,},
         {
             title: "操作", width: 295,
             command: [
-                {name: "modify", imageClass:false, text: " 编辑"},
-                {name: "shareall", imageClass:false, text: "分享"},
-                /*{name: "delivery", imageClass:false, text: "递送"},*/
-                {name: "validate", imageClass:false, text: "递送"},
+                {name: "modify", imageClass:false, text: "详情"},
                 {name: "download", imageClass:false, text: "下载"},
                 regCmd("modify"),
                 regCmd("shareall"),
