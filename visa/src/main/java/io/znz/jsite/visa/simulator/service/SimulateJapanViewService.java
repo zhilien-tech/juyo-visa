@@ -206,14 +206,13 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 			if (Util.isEmpty(suffix) || suffix.length() < 2) {
 				return ResultObject.fail("文件名错误");
 			}
-			suffix = suffix.substring(1);
-			visaFile = Const.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, suffix, null);
-
 			Integer status = order.getStatus();
 			//验证提交状态
 			if (Util.isEmpty(status) || OrderVisaApproStatusEnum.submiting.intKey() != status) {
 				return ResultObject.fail("已提交的任务方可进行文件上传！");
 			}
+			suffix = suffix.substring(1);
+			visaFile = Const.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, suffix, null);
 
 			//为客户设置文件地址，签证状态改为'已提交'
 			order.setStatus(OrderVisaApproStatusEnum.submited.intKey());

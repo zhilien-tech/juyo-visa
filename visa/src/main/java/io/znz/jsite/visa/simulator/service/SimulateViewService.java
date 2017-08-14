@@ -138,14 +138,13 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 
 		String visaFile = null;
 		try {
-			InputStream inputStream = file.getInputStream();
-			visaFile = Const.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, "zip", null);
-
 			Integer status = customer.getStatus();
 			//验证提交状态
 			if (Util.isEmpty(status) || OrderVisaApproStatusEnum.submiting.intKey() != status) {
 				return ResultObject.fail("已提交ds160的任务方可进行文件上传！");
 			}
+			InputStream inputStream = file.getInputStream();
+			visaFile = Const.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, "zip", null);
 
 			//为客户设置文件地址，签证状态改为'已提交'
 			customer.setStatus(OrderVisaApproStatusEnum.submited.intKey());

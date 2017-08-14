@@ -254,7 +254,7 @@ function detailInit(e) {
                     {name: "share", imageClass:false, text: "分享"},//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
                     {name: "delivery", imageClass:false, text: "递送"},
                     {name: "notice", imageClass:false, text: "通知"},
-                    {name: "validate", imageClass:false, text: "验证"},
+                   /* {name: "validate", imageClass:false, text: "验证"},*/
                     regCmd("validate"),//美国验证要走的方法
                     regCmd("customerEdit"),
                     regCmd("share"),
