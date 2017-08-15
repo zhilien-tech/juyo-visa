@@ -6,6 +6,7 @@
 
 package io.znz.jsite.visa.simulator.controller;
 
+import io.znz.jsite.visa.simulator.form.JapanSimulatorForm;
 import io.znz.jsite.visa.simulator.service.SimulateJapanViewService;
 import io.znz.jsite.visa.simulator.service.SimulateViewService;
 
@@ -86,7 +87,8 @@ public class SimulateController {
 	 */
 	@RequestMapping(value = "UploadJapan/{cid}", method = RequestMethod.POST)
 	@ResponseBody
-	public Object UploadJapan(@RequestParam(required = false) MultipartFile file, @PathVariable Long cid) {
-		return simulateJapanViewService.UploadJapan(file, cid);
+	public Object UploadJapan(@RequestParam(required = false) MultipartFile file, @PathVariable Long cid,
+			JapanSimulatorForm jpForm) {
+		return simulateJapanViewService.UploadJapan(file, cid, jpForm);
 	}
 }
