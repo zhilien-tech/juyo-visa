@@ -147,7 +147,7 @@ public class CompanyService extends NutzBaseService<CompanyEntity> {
 		//List<CompanyEntity> updatecompany = dbDao.query(CompanyEntity.class, Cnd.where("id", "=", comId), null);
 		Map<String, Object> map = Maps.newHashMap();
 		map.put("updatecompany", dbDao.fetch(CompanyEntity.class, comId));
-		map.put("companytype", dbDao.query(NewComeBabyJpEntity.class, Cnd.where("comId", "=", comId), null));
+		map.put("companytype", dbDao.query(CompanyEntity.class, Cnd.where("id", "=", comId), null));
 		return map;
 	}
 

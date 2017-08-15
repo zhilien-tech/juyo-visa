@@ -34,8 +34,11 @@ $(function(){
 			var landname ="日本地接社";
 			for(var i=0;i<companytype.length;i++){
 				var comtypeId = companytype[i].comType;
-				if(comtypeId==data.updatecompany.comType){
+				if(comtypeId==data.updatecompany.comType && data.updatecompany.comType==1){
 					str += '<option value="'+comtypeId+'" selected="selected">'+sendname+'</option>';
+					str += '<option value="'+comtypeId+'">'+landname+'</option>';
+				}else if(comtypeId==data.updatecompany.comType && data.updatecompany.comType==2){
+					str += '<option value="'+comtypeId+'">'+sendname+'</option>';
 					str += '<option value="'+comtypeId+'" selected="selected">'+landname+'</option>';
 				}else{
 					str += '<option value="'+comtypeId+'">'+sendname+'</option>';
@@ -83,7 +86,6 @@ var emptyNum=[];
 var errorNum=[];
 var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
 $("#updateCompanySave").click(function(){
-	alert($('#updateForm').serialize());
 	if(validatable.validate()){
 		//清空验证的数组
 		emptyNum.splice(0,emptyNum.length);

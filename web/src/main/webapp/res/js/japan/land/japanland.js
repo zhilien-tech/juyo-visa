@@ -366,19 +366,19 @@ var grid = $("#grid").kendoGrid({
                 container.hide().prev().hide();
             }
         },
-        {field: 'completedNumber', title: '受付番号', width: 90,template: "<span class='ellipsis' title='#=data.linkman#'>#=data.linkman?data.linkman:''#</span>"},
-        {field: 'comFullName', title: '送签社',template: "<span class='ellipsis' title='#=data.telephone#'>#=data.telephone?data.telephone:''#</span>"},
-        {field: 'fullName', title: '操作人',  width: 75,},
-        {field: 'chinesefullname', title: '主申请人',  width: 75,},
+        {field: 'completedNumber', title: '受付番号', width: 110,template: "<span class='ellipsis' title='#=data.linkman#'>#=data.linkman?data.linkman:''#</span>"},
+        {field: 'comFullName', title: '送签社', width: 88,template: "<span class='ellipsis' title='#=data.telephone#'>#=data.telephone?data.telephone:''#</span>"},
+        {field: 'fullName', title: '操作人',  width: 88,},
+        {field: 'chinesefullname', title: '主申请人',  width:100,},
         {field: 'headnum', title: '人数',  width: 75,},
-        {field: 'visatype', title: '签证类型',  width: 75,},
+        {field: 'visatype', title: '签证类型',  width:100,},
         {field: 'senddate', title: '送签时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.senddate#'>#=data.senddate?kendo.toString(data.senddate, 'yyyy-MM-dd'):''#</span>"},
         {field: 'startdate', title: '出发时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.outdate#'>#=data.outdate?kendo.toString(data.outdate, 'yyyy-MM-dd'):''#</span>"},
         {field: 'outdate', title: '返回时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.outdate#'>#=data.outdate?kendo.toString(data.outdate, 'yyyy-MM-dd'):''#</span>"},
 /*        {field: 'countrytype', title: '签证类型', width: 80,values:countrylist},*/
-        {field: 'status', title: '状态',values:statuslist, width: 80,},
+        {field: 'status', title: '状态',values:statuslist, width: 75,},
         {
-            title: "操作", width: 295,
+            title: "操作", width:155,
             command: [
                 {name: "modify", imageClass:false, text: "详情"},
                 {name: "download", imageClass:false, text: "下载"},
