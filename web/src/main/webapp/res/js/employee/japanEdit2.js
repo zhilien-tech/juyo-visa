@@ -513,10 +513,17 @@ $(function () {
     $('.dongSanXian').hide();
     $('select[name="visatype"]').change(function(){
     	var selVal=$(this).val();
-    	if(selVal==2){//状态为 东三县
+    	/*if(selVal==2){//状态为 东三县
     		$('.dongSanXian').show();
     		$('.dongliuXian').hide();
-    	}else if(selVal==3){//状态为 东六县
+    	}else if(selVal==3){//状态为 新三县
+    		$('.dongSanXian').hide();
+    		$('.dongliuXian').show();
+    	}else{
+    		$('.dongSanXian').hide();
+    		$('.dongliuXian').hide();
+    	}*/
+    	if(selVal==2 || selVal==3 || selVal==4){//东三县，新三县，冲绳，选择时，下方均出现7个县，允许多选
     		$('.dongSanXian').hide();
     		$('.dongliuXian').show();
     	}else{
@@ -713,21 +720,21 @@ function orderJpsave(){
 		errorNum.splice(0,errorNum.length);
 		//对东三县东六县的值进行处理
 		var visatype=viewModel.get("customer.visatype");
-		if(visatype==3){
+		if(visatype==2 || visatype==3 || visatype==4){
 			var sixnumstr="";
 			for(var i=0;i<sixnum.length;i++){
 				sixnumstr+=sixnum[i]+",";
 			}
 			viewModel.set("customer.threenum","");
 			viewModel.set("customer.sixnum",sixnumstr);
-		}else if(visatype==2){
+		}/*else if(visatype==2){
 			var threenumstr="";
 				for(var i=0;i<threenum.length;i++){
 					threenumstr+=threenum[i]+",";
 				}
 				viewModel.set("customer.sixnum","");
 				viewModel.set("customer.threenum",threenumstr);
-		}else{
+		}*/else{
 			viewModel.set("customer.sixnum","");
 			viewModel.set("customer.threenum","");
 			
@@ -822,9 +829,8 @@ $(function () {
         	//console.log(JSON.stringify(resp));
         	viewModel.set("customer", $.extend(true, defaults, resp));
         	
-        	//对东三县和东六县的处理
         	var visatype=viewModel.get("customer.visatype");
-    		if(visatype==3){
+    		if(visatype==2 || visatype==3 || visatype==4){ //东三县，新三县，冲绳，选择时，下方均出现7个县，允许多选
     			var sixnumstr=viewModel.get("customer.sixnum");
     			$('.dongSanXian').hide();
         		$('.dongliuXian').show();
@@ -836,7 +842,7 @@ $(function () {
     				}
     			}
     			
-    		}else if(visatype==2){
+    		}/*else if(visatype==2){
     			var threenumstr=viewModel.get("customer.threenum");
     			$('.dongSanXian').show();
         		$('.dongliuXian').hide();
@@ -847,7 +853,7 @@ $(function () {
     					$("#"+result[i]+"t").attr("checked", true);
     				}
     			}
-    		}else{
+    		}*/else{
     			$('.dongSanXian').hide();
         		$('.dongliuXian').hide();
     		}

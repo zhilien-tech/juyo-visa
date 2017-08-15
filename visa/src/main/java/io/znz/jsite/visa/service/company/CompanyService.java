@@ -14,14 +14,17 @@ import io.znz.jsite.util.security.Encodes;
 import io.znz.jsite.visa.entity.company.CompanyEntity;
 import io.znz.jsite.visa.entity.companyjob.CompanyJobEntity;
 import io.znz.jsite.visa.entity.department.DepartmentEntity;
+import io.znz.jsite.visa.entity.japan.NewComeBabyJpEntity;
 import io.znz.jsite.visa.entity.job.JobEntity;
 import io.znz.jsite.visa.entity.userjobmap.UserJobMapEntity;
+import io.znz.jsite.visa.enums.CompanyTypeEnum;
 import io.znz.jsite.visa.enums.UserDeleteStatusEnum;
 import io.znz.jsite.visa.enums.UserStatusEnum;
 import io.znz.jsite.visa.forms.companyform.CompanySqlForm;
 import io.znz.jsite.visa.service.authority.PublicAuthorityService;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -30,6 +33,7 @@ import org.nutz.ioc.aop.Aop;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Maps;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
@@ -86,11 +90,23 @@ public class CompanyService extends NutzBaseService<CompanyEntity> {
 		//#########################添加公司信息###############################//
 		addForm.setCreateTime(new Date());
 		addForm.setAdminId(empId);
+		long comType = addForm.getComType();//得到公司类型(送签社或地接社)
+		if (!Util.isEmpty(comType) && comType == CompanyTypeEnum.send.intKey()) {//日本送签社
+			addForm.setComType(comType);
+		}
 		if (Util.isEmpty(addForm.getDeletestatus())) {
 			addForm.setDeletestatus(0);
 		}
 		CompanyEntity companyAdd = dbDao.insert(addForm);
-		Integer comId = companyAdd.getId();//得到公司id
+		long comId = companyAdd.getId();//得到公司id
+		if (!Util.isEmpty(comType) && comType == CompanyTypeEnum.land.intKey()) {//日本地接社
+			//添加地接社数据
+			NewComeBabyJpEntity newbaby = new NewComeBabyJpEntity();
+			newbaby.setComId(comId);
+			newbaby.setComType(CompanyTypeEnum.land.intKey());
+			newbaby.setCreateTime(new Date());
+			dbDao.insert(newbaby);
+		}
 		//#########################添加管理员所在的部门信息##########################//
 		DepartmentEntity dept = new DepartmentEntity();
 		dept.setComId(comId);
@@ -128,7 +144,11 @@ public class CompanyService extends NutzBaseService<CompanyEntity> {
 	 * @param comId
 	 */
 	public Object updatecompany(long comId) {
-		return dbDao.fetch(CompanyEntity.class, comId);
+		//List<CompanyEntity> updatecompany = dbDao.query(CompanyEntity.class, Cnd.where("id", "=", comId), null);
+		Map<String, Object> map = Maps.newHashMap();
+		map.put("updatecompany", dbDao.fetch(CompanyEntity.class, comId));
+		map.put("companytype", dbDao.query(CompanyEntity.class, Cnd.where("id", "=", comId), null));
+		return map;
 	}
 
 	/**

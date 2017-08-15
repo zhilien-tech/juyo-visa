@@ -61,6 +61,16 @@ $('.editBtn').click(function(){
 		content: '/personalInfo/personalInfoEdit.html'
 	});
 });
+//编辑密码页面
+$('.updatePWBtn').click(function(){
+	layer.open({
+		type: 2,
+		title: '修改密码',
+		area: ['750px', '430px'],
+		shadeClose: true,
+		content: '/personalInfo/modifyPassword.html'
+	});
+});
 //事件提示
 function successCallback(id){
 	if(id == '1'){

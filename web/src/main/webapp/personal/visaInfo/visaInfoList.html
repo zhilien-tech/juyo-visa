@@ -500,7 +500,7 @@
                                     <div class="form-group">
                                         <button data-bind="click:addOne" data-params="customer.peerList"
                                                 class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加一名同行人
+                                            <span class="k-icon k-i-plus" data-bind="click:addOne" data-params="customer.peerList"></span>添加一名同行人
                                         </button>
                                     </div>
                                 </div>
@@ -852,7 +852,7 @@
                                     <div class="form-group">
                                         <button data-bind="click:addOne" data-params="customer.relation"
                                                 class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加一名亲属
+                                            <span class="k-icon k-i-plus" data-bind="click:addOne" data-params="customer.relation"></span>添加一名亲属
                                         </button>
                                     </div>
                                 </div>
@@ -1245,7 +1245,7 @@
                                         <button id="addLangRow" data-bind="click:addOne"
                                                 data-params="customer.languagelist"
                                                 class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加
+                                            <span class="k-icon k-i-plus" data-bind="click:addOne" data-params="customer.languagelist"></span>添加
                                         </button>
                                     </div>
                                 </div>
@@ -1265,7 +1265,7 @@
                                         <button id="addToCountryRow" data-bind="click:addOne"
                                                 data-params="customer.visitedcountrylist"
                                                 class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加
+                                            <span class="k-icon k-i-plus" data-bind="click:addOne" data-params="customer.visitedcountrylist"></span>添加
                                         </button>
                                     </div>
                                 </div>
@@ -1285,7 +1285,7 @@
                                         <button id="addCharitableRow" data-bind="click:addOne"
                                                 data-params="customer.workedplacelist"
                                                 class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加
+                                            <span class="k-icon k-i-plus" data-bind="click:addOne" data-params="customer.workedplacelist"></span>添加
                                         </button>
                                     </div>
                                 </div>
@@ -1597,8 +1597,7 @@
             <div class="form-group">
                 <label for="peerxing#:data.uid#">同行人姓:<span style="color: red">*</span></label>
                 <div class='input-group'>
-                    <input id="peerxing#:data.uid#" name="peerxing"
-                           class="k-textbox" style="width: 100%;"
+                    <input id="peerxing#:data.uid#" name="peerxing" class="k-textbox" style="width: 100%;"
                            data-bind="value:peerxing,events:{input:onCheckpeer}"/>
                     <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                 </div>
@@ -1608,9 +1607,8 @@
             <div class="form-group">
                 <label for="peerxingen#:data.uid#">拼音:<span style="color: red">*</span></label>
                 <div class='input-group'>
-                    <input id="peerxingen#:data.uid#"
-                           data-bind="value:peerxingen" pinYinName="peerxingen" class="k-textbox"
-                           style="width: 100%;text-transform:uppercase;"/>
+                    <input id="peerxingen#:data.uid#" class="k-textbox" style="width: 100%;
+                           data-bind="value:peerxingen" pinYinName="peerxingen" text-transform:uppercase;"/>
                     <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                 </div>
             </div>

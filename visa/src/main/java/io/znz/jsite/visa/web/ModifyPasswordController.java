@@ -85,6 +85,8 @@ public class ModifyPasswordController {
 						dbDao.update(one, null);
 					}
 				}
+			} else {
+				return ResultObject.success("原密码不正确");
 			}
 		} else {
 			return ResultObject.success("修改失败");

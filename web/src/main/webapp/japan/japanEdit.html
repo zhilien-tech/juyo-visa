@@ -202,12 +202,12 @@
                                                     data-bind="value:customer.visatype"
                                                      name="visatype">
                                                 <option value="0">单次</option>
-                                                <option value="1">一年单次</option>
+                                                <!-- <option value="1">一年单次</option> -->
                                                 <option value="2">东三县</option>
-                                                <option value="3">东六县</option>
+                                                <option value="3">新三县</option>
                                                 <option value="4">冲绳</option>
                                                 <option value="5">普通三年</option>
-                                                <option value="6">普通五年</option>
+                                                <!-- <option value="6">普通五年</option> -->
                                             </select>
                                             <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                                         </div>
@@ -447,7 +447,7 @@
 				                        <div class="col-xs-12">
 				                            <button data-bind="click:addOne" data-params="customer.dateplanJpList"
 				                                    class="k-button col-xs-12 k-button-icontext">
-				                                <span class="k-icon k-i-plus"></span>添加
+				                                <span class="k-icon k-i-plus" data-bind="click:addOne" data-params="customer.dateplanJpList"></span>添加
 				                            </button>
 				                        </div>
 				                    </div>
@@ -614,7 +614,7 @@
                         <div class="col-xs-12">
                             <button data-bind="click:addOne" data-params="customer.tripplanJpList"
                                     class="k-button col-xs-12 k-button-icontext">
-                                <span class="k-icon k-i-plus"></span>添加行程
+                                <span class="k-icon k-i-plus" data-bind="click:addOne" data-params="customer.tripplanJpList"></span>添加行程
                             </button>
                         </div>
                     </div>
