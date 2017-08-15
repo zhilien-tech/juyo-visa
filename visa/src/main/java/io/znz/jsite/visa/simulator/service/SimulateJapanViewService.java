@@ -15,6 +15,7 @@ import io.znz.jsite.visa.entity.japan.NewOrderJpEntity;
 import io.znz.jsite.visa.entity.japan.NewTripJpEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
 import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
+import io.znz.jsite.visa.simulator.form.JapanSimulatorForm;
 import io.znz.jsite.visa.util.Const;
 
 import java.io.InputStream;
@@ -188,7 +189,7 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 
 	}
 
-	public Object UploadJapan(MultipartFile file, Long cid) {
+	public Object UploadJapan(MultipartFile file, Long cid, JapanSimulatorForm jpForm) {
 		if (Util.isEmpty(cid)) {
 			return ResultObject.fail("任务id不能为空！");
 		}
