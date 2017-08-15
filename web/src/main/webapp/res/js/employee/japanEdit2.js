@@ -330,7 +330,7 @@ var viewModel = kendo.observable({
     	var person=new Object();
     	person.text=(e.data.xing+''+e.data.name);
     	person.value=e.data.id;
-    	alert(e.data.ismainproposer);
+    	/*alert(e.data.ismainproposer);*/
     	if(e.data.ismainproposer){
     		for(var i=0;i<proposersnew.length;i++){
 				if(proposersnew[i].value+""==(e.data.id)+""){
