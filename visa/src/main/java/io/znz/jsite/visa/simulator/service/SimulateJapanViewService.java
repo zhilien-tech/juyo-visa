@@ -195,9 +195,13 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 		}
 
 		NewOrderJpEntity order = dbDao.fetch(NewOrderJpEntity.class, cid);
+
 		if (Util.isEmpty(order)) {
 			return ResultObject.fail("任务不存在！");
 		}
+		//保存受付番号
+		order.setCompletedNumber(jpForm.getAcceptanceNumber());
+		dbDao.update(order, null);
 
 		String visaFile = null;
 		try {

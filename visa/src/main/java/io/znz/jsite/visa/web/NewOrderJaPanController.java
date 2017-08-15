@@ -1551,6 +1551,7 @@ public class NewOrderJaPanController {
 		}
 		String fileName = URLEncoder.encode(str + "-" + order.getOrdernumber() + ".zip", "UTF-8");
 		resp.setContentType("application/zip");
+		resp.setHeader("Set-Cookie", "fileDownload=true; path=/");
 		resp.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
 		IOUtils.write(bytes, resp.getOutputStream());
 		return ResultObject.fail("PDF生成失败!");

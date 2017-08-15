@@ -17,7 +17,7 @@ SELECT
 	
 	vnoj.ordernumber,
 	vnoj.completedNumber,
-	come.comFullName,
+	
 	eee.fullName,
 	vnoj.headnum,
 	vnoj.senddate,
@@ -38,7 +38,12 @@ If(
  mm.ismainproposer=1,
 mm.chinesefullname,
 ''
-) as 'mainporposer'
+) as 'mainporposer',
+If(
+ vnoj.customerSource=3,
+vcm.fullComName,
+qqq.fullComName
+) as 'fullComName'
 FROM	visa_new_order_jp vnoj LEFT JOIN visa_new_customersource_jp vcm ON vnoj.id = vcm.order_jp_id
 LEFT JOIN (select *
 from (
@@ -61,6 +66,7 @@ GROUP BY n.orderid
 LEFT JOIN visa_new_comebaby_jp come ON come.id  = vnoj.sendComId
 LEFT JOIN visa_employee eee ON eee.id  = vnoj.operatePersonId
 LEFT JOIN visa_new_trip_jp aaa ON aaa.order_jp_id = vnoj.id 
+LEFT JOIN visa_customer_management qqq on qqq.id=vnoj.customer_manager_id
 LEFT JOIN (select *,MIN(bbb.startdate) from visa_new_dateplan_jp bbb 
 GROUP BY bbb.trip_jp_id ) ccc ON ccc.trip_jp_id = aaa.id 
 $condition
