@@ -6,6 +6,7 @@ if(c.comType>1,c.landtelephone,c.telephone) as 'telephone'
 ,c.phone,
 c.comType,
 c.id,
-c.Fax
+c.Fax,
+c.completedNumber
 FROM visa_new_comebaby_jp c
 $condition

@@ -75,6 +75,11 @@ ALTER TABLE `visa_new_order_jp`
 ADD COLUMN `operatePersonId`  int NULL COMMENT '操作人id' AFTER `fileurl`;
 ALTER TABLE `visa_new_order_jp`
 ADD COLUMN `completedNumber`  varchar(255) NULL COMMENT '受付番号' AFTER `operatePersonId`;
+ALTER TABLE `visa_new_comebaby_jp`
+ADD COLUMN `completedNumber`  varchar(255) NULL COMMENT '受付番号' AFTER `updateTime`;
+ALTER TABLE `visa_new_comebaby_jp`
+ADD COLUMN `sealSQUrl`  varchar(255) NULL COMMENT '送签社印章地址' AFTER `sealName`,
+ADD COLUMN `sealSQName`  varchar(255) NULL COMMENT '送签社印章名称' AFTER `sealSQUrl`;
 
 /******************************************************************************
 version : 7.0.0   end
