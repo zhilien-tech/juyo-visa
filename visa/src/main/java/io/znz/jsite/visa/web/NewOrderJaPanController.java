@@ -187,6 +187,12 @@ public class NewOrderJaPanController {
 			long comId = company.getComId();
 			order.setComId(comId);
 		}
+
+		io.znz.jsite.core.entity.EmployeeEntity user = (io.znz.jsite.core.entity.EmployeeEntity) session
+				.getAttribute(Const.SESSION_NAME);
+		if (!Util.isEmpty(user)) {
+			order.setOperatePersonId(user.getId());
+		}
 		//根据他们的id是否存在判断是更新还是删除
 		NewOrderJpEntity orderOld = order;
 		if (!Util.isEmpty(order.getId()) && order.getId() > 0) {
