@@ -137,14 +137,16 @@ function regCmd(command) {
                 	break;
                 case "modify":
                     var data = grid.dataItem($(e.currentTarget).closest("tr"));
+                    if(data.comtype==1){
+                    	layer.open({
+                            type: 2,
+                            title: '编辑-日本招宝信息',
+                            area: ['550px', '610px'],
+                            shadeClose: true,
+                            content: '/comebaby/comebabyEdit.html?cid=' + data.id + "&check=true"
+                        });
+                    }
                     
-                    layer.open({
-                        type: 2,
-                        title: '编辑-日本招宝信息',
-                        area: ['550px', '610px'],
-                        shadeClose: true,
-                        content: '/japanZhaobaoInfo/japanZhaobaoInfoEdit.html?cid=' + data.id + "&check=true"
-                    });
                     break;
                 case "customerEdit":
                 	/*var data = grid.dataItem($(e.currentTarget).closest("tr"));*/
@@ -156,7 +158,7 @@ function regCmd(command) {
                 		title: '编辑客户信息',
                 		area: ['550px', '600px'],
                 		shadeClose: true,
-                		content: '/japanZhaobaoInfo/japanZhaobaoInfoEdit.html?cid=' + data.id + "&check=true"
+                		content: '/comebaby/comebabyEdit.html?cid=' + data.id + "&check=true"
                 	});
                 	break;
                 default:
@@ -243,7 +245,8 @@ var grid = $("#grid").kendoGrid({
                 container.hide().prev().hide();
             }
         },*/
-        {field: 'comfullname', title: '公司名称', width: 170,template: "<span class='ellipsis' title='#=data.comfullname#'>#=data.comfullname?data.comfullname:''#</span>"},
+        {field: 'comfullname', title: '保证会社', width: 170,template: "<span class='ellipsis' title='#=data.comfullname#'>#=data.comfullname?data.comfullname:''#</span>"},
+        {field: 'completednumber', title: '受付番号',width:100,},
         {field: 'address', title: '住所',width:170,template: "<span class='ellipsis' title='#=data.address#'>#=data.address?data.address:''#</span>"},
         {field: 'linkman', title: '担当者',width:100,},
         {field: 'phone', title: '携带电话',width:120,format: "{0: yyyy-MM-dd }",},
