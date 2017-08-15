@@ -121,7 +121,7 @@ public class NewOrderJpEntity implements Serializable {
 	private String fileurl;
 	@Column
 	@Comment("操作人id")
-	private String operatePersonId;
+	private Integer operatePersonId;
 	@Column
 	@Comment("受付番号")
 	private String completedNumber;
