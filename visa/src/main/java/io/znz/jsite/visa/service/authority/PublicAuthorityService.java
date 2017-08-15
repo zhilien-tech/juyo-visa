@@ -37,7 +37,7 @@ public class PublicAuthorityService extends NutzBaseService {
 		CompanyEntity fetchType = dbDao.fetch(CompanyEntity.class, Cnd.where("adminId", "=", adminId));
 		long comId = fetchType.getId();//得到公司id
 		//上游公司功能ID
-		int[] function = { 1, 2, 3, 6, 17, 18, 19, 25 };
+		int[] function = { 1, 2, 3, 6, 17, 18, 19, 25, 27 };
 		List<CompanyFunctionEntity> functionList = Lists.newArrayList();
 		for (int i = 0; i < function.length; i++) {
 			//向公司功能关系表中添加数据

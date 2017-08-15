@@ -487,7 +487,7 @@
                                         <button data-bind="click:addOne"
                                                 data-params="customer.otherCountry"
                                                 class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加
+                                            <span class="k-icon k-i-plus" data-bind="click:addOne" data-params="customer.otherCountry"></span>添加
                                         </button>
                                     </div>
                                 </div>
@@ -1108,7 +1108,7 @@
                                     <div class="form-group">
                                         <button data-bind="click:addOne" data-params="customer.travel.togethers"
                                                 class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加一名同行人
+                                            <span class="k-icon k-i-plus" data-bind="click:addOne" data-params="customer.travel.togethers"></span>添加一名同行人
                                         </button>
                                     </div>
                                 </div>
@@ -1665,7 +1665,7 @@
                                     <div class="form-group">
                                         <button data-bind="click:addOne" data-params="customer.families"
                                                 class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加一名亲属
+                                            <span class="k-icon k-i-plus" data-bind="click:addOne" data-params="customer.families"></span>添加一名亲属
                                         </button>
                                     </div>
                                 </div>
@@ -1701,7 +1701,7 @@
                                     <div class="form-group">
                                         <button data-bind="click:addOne" data-params="customer.histories"
                                                 class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加
+                                            <span class="k-icon k-i-plus" data-bind="click:addOne" data-params="customer.histories"></span>添加
                                         </button>
                                     </div>
                                 </div>
@@ -1886,7 +1886,7 @@
                                         <button id="addSchoolARow" data-bind="click:addOne"
                                                 data-params="customer.schools"
                                                 class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加一所学校
+                                            <span class="k-icon k-i-plus" data-bind="click:addOne" data-params="customer.schools"></span>添加一所学校
                                         </button>
                                     </div>
                                 </div>
@@ -2187,7 +2187,7 @@
                                         <label for="addOrgRow">&nbsp;</label>
                                         <button id="addOrgRow" data-bind="click:addOne" data-params="customer.works"
                                                 class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加公司/单位
+                                            <span class="k-icon k-i-plus" data-bind="click:addOne" data-params="customer.works"></span>添加公司/单位
                                         </button>
                                     </div>
                                 </div>
@@ -2208,7 +2208,7 @@
                                         <button id="addLangRow" data-bind="click:addOne"
                                                 data-params="customer.languages"
                                                 class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加
+                                            <span class="k-icon k-i-plus" data-bind="click:addOne" data-params="customer.languages"></span>添加
                                         </button>
                                     </div>
                                 </div>
@@ -2225,7 +2225,7 @@
                                         <button id="addToCountryRow" data-bind="click:addOne"
                                                 data-params="customer.visitCountry"
                                                 class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加
+                                            <span class="k-icon k-i-plus" data-bind="click:addOne" data-params="customer.visitCountry"></span>添加
                                         </button>
                                     </div>
                                 </div>
@@ -2242,7 +2242,7 @@
                                         <button id="addCharitableRow" data-bind="click:addOne"
                                                 data-params="customer.charitable"
                                                 class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus"></span>添加
+                                            <span class="k-icon k-i-plus" data-bind="click:addOne" data-params="customer.charitable"></span>添加
                                         </button>
                                     </div>
                                 </div>
@@ -2433,7 +2433,7 @@
         <div class="col-xs-2">
             <div class="form-group">
                 <button data-bind="click:delOne" data-params="customer.otherCountry" class="k-button col-xs-12 k-button-icontext">
-                    <span class="k-icon k-i-close"></span>删除
+                    <span class="k-icon k-i-close" data-bind="click:delOne" data-params="customer.otherCountry"></span>删除
                 </button>
             </div>
         </div>
@@ -2511,7 +2511,7 @@
                 <label for="traveler_del_#:data.uid#">移除此联系人&nbsp;</label>
                 <button id="traveler_del_#:data.uid#" data-bind="click:delOne" data-params="customer.travel.togethers"
                         class="k-button col-xs-12 k-button-icontext">
-                    <span class="k-icon k-i-close"></span>移除
+                    <span class="k-icon k-i-close" data-bind="click:delOne" data-params="customer.travel.togethers"></span>移除
                 </button>
             </div>
         </div>
@@ -2617,7 +2617,7 @@
                 <label for="ir_del_#:data.uid#">操作&nbsp;</label>
                 <button id="ir_del_#:data.uid#" data-bind="click:delOne" data-params="customer.families"
                         class="k-button col-xs-12 k-button-icontext">
-                    <span class="k-icon k-i-close"></span>不登记这名亲属
+                    <span class="k-icon k-i-close" data-bind="click:delOne" data-params="customer.families"></span>不登记这名亲属
                 </button>
             </div>
         </div>
@@ -2666,7 +2666,7 @@
                 <label for="to_usa_del_#:data.uid#">操作&nbsp;</label>
                 <button id="to_usa_del_#:data.uid#" data-bind="click:delOne" data-params="customer.histories"
                         class="k-button col-xs-12 k-button-icontext">
-                    <span class="k-icon k-i-close"></span>删除本次记录
+                    <span class="k-icon k-i-close" data-bind="click:delOne" data-params="customer.histories"></span>删除本次记录
                 </button>
             </div>
         </div>
@@ -2841,7 +2841,7 @@
             <div class="form-group">
                 <button data-bind="click:delOne" data-params="customer.schools"
                         class="k-button col-xs-12 k-button-icontext">
-                    <span class="k-icon k-i-close"></span>移除学校
+                    <span class="k-icon k-i-close" data-bind="click:delOne" data-params="customer.schools"></span>移除学校
                 </button>
             </div>
         </div>
@@ -3075,7 +3075,7 @@
             <div class="form-group">
                 <button data-bind="click:delOne" data-params="customer.works"
                         class="k-button col-xs-12 k-button-icontext">
-                    <span class="k-icon k-i-close"></span>移除公司/单位
+                    <span class="k-icon k-i-close" data-bind="click:delOne" data-params="customer.works"></span>移除公司/单位
                 </button>
             </div>
         </div>
@@ -3104,7 +3104,7 @@
             <div class="form-group">
                 <button data-bind="click:delOne" data-params="customer.languages"
                         class="k-button col-xs-12 k-button-icontext">
-                    <span class="k-icon k-i-close"></span> 删除
+                    <span class="k-icon k-i-close" data-bind="click:delOne" data-params="customer.languages"></span> 删除
                 </button>
             </div>
         </div>
@@ -3132,7 +3132,7 @@
             <div class="form-group">
                 <button data-bind="click:delOne" data-params="customer.visitCountry"
                         class="k-button col-xs-12 k-button-icontext">
-                    <span class="k-icon k-i-close"></span> 删除
+                    <span class="k-icon k-i-close" data-bind="click:delOne" data-params="customer.visitCountry"></span> 删除
                 </button>
             </div>
         </div>
@@ -3153,7 +3153,7 @@
             <div class="form-group">
                 <button data-bind="click:delOne" data-params="customer.charitable"
                         class="k-button col-xs-12 k-button-icontext">
-                    <span class="k-icon k-i-close"></span> 删除
+                    <span class="k-icon k-i-close" data-bind="click:delOne" data-params="customer.charitable"></span> 删除
                 </button>
             </div>
         </div>

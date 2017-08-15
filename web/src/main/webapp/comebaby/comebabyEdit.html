@@ -18,8 +18,11 @@
     	.companyChopBtn {opacity:0;width:128px;height:31px;cursor:pointer; position:relative;top:-25px;}
     	.companyChopA{background-color:#0172c6;color:#fff;padding:8px 15px;font-size:13px;}
     	.imgPreview{width: 99.5%; height: 200px;text-align: center;line-height: 200px;}
+    	.sqImgPreview{width: 99.5%; height: 200px;text-align: center;line-height: 200px;}
     	#img{width: 99.5%; height: 200px;text-align: center;line-height: 200px;border: solid 1px #c9c9c9;}
+    	#sqImg{width: 99.5%; height: 200px;text-align: center;line-height: 200px;border: solid 1px #c9c9c9;}
     	#uploadFile-button{width:100px !important;}
+    	#uploadSQFile-button{width:100px !important;}
     	object#SWFUpload_0 {width: 100px !important;}
     	.upload-btn {position: relative;left: -15px;}
     	.input-group{width:100%;}/*由于删掉小灯泡 宽度出现问题 此处理设置所有input、select等宽度等于父类*/
@@ -44,7 +47,7 @@
 	                                                    data-value-primitive="true"
 	                                                    data-bind="value:customer.comType" onchange="checknull();">
 	                                                <option value="1">送签社</option>
-	                                                <option value="2">地接社</option>
+	                                                <!-- <option value="2">地接社</option> -->
 	                                            </select>
 	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
@@ -55,11 +58,20 @@
 	                        
 	                        	<!-- 公司全称 -->
 	                            <div class="row" id="1">
-	                                <div class="col-xs-12">
+	                                <div class="col-xs-6">
 	                                    <div class="form-group">
-	                                        <label for="last_name_cn">公司全称:<span style="color: red">*</span></label>
+	                                        <label for="last_name_cn">保证会社:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
 	                                            <input id="" name="comFullName" type="text" class="k-textbox" placeholder="" style="width: 100%;" data-bind="value:customer.comFullName" send="send"/>
+	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="col-xs-6">
+	                                    <div class="form-group">
+	                                        <label for="last_name_cn">受付番号:<span style="color: red">*</span></label>
+	                                        <div class='input-group'>
+	                                            <input id="" name="completedNumber" type="text" class="k-textbox" placeholder="" style="width: 100%;" data-bind="value:customer.completedNumber" send="send"/>
 	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
 	                                    </div>
@@ -146,6 +158,31 @@
 	                                        </div>
 	                                    </div>
 	                                </div>
+	                                <div class="col-xs-12 FAX">
+	                                	  <!-- 上传公司公章Button -->
+			                              <div class="row" style="margin-top:15px;">
+			                                <div class="col-xs-4">
+			                                	<div class="form-group">
+								      				<!-- <label class="">上传公司公章:</label> -->
+								      				<div class="upload-btn">
+								      					<button id="uploadSQFile" name="file" type="file" class="btn btn-primary btn-sm" >上传公司公章</button>
+								      					<span id="completeFileName"></span>
+								      					<span id="photoname"></span>
+								      					<span id="yvlan"></span>
+								      				</div>
+								      			</div>
+			                                </div>
+			                                <div class="col-xs-8">
+			                                    <div class="form-group">
+			                                    	 <div class="sqImgPreview">
+			                                    	 	<img alt="公司公章" src="" id="sqImg" >
+			                                    	 </div>
+			                                    </div>
+			                                </div>
+			                            </div>
+										<!-- end 上传公司公章Button -->
+	                                </div>
+	                              
 	                            </div>
 								<!-- end 担当者/携帯电话/TEL/FAX -->
 								
@@ -235,7 +272,9 @@
 <script type="text/javascript">
 $(function(){
     uploadFile();
+    uploadSQFile();
     $('#uploadFile-button span').html("上传公司公章");
+    $('#uploadSQFile-button span').html("上传公司公章");
 });
 $(function(){
 	$('.companyChopDiv').hide();//上传公司公章部分 默认隐藏
@@ -251,11 +290,15 @@ $(function(){
 			$("#3").show();
 			$("#4").show();
 			viewModel.set("customer.comFullName","");
+			viewModel.set("customer.completedNumber","");
 			viewModel.set("customer.address","");
 			viewModel.set("customer.linkman","");
 			viewModel.set("customer.phone","");
 			viewModel.set("customer.telephone","");
 			viewModel.set("customer.Fax","");
+			viewModel.set("customer.sealSQUrl","");
+			viewModel.set("customer.sealSQName","");
+			$("#sqImg").attr('src',"");
 		}else if(stateInfo=="送签社"){
 			viewModel.set("customer.landcomFullName","");
 			viewModel.set("customer.landaddress","");
@@ -275,15 +318,9 @@ $(function(){
 	});
 });
 
-
-
-
-//文件上传
+//地接社文件上传
 function uploadFile(){
-/* 	alert(localhostPaht);
-	alert(curWwwPath);
-	alert(pathName); */
-	 var index=null;
+	var index=null;
 	$.fileupload1 = $('#uploadFile').uploadify({
 		'auto' : true,//选择文件后自动上传
 		'formData' : {
@@ -304,10 +341,10 @@ function uploadFile(){
 			index = layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 		},
 		 'onUploadSuccess': function(file, data, response) {
-			 var fileName = file.name;//文件名称
+			var fileName = file.name;//文件名称
 			var photoname= "<a id='downloadA' href='#'>"
-            + file.name
-            + "</a>";
+				            + file.name
+				            + "</a>";
 			 ///console.log(file);
 			/* 	var jsonobj = eval('(' + data + ')');
 				var url  = jsonobj;//地址 */
@@ -345,6 +382,66 @@ function uploadFile(){
        	/* alert('The file ' + file.name + ' could not be uploaded: ' + errorString); */
        }
 	});
+}
+	
+//送签社上传印章
+function uploadSQFile(){
+		var index=null;
+		$.fileupload1 = $('#uploadSQFile').uploadify({
+			'auto' : true,//选择文件后自动上传
+			'formData' : {
+				'fcharset' : 'uft-8'/* ,
+				'action' : 'uploadimage' */
+			},
+			'buttonText' : '上传',//按钮显示的文字
+			'fileSizeLimit' : '3000MB',
+			'fileTypeDesc' : '文件',//在浏览窗口底部的文件类型下拉菜单中显示的文本
+			 'fileTypeExts' : '*.png;*.jpg; *.jpeg; *.gif;',//上传文件的类型
+			'swf' : '/res/upload/uploadify.swf',//指定swf文件
+			'multi' : false,//multi设置为true将允许多文件上传
+			'successTimeout' : 1800, 
+			/* 'queueSizeLimit' : 100, */
+			'uploader' : localhostPaht+'/visa/comebaby/uploadFile',
+			//下面的例子演示如何获取到vid
+			'onUploadStart':function(file){
+				index = layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+			},
+			 'onUploadSuccess': function(file, data, response) {
+				var fileName = file.name;//文件名称
+				var photoname= "<a id='downloadA' href='#'>"
+					            + file.name
+					            + "</a>";
+				if(index!=null){
+					layer.close(index);
+				}
+				/*显示 预览 按钮*/
+				viewModel.set("customer.sealSQUrl",data);
+				viewModel.set("customer.sealSQName",fileName);
+	           	$("#sqImg").attr('src',data);
+				/*$("#yvlan").html('<a href="'+data+'">预览</a>'); */
+	      
+			},
+	       //加上此句会重写onSelectError方法【需要重写的事件】
+	       'overrideEvents': ['onSelectError', 'onDialogClose'],
+	       //返回一个错误，选择文件的时候触发
+	       'onSelectError':function(file, errorCode, errorMsg){
+	       	///console.log(errorMsg);
+	           switch(errorCode) {
+	               case -110:
+	                   alert("文件 ["+file.name+"] 大小超出系统限制！");
+	                   break;
+	               case -120:
+	                   alert("文件 ["+file.name+"] 大小异常！");
+	                   break;
+	               case -130:
+	                   alert("文件 ["+file.name+"] 类型不正确！");
+	                   break;
+	           }
+	       },
+	       'onUploadError':function(file, errorCode, errorMsg, errorString){
+	       	/* alert('The file ' + file.name + ' could not be uploaded: ' + errorString); */
+	       }
+		});
 }
 </script>
 </html>

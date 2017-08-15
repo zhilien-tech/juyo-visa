@@ -159,6 +159,36 @@ function regCmd(command) {
                 		content: '/order/customerEdit.html?cid=' + data.id + "&check=true"
                 	});
                 	break;
+                case "validate":
+                	if (!(data = select(e))) return;
+                	var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+                	$.getJSON("/visa/order/validate?type=order&customerid=" + data.id, {}, function (resp) {
+                		if (resp.code === "SUCCESS") {
+                			if(index!=null){
+                				
+                				layer.close(index);
+                			}
+                			/*	layer.confirm('发送成功，打开预览？', {
+                                btn: ['预览', '关闭']
+                            }, function (index, layero) {
+                                window.open("/delivery/deliveryJapan.html?oid="+data.id);
+                            }, function (index) {
+                                $.layer.closeAll();
+                            });*/
+                			
+                			layer.msg("等待递送！",{time: 2000});
+                		} else if(resp.code === "FAIL"){
+                			if(index!=null){
+                				
+                				layer.close(index);
+                			}
+                			$.layer.alert(resp.msg);
+                		}else{
+                			$.layer.alert(resp.msg);
+                			
+                		}
+                	});
+                	break;
                 default:
                     $.layer.alert(command);
                     break;
@@ -224,6 +254,8 @@ function detailInit(e) {
                     {name: "share", imageClass:false, text: "分享"},//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
                     {name: "delivery", imageClass:false, text: "递送"},
                     {name: "notice", imageClass:false, text: "通知"},
+                   /* {name: "validate", imageClass:false, text: "验证"},*/
+                    regCmd("validate"),//美国验证要走的方法
                     regCmd("customerEdit"),
                     regCmd("share"),
                     regCmd("notice"),

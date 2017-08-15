@@ -83,6 +83,18 @@ public class NewComeBabyJpEntity implements Serializable {
 	private String sealName;
 
 	@Column
+	@Comment("送签社印章地址")
+	private String sealSQUrl;
+
+	@Column
+	@Comment("送签社印章名字")
+	private String sealSQName;
+
+	@Column
+	@Comment("受付番号")
+	private String completedNumber;
+
+	@Column
 	@Comment("地接社公司全称")
 	private String landcomFullName;
 

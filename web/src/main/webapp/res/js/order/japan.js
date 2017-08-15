@@ -16,15 +16,15 @@ var statuslist=[
                 {text:"初审",value:3},
                 {text:"初审通过",value:4},
                 {text:"初审拒绝",value:5},
-                {text:"待送",value:6},
-                {text:"DS-160",value:7},
+                {text:"递送",value:17},
+/*                {text:"DS-160",value:7},
                 {text:"准备提交使馆",value:8},
                 {text:"已提交使馆",value:9},
                 {text:"约签",value:10},
                 {text:"返回",value:11},
                 {text:"拒签",value:12},
                 {text:"完成",value:13},
-                {text:"EVUS",value:14}
+                {text:"EVUS",value:14}*/
               ];
 //注册命令
 function regCmd(command) {
@@ -375,7 +375,8 @@ var grid = $("#grid").kendoGrid({
         {field: 'senddate', title: '送签时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.senddate#'>#=data.senddate?kendo.toString(data.senddate, 'yyyy-MM-dd'):''#</span>"},
         {field: 'outdate', title: '出签时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.outdate#'>#=data.outdate?kendo.toString(data.outdate, 'yyyy-MM-dd'):''#</span>"},
         {field: 'headnum', title: '人数', values: ["美国", "日本"], width: 75,},
-        {field: 'countrytype', title: '国家', width: 80,values:countrylist},
+        {field: 'completednumber', title: '受付番号', width: 100,},
+        /*{field: 'countrytype', title: '国家', width: 80,values:countrylist},*/
         {field: 'status', title: '状态',values:statuslist, width: 80,},
         {
             title: "操作", width: 295,

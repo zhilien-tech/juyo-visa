@@ -5,11 +5,14 @@ import io.znz.jsite.base.bean.ResultObject;
 import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
 import io.znz.jsite.core.service.MailService;
 import io.znz.jsite.core.util.Const;
+import io.znz.jsite.util.DateUtils;
+import io.znz.jsite.util.XORUtil;
 import io.znz.jsite.util.security.Digests;
 import io.znz.jsite.util.security.Encodes;
 import io.znz.jsite.visa.bean.Customer;
 import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
 import io.znz.jsite.visa.entity.delivery.NewDeliveryUSAEntity;
+import io.znz.jsite.visa.entity.japan.NewCustomerOrderJpEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerOrderEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerresourceEntity;
@@ -79,7 +82,10 @@ public class OrderController extends BaseController {
 	/**nutz dao*/
 	@Autowired
 	protected Dao nutDao;
-
+	//不能为空的字段集合
+	private List<String> validateEmptyList = Lists.newArrayList();
+	//格式不正确的字段的集合
+	private List<String> validateMsgList = Lists.newArrayList();
 	/**
 	 * 注入容器中的sqlManager对象，用于获取sql
 	 */
@@ -188,7 +194,7 @@ public class OrderController extends BaseController {
 
 	/*****
 	 * 
-	 * TODO(这里用一句话描述这个方法的作用)
+	 * 订单存储
 	 * <p>
 	 * TODO(这里描述这个方法详情– 可选)
 	 *
@@ -1131,8 +1137,14 @@ public class OrderController extends BaseController {
 			tmp.append(line);
 		}
 
+		String nowDateTime = DateUtils.getDateTime();
+		String key = "我是秘钥";
+		String orderInfo = "oid&" + orderid + "&now&" + nowDateTime;
+		XORUtil instance = XORUtil.getInstance();
+		String xor_encodedStr = instance.encode(orderInfo, key);
+
 		String html = tmp.toString().replace("${name}", "").replace("${oid}", order.getOrdernumber())
-				.replace("${href}", "http://218.244.148.21:9004//main.html?logintype=5&orderId=" + orderid)
+				.replace("${href}", "http://218.244.148.21:9004//main.html?logintype=5&secretMsg=" + xor_encodedStr)
 				.replace("${logininfo}", "").replace("${gender}", "先生/女士");
 		String result = mailService.send(email, html, "签证资料录入", MailService.Type.HTML);
 
@@ -1160,6 +1172,46 @@ public class OrderController extends BaseController {
 		}
 
 		return ResultObject.success(result);
+	}
+
+	//美国递送的验证部分
+	@RequestMapping(value = "validate")
+	@ResponseBody
+	public Object validate(long customerid, final HttpSession session) {
+		validateEmptyList.clear();
+		validateMsgList.clear();
+		List<NewCustomerOrderJpEntity> customerOrderList = dbDao.query(NewCustomerOrderJpEntity.class,
+				Cnd.where("customer_jp_id", "=", customerid), null);
+		long orderId = 0;
+		if (!Util.isEmpty(customerOrderList) && customerOrderList.size() > 0) {
+			orderId = customerOrderList.get(0).getOrder_jp_id();
+		}
+		if (!Util.isEmpty(orderId) && orderId > 0) {
+			//TODO 此处为订单信息不正确的验证
+		}
+		validateEmptyList.add("某某某");
+		String msg = "";
+		if (!Util.isEmpty(validateEmptyList) && validateEmptyList.size() > 0) {
+			if (!Util.isEmpty(validateEmptyList) && validateEmptyList.size() > 0) {
+				for (String string : validateEmptyList) {
+					msg += string + "、";
+				}
+				msg += "不能为空！";
+			}
+
+		}
+		if (Util.isEmpty(validateMsgList) && validateMsgList.size() > 0) {
+			for (String string : validateMsgList) {
+				msg += string;
+			}
+		}
+		if (Util.isEmpty(validateEmptyList) && Util.isEmpty(validateMsgList)) {
+
+			return ResultObject.success("无错误");
+		} else {
+			return ResultObject.fail(msg);
+
+		}
 	}
 
 	private Customer contains(List<Customer> customers, Customer customer) {

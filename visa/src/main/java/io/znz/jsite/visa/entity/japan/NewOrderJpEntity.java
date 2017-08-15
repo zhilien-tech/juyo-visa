@@ -119,6 +119,12 @@ public class NewOrderJpEntity implements Serializable {
 	@Column
 	@Comment("文件地址")
 	private String fileurl;
+	@Column
+	@Comment("操作人id")
+	private String operatePersonId;
+	@Column
+	@Comment("受付番号")
+	private String completedNumber;
 
 	private CustomerManageEntity customermanage;
 

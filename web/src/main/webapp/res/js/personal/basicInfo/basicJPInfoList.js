@@ -304,18 +304,17 @@ var viewModel = kendo.observable({
     },
     // 曾用名
     oldNameEnable: function () {
-    	/*var oldNameEnable = viewModel.get("customer.oldname");
+    	/*var oldNameEnable = viewModel.get("customer.oldnameJp");
         var state = oldNameEnable ? oldNameEnable.length > 0 : false;*/
         /* return state;*/
-        ///return viewModel.get("customer.oldname");
+        ///return viewModel.get("customer.oldnameJp");
     	
     	/*var oldnames = JSON.stringify(viewModel.get("customer.oldnameJp.oldname"));
     	var state = viewModel.get("customer.oldnameJp.oldname")
 		|| viewModel.get("customer.oldnameJp.oldnameen")
 		|| viewModel.get("customer.oldnameJp.oldxing")
 		|| viewModel.get("customer.oldnameJp.oldxingen");*/
-        
-    	var a=viewModel.get("customer.oldname.id");
+    	var a=viewModel.get("customer.oldnameJp.id");
     	if(a>0){
     		$("input[oldname='oldname']").each(function(){
     			var labelTxt=$(this).parent().prev().text().trim();
@@ -449,10 +448,9 @@ $("#has_used_name").change(function () {
     viewModel.set("customer.oldnameJp.oldnameen", value);
     viewModel.set("customer.oldnameJp.oldxing", value);
     viewModel.set("customer.oldnameJp.oldxingen", value);*/
-    
     var a={"customer_jp_id":0,"id":0,"oldname":"","oldnameen":"","oldxing":"","oldxingen":""};
 	var b={"customer_jp_id":0,"id":-1,"oldname":"","oldnameen":"","oldxing":"","oldxingen":""};
-	viewModel.set("customer.oldname", $(this).is(':checked') ? a : b);
+	viewModel.set("customer.oldnameJp", $(this).is(':checked') ? a : b);
 });
 //其他国家居民
 $("#has_pr").change(function () {
@@ -680,4 +678,13 @@ function uploadFile(){
        'onUploadError':function(file, errorCode, errorMsg, errorString){
        }
 	});
+}
+//日本基本信息根据中文自动转为拼音
+function getPinYin(){
+	var oldxing = $("#old_usrname_cn").val();
+	var oldxingen = pinyinUtil.getPinyin(oldxing, '', false, false);
+	viewModel.set("customer.oldnameJp.oldxingen",oldxingen.toUpperCase());
+	var oldname = $("#old_given_name_cn").val();
+	var oldnameen = pinyinUtil.getPinyin(oldname, '', false, false);
+	viewModel.set("customer.oldnameJp.oldnameen",oldnameen.toUpperCase());
 }

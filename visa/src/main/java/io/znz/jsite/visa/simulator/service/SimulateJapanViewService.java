@@ -31,6 +31,7 @@ import org.nutz.dao.Dao;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
+import org.nutz.lang.Files;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -118,8 +119,8 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 
 			map.put("visaAccount", "1507-001");
 			map.put("visaPasswd", "kintsu2017");
-			map.put("agentNo", "GTP-BJ-084-0");
-			map.put("visaType1", 1);
+			map.put("agentNo", "gtu-sh-057-0");
+			map.put("visaType1", "2");
 
 			/*	map.put("visaType2", );*/
 			if (!Util.isEmpty(customerList) && customerList.size() > 0) {
@@ -137,7 +138,7 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 					chinesenameen = "";
 				}
 				map.put("proposerNameEN", chinesexingen + chinesenameen);
-				map.put("applicantCnt", customerList.size() - 1);//除申请人之外的人数
+				map.put("applicantCnt", (customerList.size() - 1) + "");//除申请人之外的人数
 			}
 
 			if (!Util.isEmpty(order)) {
@@ -150,7 +151,7 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 			if (!Util.isEmpty(map)) {
 				ResultObject ro = ResultObject.success(map);
 
-				ro.addAttribute("oid", orderid);
+				ro.addAttribute("oid", orderid + "");
 
 				return ro;
 			}
@@ -173,15 +174,15 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 		try {
 			Integer status = order.getStatus();
 			//验证提交状态
-			if (Util.isEmpty(status) || OrderVisaApproStatusEnum.readySubmit.intKey() != status) {
-				return ResultObject.fail("准备提交使馆的任务方可提交ds160！");
+			if (Util.isEmpty(status) || OrderVisaApproStatusEnum.DS.intKey() != status) {
+				return ResultObject.fail("准备提交使馆的任务方可提交！");
 			}
 
 			//签证状态改为'提交中'
 			dbDao.update(NewOrderJpEntity.class, Chain.make("status", OrderVisaApproStatusEnum.submiting.intKey()),
 					Cnd.where("id", "=", cid));
 		} catch (Exception e) {
-			return ResultObject.fail("ds160提交失败,请稍后重试！");
+			return ResultObject.fail("提交失败,请稍后重试！");
 		}
 		return ResultObject.success(order);
 
@@ -200,13 +201,18 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 		String visaFile = null;
 		try {
 			InputStream inputStream = file.getInputStream();
-			visaFile = Const.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, "zip", null);
-
+			String originalFilename = file.getOriginalFilename();
+			String suffix = Files.getSuffix(originalFilename);
+			if (Util.isEmpty(suffix) || suffix.length() < 2) {
+				return ResultObject.fail("文件名错误");
+			}
 			Integer status = order.getStatus();
 			//验证提交状态
 			if (Util.isEmpty(status) || OrderVisaApproStatusEnum.submiting.intKey() != status) {
-				return ResultObject.fail("已提交ds160的任务方可进行文件上传！");
+				return ResultObject.fail("已提交的任务方可进行文件上传！");
 			}
+			suffix = suffix.substring(1);
+			visaFile = Const.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, suffix, null);
 
 			//为客户设置文件地址，签证状态改为'已提交'
 			order.setStatus(OrderVisaApproStatusEnum.submited.intKey());
