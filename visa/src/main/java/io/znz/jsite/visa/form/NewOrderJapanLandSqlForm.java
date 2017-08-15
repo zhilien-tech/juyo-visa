@@ -42,7 +42,7 @@ public class NewOrderJapanLandSqlForm extends KenDoParamForm {
 		 * 默认使用了当前form关联entity的单表查询sql,如果是多表复杂sql，
 		 * 请使用sqlManager获取自定义的sql，并设置查询条件
 		 */
-		String sqlString = paramSqlManager.get("neworderjapan_mainproposer");
+		String sqlString = paramSqlManager.get("newcustomerjapan_landlist");
 		Sql sql = Sqls.create(sqlString);
 		sql.setCondition(cnd());
 		return sql;
