@@ -177,6 +177,9 @@ public class NewCustomerJpEntity implements Serializable {
 	@Column
 	@Comment("照片名字")
 	private String photoname;
+	//名字的全拼
+	private String fullnameen;
+
 	private NewWorkinfoJpEntity workinfoJp;
 
 	private List<NewFinanceJpEntity> financeJpList;
