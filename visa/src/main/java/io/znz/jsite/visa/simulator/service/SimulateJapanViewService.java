@@ -18,13 +18,22 @@ import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
 import io.znz.jsite.visa.simulator.form.JapanSimulatorForm;
 import io.znz.jsite.visa.util.Const;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -224,5 +233,70 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 		}
 		return ResultObject.success(visaFile);
 
+	}
+
+	/**
+	 * 代理下载文件
+	 * @param jpForm
+	 * @param response 
+	 */
+	public void agentDownload(final JapanSimulatorForm jpForm, HttpServletResponse response) {
+		InputStream is = null;
+		OutputStream out = null;
+		try {
+			String fileUrl = jpForm.getFileUrl();
+			URL url = new URL(fileUrl);
+			URLConnection conn = url.openConnection();
+			is = conn.getInputStream();
+
+			String filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+			if (Util.isEmpty(filename)) {//如果获取不到文件名称 
+				for (int i = 0;; i++) {
+					String mine = conn.getHeaderField(i);
+					if (mine == null)
+						break;
+					if ("content-disposition".equals(conn.getHeaderFieldKey(i).toLowerCase())) {
+						Matcher m = Pattern.compile(".*filename=(.*)").matcher(mine.toLowerCase());
+						if (m.find()) {
+							filename = m.group(1);
+						}
+					}
+				}
+			}
+			if (Util.isEmpty(filename)) {
+				filename = UUID.randomUUID() + ".tmp";//默认取一个文件名	
+			}
+			out = response.getOutputStream();
+			response.reset();
+			response.setContentType("application/octet-stream");
+			response.setCharacterEncoding("utf-8");
+			response.setHeader("Content-Disposition", String.format("attachment;filename=\"%s\"", filename));
+			byte[] buffer = new byte[2048];
+			int count = 0;
+			while ((count = is.read(buffer)) > 0) {
+				out.write(buffer, 0, count);
+			}
+			out.flush();
+			response.flushBuffer();
+			out.close();
+			is.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (!Util.isEmpty(is)) {
+					is.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				if (!Util.isEmpty(out)) {
+					out.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}//end of outter try
 	}
 }
