@@ -20,6 +20,22 @@ import urllib.request
 import urllib.error
 import requests
 
+from ctypes import cdll
+
+_sopen = cdll.msvcrt._sopen
+_close = cdll.msvcrt._close
+_SH_DENYRW = 0x10
+
+#判断文件是否被打开
+def is_open(filename):
+    if not os.access(filename, os.F_OK):
+        return False # file doesn't exist
+    h = _sopen(filename, 0, _SH_DENYRW, 0)
+    if h == 3:
+        _close(h)
+        return False # file is not opened by anyone else
+    return True # file is already open
+
 #函数定义  begin 
 #等待id为elm_id的元素可见
 def _wait_for_elm_by_id(elm_id,timeout = 3600):
@@ -106,8 +122,8 @@ def _buttonById(elmId,timeout=3600):
     logging.info("Click Button id: " + elmId)
 	
 #個人名簿登録
-def _buttonByCustomerName(customerName,buttonName="個人名簿登録"):
-    xpath="//tr/td/div[contains(text(),'"+customerName+"')]/../../following-sibling::tr[1]/td/input[@value='"+buttonName+"']"
+def _buttonByCustomerNameAndCount(customerName,count,buttonName="個人名簿登録"):
+    xpath="//tr/td/div[contains(text(),'"+customerName+"') and contains(text(),'"+count+"')]/../../following-sibling::tr[1]/td/input[@value='"+buttonName+"']"
     _wait_for_xpath(xpath)
     target=driver.find_element_by_xpath(xpath)
     driver.execute_script("arguments[0].scrollIntoView();", target) #拖动到可见的元素去
@@ -179,7 +195,10 @@ profile.set_preference('browser.download.folderList', 2)
 #不显示下载管理器
 profile.set_preference('browser.download.manager.showWhenStarting', False) 
 #MIME
-profile.set_preference("browser.helperApps.neverAsk.saveToDisk","application/octet-stream")
+profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/pdf")
+#自动下载pdf必须添加
+profile.set_preference("plugin.disable_full_page_plugin_for_types", "application/pdf")
+profile.set_preference("pdfjs.disabled", True)
 
 driver = webdriver.Firefox(profile)
 driver.get("https://churenkyosystem.com/member/login.php")
@@ -231,8 +250,8 @@ elm_input.send_keys(answer)
 answer = data_json["proposerNameEN"]
 _textInputByName("APPLICANT_PINYIN",answer)
 #人数
-answer = data_json["applicantCnt"]
-_textInputByName("NUMBER_OF_TOURISTS",answer)
+applicant_count = data_json["applicantCnt"]
+_textInputByName("NUMBER_OF_TOURISTS",applicant_count)
 
 #出入境时间
 answer = data_json["entryDate"]
@@ -282,10 +301,14 @@ time.sleep(2)
 _wait_for_xpath("//input[@name='BTN_SEARCH_x']")
 _buttonByName("BTN_SEARCH_x")
 
+#获取受付番号
+acceptance_number=driver.find_element_by_xpath("//tr/td/div[contains(text(),'廖 阳') and contains(text(),'1')]/../../td/a").getText()
+logging.info("受付番号 :%s",acceptance_number)
+
 #名簿登録
 answer = data_json["proposerNameCN"]
 _wait_for_elm_by_id("container",3600)
-_buttonByCustomerName(answer)
+_buttonByCustomerNameAndCount(answer,applicant_count)
 _buttonByName("BTN_ADD_CSV_x")
 
 # Upload excel page
@@ -323,24 +346,55 @@ _buttonByName("BTN_SEARCH_x")
 _wait_for_elm_by_id("container")
 answer = data_json["proposerNameCN"]
 _wait_for_elm_by_id("container",3600)
-_buttonByCustomerName(answer,"帰国報告")
+_buttonByCustomerNameAndCount(answer,applicant_count,"帰国報告")
 _wait_for_elm_by_id("container")
 _buttonByName("BTN_CHECK_x")
 
 _wait_for_elm_by_id("container")
 _buttonByName("BTN_CHECK_SUBMIT_x")
 
-#点击归国报告书表示
+#每次下载归国报告书之前判断文件夹里是否存在名为mpdf.pdf以及任务id为名的pdf文件，有的话则删除
+task_id=sys.argv[2]
+logging.info("task_id:" + task_id)
+
+default_download_name=workDir+"\\mpdf.pdf"
+pdf_name=workDir+"\\"+task_id+".pdf"
+if os.path.isfile(default_download_name):
+    os.remove(default_download_name)
+
+if os.path.isfile(pdf_name):
+    os.remove(pdf_name)
+
+#点击归国报告书表示(下载归国报告书)
 _wait_for_elm_by_id("container")
 _check_alert_to_close()
 elm_btn = driver.find_element_by_xpath("//input[@name='BTN_BACK_x' and @value='帰国報告書の表示']")
 driver.execute_script("arguments[0].scrollIntoView();", elm_btn) 
+driver.implicitly_wait(10)
 elm_btn.click()
-
-#pdf下载页面
 time.sleep(3)
 
-#归国报告书下载地址
+#等待下载完毕
+flag = 1
+while flag == 1 :
+    if os.path.isfile(default_download_name):
+        flag = 0
+
+#重命名,因为重命名文件导致元数据丢失，重命名后的pdf文件打不开，暂时不使用重命名了
+'''
+if os.path.isfile(default_download_name):
+    try:
+        logging.info("default_download_name:" + default_download_name)
+        os.rename(default_download_name,pdf_name)
+        logging.info("[success]download file successfully.")    
+    except urllib.error.HTTPError as e: 
+        logging.info(e)
+else:
+    logging.info("帰国報告書下载失败")
+'''
+
+#python脚本下载方式,未使用，留作参考
+'''
 download_url=""
 flag = 1
 while flag == 1 :
@@ -356,23 +410,31 @@ while flag == 1 :
             break
 
 task_id=sys.argv[2]
-pprint("task_id:" + task_id)
+logging.info("task_id:" + task_id)
 pdf_name=workDir+"\\"+task_id+".pdf"	
-pprint("pdf_name:" + pdf_name)
+logging.info("pdf_name:" + pdf_name)
 try:
     pprint("download_url:" + download_url)
     urllib.request.urlretrieve(download_url, pdf_name, callbackfunc)
     pprint("[succ]download file successfully.")    
 except urllib.error.HTTPError as e: 
-    pprint(e)	
-time.sleep(2)
-#上传文件
+    pprint(e)
+'''	
+
+time.sleep(3)
+#上传文件,上传完成后关闭文件
 upload_url="http://218.244.148.21:9004/visa/simulator/UploadJapan/"	+ task_id
-files = {'file':open(pdf_name, 'rb')}
-data = {}
+upload_file=open(default_download_name, 'rb')
+files = {'file':('report.pdf',upload_file,'application/pdf')}
+data = {acceptanceNumber:acceptance_number}
 resp = requests.post(upload_url, files=files, data = data)
 pprint(resp.text)
 result = json.loads(resp.text)
 if "SUCCESS" == result['code']:
-    logging.info("上传成功，任务:" + task_id + "执行完毕")
-    driver.quit()
+    logging.info("Upload SUCCESS，Task:" + task_id + "complete!")
+    upload_file.close()
+    
+#执行完成后把本地归国报告文件删除
+if os.path.isfile(default_download_name):
+    os.remove(default_download_name)   
+driver.quit()
