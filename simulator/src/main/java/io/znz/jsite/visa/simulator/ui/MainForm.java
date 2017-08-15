@@ -73,6 +73,8 @@ public class MainForm extends JPanel {
 
 	private static final String TASK_SUBMITING_URI = "visa/simulator/ds160Japan/";
 	private static final String VISA_UPLOAD_URI = "visa/simulator/UploadJapan/";
+
+	private static final String AGENT_DOWNLOAD_URL = "visa/simulator/agentDownload.html";
 	//	private static final String TASK_FETCH_URI = "visa/customer/fetch";
 
 	private static final String HISTORY = "history";
@@ -223,7 +225,8 @@ public class MainForm extends JPanel {
 						//保存名录excel文件
 						String suffix = Files.getSuffix(remoteFileUrl);
 						String localExcelUrl = tmp.getAbsolutePath() + File.separator + oid + suffix;
-						HttpClientUtil.download(remoteFileUrl, localExcelUrl);
+						String requestUrl = getBaseUrl() + AGENT_DOWNLOAD_URL;
+						HttpClientUtil.agentPostDownload(requestUrl, remoteFileUrl, localExcelUrl);
 
 						//替换json 中的文件为绝对路径，保存json文件
 						ro.getData().put("excelUrl", localExcelUrl);

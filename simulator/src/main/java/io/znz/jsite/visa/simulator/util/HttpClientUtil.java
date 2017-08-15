@@ -33,6 +33,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import com.google.common.collect.Maps;
+
 public class HttpClientUtil {
 
 	/**
@@ -107,6 +109,55 @@ public class HttpClientUtil {
 	}
 
 	public static final int cache = 10 * 1024;
+
+	/**
+	 * 远程post方式请求代理下载地址，进行文件下载
+	 *
+	 * @param requestUrl  代理文件下载的地址
+	 * @param fileUrl     欲下载的文件地址
+	 * @param localFile   下载完成后本地保存的文件全路径
+	 */
+	public static void agentPostDownload(String requestUrl, String fileUrl, String localFile) {
+		try {
+			CloseableHttpClient client = HttpClients.createDefault();
+			HttpPost httppost = new HttpPost(requestUrl);
+
+			Map<String, String> params = Maps.newHashMap();
+			params.put("fileUrl", fileUrl);
+
+			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+			Set<String> keySet = params.keySet();
+			for (String key : keySet) {
+				nvps.add(new BasicNameValuePair(key, params.get(key)));
+			}
+			try {
+				httppost.setEntity(new UrlEncodedFormEntity(nvps, Charset.forName("UTF-8")));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			HttpResponse response = client.execute(httppost);
+
+			HttpEntity entity = response.getEntity();
+			InputStream is = entity.getContent();
+			File file = new File(localFile);
+			file.getParentFile().mkdirs();
+			FileOutputStream fileout = new FileOutputStream(file);
+			/**
+			 * 根据实际运行效果 设置缓冲区大小
+			 */
+			byte[] buffer = new byte[2048];
+			int ch = 0;
+			while ((ch = is.read(buffer)) != -1) {
+				fileout.write(buffer, 0, ch);
+			}
+			is.close();
+			fileout.flush();
+			fileout.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static String download(String url, String filePath) {
 		try {
