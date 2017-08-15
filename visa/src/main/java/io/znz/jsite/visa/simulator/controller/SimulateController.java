@@ -10,6 +10,8 @@ import io.znz.jsite.visa.simulator.form.JapanSimulatorForm;
 import io.znz.jsite.visa.simulator.service.SimulateJapanViewService;
 import io.znz.jsite.visa.simulator.service.SimulateViewService;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -90,5 +92,13 @@ public class SimulateController {
 	public Object UploadJapan(@RequestParam(required = false) MultipartFile file, @PathVariable Long cid,
 			JapanSimulatorForm jpForm) {
 		return simulateJapanViewService.UploadJapan(file, cid, jpForm);
+	}
+
+	/**
+	 * 日本;将准备提交的任务修改为'提交中'
+	 */
+	@RequestMapping(value = "agentDownload", method = RequestMethod.POST)
+	public void agentDownload(final JapanSimulatorForm jpForm, HttpServletResponse response) {
+		simulateJapanViewService.agentDownload(jpForm, response);
 	}
 }

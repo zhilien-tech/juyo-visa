@@ -19,4 +19,7 @@ public class JapanSimulatorForm {
 	/**受付番号*/
 	private String acceptanceNumber;
 
+	/**代理下载文件地址*/
+	private String fileUrl;
+
 }

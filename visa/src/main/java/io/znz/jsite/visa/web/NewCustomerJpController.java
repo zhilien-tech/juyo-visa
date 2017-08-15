@@ -14,7 +14,7 @@ import io.znz.jsite.visa.entity.japan.NewOldnameJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOldpassportJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrderJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrthercountryJpEntity;
-import io.znz.jsite.visa.entity.japan.NewRecentlyintojpJpEntity;
+import io.znz.jsite.visa.entity.japan.NewRecentlyintojpEntity;
 import io.znz.jsite.visa.entity.japan.NewWorkinfoJpEntity;
 import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
 import io.znz.jsite.visa.service.NewCustomerJpService;
@@ -132,11 +132,19 @@ public class NewCustomerJpController {
 			customer.setOrthercountryJpList(relation);
 		}
 
-		List<NewRecentlyintojpJpEntity> teachinfo = dbDao.query(NewRecentlyintojpJpEntity.class,
+		NewRecentlyintojpEntity recentIntoJp = dbDao.fetch(NewRecentlyintojpEntity.class,
+				Cnd.where("customerJpId", "=", customer.getId()));
+		if (!Util.isEmpty(recentIntoJp)) {
+			customer.setRecentlyintojp(recentIntoJp);
+		} else {
+			customer.setRecentlyintojp(new NewRecentlyintojpEntity());
+		}
+
+		/*List<NewRecentlyintojpJpEntity> teachinfo = dbDao.query(NewRecentlyintojpJpEntity.class,
 				Cnd.where("customer_jp_id", "=", customer.getId()), null);
 		if (!Util.isEmpty(teachinfo) && teachinfo.size() > 0) {
 			customer.setRecentlyintojpJpList(teachinfo);
-		}
+		}*/
 
 		return customer;
 	}
