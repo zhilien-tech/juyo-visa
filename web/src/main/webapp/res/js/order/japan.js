@@ -103,8 +103,7 @@ function regCmd(command) {
                 			 layer.msg("分享成功",{time: 2000});
                 		} else if(resp.code === "FAIL"){
                 				if(index!=null){
-        						
-            					layer.close(index);
+                					layer.close(index);
             					}
                 			$.layer.alert(resp.msg);
                 		}else{

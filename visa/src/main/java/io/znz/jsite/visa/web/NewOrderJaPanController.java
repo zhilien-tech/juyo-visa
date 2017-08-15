@@ -92,9 +92,9 @@ import com.uxuexi.core.db.dao.IDbDao;
 import com.uxuexi.core.db.util.DbSqlUtil;
 
 /**
- * TODO(这里用一句话描述这个类的作用)
+ * 
  * <p>
- * TODO(这里描述这个类补充说明 – 可选)
+ * 
  *
  * @author   孙斌
  * @Date	 2017年6月21日 	 
@@ -153,7 +153,7 @@ public class NewOrderJaPanController {
 	 *
 	 * @param customers
 	 * @param customer
-	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 * @return 
 	 */
 	@RequestMapping(value = "childList")
 	@ResponseBody
@@ -174,7 +174,7 @@ public class NewOrderJaPanController {
 	 *
 	 * @param customers
 	 * @param customer
-	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 * @return 
 	 */
 	@RequestMapping(value = "orderJpsave")
 	@ResponseBody
@@ -764,7 +764,7 @@ public class NewOrderJaPanController {
 	 *信息编辑界面的数据回显
 	 *
 	 * @param orderid
-	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 * @return 
 	 */
 	@RequestMapping(value = "showDetail")
 	@ResponseBody
@@ -854,7 +854,6 @@ public class NewOrderJaPanController {
 					n.setIntime(df.parse(df1.format(n.getIntime())));
 				} catch (ParseException e) {
 
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 
 				}
@@ -865,7 +864,6 @@ public class NewOrderJaPanController {
 					n.setOuttime(df.parse(df1.format(n.getOuttime())));
 				} catch (ParseException e) {
 
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 
 				}
@@ -947,7 +945,6 @@ public class NewOrderJaPanController {
 					nutDao.update(employeeEntity);
 				} catch (Exception e) {
 
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 
 				}*/
@@ -1315,7 +1312,7 @@ public class NewOrderJaPanController {
 	 * 
 	 *日本的递送回显
 	 * @param orderid
-	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 * @return 
 	 */
 
 	@RequestMapping(value = "deliveryusa")
@@ -1331,7 +1328,7 @@ public class NewOrderJaPanController {
 	 * 
 	 *日本的递送保存
 	 * @param orderid
-	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 * @return 
 	 */
 
 	@RequestMapping(value = "deliveryJpsave")
@@ -1496,6 +1493,7 @@ public class NewOrderJaPanController {
 				customer.setOrthercountryJpList(relation);
 			}
 
+			//TODO
 			List<NewRecentlyintojpJpEntity> teachinfo = dbDao.query(NewRecentlyintojpJpEntity.class,
 					Cnd.where("customer_jp_id", "=", customer.getId()), null);
 			if (!Util.isEmpty(teachinfo) && teachinfo.size() > 0) {
@@ -2095,6 +2093,7 @@ public class NewOrderJaPanController {
 					customer.setOrthercountryJpList(relation);
 				}
 
+				//TODO
 				List<NewRecentlyintojpJpEntity> teachinfo = dbDao.query(NewRecentlyintojpJpEntity.class,
 						Cnd.where("customer_jp_id", "=", customer.getId()), null);
 				if (!Util.isEmpty(teachinfo) && teachinfo.size() > 0) {
@@ -2139,7 +2138,6 @@ public class NewOrderJaPanController {
 				is = new FileInputStream(createTempFile);
 			} catch (FileNotFoundException e) {
 
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 
 			}

@@ -189,6 +189,8 @@ public class NewCustomerJpEntity implements Serializable {
 
 	private List<NewRecentlyintojpJpEntity> recentlyintojpJpList;
 
+	private NewRecentlyintojpEntity recentlyintojp;
+
 	public boolean isMain() {
 		return this.main;
 	}

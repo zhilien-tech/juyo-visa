@@ -15,7 +15,7 @@ import io.znz.jsite.visa.entity.japan.NewOldpassportJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrderJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrthercountryJpEntity;
 import io.znz.jsite.visa.entity.japan.NewProposerInfoJpEntity;
-import io.znz.jsite.visa.entity.japan.NewRecentlyintojpJpEntity;
+import io.znz.jsite.visa.entity.japan.NewRecentlyintojpEntity;
 import io.znz.jsite.visa.entity.japan.NewWorkinfoJpEntity;
 
 import java.text.ParseException;
@@ -156,7 +156,30 @@ public class NewCustomerJpService {
 			}
 		}
 
-		List<NewRecentlyintojpJpEntity> oldworkslist = customer.getRecentlyintojpJpList();
+		//修改为最近一次入境信息
+		NewRecentlyintojpEntity recentlyintojp = customer.getRecentlyintojp();
+		if (!Util.isEmpty(recentlyintojp)) {
+			if (!Util.isEmpty(recentlyintojp.getId()) && recentlyintojp.getId() > 0) {
+				nutDao.update(recentlyintojp);
+			} else {
+				recentlyintojp.setCustomerJpId(customer.getId());
+				recentlyintojp.setCreateTime(new Date());
+				dbDao.insert(recentlyintojp);
+			}
+		}
+		/*Long customerId = customer.getId();
+		NewRecentlyintojpEntity recentIntoJp = dbDao.fetch(NewRecentlyintojpEntity.class,
+				Cnd.where("customerJpId", "=", customerId));
+		if (!Util.isEmpty(recentIntoJp)) {
+			dbDao.delete(recentIntoJp);
+		}
+		NewRecentlyintojpEntity recentlyintojp = customer.getRecentlyintojp();
+		recentlyintojp.setId(customerId);
+		recentlyintojp.setCreateTime(DateUtil.nowDate());
+		dbDao.insert(recentlyintojp);*/
+
+		//最近5次入境信息
+		/*List<NewRecentlyintojpJpEntity> oldworkslist = customer.getRecentlyintojpJpList();
 		List<NewRecentlyintojpJpEntity> list1 = dbDao.query(NewRecentlyintojpJpEntity.class,
 				Cnd.where("customer_jp_id", "=", customer.getId()), null);
 		if (!Util.isEmpty(list1) && list1.size() > 0) {
@@ -165,15 +188,15 @@ public class NewCustomerJpService {
 		}
 		if (!Util.isEmpty(oldworkslist) && oldworkslist.size() > 0) {
 			for (NewRecentlyintojpJpEntity newLanguageEntity : oldworkslist) {
-				/*if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
+				if (!Util.isEmpty(newLanguageEntity.getId()) && newLanguageEntity.getId() > 0) {
 					nutDao.update(newLanguageEntity);
 				} else {
-				*/
+				
 				newLanguageEntity.setCustomer_jp_id(customer.getId());
 				dbDao.insert(newLanguageEntity);
 				//}
 			}
-		}
+		}*/
 		List<NewFinanceJpEntity> orthercountrylist = customer.getFinanceJpList();
 		List<NewFinanceJpEntity> list2 = dbDao.query(NewFinanceJpEntity.class,
 				Cnd.where("customer_jp_id", "=", customer.getId()), null);
@@ -216,5 +239,4 @@ public class NewCustomerJpService {
 		return ResultObject.success("修改成功");
 
 	}
-
 }

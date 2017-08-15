@@ -81,6 +81,18 @@ ALTER TABLE `visa_new_comebaby_jp`
 ADD COLUMN `sealSQUrl`  varchar(255) NULL COMMENT '送签社印章地址' AFTER `sealName`,
 ADD COLUMN `sealSQName`  varchar(255) NULL COMMENT '送签社印章名称' AFTER `sealSQUrl`;
 
+CREATE TABLE `visa_new_recentlyintojp` (
+`id`  int(32) NOT NULL AUTO_INCREMENT COMMENT '主键',
+`customerJpId`  int(32) NULL COMMENT '客户管理id' ,
+`intoDate`  datetime NULL COMMENT '入境时间' ,
+`outofDate`  datetime NULL COMMENT '出境时间' ,
+`stayDays`  varchar(255) NULL COMMENT '停留天数' ,
+`createTime`  datetime NULL COMMENT '创建时间' ,
+PRIMARY KEY (`id`)
+);
+
+
+
 /******************************************************************************
 version : 7.0.0   end
 ******************************************************************************/ 
