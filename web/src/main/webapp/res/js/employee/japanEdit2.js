@@ -829,9 +829,8 @@ $(function () {
         	//console.log(JSON.stringify(resp));
         	viewModel.set("customer", $.extend(true, defaults, resp));
         	
-        	//对东三县和东六县的处理
         	var visatype=viewModel.get("customer.visatype");
-    		if(visatype==2 || visatype==3 || visatype==4){
+    		if(visatype==2 || visatype==3 || visatype==4){ //东三县，新三县，冲绳，选择时，下方均出现7个县，允许多选
     			var sixnumstr=viewModel.get("customer.sixnum");
     			$('.dongSanXian').hide();
         		$('.dongliuXian').show();

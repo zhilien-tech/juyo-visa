@@ -61,14 +61,18 @@ var errorNum=[];
 var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
 //信息保存
 function ordersave(){
-	var  imgurl=viewModel.get("customer.sealUrl");
+	
 	var flag=true;
+	var imgurl=viewModel.get("customer.sealUrl");
+	var sqImgurl=viewModel.get("customer.sealSQUrl");
 	var  comType=viewModel.get("customer.comType");
 	
-	
 	if(comType==2){
-		
 		if(imgurl==null||imgurl==''){
+			flag=false;
+		}
+	}else{
+		if(sqImgurl==null||sqImgurl==''){
 			flag=false;
 		}
 	}
@@ -138,6 +142,13 @@ function ordersave(){
 					str+="不能为空！";
 				}
 			}
+		}else{
+			if(sqImgurl==null||sqImgurl==''){
+				str+="公司公章,";
+				if(validatable.validate()){
+					str+="不能为空！";
+				}
+			}
 		}
 		if(emptyNum.length>0){
 			
@@ -176,9 +187,12 @@ $(function () {
         			$('#1').show();
         			$('#2').show();
         			$('.songqianshe-div').show();//显示 送签社：担当者/携带电话/TEL/FAX
-        			$('.companyChopDiv').hide();//隐藏 上传公司公章部分
+        			//$('.companyChopDiv').hide();//隐藏 上传公司公章部分
         			$('.dijieshe-div').hide();//隐藏  地接社：担当者/TEL
-        			
+        			var sealSQUrl=viewModel.get("customer.sealSQUrl");
+        			if(sealSQUrl!=null&&sealSQUrl!=''){
+        				$("#sqImg").attr('src',sealSQUrl);
+        			}
         			
         			$("input[send='send']").each(function(){
         				var labelTxt=$(this).parent().prev().text().trim();
@@ -200,7 +214,7 @@ $(function () {
         			});
         		}else if(a==2){
         			$('.dijieshe-div').show();//显示 地接社：担当者/TEL 
-        			$('.companyChopDiv').show();//显示 上传公司公章部分
+        			//$('.companyChopDiv').show();//显示 上传公司公章部分
         			$('.songqianshe-div').hide();//隐藏 送签社：担当者/携带电话/TEL/FAX
         			$('#1').hide();
         			$('#2').hide();

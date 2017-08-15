@@ -375,7 +375,8 @@ var grid = $("#grid").kendoGrid({
         {field: 'senddate', title: '送签时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.senddate#'>#=data.senddate?kendo.toString(data.senddate, 'yyyy-MM-dd'):''#</span>"},
         {field: 'outdate', title: '出签时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.outdate#'>#=data.outdate?kendo.toString(data.outdate, 'yyyy-MM-dd'):''#</span>"},
         {field: 'headnum', title: '人数', values: ["美国", "日本"], width: 75,},
-        {field: 'countrytype', title: '国家', width: 80,values:countrylist},
+        {field: 'completednumber', title: '受付番号', width: 100,},
+        /*{field: 'countrytype', title: '国家', width: 80,values:countrylist},*/
         {field: 'status', title: '状态',values:statuslist, width: 80,},
         {
             title: "操作", width: 295,
