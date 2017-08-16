@@ -123,6 +123,9 @@ public class NewOrderJpEntity implements Serializable {
 	@Comment("操作人id")
 	private Integer operatePersonId;
 	@Column
+	@Comment("判断是否为日本地接社添加的")
+	private Integer island;
+	@Column
 	@Comment("受付番号")
 	private String completedNumber;
 

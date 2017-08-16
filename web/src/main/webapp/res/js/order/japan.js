@@ -17,6 +17,11 @@ var statuslist=[
                 {text:"初审通过",value:4},
                 {text:"初审拒绝",value:5},
                 {text:"递送",value:17},
+                {text:"发招宝中",value:18},
+                {text:"已发招宝",value:19},
+                {text:"发招宝失败",value:20},
+                {text:"归国报告",value:21},
+                {text:"归国报告失败",value:22}
 /*                {text:"DS-160",value:7},
                 {text:"准备提交使馆",value:8},
                 {text:"已提交使馆",value:9},
@@ -275,7 +280,7 @@ function detailInit(e) {
                 command: [
 
                     {name: "customerEdit1", imageClass:false, text: "编辑"},
-                /*    {name: " ", imageClass: "base fa-send", text: "递送"},
+                /*  {name: " ", imageClass: "base fa-send", text: "递送"},
                     {name: "share", imageClass: "base fa-share-alt", text: "分享"	
                     },//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
                     {name: "notice", imageClass: "base fa-bell-o", text: "通知"},*/
@@ -378,7 +383,7 @@ var grid = $("#grid").kendoGrid({
         /*{field: 'countrytype', title: '国家', width: 80,values:countrylist},*/
         {field: 'status', title: '状态',values:statuslist, width: 80,},
         {
-            title: "操作", width: 295,
+            title: "操作", width: 240,
             command: [
                 {name: "modify", imageClass:false, text: " 编辑"},
                 {name: "shareall", imageClass:false, text: "分享"},

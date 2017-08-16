@@ -37,3 +37,4 @@ ol, ul {padding-left: 0;list-style: none;}
 span.k-icon.false {width: 0;}
 #nextStepBtn {margin-bottom: 30px;}
 #back {line-height: 35px;}
+.k-grid tbody .k-button, .k-ie8 .k-grid tbody button.k-button {min-width: 45px;}
