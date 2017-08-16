@@ -280,7 +280,7 @@ function detailInit(e) {
                 command: [
 
                     {name: "customerEdit1", imageClass:false, text: "编辑"},
-                /*    {name: " ", imageClass: "base fa-send", text: "递送"},
+                /*  {name: " ", imageClass: "base fa-send", text: "递送"},
                     {name: "share", imageClass: "base fa-share-alt", text: "分享"	
                     },//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
                     {name: "notice", imageClass: "base fa-bell-o", text: "通知"},*/
@@ -383,7 +383,7 @@ var grid = $("#grid").kendoGrid({
         /*{field: 'countrytype', title: '国家', width: 80,values:countrylist},*/
         {field: 'status', title: '状态',values:statuslist, width: 80,},
         {
-            title: "操作", width: 295,
+            title: "操作", width: 240,
             command: [
                 {name: "modify", imageClass:false, text: " 编辑"},
                 {name: "shareall", imageClass:false, text: "分享"},
