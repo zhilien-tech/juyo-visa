@@ -187,6 +187,12 @@ public class NewOrderJaPanController {
 			long comId = company.getComId();
 			order.setComId(comId);
 		}
+
+		io.znz.jsite.core.entity.EmployeeEntity user = (io.znz.jsite.core.entity.EmployeeEntity) session
+				.getAttribute(Const.SESSION_NAME);
+		if (!Util.isEmpty(user)) {
+			order.setOperatePersonId(user.getId());
+		}
 		//根据他们的id是否存在判断是更新还是删除
 		NewOrderJpEntity orderOld = order;
 		if (!Util.isEmpty(order.getId()) && order.getId() > 0) {
@@ -1549,6 +1555,7 @@ public class NewOrderJaPanController {
 		}
 		String fileName = URLEncoder.encode(str + "-" + order.getOrdernumber() + ".zip", "UTF-8");
 		resp.setContentType("application/zip");
+		resp.setHeader("Set-Cookie", "fileDownload=true; path=/");
 		resp.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
 		IOUtils.write(bytes, resp.getOutputStream());
 		return ResultObject.fail("PDF生成失败!");

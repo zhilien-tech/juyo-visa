@@ -98,16 +98,24 @@ var errorNum=[];
 function downloadsave(){
 	var sendComId=viewModel.customer.sendComId;
 	var landComId=viewModel.customer.landComId;
+	var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 	 $.fileDownload("/visa/neworderjp/export?orderid=" + $.queryString("cid")+"&sendComId="+sendComId+"&landComId="+landComId, {
          successCallback: function (url) {
-             $.layer.alert('文件不存在 :' + url);
+        		if(indexnew!=null){
+            		layer.close(indexnew);
+            	}
          },
          failCallback: function (html, url) {
-             if (html.indexOf('<') >= 0) {
+            /* if (html.indexOf('<') >= 0) {
                  html = $(html).text();
              }
              var json = JSON.parse(html);
-             $.layer.alert(json.msg);
+             $.layer.alert(json.msg);*/
+        		if(indexnew!=null){
+            		layer.close(indexnew);
+            	}
+        		$.layer.alert("下载失败");
+        		
          }
      });
 /*	 var iframebody = layer.getChildFrame('body', index); //获取窗口索引
