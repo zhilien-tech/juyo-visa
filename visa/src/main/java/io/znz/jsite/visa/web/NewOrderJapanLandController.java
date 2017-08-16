@@ -2157,7 +2157,7 @@ public class NewOrderJapanLandController {
 			String uploadImage = qiniuUploadService.uploadImage(is, "xlsx", null);
 			String url = io.znz.jsite.visa.util.Const.IMAGES_SERVER_ADDR + uploadImage;
 			order.setExcelurl(url);
-			order.setStatus(OrderVisaApproStatusEnum.japancoming.intKey());
+			order.setStatus(OrderVisaApproStatusEnum.readySubmit.intKey());
 			dbDao.update(order, null);
 			//================================结束======================================================
 
