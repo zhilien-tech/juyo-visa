@@ -718,6 +718,13 @@ function orderJpsave(){
 		//清空验证的数组
 		emptyNum.splice(0,emptyNum.length);
 		errorNum.splice(0,errorNum.length);
+		//判断是否为日本地接社添加的
+		var island=$.queryString("island");
+		if(island==1){
+			viewModel.set("customer.island",1);
+		}
+		
+		
 		//对东三县东六县的值进行处理
 		var visatype=viewModel.get("customer.visatype");
 		if(visatype==2 || visatype==3 || visatype==4){

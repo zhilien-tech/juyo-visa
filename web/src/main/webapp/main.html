@@ -665,6 +665,7 @@
 
 <!--父窗口的图片查看器 配合$.photos 使用-->
 <link rel="stylesheet" href="/res/plugin/lightGallery/css/lightgallery.css"/>
+<script src="/res/js/projectpath/projectpath.js"></script>
 <script src="/res/plugin/lightGallery/js/lightgallery.js"></script>
 <script type="text/javascript">
     function photos(array) {
@@ -675,6 +676,9 @@
         });
     }
     $(function () {
+    	if (top != window){//session过期后跳到登录页
+    		top.location.href = window.location.href;
+    	} 
     	/* for(var i=1;i<25;i++){
     		$("#"+i).hide();
     	}
@@ -729,14 +733,16 @@
     	//显示登录人姓名
     	var username=$.queryString("username");
     	var usertype=$.queryString("userType");
+    	
     	if(usertype==2 || usertype==3 || usertype==4){
     		$(".personalInfoA").removeAttr("href");
+    	}else if(usertype=="" || usertype==null || usertype== undefined ){
+    		window.location.href= localhostPaht + "/login/logout";
     	}
     	
     	if(username!=null&&username!=''){
-    		
-    	var j = JSON.parse($.base64.atob(decodeURI(username),true));
-    	$("#userId").text(j);
+	    	var j = JSON.parse($.base64.atob(decodeURI(username),true));
+	    	$("#userId").text(j);
     	}
     	var logintype=$.queryString("logintype");
     	/* if(logintype != "" && logintype != null && logintype == 1){//1表示进入日本的签证状态
@@ -753,22 +759,18 @@
     	if(logintype != "" && logintype != null && logintype == 1){//1表示进入日本的签证状态
         	$('.J_iframe').attr('src','order/america.html'); 
     		$('#homePage').html('<a href="javascript:;" class="active J_menuTab" data-id="order/america.html">美国 </a>');
-    		
         }else if(logintype == 4){
         	$('.J_iframe').attr('src','company/companylist.html'); 
     		$('#homePage').html('<a href="javascript:;" class="active J_menuTab" data-id="company/companylist.html">公司管理 </a>');
         }else{
         	if(logintype==5){
-        		
-        	$('.J_iframe').attr('src','myvisa/transactVisa/visaNationList.html?logintype=5&secretMsg='+$.queryString('secretMsg')); 
-    		$('#homePage').html('<a href="javascript:;" class="active J_menuTab" data-id="myvisa/transactVisa/visaNationList.html?logintype=5">办理中签证 </a>');
+	        	$('.J_iframe').attr('src','myvisa/transactVisa/visaNationList.html?logintype=5&secretMsg='+$.queryString('secretMsg')); 
+	    		$('#homePage').html('<a href="javascript:;" class="active J_menuTab" data-id="myvisa/transactVisa/visaNationList.html?logintype=5">办理中签证 </a>');
         	}else{
-        		
-        	$('.J_iframe').attr('src','myvisa/transactVisa/visaNationList.html'); 
-    		$('#homePage').html('<a href="javascript:;" class="active J_menuTab" data-id="myvisa/transactVisa/visaNationList.html">办理中签证 </a>');
+	        	$('.J_iframe').attr('src','myvisa/transactVisa/visaNationList.html'); 
+	    		$('#homePage').html('<a href="javascript:;" class="active J_menuTab" data-id="myvisa/transactVisa/visaNationList.html">办理中签证 </a>');
         	}
         }
-        
         $.getJSON("/sys/user/curr",function(result){
             $("#name").html(result.name);
             $("#role").html(result.role);

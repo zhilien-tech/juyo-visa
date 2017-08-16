@@ -91,6 +91,8 @@ CREATE TABLE `visa_new_recentlyintojp` (
 PRIMARY KEY (`id`)
 );
 
+ALTER TABLE `visa_new_order_jp`
+ADD COLUMN `island`  int NULL COMMENT '判断是否为日本地接社添加的' AFTER `completedNumber`;
 
 
 /******************************************************************************

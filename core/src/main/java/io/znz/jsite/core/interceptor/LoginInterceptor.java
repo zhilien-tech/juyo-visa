@@ -60,11 +60,15 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		/*if (nowurl.equals(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/")) {
 			return true;
 		}*/
+		// 判断是否是首次登陆 
+		//String requestURI = request.getRequestURI().toLowerCase();
+		//boolean isLogin = requestURI.indexOf("login") >= 0;
+
 		//从session中取出当前登录用户信息
 		EmployeeEntity user = (EmployeeEntity) request.getSession().getAttribute(Const.SESSION_NAME);
 		if (Util.isEmpty(user)) {
-			//request.getRequestDispatcher("/index.html").forward(request, response);
-			response.sendRedirect("/index.html");
+			//request.getRequestDispatcher("/login/logout").forward(request, response);
+			response.sendRedirect("/index.html?aaa=1" + "&bbb=2");
 			return false;
 		}
 		return true;
