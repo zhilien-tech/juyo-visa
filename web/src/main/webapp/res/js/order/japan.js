@@ -17,6 +17,11 @@ var statuslist=[
                 {text:"初审通过",value:4},
                 {text:"初审拒绝",value:5},
                 {text:"递送",value:17},
+                {text:"发招宝中",value:18},
+                {text:"已发招宝",value:19},
+                {text:"发招宝失败",value:20},
+                {text:"归国报告",value:21},
+                {text:"归国报告失败",value:22}
 /*                {text:"DS-160",value:7},
                 {text:"准备提交使馆",value:8},
                 {text:"已提交使馆",value:9},
