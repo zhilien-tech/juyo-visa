@@ -398,7 +398,7 @@ var grid = $("#grid").kendoGrid({
 /*        {field: 'countrytype', title: '签证类型', width: 80,values:countrylist},*/
         {field: 'status', title: '状态',values:statuslist, width: 75,},
         {
-            title: "操作", width:155,
+            title: "操作", width:180,
             command: [
                 {name: "modify", imageClass:false, text: "编辑"},
                 {name: "validate", imageClass:false, text: "发招宝"},

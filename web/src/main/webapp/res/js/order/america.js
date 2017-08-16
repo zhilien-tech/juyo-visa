@@ -248,7 +248,7 @@ function detailInit(e) {
             {field: 'outtime', title: '出签时间',format: "{0: yyyy-MM-dd}"},
             {field: 'status', title: ' 状态',values:statuslist},
             { 
-                title: "操作", width: 300,
+                title: "操作", width: 230,
                 command: [
                     {name: "customerEdit", imageClass:false, text: "编辑"},
                     {name: "share", imageClass:false, text: "分享"},//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
@@ -348,7 +348,7 @@ var grid = $("#grid").kendoGrid({
         {field: 'countrytype', title: '国家', width: 80,values:countrylist},
         {field: 'status', title: '状态',values:statuslist, width: 80,},
         {
-            title: "操作", width: 280,
+            title: "操作", width: 250,
             command: [
                 {name: "modify", imageClass:false, text: " 编辑"},
                 {name: "shareall", imageClass:false, text: "批量分享"},
