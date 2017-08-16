@@ -5,7 +5,23 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
   <display-name>JSite WEB</display-name>
-
+  	<session-config>
+		<session-timeout>60</session-timeout>
+	</session-config>
+	<!-- SSL -->
+	<!-- <login-config> 
+		<auth-method>CLIENT-CERT</auth-method> 
+		<realm-name>Client Cert Users-only Area</realm-name> 
+	</login-config> 
+	<security-constraint> 
+		<web-resource-collection> 
+			<web-resource-name>SSL-LOGIN</web-resource-name> 
+			<url-pattern>/index.html</url-pattern> 
+		</web-resource-collection> 
+		<user-data-constraint> 
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee> 
+		</user-data-constraint> 
+	</security-constraint> -->
   <!--客户端请求的静态资源如图片、JS文件等的请求交由默认的servlet进行处理,要写在DispatcherServlet的前面-->
   
  <servlet-mapping>
