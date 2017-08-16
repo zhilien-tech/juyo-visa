@@ -109,19 +109,18 @@ var viewModel = kendo.observable({
         var intoDate = viewModel.get("customer.recentlyintojp.intoDate")+"";
         //出境时间
         var outofDate = viewModel.get("customer.recentlyintojp.outofDate")+"";
-     	//日期差
-        var dateDifference =null;
-    	var a=new Date(Date.parse((intoDate).replace(/-/g, "/"))).getTime();
-    	var b=new Date(Date.parse((outofDate).replace(/-/g, "/"))).getTime();
+    	//日期差
+        var dateDifference = 0;
+    	var a=new Date(Date.parse((intoDate))).getTime();
+    	var b=new Date(Date.parse((outofDate))).getTime();
     	var daynum=(b-a)/(1000*3600*24);
-    	if(daynum<0){
-    		dateDifference = 0;
-    	}else if(daynum>0){
+    	if(daynum>=0){
     		dateDifference = Math.ceil(daynum)+1;
     	}else{
-    		dateDifference = 1;
+    		dateDifference = 0;
     	}
     	viewModel.set("customer.recentlyintojp.stayDays", dateDifference);
+        
     },
     onDateChange: function (e) {
         var target = e.sender.element.attr("id");
