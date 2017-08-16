@@ -23,7 +23,7 @@ var statuslist=[
                 {text:"发招宝失败",value:20},
                 {text:"归国报告",value:21},
                 {text:"归国报告失败",value:22}
-/*                {text:"DS-160",value:7},
+                /*                {text:"DS-160",value:7},
 
                 {text:"准备提交使馆",value:8},
                 {text:"已提交使馆",value:9},
@@ -281,13 +281,9 @@ function detailInit(e) {
 		        	  title: "操作",
 		        	  command: [
 
-<<<<<<< HEAD
 		        	            {name: "customerEdit1", imageClass:false, text: "编辑"},
-		        	            /*    {name: " ", imageClass: "base fa-send", text: "递送"},
-=======
-                    {name: "customerEdit1", imageClass:false, text: "编辑"},
-                /*  {name: " ", imageClass: "base fa-send", text: "递送"},
->>>>>>> refs/remotes/origin/master
+		        	            /*  {name: " ", imageClass: "base fa-send", text: "递送"},
+
                     {name: "share", imageClass: "base fa-share-alt", text: "分享"	
                     },//,template: "<span class='ellipsis' title='#=data.sharecount#'>#=data.chinesefullname#</span>"
                     {name: "notice", imageClass: "base fa-bell-o", text: "通知"},*/
@@ -374,7 +370,7 @@ var grid = $("#grid").kendoGrid({
       	template: "<span class='row-number'></span>",
       	width:75
       },*/
-<<<<<<< HEAD
+
 	          {
 	        	  field: 'ordernumber', title: ' 订单号', width: 130,
 	        	  template: "<span class='ellipsis' title='#=ordernumber#'>#=ordernumber#</span>",
@@ -391,7 +387,7 @@ var grid = $("#grid").kendoGrid({
 	          /*{field: 'countrytype', title: '国家', width: 80,values:countrylist},*/
 	          {field: 'status', title: '状态',values:statuslist, width: 80,},
 	          {
-	        	  title: "操作", width: 295,
+	        	  title: "操作", width: 240,
 	        	  command: [
 	        	            {name: "modify", imageClass:false, text: " 编辑"},
 	        	            {name: "shareall", imageClass:false, text: "分享"},
@@ -406,39 +402,7 @@ var grid = $("#grid").kendoGrid({
 	        	            ]
 	          }
 	          ]/*,
-=======
-        {
-            field: 'ordernumber', title: ' 订单号', width: 130,
-            template: "<span class='ellipsis' title='#=ordernumber#'>#=ordernumber#</span>",
-            editor: function (container, options) {
-                container.hide().prev().hide();
-            }
-        },
-        {field: 'linkman', title: '联系人', width: 90,template: "<span class='ellipsis' title='#=data.linkman#'>#=data.linkman?data.linkman:''#</span>"},
-        {field: 'telephone', title: '电话',template: "<span class='ellipsis' title='#=data.telephone#'>#=data.telephone?data.telephone:''#</span>"},
-        {field: 'senddate', title: '送签时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.senddate#'>#=data.senddate?kendo.toString(data.senddate, 'yyyy-MM-dd'):''#</span>"},
-        {field: 'outdate', title: '出签时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.outdate#'>#=data.outdate?kendo.toString(data.outdate, 'yyyy-MM-dd'):''#</span>"},
-        {field: 'headnum', title: '人数', values: ["美国", "日本"], width: 75,},
-        {field: 'completednumber', title: '受付番号', width: 100,},
-        /*{field: 'countrytype', title: '国家', width: 80,values:countrylist},*/
-        {field: 'status', title: '状态',values:statuslist, width: 80,},
-        {
-            title: "操作", width: 240,
-            command: [
-                {name: "modify", imageClass:false, text: " 编辑"},
-                {name: "shareall", imageClass:false, text: "分享"},
-                /*{name: "delivery", imageClass:false, text: "递送"},*/
-                {name: "validate", imageClass:false, text: "递送"},
-                {name: "download", imageClass:false, text: "下载"},
-                regCmd("modify"),
-                regCmd("shareall"),
-                regCmd("download"),
-                /*regCmd("delivery"),*/
-                regCmd("validate"),
-            ]
-        }
-    ]/*,
->>>>>>> refs/remotes/origin/master
+
     dataBound: function () {  
         var rows = this.items();  
         $(rows).each(function () {  
