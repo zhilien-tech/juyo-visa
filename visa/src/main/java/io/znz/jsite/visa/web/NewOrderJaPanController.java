@@ -44,6 +44,7 @@ import io.znz.jsite.visa.enums.GenderEnum;
 import io.znz.jsite.visa.enums.OrderJapancustomersourceEnum;
 import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
 import io.znz.jsite.visa.enums.UserTypeEnum;
+import io.znz.jsite.visa.enums.VisaJapanApproStatusEnum;
 import io.znz.jsite.visa.form.NewOrderJapanSqlForm;
 import io.znz.jsite.visa.newpdf.NewPdfService;
 import io.znz.jsite.visa.newpdf.NewTemplate;
@@ -2151,7 +2152,7 @@ public class NewOrderJaPanController {
 			String uploadImage = qiniuUploadService.uploadImage(is, "xlsx", null);
 			String url = io.znz.jsite.visa.util.Const.IMAGES_SERVER_ADDR + uploadImage;
 			order.setExcelurl(url);
-			order.setStatus(OrderVisaApproStatusEnum.readySubmit.intKey());
+			order.setStatus(VisaJapanApproStatusEnum.readySubmit.intKey());
 			dbDao.update(order, null);
 			//================================结束======================================================
 

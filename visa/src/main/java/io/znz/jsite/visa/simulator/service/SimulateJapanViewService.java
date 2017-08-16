@@ -14,7 +14,7 @@ import io.znz.jsite.visa.entity.japan.NewDateplanJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrderJpEntity;
 import io.znz.jsite.visa.entity.japan.NewTripJpEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
-import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
+import io.znz.jsite.visa.enums.VisaJapanApproStatusEnum;
 import io.znz.jsite.visa.simulator.form.JapanErrorHandleForm;
 import io.znz.jsite.visa.simulator.form.JapanSimulatorForm;
 import io.znz.jsite.visa.util.Const;
@@ -73,7 +73,7 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 	/**查询第一个可提交签证网站的日本客户信息*/
 	public ResultObject fetchJapanOrder() {
 		List<NewOrderJpEntity> orderList = dbDao.query(NewOrderJpEntity.class,
-				Cnd.where("status", "=", OrderVisaApproStatusEnum.DS.intKey()), null);
+				Cnd.where("status", "=", VisaJapanApproStatusEnum.readySubmit.intKey()), null);
 		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
 		if (!Util.isEmpty(orderList) && orderList.size() > 0) {
 			String sqlString = sqlManager.get("newcustomerjapan_list");
@@ -185,12 +185,12 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 		try {
 			Integer status = order.getStatus();
 			//验证提交状态
-			if (Util.isEmpty(status) || OrderVisaApproStatusEnum.DS.intKey() != status) {
+			if (Util.isEmpty(status) || VisaJapanApproStatusEnum.readySubmit.intKey() != status) {
 				return ResultObject.fail("准备提交使馆的任务方可提交！");
 			}
 
 			//签证状态改为'提交中'
-			dbDao.update(NewOrderJpEntity.class, Chain.make("status", OrderVisaApproStatusEnum.japancoming.intKey()),
+			dbDao.update(NewOrderJpEntity.class, Chain.make("status", VisaJapanApproStatusEnum.japancoming.intKey()),
 					Cnd.where("id", "=", cid));
 		} catch (Exception e) {
 			return ResultObject.fail("提交失败,请稍后重试！");
@@ -223,14 +223,14 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 			}
 			Integer status = order.getStatus();
 			//验证提交状态
-			if (Util.isEmpty(status) || OrderVisaApproStatusEnum.japancoming.intKey() != status) {
+			if (Util.isEmpty(status) || VisaJapanApproStatusEnum.japancoming.intKey() != status) {
 				return ResultObject.fail("已提交的任务方可进行文件上传！");
 			}
 			suffix = suffix.substring(1);
 			visaFile = Const.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, suffix, null);
 
 			//为客户设置文件地址，签证状态改为'已提交'
-			order.setStatus(OrderVisaApproStatusEnum.japanAlreadySend.intKey());
+			order.setStatus(VisaJapanApproStatusEnum.japanAlreadySend.intKey());
 			order.setFileurl(visaFile);
 			dbDao.update(order);
 		} catch (Exception e) {
