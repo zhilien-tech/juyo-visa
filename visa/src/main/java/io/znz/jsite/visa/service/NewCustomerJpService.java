@@ -159,7 +159,8 @@ public class NewCustomerJpService {
 		//修改为最近一次入境信息
 		NewRecentlyintojpEntity recentlyintojp = customer.getRecentlyintojp();
 		if (!Util.isEmpty(recentlyintojp)) {
-			if (!Util.isEmpty(recentlyintojp.getId()) && recentlyintojp.getId() > 0) {
+			long customerJpId = recentlyintojp.getCustomerJpId();
+			if (customerJpId > 0) {
 				nutDao.update(recentlyintojp);
 			} else {
 				recentlyintojp.setCustomerJpId(customer.getId());

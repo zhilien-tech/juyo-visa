@@ -107,6 +107,7 @@ var viewModel = kendo.observable({
         }*/
         //入境时间
         var intoDate = viewModel.get("customer.recentlyintojp.intoDate")+"";
+        //出境时间
         var outofDate = viewModel.get("customer.recentlyintojp.outofDate")+"";
      	//日期差
         var dateDifference =null;
