@@ -30,7 +30,9 @@ var statuslist=[
                 {text:"已发招宝",value:19},
                 {text:"发招宝失败",value:20},
                 {text:"归国报告",value:21},
-                {text:"归国报告失败",value:22}
+                {text:"归国报告失败",value:22},
+                {text:"提交失败",value:23},
+                {text:"准备提交使馆",value:8}
               ];
 //注册命令
 function regCmd(command) {
@@ -450,7 +452,7 @@ var grid = $("#grid").kendoGrid({
     sortable: true,
     resizable: true,
     filterable: true,
-    reorderable: true,
+    reorderable: false,
     columnMenu: true,
     scrollable: true,
     pageable: {
@@ -534,7 +536,7 @@ var grid = $("#grid").kendoGrid({
         {field: 'startdate', title: '出发时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.startdate#'>#=data.startdate?kendo.toString(data.startdate, 'yyyy-MM-dd'):''#</span>"},
         {field: 'outdate', title: '返回时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.outdate#'>#=data.outdate?kendo.toString(data.outdate, 'yyyy-MM-dd'):''#</span>"},
 /*        {field: 'countrytype', title: '签证类型', width: 80,values:countrylist},*/
-        {field: 'status', title: '状态',values:statuslist, width: 75,},
+        {field: 'status', title: '状态',values:statuslist, width: 75,click:showDetails},
         {
             title: "操作", width:180,
             command: [
@@ -593,5 +595,16 @@ $().click(function(
 		
 ));*/
 
-
-
+grid.table.on('click', 'tr td:eq(11)', function () {
+    // 双击, dataItem = grid.dataItem(row)
+	 var row = $(this).closest("tr");
+	 var data = grid.dataItem(row);
+	 var status=data.status;
+	 if(status>=20&&status!=21){
+		 layer.alert(data.errormsg);
+	 }
+	 console.log(JSON.stringify(data));
+});
+function showDetails(e){
+	console.log(e);
+}
