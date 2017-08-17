@@ -7,6 +7,7 @@
 package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.bean.ResultObject;
+import io.znz.jsite.core.entity.company.CompanyEntity;
 import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.download.UploadService;
@@ -73,8 +74,16 @@ public class ComeBabyController {
 		Pager pager = new Pager();
 		pager.setPageNumber(form.getPageNumber());
 		pager.setPageSize(form.getPageSize());
+
+		CompanyEntity comp = dbDao.fetch(CompanyEntity.class, company.getComId());
+		Integer comType = null;
+		if (!Util.isEmpty(comp)) {
+			comType = comp.getComType();
+			form.setComtype(comType);
+		}
+
 		Pagination listPage = comeBabyService.listPage(form, pager);
-		return comeBabyService.listPage(form, pager);
+		return listPage;
 	}
 
 	/**
@@ -107,7 +116,7 @@ public class ComeBabyController {
 	 */
 	@RequestMapping(value = "comefetch")
 	@ResponseBody
-	public Object comefetch(long comeid) {
+	public Object comefetch(long comeid, final HttpSession session) {
 
 		NewComeBabyJpEntity fetch = dbDao.fetch(NewComeBabyJpEntity.class, comeid);
 		if (Util.isEmpty(fetch)) {
