@@ -284,50 +284,77 @@ function regCmd(command) {
 function uploadfile(e) {
 	var index=null;
 	var data = grid.dataItem($(e.currentTarget).closest("tr"));
-	 WebUploader.create({
-        pick: '.k-button k-button-icontext k-grid-upload',
-        fileVal: "file",
-        auto: true,// 选完文件后，是否自动上传。
-        server: "visa/neworderjp/uploadFile?type=order",
-        swf: 'res/plugin/webuploader/Uploader.swf',// swf文件路径
-        accept: {
-            title: '选择图片',
-            extensions: ["jpg", "jpeg", "png"],
-            mimeTypes: 'image/jpg,image/jpeg,image/png'
-        },
-        fileSingleSizeLimit: 1024 * 1024,//1M
-            	    }).on('fileQueued', function (file) {
-					        this.makeThumb(file, function (error, src) {
-					            if (error) return;
-					            $("#rt_" + file.source.ruid).closest(".form-group").prev().attr('src', src);
-					        }, 1, 1);
-				    }).on('uploadSuccess', function (file, resp) {
-				        if (resp.code === "SUCCESS") {
-				            $("#rt_" + file.source.ruid).closest(".form-group").prev().attr('src', resp.data);
-				        }
-				    }).on('error', function (code) {
-				        $.layer.alert("只能是图片类型,且大小不能超过1M(推荐JPG图片)!");
-				    });
-					var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
-	
-
-			$.getJSON("/visa/neworderjp/uploadFile?type=order&orderid=" + data.id, {}, function (resp) {
-				if (resp.code === "SUCCESS") {
-					if(index!=null){
+	 var index=null;
+		$.fileupload1 = $('#fileupload').uploadify({
+			'auto' : true,//选择文件后自动上传
+			'formData' : {
+				'fcharset' : 'uft-8'/* ,
+				'action' : 'uploadimage' */
+			},
+			'buttonText' : '上传',//按钮显示的文字
+			'fileSizeLimit' : '3000MB',
+			'fileTypeDesc' : '文件',//在浏览窗口底部的文件类型下拉菜单中显示的文本
+			 'fileTypeExts' : '*.png;*.jpg; *.jpeg; *.gif;',//上传文件的类型
+			'swf' : '/res/upload/uploadify.swf',//指定swf文件
+			'multi' : false,//multi设置为true将允许多文件上传
+			'successTimeout' : 1800, 
+			/* 'queueSizeLimit' : 100, */
+			'uploader' : "/visa/neworderjp/uploadFile?type=order&orderid=" + data.id,
+			//下面的例子演示如何获取到vid
+			'onUploadStart':function(file){
+				index = layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+			},
+			 'onUploadSuccess': function(file, data, response) {
+				 var fileName = file.name;//文件名称
+				var photoname= "<a id='downloadA' href='#'>"
+	             + file.name
+	             + "</a>"
+				 ///console.log(file);
+				/* 	var jsonobj = eval('(' + data + ')');
+					var url  = jsonobj;//地址 */
+					///console.log(data);
+				 ///console.log(response);
+				/*  alert(typeof data); */
+				 if(index!=null){
 						layer.close(index);
-					}
-					$.layer.confirm('发送成功，打开预览？', {
-						btn: ['预览', '关闭']
-					}, function (index, layero) {
-						window.open(resp.data);
-					}, function (index) {
-						$.layer.closeAll();
-					});
-					layer.msg("上传成功",{time: 2000});
-				} else {
-					$.layer.alert(resp.msg);
-				}
-			});
+				 }
+				 /*显示 预览 按钮*/
+				viewModel.set("customer.phoneurl",data);
+				viewModel.set("customer.photoname",fileName);
+				/*$("#yvlan").html('<a href="'+data+'">预览</a>'); */
+	            $("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
+				$("#photoname").html(photoname);
+	            $(document).on('click','#preview',function(){
+	            	$('#light').css('display','block');
+	            	$('#fade').css('display','block');
+	            	var phoneurl=viewModel.get("customer.phoneurl");
+	            	if(phoneurl!=null&&phoneurl!=''){
+	            		///console.log("1111111====="+phoneurl);
+	            		$("#imgId").attr('src',phoneurl);
+	            	}
+	            });
+			},
+	        //加上此句会重写onSelectError方法【需要重写的事件】
+	        'overrideEvents': ['onSelectError', 'onDialogClose'],
+	        //返回一个错误，选择文件的时候触发
+	        'onSelectError':function(file, errorCode, errorMsg){
+	        	///console.log(errorMsg);
+	            switch(errorCode) {
+	                case -110:
+	                    alert("文件 ["+file.name+"] 大小超出系统限制！");
+	                    break;
+	                case -120:
+	                    alert("文件 ["+file.name+"] 大小异常！");
+	                    break;
+	                case -130:
+	                    alert("文件 ["+file.name+"] 类型不正确！");
+	                    break;
+	            }
+	        },
+	        'onUploadError':function(file, errorCode, errorMsg, errorString){
+	        	/* alert('The file ' + file.name + ' could not be uploaded: ' + errorString); */
+	        }
+		});
 } 
 
 function download(cid) {
@@ -514,13 +541,13 @@ var grid = $("#grid").kendoGrid({
                 {name: "modify", imageClass:false, text: "编辑"},
                 {name: "validate", imageClass:false, text: "发招宝"},
                 {name: "download", imageClass:false, text: "下载"},
-                //{name: "upload", imageClass:false, text: "上传",click:uploadfile},
+                {name: "upload", imageClass:false, text: "上传",click:uploadfile},
                 regCmd("modify"),
                 regCmd("shareall"),
                 regCmd("download"),
                 /*regCmd("delivery"),*/
                 regCmd("validate"),
-                //regCmd("upload"),
+                regCmd("upload"),
             ]
         }
     ]/*,
@@ -558,7 +585,7 @@ $(function(){
 	});*/
 	
 	
-	
+$("#fileupload").hide();
 	
 });
 /*//点击触发日历
