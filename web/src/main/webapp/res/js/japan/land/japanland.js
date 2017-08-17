@@ -172,35 +172,41 @@ function regCmd(command) {
                 	});
                 	break;
                 case "upload":
-                	if (!(data = select(e))) return;
+                	
+                	
+                	
+                	
+                	
+                	
+                	/*if (!(data = select(e))) return;
                 	 WebUploader.create({
              	        pick: '.k-button k-button-icontext k-grid-upload',
              	        fileVal: "file",
              	        auto: true,// 选完文件后，是否自动上传。
              	        server: "visa/neworderjp/uploadFile?type=order",
              	        swf: 'res/plugin/webuploader/Uploader.swf',// swf文件路径
-             	     /*   accept: {
+             	        accept: {
              	            title: '选择图片',
              	            extensions: ["jpg", "jpeg", "png"],
              	            mimeTypes: 'image/jpg,image/jpeg,image/png'
              	        },
              	        fileSingleSizeLimit: 1024 * 1024,//1M
-             */                	    }).on('fileQueued', function (file) {
-             	    /*    this.makeThumb(file, function (error, src) {
+                             	    }).on('fileQueued', function (file) {
+             	        this.makeThumb(file, function (error, src) {
              	            if (error) return;
-             	            $("#rt_" + file.source.ruid).closest(".form-group").prev().attr('src', src);
-             	        }, 1, 1);*/
+             	            $("#rt_" + file.source.ruid).closest(".form-group").prev().attr('src', sr;;c);
+             	        }, 1, 1);
              	    }).on('uploadSuccess', function (file, resp) {
              	        if (resp.code === "SUCCESS") {
-             	           /* $("#rt_" + file.source.ruid).closest(".form-group").prev().attr('src', resp.data);*/
+             	            $("#rt_" + file.source.ruid).closest(".form-group").prev().attr('src', resp.data);
              	        }
              	    }).on('error', function (code) {
              	        $.layer.alert("只能是图片类型,且大小不能超过1M(推荐JPG图片)!");
              	    });
-          /*      	var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
-*/                	
+                	var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+                	
                
-                /*	$.getJSON("/visa/neworderjp/uploadFile?type=order&orderid=" + data.id, {}, function (resp) {
+                	$.getJSON("/visa/neworderjp/uploadFile?type=order&orderid=" + data.id, {}, function (resp) {
                 		if (resp.code === "SUCCESS") {
                 			if(index!=null){
                 				
@@ -217,7 +223,7 @@ function regCmd(command) {
                 		} else {
                 			$.layer.alert(resp.msg);
                 		}
-                	});*/
+                	});
                 	break;
                 case "customerEdit1":
                 	
@@ -228,7 +234,7 @@ function regCmd(command) {
 		              		area: ['950px', '600px'],
 		              		shadeClose: true,
 		              		content: '/japan/japancustomerEdit.html?cid=' + data.id + "&check=true"
-		              	});
+		              	});*/
 		              	break;
                 case "modify":
                     var data = grid.dataItem($(e.currentTarget).closest("tr"));
@@ -274,6 +280,56 @@ function regCmd(command) {
         }
     };
 }
+//上传
+function uploadfile(e) {
+	var index=null;
+	var data = grid.dataItem($(e.currentTarget).closest("tr"));
+	 WebUploader.create({
+        pick: '.k-button k-button-icontext k-grid-upload',
+        fileVal: "file",
+        auto: true,// 选完文件后，是否自动上传。
+        server: "visa/neworderjp/uploadFile?type=order",
+        swf: 'res/plugin/webuploader/Uploader.swf',// swf文件路径
+        accept: {
+            title: '选择图片',
+            extensions: ["jpg", "jpeg", "png"],
+            mimeTypes: 'image/jpg,image/jpeg,image/png'
+        },
+        fileSingleSizeLimit: 1024 * 1024,//1M
+            	    }).on('fileQueued', function (file) {
+					        this.makeThumb(file, function (error, src) {
+					            if (error) return;
+					            $("#rt_" + file.source.ruid).closest(".form-group").prev().attr('src', src);
+					        }, 1, 1);
+				    }).on('uploadSuccess', function (file, resp) {
+				        if (resp.code === "SUCCESS") {
+				            $("#rt_" + file.source.ruid).closest(".form-group").prev().attr('src', resp.data);
+				        }
+				    }).on('error', function (code) {
+				        $.layer.alert("只能是图片类型,且大小不能超过1M(推荐JPG图片)!");
+				    });
+					var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+	
+
+			$.getJSON("/visa/neworderjp/uploadFile?type=order&orderid=" + data.id, {}, function (resp) {
+				if (resp.code === "SUCCESS") {
+					if(index!=null){
+						layer.close(index);
+					}
+					$.layer.confirm('发送成功，打开预览？', {
+						btn: ['预览', '关闭']
+					}, function (index, layero) {
+						window.open(resp.data);
+					}, function (index) {
+						$.layer.closeAll();
+					});
+					layer.msg("上传成功",{time: 2000});
+				} else {
+					$.layer.alert(resp.msg);
+				}
+			});
+} 
+
 function download(cid) {
     $.getJSON("/visa/photo/list", {cid: cid}, function (result) {
         if (result.code === "SUCCESS") {
@@ -458,13 +514,13 @@ var grid = $("#grid").kendoGrid({
                 {name: "modify", imageClass:false, text: "编辑"},
                 {name: "validate", imageClass:false, text: "发招宝"},
                 {name: "download", imageClass:false, text: "下载"},
-              /*  {name: "upload", imageClass:false, text: "上传"},*/
+                //{name: "upload", imageClass:false, text: "上传",click:uploadfile},
                 regCmd("modify"),
                 regCmd("shareall"),
                 regCmd("download"),
                 /*regCmd("delivery"),*/
                 regCmd("validate"),
-                regCmd("upload"),
+                //regCmd("upload"),
             ]
         }
     ]/*,
