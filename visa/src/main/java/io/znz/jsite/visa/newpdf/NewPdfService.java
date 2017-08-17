@@ -13,6 +13,11 @@ import io.znz.jsite.visa.entity.japan.NewTripplanJpEntity;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -109,6 +114,28 @@ public class NewPdfService {
 			//导出人员名单的电子表格
 			fileMap.put(t.getExcelFileName(order), createTempFile(t.excel(order)));
 			//导出日本提交成功的归国报告
+			String fileurl = order.getFileurl();
+			if (!Util.isEmpty(fileurl)) {
+
+				String str = System.getProperty("java.io.tmpdir");
+				String extendName = fileurl.substring(fileurl.lastIndexOf(".") + 1, fileurl.length());
+				File file11 = new File(str + File.separator + "12" + extendName);
+				InputStream is = null;
+				OutputStream os = null;
+				os = new FileOutputStream(file11);
+				URL url = new URL(fileurl);// 生成url对象
+				URLConnection urlConnection = url.openConnection();
+				//urlConnection.getInputStream();
+				is = urlConnection.getInputStream();
+				byte[] buffer = new byte[1024];
+				int byteread = 0;
+				while ((byteread = is.read(buffer)) != -1) {
+					os.write(buffer, 0, byteread);
+
+				}
+				os.flush();
+				fileMap.put("归国报告.pdf", file11);
+			}
 
 			//合并输出为一个压缩包
 			ByteArrayOutputStream out = new ByteArrayOutputStream();

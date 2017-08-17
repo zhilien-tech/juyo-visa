@@ -21,6 +21,12 @@
       <div class="col-xs-2 padding-Left-0">
       	<select id="state" style="width: 100%;" class="k-textbox fill uppercase" >
           <option value="-1">状态</option>
+                    <option value="1">已分享</option>
+          <option value="2">资料填写</option>
+          <option value="3">初审</option>
+          <option value="4">初审通过</option>
+          <option value="5">初审拒绝</option>
+          <option value="17">递送</option>
           <option value="18">发招宝中</option>
           <option value="19">已发招宝</option>
           <option value="20">发招宝失败</option>
@@ -152,6 +158,7 @@
 </script>
 
 <script src="/res/plugin/jquery.min.js"></script>
+<script src="/res/js/sessiontimeout/sessiontimeout.js"></script><!-- session过期跳到登录页 -->
 <script src="/res/plugin/layer/layer.js"></script>
 <script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
 <script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
@@ -168,7 +175,7 @@
             title: '编辑订单',
             area: ['950px', '600px'],
             shadeClose: true,
-            content: '/japan/japanEdit.html'
+            content: '/japan/japanEdit.html?island=1'
         });
 	}
 	$(document).ready(function() {

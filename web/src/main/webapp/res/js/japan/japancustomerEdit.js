@@ -64,6 +64,7 @@ var countries = new kendo.data.DataSource({
 	financeJpList:[],
 	oldpassportJp: {},
 	oldnameJp: {},
+	recentlyintojp: {},
 	orthercountryJpList: [],
 	recentlyintojpJpList: [],
 	customers: [
@@ -91,15 +92,41 @@ var countries = new kendo.data.DataSource({
  * 数据绑定
  ****************************************************/
 var viewModel = kendo.observable({
+	customer: dafaults,
 	passporttype:passporttype,
     countries: countries,
     states: states,
+    onRecentChange:function (e) {
+    	var target = e.sender.element.attr("id");
+    	var start = $("#in_date").data("kendoDatePicker");
+        var end = $("#out_date").data("kendoDatePicker");
+        /*if (target == "in_date") {
+            end.min(start.value());
+        } else {
+            start.max(end.value());
+        }*/
+        //入境时间
+        var intoDate = viewModel.get("customer.recentlyintojp.intoDate")+"";
+        //出境时间
+        var outofDate = viewModel.get("customer.recentlyintojp.outofDate")+"";
+    	//日期差
+        var dateDifference = 0;
+    	var a=new Date(Date.parse((intoDate))).getTime();
+    	var b=new Date(Date.parse((outofDate))).getTime();
+    	var daynum=(b-a)/(1000*3600*24);
+    	if(daynum>=0){
+    		dateDifference = Math.ceil(daynum)+1;
+    	}else{
+    		dateDifference = 0;
+    	}
+    	viewModel.set("customer.recentlyintojp.stayDays", dateDifference);
+        
+    },
     onDateChange: function (e) {
         var target = e.sender.element.attr("id");
-        console.log(target);
         var start = $("#signed_at").data("kendoDatePicker");
         var end = $("#expire_at").data("kendoDatePicker");
-        if (target === "signed_at") {
+        if (target == "signed_at") {
             end.min(start.value());
         } else {
             start.max(end.value());
@@ -190,7 +217,13 @@ var viewModel = kendo.observable({
         });
         return result;
     },
-    customer: dafaults,
+    //最近1次入境日本的信息
+    jprecentlyEnable:function(){
+    	var state = viewModel.get("customer.recentlyintojp.intoDate")
+		|| viewModel.get("customer.recentlyintojp.outofDate")
+		|| viewModel.get("customer.recentlyintojp.stayDays");
+    	return state;
+    }
 });
 kendo.bind($(document.body), viewModel);
 /*****************************************************
@@ -221,6 +254,14 @@ $("#has_pr").change(function () {
         viewModel.clearAll("customer.orthercountryJpList");
     }
 });
+//最近1次入境日本的信息
+$("#has_usa_aboard").change(function () {
+	var value = $(this).is(':checked') ? " " : "";
+    viewModel.set("customer.recentlyintojp.intoDate", value);
+    viewModel.set("customer.recentlyintojp.outofDate", value);
+    viewModel.set("customer.recentlyintojp.stayDays", value);
+});
+
 
 //存放空的数组
 var emptyNum=[];

@@ -44,6 +44,7 @@ import io.znz.jsite.visa.enums.GenderEnum;
 import io.znz.jsite.visa.enums.OrderJapancustomersourceEnum;
 import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
 import io.znz.jsite.visa.enums.UserTypeEnum;
+import io.znz.jsite.visa.enums.VisaJapanApproStatusEnum;
 import io.znz.jsite.visa.form.NewOrderJapanSqlForm;
 import io.znz.jsite.visa.newpdf.NewPdfService;
 import io.znz.jsite.visa.newpdf.NewTemplate;
@@ -92,9 +93,9 @@ import com.uxuexi.core.db.dao.IDbDao;
 import com.uxuexi.core.db.util.DbSqlUtil;
 
 /**
- * TODO(这里用一句话描述这个类的作用)
+ * 
  * <p>
- * TODO(这里描述这个类补充说明 – 可选)
+ * 
  *
  * @author   孙斌
  * @Date	 2017年6月21日 	 
@@ -153,7 +154,7 @@ public class NewOrderJaPanController {
 	 *
 	 * @param customers
 	 * @param customer
-	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 * @return 
 	 */
 	@RequestMapping(value = "childList")
 	@ResponseBody
@@ -174,7 +175,7 @@ public class NewOrderJaPanController {
 	 *
 	 * @param customers
 	 * @param customer
-	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 * @return 
 	 */
 	@RequestMapping(value = "orderJpsave")
 	@ResponseBody
@@ -186,6 +187,12 @@ public class NewOrderJaPanController {
 
 			long comId = company.getComId();
 			order.setComId(comId);
+		}
+
+		io.znz.jsite.core.entity.EmployeeEntity user = (io.znz.jsite.core.entity.EmployeeEntity) session
+				.getAttribute(Const.SESSION_NAME);
+		if (!Util.isEmpty(user)) {
+			order.setOperatePersonId(user.getId());
 		}
 		//根据他们的id是否存在判断是更新还是删除
 		NewOrderJpEntity orderOld = order;
@@ -764,7 +771,7 @@ public class NewOrderJaPanController {
 	 *信息编辑界面的数据回显
 	 *
 	 * @param orderid
-	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 * @return 
 	 */
 	@RequestMapping(value = "showDetail")
 	@ResponseBody
@@ -854,7 +861,6 @@ public class NewOrderJaPanController {
 					n.setIntime(df.parse(df1.format(n.getIntime())));
 				} catch (ParseException e) {
 
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 
 				}
@@ -865,7 +871,6 @@ public class NewOrderJaPanController {
 					n.setOuttime(df.parse(df1.format(n.getOuttime())));
 				} catch (ParseException e) {
 
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 
 				}
@@ -947,7 +952,6 @@ public class NewOrderJaPanController {
 					nutDao.update(employeeEntity);
 				} catch (Exception e) {
 
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 
 				}*/
@@ -1315,7 +1319,7 @@ public class NewOrderJaPanController {
 	 * 
 	 *日本的递送回显
 	 * @param orderid
-	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 * @return 
 	 */
 
 	@RequestMapping(value = "deliveryusa")
@@ -1331,7 +1335,7 @@ public class NewOrderJaPanController {
 	 * 
 	 *日本的递送保存
 	 * @param orderid
-	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 * @return 
 	 */
 
 	@RequestMapping(value = "deliveryJpsave")
@@ -1496,6 +1500,7 @@ public class NewOrderJaPanController {
 				customer.setOrthercountryJpList(relation);
 			}
 
+			//TODO
 			List<NewRecentlyintojpJpEntity> teachinfo = dbDao.query(NewRecentlyintojpJpEntity.class,
 					Cnd.where("customer_jp_id", "=", customer.getId()), null);
 			if (!Util.isEmpty(teachinfo) && teachinfo.size() > 0) {
@@ -1551,6 +1556,7 @@ public class NewOrderJaPanController {
 		}
 		String fileName = URLEncoder.encode(str + "-" + order.getOrdernumber() + ".zip", "UTF-8");
 		resp.setContentType("application/zip");
+		resp.setHeader("Set-Cookie", "fileDownload=true; path=/");
 		resp.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
 		IOUtils.write(bytes, resp.getOutputStream());
 		return ResultObject.fail("PDF生成失败!");
@@ -2095,6 +2101,7 @@ public class NewOrderJaPanController {
 					customer.setOrthercountryJpList(relation);
 				}
 
+				//TODO
 				List<NewRecentlyintojpJpEntity> teachinfo = dbDao.query(NewRecentlyintojpJpEntity.class,
 						Cnd.where("customer_jp_id", "=", customer.getId()), null);
 				if (!Util.isEmpty(teachinfo) && teachinfo.size() > 0) {
@@ -2139,26 +2146,25 @@ public class NewOrderJaPanController {
 				is = new FileInputStream(createTempFile);
 			} catch (FileNotFoundException e) {
 
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 
 			}
 			String uploadImage = qiniuUploadService.uploadImage(is, "xlsx", null);
 			String url = io.znz.jsite.visa.util.Const.IMAGES_SERVER_ADDR + uploadImage;
 			order.setExcelurl(url);
-			order.setStatus(OrderVisaApproStatusEnum.DS.intKey());
+			order.setStatus(VisaJapanApproStatusEnum.readySubmit.intKey());
 			dbDao.update(order, null);
 			//================================结束======================================================
 
-			for (NewCustomerOrderJpEntity newCustomerOrderJpEntity : customerOrderList) {
-				long customerid = newCustomerOrderJpEntity.getCustomer_jp_id();
+			/*	for (NewCustomerOrderJpEntity newCustomerOrderJpEntity : customerOrderList) {
+					long customerid = newCustomerOrderJpEntity.getCustomer_jp_id();
 
-				dbDao.update(
-						NewCustomerJpEntity.class,
-						Chain.make("updatetime", new Date()).add("status",
-								OrderVisaApproStatusEnum.readySubmit.intKey()), Cnd.where("id", "=", customerid));
+					dbDao.update(
+							NewCustomerJpEntity.class,
+							Chain.make("updatetime", new Date()).add("status",
+									OrderVisaApproStatusEnum.readySubmit.intKey()), Cnd.where("id", "=", customerid));
 
-			}
+				}*/
 
 			return ResultObject.success("无错误");
 		} else {

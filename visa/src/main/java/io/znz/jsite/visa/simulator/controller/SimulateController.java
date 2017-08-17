@@ -6,6 +6,7 @@
 
 package io.znz.jsite.visa.simulator.controller;
 
+import io.znz.jsite.visa.simulator.form.JapanErrorHandleForm;
 import io.znz.jsite.visa.simulator.form.JapanSimulatorForm;
 import io.znz.jsite.visa.simulator.service.SimulateJapanViewService;
 import io.znz.jsite.visa.simulator.service.SimulateViewService;
@@ -100,5 +101,13 @@ public class SimulateController {
 	@RequestMapping(value = "agentDownload", method = RequestMethod.POST)
 	public void agentDownload(final JapanSimulatorForm jpForm, HttpServletResponse response) {
 		simulateJapanViewService.agentDownload(jpForm, response);
+	}
+
+	/**
+	 * 日本;接收自动填表的错误信息
+	 */
+	@RequestMapping(value = "japanErrorHandle/{cid}", method = RequestMethod.POST)
+	public void japanErrorHandle(final JapanErrorHandleForm jpForm, HttpServletResponse response, @PathVariable Long cid) {
+		simulateJapanViewService.japanErrorHandle(jpForm, response, cid);
 	}
 }

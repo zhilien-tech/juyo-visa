@@ -19,6 +19,13 @@ var visatypelist=[
 //状态listorder
 var statuslist=[
      
+                {text:"下单",value:15},
+                {text:"已分享",value:1},
+                {text:"资料填写",value:2},
+                {text:"初审",value:3},
+                {text:"初审通过",value:4},
+                {text:"初审拒绝",value:5},
+                {text:"递送",value:17},
                 {text:"发招宝中",value:18},
                 {text:"已发招宝",value:19},
                 {text:"发招宝失败",value:20},
@@ -260,24 +267,24 @@ function detailInit(e) {
 	          },
 	          total : function(d) {
 	              return d.recordCount;   //总条数
-	          },
+	          }/*,
 	          model: {
 	                id: "id",
 	                fields: {
 	                	birthday: {type: "date"},
 	          			email: {type: "string"},
-	                   /* user: {defaultValue: {id: "1", name: "管理员"}},
+	                    user: {defaultValue: {id: "1", name: "管理员"}},
 	                    useFor: {defaultValue: "美国"},
-	                    amount: {type: "number", defaultValue: 1, validation: {min: 1, required: true}}*/
+	                    amount: {type: "number", defaultValue: 1, validation: {min: 1, required: true}}
 	                }
-	            }
+	            }*/
       },
         columns: [
             {field: 'chinesefullname',title: '氏名'},
             {field: 'fullnameen',title: 'ピンイン'},
             {field: 'gender',title: '性別',values:genderlist},
             {field: 'nowcity',title: '居住地域'},
-            {field: 'birthday',title: '生年月日',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.birthday#'>#=data.birthday?kendo.toString(data.birthday, 'yyyy-MM-dd'):''#</span>"},
+            {field: 'birthday',title: '生年月日',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.birthday#'>#=data.birthday?(kendo.toString(data.birthday, 'yyyy-MM-dd')).substring(0,11):''#</span>"},
             {field: 'passport',title: '旅券番号'},
             
           /*  {field: 'phone', title: '电话'},
@@ -386,9 +393,9 @@ var grid = $("#grid").kendoGrid({
                 container.hide().prev().hide();
             }
         },
-        {field: 'completedNumber', title: '受付番号', width: 110,template: "<span class='ellipsis' title='#=data.linkman#'>#=data.linkman?data.linkman:''#</span>"},
-        {field: 'comFullName', title: '送签社', width: 88,template: "<span class='ellipsis' title='#=data.telephone#'>#=data.telephone?data.telephone:''#</span>"},
-        {field: 'fullName', title: '操作人',  width: 88,},
+        {field: 'completednumber', title: '受付番号', width: 110,template: "<span class='ellipsis' title='#=data.completednumber#'>#=data.completednumber?data.completednumber:''#</span>"},
+        {field: 'fullcomname', title: '送签社', width: 88,template: "<span class='ellipsis' title='#=data.fullcomname#'>#=data.fullcomname?data.fullcomname:''#</span>"},
+        {field: 'fullname', title: '操作人',  width: 88,},
         {field: 'mainporposer', title: '主申请人',  width:100,},
         {field: 'headnum', title: '人数',  width: 75,},
         {field: 'visatype', title: '签证类型', values:visatypelist, width:100,},
@@ -398,9 +405,10 @@ var grid = $("#grid").kendoGrid({
 /*        {field: 'countrytype', title: '签证类型', width: 80,values:countrylist},*/
         {field: 'status', title: '状态',values:statuslist, width: 75,},
         {
-            title: "操作", width:155,
+            title: "操作", width:180,
             command: [
-                {name: "modify", imageClass:false, text: "详情"},
+                {name: "modify", imageClass:false, text: "编辑"},
+                {name: "validate", imageClass:false, text: "发招宝"},
                 {name: "download", imageClass:false, text: "下载"},
                 regCmd("modify"),
                 regCmd("shareall"),

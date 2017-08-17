@@ -462,14 +462,41 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label for="has_usa_aboard"
-                                               class="check-box-label">最近1次入境日本的信息:</label>
-                                        <input id='has_usa_aboard' data-bind="checked:hasHistory"
-                                               class="mui-switch" type="checkbox"/>
+                                        <label for="has_usa_aboard" class="check-box-label">最近1次入境日本的信息:</label>
+                                        <input id='has_usa_aboard' data-bind="checked:jprecentlyEnable" class="mui-switch" type="checkbox"/>
                                     </div>
                                 </div>
                             </div>
-                            <div data-template="tpl_has_usa_aboard" data-bind="source:customer.recentlyintojpJpList"></div>
+                            <div class="row has_usa_aboard" data-bind="visible:jprecentlyEnable">
+                            	<div class="col-xs-4">
+		                           <div class="form-group">
+		                               <label for="in_date">入境时间:</label>
+		                               <div class='input-group'>
+		                                   <input id="in_date" data-role="datepicker" name="intoDate" data-bind="value:customer.recentlyintojp.intoDate,events:{change:onRecentChange}" style="width: 100%;"/>
+		                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+		                               </div>
+		                           </div>
+		                        </div>
+                            	<div class="col-xs-4">
+		                           <div class="form-group">
+		                               <label for="out_date">出境时间:</label>
+		                               <div class='input-group'>
+		                                   <input id="out_date" data-role="datepicker" name="outofDate" data-bind="value:customer.recentlyintojp.outofDate,events:{change:onRecentChange}" style="width: 100%;"/>
+		                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+		                               </div>
+		                           </div>
+		                        </div>
+                            	<div class="col-xs-4">
+		                           <div class="form-group">
+		                               <label for="stay_date">停留时间:</label>
+		                               <div class='input-group'>
+		                                   <input id="stay_date" type="text" class="k-textbox" data-bind="value:customer.recentlyintojp.stayDays" style="width: 108%;"/><span style="display: table-cell;position: relative;left: -3px;">天</span>
+		                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
+		                               </div>
+		                           </div>
+		                        </div>
+                            </div>
+                            <!-- <div data-template="tpl_has_usa_aboard" data-bind="source:customer.recentlyintojpJpList"></div>
                             <div class="row to_usa" data-bind="visible:hasHistory">
                                 <div class="col-xs-12">
                                     <div class="form-group">
@@ -479,7 +506,7 @@
                                         </button>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </li>
                     <li> </li>
@@ -882,6 +909,7 @@
 <!--引入 js 库文件-->
 <script src="/res/plugin/template.js"></script>
 <script src="/res/plugin/jquery.min.js"></script>
+<script src="/res/js/sessiontimeout/sessiontimeout.js"></script><!-- session过期跳到登录页 -->
 <script src="/res/plugin/layer/layer.js"></script>
 <script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
 <script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
