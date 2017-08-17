@@ -18,8 +18,8 @@ import com.uxuexi.core.common.enums.IEnum;
  */
 public enum VisaJapanApproStatusEnum implements IEnum {
 	placeOrder(15, "下单"), shared(1, "已分享"), writeInfo(2, "资料填写"), firstReview(3, "初审"), agree(4, "通过"), refuse(5, "拒绝"), readySubmit(
-			8, "准备提交使馆"), complete(13, "完成"), EVUS(14, "EVUS"), japansend(17, "递送"), japancoming(18, "发招宝中"), japanAlreadySend(
-			19, "已发招宝"), japanSendFail(20, "发招宝失败"), japanReport(21, "归国报告"), japanReportFail(22, "归国报告失败");
+			8, "准备提交使馆"), fail(23, "提交失败"), japansend(17, "递送"), japancoming(18, "发招宝中"), japanAlreadySend(19, "已发招宝"), japanSendFail(
+			20, "发招宝失败"), japanReport(21, "归国报告"), japanReportFail(22, "归国报告失败");
 	private int key;
 	private String value;
 

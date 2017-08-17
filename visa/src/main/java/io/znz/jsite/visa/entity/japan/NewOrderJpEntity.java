@@ -128,6 +128,12 @@ public class NewOrderJpEntity implements Serializable {
 	@Column
 	@Comment("受付番号")
 	private String completedNumber;
+	@Column
+	@Comment("错误码")
+	private Integer errorCode;
+	@Column
+	@Comment("错误信息")
+	private String errorMsg;
 
 	private CustomerManageEntity customermanage;
 
