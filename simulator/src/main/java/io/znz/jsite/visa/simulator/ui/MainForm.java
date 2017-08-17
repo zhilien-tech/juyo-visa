@@ -33,6 +33,8 @@ import java.util.Date;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.prefs.Preferences;
 import java.util.zip.ZipOutputStream;
 
@@ -75,25 +77,35 @@ public class MainForm extends JPanel {
 	private static final String VISA_UPLOAD_URI = "visa/simulator/UploadJapan/";
 
 	private static final String AGENT_DOWNLOAD_URL = "visa/simulator/agentDownload.html";
-	//	private static final String TASK_FETCH_URI = "visa/customer/fetch";
+
+	private static final String FEED_ERROR_URL = "visa/simulator/japanErrorHandle/";
 
 	private static final String HISTORY = "history";
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss.SSS]");
 	private long startTime = 0;
+
+	private static final int SUCCESS = 0;
+
+	private static ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(5);
 
 	public MainForm() {
 		initComponents();
 		pyFile.setText(System.getProperty("user.dir") + "/conf/japan.py");
 		host.setText("218.244.148.21");
 		port.setText("9004");
+		upload.setEnabled(false);//禁用上传按钮
+		filesPicker.setEnabled(false); //禁用选择文件上传的按钮
 	}
 
 	//拼接 url 地址
-	private String getBaseUrl() {
+	String getBaseUrl() {
 		return "http://" + host.getText() + ":" + port.getText() + "/";
 	}
 
-	private void transferLog(final InputStream inStream) {
+	/**
+	 * 将命令行的错误信息输出到日志区(逐行)
+	 */
+	void transferLog(final InputStream inStream) {
 		new Thread(new Runnable() {
 			public void run() {
 				BufferedReader br = new BufferedReader(new InputStreamReader(inStream));
@@ -112,7 +124,7 @@ public class MainForm extends JPanel {
 	}
 
 	//向控制台输出日志
-	private void log(final String msg) {
+	void log(final String msg) {
 		if (StringUtils.isBlank(msg))
 			return;
 		SwingUtilities.invokeLater(new Runnable() {
@@ -124,16 +136,19 @@ public class MainForm extends JPanel {
 	}
 
 	//执行命令行
-	private void exe(final String command) {
+	int executeCommand(final String command) {
+		int result = 0;
 		try {
 			Process p = Runtime.getRuntime().exec(command);
 			transferLog(p.getInputStream());
 			transferLog(p.getErrorStream());
-			log("返回结果:" + p.waitFor());
 			p.destroy();
+			result = p.waitFor();
+			log("执行python命令返回结果:" + result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return result;
 	}
 
 	/**
@@ -194,18 +209,22 @@ public class MainForm extends JPanel {
 	}
 
 	//执行按钮点击事件
-	private void executeTaskActionPerformed(ActionEvent e) {
+	private void executeTaskActionPerformed(ActionEvent actionEvent) {
 		startTime = System.currentTimeMillis();
 		executeTask.setEnabled(false);
-		// 获取一个可执行的任务
-		new Thread(new Runnable() {
+
+		exec.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
 				try {
+					log("========================开始检测是否有可执行的任务===========================");
 					String json = HttpClientUtil.get(getBaseUrl() + TASK_FETCH_URI);
 					ResultObject<Map, Object> ro = JSON.parseObject(json, ResultObject.class);
+
 					if (ro.getCode() == ResultObject.ResultCode.SUCCESS) {
+
 						final String oid = String.valueOf(ro.getAttributes().get("oid"));
+						log("========================开始执行任务:" + oid + "===========================");
 						String remoteFileUrl = String.valueOf(ro.getData().get("excelUrl"));
 						SwingUtilities.invokeLater(new Runnable() {
 							@Override
@@ -234,7 +253,7 @@ public class MainForm extends JPanel {
 						File target = new File(tmp, oid + ".json");
 						//保存json文件，使用UTF-8编码
 						FileUtils.writeStringToFile(target, JSON.toJSONString(ro.getData()), ENCODING);
-						log("文件已保存至:" + target.getAbsolutePath());
+						log("任务数据文件已保存至:" + target.getAbsolutePath());
 
 						//执行命令行
 						File python = new File(pyFile.getText());
@@ -250,27 +269,39 @@ public class MainForm extends JPanel {
 							//第三个参数为任务码
 							String cmd = "python " + pyFile.getText() + " " + target.getAbsolutePath() + " " + oid;
 							command.setText(cmd);
-							exe(command.getText());
-
-							log("准备任务码为" + oid + "的上传文件");
-							log("总计用时:" + ((System.currentTimeMillis() - startTime) / 1000) + "秒");
+							int execResult = executeCommand(cmd);
+							//如果命令行意外退出
+							if (SUCCESS != execResult) {
+								IdentityHashMap<String, String> params = new IdentityHashMap<String, String>();
+								params.put("errorCode", "0");
+								params.put("errorMsg", "未知错误");
+								String feedErrorUrl = getBaseUrl() + FEED_ERROR_URL + oid;
+								HttpClientUtil.post(feedErrorUrl, params);
+							}
+							log("========================任务:" + oid + " 执行完毕===========================");
+							log("========================总计用时:" + ((System.currentTimeMillis() - startTime) / 1000)
+									+ "秒===========================");
 						} else {
 							JOptionPane.showMessageDialog(new JLabel(), "自动化脚本不存在");
 						}
 					} else {
+						log("========================暂无可执行的任务===========================");
 						JOptionPane.showMessageDialog(new JLabel(), ro.getMsg());
 					}
 
 				} catch (Exception exception) {
+					//控制台输出异常信息
 					MainForm.this.log(ExceptionUtils.getStackTrace(exception));
-					JOptionPane.showMessageDialog(new JLabel(), "服务器不可用");
 				}
-				executeTask.setEnabled(true);
 			}
-		}).start();
+		}, 1000, 600000, TimeUnit.MILLISECONDS);//10分钟执行一次
+
 	}
 
-	//上传文件的按钮点击事件
+	/**
+	 * 上传文件的按钮点击事件,自动上传归国报告，因此废弃此方法
+	 */
+	@Deprecated
 	private void uploadActionPerformed(ActionEvent e) {
 		if (StringUtils.isBlank(resultFiles.getText())) {
 			JOptionPane.showMessageDialog(new JLabel(), "请先选择上传文件!");
@@ -287,7 +318,7 @@ public class MainForm extends JPanel {
 			@Override
 			public void run() {
 				String files[] = resultFiles.getText().split(";");
-
+				//这里是打包zip文件的方法
 				List<ZFile> zfiles = Lists.newArrayList();
 				for (String f : files) {
 					File file = new File(f);
@@ -343,7 +374,12 @@ public class MainForm extends JPanel {
 		}).start();
 	}
 
-	//选择上传文件的按钮点击事件
+	/**
+	 * 选择上传文件的按钮点击事件
+	 * <p>
+	 * 自动上传归国报告，废弃此方法
+	 */
+	@Deprecated
 	private void filesPickerActionPerformed(ActionEvent e) {
 		File files[] = openFilePicker("选择帰国報告文件", true, "pdf");
 		if (files.length == 0)
@@ -402,6 +438,7 @@ public class MainForm extends JPanel {
 		textArea.selectAll();
 	}
 
+	//初始化界面，以及界面元素的监听事件
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		panel1 = new JPanel();
@@ -672,7 +709,7 @@ public class MainForm extends JPanel {
 	private JButton upload;
 	private JPanel panel4;
 	private JScrollPane scrollPane1;
-	private JTextArea textArea;
+	private JTextArea textArea;//控制台日志区
 	private JPopupMenu popupMenu;
 	private JMenuItem copy;
 	private JMenuItem clear;

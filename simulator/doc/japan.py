@@ -2,13 +2,15 @@
 import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait # available since 2.4.0
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC # available since 2.26.0
 from selenium.webdriver.support.select import Select
-from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
+from selenium.webdriver.support import expected_conditions as EC # available since 2.26.0
+from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException
+
 import sys
 import logging
 import json
@@ -26,7 +28,7 @@ _sopen = cdll.msvcrt._sopen
 _close = cdll.msvcrt._close
 _SH_DENYRW = 0x10
 
-#判断文件是否被打开
+#判断文件是否被打开,预留作为参考的方法
 def is_open(filename):
     if not os.access(filename, os.F_OK):
         return False # file doesn't exist
@@ -38,21 +40,21 @@ def is_open(filename):
 
 #函数定义  begin 
 #等待id为elm_id的元素可见
-def _wait_for_elm_by_id(elm_id,timeout = 3600):
+def _wait_for_elm_by_id(elm_id,timeout = 20):
     _check_alert_to_close()
     logging.info("Waiting element shown, id: " + elm_id)
     element = WebDriverWait(driver, timeout).until(
         EC.visibility_of_element_located((By.ID, elm_id))
     )
 
-def _wait_for_xpath(xpath,timeout = 3600):
+def _wait_for_xpath(xpath,timeout = 20):
     _check_alert_to_close()
     logging.info("Waiting for xpath: " + xpath)
     element = WebDriverWait(driver, timeout).until(
         EC.visibility_of_element_located((By.XPATH,xpath))
     )
 	
-def _wait_for_elm_by_name(name,timeout = 3600):
+def _wait_for_elm_by_name(name,timeout = 20):
     _check_alert_to_close()
     logging.info("Waiting element shown, name: " + name)
     element = WebDriverWait(driver, timeout).until(
@@ -69,7 +71,7 @@ def _check_alert_to_close():
         pass
 
 #填写name为elmId的输入框，如果输入框已经有值则忽略
-def _textInputByName(elmId,val,timeout=3600,duplicate_substr=None):
+def _textInputByName(elmId,val,timeout=20,duplicate_substr=None):
 	
     if val == None:
 	    val=''
@@ -91,7 +93,7 @@ def _textInputByName(elmId,val,timeout=3600,duplicate_substr=None):
     logging.info("\"" + elmId + "\"" + ":" + "\"" + val + "\",")
 
 #填写id为elmId的输入框，如果输入框已经有值则忽略
-def _textInputById(elmId,val,timeout=3600,duplicate_substr=None):
+def _textInputById(elmId,val,timeout=20,duplicate_substr=None):
 	
     if val == None:
 	    val=''
@@ -113,7 +115,7 @@ def _textInputById(elmId,val,timeout=3600,duplicate_substr=None):
     logging.info("\"" + elmId + "\"" + ":" + "\"" + val + "\",")
 
 #点击id为elmId的按钮
-def _buttonById(elmId,timeout=3600):
+def _buttonById(elmId,timeout=20):
     _check_alert_to_close()
     logging.info("Waiting Button id: " + elmId)
     elm_btn_x = driver.find_element_by_id(elmId)
@@ -128,9 +130,9 @@ def _buttonByCustomerNameAndCount(customerName,count,buttonName="個人名簿登
     target=driver.find_element_by_xpath(xpath)
     driver.execute_script("arguments[0].scrollIntoView();", target) #拖动到可见的元素去
     target.click()
-	
+
 #点击name为elmName的按钮
-def _buttonByName(elmName,timeout=3600):
+def _buttonByName(elmName,timeout=20):
     _check_alert_to_close()
     logging.info("Waiting Button name: " + elmName)
     elm_btn_x = driver.find_element_by_name(elmName)
@@ -139,7 +141,7 @@ def _buttonByName(elmName,timeout=3600):
     logging.info("Click Button name: " + elmName)
 
 #勾选单选组
-def _radioBoxVisableByName(radioName,value,isSelectId1="false",timeout=3600):
+def _radioBoxVisableByName(radioName,value,isSelectId1="false",timeout=20):
     _check_alert_to_close()
     elm_ipt_x = driver.find_element_by_xpath("//input[@name='"+radioName+"' and @value='"+value+"']")
     #是否选中第一个
@@ -165,10 +167,29 @@ def callbackfunc(blocknum, blocksize, totalsize):
     sys.stdout.flush()
     if percent == 100:
         print('')
-	
+
+def feedBackError(requrl,errorCode,errorMsg="未知错误"):
+    '''向服务器反馈错误信息
+    @requrl:请求地址
+    @errorCode: 错误类型,1代表受付番号未生成，2代表个人名簿登录失败，3代表归国报告上传失败
+    @errorMsg: 错误消息
+    '''
+    try:
+        payload  = {'errorCode':errorCode,'errorMsg':errorMsg}
+        res = requests.post(url = requrl,data=payload)
+        result = res.text
+    except Exception as e:
+        logging.info("反馈错误信息失败")
+        logging.info(e)
+    
 #函数定义  end
 #主流程开始
 # Main Process Start
+task_id=sys.argv[2]
+logging.info("task_id:" + task_id)
+server_host="http://218.244.148.21:9004"
+feed_back_url=server_host + "/visa/simulator/japanErrorHandle/"	+ task_id
+
 if not sys.platform.startswith('win'):
     import coloredlogs
     coloredlogs.install(level='INFO')
@@ -285,6 +306,7 @@ _buttonByName("BTN_CHECK_SUBMIT_x")
 _check_alert_to_close()
 
 #3. 列表页，点击個人名簿登録
+# 如果 不出现对应的按钮，则代表美元生成受付番号，需要重新填写
 # Make sure page has been complete loaded
 _wait_for_elm_by_id("container")
 driver.find_element_by_xpath("//li[@class='navi_01']").click()
@@ -302,12 +324,19 @@ _wait_for_xpath("//input[@name='BTN_SEARCH_x']")
 _buttonByName("BTN_SEARCH_x")
 
 #获取受付番号
-acceptance_number=driver.find_element_by_xpath("//tr/td/div[contains(text(),'廖 阳') and contains(text(),'1')]/../../td/a").getText()
+customerName = data_json["proposerNameCN"]
+acceptance_number = None
+try:
+    acceptance_number=driver.find_element_by_xpath("//tr/td/div[contains(text(),'"+customerName+"') and contains(text(),'"+applicant_count+"')]/../../td/a").getText()
+    #如果没有获取到受付番号，向服务器反馈错误信息
+except NoSuchElementException as e:
+    feedBackError(feed_back_url,1,"未生成受付番号")
+    logging.info(e)
 logging.info("受付番号 :%s",acceptance_number)
 
-#名簿登録
+#名簿登録页
 answer = data_json["proposerNameCN"]
-_wait_for_elm_by_id("container",3600)
+_wait_for_elm_by_id("container",20)
 _buttonByCustomerNameAndCount(answer,applicant_count)
 _buttonByName("BTN_ADD_CSV_x")
 
@@ -317,11 +346,20 @@ time.sleep(3)
 _wait_for_elm_by_id("container")
 logging.info("Load Page Title :%s",driver.title)
 
-#上传名簿
+#上传名簿,这里可能会因为文件数据问题，上传名簿失败
 answer = data_json["excelUrl"]
 _textInputByName("CSV_FILE",answer)
 _buttonByName("BTN_SUBMIT_x")
 _check_alert_to_close()
+time.sleep(3)
+
+#判断是否上传出错,如果找到errorMsg元素，则表示上传失败
+try:
+    error_xpath="//input[@name='CSV_FILE']/./following-sibling::p[@class='errorMsg']"
+    upload_error=driver.find_element_by_xpath(error_xpath)
+    feedBackError(feed_back_url,2,"個人名簿登録失败")
+except NoSuchElementException as e:
+    logging.info("個人名簿登録成功")
 
 #归国报告
 time.sleep(3)
@@ -345,40 +383,41 @@ _buttonByName("BTN_SEARCH_x")
 
 _wait_for_elm_by_id("container")
 answer = data_json["proposerNameCN"]
-_wait_for_elm_by_id("container",3600)
-_buttonByCustomerNameAndCount(answer,applicant_count,"帰国報告")
-_wait_for_elm_by_id("container")
-_buttonByName("BTN_CHECK_x")
+_wait_for_elm_by_id("container",20)
+try:
+    _buttonByCustomerNameAndCount(answer,applicant_count,"帰国報告")
+    _wait_for_elm_by_id("container")
+    _buttonByName("BTN_CHECK_x")
 
-_wait_for_elm_by_id("container")
-_buttonByName("BTN_CHECK_SUBMIT_x")
+    _wait_for_elm_by_id("container")
+    _buttonByName("BTN_CHECK_SUBMIT_x")
 
-#每次下载归国报告书之前判断文件夹里是否存在名为mpdf.pdf以及任务id为名的pdf文件，有的话则删除
-task_id=sys.argv[2]
-logging.info("task_id:" + task_id)
-
-default_download_name=workDir+"\\mpdf.pdf"
-pdf_name=workDir+"\\"+task_id+".pdf"
-if os.path.isfile(default_download_name):
-    os.remove(default_download_name)
-
-if os.path.isfile(pdf_name):
-    os.remove(pdf_name)
-
-#点击归国报告书表示(下载归国报告书)
-_wait_for_elm_by_id("container")
-_check_alert_to_close()
-elm_btn = driver.find_element_by_xpath("//input[@name='BTN_BACK_x' and @value='帰国報告書の表示']")
-driver.execute_script("arguments[0].scrollIntoView();", elm_btn) 
-driver.implicitly_wait(10)
-elm_btn.click()
-time.sleep(3)
-
-#等待下载完毕
-flag = 1
-while flag == 1 :
+    #每次下载归国报告书之前判断文件夹里是否存在名为mpdf.pdf以及任务id为名的pdf文件，有的话则删除
+    default_download_name=workDir+"\\mpdf.pdf"
+    pdf_name=workDir+"\\"+task_id+".pdf"
     if os.path.isfile(default_download_name):
-        flag = 0
+        os.remove(default_download_name)
+
+    if os.path.isfile(pdf_name):
+        os.remove(pdf_name)
+
+    #点击归国报告书表示(下载归国报告书)
+    _wait_for_elm_by_id("container")
+    _check_alert_to_close()
+    elm_btn = driver.find_element_by_xpath("//input[@name='BTN_BACK_x' and @value='帰国報告書の表示']")
+    driver.execute_script("arguments[0].scrollIntoView();", elm_btn) 
+    driver.implicitly_wait(10)
+    elm_btn.click()
+    time.sleep(3)
+
+    #等待下载完毕
+    flag = 1
+    while flag == 1 :
+        if os.path.isfile(default_download_name):
+            flag = 0
+except Exception as e:
+    feedBackError(feed_back_url,3,"获取帰国報告失败")
+    logging.info(e)
 
 #重命名,因为重命名文件导致元数据丢失，重命名后的pdf文件打不开，暂时不使用重命名了
 '''
@@ -409,8 +448,6 @@ while flag == 1 :
             flag = 0
             break
 
-task_id=sys.argv[2]
-logging.info("task_id:" + task_id)
 pdf_name=workDir+"\\"+task_id+".pdf"	
 logging.info("pdf_name:" + pdf_name)
 try:
@@ -423,17 +460,23 @@ except urllib.error.HTTPError as e:
 
 time.sleep(3)
 #上传文件,上传完成后关闭文件
-upload_url="http://218.244.148.21:9004/visa/simulator/UploadJapan/"	+ task_id
-upload_file=open(default_download_name, 'rb')
-files = {'file':('report.pdf',upload_file,'application/pdf')}
-data = {acceptanceNumber:acceptance_number}
-resp = requests.post(upload_url, files=files, data = data)
-pprint(resp.text)
-result = json.loads(resp.text)
-if "SUCCESS" == result['code']:
-    logging.info("Upload SUCCESS，Task:" + task_id + "complete!")
-    upload_file.close()
-    
+try:
+    upload_url=server_host + "/visa/simulator/UploadJapan/"	+ task_id
+    upload_file=open(default_download_name, 'rb')
+    files = {'file':('report.pdf',upload_file,'application/pdf')}
+    data = {'acceptanceNumber':acceptance_number}
+    resp = requests.post(upload_url, files=files, data = data)
+    pprint(resp.text)
+    result = json.loads(resp.text)
+    if "SUCCESS" == result['code']:
+        logging.info("Upload SUCCESS，Task:" + task_id + "complete!")
+        upload_file.close()
+    else:
+        feedBackError(feed_back_url,3,"帰国報告上传失败")
+except Exception as e:
+    feedBackError(feed_back_url,3,"帰国報告上传失败")
+    logging.info(e)
+
 #执行完成后把本地归国报告文件删除
 if os.path.isfile(default_download_name):
     os.remove(default_download_name)   
