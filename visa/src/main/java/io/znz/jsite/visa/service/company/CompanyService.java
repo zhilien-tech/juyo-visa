@@ -14,10 +14,8 @@ import io.znz.jsite.util.security.Encodes;
 import io.znz.jsite.visa.entity.company.CompanyEntity;
 import io.znz.jsite.visa.entity.companyjob.CompanyJobEntity;
 import io.znz.jsite.visa.entity.department.DepartmentEntity;
-import io.znz.jsite.visa.entity.japan.NewComeBabyJpEntity;
 import io.znz.jsite.visa.entity.job.JobEntity;
 import io.znz.jsite.visa.entity.userjobmap.UserJobMapEntity;
-import io.znz.jsite.visa.enums.CompanyTypeEnum;
 import io.znz.jsite.visa.enums.UserDeleteStatusEnum;
 import io.znz.jsite.visa.enums.UserStatusEnum;
 import io.znz.jsite.visa.forms.companyform.CompanySqlForm;
@@ -91,22 +89,26 @@ public class CompanyService extends NutzBaseService<CompanyEntity> {
 		addForm.setCreateTime(new Date());
 		addForm.setAdminId(empId);
 		long comType = addForm.getComType();//得到公司类型(送签社或地接社)
-		if (!Util.isEmpty(comType) && comType == CompanyTypeEnum.send.intKey()) {//日本送签社
-			addForm.setComType(comType);
-		}
 		if (Util.isEmpty(addForm.getDeletestatus())) {
 			addForm.setDeletestatus(0);
 		}
 		CompanyEntity companyAdd = dbDao.insert(addForm);
 		long comId = companyAdd.getId();//得到公司id
-		if (!Util.isEmpty(comType) && comType == CompanyTypeEnum.land.intKey()) {//日本地接社
-			//添加地接社数据
-			NewComeBabyJpEntity newbaby = new NewComeBabyJpEntity();
+		/*NewComeBabyJpEntity newbaby = new NewComeBabyJpEntity();
+		if (!Util.isEmpty(comType) && comType == CompanyTypeEnum.send.intKey()) {//日本送签社
+			//添加送签社数据
 			newbaby.setComId(comId);
 			newbaby.setComType(CompanyTypeEnum.land.intKey());
 			newbaby.setCreateTime(new Date());
 			dbDao.insert(newbaby);
-		}
+		}*/
+		/*if (!Util.isEmpty(comType) && comType == CompanyTypeEnum.land.intKey()) {//日本地接社
+			//添加地接社数据
+			newbaby.setComId(comId);
+			newbaby.setComType(CompanyTypeEnum.land.intKey());
+			newbaby.setCreateTime(new Date());
+			dbDao.insert(newbaby);
+		}*/
 		//#########################添加管理员所在的部门信息##########################//
 		DepartmentEntity dept = new DepartmentEntity();
 		dept.setComId(comId);
@@ -159,13 +161,12 @@ public class CompanyService extends NutzBaseService<CompanyEntity> {
 		//修改管理员用户名
 		EmployeeEntity userEntity = dbDao.fetch(EmployeeEntity.class, updateForm.getAdminId());
 		userEntity.setTelephone(updateForm.getAdminName());
-		userEntity.setFullName(updateForm.getAdminName());
 		userEntity.setUpdateTime(new Date());
-		nutDao.updateIgnoreNull(updateForm);
+		nutDao.updateIgnoreNull(userEntity);
 		//修改公司信息
-		CompanyEntity company = this.fetch(updateForm.getId());
-		company.setUpdateTime(new Date());
-		return nutDao.updateIgnoreNull(company);
+		//updateForm = this.fetch(updateForm.getId());
+		updateForm.setUpdateTime(new Date());
+		return nutDao.updateIgnoreNull(updateForm);
 	}
 
 	/**

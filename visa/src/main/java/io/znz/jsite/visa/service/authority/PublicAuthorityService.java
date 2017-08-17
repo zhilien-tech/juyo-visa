@@ -9,6 +9,7 @@ package io.znz.jsite.visa.service.authority;
 import io.znz.jsite.base.NutzBaseService;
 import io.znz.jsite.visa.entity.comfunmap.CompanyFunctionEntity;
 import io.znz.jsite.visa.entity.company.CompanyEntity;
+import io.znz.jsite.visa.enums.CompanyTypeEnum;
 
 import java.util.List;
 
@@ -36,17 +37,32 @@ public class PublicAuthorityService extends NutzBaseService {
 		//根据公司id查询出是上游公司还是代理商
 		CompanyEntity fetchType = dbDao.fetch(CompanyEntity.class, Cnd.where("adminId", "=", adminId));
 		long comId = fetchType.getId();//得到公司id
-		//上游公司功能ID
-		int[] function = { 1, 2, 3, 6, 17, 18, 19, 25, 27 };
+		long comType = fetchType.getComType();//得到公司类型(送签社或者地接社)
 		List<CompanyFunctionEntity> functionList = Lists.newArrayList();
-		for (int i = 0; i < function.length; i++) {
-			//向公司功能关系表中添加数据
-			CompanyFunctionEntity one = new CompanyFunctionEntity();
-			one.setComId(comId);
-			one.setFunId(function[i]);
-			functionList.add(one);
+		List<CompanyFunctionEntity> insert = Lists.newArrayList();
+		if (comType == CompanyTypeEnum.send.intKey()) {//送签社
+			//送签社功能ID
+			int[] function1 = { 1, 2, 3, 6, 17, 18, 19, 25 };
+			for (int i = 0; i < function1.length; i++) {
+				//向公司功能关系表中添加数据
+				CompanyFunctionEntity one = new CompanyFunctionEntity();
+				one.setComId(comId);
+				one.setFunId(function1[i]);
+				functionList.add(one);
+			}
+			insert = dbDao.insert(functionList);
+		} else if (comType == CompanyTypeEnum.land.intKey()) {//地接社
+			//送签社功能ID
+			int[] function2 = { 1, 2, 3, 6, 17, 18, 25, 27 };
+			for (int i = 0; i < function2.length; i++) {
+				//向公司功能关系表中添加数据
+				CompanyFunctionEntity one = new CompanyFunctionEntity();
+				one.setComId(comId);
+				one.setFunId(function2[i]);
+				functionList.add(one);
+			}
+			insert = dbDao.insert(functionList);
 		}
-		List<CompanyFunctionEntity> insert = dbDao.insert(functionList);
 		return !Util.isEmpty(insert);
 	}
 
