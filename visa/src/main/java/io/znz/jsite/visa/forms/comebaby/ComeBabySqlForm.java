@@ -30,14 +30,38 @@ import com.uxuexi.core.common.util.Util;
 public class ComeBabySqlForm extends KenDoParamForm {
 	private long comId;
 
+	private long comtype;
+
+	/*@Override
+	public Sql sql(SqlManager paramSqlManager) {
+		*//**
+		* 默认使用了当前form关联entity的单表查询sql,如果是多表复杂sql，
+		* 请使用sqlManager获取自定义的sql，并设置查询条件
+		*/
+	/*
+	String sqlString = paramSqlManager.get("comebaby_list");
+	Sql sql = Sqls.create(sqlString);
+	sql.setCondition(cnd());
+	return sql;
+	}
+
+	private Cnd cnd() {
+	Cnd cnd = Cnd.NEW();
+	if (!Util.isEmpty(comId) && comId > 0) {
+	cnd.and("c.comId", "=", comId);
+	}
+	cnd.orderBy("c.updateTime", "desc");
+	return cnd;
+	}*/
 	@Override
 	public Sql sql(SqlManager paramSqlManager) {
 		/**
 		 * 默认使用了当前form关联entity的单表查询sql,如果是多表复杂sql，
 		 * 请使用sqlManager获取自定义的sql，并设置查询条件
 		 */
-		String sqlString = paramSqlManager.get("comebaby_list");
+		String sqlString = paramSqlManager.get("comebaby_sqs_djs_list");
 		Sql sql = Sqls.create(sqlString);
+		sql.params().set("djsType", comtype);
 		sql.setCondition(cnd());
 		return sql;
 	}
@@ -47,7 +71,6 @@ public class ComeBabySqlForm extends KenDoParamForm {
 		if (!Util.isEmpty(comId) && comId > 0) {
 			cnd.and("c.comId", "=", comId);
 		}
-		cnd.orderBy("c.updateTime", "desc");
 		return cnd;
 	}
 }
