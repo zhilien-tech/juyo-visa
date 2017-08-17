@@ -14,6 +14,7 @@ import io.znz.jsite.visa.entity.japan.NewDateplanJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrderJpEntity;
 import io.znz.jsite.visa.entity.japan.NewTripJpEntity;
 import io.znz.jsite.visa.entity.usa.NewCustomerEntity;
+import io.znz.jsite.visa.enums.ErrorCodeEnum;
 import io.znz.jsite.visa.enums.VisaJapanApproStatusEnum;
 import io.znz.jsite.visa.simulator.form.JapanErrorHandleForm;
 import io.znz.jsite.visa.simulator.form.JapanSimulatorForm;
@@ -38,8 +39,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
-import org.nutz.dao.Dao;
-import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.lang.Files;
@@ -48,7 +47,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.uxuexi.core.common.util.Util;
-import com.uxuexi.core.db.dao.IDbDao;
 import com.uxuexi.core.db.util.DbSqlUtil;
 
 /**
@@ -63,15 +61,32 @@ import com.uxuexi.core.db.util.DbSqlUtil;
 public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity> {
 	@Autowired
 	private QiniuUploadServiceImpl qiniuUploadService;
-	@Autowired
-	protected SqlManager sqlManager;
-	@Autowired
-	protected Dao nutDao;
-	@Autowired
-	protected IDbDao dbDao;
 
 	/**查询第一个可提交签证网站的日本客户信息*/
 	public ResultObject fetchJapanOrder() {
+		List<NewOrderJpEntity> orderListSubmiting = dbDao.query(NewOrderJpEntity.class,
+				Cnd.where("status", "=", VisaJapanApproStatusEnum.japancoming.intKey()), null);
+		if (!Util.isEmpty(orderListSubmiting) && orderListSubmiting.size() > 0) {
+			Date updatetimeOld = orderListSubmiting.get(0).getUpdatetime();
+			Date newTime = new Date();
+			int minutes = (int) (newTime.getTime() - updatetimeOld.getTime()) / 1000 / 60;
+			if (minutes > 15) {
+				//如果没响应将订单状态改为提交失败
+				dbDao.update(NewOrderJpEntity.class,
+						Chain.make("updatetime", new Date()).add("status", VisaJapanApproStatusEnum.fail.intKey()),
+						Cnd.where("id", "=", orderListSubmiting.get(0).getId()));
+				ResultObject japanOrderInfo = getJapanOrderInfo();
+				return japanOrderInfo;
+			}
+		} else {
+			ResultObject japanOrderInfo = getJapanOrderInfo();
+			return japanOrderInfo;
+		}
+
+		return ResultObject.fail("暂无任务");
+	}
+
+	public ResultObject getJapanOrderInfo() {
 		List<NewOrderJpEntity> orderList = dbDao.query(NewOrderJpEntity.class,
 				Cnd.where("status", "=", VisaJapanApproStatusEnum.readySubmit.intKey()), null);
 		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
@@ -167,7 +182,6 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 				return ro;
 			}
 		}
-
 		return ResultObject.fail("暂无任务");
 	}
 
@@ -190,8 +204,8 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 			}
 
 			//签证状态改为'提交中'
-			dbDao.update(NewOrderJpEntity.class, Chain.make("status", VisaJapanApproStatusEnum.japancoming.intKey()),
-					Cnd.where("id", "=", cid));
+			dbDao.update(NewOrderJpEntity.class, Chain.make("status", VisaJapanApproStatusEnum.japancoming.intKey())
+					.add("updatetime", new Date()), Cnd.where("id", "=", cid));
 		} catch (Exception e) {
 			return ResultObject.fail("提交失败,请稍后重试！");
 		}
@@ -306,6 +320,25 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 	}
 
 	public void japanErrorHandle(JapanErrorHandleForm jpForm, HttpServletResponse response, Long cid) {
+		if (!Util.isEmpty(cid) && cid > 0) {
+			NewOrderJpEntity order = dbDao.fetch(NewOrderJpEntity.class, cid);
+			int errorCode = jpForm.getErrorCode();
+			String errorMsg = jpForm.getErrorMsg();
+			order.setErrorCode(errorCode);
+			order.setErrorMsg(errorMsg);
+			dbDao.update(order, null);
 
+			if (errorCode == ErrorCodeEnum.completedNumberFail.intKey()) {
+				dbDao.update(
+						NewOrderJpEntity.class,
+						Chain.make("updatetime", new Date()).add("status",
+								VisaJapanApproStatusEnum.readySubmit.intKey()), Cnd.where("id", "=", cid.longValue()));
+			} else {
+				dbDao.update(NewOrderJpEntity.class,
+						Chain.make("updatetime", new Date()).add("status", VisaJapanApproStatusEnum.fail.intKey()),
+						Cnd.where("id", "=", cid.longValue()));
+			}
+
+		}
 	}
 }

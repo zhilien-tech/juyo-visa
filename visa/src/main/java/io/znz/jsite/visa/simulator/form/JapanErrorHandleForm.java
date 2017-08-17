@@ -19,6 +19,6 @@ import lombok.Data;
 @Data
 public class JapanErrorHandleForm {
 	private int errorCode;
-	private int errorProgress;
+	private String errorMsg;
 
 }
