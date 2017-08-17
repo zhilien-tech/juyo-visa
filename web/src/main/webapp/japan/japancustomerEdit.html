@@ -473,6 +473,7 @@
 		                               <label for="in_date">入境时间:</label>
 		                               <div class='input-group'>
 		                                   <input id="in_date" data-role="datepicker" name="intoDate" data-bind="value:customer.recentlyintojp.intoDate,events:{change:onRecentChange}" style="width: 100%;"/>
+		                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 		                               </div>
 		                           </div>
 		                        </div>
@@ -481,6 +482,7 @@
 		                               <label for="out_date">出境时间:</label>
 		                               <div class='input-group'>
 		                                   <input id="out_date" data-role="datepicker" name="outofDate" data-bind="value:customer.recentlyintojp.outofDate,events:{change:onRecentChange}" style="width: 100%;"/>
+		                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 		                               </div>
 		                           </div>
 		                        </div>
@@ -488,7 +490,8 @@
 		                           <div class="form-group">
 		                               <label for="stay_date">停留时间:</label>
 		                               <div class='input-group'>
-		                                   <input id="stay_date" type="text" data-bind="value:customer.recentlyintojp.stayDays" style="width: 90%;height:25px;"/>天
+		                                   <input id="stay_date" type="text" class="k-textbox" data-bind="value:customer.recentlyintojp.stayDays" style="width: 108%;"/><span style="display: table-cell;position: relative;left: -3px;">天</span>
+		                                   <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
 		                               </div>
 		                           </div>
 		                        </div>
