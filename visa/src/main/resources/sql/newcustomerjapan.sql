@@ -43,7 +43,8 @@ If(
  vnoj.customerSource=3,
 vcm.fullComName,
 qqq.fullComName
-) as 'fullComName'
+) as 'fullComName',
+vnoj.errorMsg
 FROM	visa_new_order_jp vnoj LEFT JOIN visa_new_customersource_jp vcm ON vnoj.id = vcm.order_jp_id
 LEFT JOIN (select *
 from (

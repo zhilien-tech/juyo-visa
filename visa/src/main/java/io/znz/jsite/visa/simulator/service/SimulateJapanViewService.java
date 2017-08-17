@@ -333,10 +333,23 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 						NewOrderJpEntity.class,
 						Chain.make("updatetime", new Date()).add("status",
 								VisaJapanApproStatusEnum.readySubmit.intKey()), Cnd.where("id", "=", cid.longValue()));
+			} else if (errorCode == ErrorCodeEnum.persionNameList.intKey()) {
+				dbDao.update(
+						NewOrderJpEntity.class,
+						Chain.make("updatetime", new Date()).add("status",
+								VisaJapanApproStatusEnum.japanSendFail.intKey()), Cnd.where("id", "=", cid.longValue()));
+			} else if (errorCode == ErrorCodeEnum.comeReport.intKey()) {
+				dbDao.update(
+						NewOrderJpEntity.class,
+						Chain.make("updatetime", new Date()).add("status",
+								VisaJapanApproStatusEnum.japanReportFail.intKey()),
+						Cnd.where("id", "=", cid.longValue()));
+
 			} else {
 				dbDao.update(NewOrderJpEntity.class,
 						Chain.make("updatetime", new Date()).add("status", VisaJapanApproStatusEnum.fail.intKey()),
 						Cnd.where("id", "=", cid.longValue()));
+
 			}
 
 		}
