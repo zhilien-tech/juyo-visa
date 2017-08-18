@@ -178,6 +178,7 @@ def feedBackError(requrl,errorCode,errorMsg="未知错误"):
         payload  = {'errorCode':errorCode,'errorMsg':errorMsg}
         res = requests.post(url = requrl,data=payload)
         result = res.text
+        sys.exit(0)
     except Exception as e:
         logging.info("反馈错误信息失败")
         logging.info(e)
@@ -193,117 +194,121 @@ feed_back_url=server_host + "/visa/simulator/japanErrorHandle/"	+ task_id
 if not sys.platform.startswith('win'):
     import coloredlogs
     coloredlogs.install(level='INFO')
-logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
-
-#import JSON data file,从文件加载json数据，命令行的第二个参数为完整文件名
-data_json = None
-file_name = sys.argv[1]
-logging.info("Import json data from file,use utf-8 : %s",file_name)
-#注意,json文件也请使用utf-8编码保存
-with open(file_name,encoding="utf-8") as data_file:
-    data_json = json.load(data_file)
-    data_file.close()
-
-# 打开火狐浏览器并且跳转到签证网站
-profileDir = "C:/Users/user/AppData/Roaming/Mozilla/Firefox/Profiles/e0dheleu.default"
-profile = webdriver.FirefoxProfile(profileDir)
-workDir=os.path.abspath(os.path.join(os.getcwd(), "./tmp"))
-pprint("workDir:" + workDir) 
-#自定义下载路径
-profile.set_preference("browser.download.dir",workDir)
-#使用自定义下载路径
-profile.set_preference('browser.download.folderList', 2) 
-#不显示下载管理器
-profile.set_preference('browser.download.manager.showWhenStarting', False) 
-#MIME
-profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/pdf")
-#自动下载pdf必须添加
-profile.set_preference("plugin.disable_full_page_plugin_for_types", "application/pdf")
-profile.set_preference("pdfjs.disabled", True)
-
-driver = webdriver.Firefox(profile)
-driver.get("https://churenkyosystem.com/member/login.php")
-
-#1. login
-answer = data_json["visaAccount"]
-if not answer:
-    answer = "1507-001"
-_textInputByName("LOGIN_ID",answer)
-
-answer = data_json["visaPasswd"]
-if not answer:
-    answer = "kintsu2017"
-	
-_textInputByName("PASSWORD",answer)
-_buttonByName("SUBMIT_LOGIN_x")
-
-#2. text input applicant info 
-# Make sure page has been complete loaded
-_wait_for_elm_by_id("container")
-driver.find_element_by_xpath("//li[@class='navi_05']").click()
-
-time.sleep(3)
-_wait_for_elm_by_id("container")
-logging.info("Load Page Title :%s",driver.title)
-
-#指定番号
-answer = data_json["agentNo"]
-if not answer:
-    answer = "gtu-sh-057-0"
-
-_textInputById("CHINA_AGENT_CODE",answer)
-_buttonByName("BTN_SEARCH")
-
-#签证类型
-answer = data_json["visaType1"]
-if not answer:
-    answer = "2"
-elm_ipt_x = driver.find_element_by_xpath("//input[@name='VISA_TYPE_1' and @value='"+answer+"']/..")
-elm_ipt_x.click()
-
-#申请人姓名
-answer = data_json["proposerNameCN"]
-logging.info("proposerNameCN :%s",answer)
-elm_input = driver.find_element_by_name("APPLICANT_NAME")
-driver.execute_script("arguments[0].scrollIntoView();", elm_input)
-elm_input.send_keys(answer)
-
-answer = data_json["proposerNameEN"]
-_textInputByName("APPLICANT_PINYIN",answer)
-#人数
-applicant_count = data_json["applicantCnt"]
-_textInputByName("NUMBER_OF_TOURISTS",applicant_count)
-
-#出入境时间
-answer = data_json["entryDate"]
-pprint("entryDate:" + answer)
-driver.execute_script("document.getElementById('ARRIVAL_DATE').removeAttribute('readonly',0);")
-
-arrivalDate = driver.find_element_by_id("ARRIVAL_DATE")
-arrivalDate.clear()
-arrivalDate.send_keys(answer)
-arrivalDate.send_keys(Keys.TAB)
-
-answer = data_json["leaveDate"]
-pprint("leaveDate:" + answer)
-driver.execute_script("document.getElementById('DEPARTURE_DATE').removeAttribute('readonly',0);")
-
-departureDate = driver.find_element_by_id("DEPARTURE_DATE")
-departureDate.clear()
-departureDate.send_keys(answer)
-departureDate.send_keys(Keys.TAB)
-_check_alert_to_close()
-
-#点击确认
-_check_alert_to_close()
-_buttonByName("BTN_CHECK_x")
-
-#确认页
-time.sleep(3)
-_wait_for_elm_by_id("container")
-_radioBoxVisableByName("MAIL_STATUS","1")
-_buttonByName("BTN_CHECK_SUBMIT_x")
-_check_alert_to_close()
+logging.basicConfig(stream=sys.stdout,format='%(levelname)s:%(message)s', level=logging.INFO)
+try:
+    #import JSON data file,从文件加载json数据，命令行的第二个参数为完整文件名
+    data_json = None
+    file_name = sys.argv[1]
+    logging.info("Import json data from file,use utf-8 : %s",file_name)
+    #注意,json文件也请使用utf-8编码保存
+    with open(file_name,encoding="utf-8") as data_file:
+        data_json = json.load(data_file)
+        data_file.close()
+    
+    # 打开火狐浏览器并且跳转到签证网站
+    profileDir = "C:/Users/user/AppData/Roaming/Mozilla/Firefox/Profiles/e0dheleu.default"
+    profile = webdriver.FirefoxProfile(profileDir)
+    workDir=os.path.abspath(os.path.join(os.getcwd(), "./tmp"))
+    pprint("workDir:" + workDir) 
+    #自定义下载路径
+    profile.set_preference("browser.download.dir",workDir)
+    #使用自定义下载路径
+    profile.set_preference('browser.download.folderList', 2) 
+    #不显示下载管理器
+    profile.set_preference('browser.download.manager.showWhenStarting', False) 
+    #MIME
+    profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/pdf")
+    #自动下载pdf必须添加
+    profile.set_preference("plugin.disable_full_page_plugin_for_types", "application/pdf")
+    profile.set_preference("pdfjs.disabled", True)
+    
+    driver = webdriver.Firefox(profile)
+    driver.get("https://churenkyosystem.com/member/login.php")
+    
+    #1. login
+    answer = data_json["visaAccount"]
+    if not answer:
+        answer = "1507-001"
+    _textInputByName("LOGIN_ID",answer)
+    
+    answer = data_json["visaPasswd"]
+    if not answer:
+        answer = "kintsu2017"
+    	
+    _textInputByName("PASSWORD",answer)
+    _buttonByName("SUBMIT_LOGIN_x")
+    
+    #2. text input applicant info 
+    # Make sure page has been complete loaded
+    _wait_for_elm_by_id("container")
+    driver.find_element_by_xpath("//li[@class='navi_05']").click()
+    
+    time.sleep(3)
+    _wait_for_elm_by_id("container")
+    logging.info("Load Page Title :%s",driver.title)
+    
+    #指定番号
+    answer = data_json["agentNo"]
+    if not answer:
+        answer = "gtu-sh-057-0"
+    
+    _textInputById("CHINA_AGENT_CODE",answer)
+    _buttonByName("BTN_SEARCH")
+    
+    #签证类型
+    answer = data_json["visaType1"]
+    if not answer:
+        answer = "2"
+    elm_ipt_x = driver.find_element_by_xpath("//input[@name='VISA_TYPE_1' and @value='"+answer+"']/..")
+    elm_ipt_x.click()
+    
+    #申请人姓名
+    answer = data_json["proposerNameCN"]
+    logging.info("proposerNameCN :%s",answer)
+    elm_input = driver.find_element_by_name("APPLICANT_NAME")
+    driver.execute_script("arguments[0].scrollIntoView();", elm_input)
+    elm_input.send_keys(answer)
+    
+    answer = data_json["proposerNameEN"]
+    _textInputByName("APPLICANT_PINYIN",answer)
+    #人数
+    applicant_count = data_json["applicantCnt"]
+    _textInputByName("NUMBER_OF_TOURISTS",applicant_count)
+    
+    #出入境时间
+    answer = data_json["entryDate"]
+    pprint("entryDate:" + answer)
+    driver.execute_script("document.getElementById('ARRIVAL_DATE').removeAttribute('readonly',0);")
+    
+    arrivalDate = driver.find_element_by_id("ARRIVAL_DATE")
+    arrivalDate.clear()
+    arrivalDate.send_keys(answer)
+    arrivalDate.send_keys(Keys.TAB)
+    
+    answer = data_json["leaveDate"]
+    pprint("leaveDate:" + answer)
+    driver.execute_script("document.getElementById('DEPARTURE_DATE').removeAttribute('readonly',0);")
+    
+    departureDate = driver.find_element_by_id("DEPARTURE_DATE")
+    departureDate.clear()
+    departureDate.send_keys(answer)
+    departureDate.send_keys(Keys.TAB)
+    _check_alert_to_close()
+    
+    #点击确认
+    _check_alert_to_close()
+    _buttonByName("BTN_CHECK_x")
+    
+    #确认信息页
+    time.sleep(3)
+    _wait_for_elm_by_id("container")
+    _radioBoxVisableByName("MAIL_STATUS","1")
+    #-------------------------------------------------------点击确认生成受付番号------------------------------------------
+    _buttonByName("BTN_CHECK_SUBMIT_x")
+    _check_alert_to_close()
+except Exception as e:
+    logging.info(e)
+    feedBackError(feed_back_url,1,"未生成受付番号")
 
 #3. 列表页，点击個人名簿登録
 # 如果 不出现对应的按钮，则代表美元生成受付番号，需要重新填写
@@ -327,39 +332,44 @@ _buttonByName("BTN_SEARCH_x")
 customerName = data_json["proposerNameCN"]
 acceptance_number = None
 try:
-    acceptance_number=driver.find_element_by_xpath("//tr/td/div[contains(text(),'"+customerName+"') and contains(text(),'"+applicant_count+"')]/../../td/a").getText()
+    xpath="//tr/td/div[contains(text(),'"+customerName+"') and contains(text(),'"+applicant_count+"')]/../../td/a"
+    acceptance_number=driver.find_element_by_xpath(xpath).text
     #如果没有获取到受付番号，向服务器反馈错误信息
-except NoSuchElementException as e:
-    feedBackError(feed_back_url,1,"未生成受付番号")
+except Exception as e:
     logging.info(e)
+    feedBackError(feed_back_url,1,"未生成受付番号")
+
 logging.info("受付番号 :%s",acceptance_number)
-
-#名簿登録页
-answer = data_json["proposerNameCN"]
-_wait_for_elm_by_id("container",20)
-_buttonByCustomerNameAndCount(answer,applicant_count)
-_buttonByName("BTN_ADD_CSV_x")
-
-# Upload excel page
-# Make sure page has been complete loaded
-time.sleep(3)
-_wait_for_elm_by_id("container")
-logging.info("Load Page Title :%s",driver.title)
-
-#上传名簿,这里可能会因为文件数据问题，上传名簿失败
-answer = data_json["excelUrl"]
-_textInputByName("CSV_FILE",answer)
-_buttonByName("BTN_SUBMIT_x")
-_check_alert_to_close()
-time.sleep(3)
-
-#判断是否上传出错,如果找到errorMsg元素，则表示上传失败
 try:
-    error_xpath="//input[@name='CSV_FILE']/./following-sibling::p[@class='errorMsg']"
-    upload_error=driver.find_element_by_xpath(error_xpath)
+    #名簿登録页
+    answer = data_json["proposerNameCN"]
+    _wait_for_elm_by_id("container",20)
+    _buttonByCustomerNameAndCount(answer,applicant_count)
+    _buttonByName("BTN_ADD_CSV_x")
+    
+    # Upload excel page
+    # Make sure page has been complete loaded
+    time.sleep(3)
+    _wait_for_elm_by_id("container")
+    logging.info("Load Page Title :%s",driver.title)
+    
+    #上传名簿,这里可能会因为文件数据问题，上传名簿失败
+    answer = data_json["excelUrl"]
+    _textInputByName("CSV_FILE",answer)
+    _buttonByName("BTN_SUBMIT_x")
+    _check_alert_to_close()
+    time.sleep(3)
+    
+    #判断是否上传出错,如果找到errorMsg元素，则表示上传失败
+    try:
+        error_xpath="//input[@name='CSV_FILE']/./following-sibling::p[@class='errorMsg']"
+        upload_error=driver.find_element_by_xpath(error_xpath)
+        feedBackError(feed_back_url,2,"個人名簿登録失败")
+    except NoSuchElementException as e:
+        logging.info("個人名簿登録成功")
+except Exception as e:
+    logging.info(e)
     feedBackError(feed_back_url,2,"個人名簿登録失败")
-except NoSuchElementException as e:
-    logging.info("個人名簿登録成功")
 
 #归国报告
 time.sleep(3)

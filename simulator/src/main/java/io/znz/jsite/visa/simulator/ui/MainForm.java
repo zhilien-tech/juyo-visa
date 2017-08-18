@@ -82,7 +82,6 @@ public class MainForm extends JPanel {
 
 	private static final String HISTORY = "history";
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss.SSS]");
-	private long startTime = 0;
 
 	private static final int SUCCESS = 0;
 
@@ -115,7 +114,8 @@ public class MainForm extends JPanel {
 						log(line + "\n");
 					}
 				} catch (IOException e) {
-					JOptionPane.showMessageDialog(null, "从BufferedReader读取错误：" + e);
+					System.out.println("从BufferedReader读取错误：" + e);
+					e.printStackTrace();
 				} finally {
 					IOUtils.closeQuietly(br);
 				}
@@ -142,7 +142,6 @@ public class MainForm extends JPanel {
 			Process p = Runtime.getRuntime().exec(command);
 			transferLog(p.getInputStream());
 			transferLog(p.getErrorStream());
-			p.destroy();
 			result = p.waitFor();
 			log("执行python命令返回结果:" + result);
 		} catch (Exception e) {
@@ -210,7 +209,6 @@ public class MainForm extends JPanel {
 
 	//执行按钮点击事件
 	private void executeTaskActionPerformed(ActionEvent actionEvent) {
-		startTime = System.currentTimeMillis();
 		executeTask.setEnabled(false);
 
 		exec.scheduleAtFixedRate(new Runnable() {
@@ -225,6 +223,7 @@ public class MainForm extends JPanel {
 
 						final String oid = String.valueOf(ro.getAttributes().get("oid"));
 						log("========================开始执行任务:" + oid + "===========================");
+						long startTime = System.currentTimeMillis();
 						String remoteFileUrl = String.valueOf(ro.getData().get("excelUrl"));
 						SwingUtilities.invokeLater(new Runnable() {
 							@Override
@@ -264,7 +263,7 @@ public class MainForm extends JPanel {
 							if (ds160ro.getCode() == ResultObject.ResultCode.SUCCESS) {
 								log("任务码:" + oid + " 提交中...");
 							} else {
-								JOptionPane.showMessageDialog(new JLabel(), ds160ro.getMsg());
+								log("任务码:" + oid + "准备提交失败");
 							}
 							//第三个参数为任务码
 							String cmd = "python " + pyFile.getText() + " " + target.getAbsolutePath() + " " + oid;
@@ -286,7 +285,6 @@ public class MainForm extends JPanel {
 						}
 					} else {
 						log("========================暂无可执行的任务===========================");
-						JOptionPane.showMessageDialog(new JLabel(), ro.getMsg());
 					}
 
 				} catch (Exception exception) {

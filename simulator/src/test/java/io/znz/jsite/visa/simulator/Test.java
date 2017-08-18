@@ -1,14 +1,10 @@
 package io.znz.jsite.visa.simulator;
 
-import io.znz.jsite.visa.simulator.data.jp.JapanData;
-
-import org.nutz.json.Json;
-import org.nutz.json.JsonFormat;
-
 /**
  * Created by Chaly on 2017/3/12.
  */
 public class Test {
+	private static final int SUCCESS = 0;
 
 	public static String getBaseUrl() {
 		//        return "http://59.110.155.140:8080/";
@@ -16,15 +12,26 @@ public class Test {
 	}
 
 	public static void main(String[] args) {
-		JapanData data = new JapanData();
+		String cmd = "python D:\\test\\python\\test.py 364";
+		int execResult = executeCommand(cmd);
+		//如果命令行意外退出
+		if (SUCCESS != execResult) {
+			System.out.println("========error==========");
+		} else {
+			System.out.println("========normal==========");
+		}
+	}
 
-		data.setApplicantCnt("0");
-		data.setEntryDate("2017/09/01");
-		data.setLeaveDate("2017/09/07");
-		data.setProposerNameCN("张宝峰");
-		data.setProposerNameEN("ZHANG BAOFENG");
-		data.setExcelUrl("C:/Users/user/Desktop/simulator_test/photo.xlsx");
-
-		System.out.println(Json.toJson(data, JsonFormat.full()));
+	//执行命令行
+	static int executeCommand(final String command) {
+		int result = 0;
+		try {
+			Process p = Runtime.getRuntime().exec(command);
+			result = p.waitFor();
+			System.out.println("执行python命令返回结果:" + result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }
