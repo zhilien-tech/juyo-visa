@@ -543,7 +543,7 @@ var grid = $("#grid").kendoGrid({
                 {name: "modify", imageClass:false, text: "编辑"},
                 {name: "validate", imageClass:false, text: "发招宝"},
                 {name: "download", imageClass:false, text: "下载"},
-                {name: "upload", imageClass:false, text: "上传",click:uploadfile},
+                {name: "upload", imageClass:false, text: "上传",template:"<input type=\'file\' show=\'0\' name=\'files\' id=\'photos\'  />"},
                 regCmd("modify"),
                 regCmd("shareall"),
                 regCmd("download"),
@@ -552,7 +552,83 @@ var grid = $("#grid").kendoGrid({
                 regCmd("upload"),
             ]
         }
-    ]/*,
+    ],
+    dataBound: function (e) {
+    	var index=null;
+//    	console.log(JSON.stringify(e));
+        var grid = this;
+        var firstItem = this.dataSource.view()[0];
+   	 var row = $(this).closest("tr");
+	 var data = grid.dataItem(row);
+	 var orderids;
+        	//console.log(JSON.stringify(data));
+        	//console.log("e=============="+JSON.stringify(e));
+            this.tbody.find("input[name=files][show=0]").kendoUpload({
+                multiple: false,
+                async: {
+                    saveUrl: "/visa/neworderjp/uploadFile?type=customer&&orderid=1",
+                    /*removeUrl: "remove",*/
+                    autoUpload: true
+                },
+                validation: {
+
+                  /*  allowedExtensions: [".pdf"]*/
+                },
+                upload: function (e) {
+                	index = layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+                	var sss = grid.dataItem(this.element.closest("tr"));
+                	orderids=sss.id;
+                	//console.log("ssss___:"+JSON.stringify(sss));
+                    /*var item = grid.dataItem(this.element.closest("tr"));
+                    var id = BillId;
+                    this.element.closest(".k-button").addClass("k-state-disabled");
+                    this.element.closest(".k-button").find("input[name=files]").attr("show", "1");
+                    filescount++;
+                    alert(filescount);
+                    e.data = { id: id, Operation: item.OperationNO };*/
+                },
+                remove: function (e) {
+                    /*var item = grid.dataItem(this.element.closest("tr"));
+                    var id = BillId;
+                    this.element.closest(".k-button").removeClass("k-state-disabled");
+                    e.data = { id: id, Operation: item.OperationNO };*/
+                },
+                success: function (e) {
+                	var code=e.response.code;
+                	if("SUCCESS"==code){
+                		var url=e.response.data;
+                		$.getJSON("/visa/neworderjp/uploadFileSave?type=order&orderid=" + orderids+"&fileurl="+url, {}, function (resp) {
+                			 if(index!=null){
+             					layer.close(index);
+             			 }
+                			if (resp.code === "SUCCESS") {
+                    			
+                    			layer.msg("上传成功",{time: 2000});
+                    		} else {
+                    			
+                    			layer.msg("上传失败",{time: 2000});
+                    		}
+                    	});
+                	}else{
+                		 if(index!=null){
+         					layer.close(index);
+         			 }
+                		 layer.msg("上传失败",{time: 2000});
+                	}
+                	console.log(JSON.stringify(e.response));
+                    /*var FileName = e.response.FileName;
+
+                    var item = grid.dataItem(this.element.closest("tr"));
+                    item.FileName = FileName;
+                    alert(item.FileName);
+                    item.dirty = false;*/
+                }
+            });
+    }
+    
+    
+    
+    /*,
     dataBound: function () {  
         var rows = this.items();  
         $(rows).each(function () {  
@@ -603,8 +679,8 @@ grid.table.on('click', 'tr td:eq(11)', function () {
 	 if(status>=20&&status!=21){
 		 layer.alert(data.errormsg);
 	 }
-	 console.log(JSON.stringify(data));
+	 //console.log(JSON.stringify(data));
 });
 function showDetails(e){
-	console.log(e);
+	//console.log(e);
 }
