@@ -30,7 +30,9 @@ var statuslist=[
                 {text:"已发招宝",value:19},
                 {text:"发招宝失败",value:20},
                 {text:"归国报告",value:21},
-                {text:"归国报告失败",value:22}
+                {text:"归国报告失败",value:22},
+                {text:"提交失败",value:23},
+                {text:"准备提交使馆",value:8}
               ];
 //注册命令
 function regCmd(command) {
@@ -172,35 +174,41 @@ function regCmd(command) {
                 	});
                 	break;
                 case "upload":
-                	if (!(data = select(e))) return;
+                	
+                	
+                	
+                	
+                	
+                	
+                	/*if (!(data = select(e))) return;
                 	 WebUploader.create({
              	        pick: '.k-button k-button-icontext k-grid-upload',
              	        fileVal: "file",
              	        auto: true,// 选完文件后，是否自动上传。
              	        server: "visa/neworderjp/uploadFile?type=order",
              	        swf: 'res/plugin/webuploader/Uploader.swf',// swf文件路径
-             	     /*   accept: {
+             	        accept: {
              	            title: '选择图片',
              	            extensions: ["jpg", "jpeg", "png"],
              	            mimeTypes: 'image/jpg,image/jpeg,image/png'
              	        },
              	        fileSingleSizeLimit: 1024 * 1024,//1M
-             */                	    }).on('fileQueued', function (file) {
-             	    /*    this.makeThumb(file, function (error, src) {
+                             	    }).on('fileQueued', function (file) {
+             	        this.makeThumb(file, function (error, src) {
              	            if (error) return;
-             	            $("#rt_" + file.source.ruid).closest(".form-group").prev().attr('src', src);
-             	        }, 1, 1);*/
+             	            $("#rt_" + file.source.ruid).closest(".form-group").prev().attr('src', sr;;c);
+             	        }, 1, 1);
              	    }).on('uploadSuccess', function (file, resp) {
              	        if (resp.code === "SUCCESS") {
-             	           /* $("#rt_" + file.source.ruid).closest(".form-group").prev().attr('src', resp.data);*/
+             	            $("#rt_" + file.source.ruid).closest(".form-group").prev().attr('src', resp.data);
              	        }
              	    }).on('error', function (code) {
              	        $.layer.alert("只能是图片类型,且大小不能超过1M(推荐JPG图片)!");
              	    });
-          /*      	var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
-*/                	
+                	var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+                	
                
-                /*	$.getJSON("/visa/neworderjp/uploadFile?type=order&orderid=" + data.id, {}, function (resp) {
+                	$.getJSON("/visa/neworderjp/uploadFile?type=order&orderid=" + data.id, {}, function (resp) {
                 		if (resp.code === "SUCCESS") {
                 			if(index!=null){
                 				
@@ -217,7 +225,7 @@ function regCmd(command) {
                 		} else {
                 			$.layer.alert(resp.msg);
                 		}
-                	});*/
+                	});
                 	break;
                 case "customerEdit1":
                 	
@@ -228,7 +236,7 @@ function regCmd(command) {
 		              		area: ['950px', '600px'],
 		              		shadeClose: true,
 		              		content: '/japan/japancustomerEdit.html?cid=' + data.id + "&check=true"
-		              	});
+		              	});*/
 		              	break;
                 case "modify":
                     var data = grid.dataItem($(e.currentTarget).closest("tr"));
@@ -274,6 +282,83 @@ function regCmd(command) {
         }
     };
 }
+//上传
+function uploadfile(e) {
+	var index=null;
+	var data = grid.dataItem($(e.currentTarget).closest("tr"));
+	 var index=null;
+		$.fileupload1 = $('#fileupload').uploadify({
+			'auto' : true,//选择文件后自动上传
+			'formData' : {
+				'fcharset' : 'uft-8'/* ,
+				'action' : 'uploadimage' */
+			},
+			'buttonText' : '上传',//按钮显示的文字
+			'fileSizeLimit' : '3000MB',
+			'fileTypeDesc' : '文件',//在浏览窗口底部的文件类型下拉菜单中显示的文本
+			 'fileTypeExts' : '*.png;*.jpg; *.jpeg; *.gif;',//上传文件的类型
+			'swf' : '/res/upload/uploadify.swf',//指定swf文件
+			'multi' : false,//multi设置为true将允许多文件上传
+			'successTimeout' : 1800, 
+			/* 'queueSizeLimit' : 100, */
+			'uploader' : "/visa/neworderjp/uploadFile?type=order&orderid=" + data.id,
+			//下面的例子演示如何获取到vid
+			'onUploadStart':function(file){
+				index = layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+			},
+			 'onUploadSuccess': function(file, data, response) {
+				 var fileName = file.name;//文件名称
+				var photoname= "<a id='downloadA' href='#'>"
+	             + file.name
+	             + "</a>"
+				 ///console.log(file);
+				/* 	var jsonobj = eval('(' + data + ')');
+					var url  = jsonobj;//地址 */
+					///console.log(data);
+				 ///console.log(response);
+				/*  alert(typeof data); */
+				 if(index!=null){
+						layer.close(index);
+				 }
+				 /*显示 预览 按钮*/
+				viewModel.set("customer.phoneurl",data);
+				viewModel.set("customer.photoname",fileName);
+				/*$("#yvlan").html('<a href="'+data+'">预览</a>'); */
+	            $("#yvlan").html('<a href="javascript:;" id="preview">预览</a>');
+				$("#photoname").html(photoname);
+	            $(document).on('click','#preview',function(){
+	            	$('#light').css('display','block');
+	            	$('#fade').css('display','block');
+	            	var phoneurl=viewModel.get("customer.phoneurl");
+	            	if(phoneurl!=null&&phoneurl!=''){
+	            		///console.log("1111111====="+phoneurl);
+	            		$("#imgId").attr('src',phoneurl);
+	            	}
+	            });
+			},
+	        //加上此句会重写onSelectError方法【需要重写的事件】
+	        'overrideEvents': ['onSelectError', 'onDialogClose'],
+	        //返回一个错误，选择文件的时候触发
+	        'onSelectError':function(file, errorCode, errorMsg){
+	        	///console.log(errorMsg);
+	            switch(errorCode) {
+	                case -110:
+	                    alert("文件 ["+file.name+"] 大小超出系统限制！");
+	                    break;
+	                case -120:
+	                    alert("文件 ["+file.name+"] 大小异常！");
+	                    break;
+	                case -130:
+	                    alert("文件 ["+file.name+"] 类型不正确！");
+	                    break;
+	            }
+	        },
+	        'onUploadError':function(file, errorCode, errorMsg, errorString){
+	        	/* alert('The file ' + file.name + ' could not be uploaded: ' + errorString); */
+	        }
+		});
+} 
+
 function download(cid) {
     $.getJSON("/visa/photo/list", {cid: cid}, function (result) {
         if (result.code === "SUCCESS") {
@@ -367,7 +452,7 @@ var grid = $("#grid").kendoGrid({
     sortable: true,
     resizable: true,
     filterable: true,
-    reorderable: true,
+    reorderable: false,
     columnMenu: true,
     scrollable: true,
     pageable: {
@@ -451,14 +536,14 @@ var grid = $("#grid").kendoGrid({
         {field: 'startdate', title: '出发时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.startdate#'>#=data.startdate?kendo.toString(data.startdate, 'yyyy-MM-dd'):''#</span>"},
         {field: 'outdate', title: '返回时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.outdate#'>#=data.outdate?kendo.toString(data.outdate, 'yyyy-MM-dd'):''#</span>"},
 /*        {field: 'countrytype', title: '签证类型', width: 80,values:countrylist},*/
-        {field: 'status', title: '状态',values:statuslist, width: 75,},
+        {field: 'status', title: '状态',values:statuslist, width: 75,click:showDetails},
         {
-            title: "操作", width:180,
+            title: "操作", width:240,
             command: [
                 {name: "modify", imageClass:false, text: "编辑"},
                 {name: "validate", imageClass:false, text: "发招宝"},
                 {name: "download", imageClass:false, text: "下载"},
-              /*  {name: "upload", imageClass:false, text: "上传"},*/
+                {name: "upload", imageClass:false, text: "上传",template:"<input type=\'file\' show=\'0\' name=\'files\' id=\'photos\'  />"},
                 regCmd("modify"),
                 regCmd("shareall"),
                 regCmd("download"),
@@ -467,7 +552,89 @@ var grid = $("#grid").kendoGrid({
                 regCmd("upload"),
             ]
         }
-    ]/*,
+    ],
+    dataBound: function (e) {
+    	var index=null;
+//    	console.log(JSON.stringify(e));
+        var grid = this;
+        var firstItem = this.dataSource.view()[0];
+   	 var row = $(this).closest("tr");
+	 var data = grid.dataItem(row);
+	 var orderids;
+        	//console.log(JSON.stringify(data));
+        	//console.log("e=============="+JSON.stringify(e));
+            this.tbody.find("input[name=files][show=0]").kendoUpload({
+                multiple: false,
+                showFileList: false,
+                async: {
+                    saveUrl: "/visa/neworderjp/uploadFile?type=customer&&orderid=1",
+                    /*removeUrl: "remove",*/
+                    autoUpload: true
+                },
+                validation: {
+
+                  /*  allowedExtensions: [".pdf"]*/
+                },
+                upload: function (e) {
+                	index = layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+                	var sss = grid.dataItem(this.element.closest("tr"));
+                	orderids=sss.id;
+                	//console.log("ssss___:"+JSON.stringify(sss));
+                    /*var item = grid.dataItem(this.element.closest("tr"));
+                    var id = BillId;
+                    this.element.closest(".k-button").addClass("k-state-disabled");
+                    this.element.closest(".k-button").find("input[name=files]").attr("show", "1");
+                    filescount++;
+                    alert(filescount);
+                    e.data = { id: id, Operation: item.OperationNO };*/
+                },
+                remove: function (e) {
+                    /*var item = grid.dataItem(this.element.closest("tr"));
+                    var id = BillId;
+                    this.element.closest(".k-button").removeClass("k-state-disabled");
+                    e.data = { id: id, Operation: item.OperationNO };*/
+                },
+                success: function (e) {
+                	var code=e.response.code;
+                	if("SUCCESS"==code){
+                		var url=e.response.data;
+                		$.getJSON("/visa/neworderjp/uploadFileSave?type=order&orderid=" + orderids+"&fileurl="+url, {}, function (resp) {
+                			 if(index!=null){
+             					layer.close(index);
+             			 }
+                			if (resp.code === "SUCCESS") {
+                    			
+                    			layer.msg("上传成功",{time: 2000});
+                    		} else {
+                    			
+                    			layer.msg("上传失败",{time: 2000});
+                    		}
+                    	});
+                	}else{
+                		 if(index!=null){
+         					layer.close(index);
+         			 }
+                		 layer.msg("上传失败",{time: 2000});
+                	}
+                	console.log(JSON.stringify(e.response));
+                    /*var FileName = e.response.FileName;
+
+                    var item = grid.dataItem(this.element.closest("tr"));
+                    item.FileName = FileName;
+                    alert(item.FileName);
+                    item.dirty = false;*/
+                }
+                
+                
+            });
+            
+            
+            $('.k-upload-button span').text('上传');
+    }
+    
+    
+    
+    /*,
     dataBound: function () {  
         var rows = this.items();  
         $(rows).each(function () {  
@@ -503,12 +670,22 @@ $(function(){
 	
 	
 	
-	
 });
 /*//点击触发日历
 $().click(function(
 		
 ));*/
 
-
-
+grid.table.on('click', 'tr td:eq(11)', function () {
+    // 双击, dataItem = grid.dataItem(row)
+	 var row = $(this).closest("tr");
+	 var data = grid.dataItem(row);
+	 var status=data.status;
+	 if(status>=20&&status!=21){
+		 layer.alert(data.errormsg);
+	 }
+	 //console.log(JSON.stringify(data));
+});
+function showDetails(e){
+	//console.log(e);
+}

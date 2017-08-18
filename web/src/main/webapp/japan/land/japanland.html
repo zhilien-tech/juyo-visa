@@ -14,8 +14,15 @@
     <link rel="stylesheet" href="/res/plugin/flag-icon/css/flag-icon.min.css"/>
     <link rel="stylesheet" href="/res/plugin/lightGallery/css/lightgallery.css"/>
     <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/><!--修改的样式-->
-    
-    <link rel="stylesheet" href="/res/plugin/webuploader/webuploader.css?v=0.1.5"/>
+    <link rel="stylesheet" href="/res/upload/uploadify.css"/>
+    <!-- <link rel="stylesheet" href="/res/plugin/webuploader/webuploader.css?v=0.1.5"/> -->
+    <link rel="stylesheet" href="/res/plugin/webuploader/webuploader.css"/>
+    <style type="text/css">
+    	.k-dropzone em{display: none;}
+    	.k-dropzone {padding: 0;}
+    	.k-dropzone .k-upload-status {display: none;}
+    	.k-upload{width: 61px;background-color: rgba(238, 238, 238, 0);display: inline-block;}
+    </style>
 </head>
 <body class="clear-scroll">
 	<!--搜索条件 模块-->
@@ -28,12 +35,14 @@
           <option value="3">初审</option>
           <option value="4">初审通过</option>
           <option value="5">初审拒绝</option>
+          <option value="8">准备提交使馆</option>
           <option value="17">递送</option>
           <option value="18">发招宝中</option>
           <option value="19">已发招宝</option>
           <option value="20">发招宝失败</option>
           <option value="21">归国报告</option>
           <option value="22">归国报告失败</option>
+          <option value="23">提交失败</option>
          <!--  <option value="5">初审拒绝</option>
           <option value="17">递送</option> -->
       <!--     <option value="7">DS-160</option>
@@ -166,13 +175,12 @@
 <script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
 <script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
 <script src="/res/js/common.js"></script>
-
+<script src="/res/upload/jquery.uploadify.min.js"></script>
 <script src="/res/plugin/jquery.fileDownload.js"></script>
 <script src="/res/plugin/lightGallery/js/lightgallery.js"></script>
 <script src="/res/js/japan/land/japanland.js"></script>
 
-
-<script src="/res/plugin/webuploader/webuploader.min.js?v=0.1.5"></script>
+<script src="/res/plugin/webuploader/webuploader.min.js"></script>
 
 <script type="text/javascript">
 	function produceOrder(){
