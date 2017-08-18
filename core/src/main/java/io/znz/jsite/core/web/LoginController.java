@@ -238,6 +238,12 @@ public class LoginController extends BaseController {
 								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 								return "redirect:" + to + "?auth=2,3,6,7," + str + "&username=" + fullname
 										+ "&logintype=" + logintype + "&userType=" + userType;
+							} else if (UserLoginEnum.PERSONNEL.intKey() == logintype
+									&& UserLoginEnum.JP_DJS_ADMIN.intKey() == userType) {//日本地接社管理员
+								functions = this.djsFunctionList();
+								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
+								return "redirect:" + to + "?auth=2,3,6,7," + str + "&username=" + fullname
+										+ "&logintype=" + logintype + "&userType=" + userType;
 							} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == logintype
 									&& UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {//游客身份登录
 								//我的签证
@@ -475,6 +481,111 @@ public class LoginController extends BaseController {
 		String error = Encodes.encodeBase64(JSON.toJSONString(model.getFlashAttributes()));
 		model.addAttribute("e", error);
 		return "redirect:" + login;
+	}
+
+	/**
+	 * 日本地接社管理员登录时的权限
+	 * @return 
+	 */
+	@RequestMapping(value = "djsFunctionList")
+	@ResponseBody
+	private List<FunctionEntity> djsFunctionList() {
+		List<FunctionEntity> functions = Lists.newArrayList();
+		//公司管理
+		FunctionEntity comf = new FunctionEntity();
+		comf.setId(1);
+		comf.setParentId(0);
+		comf.setFunName("公司管理");
+		comf.setLevel(1);
+		comf.setCreateTime(new Date());
+		comf.setRemark("公司管理");
+		comf.setSort(1);
+		comf.setPortrait("fa fa-building-o");
+		functions.add(comf);
+		//权限管理
+		FunctionEntity authority = new FunctionEntity();
+		authority.setId(6);
+		authority.setParentId(1);
+		authority.setFunName("权限管理");
+		authority.setUrl("authority/authoritylist.html");
+		authority.setLevel(2);
+		authority.setCreateTime(new Date());
+		authority.setRemark("权限管理");
+		authority.setSort(2);
+		authority.setPortrait("");
+		functions.add(authority);
+		//员工管理
+		FunctionEntity usermanage = new FunctionEntity();
+		usermanage.setId(3);
+		usermanage.setParentId(1);
+		usermanage.setFunName("员工管理");
+		usermanage.setUrl("employee/employeelist.html");
+		usermanage.setLevel(2);
+		usermanage.setCreateTime(new Date());
+		usermanage.setRemark("员工管理");
+		usermanage.setSort(3);
+		usermanage.setPortrait("");
+		functions.add(usermanage);
+		//客户管理
+		FunctionEntity customermanage = new FunctionEntity();
+		customermanage.setId(2);
+		customermanage.setParentId(1);
+		customermanage.setFunName("客户管理");
+		customermanage.setUrl("custmanagement/customerlist.html");
+		customermanage.setLevel(2);
+		customermanage.setCreateTime(new Date());
+		customermanage.setRemark("客户管理");
+		customermanage.setSort(6);
+		customermanage.setPortrait("");
+		functions.add(customermanage);
+		//日本招宝信息
+		FunctionEntity combabyjp = new FunctionEntity();
+		combabyjp.setId(25);
+		combabyjp.setParentId(1);
+		combabyjp.setFunName("日本招宝信息");
+		combabyjp.setUrl("comebaby/comeList.html");
+		combabyjp.setLevel(2);
+		combabyjp.setCreateTime(new Date());
+		combabyjp.setRemark("日本招宝信息");
+		combabyjp.setSort(25);
+		combabyjp.setPortrait("");
+		functions.add(combabyjp);
+		//数据采集
+		FunctionEntity dataAcquisition = new FunctionEntity();
+		dataAcquisition.setId(17);
+		dataAcquisition.setParentId(0);
+		dataAcquisition.setFunName("数据采集");
+		dataAcquisition.setLevel(2);
+		dataAcquisition.setCreateTime(new Date());
+		dataAcquisition.setRemark("数据采集");
+		dataAcquisition.setSort(17);
+		dataAcquisition.setPortrait("fa fa-check-square-o");
+		functions.add(dataAcquisition);
+		//美国订单
+		FunctionEntity usaorder = new FunctionEntity();
+		usaorder.setId(18);
+		usaorder.setParentId(17);
+		usaorder.setFunName("美国");
+		usaorder.setUrl("order/america.html");
+		usaorder.setLevel(2);
+		usaorder.setCreateTime(new Date());
+		usaorder.setRemark("美国订单列表");
+		usaorder.setSort(18);
+		usaorder.setPortrait("");
+		functions.add(usaorder);
+		//日本地接社订单
+		FunctionEntity djsjp = new FunctionEntity();
+		djsjp.setId(17);
+		djsjp.setParentId(17);
+		djsjp.setFunName("日本");
+		djsjp.setUrl("japan/land/japanland.html");
+		djsjp.setLevel(2);
+		djsjp.setCreateTime(new Date());
+		djsjp.setRemark("日本地接社");
+		djsjp.setSort(27);
+		djsjp.setPortrait("");
+		functions.add(djsjp);
+		return functions;
 	}
 
 	/**
