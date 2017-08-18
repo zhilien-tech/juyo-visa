@@ -17,6 +17,12 @@
     <link rel="stylesheet" href="/res/upload/uploadify.css"/>
     <!-- <link rel="stylesheet" href="/res/plugin/webuploader/webuploader.css?v=0.1.5"/> -->
     <link rel="stylesheet" href="/res/plugin/webuploader/webuploader.css"/>
+    <style type="text/css">
+    	.k-dropzone em{display: none;}
+    	.k-dropzone {padding: 0;}
+    	.k-dropzone .k-upload-status {display: none;}
+    	.k-upload{width: 61px;background-color: rgba(238, 238, 238, 0);display: inline-block;}
+    </style>
 </head>
 <body class="clear-scroll">
 	<!--搜索条件 模块-->
@@ -72,7 +78,6 @@
         <input type="button" name="" class="btn btn-primary input-sm pull-right" value="下单" onclick="produceOrder();"/>
       </div>
     </div>
-    <button id="fileupload" name="file" type="file" class="btn btn-primary btn-sm" >上传</button>
     <!--end 搜索条件 模块-->
 <div id="grid"></div>
 <input type="hidden" id="na" value="me"> 

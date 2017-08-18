@@ -146,6 +146,12 @@ public class NewOrderJaPanController {
 			long comId = company.getComId();
 			form.setComId(comId);
 		}
+		io.znz.jsite.core.entity.EmployeeEntity user = (io.znz.jsite.core.entity.EmployeeEntity) session
+				.getAttribute(Const.SESSION_NAME);
+		if (!Util.isEmpty(user)) {
+			int userType = user.getUserType();
+			form.setUserType(userType);
+		}
 		Pager pager = new Pager();
 		pager.setPageNumber(form.getPageNumber());
 		pager.setPageSize(form.getPageSize());

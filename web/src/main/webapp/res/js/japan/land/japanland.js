@@ -538,7 +538,7 @@ var grid = $("#grid").kendoGrid({
 /*        {field: 'countrytype', title: '签证类型', width: 80,values:countrylist},*/
         {field: 'status', title: '状态',values:statuslist, width: 75,click:showDetails},
         {
-            title: "操作", width:180,
+            title: "操作", width:240,
             command: [
                 {name: "modify", imageClass:false, text: "编辑"},
                 {name: "validate", imageClass:false, text: "发招宝"},
@@ -565,6 +565,7 @@ var grid = $("#grid").kendoGrid({
         	//console.log("e=============="+JSON.stringify(e));
             this.tbody.find("input[name=files][show=0]").kendoUpload({
                 multiple: false,
+                showFileList: false,
                 async: {
                     saveUrl: "/visa/neworderjp/uploadFile?type=customer&&orderid=1",
                     /*removeUrl: "remove",*/
@@ -623,7 +624,12 @@ var grid = $("#grid").kendoGrid({
                     alert(item.FileName);
                     item.dirty = false;*/
                 }
+                
+                
             });
+            
+            
+            $('.k-upload-button span').text('上传');
     }
     
     
@@ -663,7 +669,6 @@ $(function(){
 	});*/
 	
 	
-$("#fileupload").hide();
 	
 });
 /*//点击触发日历
