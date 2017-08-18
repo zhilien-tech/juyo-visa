@@ -103,7 +103,6 @@ $(function () {
 				});
 				//点击 左菜单栏项 触发 function
 			    function menuItem() {
-
 			    		//left menu Highlight----------------------------------
 			        	if(typeof(Storage) !== "undefined") {
 			        		var thisId=$(this).attr('id');

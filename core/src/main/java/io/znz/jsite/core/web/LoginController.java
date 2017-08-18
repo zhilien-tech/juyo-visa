@@ -575,7 +575,7 @@ public class LoginController extends BaseController {
 		functions.add(usaorder);
 		//日本地接社订单
 		FunctionEntity djsjp = new FunctionEntity();
-		djsjp.setId(17);
+		djsjp.setId(27);
 		djsjp.setParentId(17);
 		djsjp.setFunName("日本");
 		djsjp.setUrl("japan/land/japanland.html");
