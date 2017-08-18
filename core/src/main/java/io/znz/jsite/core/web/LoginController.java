@@ -503,7 +503,7 @@ public class LoginController extends BaseController {
 		comf.setPortrait("fa fa-building-o");
 		functions.add(comf);
 		//权限管理
-		FunctionEntity authority = new FunctionEntity();
+		/*FunctionEntity authority = new FunctionEntity();
 		authority.setId(6);
 		authority.setParentId(1);
 		authority.setFunName("权限管理");
@@ -513,9 +513,9 @@ public class LoginController extends BaseController {
 		authority.setRemark("权限管理");
 		authority.setSort(2);
 		authority.setPortrait("");
-		functions.add(authority);
+		functions.add(authority);*/
 		//员工管理
-		FunctionEntity usermanage = new FunctionEntity();
+		/*FunctionEntity usermanage = new FunctionEntity();
 		usermanage.setId(3);
 		usermanage.setParentId(1);
 		usermanage.setFunName("员工管理");
@@ -525,9 +525,9 @@ public class LoginController extends BaseController {
 		usermanage.setRemark("员工管理");
 		usermanage.setSort(3);
 		usermanage.setPortrait("");
-		functions.add(usermanage);
+		functions.add(usermanage);*/
 		//客户管理
-		FunctionEntity customermanage = new FunctionEntity();
+		/*FunctionEntity customermanage = new FunctionEntity();
 		customermanage.setId(2);
 		customermanage.setParentId(1);
 		customermanage.setFunName("客户管理");
@@ -537,7 +537,7 @@ public class LoginController extends BaseController {
 		customermanage.setRemark("客户管理");
 		customermanage.setSort(6);
 		customermanage.setPortrait("");
-		functions.add(customermanage);
+		functions.add(customermanage);*/
 		//日本招宝信息
 		FunctionEntity combabyjp = new FunctionEntity();
 		combabyjp.setId(25);
@@ -562,7 +562,7 @@ public class LoginController extends BaseController {
 		dataAcquisition.setPortrait("fa fa-check-square-o");
 		functions.add(dataAcquisition);
 		//美国订单
-		FunctionEntity usaorder = new FunctionEntity();
+		/*FunctionEntity usaorder = new FunctionEntity();
 		usaorder.setId(18);
 		usaorder.setParentId(17);
 		usaorder.setFunName("美国");
@@ -572,7 +572,7 @@ public class LoginController extends BaseController {
 		usaorder.setRemark("美国订单列表");
 		usaorder.setSort(18);
 		usaorder.setPortrait("");
-		functions.add(usaorder);
+		functions.add(usaorder);*/
 		//日本地接社订单
 		FunctionEntity djsjp = new FunctionEntity();
 		djsjp.setId(27);
