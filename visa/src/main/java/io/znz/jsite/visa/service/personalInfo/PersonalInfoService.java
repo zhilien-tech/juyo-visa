@@ -43,6 +43,8 @@ public class PersonalInfoService extends NutzBaseService<EmployeeEntity> {
 		//根据当前登录用户id查询出个人信息
 		EmployeeEntity user = (EmployeeEntity) session.getAttribute(Const.SESSION_NAME);
 		int uid = user.getId();
+		Integer userType = user.getUserType();
+		sqlForm.setUserType(userType);
 		sqlForm.setId(uid);
 		Pagination list = this.listPage(sqlForm, new Pager());
 		return list.getList().get(0);

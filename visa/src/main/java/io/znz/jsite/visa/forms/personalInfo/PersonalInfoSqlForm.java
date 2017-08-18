@@ -71,9 +71,16 @@ public class PersonalInfoSqlForm extends KenDoParamForm {
 		 * 默认使用了当前form关联entity的单表查询sql,如果是多表复杂sql，
 		 * 请使用sqlManager获取自定义的sql，并设置查询条件
 		 */
-		String sqlString = paramSqlManager.get("personalInfo_list");
-		Sql sql = Sqls.create(sqlString);
-		sql.setCondition(cnd());
+		Sql sql = null;
+		if (!Util.isEmpty(userType) && userType == 6) {
+			String sqlString = paramSqlManager.get("personalInfo_djs_1507-001_data");
+			sql = Sqls.create(sqlString);
+			sql.setCondition(cnd());
+		} else {
+			String sqlString = paramSqlManager.get("personalInfo_list");
+			sql = Sqls.create(sqlString);
+			sql.setCondition(cnd());
+		}
 		return sql;
 	}
 
@@ -83,6 +90,9 @@ public class PersonalInfoSqlForm extends KenDoParamForm {
 			cnd.and("e.id", "=", id);
 		}
 		cnd.and("e.status", "=", UserJobStatusEnum.JOB.intKey());
+		if (userType == 6) {
+			cnd.and("e.userType", "=", 6);
+		}
 		return cnd;
 	}
 }
