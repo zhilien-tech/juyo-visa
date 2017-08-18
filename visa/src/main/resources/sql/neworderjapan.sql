@@ -13,7 +13,8 @@ SELECT
 	vnoj.createtime,
 	vcm.email,
 	vncj.chinesefullname,
-	vnoj.completedNumber
+	vnoj.completedNumber,
+vnoj.errorMsg
 FROM
 	visa_new_order_jp vnoj
 LEFT JOIN visa_new_customersource_jp vcm ON vnoj.id = vcm.order_jp_id
