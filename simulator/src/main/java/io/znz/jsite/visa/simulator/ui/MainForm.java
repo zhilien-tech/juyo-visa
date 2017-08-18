@@ -33,8 +33,6 @@ import java.util.Date;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.prefs.Preferences;
 import java.util.zip.ZipOutputStream;
 
@@ -63,7 +61,9 @@ import org.nutz.lang.Files;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.jgoodies.forms.factories.Borders;
+import com.uxuexi.core.common.util.Util;
 
 /**
  * @author 朱晓川
@@ -85,7 +85,9 @@ public class MainForm extends JPanel {
 
 	private static final int SUCCESS = 0;
 
-	private static ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(5);
+	/**是否有任务正在执行中*/
+	static Map<String, Boolean> executingMap = Maps.newConcurrentMap();
+	private static final String executingKey = "executingKey";
 
 	public MainForm() {
 		initComponents();
@@ -94,6 +96,7 @@ public class MainForm extends JPanel {
 		port.setText("9004");
 		upload.setEnabled(false);//禁用上传按钮
 		filesPicker.setEnabled(false); //禁用选择文件上传的按钮
+		executingMap.put(executingKey, false);
 	}
 
 	//拼接 url 地址
@@ -158,6 +161,7 @@ public class MainForm extends JPanel {
 	 * @param ext   支持的文件扩展名
 	 * @return 选择的文件数组
 	 */
+	@Deprecated
 	private File[] openFilePicker(String text, boolean multi, final String... ext) {
 		Preferences pref = Preferences.userRoot().node(this.getClass().getName());
 		String history = pref.get(HISTORY, FileUtils.getUserDirectoryPath());
@@ -207,93 +211,132 @@ public class MainForm extends JPanel {
 		}
 	}
 
+	//检测是否有可执行的任务
+	ResultObject<Map, Object> checkTaskAvail() {
+		log("检测是否有可执行的任务...");
+		String json = HttpClientUtil.get(getBaseUrl() + TASK_FETCH_URI);
+		ResultObject<Map, Object> task = JSON.parseObject(json, ResultObject.class);
+
+		if (task.getCode() == ResultObject.ResultCode.SUCCESS) {
+			final String oid = String.valueOf(task.getAttributes().get("oid"));
+			log("检测到任务:" + oid);
+			return task;
+		} else {
+			log("暂无可执行的任务,10秒后再次检测");
+			//没有任务
+			try {
+				Thread.currentThread().sleep(10000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+	}
+
 	//执行按钮点击事件
 	private void executeTaskActionPerformed(ActionEvent actionEvent) {
 		executeTask.setEnabled(false);
 
-		exec.scheduleAtFixedRate(new Runnable() {
+		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					log("========================开始检测是否有可执行的任务===========================");
-					String json = HttpClientUtil.get(getBaseUrl() + TASK_FETCH_URI);
-					ResultObject<Map, Object> ro = JSON.parseObject(json, ResultObject.class);
-
-					if (ro.getCode() == ResultObject.ResultCode.SUCCESS) {
-
-						final String oid = String.valueOf(ro.getAttributes().get("oid"));
-						log("========================开始执行任务:" + oid + "===========================");
-						long startTime = System.currentTimeMillis();
-						String remoteFileUrl = String.valueOf(ro.getData().get("excelUrl"));
-						SwingUtilities.invokeLater(new Runnable() {
-							@Override
-							public void run() {
-								taskId.setText(oid);
-							}
-						});
-
-						/*
-						 * 把用户签证的json数据信息保存到本地以供python脚本使用。
-						 * 在用户当前工作目录内创建名为tmp的文件夹用于保存文件
-						 */
-						File tmp = new File(System.getProperty("user.dir") + "/tmp");
-						if (!tmp.exists())
-							tmp.mkdirs();
-
-						//保存名录excel文件
-						String suffix = Files.getSuffix(remoteFileUrl);
-						String localExcelUrl = tmp.getAbsolutePath() + File.separator + oid + suffix;
-						String requestUrl = getBaseUrl() + AGENT_DOWNLOAD_URL;
-						HttpClientUtil.agentPostDownload(requestUrl, remoteFileUrl, localExcelUrl);
-
-						//替换json 中的文件为绝对路径，保存json文件
-						ro.getData().put("excelUrl", localExcelUrl);
-						log(localExcelUrl);
-						File target = new File(tmp, oid + ".json");
-						//保存json文件，使用UTF-8编码
-						FileUtils.writeStringToFile(target, JSON.toJSONString(ro.getData()), ENCODING);
-						log("任务数据文件已保存至:" + target.getAbsolutePath());
-
-						//执行命令行
-						File python = new File(pyFile.getText());
-						if (python.exists()) {
-							//提交ds160
-							String ds160rs = HttpClientUtil.get(getBaseUrl() + TASK_SUBMITING_URI + oid);
-							ResultObject<Map, Object> ds160ro = JSON.parseObject(ds160rs, ResultObject.class);
-							if (ds160ro.getCode() == ResultObject.ResultCode.SUCCESS) {
-								log("任务码:" + oid + " 提交中...");
-							} else {
-								log("任务码:" + oid + "准备提交失败");
-							}
-							//第三个参数为任务码
-							String cmd = "python " + pyFile.getText() + " " + target.getAbsolutePath() + " " + oid;
-							command.setText(cmd);
-							int execResult = executeCommand(cmd);
-							//如果命令行意外退出
-							if (SUCCESS != execResult) {
-								IdentityHashMap<String, String> params = new IdentityHashMap<String, String>();
-								params.put("errorCode", "0");
-								params.put("errorMsg", "未知错误");
-								String feedErrorUrl = getBaseUrl() + FEED_ERROR_URL + oid;
-								HttpClientUtil.post(feedErrorUrl, params);
-							}
-							log("========================任务:" + oid + " 执行完毕===========================");
-							log("========================总计用时:" + ((System.currentTimeMillis() - startTime) / 1000)
-									+ "秒===========================");
-						} else {
-							JOptionPane.showMessageDialog(new JLabel(), "自动化脚本不存在");
-						}
-					} else {
-						log("========================暂无可执行的任务===========================");
+					boolean executing = executingMap.get(executingKey);
+					while (!executing) {
+						excuteTask();
 					}
-
 				} catch (Exception exception) {
 					//控制台输出异常信息
 					MainForm.this.log(ExceptionUtils.getStackTrace(exception));
 				}
 			}
-		}, 1000, 600000, TimeUnit.MILLISECONDS);//10分钟执行一次
+		}).start();
 
+	}
+
+	/**执行填表任务*/
+	void excuteTask() throws IOException {
+		long startTime = System.currentTimeMillis();
+		executingMap.put(executingKey, true);
+		ResultObject<Map, Object> task = null;
+		//循环检测任务
+		while (true) {
+			task = checkTaskAvail();
+			if (!Util.isEmpty(task)) {
+				break;
+			}
+		}
+
+		final String oid = String.valueOf(task.getAttributes().get("oid"));
+		log("========================开始执行任务:" + oid + "===========================");
+		String remoteFileUrl = String.valueOf(task.getData().get("excelUrl"));
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				taskId.setText(oid);
+			}
+		});
+
+		/*
+		 * 把用户签证的json数据信息保存到本地以供python脚本使用。
+		 * 在用户当前工作目录内创建名为tmp的文件夹用于保存文件
+		 */
+		File tmp = new File(System.getProperty("user.dir") + "/tmp");
+		if (!tmp.exists())
+			tmp.mkdirs();
+
+		//保存名录excel文件
+		String suffix = Files.getSuffix(remoteFileUrl);
+		String localExcelUrl = tmp.getAbsolutePath() + File.separator + oid + suffix;
+		String requestUrl = getBaseUrl() + AGENT_DOWNLOAD_URL;
+		HttpClientUtil.agentPostDownload(requestUrl, remoteFileUrl, localExcelUrl);
+
+		//替换json 中的文件为绝对路径，保存json文件
+		task.getData().put("excelUrl", localExcelUrl);
+		log(localExcelUrl);
+		File target = new File(tmp, oid + ".json");
+		//保存json文件，使用UTF-8编码
+		FileUtils.writeStringToFile(target, JSON.toJSONString(task.getData()), ENCODING);
+		log("任务数据文件已保存至:" + target.getAbsolutePath());
+
+		//执行命令行
+		File python = new File(pyFile.getText());
+		if (python.exists()) {
+			//提交ds160
+			String ds160rs = HttpClientUtil.get(getBaseUrl() + TASK_SUBMITING_URI + oid);
+			ResultObject<Map, Object> ds160ro = JSON.parseObject(ds160rs, ResultObject.class);
+			if (ds160ro.getCode() == ResultObject.ResultCode.SUCCESS) {
+				log("任务码:" + oid + " 提交中...");
+			} else {
+				log("任务码:" + oid + "准备提交失败");
+			}
+
+			//模拟填表
+			try {
+				Thread.currentThread().sleep(10000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
+			//第三个参数为任务码
+			String cmd = "python " + pyFile.getText() + " " + target.getAbsolutePath() + " " + oid;
+			command.setText(cmd);
+			int execResult = executeCommand(cmd);
+			//如果命令行意外退出
+			if (SUCCESS != execResult) {
+				IdentityHashMap<String, String> params = new IdentityHashMap<String, String>();
+				params.put("errorCode", "0");
+				params.put("errorMsg", "未知错误");
+				String feedErrorUrl = getBaseUrl() + FEED_ERROR_URL + oid;
+				HttpClientUtil.post(feedErrorUrl, params);
+			}
+		} else {
+			JOptionPane.showMessageDialog(new JLabel(), "自动化脚本不存在");
+		}
+		log("========================任务:" + oid + " 执行完毕===========================");
+		log("========================总计用时:" + ((System.currentTimeMillis() - startTime) / 1000)
+				+ "秒===========================");
+		executingMap.put(executingKey, false);
 	}
 
 	/**
