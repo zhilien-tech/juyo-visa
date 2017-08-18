@@ -225,7 +225,7 @@ function regCmd(command) {
                 		} else {
                 			$.layer.alert(resp.msg);
                 		}
-                	});
+                	});*/
                 	break;
                 case "customerEdit1":
                 	
@@ -236,7 +236,7 @@ function regCmd(command) {
 		              		area: ['950px', '600px'],
 		              		shadeClose: true,
 		              		content: '/japan/japancustomerEdit.html?cid=' + data.id + "&check=true"
-		              	});*/
+		              	});
 		              	break;
                 case "modify":
                     var data = grid.dataItem($(e.currentTarget).closest("tr"));
@@ -536,7 +536,7 @@ var grid = $("#grid").kendoGrid({
         {field: 'startdate', title: '出发时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.startdate#'>#=data.startdate?kendo.toString(data.startdate, 'yyyy-MM-dd'):''#</span>"},
         {field: 'outdate', title: '返回时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.outdate#'>#=data.outdate?kendo.toString(data.outdate, 'yyyy-MM-dd'):''#</span>"},
 /*        {field: 'countrytype', title: '签证类型', width: 80,values:countrylist},*/
-        {field: 'status', title: '状态',values:statuslist, width: 75,click:showDetails},
+        {field: 'status', title: '状态',values:statuslist, width: 75},
         {
             title: "操作", width:240,
             command: [
@@ -630,6 +630,8 @@ var grid = $("#grid").kendoGrid({
             
             
             $('.k-upload-button span').text('上传');
+            
+          
     }
     
     
@@ -676,16 +678,64 @@ $().click(function(
 		
 ));*/
 
-grid.table.on('click', 'tr td:eq(11)', function () {
+/*
+function showDetails(e){
+	 grid.table.on('click', 'tr td:eq(11)', function () {
+         // 双击, dataItem = grid.dataItem(row)
+     	 var row = $(this).closest("tr");
+     	 var data = grid.dataItem(row);
+     	 var status=data.status;
+     	 alert(111);
+     	 if(status>=20&&status!=21){
+     		 layer.alert(data.errormsg);
+     	 }
+     });
+}
+*/
+
+/*grid.table.on('click', 'tr td:eq(11)', function () {
     // 双击, dataItem = grid.dataItem(row)
 	 var row = $(this).closest("tr");
 	 var data = grid.dataItem(row);
 	 var status=data.status;
+	 alert(111);
 	 if(status>=20&&status!=21){
 		 layer.alert(data.errormsg);
 	 }
 	 //console.log(JSON.stringify(data));
+});*/
+
+/*$(document).on('click','tbody[role="rowgroup"] tr',function(){
+	alert(10);
+});*/
+
+/*$('tbody[role="rowgroup"] tr').click(function(){
+	alert(45);
+});*/
+$(function(){
+	for(var i=0;i<20;i++){
+		 grid.table.on('click', 'tr:eq('+i+') td:eq(11)', function () {
+	         // 双击, dataItem = grid.dataItem(row)
+	     	 var row = $(this).closest("tr");
+	     	 var data = grid.dataItem(row);
+	     	 var status=data.status;
+	     	 if(status>=20&&status!=21){
+	     		 if(data!=''&&data!=null&&data!=undefined){
+	     			 layer.alert(data.errormsg);
+	     		 }
+	     	 }
+	     });
+	}
 });
-function showDetails(e){
-	//console.log(e);
-}
+/*function showDetails(e){
+	 grid.table.on('click', 'tr', function () {
+         // 双击, dataItem = grid.dataItem(row)
+     	 var row = $(this).closest("tr");
+     	 var data = grid.dataItem(row);
+     	 var status=data.status;
+     	 alert(111);
+     	 if(status>=20&&status!=21){
+     		 layer.alert(data.errormsg);
+     	 }
+     });
+}*/

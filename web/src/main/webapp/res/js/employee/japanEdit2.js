@@ -523,6 +523,9 @@ $(function () {
     		$('.dongSanXian').hide();
     		$('.dongliuXian').hide();
     	}*/
+    	$('.dongxiancheck input').each(function(){
+    		$(this).attr('checked',false);
+    	});
     	if(selVal==2 || selVal==3 || selVal==4){//东三县，新三县，冲绳，选择时，下方均出现7个县，允许多选
     		$('.dongSanXian').hide();
     		$('.dongliuXian').show();
@@ -530,6 +533,7 @@ $(function () {
     		$('.dongSanXian').hide();
     		$('.dongliuXian').hide();
     	}
+    	
     });
 });
 

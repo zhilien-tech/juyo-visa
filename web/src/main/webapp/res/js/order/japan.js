@@ -17,11 +17,12 @@ var statuslist=[
                 {text:"初审通过",value:4},
                 {text:"初审拒绝",value:5},
                 {text:"递送",value:17},
-
+                {text:"准备提交使馆",value:8},
                 {text:"发招宝中",value:18},
                 {text:"已发招宝",value:19},
                 {text:"发招宝失败",value:20},
                 {text:"归国报告",value:21},
+                {text:"提交失败",value:23},
                 {text:"归国报告失败",value:22}
                 /*                {text:"DS-160",value:7},
 
@@ -304,7 +305,7 @@ var grid = $("#grid").kendoGrid({
 	sortable: true,
 	resizable: true,
 	filterable: true,
-	reorderable: true,
+	reorderable: false,
 	columnMenu: true,
 	scrollable: true,
 	pageable: {
@@ -385,7 +386,7 @@ var grid = $("#grid").kendoGrid({
 	          {field: 'headnum', title: '人数', values: ["美国", "日本"], width: 75,},
 	          {field: 'completednumber', title: '受付番号', width: 100,},
 	          /*{field: 'countrytype', title: '国家', width: 80,values:countrylist},*/
-	          {field: 'status', title: '状态',values:statuslist, width: 80,},
+	          {field: 'status', title: '状态',values:statuslist, width: 80},
 	          {
 	        	  title: "操作", width: 240,
 	        	  command: [
@@ -434,6 +435,8 @@ $(function(){
 	/*	$(document).on('click','.k-grid-download',function(){
 
 	});*/
+	
+	
 });
 /*//点击触发日历
 $().click(function(
@@ -441,4 +444,18 @@ $().click(function(
 ));*/
 
 
-
+$(function(){
+	for(var i=0;i<20;i++){
+		 grid.table.on('click', 'tr:eq('+i+') td:eq(8)', function () {
+	         // 双击, dataItem = grid.dataItem(row)
+	     	 var row = $(this).closest("tr");
+	     	 var data = grid.dataItem(row);
+	     	 var status=data.status;
+	     	 if(status>=20&&status!=21){
+	     		 if(data!=''&&data!=null&&data!=undefined){
+	     			 layer.alert(data.errormsg);
+	     		 }
+	     	 }
+	     });
+	}
+});

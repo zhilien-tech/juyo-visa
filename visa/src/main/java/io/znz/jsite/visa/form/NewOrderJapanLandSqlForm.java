@@ -6,6 +6,8 @@
 
 package io.znz.jsite.visa.form;
 
+import io.znz.jsite.core.enums.UserLoginEnum;
+
 import java.util.Date;
 
 import lombok.Data;
@@ -35,6 +37,7 @@ public class NewOrderJapanLandSqlForm extends KenDoParamForm {
 	private Integer state;
 	private long comId;
 	private long customerid;
+	private int userType;
 
 	@Override
 	public Sql sql(SqlManager paramSqlManager) {
@@ -83,8 +86,13 @@ public class NewOrderJapanLandSqlForm extends KenDoParamForm {
 			//			cnd.and(e1).or(e2);
 			cnd.and(e1.or(e2));
 		}
-		if (!Util.isEmpty(comId) && comId > 0) {
-			cnd.and("vnoj.comId", "=", comId);
+		if (UserLoginEnum.JP_DJS_ADMIN.intKey() == userType) {
+
+		} else {
+
+			if (!Util.isEmpty(comId) && comId > 0) {
+				cnd.and("vnoj.comId", "=", comId);
+			}
 		}
 		if (!Util.isEmpty(customerid) && customerid > 0) {
 			cnd.and("vncj.id", "=", customerid);
