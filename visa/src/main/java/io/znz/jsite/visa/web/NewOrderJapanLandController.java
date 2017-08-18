@@ -146,7 +146,12 @@ public class NewOrderJapanLandController {
 		Sql sql = Sqls.create(sqlString);
 		sql.setParam("orderId", orderId);
 		List<NewCustomerJpEntity> query = DbSqlUtil.query(dbDao, NewCustomerJpEntity.class, sql);*/
-
+		io.znz.jsite.core.entity.EmployeeEntity user = (io.znz.jsite.core.entity.EmployeeEntity) session
+				.getAttribute(Const.SESSION_NAME);
+		if (!Util.isEmpty(user)) {
+			int userType = user.getUserType();
+			form.setUserType(userType);
+		}
 		Pager pager = new Pager();
 		pager.setPageNumber(form.getPageNumber());
 		pager.setPageSize(form.getPageSize());

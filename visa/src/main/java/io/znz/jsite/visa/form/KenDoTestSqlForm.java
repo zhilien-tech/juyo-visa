@@ -84,6 +84,9 @@ public class KenDoTestSqlForm extends KenDoParamForm {
 		}
 		if (!Util.isEmpty(comId) && comId > 0) {
 			cnd.and("comId", "=", comId);
+		} else {
+			cnd.and("comId", "=", -1);
+
 		}
 
 		cnd.orderBy("vno.updatetime", "desc");

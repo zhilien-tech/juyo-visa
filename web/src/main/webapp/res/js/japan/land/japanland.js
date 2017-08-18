@@ -225,7 +225,7 @@ function regCmd(command) {
                 		} else {
                 			$.layer.alert(resp.msg);
                 		}
-                	});
+                	});*/
                 	break;
                 case "customerEdit1":
                 	
@@ -236,7 +236,7 @@ function regCmd(command) {
 		              		area: ['950px', '600px'],
 		              		shadeClose: true,
 		              		content: '/japan/japancustomerEdit.html?cid=' + data.id + "&check=true"
-		              	});*/
+		              	});
 		              	break;
                 case "modify":
                     var data = grid.dataItem($(e.currentTarget).closest("tr"));
