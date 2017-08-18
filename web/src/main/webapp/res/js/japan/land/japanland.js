@@ -123,20 +123,14 @@ function regCmd(command) {
                 	break;
                 case "validate":
                 	if (!(data = select(e))) return;
-                	var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
-                	$.getJSON("/visa/neworderjp/validate?type=order&orderid=" + data.id, {}, function (resp) {
+//                	var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+                	/*$.getJSON("/visa/neworderjp/validate?type=order&orderid=" + data.id, {}, function (resp) {
                 		if (resp.code === "SUCCESS") {
                 			if(index!=null){
                 				
                 				layer.close(index);
                 			}
-                			/*	layer.confirm('发送成功，打开预览？', {
-                                btn: ['预览', '关闭']
-                            }, function (index, layero) {
-                                window.open("/delivery/deliveryJapan.html?oid="+data.id);
-                            }, function (index) {
-                                $.layer.closeAll();
-                            });*/
+                			
                 			
                 			layer.msg("等待递送！",{time: 2000});
                 		} else if(resp.code === "FAIL"){
@@ -149,7 +143,19 @@ function regCmd(command) {
                 			$.layer.alert(resp.msg);
                 			
                 		}
-                	});
+                	});*/
+                	
+                	layer.open({
+    					type: 2,
+    					title: '下载',
+    					area: ['450px', '300px'],
+    					shadeClose: true,
+    					content: '/order/download.html?cid='+data.id,
+    					end: function(){//添加完页面点击返回的时候自动加载表格数据
+    						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+    						parent.layer.close(index);
+    					}
+    				});
                 	break;
                 case "noticeall":
                 	if (!(data = select(e))) return;
@@ -225,7 +231,7 @@ function regCmd(command) {
                 		} else {
                 			$.layer.alert(resp.msg);
                 		}
-                	});
+                	});*/
                 	break;
                 case "customerEdit1":
                 	
@@ -236,7 +242,7 @@ function regCmd(command) {
 		              		area: ['950px', '600px'],
 		              		shadeClose: true,
 		              		content: '/japan/japancustomerEdit.html?cid=' + data.id + "&check=true"
-		              	});*/
+		              	});
 		              	break;
                 case "modify":
                     var data = grid.dataItem($(e.currentTarget).closest("tr"));
@@ -250,19 +256,23 @@ function regCmd(command) {
                     break;
                 case "download":
                 	 if (!(data = select(e))) return;
-                   /*  $.fileDownload("/visa/neworderjp/export?orderid=" + data.id, {
+                	 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景
+                	 $.fileDownload("/visa/neworderjp/export?orderid=" + data.id, {
                          successCallback: function (url) {
-                             $.layer.alert('文件不存在 :' + url);
+                        		if(indexnew!=null){
+                            		layer.close(indexnew);
+                            	}
                          },
                          failCallback: function (html, url) {
-                             if (html.indexOf('<') >= 0) {
-                                 html = $(html).text();
-                             }
-                             var json = JSON.parse(html);
-                             $.layer.alert(json.msg);
+                          
+                        		if(indexnew!=null){
+                            		layer.close(indexnew);
+                            	}
+                        		$.layer.alert("下载失败");
+                        		
                          }
-                     });*/
-                	 layer.open({
+                     });
+                	/* layer.open({
          	            type: 2,
          	            title: '下载',
          	            area: ['450px', '300px'],
@@ -272,7 +282,7 @@ function regCmd(command) {
          	    	    	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
          	    			parent.layer.close(index);
          	    	    }
-         	        });
+         	        });*/
                      break;
              
                 default:
@@ -536,7 +546,7 @@ var grid = $("#grid").kendoGrid({
         {field: 'startdate', title: '出发时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.startdate#'>#=data.startdate?kendo.toString(data.startdate, 'yyyy-MM-dd'):''#</span>"},
         {field: 'outdate', title: '返回时间',format: "{0: yyyy-MM-dd}",template: "<span class='ellipsis' title='#=data.outdate#'>#=data.outdate?kendo.toString(data.outdate, 'yyyy-MM-dd'):''#</span>"},
 /*        {field: 'countrytype', title: '签证类型', width: 80,values:countrylist},*/
-        {field: 'status', title: '状态',values:statuslist, width: 75,click:showDetails},
+        {field: 'status', title: '状态',values:statuslist, width: 75},
         {
             title: "操作", width:240,
             command: [
@@ -630,6 +640,8 @@ var grid = $("#grid").kendoGrid({
             
             
             $('.k-upload-button span').text('上传');
+            
+          
     }
     
     
@@ -647,16 +659,20 @@ var grid = $("#grid").kendoGrid({
 //页面刷新
 function successCallback(id){
 	//grid.GetJQuery().refresh();
-	grid.dataSource.read();
 	
-	  if(id == '1'){
-		  layer.msg("添加成功",{time: 2000});
-	  }else if(id == '2'){
-		  layer.msg("修改成功",{time: 2000});
-	  }else if(id == '3'){
-		  layer.msg("操作成功",{time: 2000});
-	  }else if(id == '4'){
-	layer.msg("准备下载,请稍候",{time: 2000});
+	grid.dataSource.read();
+	if(id == '1'){
+		layer.msg("添加成功",{time: 2000});
+	}else if(id == '2'){
+		layer.msg("修改成功",{time: 2000});
+	}else if(id == '3'){
+		layer.msg("操作成功",{time: 2000});
+	}else if(id == '4'){
+		layer.msg("准备下载,请稍候",{time: 2000});
+	}else if(id == '5'){
+	layer.msg("等待递送!",{time: 2000});
+}else if(id == '6'){
+	layer.msg("数据不正确!",{time: 2000});
 }
   }
 //页面加载时加载日历
@@ -676,16 +692,64 @@ $().click(function(
 		
 ));*/
 
-grid.table.on('click', 'tr td:eq(11)', function () {
+/*
+function showDetails(e){
+	 grid.table.on('click', 'tr td:eq(11)', function () {
+         // 双击, dataItem = grid.dataItem(row)
+     	 var row = $(this).closest("tr");
+     	 var data = grid.dataItem(row);
+     	 var status=data.status;
+     	 alert(111);
+     	 if(status>=20&&status!=21){
+     		 layer.alert(data.errormsg);
+     	 }
+     });
+}
+*/
+
+/*grid.table.on('click', 'tr td:eq(11)', function () {
     // 双击, dataItem = grid.dataItem(row)
 	 var row = $(this).closest("tr");
 	 var data = grid.dataItem(row);
 	 var status=data.status;
+	 alert(111);
 	 if(status>=20&&status!=21){
 		 layer.alert(data.errormsg);
 	 }
 	 //console.log(JSON.stringify(data));
+});*/
+
+/*$(document).on('click','tbody[role="rowgroup"] tr',function(){
+	alert(10);
+});*/
+
+/*$('tbody[role="rowgroup"] tr').click(function(){
+	alert(45);
+});*/
+$(function(){
+	for(var i=0;i<20;i++){
+		 grid.table.on('click', 'tr:eq('+i+') td:eq(11)', function () {
+	         // 双击, dataItem = grid.dataItem(row)
+	     	 var row = $(this).closest("tr");
+	     	 var data = grid.dataItem(row);
+	     	 var status=data.status;
+	     	 if(status>=20&&status!=21){
+	     		 if(data!=''&&data!=null&&data!=undefined){
+	     			 layer.alert(data.errormsg);
+	     		 }
+	     	 }
+	     });
+	}
 });
-function showDetails(e){
-	//console.log(e);
-}
+/*function showDetails(e){
+	 grid.table.on('click', 'tr', function () {
+         // 双击, dataItem = grid.dataItem(row)
+     	 var row = $(this).closest("tr");
+     	 var data = grid.dataItem(row);
+     	 var status=data.status;
+     	 alert(111);
+     	 if(status>=20&&status!=21){
+     		 layer.alert(data.errormsg);
+     	 }
+     });
+}*/

@@ -1401,15 +1401,8 @@ public class NewOrderJaPanController {
 	 */
 	@RequestMapping(value = "export")
 	@ResponseBody
-	public Object export(HttpServletResponse resp, long orderid, long sendComId, long landComId) throws IOException {
+	public Object export(HttpServletResponse resp, long orderid) throws IOException {
 		NewOrderJpEntity order = dbDao.fetch(NewOrderJpEntity.class, orderid);
-		if (!Util.isEmpty(order)) {
-
-			dbDao.update(NewOrderJpEntity.class, Chain.make("sendComId", sendComId).add("landComId", landComId),
-					Cnd.where("id", "=", order.getId()));
-			order = dbDao.fetch(NewOrderJpEntity.class, order.getId());
-		}
-
 		//		CustomerManageEntity customerManageEntity = null;
 		//		if(){
 		//			
@@ -1927,9 +1920,18 @@ public class NewOrderJaPanController {
 
 	@RequestMapping(value = "validate")
 	@ResponseBody
-	public Object validate(long orderid, final HttpSession session) {
+	public Object validate(long orderid, final HttpSession session, long sendComId, long landComId) {
 		validateEmptyList.clear();
 		validateMsgList.clear();
+
+		NewOrderJpEntity order1 = dbDao.fetch(NewOrderJpEntity.class, orderid);
+		if (!Util.isEmpty(order1)) {
+
+			dbDao.update(NewOrderJpEntity.class, Chain.make("sendComId", sendComId).add("landComId", landComId),
+					Cnd.where("id", "=", order1.getId()));
+			order1 = dbDao.fetch(NewOrderJpEntity.class, order1.getId());
+		}
+
 		if (!Util.isEmpty(orderid) && orderid > 0) {
 			List<NewCustomerOrderJpEntity> customerList = dbDao.query(NewCustomerOrderJpEntity.class,
 					Cnd.where("order_jp_id", "=", orderid), null);

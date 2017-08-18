@@ -17,11 +17,12 @@ var statuslist=[
                 {text:"初审通过",value:4},
                 {text:"初审拒绝",value:5},
                 {text:"递送",value:17},
-
+                {text:"准备提交使馆",value:8},
                 {text:"发招宝中",value:18},
                 {text:"已发招宝",value:19},
                 {text:"发招宝失败",value:20},
                 {text:"归国报告",value:21},
+                {text:"提交失败",value:23},
                 {text:"归国报告失败",value:22}
                 /*                {text:"DS-160",value:7},
 
@@ -121,33 +122,20 @@ function regCmd(command) {
 				break;
 			case "validate":
 				if (!(data = select(e))) return;
-				var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
-				$.getJSON("/visa/neworderjp/validate?type=order&orderid=" + data.id, {}, function (resp) {
-					if (resp.code === "SUCCESS") {
-						if(index!=null){
-
-							layer.close(index);
-						}
-						/*	layer.confirm('发送成功，打开预览？', {
-                                btn: ['预览', '关闭']
-                            }, function (index, layero) {
-                                window.open("/delivery/deliveryJapan.html?oid="+data.id);
-                            }, function (index) {
-                                $.layer.closeAll();
-                            });*/
-
-						layer.msg("等待递送！",{time: 2000});
-					} else if(resp.code === "FAIL"){
-						if(index!=null){
-
-							layer.close(index);
-						}
-						$.layer.alert(resp.msg);
-					}else{
-						$.layer.alert(resp.msg);
-
+				
+				
+				layer.open({
+					type: 2,
+					title: '下载',
+					area: ['450px', '300px'],
+					shadeClose: true,
+					content: '/order/download.html?cid='+data.id,
+					end: function(){//添加完页面点击返回的时候自动加载表格数据
+						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+						parent.layer.close(index);
 					}
 				});
+				
 				break;
 			case "noticeall":
 				if (!(data = select(e))) return;
@@ -194,19 +182,23 @@ function regCmd(command) {
 				break;
 			case "download":
 				if (!(data = select(e))) return;
-				/*  $.fileDownload("/visa/neworderjp/export?orderid=" + data.id, {
-                         successCallback: function (url) {
-                             $.layer.alert('文件不存在 :' + url);
-                         },
-                         failCallback: function (html, url) {
-                             if (html.indexOf('<') >= 0) {
-                                 html = $(html).text();
-                             }
-                             var json = JSON.parse(html);
-                             $.layer.alert(json.msg);
-                         }
-                     });*/
-				layer.open({
+				var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景
+				$.fileDownload("/visa/neworderjp/export?orderid=" + data.id, {
+			         successCallback: function (url) {
+			        		if(indexnew!=null){
+			            		layer.close(indexnew);
+			            	}
+			         },
+			         failCallback: function (html, url) {
+			          
+			        		if(indexnew!=null){
+			            		layer.close(indexnew);
+			            	}
+			        		$.layer.alert("下载失败");
+			        		
+			         }
+			     });
+			/*	layer.open({
 					type: 2,
 					title: '下载',
 					area: ['450px', '300px'],
@@ -216,7 +208,7 @@ function regCmd(command) {
 						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						parent.layer.close(index);
 					}
-				});
+				});*/
 				break;
 
 			default:
@@ -304,7 +296,7 @@ var grid = $("#grid").kendoGrid({
 	sortable: true,
 	resizable: true,
 	filterable: true,
-	reorderable: true,
+	reorderable: false,
 	columnMenu: true,
 	scrollable: true,
 	pageable: {
@@ -385,7 +377,7 @@ var grid = $("#grid").kendoGrid({
 	          {field: 'headnum', title: '人数', values: ["美国", "日本"], width: 75,},
 	          {field: 'completednumber', title: '受付番号', width: 100,},
 	          /*{field: 'countrytype', title: '国家', width: 80,values:countrylist},*/
-	          {field: 'status', title: '状态',values:statuslist, width: 80,},
+	          {field: 'status', title: '状态',values:statuslist, width: 80},
 	          {
 	        	  title: "操作", width: 240,
 	        	  command: [
@@ -424,7 +416,11 @@ function successCallback(id){
 		layer.msg("操作成功",{time: 2000});
 	}else if(id == '4'){
 		layer.msg("准备下载,请稍候",{time: 2000});
-	}
+	}else if(id == '5'){
+	layer.msg("等待递送!",{time: 2000});
+}else if(id == '6'){
+	layer.msg("数据不正确!",{time: 2000});
+}
 }
 //页面加载时加载日历
 $(function(){
@@ -434,6 +430,8 @@ $(function(){
 	/*	$(document).on('click','.k-grid-download',function(){
 
 	});*/
+	
+	
 });
 /*//点击触发日历
 $().click(function(
@@ -441,4 +439,18 @@ $().click(function(
 ));*/
 
 
-
+$(function(){
+	for(var i=0;i<20;i++){
+		 grid.table.on('click', 'tr:eq('+i+') td:eq(8)', function () {
+	         // 双击, dataItem = grid.dataItem(row)
+	     	 var row = $(this).closest("tr");
+	     	 var data = grid.dataItem(row);
+	     	 var status=data.status;
+	     	 if(status>=20&&status!=21){
+	     		 if(data!=''&&data!=null&&data!=undefined){
+	     			 layer.alert(data.errormsg);
+	     		 }
+	     	 }
+	     });
+	}
+});
