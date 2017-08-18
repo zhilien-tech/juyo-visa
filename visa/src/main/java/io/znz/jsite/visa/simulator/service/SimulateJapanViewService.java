@@ -9,6 +9,7 @@ package io.znz.jsite.visa.simulator.service;
 import io.znz.jsite.base.NutzBaseService;
 import io.znz.jsite.base.bean.ResultObject;
 import io.znz.jsite.download.impl.QiniuUploadServiceImpl;
+import io.znz.jsite.visa.entity.japan.NewComeBabyJpEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
 import io.znz.jsite.visa.entity.japan.NewDateplanJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrderJpEntity;
@@ -64,7 +65,7 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 
 	/**查询第一个可提交签证网站的日本客户信息*/
 	public ResultObject fetchJapanOrder() {
-		List<NewOrderJpEntity> orderListSubmiting = dbDao.query(NewOrderJpEntity.class,
+		/*List<NewOrderJpEntity> orderListSubmiting = dbDao.query(NewOrderJpEntity.class,
 				Cnd.where("status", "=", VisaJapanApproStatusEnum.japancoming.intKey()), null);
 		if (!Util.isEmpty(orderListSubmiting) && orderListSubmiting.size() > 0) {
 			Date updatetimeOld = orderListSubmiting.get(0).getUpdatetime();
@@ -78,14 +79,15 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 				ResultObject japanOrderInfo = getJapanOrderInfo();
 				return japanOrderInfo;
 			}
-		} else {
-			ResultObject japanOrderInfo = getJapanOrderInfo();
-			return japanOrderInfo;
-		}
+		} else {*/
+		ResultObject japanOrderInfo = getJapanOrderInfo();
+		return japanOrderInfo;
+		/*	}
 
-		return ResultObject.fail("暂无任务");
+			return ResultObject.fail("暂无任务");*/
 	}
 
+	@SuppressWarnings("null")
 	public ResultObject getJapanOrderInfo() {
 		List<NewOrderJpEntity> orderList = dbDao.query(NewOrderJpEntity.class,
 				Cnd.where("status", "=", VisaJapanApproStatusEnum.readySubmit.intKey()), null);
@@ -142,11 +144,20 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 				}
 
 			}
+			long sendComId = order.getSendComId();
+			if (!Util.isEmpty(sendComId) && sendComId > 0) {
+				NewComeBabyJpEntity comeBaby = dbDao.fetch(NewComeBabyJpEntity.class, sendComId);
+				map.put("visaAccount", "1507-001");
+				map.put("visaPasswd", "kintsu2017");
+				map.put("agentNo", comeBaby.getCompletedNumber());
+				map.put("visaType1", "2");
+			} else {
 
-			map.put("visaAccount", "1507-001");
-			map.put("visaPasswd", "kintsu2017");
-			map.put("agentNo", "gtu-sh-057-0");
-			map.put("visaType1", "2");
+				map.put("visaAccount", "1507-001");
+				map.put("visaPasswd", "kintsu2017");
+				map.put("agentNo", " ");
+				map.put("visaType1", "2");
+			}
 
 			/*	map.put("visaType2", );*/
 			if (!Util.isEmpty(customerList) && customerList.size() > 0) {

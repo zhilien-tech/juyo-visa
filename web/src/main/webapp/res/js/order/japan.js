@@ -122,33 +122,20 @@ function regCmd(command) {
 				break;
 			case "validate":
 				if (!(data = select(e))) return;
-				var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
-				$.getJSON("/visa/neworderjp/validate?type=order&orderid=" + data.id, {}, function (resp) {
-					if (resp.code === "SUCCESS") {
-						if(index!=null){
-
-							layer.close(index);
-						}
-						/*	layer.confirm('发送成功，打开预览？', {
-                                btn: ['预览', '关闭']
-                            }, function (index, layero) {
-                                window.open("/delivery/deliveryJapan.html?oid="+data.id);
-                            }, function (index) {
-                                $.layer.closeAll();
-                            });*/
-
-						layer.msg("等待递送！",{time: 2000});
-					} else if(resp.code === "FAIL"){
-						if(index!=null){
-
-							layer.close(index);
-						}
-						$.layer.alert(resp.msg);
-					}else{
-						$.layer.alert(resp.msg);
-
+				
+				
+				layer.open({
+					type: 2,
+					title: '下载',
+					area: ['450px', '300px'],
+					shadeClose: true,
+					content: '/order/download.html?cid='+data.id,
+					end: function(){//添加完页面点击返回的时候自动加载表格数据
+						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+						parent.layer.close(index);
 					}
 				});
+				
 				break;
 			case "noticeall":
 				if (!(data = select(e))) return;
@@ -195,19 +182,23 @@ function regCmd(command) {
 				break;
 			case "download":
 				if (!(data = select(e))) return;
-				/*  $.fileDownload("/visa/neworderjp/export?orderid=" + data.id, {
-                         successCallback: function (url) {
-                             $.layer.alert('文件不存在 :' + url);
-                         },
-                         failCallback: function (html, url) {
-                             if (html.indexOf('<') >= 0) {
-                                 html = $(html).text();
-                             }
-                             var json = JSON.parse(html);
-                             $.layer.alert(json.msg);
-                         }
-                     });*/
-				layer.open({
+				var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景
+				$.fileDownload("/visa/neworderjp/export?orderid=" + data.id, {
+			         successCallback: function (url) {
+			        		if(indexnew!=null){
+			            		layer.close(indexnew);
+			            	}
+			         },
+			         failCallback: function (html, url) {
+			          
+			        		if(indexnew!=null){
+			            		layer.close(indexnew);
+			            	}
+			        		$.layer.alert("下载失败");
+			        		
+			         }
+			     });
+			/*	layer.open({
 					type: 2,
 					title: '下载',
 					area: ['450px', '300px'],
@@ -217,7 +208,7 @@ function regCmd(command) {
 						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						parent.layer.close(index);
 					}
-				});
+				});*/
 				break;
 
 			default:
@@ -425,7 +416,11 @@ function successCallback(id){
 		layer.msg("操作成功",{time: 2000});
 	}else if(id == '4'){
 		layer.msg("准备下载,请稍候",{time: 2000});
-	}
+	}else if(id == '5'){
+	layer.msg("等待递送!",{time: 2000});
+}else if(id == '6'){
+	layer.msg("数据不正确!",{time: 2000});
+}
 }
 //页面加载时加载日历
 $(function(){

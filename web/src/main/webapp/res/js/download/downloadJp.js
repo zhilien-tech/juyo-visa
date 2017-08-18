@@ -98,26 +98,56 @@ var errorNum=[];
 function downloadsave(){
 	var sendComId=viewModel.customer.sendComId;
 	var landComId=viewModel.customer.landComId;
-	var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
-	 $.fileDownload("/visa/neworderjp/export?orderid=" + $.queryString("cid")+"&sendComId="+sendComId+"&landComId="+landComId, {
+	
+	
+	var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+	$.getJSON("/visa/neworderjp/validate?type=order&orderid=" + $.queryString("cid")+"&sendComId="+sendComId+"&landComId="+landComId, {}, function (resp) {
+		if (resp.code === "SUCCESS") {
+			if(index!=null){
+
+				layer.close(index);
+			}
+			 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			 //$.layer.closeAll();
+			 parent.layer.close(index);
+			 window.parent.successCallback('5');
+
+		} else if(resp.code === "FAIL"){
+			if(index!=null){
+
+				layer.close(index);
+			}
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			 //$.layer.closeAll();
+			 parent.layer.close(index);
+			 window.parent.successCallback('6');
+			$.layer.alert(resp.msg);
+		}else{
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			 //$.layer.closeAll();
+			 parent.layer.close(index);
+			 window.parent.successCallback('6');
+			$.layer.alert(resp.msg);
+
+		}
+	});
+	
+	
+/*	 $.fileDownload("/visa/neworderjp/export?orderid=" + $.queryString("cid")+"&sendComId="+sendComId+"&landComId="+landComId, {
          successCallback: function (url) {
         		if(indexnew!=null){
             		layer.close(indexnew);
             	}
          },
          failCallback: function (html, url) {
-            /* if (html.indexOf('<') >= 0) {
-                 html = $(html).text();
-             }
-             var json = JSON.parse(html);
-             $.layer.alert(json.msg);*/
+          
         		if(indexnew!=null){
             		layer.close(indexnew);
             	}
         		$.layer.alert("下载失败");
         		
          }
-     });
+     });*/
 /*	 var iframebody = layer.getChildFrame('body', index); //获取窗口索引
 	 parent.layer.close(iframebody);*/
 /*	 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
