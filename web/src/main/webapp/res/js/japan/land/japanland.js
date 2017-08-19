@@ -20,19 +20,19 @@ var visatypelist=[
 var statuslist=[
      
                 {text:"下单",value:15},
-                {text:"已分享",value:1},
+               /* {text:"已分享",value:1},
                 {text:"资料填写",value:2},
-                {text:"初审",value:3},
+                {text:"初审",value:3},*/
                 {text:"初审通过",value:4},
                 {text:"初审拒绝",value:5},
-                {text:"递送",value:17},
+              /*  {text:"递送",value:17},*/
                 {text:"发招宝中",value:18},
                 {text:"已发招宝",value:19},
                 {text:"发招宝失败",value:20},
                 {text:"归国报告",value:21},
                 {text:"归国报告失败",value:22},
                 {text:"提交失败",value:23},
-                {text:"准备提交使馆",value:8}
+                {text:"准备发招宝",value:8}
               ];
 //注册命令
 function regCmd(command) {
