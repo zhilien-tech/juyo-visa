@@ -548,7 +548,7 @@ var grid = $("#grid").kendoGrid({
 /*        {field: 'countrytype', title: '签证类型', width: 80,values:countrylist},*/
         {field: 'status', title: '状态',values:statuslist, width: 75},
         {
-            title: "操作", width:240,
+            title: "操作", width:260,
             command: [
                 {name: "modify", imageClass:false, text: "编辑"},
                 {name: "validate", imageClass:false, text: "发招宝"},
@@ -639,7 +639,7 @@ var grid = $("#grid").kendoGrid({
             });
             
             
-            $('.k-upload-button span').text('上传');
+            $('.k-upload-button span').text('归国上传');
             
           
     }
