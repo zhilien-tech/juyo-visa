@@ -173,11 +173,11 @@ function ordersave(){
 $(function () {
 	//如果有传递ID就是修改
 	var oid = $.queryString("cid");
+	var a=viewModel.get("customer.comType");
 	if (oid) {
 		//招宝信息 编辑页面
 		$.getJSON("/visa/comebaby/comefetch?comeid=" + oid, function (resp) {
 			viewModel.set("customer", $.extend(true, dafaults, resp));
-			var a=viewModel.get("customer.comType");
 			if(a!=null&&a!=''){
 				$("#state").val(a);
 				if(a==1){
@@ -252,14 +252,13 @@ $(function () {
 		//招宝信息 添加页面
 		$("#deleteBtn").hide();
 		$('#saveBtn').parent().parent().attr('class','col-xs-12');
-
 		var a=1;
 		$("#state").val(a);
 		if(a==1){
-			$("#3").hide();
-			$("#4").hide();
-			$('#1').show();
-			$('#2').show();
+			$('#1').show();	//保证会社、指定番号
+			$('#2').show(); //住所
+			$("#3").hide(); //公司全称
+			$("#4").hide(); //住所
 			$('.songqianshe-div').show();//显示 送签社：担当者/携带电话/TEL/FAX
 			$('.companyChopDiv').hide();//隐藏 上传公司公章部分
 			$('.dijieshe-div').hide();//隐藏  地接社：担当者/TEL
