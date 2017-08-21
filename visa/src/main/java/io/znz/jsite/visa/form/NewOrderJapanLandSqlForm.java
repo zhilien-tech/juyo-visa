@@ -38,6 +38,7 @@ public class NewOrderJapanLandSqlForm extends KenDoParamForm {
 	private long comId;
 	private long customerid;
 	private int userType;
+	private String comIdList;
 
 	@Override
 	public Sql sql(SqlManager paramSqlManager) {
@@ -88,6 +89,7 @@ public class NewOrderJapanLandSqlForm extends KenDoParamForm {
 		}
 		if (UserLoginEnum.JP_DJS_ADMIN.intKey() == userType) {
 
+			cnd.and("vnoj.comId", "in", comIdList);
 		} else {
 
 			if (!Util.isEmpty(comId) && comId > 0) {
@@ -100,6 +102,7 @@ public class NewOrderJapanLandSqlForm extends KenDoParamForm {
 		SqlExpressionGroup e1 = Cnd.exps("vnoj.status", ">", 17);
 		SqlExpressionGroup e2 = Cnd.exps("vnoj.island", "=", 1);
 		cnd.and(e1.or(e2));
+
 		cnd.orderBy("vnoj.updatetime", "desc");
 		cnd.groupBy("vnoj.id");
 		return cnd;

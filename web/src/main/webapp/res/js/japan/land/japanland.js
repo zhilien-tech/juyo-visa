@@ -20,19 +20,19 @@ var visatypelist=[
 var statuslist=[
      
                 {text:"下单",value:15},
-                {text:"已分享",value:1},
+               /* {text:"已分享",value:1},
                 {text:"资料填写",value:2},
-                {text:"初审",value:3},
+                {text:"初审",value:3},*/
                 {text:"初审通过",value:4},
                 {text:"初审拒绝",value:5},
-                {text:"递送",value:17},
+              /*  {text:"递送",value:17},*/
                 {text:"发招宝中",value:18},
                 {text:"已发招宝",value:19},
                 {text:"发招宝失败",value:20},
                 {text:"归国报告",value:21},
                 {text:"归国报告失败",value:22},
                 {text:"提交失败",value:23},
-                {text:"准备提交使馆",value:8}
+                {text:"准备发招宝",value:8}
               ];
 //注册命令
 function regCmd(command) {
@@ -548,12 +548,12 @@ var grid = $("#grid").kendoGrid({
 /*        {field: 'countrytype', title: '签证类型', width: 80,values:countrylist},*/
         {field: 'status', title: '状态',values:statuslist, width: 75},
         {
-            title: "操作", width:240,
+            title: "操作", width:260,
             command: [
                 {name: "modify", imageClass:false, text: "编辑"},
                 {name: "validate", imageClass:false, text: "发招宝"},
                 {name: "download", imageClass:false, text: "下载"},
-                {name: "upload", imageClass:false, text: "上传",template:"<input type=\'file\' show=\'0\' name=\'files\' id=\'photos\'  />"},
+                {name: "upload", imageClass:false, text: "上传归国",template:"<input type=\'file\' show=\'0\' name=\'files\' id=\'photos\'  />"},
                 regCmd("modify"),
                 regCmd("shareall"),
                 regCmd("download"),
@@ -639,7 +639,7 @@ var grid = $("#grid").kendoGrid({
             });
             
             
-            $('.k-upload-button span').text('上传');
+            $('.k-upload-button span').text('归国上传');
             
           
     }
