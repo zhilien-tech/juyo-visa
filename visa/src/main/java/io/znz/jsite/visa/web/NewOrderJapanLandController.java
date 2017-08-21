@@ -7,6 +7,7 @@
 package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.bean.ResultObject;
+import io.znz.jsite.core.entity.company.CompanyEntity;
 import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
 import io.znz.jsite.core.service.MailService;
 import io.znz.jsite.core.util.Const;
@@ -140,6 +141,18 @@ public class NewOrderJapanLandController {
 		if (!Util.isEmpty(company)) {
 			long comId = company.getComId();
 			form.setComId(comId);
+		}
+		List<CompanyEntity> comList = dbDao.query(CompanyEntity.class, Cnd.where("comType", "=", 1), null);
+		if (!Util.isEmpty(comList) && comList.size() > 0) {
+			String str = "";
+			for (CompanyEntity companyEntity : comList) {
+				str += companyEntity.getId() + ",";
+			}
+			str += 0;
+			if (!Util.isEmpty(str)) {
+
+				form.setComIdList(str);
+			}
 		}
 		/*Cnd cnd = Cnd.NEW();
 		String sqlString = sqlManager.get("newcustomerjapan_list");

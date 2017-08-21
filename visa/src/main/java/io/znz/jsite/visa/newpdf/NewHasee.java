@@ -11,6 +11,7 @@ import io.znz.jsite.util.StringUtils;
 import io.znz.jsite.visa.bean.Flight;
 import io.znz.jsite.visa.bean.Hotel;
 import io.znz.jsite.visa.bean.Scenic;
+import io.znz.jsite.visa.entity.japan.NewComeBabyJpDjsEntity;
 import io.znz.jsite.visa.entity.japan.NewComeBabyJpEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerOrderJpEntity;
@@ -688,11 +689,11 @@ public class NewHasee extends NewTemplate {
 			}
 			document.add(table);
 			//文字添加
-			NewComeBabyJpEntity comeBaby = null;
+			NewComeBabyJpDjsEntity comeBaby = null;
 			long landComId = order.getLandComId();
 			if (!Util.isEmpty(landComId) && landComId > 0) {
 
-				comeBaby = dbdao.fetch(NewComeBabyJpEntity.class, landComId);
+				comeBaby = dbdao.fetch(NewComeBabyJpDjsEntity.class, landComId);
 			}
 			{
 				String text = "";
@@ -754,7 +755,7 @@ public class NewHasee extends NewTemplate {
 			}
 			if (!Util.isEmpty(landComId) && landComId > 0) {
 
-				comeBaby = dbdao.fetch(NewComeBabyJpEntity.class, landComId);
+				comeBaby = dbdao.fetch(NewComeBabyJpDjsEntity.class, landComId);
 				if (!Util.isEmpty(comeBaby)) {
 					String sealUrl = comeBaby.getSealUrl();
 					if (!Util.isEmpty(sealUrl)) {
@@ -899,11 +900,11 @@ public class NewHasee extends NewTemplate {
 			}
 			document.add(table);
 			//文字添加
-			NewComeBabyJpEntity comeBaby = null;
+			NewComeBabyJpDjsEntity comeBaby = null;
 			long landComId = order.getLandComId();
 			if (!Util.isEmpty(landComId) && landComId > 0) {
 
-				comeBaby = dbdao.fetch(NewComeBabyJpEntity.class, landComId);
+				comeBaby = dbdao.fetch(NewComeBabyJpDjsEntity.class, landComId);
 			}
 			{
 				String text = "";
@@ -968,7 +969,7 @@ public class NewHasee extends NewTemplate {
 					Cnd.where("order_jp_id", "=", order.getId()), null);
 			if (!Util.isEmpty(landComId) && landComId > 0) {
 
-				comeBaby = dbdao.fetch(NewComeBabyJpEntity.class, landComId);
+				comeBaby = dbdao.fetch(NewComeBabyJpDjsEntity.class, landComId);
 				if (!Util.isEmpty(comeBaby)) {
 					String sealUrl = comeBaby.getSealUrl();
 					if (!Util.isEmpty(sealUrl)) {
@@ -1008,7 +1009,7 @@ public class NewHasee extends NewTemplate {
 			long landComId = order.getLandComId();
 			if (!Util.isEmpty(landComId) && landComId > 0) {
 
-				NewComeBabyJpEntity comeBaby = dbdao.fetch(NewComeBabyJpEntity.class, landComId);
+				NewComeBabyJpDjsEntity comeBaby = dbdao.fetch(NewComeBabyJpDjsEntity.class, landComId);
 				if (!Util.isEmpty(comeBaby)) {
 
 					context.put("company", comeBaby.getLandcomFullName());

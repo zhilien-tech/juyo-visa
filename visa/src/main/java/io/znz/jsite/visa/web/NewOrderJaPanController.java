@@ -20,6 +20,7 @@ import io.znz.jsite.visa.bean.Hotel;
 import io.znz.jsite.visa.bean.Scenic;
 import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
 import io.znz.jsite.visa.entity.delivery.NewDeliveryJapanEntity;
+import io.znz.jsite.visa.entity.japan.NewComeBabyJpDjsEntity;
 import io.znz.jsite.visa.entity.japan.NewComeBabyJpEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
 import io.znz.jsite.visa.entity.japan.NewCustomerOrderJpEntity;
@@ -60,6 +61,7 @@ import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -1902,20 +1904,29 @@ public class NewOrderJaPanController {
 	@ResponseBody
 	public Object downloadselectfind(int a, final HttpSession session) {
 		List<NewComeBabyJpEntity> comeList = Lists.newArrayList();
+		List<NewComeBabyJpDjsEntity> comeList1 = Lists.newArrayList();
+
 		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
 		if (!Util.isEmpty(company)) {
 			long comId = company.getComId();
 			if (a == 1) {
 				comeList = dbDao.query(NewComeBabyJpEntity.class,
 						Cnd.where("comType", "=", CompanyTypeEnum.send.intKey()).and("comId", "=", comId), null);
+				return comeList;
 
 			} else if (a == 2) {
-				comeList = dbDao.query(NewComeBabyJpEntity.class,
-						Cnd.where("comType", "=", CompanyTypeEnum.land.intKey()).and("comId", "=", comId), null);
+				comeList1 = dbDao.query(NewComeBabyJpDjsEntity.class, null, null);
 
+				return comeList1;
+			}
+		} else {
+			if (a == 2) {
+				comeList1 = dbDao.query(NewComeBabyJpDjsEntity.class, null, null);
+
+				return comeList1;
 			}
 		}
-		return comeList;
+		return new ArrayList();
 	}
 
 	@RequestMapping(value = "validate")
