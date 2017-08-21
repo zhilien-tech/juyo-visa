@@ -58,6 +58,7 @@ var countries = new kendo.data.DataSource({
         }
     }),
     dafaults = {
+	
 	docountry:"CHN",
 	passporttype:1,
 	workinfoJp: {},
@@ -392,9 +393,17 @@ $(function () {
         	var passporttype=viewModel.get("customer.passporttype");
         	if(passporttype!=""&&passporttype!=null){
         		
-        	}else{0
+        	}else{
         		
         		viewModel.set("customer.passporttype", 1);
+        	}
+        	//护照签发机关默认值处理
+        	var passportsendoffice=viewModel.get("customer.passportsendoffice");
+        	if(passportsendoffice!=""&&passportsendoffice!=null){
+        		
+        	}else{
+        		
+        		viewModel.set("customer.passportsendoffice", "公安部出入境管理局");
         	}
         	var docountry=viewModel.get("customer.docountry");
         	if(docountry!=""&&docountry!=null){

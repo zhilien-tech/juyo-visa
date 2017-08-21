@@ -289,7 +289,7 @@ var viewModel = kendo.observable({
     					viewModel.set("customer.proposerInfoJpList["+m+"].ismainproposer",true);
 					}
     			}*/
-    			//viewModel.set("customer.proposerInfoJpList",viewModel.get("customer.proposerInfoJpList"));
+    			viewModel.set("customer.proposerInfoJpList",viewModel.get("customer.proposerInfoJpList"));
     			$("#ismainproposer_"+e.data.id).text("主申请人("+e.data.xing+e.data.name+")");
     	}else{
     		for(var i=0;i<proposersnew.length;i++){
@@ -890,7 +890,7 @@ $(function () {
         	
         	var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
         	for(var i=0;i<proposerInfoJpList.length;i++){
-        		var ismain=proposerInfoJpList[i].ismainproposer;
+        		var ismain=proposerInfoJpList[i].isMainProposer;
         		if(ismain){
         			//viewModel.set("customer.proposerInfoJpList["+i+ "].ismainproposer",true);
         			var person=new Object();
@@ -899,9 +899,9 @@ $(function () {
         	    	
         	    	proposersnew.push(person);
         	    	//alert(JSON.stringify(proposersnew));
-        			viewModel.set("proposers",proposersnew);
         		}
         	}
+        	viewModel.set("proposers",proposersnew);
         	var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
         	if(proposerInfoJpList.length>0){
         		$(".mainApplicant").hide();

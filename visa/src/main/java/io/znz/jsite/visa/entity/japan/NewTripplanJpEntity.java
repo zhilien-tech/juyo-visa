@@ -74,4 +74,6 @@ public class NewTripplanJpEntity implements Serializable {
 
 	private List<Scenic> scenics;//景点
 
+	private Date endDate;//生成酒店的pdf用到
+
 }
