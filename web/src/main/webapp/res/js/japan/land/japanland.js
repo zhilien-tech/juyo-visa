@@ -553,7 +553,7 @@ var grid = $("#grid").kendoGrid({
                 {name: "modify", imageClass:false, text: "编辑"},
                 {name: "validate", imageClass:false, text: "发招宝"},
                 {name: "download", imageClass:false, text: "下载"},
-                {name: "upload", imageClass:false, text: "上传",template:"<input type=\'file\' show=\'0\' name=\'files\' id=\'photos\'  />"},
+                {name: "upload", imageClass:false, text: "上传归国",template:"<input type=\'file\' show=\'0\' name=\'files\' id=\'photos\'  />"},
                 regCmd("modify"),
                 regCmd("shareall"),
                 regCmd("download"),

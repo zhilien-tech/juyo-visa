@@ -12,8 +12,8 @@ var genderlist=[
 var statuslist=[
                 {text:"下单",value:15},
                {text:"已分享",value:1},
-               /* {text:"资料填写",value:2},
-                {text:"初审",value:3},*/
+              {text:"资料填写",value:2},
+              /*  {text:"初审",value:3},*/
                 {text:"初审通过",value:4},
                 {text:"初审拒绝",value:5},
              /*   {text:"递送",value:17},*/
