@@ -76,6 +76,12 @@ public class NewCustomerJpService {
 
 			}
 		}
+		//护照号大写
+		String passport = customer.getPassport();
+		if (!Util.isEmpty(passport)) {
+			passport = passport.toUpperCase();
+			customer.setPassport(passport);
+		}
 		String xing = customer.getChinesexing();
 		String name = customer.getChinesename();
 		if (!Util.isEmpty(xing) && !Util.isEmpty(name)) {

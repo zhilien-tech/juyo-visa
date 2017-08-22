@@ -7,7 +7,9 @@ package io.znz.jsite.visa.newpdf;
 import io.znz.jsite.exception.JSiteException;
 import io.znz.jsite.util.SpringUtil;
 import io.znz.jsite.visa.entity.japan.NewCustomerJpEntity;
+import io.znz.jsite.visa.entity.japan.NewDateplanJpEntity;
 import io.znz.jsite.visa.entity.japan.NewOrderJpEntity;
+import io.znz.jsite.visa.entity.japan.NewTripJpEntity;
 import io.znz.jsite.visa.entity.japan.NewTripplanJpEntity;
 
 import java.io.ByteArrayOutputStream;
@@ -29,14 +31,16 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeFieldType;
+import org.nutz.dao.Cnd;
 import org.springframework.stereotype.Service;
 
+import com.ibm.icu.util.Calendar;
 import com.uxuexi.core.common.util.Util;
+import com.uxuexi.core.db.dao.IDbDao;
 
 @Service
 public class NewPdfService {
+	private IDbDao dbDao = SpringUtil.getBean("dbDao");
 
 	//生成临时文件
 	private File createTempFile(ByteArrayOutputStream out) {
@@ -77,28 +81,100 @@ public class NewPdfService {
 			//酒店确认单
 			List<NewTripplanJpEntity> trips = new ArrayList<NewTripplanJpEntity>();
 			//根据计划生产行程安排的表
-			List<NewTripplanJpEntity> tripplanJpList = order.getTripplanJpList();
-			if (!Util.isEmpty(tripplanJpList) && tripplanJpList.size() > 0) {
+			/*	List<NewTripplanJpEntity> tripplanJpList = order.getTripplanJpList();
+				if (!Util.isEmpty(tripplanJpList) && tripplanJpList.size() > 0) {
 
-				for (NewTripplanJpEntity trip : tripplanJpList) {
-					if (trips.size() == 0) {
-						trips.add(trip);
-					} else {
-						NewTripplanJpEntity prev = trips.get(trips.size() - 1);
-						if (prev.getHotelid() == trip.getHotelid()) {
-							DateTime dt = new DateTime(trip.getNowdate());
-							if (!Util.isEmpty(trip.getOuttime())) {
-
-								dt = dt.withField(DateTimeFieldType.hourOfDay(), trip.getOuttime().getHours());
-								dt = dt.withField(DateTimeFieldType.minuteOfHour(), trip.getOuttime().getMinutes());
-							}
-							prev.setOuttime(dt.toDate());
-						} else {
+					for (int i=0;i<tripplanJpList.size();i++) {
+						NewTripplanJpEntity trip=tripplanJpList.get(i);
+						if (trips.size() == 0) {
 							trips.add(trip);
+						} else {
+							NewTripplanJpEntity prev = trips.get(trips.size() - 1);
+							if (prev.getHotelid() == trip.getHotelid()) {
+								DateTime dt = new DateTime(trip.getNowdate());
+								if (!Util.isEmpty(trip.getOuttime())) {
+
+									dt = dt.withField(DateTimeFieldType.hourOfDay(), trip.getOuttime().getHours());
+									dt = dt.withField(DateTimeFieldType.minuteOfHour(), trip.getOuttime().getMinutes());
+								}
+								prev.setOuttime(dt.toDate());
+							} else {
+								trips.add(trip);
+							}
+						}
+					}
+				}*/
+			//==========================================开始============================
+			List<NewTripJpEntity> tripList = dbDao.query(NewTripJpEntity.class,
+					Cnd.where("order_jp_id", "=", order.getId()), null);
+			NewTripJpEntity tripJp1 = tripList.get(0);
+			int oneormore2 = tripJp1.getOneormore().intValue();
+			if (oneormore2 == 0) {
+				List<NewTripplanJpEntity> query = dbDao.query(NewTripplanJpEntity.class,
+						Cnd.where("order_jp_id", "=", order.getId()), null);
+				NewTripplanJpEntity trip1 = new NewTripplanJpEntity();
+				if (!Util.isEmpty(query) && query.size() > 0) {
+					trip1.setHotelid(query.get(0).getHotelid());
+					trip1.setNowdate(tripJp1.getStartdate());
+					trip1.setEndDate(tripJp1.getReturndate());
+					trip1.setOrder_jp_id(order.getId());
+				}
+				trips.add(trip1);
+			} else if (oneormore2 == 1) {
+
+				List<NewDateplanJpEntity> datePlanList = dbDao.query(NewDateplanJpEntity.class,
+						Cnd.where("trip_jp_id", "=", tripJp1.getId()), null);
+				List<NewTripplanJpEntity> tripPlanList = dbDao.query(NewTripplanJpEntity.class,
+						Cnd.where("order_jp_id", "=", order.getId()), null);
+				if (!Util.isEmpty(datePlanList) && datePlanList.size() > 0) {
+					for (int i = 0; i < datePlanList.size(); i++) {
+						if (i < datePlanList.size() - 2) {
+
+							String arrivecity = datePlanList.get(i).getArrivecity();
+							NewTripplanJpEntity trip1 = new NewTripplanJpEntity();
+							for (int j = 0; j < tripPlanList.size(); j++) {
+								if (!Util.isEmpty(arrivecity)) {
+									if (arrivecity.equalsIgnoreCase(tripPlanList.get(j).getCity())) {
+
+										trip1.setHotelid(tripPlanList.get(j).getHotelid());
+										break;
+									}
+								}
+							}
+
+							trip1.setNowdate(datePlanList.get(i).getStartdate());
+
+							Calendar cal = Calendar.getInstance();
+							cal.setTime(datePlanList.get(i + 1).getStartdate());
+							cal.add(Calendar.DATE, -1);
+							trip1.setOrder_jp_id(order.getId());
+							trip1.setEndDate(cal.getTime());
+							trips.add(trip1);
+						} else if (i == datePlanList.size() - 2) {
+							String arrivecity = datePlanList.get(i).getArrivecity();
+							NewTripplanJpEntity trip1 = new NewTripplanJpEntity();
+							for (int j = 0; j < tripPlanList.size(); j++) {
+								if (!Util.isEmpty(arrivecity)) {
+									if (arrivecity.equalsIgnoreCase(tripPlanList.get(j).getCity())) {
+
+										trip1.setHotelid(tripPlanList.get(j).getHotelid());
+										break;
+									}
+								}
+							}
+
+							trip1.setNowdate(datePlanList.get(i).getStartdate());
+							trip1.setEndDate(datePlanList.get(i + 1).getStartdate());
+							trip1.setOrder_jp_id(order.getId());
+							trips.add(trip1);
+
 						}
 					}
 				}
+
 			}
+
+			//==========================================结束============================
 			if (!Util.isEmpty(trips) && trips.size() > 0) {
 
 				for (NewTripplanJpEntity trip : trips) {
