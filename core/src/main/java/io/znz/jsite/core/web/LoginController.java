@@ -457,6 +457,18 @@ public class LoginController extends BaseController {
 								logfun.setSort(26);
 								logfun.setPortrait("fa fa-building-o");
 								functions.add(logfun);
+								//平台统计
+								FunctionEntity adminfun = new FunctionEntity();
+								adminfun.setId(30);
+								adminfun.setParentId(20);
+								adminfun.setFunName("统计");
+								adminfun.setUrl("");
+								adminfun.setLevel(2);
+								adminfun.setCreateTime(new Date());
+								adminfun.setRemark("平台统计");
+								adminfun.setSort(30);
+								adminfun.setPortrait("");
+								functions.add(adminfun);
 								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 								return "redirect:" + to + "?auth=4," + "&username=" + fullname + "&logintype=" + 4
 										+ "&userType=" + userType;
@@ -585,6 +597,18 @@ public class LoginController extends BaseController {
 		djsjp.setSort(27);
 		djsjp.setPortrait("");
 		functions.add(djsjp);
+		//日本地接统计
+		FunctionEntity djsjptotal = new FunctionEntity();
+		djsjptotal.setId(29);
+		djsjptotal.setParentId(17);
+		djsjptotal.setFunName("统计");
+		djsjptotal.setUrl("");
+		djsjptotal.setLevel(2);
+		djsjptotal.setCreateTime(new Date());
+		djsjptotal.setRemark("日本地接社统计");
+		djsjptotal.setSort(29);
+		djsjptotal.setPortrait("");
+		functions.add(djsjptotal);
 		return functions;
 	}
 

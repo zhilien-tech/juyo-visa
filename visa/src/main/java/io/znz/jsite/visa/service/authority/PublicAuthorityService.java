@@ -42,7 +42,7 @@ public class PublicAuthorityService extends NutzBaseService {
 		List<CompanyFunctionEntity> insert = Lists.newArrayList();
 		if (comType == CompanyTypeEnum.send.intKey()) {//送签社
 			//送签社功能ID
-			int[] function1 = { 1, 2, 3, 6, 17, 18, 19, 25 };
+			int[] function1 = { 1, 2, 3, 6, 17, 18, 19, 25, 28 };
 			for (int i = 0; i < function1.length; i++) {
 				//向公司功能关系表中添加数据
 				CompanyFunctionEntity one = new CompanyFunctionEntity();
@@ -53,7 +53,7 @@ public class PublicAuthorityService extends NutzBaseService {
 			insert = dbDao.insert(functionList);
 		} else if (comType == CompanyTypeEnum.land.intKey()) {//地接社
 			//送签社功能ID
-			int[] function2 = { 1, 2, 3, 6, 17, 25, 27 };
+			int[] function2 = { 1, 2, 3, 6, 17, 25, 27, 29 };
 			for (int i = 0; i < function2.length; i++) {
 				//向公司功能关系表中添加数据
 				CompanyFunctionEntity one = new CompanyFunctionEntity();
