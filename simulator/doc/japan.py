@@ -257,11 +257,57 @@ try:
     
     #签证类型
     answer = data_json["visaType1"]
-    if not answer:
+    if ("0"==answer):
         answer = "2"
-    elm_ipt_x = driver.find_element_by_xpath("//input[@name='VISA_TYPE_1' and @value='"+answer+"']/..")
-    elm_ipt_x.click()
-    
+        elm_ipt_x = driver.find_element_by_xpath("//input[@name='VISA_TYPE_1' and @value='"+answer+"']/..")
+        elm_ipt_x.click()
+    #多次1
+    elif ("2"==answer ||"3"==answer || "4"==answer):
+        answer = "3"
+        elm_ipt_x = driver.find_element_by_xpath("//input[@name='VISA_TYPE_1' and @value='"+answer+"']/..")
+        elm_ipt_x.click()
+        driver.find_element_by_xpath("//input[@id='VISA_3']").click()
+        
+        VISA_STAY_PREF_47=data_json["VISA_STAY_PREF_47"]
+        if VISA_STAY_PREF_47:
+            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_47']").click()
+        
+        VISA_STAY_PREF_2=data_json["VISA_STAY_PREF_2"]
+        if VISA_STAY_PREF_2:
+            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_2']").click()
+            
+        VISA_STAY_PREF_3=data_json["VISA_STAY_PREF_3"]
+        if VISA_STAY_PREF_3:
+            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_3']").click()
+        
+        VISA_STAY_PREF_4=data_json["VISA_STAY_PREF_4"]
+        if VISA_STAY_PREF_4:
+            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_4']").click()
+
+        VISA_STAY_PREF_5=data_json["VISA_STAY_PREF_5"]
+        if VISA_STAY_PREF_5:
+            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_5']").click()
+        
+        VISA_STAY_PREF_6=data_json["VISA_STAY_PREF_6"]
+        if VISA_STAY_PREF_6:
+            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_6']").click()
+   
+        VISA_STAY_PREF_7=data_json["VISA_STAY_PREF_7"]
+        if VISA_STAY_PREF_7:
+            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_7']").click()
+        
+        #默认東北三県（岩手県、宮城県、福島県）への訪問の有無（通過は含まない）* 無
+        driver.find_element_by_xpath("//input[@id='VISA_VISIT_TYPE_0']").click()                                   
+    #多次2    
+    elif ("5"==answer):
+        answer = "3"
+        elm_ipt_x = driver.find_element_by_xpath("//input[@name='VISA_TYPE_1' and @value='"+answer+"']/..")
+        elm_ipt_x.click()
+        driver.find_element_by_xpath("//input[@id='VISA_4']").click()
+    else:
+        logging.info("签证类型错误 :%s",answer)
+        feedBackError(feed_back_url,1,"签证类型错误")
+            
     #申请人姓名
     answer = data_json["proposerNameCN"]
     logging.info("proposerNameCN :%s",answer)
@@ -318,6 +364,7 @@ driver.find_element_by_xpath("//li[@class='navi_01']").click()
 time.sleep(3)
 _wait_for_elm_by_id("container")
 logging.info("Load Page Title :%s",driver.title)
+#列表页根据指定番号进行检索
 answer = data_json["agentNo"]
 if not answer:
     answer = "GTP-BJ-084-0"
