@@ -44,33 +44,32 @@ public class NewSysStatisticSqlForm extends KenDoParamForm {
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
 		if (!Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
-			SqlExpressionGroup e1 = Cnd.exps("ojp.createtime", ">=", start_time).and("vno.sendtime", "<=", end_time);
-			SqlExpressionGroup e2 = Cnd.exps("ojp.createtime", ">=", start_time).and("vno.outtime", "<=", end_time);
-			//cnd.and(e1).or(e2);
+			SqlExpressionGroup e1 = Cnd.exps("vnoj.createtime", ">=", start_time)
+					.and("vnoj.createtime", "<=", end_time);
+			SqlExpressionGroup e2 = Cnd.exps("vnoj.createtime", ">=", start_time)
+					.and("vnoj.createtime", "<=", end_time);
 			cnd.and(e1.or(e2));
 		} else if (Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
-			SqlExpressionGroup e1 = Cnd.exps("ojp.createtime", "<=", end_time);
-			SqlExpressionGroup e2 = Cnd.exps("ojp.createtime", "<=", end_time);
-			//cnd.and(e1).or(e2);
+			SqlExpressionGroup e1 = Cnd.exps("vnoj.createtime", "<=", end_time);
+			SqlExpressionGroup e2 = Cnd.exps("vnoj.createtime", "<=", end_time);
 			cnd.and(e1.or(e2));
 		} else if (!Util.isEmpty(start_time) && Util.isEmpty(end_time)) {
-			SqlExpressionGroup e1 = Cnd.exps("ojp.createtime", ">=", start_time);
-			SqlExpressionGroup e2 = Cnd.exps("ojp.createtime", ">=", start_time);
-			//cnd.and(e1).or(e2);
+			SqlExpressionGroup e1 = Cnd.exps("vnoj.createtime", ">=", start_time);
+			SqlExpressionGroup e2 = Cnd.exps("vnoj.createtime", ">=", start_time);
 			cnd.and(e1.or(e2));
 		}
 		if (!Util.isEmpty(keywords)) {
-			SqlExpressionGroup e1 = Cnd.exps("ojp.ordernumber", "like", "%" + keywords + "%");
-			SqlExpressionGroup e2 = Cnd.exps("ojp.completedNumber", "like", "%" + keywords + "%");
-			SqlExpressionGroup e3 = Cnd.exps("emp.fullName", "like", "%" + keywords + "%");
-			SqlExpressionGroup e4 = Cnd.exps("pinfo.fullname", "like", "%" + keywords + "%");
+			SqlExpressionGroup e1 = Cnd.exps("vnoj.ordernumber", "like", "%" + keywords + "%");
+			SqlExpressionGroup e2 = Cnd.exps("vnoj.completedNumber", "like", "%" + keywords + "%");
+			SqlExpressionGroup e3 = Cnd.exps("mm.chinesefullname", "like", "%" + keywords + "%");
+			SqlExpressionGroup e4 = Cnd.exps("eee.fullName", "like", "%" + keywords + "%");
 			cnd.and(e1.or(e2).or(e3).or(e4));
 		}
-		if (!Util.isEmpty(sqs_id)) {
-			cnd.and("ojp.sendComId", "=", sqs_id);
+		if (!Util.isEmpty(sqs_id) && !sqs_id.equals("-1")) {
+			cnd.and("vnoj.sendComId", "=", sqs_id);
 		}
-		if (!Util.isEmpty(djs_id)) {
-			cnd.and("ojp.landComId", "=", djs_id);
+		if (!Util.isEmpty(djs_id) && !djs_id.equals("-1")) {
+			cnd.and("vnoj.landComId", "=", djs_id);
 		}
 		return cnd;
 	}
