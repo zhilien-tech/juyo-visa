@@ -148,13 +148,13 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 			if (!Util.isEmpty(sendComId) && sendComId > 0) {
 				NewComeBabyJpEntity comeBaby = dbDao.fetch(NewComeBabyJpEntity.class, sendComId);
 				map.put("visaAccount", "1507-001");
-				map.put("visaPasswd", "kintsu2017");
+				map.put("visaPasswd", "kintsu0821");
 				map.put("agentNo", comeBaby.getCompletedNumber());
 				map.put("visaType1", "2");
 			} else {
 
 				map.put("visaAccount", "1507-001");
-				map.put("visaPasswd", "kintsu2017");
+				map.put("visaPasswd", "kintsu0821");
 				map.put("agentNo", " ");
 				map.put("visaType1", "2");
 			}
