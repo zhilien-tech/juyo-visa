@@ -233,18 +233,16 @@ var grid = $("#grid").kendoGrid({
             read: {
                 type: "POST",
                 dataType: "json",
-                url: "/visa/order/list",
+                url: "/visa/systemstatistic/list",
                 contentType: 'application/json;charset=UTF-8',
             },
             parameterMap: function (options, type) {
-                /*return JSON.stringify(options);*/
             	var parameter = {
-                        pageNumber : options.page,    //当前页
-                        pageSize : options.pageSize,//每页显示个数
+                        pageNumber : options.page,   //当前页
+                        pageSize : options.pageSize, //每页显示个数
                         start_time:$("#start_time").val(),
                         end_time:$("#end_time").val(),
-                        keywords:$("#keywords").val(),
-                        state:$("#state").val()
+                        keywords:$("#keywords").val()
                     };
                return kendo.stringify(parameter);
             },
@@ -262,11 +260,7 @@ var grid = $("#grid").kendoGrid({
                 id: "id",
                 fields: {
                 	sendtime: {type: "date"},
-                	outtime: {type: "date"},
-                    email: {type: "string"}
-                   /* user: {defaultValue: {id: "1", name: "管理员"}},
-                    useFor: {defaultValue: "美国"},
-                    amount: {type: "number", defaultValue: 1, validation: {min: 1, required: true}}*/
+                	outtime: {type: "date"}
                 }
             }
         },
@@ -283,13 +277,13 @@ var grid = $("#grid").kendoGrid({
                 container.hide().prev().hide();
             }
         },
-        {field: 'linkman', title: '送签社', width:150,template: "<span class='ellipsis' title='#=data.linkman#'>#=data.linkman?data.linkman:''#</span>"},
-        {field: 'email', title: '操作人', width:110,template: "<span class='ellipsis' title='#=data.telephone#'>#=data.telephone?data.telephone:''#</span>"},
-        {field: 'sendtime', title: '地接社', width:150,format: "{0: yyyy-MM-dd }",template: "<span class='ellipsis' title='#=data.sendtime#'>#=data.sendtime?kendo.toString(data.sendtime, 'yyyy-MM-dd'):''#</span>"},
-        {field: 'outtime', title: '受付番号', width:140,format: "{0: yyyy-MM-dd }",template: "<span class='ellipsis' title='#=data.outtime#'>#=data.outtime?kendo.toString(data.outtime, 'yyyy-MM-dd'):''#</span>"},
-        {field: 'headcount', title: '主申请人', values: ["美国", "日本"], width: 100},
-        {field: 'headcount', title: '人数', values: ["美国", "日本"], width: 80},
-        {field: 'countrytype', title: '签证类型', width:100,values:666}
+        {field: 'comfullname', title: '送签社', width:150},
+        {field: 'username', title: '操作人', width:110},
+        {field: 'landcomfullName', title: '地接社', width:150},
+        {field: 'completednumber', title: '受付番号', width:140},
+        {field: 'fullname', title: '主申请人', width: 100},
+        {field: 'headnum', title: '人数', width:80},
+        {field: 'visatype', title: '签证类型', width:100}
         
     ]
 }).data("kendoGrid");
