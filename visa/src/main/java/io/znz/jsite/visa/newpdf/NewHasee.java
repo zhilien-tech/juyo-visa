@@ -1297,7 +1297,7 @@ public class NewHasee extends NewTemplate {
 			AcroFields fields = ps.getAcroFields();
 			//5给表单添加中文字体 这里采用系统字体。不设置的话，中文可能无法显示
 			fields.addSubstitutionFont(getBaseFont());
-
+			
 			//6遍历pdf表单表格，同时给表格赋值
 			Iterator<Map.Entry<String, AcroFields.Item>> iterator = fields.getFields().entrySet().iterator();
 			while (iterator.hasNext()) {
