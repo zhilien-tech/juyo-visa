@@ -479,7 +479,7 @@ public class NewHasee extends NewTemplate {
 				if (!Util.isEmpty(c.getFinanceJpList()) && c.getFinanceJpList().size() > 0) {
 
 					for (NewFinanceJpEntity option : c.getFinanceJpList()) {
-						if (Util.isEmpty(option)) {
+						if (!Util.isEmpty(option)) {
 
 							sbt.append(option.getBusiness()).append("\n");
 							sbv.append(option.getDetail()).append("\n");
@@ -518,35 +518,63 @@ public class NewHasee extends NewTemplate {
 
 							case 0:
 								marryState = "单身";
+								break;
 							case 1:
 								marryState = "已婚";
+								break;
 							case 2:
 								marryState = "离异";
+								break;
 							case 3:
 								marryState = "丧偶";
+								break;
 							default:
 								marryState = "单身";
+								break;
 
 							}
 
 						}
-						String datas[] = {
-								"1-" + (i + 1),
-								c.getChinesexing() + c.getChinesename(),
-								(c.getChinesexingen() + "\n" + c.getChinesenameen()).toUpperCase(),
-								gender,
-								birthday,
+						//pdf主副申请人关系处理
+						int relation = proposerList.get(0).getRelation();
+						String relationStr = "";
+						if (!Util.isEmpty(relation)) {
+
+							switch (relation) {
+							case 4:
+								relationStr = "亲戚";
+								break;
+							case 1:
+								relationStr = "配偶";
+								break;
+							case 2:
+								relationStr = "子女";
+								break;
+							case 3:
+								relationStr = "父母";
+								break;
+							case 5:
+								relationStr = "朋友";
+								break;
+							case 6:
+								relationStr = "其它";
+								break;
+							default:
+								marryState = " ";
+								break;
+
+							}
+						}
+
+						String datas[] = { "1-" + (i + 1), c.getChinesexing() + c.getChinesename(),
+								(c.getChinesexingen() + "\n" + c.getChinesenameen()).toUpperCase(), gender, birthday,
 								passportsendplace,
 								!Util.isEmpty(c.getWorkinfoJp()) ? c.getWorkinfoJp().getMyjob() : "",
-								!Util.isEmpty(c.getNowprovince()) ? c.getNowprovince().toUpperCase() : "",
-								"良好",
-								marryState,
-								"身份证\n户口本",
-								StringUtils.isBlank(sbt.toString()) ? "" : sbt.toString(),
+								!Util.isEmpty(c.getNowprovince()) ? c.getNowprovince().toUpperCase() : "", "良好",
+								marryState, "身份证\n户口本", StringUtils.isBlank(sbt.toString()) ? "" : sbt.toString(),
 								StringUtils.isBlank(sbv.toString()) ? "" : sbv.toString(),
 								//主卡和副卡的关系
-								proposerList.get(0).getIsMainProposer() ? "主卡" : getMasterName(order) + "的"
-										+ "主卡和副卡的关系", "推荐" };
+								proposerList.get(0).getIsMainProposer() ? "主卡" : relationStr, "推荐" };
 
 						for (String title : datas) {
 							PdfPCell cell = new PdfPCell(new Paragraph(title, font));
@@ -1228,6 +1256,21 @@ public class NewHasee extends NewTemplate {
 					map.put("city", hotel.getCity());
 				}
 			}
+			long order_jp_id = trip.getOrder_jp_id();
+			NewOrderJpEntity order = dbdao.fetch(NewOrderJpEntity.class, order_jp_id);
+			if (!Util.isEmpty(order)) {
+				long sendComId = order.getSendComId();
+				NewComeBabyJpEntity comeBaby = dbdao.fetch(NewComeBabyJpEntity.class, sendComId);
+				if (!Util.isEmpty(comeBaby)) {
+					map.put("comNameSmall", comeBaby.getComFullName());
+					map.put("address", comeBaby.getAddress());
+					map.put("telephone", comeBaby.getTelephone());
+					map.put("fax", comeBaby.getFax());
+					map.put("linkman", comeBaby.getLinkman());
+					map.put("phone", comeBaby.getPhone());
+					map.put("comNameBig", comeBaby.getComFullName());
+				}
+			}
 			map.put("guest", guest);
 			DateTime dt = new DateTime(trip.getNowdate());
 			if (!Util.isEmpty(trip.getIntime())) {
@@ -1235,24 +1278,25 @@ public class NewHasee extends NewTemplate {
 				dt = dt.withField(DateTimeFieldType.hourOfDay(), trip.getIntime().getHours());
 				dt = dt.withField(DateTimeFieldType.minuteOfHour(), trip.getIntime().getMinutes());
 			}
-			map.put("checkInDate", df5.format(dt.toDate()));
-			if (!Util.isEmpty(trip.getOuttime())) {
+			map.put("checkInDate", df1.format(dt.toDate()));
+			if (!Util.isEmpty(trip.getEndDate())) {
 
-				map.put("checkOutDate", df5.format(trip.getOuttime()));
+				map.put("checkOutDate", df1.format(trip.getEndDate()));
 			}
-			map.put("room", trip.getHometype() + "");
-			map.put("breakfast", trip.getBreakfast() + "");
-			map.put("dinner", trip.getDinner() + "");
+			map.put("room", "TWN 1 室");
+			map.put("breakfast", "無");
+			map.put("dinner", "無");
 			//1 不进行密码验证
 			PdfReader.unethicalreading = true;
 			//2 读入pdf表单
-			PdfReader reader = new PdfReader(getClass().getClassLoader().getResource(getPrefix() + "hotel.pdf"));
+			PdfReader reader = new PdfReader(getClass().getClassLoader().getResource(getPrefix() + "hotelnewnew.pdf"));
 			//3 根据表单生成一个新的pdf
 			PdfStamper ps = new PdfStamper(reader, stream);
 			//4 获取pdf表单
 			AcroFields fields = ps.getAcroFields();
 			//5给表单添加中文字体 这里采用系统字体。不设置的话，中文可能无法显示
 			fields.addSubstitutionFont(getBaseFont());
+
 			//6遍历pdf表单表格，同时给表格赋值
 			Iterator<Map.Entry<String, AcroFields.Item>> iterator = fields.getFields().entrySet().iterator();
 			while (iterator.hasNext()) {
@@ -1261,6 +1305,8 @@ public class NewHasee extends NewTemplate {
 					fields.setField(key, map.get(key));
 				}
 			}
+			/*	Font font = new Font(getBaseFont(), 30, Font.BOLD);
+				fields.addSubstitutionFont(font);*/
 			ps.setFormFlattening(true); // 这句不能少
 			ps.close();
 			reader.close();
