@@ -46,7 +46,8 @@ FROM
 		s.id,
 		s.Fax,
 		s.updateTime,
-		s.completedNumber
+		s.completedNumber,
+		s.comId
 	FROM
 		visa_new_comebaby_jp_djs s
 		where s.comType != @djsType
@@ -81,8 +82,9 @@ FROM
 		c.id,
 		c.Fax,
 		c.updateTime,
-		c.completedNumber
-	FROM
+		c.completedNumber,
+		c.comId
+		from
 		visa_new_comebaby_jp c
 	$condition
 ) ds
