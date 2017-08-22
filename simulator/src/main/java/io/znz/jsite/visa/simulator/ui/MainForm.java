@@ -261,7 +261,18 @@ public class MainForm extends JPanel {
 		ResultObject<Map, Object> task = null;
 		//循环检测任务
 		while (true) {
-			task = checkTaskAvail();
+			try {
+				task = checkTaskAvail();
+			} catch (Exception e) {
+				e.printStackTrace();
+				log("========================任务检测异常，请检查服务器响应==========================");
+				try {
+					log("...10秒后再次检测");
+					Thread.currentThread().sleep(10000);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			}
 			if (!Util.isEmpty(task)) {
 				break;
 			}
@@ -309,13 +320,6 @@ public class MainForm extends JPanel {
 				log("任务码:" + oid + " 提交中...");
 			} else {
 				log("任务码:" + oid + "准备提交失败");
-			}
-
-			//模拟填表
-			try {
-				Thread.currentThread().sleep(10000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
 			}
 
 			//第三个参数为任务码
