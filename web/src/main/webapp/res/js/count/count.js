@@ -129,7 +129,7 @@ var grid = $("#grid").kendoGrid({
 	          {field: 'username', title: '操作人', width:110},
 	          {field: 'landcomfullname', title: '地接社', width:150},
 	          {field: 'completednumber', title: '受付番号', width:140},
-	          {field: 'chinesefullname', title: '主申请人', width: 100},
+	          {field: 'mainporposer', title: '主申请人', width: 100},
 	          {field: 'headnum', title: '人数', width:80},
 	          {field: 'visatype', title: '签证类型', values:visatypelist, width:100}
 
