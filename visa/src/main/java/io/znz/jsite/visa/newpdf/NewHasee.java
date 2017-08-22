@@ -81,7 +81,6 @@ public class NewHasee extends NewTemplate {
 
 				NewComeBabyJpEntity comeBaby = dbdao.fetch(NewComeBabyJpEntity.class, sendComId);
 				if (!Util.isEmpty(comeBaby)) {
-
 					map.put("company", comeBaby.getComFullName());
 					map.put("linkman", comeBaby.getLinkman());
 					map.put("telephone", comeBaby.getTelephone());
