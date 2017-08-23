@@ -1,5 +1,20 @@
 /*system_statistic_list*/
 SELECT
+	vnoj.id,
+	vnoj.comId,
+	c.comType,
+	(
+		SELECT
+			COUNT(*)
+		FROM
+			visa_new_comebaby_jp
+	) AS sqscount,
+	(
+		SELECT
+			COUNT(*)
+		FROM
+			visa_new_comebaby_jp_djs
+	) AS djscount,
 	vnoj.ordernumber,
 	come.comFullName,
 	vnoj.completedNumber,
@@ -9,7 +24,6 @@ SELECT
 	vnoj.visatype,
 	vnoj.senddate,
 	vnoj.outdate,
-	vnoj.id,
 	vnoj.updatetime,
 	vnoj.countrytype,
 	vnoj.`status`,
@@ -91,6 +105,7 @@ LEFT JOIN visa_new_comebaby_jp_djs djs ON djs.id = vnoj.landComId
 LEFT JOIN visa_employee eee ON eee.id = vnoj.operatePersonId
 LEFT JOIN visa_new_trip_jp aaa ON aaa.order_jp_id = vnoj.id
 LEFT JOIN visa_customer_management qqq ON qqq.id = vnoj.customer_manager_id
+LEFT JOIN visa_new_company c ON c.id = vnoj.comId
 LEFT JOIN (
 	SELECT
 		*, MIN(bbb.startdate)

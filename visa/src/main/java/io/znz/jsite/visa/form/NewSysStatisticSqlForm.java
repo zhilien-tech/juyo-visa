@@ -11,6 +11,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
+import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
 
 /**
@@ -28,6 +29,9 @@ public class NewSysStatisticSqlForm extends KenDoParamForm {
 	private String keywords;
 	private String sqs_id;
 	private String djs_id;
+	private int sqsCount;
+	private int djsCount;
+	private int allCount;
 
 	@Override
 	public Sql sql(SqlManager paramSqlManager) {
@@ -43,6 +47,9 @@ public class NewSysStatisticSqlForm extends KenDoParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
+		if (!Util.isEmpty(end_time)) {
+			end_time = DateUtil.addDay(end_time, 1);
+		}
 		if (!Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
 			SqlExpressionGroup e1 = Cnd.exps("vnoj.createtime", ">=", start_time)
 					.and("vnoj.createtime", "<=", end_time);
@@ -73,4 +80,5 @@ public class NewSysStatisticSqlForm extends KenDoParamForm {
 		}
 		return cnd;
 	}
+
 }

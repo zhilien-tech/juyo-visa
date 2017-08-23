@@ -67,7 +67,7 @@ function ordersave(){
 	var sqImgurl=viewModel.get("customer.sealSQUrl");
 	var comType=viewModel.get("customer.comType");
 
-	if(comType==2){
+	/*if(comType==2){
 		if(imgurl==null||imgurl==''){
 			flag=false;
 		}
@@ -75,7 +75,7 @@ function ordersave(){
 		if(sqImgurl==null||sqImgurl==''){
 			flag=false;
 		}
-	}
+	}*/
 	if(validatable.validate()&&flag){
 		//清空验证的数组
 		emptyNum.splice(0,emptyNum.length);
@@ -134,7 +134,7 @@ function ordersave(){
 
 
 		var str="";
-		if(comType==2){
+		/*if(comType==2){
 			if(imgurl==null||imgurl==''){
 				str+="公司公章,";
 				if(validatable.validate()){
@@ -148,7 +148,7 @@ function ordersave(){
 					str+="不能为空！";
 				}
 			}
-		}
+		}*/
 		if(emptyNum.length>0){
 
 			for(var i=0;i<emptyNum.length;i++){
@@ -163,6 +163,7 @@ function ordersave(){
 			}
 			str+="格式不正确！";
 		}
+		
 		$.layer.alert(str);
 		//用完清空
 		emptyNum.splice(0,emptyNum.length);
