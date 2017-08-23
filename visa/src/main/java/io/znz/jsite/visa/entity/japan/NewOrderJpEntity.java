@@ -102,10 +102,10 @@ public class NewOrderJpEntity implements Serializable {
 	@Comment("客户来源")
 	private long comId;
 	@Column
-	@Comment("客户来源")
+	@Comment("送签社id")
 	private long sendComId;
 	@Column
-	@Comment("客户来源")
+	@Comment("地接社id")
 	private long landComId;
 	@Column
 	@Comment("东六县保存的具体内容")

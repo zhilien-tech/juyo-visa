@@ -123,7 +123,6 @@ function regCmd(command) {
 			case "validate":
 				if (!(data = select(e))) return;
 				
-				
 				layer.open({
 					type: 2,
 					title: '下载',

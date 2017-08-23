@@ -248,6 +248,10 @@ var grid = $("#grid").kendoGrid({
 	          {field: 'address', title: '住所',width:150,template: "<span class='ellipsis' title='#=data.address#'>#=data.address?data.address:''#</span>"},
 	          {field: 'linkman', title: '担当者',width:100,template: "<span class='ellipsis' title='#=data.linkman#'>#=data.linkman?data.linkman:''#</span>"},
 	          {field: 'phone', title: '携带电话',width:120,format: "{0: yyyy-MM-dd }",template: "<span class='ellipsis' title='#=data.phone#'>#=data.phone?data.phone:''#</span>"},
+	         /* {field: 'completednumber', title: '指定番号',width:120,},
+	          {field: 'address', title: '住所',width:160,template: "<span class='ellipsis' title='#=data.address#'>#=data.address?data.address:''#</span>"},
+	          {field: 'linkman', title: '担当者',width:100,},
+	          {field: 'phone', title: '携带电话',width:120,format: "{0: yyyy-MM-dd }",},*/
 	          {field: 'telephone', title: 'TEL',width:120, values: ["美国", "日本"],},
 	          {field: 'fax', title: 'FAX', width:120,template: "<span class='ellipsis' title='#=data.fax#'>#=data.fax?data.fax:''#</span>"},
 	          {field: 'comtype', title: '旅行社',values:comlist, width:120,},
