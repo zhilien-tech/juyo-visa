@@ -30,8 +30,8 @@ $(function(){
 			$('#addressId').val(data.updatecompany.address);
 			var companytype = data.companytype;
 			var str = '<option value="">--请选择--</option>';
-			var sendname ="日本送签社";
-			var landname ="日本地接社";
+			var sendname ="送签社";
+			var landname ="地接社";
 			for(var i=0;i<companytype.length;i++){
 				var comtypeId = companytype[i].comType;
 				if(comtypeId==data.updatecompany.comType && data.updatecompany.comType==1){
@@ -173,9 +173,9 @@ $("#deleteFlagId").click(function(){
 });
 function changetype(){
 	var typename = $("#comTypeId option:selected").text();
-	if(typename=="日本送签社"){
+	if(typename=="送签社"){
 		$("#comTypeId option:selected").val(1);
-	}else if(typename=="日本地接社"){
+	}else if(typename=="地接社"){
 		$("#comTypeId option:selected").val(2);
 	}
 }

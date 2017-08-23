@@ -1,19 +1,3 @@
-//注册命令
-/*function regCmd(command) {
-    var select = function (e) {
-        var data = $(e.delegateTarget).data("kendoGrid").dataItem($(e.currentTarget).closest("tr"));
-        if (!data) $.layer.alert("请先选择需要操作的数据行");
-        return data;
-    };
-    return {
-        name: command,
-        className: "k-grid-" + command,
-        attr: "style='display:none;'",
-        click: function (e) {
-        	
-        }
-    };
-}*/
 var sqscount;
 var djscount;
 var recordcount;
@@ -93,7 +77,7 @@ var grid = $("#grid").kendoGrid({
             read: {
                 type: "POST",
                 dataType: "json",
-                url: "/visa/sqsjptotal/sqsjptotalList",
+                url: "/visa/djsjptotal/djsjptotalList",
                 contentType: 'application/json;charset=UTF-8'
             },
             parameterMap: function (options, type) {
@@ -196,7 +180,7 @@ $(function(){
 			transport: {
 				read: {
 					dataType: "json",
-					url: "/visa/sqsjptotal/compSelectfind?compType=1",
+					url: "/visa/djsjptotal/compSelectfind?compType=1",
 				}
 			}
 		}
@@ -210,7 +194,7 @@ $(function(){
 			transport: {
 				read: {
 					dataType: "json",
-					url: "/visa/sqsjptotal/compSelectfind?compType=2",
+					url: "/visa/djsjptotal/compSelectfind?compType=2",
 				}
 			}
 		}

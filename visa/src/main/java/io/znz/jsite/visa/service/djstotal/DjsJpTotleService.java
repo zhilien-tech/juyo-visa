@@ -4,14 +4,14 @@
  * Copyright (c) 2017, 北京科技有限公司版权所有.
 */
 
-package io.znz.jsite.visa.service.sqsjptotal;
+package io.znz.jsite.visa.service.djstotal;
 
 import io.znz.jsite.base.NutzBaseService;
 import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.visa.entity.japan.NewComeBabyJpDjsEntity;
 import io.znz.jsite.visa.entity.japan.NewComeBabyJpEntity;
-import io.znz.jsite.visa.forms.sqstotal.SqlJpTotalForm;
+import io.znz.jsite.visa.forms.djstotal.DjsJpTotalForm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +30,8 @@ import com.google.common.collect.Lists;
  * @Date	 2017年8月22日 	 
  */
 @Service
-public class SqsJpTotleService extends NutzBaseService {
-	public Object sqsjptotalList(SqlJpTotalForm sqlForm, Pager pager, final HttpSession session) {
+public class DjsJpTotleService extends NutzBaseService {
+	public Object djsjptotalList(DjsJpTotalForm sqlForm, Pager pager, final HttpSession session) {
 		//通过session获取公司的id
 		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
 		long comId = company.getComId();//得到公司的id

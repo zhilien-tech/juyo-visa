@@ -1,4 +1,4 @@
-/*sqsjptotal_list_data*/
+/*djsjptotal_list_data*/
 SELECT
 	vnoj.id,
 	vnoj.comId,

@@ -7,8 +7,8 @@
 package io.znz.jsite.visa.web;
 
 import io.znz.jsite.base.BaseController;
-import io.znz.jsite.visa.forms.sqstotal.SqlJpTotalForm;
-import io.znz.jsite.visa.service.sqsjptotal.SqsJpTotleService;
+import io.znz.jsite.visa.forms.djstotal.DjsJpTotalForm;
+import io.znz.jsite.visa.service.djstotal.DjsJpTotleService;
 
 import javax.servlet.http.HttpSession;
 
@@ -25,25 +25,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Date	 2017年8月22日 	 
  */
 @Controller
-@RequestMapping("visa/sqsjptotal")
-public class SqsJpTotalController extends BaseController {
+@RequestMapping("visa/djsjptotal")
+public class DjsJpTotalController extends BaseController {
 
 	@Autowired
-	private SqsJpTotleService sqsJpTotleService;//日本送签社统计
+	private DjsJpTotleService djsJpTotleService;//日本送签社统计
 
 	/**
 	 * 送签社统计列表查询
 	 */
-	@RequestMapping(value = "sqsjptotalList")
+	@RequestMapping(value = "djsjptotalList")
 	@ResponseBody
-	public Object sqsjptotalList(@RequestBody SqlJpTotalForm sqlForm, Pager pager, final HttpSession session) {
-		return sqsJpTotleService.sqsjptotalList(sqlForm, pager, session);
+	public Object djsjptotalList(@RequestBody DjsJpTotalForm sqlForm, Pager pager, final HttpSession session) {
+		return djsJpTotleService.djsjptotalList(sqlForm, pager, session);
 	}
 
 	//下拉框初始化
 	@RequestMapping(value = "compSelectfind")
 	@ResponseBody
 	public Object compSelectfind(int compType, final HttpSession session) {
-		return sqsJpTotleService.compSelectfind(compType, session);
+		return djsJpTotleService.compSelectfind(compType, session);
 	}
 }

@@ -4,7 +4,7 @@
  * Copyright (c) 2017, 北京科技有限公司版权所有.
 */
 
-package io.znz.jsite.visa.forms;
+package io.znz.jsite.visa.forms.sqstotal;
 
 import io.znz.jsite.visa.form.KenDoParamForm;
 
@@ -17,6 +17,7 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
+import org.nutz.dao.util.cri.SqlExpressionGroup;
 
 import com.uxuexi.core.common.util.Util;
 
@@ -60,6 +61,10 @@ public class SqlJpTotalForm extends KenDoParamForm {
 	private Date start_time;
 	//结束时间
 	private Date end_time;
+	//送签社
+	private String sqs_id;
+	//地接社
+	private String djs_id;
 
 	@Override
 	public Sql sql(SqlManager paramSqlManager) {
@@ -75,13 +80,37 @@ public class SqlJpTotalForm extends KenDoParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
+		//送签社
+		if (!Util.isEmpty(sqs_id) && !sqs_id.equals("-1")) {
+			cnd.and("vnoj.sendComId", "=", sqs_id);
+		}
+		//地接社
+		if (!Util.isEmpty(djs_id) && !djs_id.equals("-1")) {
+			cnd.and("vnoj.landComId", "=", djs_id);
+		}
+		//时间
+		if (!Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
+			SqlExpressionGroup e1 = Cnd.exps("vnoj.createtime", ">=", start_time)
+					.and("vnoj.createtime", "<=", end_time);
+			SqlExpressionGroup e2 = Cnd.exps("vnoj.createtime", ">=", start_time)
+					.and("vnoj.createtime", "<=", end_time);
+			cnd.and(e1.or(e2));
+		} else if (Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
+			SqlExpressionGroup e1 = Cnd.exps("vnoj.createtime", "<=", end_time);
+			SqlExpressionGroup e2 = Cnd.exps("vnoj.createtime", "<=", end_time);
+			cnd.and(e1.or(e2));
+		} else if (!Util.isEmpty(start_time) && Util.isEmpty(end_time)) {
+			SqlExpressionGroup e1 = Cnd.exps("vnoj.createtime", ">=", start_time);
+			SqlExpressionGroup e2 = Cnd.exps("vnoj.createtime", ">=", start_time);
+			cnd.and(e1.or(e2));
+		}
 		if (!Util.isEmpty(keyword)) {
 			cnd.and("vnoj.ordernumber", "like", "%" + keyword + "%").or("eee.fullName", "like", "%" + keyword + "%")
 					.or("vnoj.completedNumber", "like", "%" + keyword + "%")
-					.or("mainporposer", "like", "%" + keyword + "%");
+					.or("mm.chinesefullname", "like", "%" + keyword + "%");
 		}
 		cnd.and("vnoj.comId", "=", comId);
-		//cnd.orderBy("vc.createTime", "DESC");
+		cnd.orderBy("vnoj.createTime", "DESC");
 		return cnd;
 	}
 }
