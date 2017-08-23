@@ -8,23 +8,19 @@ var visatypelist=[
                   {text:"普通三年",value:5}
                   ];
 
-var defaults = {
-		
-};
-
 var sendComp=new kendo.data.DataSource({
-    serverFiltering: true,
-    transport: {
-        read: {
-            dataType: "json",
-            url: "/visa/systemstatistic/compSelectfind?compType="+1,
-        },
-        parameterMap: function (options, type) {
-            if (options.filter) {
-                return {filter: options.filter.filters[0].value};
-            }
-        },
-    }
+	serverFiltering: true,
+	transport: {
+		read: {
+			dataType: "json",
+			url: "/visa/systemstatistic/compSelectfind?compType="+1,
+		},
+		parameterMap: function (options, type) {
+			if (options.filter) {
+				return {filter: options.filter.filters[0].value};
+			}
+		},
+	}
 });
 var landComp=new kendo.data.DataSource({
 	serverFiltering: true,
@@ -41,13 +37,16 @@ var landComp=new kendo.data.DataSource({
 	}
 });
 
+/*var defaults = {
+
+};
 var viewModel = kendo.observable({
 	sendComp:sendComp,
 	landComp:landComp,
-    customer: defaults
-    
+	customer: defaults
+
 });
-kendo.bind($(document.body), viewModel);
+kendo.bind($(document.body), viewModel);*/
 
 //初始化上部的表格布局
 var grid = $("#grid").kendoGrid({
@@ -113,10 +112,10 @@ var grid = $("#grid").kendoGrid({
 	},
 	columns: [
 	          {
-	      	    field: 'rowNumber',
-	            	title: '序号',
-	            	template: "<span class='row-number'></span>",
-	            	width:75
+	        	  field: 'rowNumber',
+	        	  title: '序号',
+	        	  template: "<span class='row-number'></span>",
+	        	  width:75
 	          },
 	          {
 	        	  field: 'ordernumber', title: ' 订单号', width: 150,
@@ -135,12 +134,12 @@ var grid = $("#grid").kendoGrid({
 
 	          ],
 	          dataBound:function () {
-	      	    var rows = this.items();  
-	      	    $(rows).each(function () {  
-	      	        var index = $(this).index() + 1;  
-	      	        var rowLabel = $(this).find(".row-number");  
-	      	        $(rowLabel).html(index);  
-	      	    });  
+	        	  var rows = this.items();  
+	        	  $(rows).each(function () {  
+	        		  var index = $(this).index() + 1;  
+	        		  var rowLabel = $(this).find(".row-number");  
+	        		  $(rowLabel).html(index);  
+	        	  });  
 	          },
 }).data("kendoGrid");
 
@@ -158,8 +157,37 @@ function successCallback(id){
 }
 //页面加载时加载日历
 $(function(){
-	$("#sendSigned").kendoDropDownList();//送签社 初始化
-	$("#groundConnection").kendoDropDownList();//地接社 初始化
+	
+	//$("#sqs_id").kendoDropDownList();//送签社 初始化
+	$("#sqs_id").kendoDropDownList({
+		optionLabel: "送签社",
+		dataTextField: "comFullName",
+		dataValueField: "id",
+		dataSource: {
+			transport: {
+				read: {
+					dataType: "json",
+					url: "/visa/systemstatistic/compSelectfind?compType="+1,
+				}
+			}
+		}
+	});
+	
+	//$("#djs_id").kendoDropDownList();//地接社 初始化
+	$("#djs_id").kendoDropDownList({
+		optionLabel: "地接社",
+		dataTextField: "landcomFullName",
+		dataValueField: "id",
+		dataSource: {
+			transport: {
+				read: {
+					dataType: "json",
+					url: "/visa/systemstatistic/compSelectfind?compType="+2,
+				}
+			}
+		}
+	});
+	
 	$("#start_time").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});
 	$("#end_time").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});
 });

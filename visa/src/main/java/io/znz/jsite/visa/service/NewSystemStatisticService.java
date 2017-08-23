@@ -35,19 +35,19 @@ public class NewSystemStatisticService extends NutzBaseService {
 
 		if (compType == 1) {
 			sqsCompList = dbDao.query(NewComeBabyJpEntity.class, null, null);
-			NewComeBabyJpEntity entity = new NewComeBabyJpEntity();
+			/*NewComeBabyJpEntity entity = new NewComeBabyJpEntity();
 			entity.setId(-1L);
 			entity.setComFullName("送签社");
-			sqsCompList.add(0, entity);
+			sqsCompList.add(0, entity);*/
 			return sqsCompList;
 
 		}
 		if (compType == 2) {
 			disCompList = dbDao.query(NewComeBabyJpDjsEntity.class, null, null);
-			NewComeBabyJpDjsEntity DjsEntity = new NewComeBabyJpDjsEntity();
+			/*NewComeBabyJpDjsEntity DjsEntity = new NewComeBabyJpDjsEntity();
 			DjsEntity.setId(-1L);
 			DjsEntity.setLandcomFullName("地接社");
-			disCompList.add(0, DjsEntity);
+			disCompList.add(0, DjsEntity);*/
 			return disCompList;
 		}
 		return new ArrayList();
