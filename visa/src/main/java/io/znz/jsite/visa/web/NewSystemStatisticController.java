@@ -49,34 +49,6 @@ public class NewSystemStatisticController {
 		pager.setPageNumber(form.getPageNumber());
 		pager.setPageSize(form.getPageSize());
 		Pagination listPage = newSystemStatisticService.listPage(form, pager);
-		/*	int recordCount = listPage.getRecordCount(); //总记录数
-
-			String comIds = "";
-			List<String> comIdList = new ArrayList<String>();
-			List<NewOrderJpEntity> orderList = nutDao.query(NewOrderJpEntity.class, null);
-			for (NewOrderJpEntity order : orderList) {
-				long comid = order.getComId();
-				comIds += comid + ",";
-				comIdList.add(comid + "");
-			}
-
-			if (comIds.length() > 1) {
-				comIds = comIds.substring(0, comIds.length() - 1);
-				List<CompanyEntity> compList = nutDao.query(CompanyEntity.class, Cnd.where("id", "in", comIds));
-				for (CompanyEntity comp : compList) {
-					if (comp.getComType() == 1) {
-						String ids = comp.getId() + "";
-						for (String oComId : comIdList) {
-							if (ids.endsWith(oComId)) {
-								//送签社数量
-								sqsCount++;
-							}
-						}
-					}
-				}
-
-			}
-			djsCount = recordCount - sqsCount;*/
 		return listPage;
 	}
 
