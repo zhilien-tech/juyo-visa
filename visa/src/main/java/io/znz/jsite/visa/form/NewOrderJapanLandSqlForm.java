@@ -72,14 +72,15 @@ public class NewOrderJapanLandSqlForm extends KenDoParamForm {
 		}
 		if (!Util.isEmpty(keywords)) {
 			SqlExpressionGroup e1 = Cnd.exps("vnoj.ordernumber", "like", "%" + keywords + "%");
-			/*			SqlExpressionGroup e2 = Cnd.exps("vncj.chinesefullname", "like", "%" + keywords + "%");
-						SqlExpressionGroup e3 = Cnd.exps("vcm.telephone", "like", "%" + keywords + "%");
-						SqlExpressionGroup e4 = Cnd.exps("vcm.email", "like", "%" + keywords + "%");
-						SqlExpressionGroup e5 = Cnd.exps("vcm.linkman", "like", "%" + keywords + "%");
-						SqlExpressionGroup e6 = Cnd.exps("vncj.phone", "like", "%" + keywords + "%");*/
-			//			cnd.and(e1).or(e2).or(e3).or(e4).or(e5).or(e6);
-			//			cnd.and(e1.or(e2).or(e3).or(e4).or(e5).or(e6));
-			cnd.and(e1);
+			SqlExpressionGroup e2 = Cnd.exps("iii.chinesefullname", "like", "%" + keywords + "%");
+			SqlExpressionGroup e3 = Cnd.exps("qqq.telephone", "like", "%" + keywords + "%");
+			SqlExpressionGroup e4 = Cnd.exps("qqq.email", "like", "%" + keywords + "%");
+			SqlExpressionGroup e5 = Cnd.exps("qqq.linkman", "like", "%" + keywords + "%");
+			SqlExpressionGroup e6 = Cnd.exps("iii.phone", "like", "%" + keywords + "%");
+			SqlExpressionGroup e7 = Cnd.exps("iii.familyphone", "like", "%" + keywords + "%");
+			SqlExpressionGroup e8 = Cnd.exps("iii.email", "like", "%" + keywords + "%");
+			cnd.and(e1.or(e2).or(e3).or(e4).or(e5).or(e6).or(e7).or(e8));
+			//			cnd.and(e1);
 		}
 		if (!Util.isEmpty(state) && state > 0) {
 			SqlExpressionGroup e1 = Cnd.exps("vnoj.status", "=", state);
