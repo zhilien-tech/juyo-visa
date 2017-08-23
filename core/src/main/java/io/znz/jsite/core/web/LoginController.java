@@ -462,7 +462,7 @@ public class LoginController extends BaseController {
 								adminfun.setId(30);
 								adminfun.setParentId(20);
 								adminfun.setFunName("统计");
-								adminfun.setUrl("");
+								adminfun.setUrl("systemStatistic/systemStatistic.html");
 								adminfun.setLevel(2);
 								adminfun.setCreateTime(new Date());
 								adminfun.setRemark("平台统计");
@@ -593,7 +593,7 @@ public class LoginController extends BaseController {
 		djsjp.setUrl("japan/land/japanland.html");
 		djsjp.setLevel(2);
 		djsjp.setCreateTime(new Date());
-		djsjp.setRemark("日本地接社");
+		djsjp.setRemark("日本地接社订单");
 		djsjp.setSort(27);
 		djsjp.setPortrait("");
 		functions.add(djsjp);
@@ -602,7 +602,7 @@ public class LoginController extends BaseController {
 		djsjptotal.setId(29);
 		djsjptotal.setParentId(17);
 		djsjptotal.setFunName("统计");
-		djsjptotal.setUrl("");
+		djsjptotal.setUrl("djsJptotal/djsJptotal.html");
 		djsjptotal.setLevel(2);
 		djsjptotal.setCreateTime(new Date());
 		djsjptotal.setRemark("日本地接社统计");

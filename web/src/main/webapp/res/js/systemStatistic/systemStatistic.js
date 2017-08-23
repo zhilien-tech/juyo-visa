@@ -234,3 +234,21 @@ $(function(){
 	$("#start_time").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});
 	$("#end_time").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});
 });
+//列表页检索
+$("#searchBtn").on('click', function () {
+	grid.dataSource.read();
+})
+//送签社
+function sqsChange(){
+	$("#searchBtn").click();
+}
+//地接社
+function djsChange(){
+	$("#searchBtn").click();
+}
+//搜索回车事件
+function onkeyEnter(){
+	 if(event.keyCode==13){
+		 $("#searchBtn").click();
+	 }
+}
