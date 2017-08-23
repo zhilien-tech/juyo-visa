@@ -20,7 +20,7 @@ public class NewRecentlyintojpEntity implements Serializable {
 	private long id;
 
 	@Column
-	@Comment("客户管理id")
+	@Comment("客户id")
 	private long customerJpId;
 
 	@Column

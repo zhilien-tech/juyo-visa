@@ -125,7 +125,7 @@ public class NewCustomerJpEntity implements Serializable {
 	private Integer marrystate;
 
 	@Column
-	@Comment("详细地址英文")
+	@Comment("配偶或父母的职业")
 	private String familywork;
 
 	@Column

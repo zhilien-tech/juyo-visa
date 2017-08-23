@@ -18,7 +18,7 @@ public class NewRecentlyintojpJpEntity implements Serializable {
 	private Integer id;
 
 	@Column
-	@Comment("客户管理id")
+	@Comment("客户id")
 	private Long customer_jp_id;
 
 	@Column
