@@ -148,15 +148,52 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 			if (!Util.isEmpty(sendComId) && sendComId > 0) {
 				NewComeBabyJpEntity comeBaby = dbDao.fetch(NewComeBabyJpEntity.class, sendComId);
 				map.put("visaAccount", "1507-001");
-				map.put("visaPasswd", "kintsu2017");
+				map.put("visaPasswd", "kintsu0821");
 				map.put("agentNo", comeBaby.getCompletedNumber());
-				map.put("visaType1", "2");
+				if (!Util.isEmpty(order)) {
+					map.put("visaType1", order.getVisatype() + "");
+					map.put("VISA_STAY_PREF_2", false);
+					map.put("VISA_STAY_PREF_3", false);
+					map.put("VISA_STAY_PREF_4", false);
+					map.put("VISA_STAY_PREF_5", false);
+					map.put("VISA_STAY_PREF_6", false);
+					map.put("VISA_STAY_PREF_7", false);
+					map.put("VISA_STAY_PREF_47", false);
+					String sixnum = order.getSixnum();
+					if (!Util.isEmpty(sixnum)) {
+						String[] split = sixnum.split(",");
+						if (split.length > 0) {
+							for (int i = 0; i < split.length; i++) {
+								map.put("VISA_STAY_PREF_" + split[i], true);
+							}
+						}
+					}
+				}
 			} else {
 
 				map.put("visaAccount", "1507-001");
-				map.put("visaPasswd", "kintsu2017");
+				map.put("visaPasswd", "kintsu0821");
 				map.put("agentNo", " ");
-				map.put("visaType1", "2");
+
+				if (!Util.isEmpty(order)) {
+					map.put("visaType1", order.getVisatype() + "");
+					map.put("VISA_STAY_PREF_2", false);
+					map.put("VISA_STAY_PREF_3", false);
+					map.put("VISA_STAY_PREF_4", false);
+					map.put("VISA_STAY_PREF_5", false);
+					map.put("VISA_STAY_PREF_6", false);
+					map.put("VISA_STAY_PREF_7", false);
+					map.put("VISA_STAY_PREF_47", false);
+					String sixnum = order.getSixnum();
+					if (!Util.isEmpty(sixnum)) {
+						String[] split = sixnum.split(",");
+						if (split.length > 0) {
+							for (int i = 0; i < split.length; i++) {
+								map.put("VISA_STAY_PREF_" + split[i], true);
+							}
+						}
+					}
+				}
 			}
 
 			/*	map.put("visaType2", );*/
@@ -340,10 +377,9 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 			dbDao.update(order, null);
 
 			if (errorCode == ErrorCodeEnum.completedNumberFail.intKey()) {
-				dbDao.update(
-						NewOrderJpEntity.class,
-						Chain.make("updatetime", new Date()).add("status",
-								VisaJapanApproStatusEnum.readySubmit.intKey()), Cnd.where("id", "=", cid.longValue()));
+				dbDao.update(NewOrderJpEntity.class,
+						Chain.make("updatetime", new Date()).add("status", VisaJapanApproStatusEnum.fail.intKey()),
+						Cnd.where("id", "=", cid.longValue()));
 			} else if (errorCode == ErrorCodeEnum.persionNameList.intKey()) {
 				dbDao.update(
 						NewOrderJpEntity.class,

@@ -728,28 +728,62 @@ function orderJpsave(){
 			viewModel.set("customer.island",1);
 		}
 		
-		
+		console.log(JSON.stringify(sixnum.length));
 		//对东三县东六县的值进行处理
 		var visatype=viewModel.get("customer.visatype");
 		if(visatype==2 || visatype==3 || visatype==4){
 			var sixnumstr="";
-			for(var i=0;i<sixnum.length;i++){
-				sixnumstr+=sixnum[i]+",";
-			}
-			viewModel.set("customer.threenum","");
-			viewModel.set("customer.sixnum",sixnumstr);
-		}/*else if(visatype==2){
-			var threenumstr="";
-				for(var i=0;i<threenum.length;i++){
-					threenumstr+=threenum[i]+",";
+			
+			var a=sixnum.length;	
+			if(sixnum.length>0){
+				for(var i=0;i<sixnum.length;i++){
+					sixnumstr+=sixnum[i]+",";
 				}
-				viewModel.set("customer.sixnum","");
-				viewModel.set("customer.threenum",threenumstr);
-		}*/else{
+				var sixa=viewModel.get("customer.sixnum");
+				if(sixa!=null&&sixa!=''&&sixa!=undefined){
+						
+						viewModel.set("customer.threenum","");
+						viewModel.set("customer.sixnum",viewModel.get("customer.sixnum")+sixnumstr);
+					
+				}else{
+					
+					viewModel.set("customer.threenum","");
+					viewModel.set("customer.sixnum",sixnumstr);
+				
+				}
+			}else{
+				/*var sixa=viewModel.get("customer.sixnum");
+				if(sixa!=null&&sixa!=''&&sixa!=undefined){
+					viewModel.set("customer.threenum","");
+					viewModel.set("customer.sixnum",viewModel.get("customer.sixnum"));
+				}else{
+					
+					viewModel.set("customer.sixnum","");
+				}*/
+				$('.dongxiancheck input').each(function(){
+//					alert($(this).is(':checked'));
+					if($(this).is(':checked')){
+						
+						sixnumstr+=$(this).attr("id")+",";
+//						alert($(this).attr("id"));
+					}
+				});
+				viewModel.set("customer.threenum","");
+				viewModel.set("customer.sixnum",sixnumstr);
+			}
+		}else{
 			viewModel.set("customer.sixnum","");
 			viewModel.set("customer.threenum","");
 			
 		}
+		/*else if(visatype==2){
+		var threenumstr="";
+			for(var i=0;i<threenum.length;i++){
+				threenumstr+=threenum[i]+",";
+			}
+			viewModel.set("customer.sixnum","");
+			viewModel.set("customer.threenum",threenumstr);
+	}*/
 		
 				 console.log(JSON.stringify(viewModel.customer));
 				 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 

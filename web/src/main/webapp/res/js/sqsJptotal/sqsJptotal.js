@@ -71,7 +71,7 @@ kendo.bind($(document.body), viewModel);
 
 //初始化上部的表格布局
 var grid = $("#grid").kendoGrid({
-    height: "93%",
+    height: "89%",
     selectable: "row",
     sortable: true,
     resizable: true,
@@ -220,6 +220,13 @@ $(function(){
 $("#searchBtn").on('click', function () {
 	grid.dataSource.read();
 })
+//日期
+function startTime(){
+	$("#searchBtn").click();
+}
+function endTime(){
+	$("#searchBtn").click();
+}
 //送签社
 function sqsChange(){
 	$("#searchBtn").click();

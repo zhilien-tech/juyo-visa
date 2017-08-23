@@ -14,33 +14,30 @@ where vncj.`status`=@status
 ORDER BY aa.relationproposer desc,aa.ismainproposer desc,vncj.chinesefullname desc
 /*newcustomerjapan_landlist*/
 SELECT
-	
-	vnoj.ordernumber,
-	vnoj.completedNumber,
-	
-	eee.fullName,
-	vnoj.headnum,
-	vnoj.senddate,
-	vnoj.outdate,
-	vnoj.id,
-	vnoj.updatetime,
-	vnoj.countrytype,
-	vnoj.`status`,
-	vnoj.createtime,
-	vnoj.visatype,
-
+vnoj.ordernumber,
+vnoj.completedNumber,
+eee.fullName,
+vnoj.headnum,
+vnoj.senddate,
+vnoj.outdate,
+vnoj.id,
+vnoj.updatetime,
+vnoj.countrytype,
+vnoj.`status`,
+vnoj.createtime,
+vnoj.visatype,
 IF (
-	aaa.oneormore = 0,
-	aaa.startdate,
-	ccc.startdate
+aaa.oneormore = 0,
+aaa.startdate,
+ccc.startdate
 ) AS 'startdate',
 If(
- mm.ismainproposer=1,
+mm.ismainproposer=1,
 mm.chinesefullname,
 ''
 ) as 'mainporposer',
 If(
- vnoj.customerSource=3,
+vnoj.customerSource=3,
 vcm.fullComName,
 qqq.fullComName
 ) as 'fullComName',
@@ -53,8 +50,8 @@ LEFT JOIN visa_new_customer_order_jp vncoj on vncj.id=vncoj.customer_jp_id
 LEFT JOIN visa_new_order_jp vnoj on vnoj.id=vncoj.order_jp_id
 LEFT JOIN visa_new_proposer_info_jp  aa on aa.customer_jp_id=vncj.id
 ORDER BY aa.ismainproposer desc,aa.relationproposer desc,vncj.chinesefullname desc) m
- where m.id = (
-	SELECT n.id from (
+where m.id = (
+SELECT n.id from (
 select vnoj.id as 'orderid',vncj.id from visa_new_customer_jp vncj
 LEFT JOIN visa_new_customer_order_jp vncoj on vncj.id=vncoj.customer_jp_id
 LEFT JOIN visa_new_order_jp vnoj on vnoj.id=vncoj.order_jp_id
@@ -62,12 +59,14 @@ LEFT JOIN visa_new_proposer_info_jp  aa on aa.customer_jp_id=vncj.id
 ORDER BY aa.ismainproposer desc,aa.relationproposer desc,vncj.chinesefullname desc) n
 where n.orderid =m.orderid
 GROUP BY n.orderid
- LIMIT 0,1
+LIMIT 0,1
 )) mm on vnoj.id=mm.orderid
 LEFT JOIN visa_new_comebaby_jp come ON come.id  = vnoj.sendComId
 LEFT JOIN visa_employee eee ON eee.id  = vnoj.operatePersonId
-LEFT JOIN visa_new_trip_jp aaa ON aaa.order_jp_id = vnoj.id 
+LEFT JOIN visa_new_trip_jp aaa ON aaa.order_jp_id = vnoj.id
 LEFT JOIN visa_customer_management qqq on qqq.id=vnoj.customer_manager_id
-LEFT JOIN (select *,MIN(bbb.startdate) from visa_new_dateplan_jp bbb 
-GROUP BY bbb.trip_jp_id ) ccc ON ccc.trip_jp_id = aaa.id 
+LEFT JOIN (select *,MIN(bbb.startdate) from visa_new_dateplan_jp bbb
+GROUP BY bbb.trip_jp_id ) ccc ON ccc.trip_jp_id = aaa.id
+LEFT JOIN visa_new_customer_order_jp hhh on vnoj.id=hhh.customer_jp_id
+LEFT JOIN visa_new_customer_jp iii on iii.id=hhh.customer_jp_id
 $condition

@@ -30,6 +30,7 @@ import org.nutz.dao.pager.Pager;
 import org.nutz.ioc.aop.Aop;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Maps;
 import com.uxuexi.core.common.util.Util;
@@ -70,6 +71,7 @@ public class CompanyService extends NutzBaseService<CompanyEntity> {
 	 * 添加公司操作
 	 * @param addForm
 	 */
+	@Transactional
 	public Object addcompany(CompanyEntity addForm, EmployeeEntity empForm) {
 		//#########################添加用户信息###############################//
 		byte[] salt = Digests.generateSalt(SALT_SIZE);

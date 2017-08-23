@@ -1925,6 +1925,12 @@ public class NewOrderJaPanController {
 
 				return comeList1;
 			}
+			if (a == 1) {
+				comeList = dbDao.query(NewComeBabyJpEntity.class,
+						Cnd.where("comType", "=", CompanyTypeEnum.send.intKey()).and("comId", "=", -1), null);
+				return comeList;
+
+			}
 		}
 		return new ArrayList();
 	}
