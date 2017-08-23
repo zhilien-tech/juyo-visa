@@ -171,7 +171,7 @@ def callbackfunc(blocknum, blocksize, totalsize):
 def feedBackError(requrl,errorCode,errorMsg="未知错误"):
     '''向服务器反馈错误信息
     @requrl:请求地址
-    @errorCode: 错误类型,1代表受付番号未生成，2代表个人名簿登录失败，3代表归国报告上传失败
+    @errorCode: 错误类型,1代表受付番号未生成之前,数据错误,修改后再次递送即可;2代表个人名簿登录失败;3代表归国报告上传失败
     @errorMsg: 错误消息
     '''
     try:
@@ -256,54 +256,55 @@ try:
     _buttonByName("BTN_SEARCH")
     
     #签证类型
+    #单次
     answer = data_json["visaType1"]
     if ("0"==answer):
         answer = "2"
         elm_ipt_x = driver.find_element_by_xpath("//input[@name='VISA_TYPE_1' and @value='"+answer+"']/..")
         elm_ipt_x.click()
     #多次1
-    elif ("2"==answer ||"3"==answer || "4"==answer):
-        answer = "3"
+    elif ("2"==answer) or ("3"==answer) or ("4"==answer):
+        answer = "N"
         elm_ipt_x = driver.find_element_by_xpath("//input[@name='VISA_TYPE_1' and @value='"+answer+"']/..")
         elm_ipt_x.click()
-        driver.find_element_by_xpath("//input[@id='VISA_3']").click()
+        driver.find_element_by_xpath("//input[@id='VISA_3' and @value='3']/..").click()
         
         VISA_STAY_PREF_47=data_json["VISA_STAY_PREF_47"]
         if VISA_STAY_PREF_47:
-            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_47']").click()
+            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_47']/../label[@for='VISA_STAY_PREF_47']").click()
         
         VISA_STAY_PREF_2=data_json["VISA_STAY_PREF_2"]
         if VISA_STAY_PREF_2:
-            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_2']").click()
+            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_2']/../label[@for='VISA_STAY_PREF_2']").click()
             
         VISA_STAY_PREF_3=data_json["VISA_STAY_PREF_3"]
         if VISA_STAY_PREF_3:
-            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_3']").click()
+            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_3']/../label[@for='VISA_STAY_PREF_3']").click()
         
         VISA_STAY_PREF_4=data_json["VISA_STAY_PREF_4"]
         if VISA_STAY_PREF_4:
-            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_4']").click()
+            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_4']/../label[@for='VISA_STAY_PREF_4']").click()
 
         VISA_STAY_PREF_5=data_json["VISA_STAY_PREF_5"]
         if VISA_STAY_PREF_5:
-            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_5']").click()
+            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_5']/../label[@for='VISA_STAY_PREF_5']").click()
         
         VISA_STAY_PREF_6=data_json["VISA_STAY_PREF_6"]
         if VISA_STAY_PREF_6:
-            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_6']").click()
+            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_6']/../label[@for='VISA_STAY_PREF_6']").click()
    
         VISA_STAY_PREF_7=data_json["VISA_STAY_PREF_7"]
         if VISA_STAY_PREF_7:
-            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_7']").click()
+            driver.find_element_by_xpath("//input[@id='VISA_STAY_PREF_7']/../label[@for='VISA_STAY_PREF_7']").click()
         
         #默认東北三県（岩手県、宮城県、福島県）への訪問の有無（通過は含まない）* 無
-        driver.find_element_by_xpath("//input[@id='VISA_VISIT_TYPE_0']").click()                                   
+        driver.find_element_by_xpath("//input[@id='VISA_VISIT_TYPE_0']/..").click()                                   
     #多次2    
     elif ("5"==answer):
-        answer = "3"
+        answer = "N"
         elm_ipt_x = driver.find_element_by_xpath("//input[@name='VISA_TYPE_1' and @value='"+answer+"']/..")
         elm_ipt_x.click()
-        driver.find_element_by_xpath("//input[@id='VISA_4']").click()
+        driver.find_element_by_xpath("//input[@id='VISA_4' and @value='4']/..").click()
     else:
         logging.info("签证类型错误 :%s",answer)
         feedBackError(feed_back_url,1,"签证类型错误")
@@ -354,7 +355,7 @@ try:
     _check_alert_to_close()
 except Exception as e:
     logging.info(e)
-    feedBackError(feed_back_url,1,"未生成受付番号")
+    feedBackError(feed_back_url,1,"数据错误,请修改后再递送")
 
 #3. 列表页，点击個人名簿登録
 # 如果 不出现对应的按钮，则代表美元生成受付番号，需要重新填写
@@ -384,7 +385,7 @@ try:
     #如果没有获取到受付番号，向服务器反馈错误信息
 except Exception as e:
     logging.info(e)
-    feedBackError(feed_back_url,1,"未生成受付番号")
+    feedBackError(feed_back_url,1,"数据错误,请修改后再递送")
 
 logging.info("受付番号 :%s",acceptance_number)
 try:
