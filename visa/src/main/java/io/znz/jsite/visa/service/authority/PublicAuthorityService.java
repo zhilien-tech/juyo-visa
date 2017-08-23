@@ -33,11 +33,14 @@ public class PublicAuthorityService extends NutzBaseService {
 	public boolean companyFunction(CompanyEntity addForm) {
 		//通过session获取公司的id
 		//TCompanyEntity company = (TCompanyEntity) session.getAttribute(LoginService.USER_COMPANY_KEY);
-		long adminId = addForm.getAdminId();//得到公司管理员的id
+		long comId = addForm.getId();//得到公司的id
 		//根据公司id查询出是上游公司还是代理商
-		CompanyEntity fetchType = dbDao.fetch(CompanyEntity.class, Cnd.where("adminId", "=", adminId));
-		long comId = fetchType.getId();//得到公司id
-		long comType = fetchType.getComType();//得到公司类型(送签社或者地接社)
+		CompanyEntity fetchType = null;
+		Long comType = null;
+		if (!Util.isEmpty(comId)) {
+			fetchType = dbDao.fetch(CompanyEntity.class, Cnd.where("id", "=", comId));
+			comType = fetchType.getComType();//得到公司类型(送签社或者地接社)
+		}
 		List<CompanyFunctionEntity> functionList = Lists.newArrayList();
 		List<CompanyFunctionEntity> insert = Lists.newArrayList();
 		if (comType == CompanyTypeEnum.send.intKey()) {//送签社
