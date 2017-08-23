@@ -204,6 +204,13 @@ $(function(){
 $("#searchBtn").on('click', function () {
 	grid.dataSource.read();
 })
+//日期
+function startTime(){
+	$("#searchBtn").click();
+}
+function endTime(){
+	$("#searchBtn").click();
+}
 //送签社
 function sqsChange(){
 	$("#searchBtn").click();
