@@ -28,6 +28,9 @@ public class NewSysStatisticSqlForm extends KenDoParamForm {
 	private String keywords;
 	private String sqs_id;
 	private String djs_id;
+	private int sqsCount;
+	private int djsCount;
+	private int allCount;
 
 	@Override
 	public Sql sql(SqlManager paramSqlManager) {

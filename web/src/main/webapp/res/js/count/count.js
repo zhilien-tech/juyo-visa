@@ -1,4 +1,6 @@
-
+var sqsCount = 0;
+var djsCount = 0;
+var allCount = 0;
 //签证类型
 var visatypelist=[
                   {text:"东三县",value:2},
@@ -93,6 +95,14 @@ var grid = $("#grid").kendoGrid({
 			/* data: "content",
             total: "totalElements",*/
 			data : function(d) {
+				if(d.list != null && d.list != "" && d.list != undefined){
+					sqsCount = d.list[0].sqscount;
+					djsCount = d.list[0].djscount;
+					allCount = d.recordCount;
+				}
+				$("#sqsCount").html(sqsCount);
+				$("#djsCount").html(djsCount);
+				$("#allCount").html(allCount);
 				return d.list;  //响应到页面的数据
 			},
 			total : function(d) {
