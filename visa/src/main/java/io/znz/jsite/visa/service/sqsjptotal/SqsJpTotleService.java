@@ -10,11 +10,16 @@ import io.znz.jsite.base.NutzBaseService;
 import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
 import io.znz.jsite.core.util.Const;
 import io.znz.jsite.visa.forms.SqlJpTotalForm;
+import io.znz.jsite.visa.totalbean.TotalJpBean;
+
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.pager.Pager;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.Lists;
 
 /**
  * 日本送签社统计
@@ -31,6 +36,8 @@ public class SqsJpTotleService extends NutzBaseService {
 		pager = new Pager();
 		pager.setPageNumber(sqlForm.getPageNumber());
 		pager.setPageSize(sqlForm.getPageSize());
+		List<TotalJpBean> list = Lists.newArrayList();
+
 		return this.listPage(sqlForm, pager);
 	}
 }

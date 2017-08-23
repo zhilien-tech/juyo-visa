@@ -16,7 +16,6 @@ import org.nutz.dao.pager.Pager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -34,7 +33,7 @@ public class SqsJpTotalController extends BaseController {
 	/**
 	 * 送签社统计列表查询
 	 */
-	@RequestMapping(value = "sqsjptotalList", method = RequestMethod.POST)
+	@RequestMapping(value = "sqsjptotalList")
 	@ResponseBody
 	public Object sqsjptotalList(SqlJpTotalForm sqlForm, Pager pager, final HttpSession session) {
 		return sqsJpTotleService.sqsjptotalList(sqlForm, pager, session);

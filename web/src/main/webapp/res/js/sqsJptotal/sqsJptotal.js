@@ -1,22 +1,5 @@
-//页面加载时加载日历
-$(function(){
-	$("#sendSigned").kendoDropDownList();//送签社 初始化
-	$("#groundConnection").kendoDropDownList();//地接社 初始化
-	$("#start_time").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});
-	$("#end_time").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});
-});
-//签证类型
-var visatypeStatus=[
-	{text:"单次",value:0},           
-	{text:"一年单次",value:1},           
-	{text:"东三县",value:2},           
-	{text:"新三县",value:3},           
-	{text:"冲绳",value:4},           
-	{text:"普通三年",value:5},           
-	{text:"普通五年",value:6}      
-];
 //注册命令
-function regCmd(command) {
+/*function regCmd(command) {
     var select = function (e) {
         var data = $(e.delegateTarget).data("kendoGrid").dataItem($(e.currentTarget).closest("tr"));
         if (!data) $.layer.alert("请先选择需要操作的数据行");
@@ -30,7 +13,60 @@ function regCmd(command) {
         	
         }
     };
-}
+}*/
+//送签社搜索
+var sendCom=new kendo.data.DataSource({
+    serverFiltering: true,
+    transport: {
+        read: {
+            dataType: "json",
+            url: "/visa/neworderjp/downloadselectfind?a="+1,
+        },
+        parameterMap: function (options, type) {
+            if (options.filter) {
+                return {filter: options.filter.filters[0].value};
+            }
+        },
+    }
+});
+console.log("sendCom:"+JSON.stringify(sendCom));
+//地接社搜索
+var landCom=new kendo.data.DataSource({
+	serverFiltering: true,
+	transport: {
+		read: {
+			dataType: "json",
+			url: "/visa/neworderjp/downloadselectfind?a="+2,
+		},
+		parameterMap: function (options, type) {
+			if (options.filter) {
+				return {filter: options.filter.filters[0].value};
+			}
+		},
+	}
+});
+console.log("landCom:"+JSON.stringify(landCom));
+//签证类型
+var visatypeStatus=[
+	{text:"单次",value:0},           
+	{text:"一年单次",value:1},           
+	{text:"东三县",value:2},           
+	{text:"新三县",value:3},           
+	{text:"冲绳",value:4},           
+	{text:"普通三年",value:5},           
+	{text:"普通五年",value:6}      
+];
+var defaults = {
+		
+};
+
+//数据绑定
+var viewModel = kendo.observable({
+	sendCom:sendCom,
+	landCom:landCom,
+    customer: defaults
+});
+kendo.bind($(document.body), viewModel);
 
 //初始化上部的表格布局
 var grid = $("#grid").kendoGrid({
@@ -57,7 +93,7 @@ var grid = $("#grid").kendoGrid({
                 type: "POST",
                 dataType: "json",
                 url: "/visa/sqsjptotal/sqsjptotalList",
-                contentType: 'application/json;charset=UTF-8',
+                contentType: 'application/json;charset=UTF-8'
             },
             parameterMap: function (options, type) {
             	var parameter = {
@@ -65,7 +101,7 @@ var grid = $("#grid").kendoGrid({
                         pageSize : options.pageSize,//每页显示个数
                         start_time:$("#start_time").val(),
                         end_time:$("#end_time").val(),
-                        keywords:$("#keywords").val(),
+                        keyword:$("#keyword").val(),//检索条件
                         state:$("#state").val()
                     };
                return kendo.stringify(parameter);
@@ -73,6 +109,14 @@ var grid = $("#grid").kendoGrid({
         },
         schema: {
         	data : function(d) {
+        		/*console.log(JSON.stringify(d.list));
+        		var sqslist = d.list;
+        		var str = '<option value="">送签社</option>';
+        		for(var i=0;i<sqslist.length;i++){
+        			str += '<option value="'+sqslist[i].id+'">'+sqslist[i].comfullname+'</option>';
+        		}
+        		console.log(str);
+        		$('#sendSigned').html(str);*/
                 return d.list;  //响应到页面的数据
             },
             total : function(d) {
@@ -96,7 +140,7 @@ var grid = $("#grid").kendoGrid({
         {field: 'username', title: '操作人'},
         {field: 'landcomfullname', title: '地接社'},
         {field: 'completednumber', title: '受付番号'},
-        {field: 'fullname', title: '主申请人', width: 100},
+        {field: 'mainporposer', title: '主申请人', width: 100},
         {field: 'headnum', title: '人数', width: 80},
         {field: 'visatype', title: '签证类型',values:visatypeStatus, width:100}
     ],
@@ -122,3 +166,20 @@ function successCallback(id){
 		  layer.msg("操作成功",{time: 2000});
 	  }
   }
+//页面加载时加载日历
+$(function(){
+	$("#sendSigned").kendoDropDownList();//送签社 初始化
+	$("#groundConnection").kendoDropDownList();//地接社 初始化
+	$("#start_time").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});
+	$("#end_time").kendoDatePicker({culture:"zh-CN",format:"yyyy-MM-dd"});
+});
+//列表页检索
+$("#searchBtn").on('click', function () {
+	grid.dataSource.read();
+})
+//搜索回车事件
+function onkeyEnter(){
+	 if(event.keyCode==13){
+		 $("#searchBtn").click();
+	 }
+}

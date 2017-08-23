@@ -18,6 +18,8 @@ import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 
+import com.uxuexi.core.common.util.Util;
+
 /**
  * 日本送签社统计
  * @author   崔建斌
@@ -48,47 +50,16 @@ public class SqlJpTotalForm extends KenDoParamForm {
 	private Integer headnum;
 	//签证类型
 	private Integer visatype;
-
-	//领区
-	private Integer area;
-	//是否加急
-	private Integer ishurry;
-	//行程
-	private Integer triptype;
-	//收款方式
-	private Integer paytype;
-	//金额
-	private Double money;
-	//送签时间
-	private Date senddate;
-	//出签时间
-	private Date outdate;
-	//备注
-	private String remark;
-	//国家类型
-	private Integer countrytype;
-	//状态
-	private Integer status;
-	//更新时间
-	private Date updatetime;
-	//创建时间
-	private Date createtime;
-	//分享次数
-	private Integer sharenum;
-	//递送次数
-	private Integer sendnum;
-	//客户来源
-	private Integer customerSource;
-	//客户来源
-	private long sendComId;
+	//公司类型(1-送签社,2-地接社)
+	private Integer comtype;
 	//操作人id
 	private Integer operatePersonId;
-	//判断是否为日本地接社添加的
-	private Integer island;
-	//错误码
-	private Integer errorCode;
-	//错误信息
-	private String errorMsg;
+	//检索条件
+	private String keyword;
+	//开始时间
+	private Date start_time;
+	//结束时间
+	private Date end_time;
 
 	@Override
 	public Sql sql(SqlManager paramSqlManager) {
@@ -104,13 +75,13 @@ public class SqlJpTotalForm extends KenDoParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
-		cnd.and("ojp.comId", "=", comId);
-		/*if (!Util.isEmpty(keyword)) {
-			cnd.and("vc.comName", "like", "%" + keyword + "%").or("vc.connect", "like", "%" + keyword + "%")
-					.or("vc.mobile", "like", "%" + keyword + "%");
+		if (!Util.isEmpty(keyword)) {
+			cnd.and("vnoj.ordernumber", "like", "%" + keyword + "%").or("eee.fullName", "like", "%" + keyword + "%")
+					.or("vnoj.completedNumber", "like", "%" + keyword + "%")
+					.or("mainporposer", "like", "%" + keyword + "%");
 		}
-		cnd.and("vc.deletestatus", "=", UserDeleteStatusEnum.NO.intKey());
-		cnd.orderBy("vc.createTime", "DESC");*/
+		cnd.and("vnoj.comId", "=", comId);
+		//cnd.orderBy("vc.createTime", "DESC");
 		return cnd;
 	}
 }
