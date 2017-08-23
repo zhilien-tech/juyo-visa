@@ -244,8 +244,8 @@ var grid = $("#grid").kendoGrid({
             	}
 			  },*/
 	          {field: 'comfullname', title: '保证会社', width: 170,template: "<span class='ellipsis' title='#=data.comfullname#'>#=data.comfullname?data.comfullname:''#</span>"},
-	          {field: 'completednumber', title: '指定番号',width:170,},
-	          {field: 'address', title: '住所',width:300,template: "<span class='ellipsis' title='#=data.address#'>#=data.address?data.address:''#</span>"},
+	          {field: 'completednumber', title: '指定番号',width:120,},
+	          {field: 'address', title: '住所',width:160,template: "<span class='ellipsis' title='#=data.address#'>#=data.address?data.address:''#</span>"},
 	          {field: 'linkman', title: '担当者',width:100,},
 	          {field: 'phone', title: '携带电话',width:120,format: "{0: yyyy-MM-dd }",},
 	          {field: 'telephone', title: 'TEL',width:120, values: ["美国", "日本"],},

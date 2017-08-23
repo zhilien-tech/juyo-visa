@@ -279,11 +279,10 @@ $("#saveCustomerData").on("click",function(){
 		///console.log(JSON.stringify(viewModel.customer));
 		/*var error=JSON.stringify(map);
 		if(error.length>15){
-			
 			viewModel.set("customer.errorinfo",JSON.stringify(map));
 			map.clear();
 		}*/
-		 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+		var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 		$.ajax({
 			 type: "POST",
 			 url: "/visa/newcustomerjp/customerSave",
@@ -292,7 +291,7 @@ $("#saveCustomerData").on("click",function(){
 			 success: function (result){
 				 if(indexnew!=null){
 						layer.close(indexnew);
-						}
+				 }
 				 
 				 ///console.log(result);
 				 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
@@ -301,9 +300,8 @@ $("#saveCustomerData").on("click",function(){
 			 },
 			 error: function(XMLHttpRequest, textStatus, errorThrown) {
 				 if(indexnew!=null){
-						
-						layer.close(indexnew);
-						}
+					layer.close(indexnew);
+				 }
 				 console.log(XMLHttpRequest);
 				 console.log(textStatus);
 				 console.log(errorThrown);
@@ -385,16 +383,15 @@ function agreeOrRefuse(flag){
 
 $(function () {
     //如果有传递ID就是修改
-	 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+	var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
     var oid = $.queryString("cid");
     if (oid) {
-        $.getJSON("/visa/newcustomerjp/showDetail?customerid=" + oid, function (resp) {
+        $.getJSON("/visa/newcustomerjp/showDetail?customerid=" + oid, function (resp){
         	viewModel.set("customer", $.extend(true, dafaults, resp));
         	var passporttype=viewModel.get("customer.passporttype");
         	if(passporttype!=""&&passporttype!=null){
         		
         	}else{
-        		
         		viewModel.set("customer.passporttype", 1);
         	}
         	//护照签发机关默认值处理
@@ -402,14 +399,12 @@ $(function () {
         	if(passportsendoffice!=""&&passportsendoffice!=null){
         		
         	}else{
-        		
         		viewModel.set("customer.passportsendoffice", "公安部出入境管理局");
         	}
         	var docountry=viewModel.get("customer.docountry");
         	if(docountry!=""&&docountry!=null){
         		
         	}else{
-        		
         		viewModel.set("customer.docountry", "CHN");
         	}
         	
@@ -438,7 +433,7 @@ $(function () {
          	}*/
         	
         	
-      /*  	var reason=viewModel.get("customer.errorinfo");
+        	/*var reason=viewModel.get("customer.errorinfo");
         	var map=new Map();
         	map=eval("("+reason+")");
         	for (var key in map){
@@ -500,10 +495,9 @@ $(function () {
         		}
         	}
         	
-        	
         	if(indexnew!=null){
     			layer.close(indexnew);
-    	 }
+        	}
         	/*--------------------------end 小灯泡 回显----------------------*/
         	
         });
