@@ -99,9 +99,20 @@ var grid = $("#grid").kendoGrid({
 					sqsCount = d.list[0].sqscount;
 					djsCount = d.list[0].djscount;
 					allCount = d.recordCount;
+				}else{
+					allCount = 0;
 				}
-				$("#sqsCount").html(sqsCount);
-				$("#djsCount").html(djsCount);
+				
+				if($("#sqs_id option:selected").text()=="送签社" && $("#sqs_id").val() == ""){
+					$("#sqsCount").html(sqsCount);
+				}else{
+					$("#sqsCount").html(1);
+				}
+				if($("#djs_id option:selected").text()=="地接社" && $("#djs_id").val() == ""){
+					$("#djsCount").html(djsCount);
+				}else{
+					$("#djsCount").html(1);
+				}
 				$("#allCount").html(allCount);
 				return d.list;  //响应到页面的数据
 			},
@@ -152,6 +163,28 @@ var grid = $("#grid").kendoGrid({
 	        	  });  
 	          },
 }).data("kendoGrid");
+
+//送签社change
+function sqsChange(){
+	var text = $("#sqs_id option:selected").text();
+	var val = $("#sqs_id").val();
+	if(text=="送签社" || val == null){
+		$("#sqsCount").html(sqsCount);
+	}else{
+		$("#sqsCount").html(1);
+	}
+}
+
+//地接社change
+function djsChange(){
+	var text = $("#djs_id option:selected").text();
+	var val = $("#djs_id").val();
+	if(text=="地接社" || val == null){
+		$("#djsCount").html(djsCount);
+	}else{
+		$("#djsCount").html(1);
+	}
+}
 
 //页面刷新
 function successCallback(id){
