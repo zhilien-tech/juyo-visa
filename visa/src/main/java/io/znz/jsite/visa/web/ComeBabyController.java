@@ -70,16 +70,23 @@ public class ComeBabyController {
 		if (!Util.isEmpty(company)) {
 			long comId = company.getComId();
 			form.setComId(comId);
+		} else {
+			form.setComId(-1);
 		}
 		Pager pager = new Pager();
 		pager.setPageNumber(form.getPageNumber());
 		pager.setPageSize(form.getPageSize());
+		if (!Util.isEmpty(company)) {
 
-		CompanyEntity comp = dbDao.fetch(CompanyEntity.class, company.getComId());
-		Integer comType = null;
-		if (!Util.isEmpty(comp)) {
-			comType = comp.getComType();
-			form.setComtype(comType);
+			CompanyEntity comp = dbDao.fetch(CompanyEntity.class, company.getComId());
+			Integer comType = null;
+			if (!Util.isEmpty(comp)) {
+				comType = comp.getComType();
+				form.setComtype(comType);
+			} else {
+				form.setComtype(1);
+
+			}
 		}
 
 		Pagination listPage = comeBabyService.listPage(form, pager);
@@ -98,6 +105,9 @@ public class ComeBabyController {
 		if (!Util.isEmpty(company)) {
 			long comId = company.getComId();
 			comebaby.setComId(comId);
+		} else {
+
+			comebaby.setComId(Long.valueOf("-1"));
 		}
 
 		comebaby.setUpdateTime(new Date());

@@ -33,16 +33,19 @@ public class PublicAuthorityService extends NutzBaseService {
 	public boolean companyFunction(CompanyEntity addForm) {
 		//通过session获取公司的id
 		//TCompanyEntity company = (TCompanyEntity) session.getAttribute(LoginService.USER_COMPANY_KEY);
-		long adminId = addForm.getAdminId();//得到公司管理员的id
+		long comId = addForm.getId();//得到公司的id
 		//根据公司id查询出是上游公司还是代理商
-		CompanyEntity fetchType = dbDao.fetch(CompanyEntity.class, Cnd.where("adminId", "=", adminId));
-		long comId = fetchType.getId();//得到公司id
-		long comType = fetchType.getComType();//得到公司类型(送签社或者地接社)
+		CompanyEntity fetchType = null;
+		Long comType = null;
+		if (!Util.isEmpty(comId)) {
+			fetchType = dbDao.fetch(CompanyEntity.class, Cnd.where("id", "=", comId));
+			comType = fetchType.getComType();//得到公司类型(送签社或者地接社)
+		}
 		List<CompanyFunctionEntity> functionList = Lists.newArrayList();
 		List<CompanyFunctionEntity> insert = Lists.newArrayList();
 		if (comType == CompanyTypeEnum.send.intKey()) {//送签社
 			//送签社功能ID
-			int[] function1 = { 1, 2, 3, 6, 17, 18, 19, 25 };
+			int[] function1 = { 1, 2, 3, 6, 17, 18, 19, 25, 28 };
 			for (int i = 0; i < function1.length; i++) {
 				//向公司功能关系表中添加数据
 				CompanyFunctionEntity one = new CompanyFunctionEntity();
@@ -53,7 +56,7 @@ public class PublicAuthorityService extends NutzBaseService {
 			insert = dbDao.insert(functionList);
 		} else if (comType == CompanyTypeEnum.land.intKey()) {//地接社
 			//送签社功能ID
-			int[] function2 = { 1, 2, 3, 6, 17, 25, 27 };
+			int[] function2 = { 1, 2, 3, 6, 17, 25, 27, 29 };
 			for (int i = 0; i < function2.length; i++) {
 				//向公司功能关系表中添加数据
 				CompanyFunctionEntity one = new CompanyFunctionEntity();

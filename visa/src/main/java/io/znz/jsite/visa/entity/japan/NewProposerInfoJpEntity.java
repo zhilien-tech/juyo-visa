@@ -29,7 +29,7 @@ public class NewProposerInfoJpEntity implements Serializable {
 
 	 */
 	@Column
-	@Comment("客户管理id")
+	@Comment("客户id")
 	private Long customer_jp_id;
 	@Column
 	@Comment("订单id")

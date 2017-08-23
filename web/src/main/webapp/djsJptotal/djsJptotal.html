@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>统计-优悦签</title>
+    <link rel="stylesheet" href="/res/plugin/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.common.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/kendoui/styles/kendo.office365.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/res/css/colors.min.css"/>
+    <link rel="stylesheet" href="/res/css/common.min.css?v=1"/>
+    <link rel="stylesheet" href="/res/plugin/flag-icon/css/flag-icon.min.css"/>
+    <link rel="stylesheet" href="/res/plugin/lightGallery/css/lightgallery.css"/>
+    <link rel="stylesheet" href="/res/plugin/h+/css/main.css"/><!--修改的样式-->
+    <style type="text/css">
+    	.count{margin-top: 40px;}
+    	.Search {height: 60px;}
+    </style>
+</head>
+<body class="clear-scroll">
+	<!--搜索条件 模块-->
+    <div class="Search">
+      <div class="col-xs-2 padding-Left-0">
+        <!-- <select id="sendSigned"
+              data-role="dropdownlist"
+              data-filter="startswith"
+              data-suggest="true"
+              data-auto-bind="true"
+              data-value-primitive="true"
+              data-text-field="comFullName"
+              data-value-field="id"
+              data-bind="value:customer.sendComId,source:sendCom"
+              style="width: 100%;" >
+        </select> -->
+        <select id="sqs_id" onchange="sqsChange()" style="width: 100%;"></select>
+      </div>
+      <div class="col-xs-2 padding-Left-0">
+        <!-- <select id="sendSigned"
+              data-role="dropdownlist"
+              data-filter="startswith"
+              data-suggest="true"
+              data-auto-bind="true"
+              data-value-primitive="true"
+              data-text-field="landcomFullName"
+              data-value-field="id"
+              data-bind="value:customer.landComId,source:landCom"
+              style="width: 100%;" >
+        </select> -->
+        <select id="djs_id" onchange="djsChange()" style="width: 100%;"></select>
+      </div>
+      <div class="col-xs-2 padding-Left-0">
+      		<input type="text" id="start_time" onchange="startTime();"  class="k-textbox fill uppercase" placeholder=" ">
+      </div>
+      <label class="timeLabel">至</label>
+      <div class="col-xs-2">
+      		<input type="text" id="end_time" onchange="endTime();"  class="k-textbox fill uppercase" placeholder=" ">
+      </div>
+      <div class="col-xs-2 padding-Left-0">
+      		<input type="text" id="keyword" onkeypress="onkeyEnter();" class="k-textbox fill" placeholder="订单号/受付番号/操作人/主申请人">
+      </div>
+      <div class="col-xs-1 padding-Left-0">
+        <input id="searchBtn" type="button" class="btn btn-primary input-sm" value="搜索">
+      </div>
+      <p class="count">送签社：<span id="sqs_count">0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日本地接社：<span id="djs_count">0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;总订单：<span id="total_count">0</span></p>
+    </div>
+    
+    <!--end 搜索条件 模块-->
+	<div id="grid">
+		
+	</div>
+	<input type="hidden" id="na" value="me"> 
+</body>
+
+<script src="/res/plugin/jquery.min.js"></script>
+<script src="/res/js/sessiontimeout/sessiontimeout.js"></script>
+<script src="/res/plugin/layer/layer.js"></script>
+<script src="/res/plugin/kendoui/js/kendo.web.min.js"></script>
+<script src="/res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
+<script src="/res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
+<script src="/res/js/common.js"></script>
+
+<script src="/res/plugin/jquery.fileDownload.js"></script>
+<script src="/res/plugin/lightGallery/js/lightgallery.js"></script>
+<script src="/res/js/djsJptotal/djsJptotal.js"></script>
+</html>
