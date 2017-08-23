@@ -61,7 +61,6 @@ import org.nutz.lang.Files;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.jgoodies.forms.factories.Borders;
 import com.uxuexi.core.common.util.Util;
 
@@ -85,10 +84,6 @@ public class MainForm extends JPanel {
 
 	private static final int SUCCESS = 0;
 
-	/**是否有任务正在执行中*/
-	static Map<String, Boolean> executingMap = Maps.newConcurrentMap();
-	private static final String executingKey = "executingKey";
-
 	public MainForm() {
 		initComponents();
 		pyFile.setText(System.getProperty("user.dir") + "/conf/japan.py");
@@ -96,7 +91,6 @@ public class MainForm extends JPanel {
 		port.setText("9004");
 		upload.setEnabled(false);//禁用上传按钮
 		filesPicker.setEnabled(false); //禁用选择文件上传的按钮
-		executingMap.put(executingKey, false);
 	}
 
 	//拼接 url 地址
@@ -241,8 +235,7 @@ public class MainForm extends JPanel {
 			@Override
 			public void run() {
 				try {
-					boolean executing = executingMap.get(executingKey);
-					while (!executing) {
+					while (true) {
 						excuteTask();
 					}
 				} catch (Exception exception) {
@@ -255,9 +248,8 @@ public class MainForm extends JPanel {
 	}
 
 	/**执行填表任务*/
-	void excuteTask() throws IOException {
+	boolean excuteTask() throws IOException {
 		long startTime = System.currentTimeMillis();
-		executingMap.put(executingKey, true);
 		ResultObject<Map, Object> task = null;
 		//循环检测任务
 		while (true) {
@@ -279,6 +271,17 @@ public class MainForm extends JPanel {
 		}
 
 		final String oid = String.valueOf(task.getAttributes().get("oid"));
+
+		//准备提交填表任务
+		String ds160rs = HttpClientUtil.get(getBaseUrl() + TASK_SUBMITING_URI + oid);
+		ResultObject<Map, Object> ds160ro = JSON.parseObject(ds160rs, ResultObject.class);
+		if (ds160ro.getCode() == ResultObject.ResultCode.SUCCESS) {
+			log("任务码:" + oid + " 提交中...");
+		} else {
+			log("任务码:" + oid + "准备提交失败");
+			return false;
+		}
+
 		log("========================开始执行任务:" + oid + "===========================");
 		String remoteFileUrl = String.valueOf(task.getData().get("excelUrl"));
 		SwingUtilities.invokeLater(new Runnable() {
@@ -313,16 +316,7 @@ public class MainForm extends JPanel {
 		//执行命令行
 		File python = new File(pyFile.getText());
 		if (python.exists()) {
-			//提交ds160
-			String ds160rs = HttpClientUtil.get(getBaseUrl() + TASK_SUBMITING_URI + oid);
-			ResultObject<Map, Object> ds160ro = JSON.parseObject(ds160rs, ResultObject.class);
-			if (ds160ro.getCode() == ResultObject.ResultCode.SUCCESS) {
-				log("任务码:" + oid + " 提交中...");
-			} else {
-				log("任务码:" + oid + "准备提交失败");
-			}
-
-			//第三个参数为任务码
+			//执行脚本，提交任务，第三个参数为任务码
 			String cmd = "python " + pyFile.getText() + " " + target.getAbsolutePath() + " " + oid;
 			command.setText(cmd);
 			int execResult = executeCommand(cmd);
@@ -340,7 +334,7 @@ public class MainForm extends JPanel {
 		log("========================任务:" + oid + " 执行完毕===========================");
 		log("========================总计用时:" + ((System.currentTimeMillis() - startTime) / 1000)
 				+ "秒===========================");
-		executingMap.put(executingKey, false);
+		return true;
 	}
 
 	/**
