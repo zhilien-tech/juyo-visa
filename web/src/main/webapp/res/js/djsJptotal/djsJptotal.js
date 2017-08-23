@@ -55,7 +55,7 @@ kendo.bind($(document.body), viewModel);
 
 //初始化上部的表格布局
 var grid = $("#grid").kendoGrid({
-    height: "93%",
+    height: "89%",
     selectable: "row",
     sortable: true,
     resizable: true,
