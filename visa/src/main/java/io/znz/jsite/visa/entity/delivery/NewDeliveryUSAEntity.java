@@ -30,7 +30,7 @@ public class NewDeliveryUSAEntity {
 	private Integer id;
 
 	@Column
-	@Comment("訂單id")
+	@Comment("客户id")
 	private Integer customer_usa_id;
 
 	@Column
