@@ -131,8 +131,7 @@ var grid = $("#grid").kendoGrid({
 				}
 				$("#total_count").html(recordcount);
 				if(sqslist == "" || sqslist == null || sqslist == undefined){
-					layer.msg("暂无数据",{time: 2000});
-					return;
+					$('.k-grid-content').append('<span style="display: block;text-align: center;line-height:3rem;color: #dcdcdc;font-size: 13px;">暂&nbsp;无&nbsp;可&nbsp;用&nbsp;数&nbsp;据</span>');
 				}
                 return sqslist;  //响应到页面的数据
             },
