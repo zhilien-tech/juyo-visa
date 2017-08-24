@@ -96,7 +96,6 @@ var grid = $("#grid").kendoGrid({
         schema: {
         	data : function(d) {
         		var sqslist = d.list;
-        		console.log(JSON.stringify(sqslist));
         		if(sqslist != "" && sqslist  != null && sqslist != undefined){
         			sqscount = sqslist[0].sqscount;//送签社
         			djscount = sqslist[0].djscount;//地接社
@@ -117,8 +116,9 @@ var grid = $("#grid").kendoGrid({
 				$("#total_count").html(recordcount);
 				
 				if(sqslist == "" || sqslist == null || sqslist == undefined){
-					layer.msg("暂无数据",{time: 2000});
-					return;
+					/*layer.msg("暂无数据",{time: 2000});
+					return;*/
+					$('.k-grid-content').append('<span style="display: block;text-align: center;line-height: 10rem;color: #dcdcdc;font-size: 17px;">暂无可用数据</span>');
 				}
 
                 return sqslist;  //响应到页面的数据
