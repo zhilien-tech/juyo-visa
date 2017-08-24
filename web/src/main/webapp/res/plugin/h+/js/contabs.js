@@ -65,42 +65,45 @@ $(function () {
 			type : "POST",
 			datatype: 'JSON', 
 			success : function(data) {
-				var emp = JSON.parse(data);
-				//console.log(emp);
-				for(var i=0;i<emp.length;i++){
-		    		$("#"+emp[i].id).show();
-		    	}
-				var html="";
-				for(var i=0;i<emp.length;i++){
-		    		if(emp[i].parentId==0){
-		    			var a=0;
-		    			for(var m=i;m<emp.length;m++){
-		    				if(emp[m].parentId==emp[i].id){
-		    					a++;
-		    				}
-		    			}
-		    			if(a>0){
-		    				html+='<li><a href="javascript:;" class="J_menuItem1" id="'+emp[i].id+'"><i class="'+emp[i].portrait+'"></i><span class="nav-label" >'+emp[i].funName+'</span><span class="fa arrow"></span></a>'
-		                	html+='<ul class="nav nav-second-level">';
-		    	    		for(var j=i+1;j<emp.length;j++){
-		    	    			if(emp[i].id==emp[j].parentId){
-		    	    				html+='<li><a class="J_menuItem" href="'+emp[j].url+'" id="'+emp[j].id+'">'+emp[j].funName+'</a></li>'
-		    	    			}
-		    	    		}
-		    	    		html+= '</ul>';
-		           			html+='</li>';
-		    			}else{
-		    				html+='<li><a href="'+emp[i].url+'" class="J_menuItem" id="'+emp[i].id+'"><i class="'+emp[i].portrait+'"></i><span class="nav-label" >'+emp[i].funName+'</span></a>'
-		           			html+='</li>';
-		    			}
-		    		}
+				var emp = null;
+				if(data !=null && data != "" && data != undefined){
+					emp = JSON.parse(data);
+					for(var i=0;i<emp.length;i++){
+			    		$("#"+emp[i].id).show();
+			    	}
+					var html="";
+					for(var i=0;i<emp.length;i++){
+			    		if(emp[i].parentId==0){
+			    			var a=0;
+			    			for(var m=i;m<emp.length;m++){
+			    				if(emp[m].parentId==emp[i].id){
+			    					a++;
+			    				}
+			    			}
+			    			if(a>0){
+			    				html+='<li><a href="javascript:;" class="J_menuItem1" id="'+emp[i].id+'"><i class="'+emp[i].portrait+'"></i><span class="nav-label" >'+emp[i].funName+'</span><span class="fa arrow"></span></a>'
+			                	html+='<ul class="nav nav-second-level">';
+			    	    		for(var j=i+1;j<emp.length;j++){
+			    	    			if(emp[i].id==emp[j].parentId){
+			    	    				html+='<li><a class="J_menuItem" href="'+emp[j].url+'" id="'+emp[j].id+'">'+emp[j].funName+'</a></li>'
+			    	    			}
+			    	    		}
+			    	    		html+= '</ul>';
+			           			html+='</li>';
+			    			}else{
+			    				html+='<li><a href="'+emp[i].url+'" class="J_menuItem" id="'+emp[i].id+'"><i class="'+emp[i].portrait+'"></i><span class="nav-label" >'+emp[i].funName+'</span></a>'
+			           			html+='</li>';
+			    			}
+			    		}
+					}
+					$("#side-menu").append(html);
+					$('.nav-second-level').hide();
+					$('.J_menuItem1').on('click', function(){
+						$(this).next().toggle('100');
+						//$(this).parent().siblings().find('ul').hide('100');//同级其他同胞隐藏
+					});
 				}
-				$("#side-menu").append(html);
-				$('.nav-second-level').hide();
-				$('.J_menuItem1').on('click', function(){
-					$(this).next().toggle('100');
-					//$(this).parent().siblings().find('ul').hide('100');//同级其他同胞隐藏
-				});
+				
 				//点击 左菜单栏项 触发 function
 			    function menuItem() {
 			    		//left menu Highlight----------------------------------

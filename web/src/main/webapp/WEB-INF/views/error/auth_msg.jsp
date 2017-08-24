@@ -21,4 +21,5 @@
     </head>
     <body>
     </body>
+    <script src="/res/js/sessiontimeout/sessiontimeout.js"></script><!-- session过期跳到登录页 -->
 </html>
