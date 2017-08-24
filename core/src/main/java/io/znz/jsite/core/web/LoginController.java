@@ -427,11 +427,11 @@ public class LoginController extends BaseController {
 								FunctionEntity hotelmanage = new FunctionEntity();
 								hotelmanage.setId(23);
 								hotelmanage.setParentId(20);
-								hotelmanage.setFunName("航班信息");
+								hotelmanage.setFunName("酒店管理");
 								hotelmanage.setUrl("hotel.html");
 								hotelmanage.setLevel(2);
 								hotelmanage.setCreateTime(new Date());
-								hotelmanage.setRemark("航班信息");
+								hotelmanage.setRemark("酒店管理");
 								hotelmanage.setSort(23);
 								functions.add(hotelmanage);
 								//景点管理
@@ -442,7 +442,7 @@ public class LoginController extends BaseController {
 								scenicmanage.setUrl("scenic.html");
 								scenicmanage.setLevel(2);
 								scenicmanage.setCreateTime(new Date());
-								scenicmanage.setRemark("航班信息");
+								scenicmanage.setRemark("景点管理");
 								scenicmanage.setSort(24);
 								functions.add(scenicmanage);
 								//日志记录

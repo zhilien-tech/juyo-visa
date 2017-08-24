@@ -3,12 +3,14 @@ SELECT
 	vnoj.id,
 	vnoj.comId,
 	c.comType,
+	c.comName,
 	(
 		SELECT
 			COUNT(*)
 		FROM
-			visa_new_comebaby_jp p
-    WHERE p.comId=vnoj.comId
+			visa_new_company c
+		WHERE
+			c.id = vnoj.comId
 	) AS sqscount,
 	(
 		SELECT
