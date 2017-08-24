@@ -53,6 +53,8 @@ public class DjsJpTotalForm extends KenDoParamForm {
 	private Integer visatype;
 	//公司类型(1-送签社,2-地接社)
 	private Integer comtype;
+	//用户类型
+	private Integer usertype;
 	//操作人id
 	private Integer operatePersonId;
 	//检索条件
@@ -75,19 +77,36 @@ public class DjsJpTotalForm extends KenDoParamForm {
 		String sqlString = paramSqlManager.get("djsjptotal_list_data");
 		Sql sql = Sqls.create(sqlString);
 		sql.setCondition(cnd());
+
+		if (usertype == 6) {
+			//1507-001 账号专用
+			sqlString = paramSqlManager.get("djsjptotal_1507-001_list_data");
+			sql = Sqls.create(sqlString);
+			sql.setCondition(cnd());
+		}
 		return sql;
 	}
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
 		//送签社
-		if (!Util.isEmpty(sqs_id) && !sqs_id.equals("-1")) {
-			cnd.and("vnoj.sendComId", "=", sqs_id);
+		if (usertype == 6) {
+			//1507-001 账号专用
+			if (!Util.isEmpty(sqs_id) && !sqs_id.equals("-1")) {
+				cnd.and("c.id", "=", sqs_id);
+			}
+		} else {
+			if (!Util.isEmpty(sqs_id) && !sqs_id.equals("-1")) {
+				cnd.and("vnoj.sendComId", "=", sqs_id);
+			}
+			cnd.and("vnoj.comId", "=", comId);
 		}
+
 		//地接社
 		if (!Util.isEmpty(djs_id) && !djs_id.equals("-1")) {
 			cnd.and("vnoj.landComId", "=", djs_id);
 		}
+
 		//时间
 		if (!Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
 			SqlExpressionGroup e1 = Cnd.exps("vnoj.createtime", ">=", start_time)
@@ -109,7 +128,7 @@ public class DjsJpTotalForm extends KenDoParamForm {
 					.or("vnoj.completedNumber", "like", "%" + keyword + "%")
 					.or("mm.chinesefullname", "like", "%" + keyword + "%");
 		}
-		cnd.and("vnoj.comId", "=", comId);
+
 		cnd.orderBy("vnoj.createTime", "DESC");
 		return cnd;
 	}
