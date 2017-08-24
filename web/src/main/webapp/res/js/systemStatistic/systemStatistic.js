@@ -114,6 +114,13 @@ var grid = $("#grid").kendoGrid({
 					$("#djsCount").html(1);
 				}
 				$("#allCount").html(allCount);
+				
+				
+				if(d.list == null || d.list == "" || d.list == undefined){
+					layer.msg("暂无数据",{time: 2000});
+					return;
+				}
+				
 				return d.list;  //响应到页面的数据
 			},
 			total : function(d) {
@@ -204,7 +211,7 @@ $(function(){
 	//$("#sqs_id").kendoDropDownList();//送签社 初始化
 	$("#sqs_id").kendoDropDownList({
 		optionLabel: "送签社",
-		dataTextField: "comFullName",
+		dataTextField: "comName",
 		dataValueField: "id",
 		dataSource: {
 			transport: {
@@ -219,7 +226,7 @@ $(function(){
 	//$("#djs_id").kendoDropDownList();//地接社 初始化
 	$("#djs_id").kendoDropDownList({
 		optionLabel: "地接社",
-		dataTextField: "landcomFullName",
+		dataTextField: "comName",
 		dataValueField: "id",
 		dataSource: {
 			transport: {

@@ -115,6 +115,11 @@ var grid = $("#grid").kendoGrid({
 					$("#djs_count").html(1);
 				}
 				$("#total_count").html(recordcount);
+				
+				if(sqslist == "" || sqslist == null || sqslist == undefined){
+					layer.msg("暂无数据",{time: 2000});
+					return;
+				}
 
                 return sqslist;  //响应到页面的数据
             },
