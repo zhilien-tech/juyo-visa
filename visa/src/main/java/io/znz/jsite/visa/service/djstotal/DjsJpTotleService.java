@@ -47,6 +47,7 @@ public class DjsJpTotleService extends NutzBaseService {
 			CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
 			long comId = company.getComId();//得到公司的id
 			sqlForm.setComId(comId);
+			sqlForm.setUsertype(userType);
 		}
 
 		pager = new Pager();

@@ -80,6 +80,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
+import org.nutz.dao.util.cri.SqlExpressionGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -154,11 +155,64 @@ public class NewOrderJapanLandController {
 				form.setComIdList(str);
 			}
 		}
-		/*Cnd cnd = Cnd.NEW();
-		String sqlString = sqlManager.get("newcustomerjapan_list");
+		String sqlString = sqlManager.get("japanLand_select");
 		Sql sql = Sqls.create(sqlString);
-		sql.setParam("orderId", orderId);
-		List<NewCustomerJpEntity> query = DbSqlUtil.query(dbDao, NewCustomerJpEntity.class, sql);*/
+		String keywords = form.getKeywords();
+		if (!Util.isEmpty(keywords)) {
+			if (keywords.contains("@")) {
+				keywords = keywords.replace("@", "@");
+				/*SqlExpressionGroup e2 = Cnd.exps("c.chinesefullname", "like", "%" + keywords + "% escape /");
+				SqlExpressionGroup e6 = Cnd.exps("c.phone", "like", "%" + keywords + "% escape /");
+				SqlExpressionGroup e7 = Cnd.exps("c.familyphone", "like", "%" + keywords + "% escape /");
+				SqlExpressionGroup e8 = Cnd.exps("c.email", "like", "%" + keywords + "% escape /");
+				Cnd cnd = Cnd.NEW();
+				cnd.and(e2.or(e6).or(e7).or(e8));
+				sql.setCondition(cnd);*/
+			} else {
+
+			}
+			SqlExpressionGroup e2 = Cnd.exps("c.chinesefullname", "like", "%" + "@aaa" + "%");
+			SqlExpressionGroup e6 = Cnd.exps("c.phone", "like", "%" + "@aaa" + "%");
+			SqlExpressionGroup e7 = Cnd.exps("c.familyphone", "like", "%" + "@aaa" + "%");
+			SqlExpressionGroup e8 = Cnd.exps("c.email", "like", "%" + "@aaa" + "%");
+			Integer state = form.getState();
+			SqlExpressionGroup e1 = null;
+			if (!Util.isEmpty(state)) {
+
+				e1 = Cnd.exps("c.status", "=", form.getState());
+			}
+			Cnd cnd = Cnd.NEW();
+			if (!Util.isEmpty(e1)) {
+				cnd.and(e2.or(e6).or(e7).or(e8).or(e1));
+
+			} else {
+
+				cnd.and(e2.or(e6).or(e7).or(e8));
+			}
+			sql.setCondition(cnd);
+
+			String string = sql.toString();
+			if (!Util.isEmpty(keywords)) {
+				String replaceAll = string.replaceAll("@aaa", form.getKeywords());
+				Sql sql2 = Sqls.create(replaceAll);
+
+				sql = sql2;
+			}
+
+		}
+
+		List<NewOrderJpEntity> query = DbSqlUtil.query(dbDao, NewOrderJpEntity.class, sql);
+		String orderIds = "";
+		if (!Util.isEmpty(query) && query.size() > 0) {
+			for (NewOrderJpEntity newOrderJpEntity : query) {
+				if (!Util.isEmpty(newOrderJpEntity)) {
+					orderIds += newOrderJpEntity.getId() + ",";
+				}
+			}
+		}
+		if (!Util.isEmpty(orderIds)) {
+			form.setOrderIds(orderIds.substring(0, orderIds.length() - 1));
+		}
 		io.znz.jsite.core.entity.EmployeeEntity user = (io.znz.jsite.core.entity.EmployeeEntity) session
 				.getAttribute(Const.SESSION_NAME);
 		if (!Util.isEmpty(user)) {
