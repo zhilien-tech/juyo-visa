@@ -445,6 +445,18 @@ public class LoginController extends BaseController {
 								scenicmanage.setRemark("景点管理");
 								scenicmanage.setSort(24);
 								functions.add(scenicmanage);
+								//平台统计
+								FunctionEntity adminfun = new FunctionEntity();
+								adminfun.setId(30);
+								adminfun.setParentId(0);
+								adminfun.setFunName("统计");
+								adminfun.setUrl("systemStatistic/systemStatistic.html");
+								adminfun.setLevel(1);
+								adminfun.setCreateTime(new Date());
+								adminfun.setRemark("平台统计");
+								adminfun.setSort(26);
+								adminfun.setPortrait("fa fa-bar-chart-o");
+								functions.add(adminfun);
 								//日志记录
 								FunctionEntity logfun = new FunctionEntity();
 								logfun.setId(26);
@@ -454,21 +466,9 @@ public class LoginController extends BaseController {
 								logfun.setLevel(1);
 								logfun.setCreateTime(new Date());
 								logfun.setRemark("日志记录");
-								logfun.setSort(26);
-								logfun.setPortrait("fa fa-building-o");
+								logfun.setSort(30);
+								logfun.setPortrait("fa fa-bookmark-o");
 								functions.add(logfun);
-								//平台统计
-								FunctionEntity adminfun = new FunctionEntity();
-								adminfun.setId(30);
-								adminfun.setParentId(20);
-								adminfun.setFunName("统计");
-								adminfun.setUrl("systemStatistic/systemStatistic.html");
-								adminfun.setLevel(2);
-								adminfun.setCreateTime(new Date());
-								adminfun.setRemark("平台统计");
-								adminfun.setSort(30);
-								adminfun.setPortrait("");
-								functions.add(adminfun);
 								request.getSession().setAttribute(Const.AUTHS_KEY, functions);//功能session
 								return "redirect:" + to + "?auth=4," + "&username=" + fullname + "&logintype=" + 4
 										+ "&userType=" + userType;
@@ -600,14 +600,14 @@ public class LoginController extends BaseController {
 		//日本地接统计
 		FunctionEntity djsjptotal = new FunctionEntity();
 		djsjptotal.setId(29);
-		djsjptotal.setParentId(17);
+		djsjptotal.setParentId(0);
 		djsjptotal.setFunName("统计");
 		djsjptotal.setUrl("djsJptotal/djsJptotal.html");
-		djsjptotal.setLevel(2);
+		djsjptotal.setLevel(1);
 		djsjptotal.setCreateTime(new Date());
 		djsjptotal.setRemark("日本地接社统计");
 		djsjptotal.setSort(29);
-		djsjptotal.setPortrait("");
+		djsjptotal.setPortrait("fa fa-bar-chart-o");
 		functions.add(djsjptotal);
 		return functions;
 	}
