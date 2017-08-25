@@ -144,18 +144,52 @@ function regCmd(command) {
                 			
                 		}
                 	});*/
+                	//先验证再选择地接社和送签社
+                	var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+                	$.getJSON("/visa/neworderjp/validate?type=order&orderid=" + data.id, {}, function (resp) {
+                		if(index!=null){
+
+            				layer.close(index);
+            			}
+                		if (resp.code === "SUCCESS") {
+                		  	layer.open({
+            					type: 2,
+            					title: '下载',
+            					area: ['450px', '300px'],
+            					shadeClose: false,
+            					content: '/order/download.html?cid='+data.id,
+            					end: function(){//添加完页面点击返回的时候自动加载表格数据
+            						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            						parent.layer.close(index);
+            					}
+            				});
+
+                		} else if(resp.code === "FAIL"){
+                			if(index!=null){
+
+                				layer.close(index);
+                			}
+                			/*var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                			 //$.layer.closeAll();
+                			 parent.layer.close(index);
+                			 window.parent.successCallback('6');*/
+                			$.layer.alert(resp.msg);
+                		}else{
+                			if(index!=null){
+
+                				layer.close(index);
+                			}
+                			/*var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                			 //$.layer.closeAll();
+                			 parent.layer.close(index);
+                			 window.parent.successCallback('6');*/
+                			$.layer.alert(resp.msg);
+
+                		}
+                	});
                 	
-                	layer.open({
-    					type: 2,
-    					title: '下载',
-    					area: ['450px', '300px'],
-    					shadeClose: false,
-    					content: '/order/download.html?cid='+data.id,
-    					end: function(){//添加完页面点击返回的时候自动加载表格数据
-    						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-    						parent.layer.close(index);
-    					}
-    				});
+                	
+              
                 	break;
                 case "noticeall":
                 	if (!(data = select(e))) return;
