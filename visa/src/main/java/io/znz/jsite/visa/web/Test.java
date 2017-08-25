@@ -6,7 +6,9 @@
 
 package io.znz.jsite.visa.web;
 
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -16,15 +18,34 @@ import java.util.HashMap;
  * @author   孙斌
  * @Date	 2017年6月14日 	 
  */
-public class Test {
-	public static final String HASH_ALGORITHM = "SHA-1";
-	public static final int HASH_INTERATIONS = 1024;
-	private static final int SALT_SIZE = 8; //盐长度
+public abstract class Test {
+	public Test() {
 
-	public static void main(String[] args) {
-		int[] a = { 1, 2 };
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("a", "b");
-		int[] object = (int[]) map.get("a");
+	}
+
+	public static void main(String args[]) {
+		String strInput = "abacacde";
+		//			Test ts = new Test();
+		//		System.out.println(ts.strFilter(strInput));
+	}
+
+	public String strFilter(String strInput) {
+
+		//No.1
+		//开始写代码， 在此写入实现代码。 
+		String temp = "";
+		Set<String> s = new HashSet<String>();
+		for (int i = 0; i < strInput.length(); i++) {
+			s.add(strInput.charAt(i) + "");
+		}
+		Iterator<String> it = s.iterator();
+		while (it.hasNext()) {
+			String str = it.next();
+			temp += str;
+		}
+
+		//end_code
+
+		return temp;
 	}
 }

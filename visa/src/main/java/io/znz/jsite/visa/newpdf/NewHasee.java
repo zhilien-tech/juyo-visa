@@ -144,8 +144,8 @@ public class NewHasee extends NewTemplate {
 			}
 			NewTripJpEntity entry = order.getTripJp();
 
-			if (entry == null)
-				throw new JSiteException("入境信息不能为空!");
+			/*if (entry == null)
+				throw new JSiteException("入境信息不能为空!");*/
 			/*	DateTime dt = new DateTime(startDate);
 				if (dt.isBeforeNow()) {
 					throw new JSiteException("入境时间不能在当前时间之前!");
@@ -166,8 +166,8 @@ public class NewHasee extends NewTemplate {
 			}
 			NewTripJpEntity depart = order.getTripJp();
 			//Ticket depart = order.getDepart();
-			if (depart == null)
-				throw new JSiteException("出境信息不能为空!");
+			/*if (depart == null)
+				throw new JSiteException("出境信息不能为空!");*/
 			/*if (dt.isAfter(endDate.getTime())) {
 				throw new JSiteException("出境时间不能在入境时间之前!");
 			}*/
@@ -535,8 +535,11 @@ public class NewHasee extends NewTemplate {
 							}
 
 						}
+						int relation = 8;
 						//pdf主副申请人关系处理
-						int relation = proposerList.get(0).getRelation();
+						if (!Util.isEmpty(proposerList.get(0).getRelation())) {
+							relation = proposerList.get(0).getRelation();
+						}
 						String relationStr = "";
 						if (!Util.isEmpty(relation)) {
 
