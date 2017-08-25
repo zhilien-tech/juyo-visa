@@ -9,8 +9,8 @@ package io.znz.jsite.visa.service.sqsjptotal;
 import io.znz.jsite.base.NutzBaseService;
 import io.znz.jsite.core.entity.companyjob.CompanyJobEntity;
 import io.znz.jsite.core.util.Const;
+import io.znz.jsite.visa.entity.company.CompanyEntity;
 import io.znz.jsite.visa.entity.japan.NewComeBabyJpDjsEntity;
-import io.znz.jsite.visa.entity.japan.NewComeBabyJpEntity;
 import io.znz.jsite.visa.forms.sqstotal.SqlJpTotalForm;
 
 import java.util.ArrayList;
@@ -48,10 +48,10 @@ public class SqsJpTotleService extends NutzBaseService {
 		//通过session获取公司的id
 		CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
 		long comId = company.getComId();//得到公司的id
-		List<NewComeBabyJpEntity> sqsCompList = Lists.newArrayList();
+		List<CompanyEntity> sqsCompList = Lists.newArrayList();
 		List<NewComeBabyJpDjsEntity> disCompList = Lists.newArrayList();
 		if (compType == 1) {
-			sqsCompList = dbDao.query(NewComeBabyJpEntity.class, Cnd.where("comId", "=", comId), null);
+			sqsCompList = dbDao.query(CompanyEntity.class, Cnd.where("id", "=", comId), null);
 			return sqsCompList;
 		}
 		if (compType == 2) {

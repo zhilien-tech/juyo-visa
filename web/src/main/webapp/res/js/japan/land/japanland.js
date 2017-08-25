@@ -240,7 +240,7 @@ function regCmd(command) {
 		              		type: 2,
 		              		title: '编辑客户信息',
 		              		area: ['950px', '600px'],
-		              		shadeClose: true,
+		              		shadeClose: false,
 		              		content: '/japan/japancustomerEdit.html?cid=' + data.id + "&check=true"
 		              	});
 		              	break;
@@ -250,7 +250,7 @@ function regCmd(command) {
                         type: 2,
                         title: '编辑订单',
                         area: ['950px', '600px'],
-                        shadeClose: true,
+                        shadeClose: false,
                         content: '/japan/japanEdit.html?cid=' + data.id + "&check=true"
                     });
                     break;

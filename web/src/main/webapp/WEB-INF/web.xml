@@ -6,7 +6,7 @@
 
   <display-name>JSite WEB</display-name>
   	<session-config>
-		<session-timeout>60</session-timeout>
+		<session-timeout>720</session-timeout>
 	</session-config>
 	<!-- SSL -->
 	<!-- <login-config> 

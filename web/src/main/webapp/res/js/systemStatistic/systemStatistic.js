@@ -114,6 +114,12 @@ var grid = $("#grid").kendoGrid({
 					$("#djsCount").html(1);
 				}
 				$("#allCount").html(allCount);
+				
+				
+				if(d.list == null || d.list == "" || d.list == undefined){
+					$('.k-grid-content').append('<span style="display: block;text-align: center;line-height:3rem;color: #dcdcdc;font-size: 13px;">暂&nbsp;无&nbsp;可&nbsp;用&nbsp;数&nbsp;据</span>');
+				}
+				
 				return d.list;  //响应到页面的数据
 			},
 			total : function(d) {
@@ -204,7 +210,7 @@ $(function(){
 	//$("#sqs_id").kendoDropDownList();//送签社 初始化
 	$("#sqs_id").kendoDropDownList({
 		optionLabel: "送签社",
-		dataTextField: "comFullName",
+		dataTextField: "comName",
 		dataValueField: "id",
 		dataSource: {
 			transport: {
@@ -219,7 +225,7 @@ $(function(){
 	//$("#djs_id").kendoDropDownList();//地接社 初始化
 	$("#djs_id").kendoDropDownList({
 		optionLabel: "地接社",
-		dataTextField: "landcomFullName",
+		dataTextField: "comName",
 		dataValueField: "id",
 		dataSource: {
 			transport: {

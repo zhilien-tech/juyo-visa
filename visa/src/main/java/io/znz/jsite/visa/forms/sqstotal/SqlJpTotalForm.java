@@ -82,7 +82,8 @@ public class SqlJpTotalForm extends KenDoParamForm {
 		Cnd cnd = Cnd.NEW();
 		//送签社
 		if (!Util.isEmpty(sqs_id) && !sqs_id.equals("-1")) {
-			cnd.and("vnoj.sendComId", "=", sqs_id);
+			cnd.and("c.id", "=", comId);
+			//cnd.and("vnoj.sendComId", "=", sqs_id);
 		}
 		//地接社
 		if (!Util.isEmpty(djs_id) && !djs_id.equals("-1")) {

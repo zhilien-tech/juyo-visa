@@ -3,31 +3,33 @@ SELECT
 	vnoj.id,
 	vnoj.comId,
 	c.comType,
-	(
+		(
 		SELECT
 			COUNT(*)
 		FROM
-			visa_new_comebaby_jp
+			visa_new_company where comType=1
 	) AS sqscount,
 	(
 		SELECT
-			COUNT(*)
+			COUNT(*)+1
 		FROM
-			visa_new_comebaby_jp_djs
+			visa_new_company where comType=2
 	) AS djscount,
 	vnoj.ordernumber,
-	come.comFullName,
-	vnoj.completedNumber,
-	eee.fullName AS username,
-	djs.landcomFullName,
-	vnoj.headnum,
-	vnoj.visatype,
-	vnoj.senddate,
-	vnoj.outdate,
-	vnoj.updatetime,
-	vnoj.countrytype,
-	vnoj.`status`,
-	vnoj.createtime,
+
+IF (c.comType = 1, c.comName, '') AS 'comFullName',
+ vnoj.completedNumber,
+ eee.fullName AS username,
+
+IF (c.comType = 2, c.comName, IF (vnoj.comId = 0, '株式会社金通商事', '')) AS 'landcomFullName',
+ vnoj.headnum,
+ vnoj.visatype,
+ vnoj.senddate,
+ vnoj.outdate,
+ vnoj.updatetime,
+ vnoj.countrytype,
+ vnoj.`status`,
+ vnoj.createtime,
 
 IF (
 	aaa.oneormore = 0,

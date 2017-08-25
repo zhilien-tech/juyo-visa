@@ -112,7 +112,6 @@ var grid = $("#grid").kendoGrid({
         schema: {
         	data : function(d) {
         		var sqslist = d.list;
-        		console.log(JSON.stringify(sqslist));
         		if(sqslist != "" && sqslist  != null && sqslist != undefined){
         			sqscount = sqslist[0].sqscount;//送签社
         			djscount = sqslist[0].djscount;//地接社
@@ -131,7 +130,9 @@ var grid = $("#grid").kendoGrid({
 					$("#djs_count").html(1);
 				}
 				$("#total_count").html(recordcount);
-
+				if(sqslist == "" || sqslist == null || sqslist == undefined){
+					$('.k-grid-content').append('<span style="display: block;text-align: center;line-height:3rem;color: #dcdcdc;font-size: 13px;">暂&nbsp;无&nbsp;可&nbsp;用&nbsp;数&nbsp;据</span>');
+				}
                 return sqslist;  //响应到页面的数据
             },
             total : function(d) {
@@ -151,7 +152,7 @@ var grid = $("#grid").kendoGrid({
         	template: "<span class='row-number'></span>" 
         },
         {field: 'ordernumber', title: ' 订单号', width: 150},
-        {field: 'comfullname', title: '送签社'},
+        {field: 'comname', title: '送签社'},
         {field: 'username', title: '操作人'},
         {field: 'landcomfullname', title: '地接社'},
         {field: 'completednumber', title: '受付番号'},
@@ -190,7 +191,7 @@ $(function(){
 	
 	$("#sqs_id").kendoDropDownList({
 		optionLabel: "送签社",
-		dataTextField: "comFullName",
+		dataTextField: "comName",
 		dataValueField: "id",
 		dataSource: {
 			transport: {
