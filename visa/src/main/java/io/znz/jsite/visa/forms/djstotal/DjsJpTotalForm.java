@@ -6,6 +6,7 @@
 
 package io.znz.jsite.visa.forms.djstotal;
 
+import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
 import io.znz.jsite.visa.form.KenDoParamForm;
 
 import java.util.Date;
@@ -95,6 +96,14 @@ public class DjsJpTotalForm extends KenDoParamForm {
 			if (!Util.isEmpty(sqs_id) && !sqs_id.equals("-1")) {
 				cnd.and("c.id", "=", sqs_id);
 			}
+			//递送之后的单子
+			SqlExpressionGroup e1 = Cnd.exps("vnoj.status", "=", OrderVisaApproStatusEnum.readySubmit.intKey());
+			SqlExpressionGroup e2 = Cnd.exps("vnoj.status", ">", OrderVisaApproStatusEnum.japansend.intKey());
+			cnd.and(e1.or(e2));
+			//送签社 or 1507账号
+			SqlExpressionGroup e3 = Cnd.exps("c.comType", "=", 1);
+			SqlExpressionGroup e4 = Cnd.exps("vnoj.comId", "=", 0);
+			cnd.and(e3.or(e4));
 		} else {
 			if (!Util.isEmpty(sqs_id) && !sqs_id.equals("-1")) {
 				cnd.and("vnoj.sendComId", "=", sqs_id);
@@ -104,7 +113,9 @@ public class DjsJpTotalForm extends KenDoParamForm {
 
 		//地接社
 		if (!Util.isEmpty(djs_id) && !djs_id.equals("-1")) {
-			cnd.and("vnoj.landComId", "=", djs_id);
+			SqlExpressionGroup e3 = Cnd.exps("vnoj.comId", "=", 0);
+			SqlExpressionGroup e4 = Cnd.exps("vnoj.landComId", "=", djs_id);
+			cnd.and(e3.or(e4));
 		}
 
 		//时间

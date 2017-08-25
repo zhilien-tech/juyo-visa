@@ -83,6 +83,7 @@ public class NewSysStatisticSqlForm extends KenDoParamForm {
 				cnd.and("c.id", "=", djs_id);
 			}
 		}
+		cnd.orderBy("vnoj.createTime", "DESC");
 		return cnd;
 	}
 
