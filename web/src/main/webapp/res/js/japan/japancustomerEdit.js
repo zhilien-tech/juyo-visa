@@ -141,26 +141,29 @@ var viewModel = kendo.observable({
      		var passporteffectdate=JSON.stringify(passporteffectdate).substring(0,10);
      	}*/
      	//日期差
-     	var dateDifference =null;
-		var a=myDate.getTime();//系统日期
-		var b=passporteffectdate.getTime();//签证有效日期
-		var daynum=(b-a)/(1000*3600*24);
-		if(daynum<0){
-			dateDifference = 0;
-		}else if(daynum>0){
-			dateDifference = Math.ceil(daynum);
-		}
-		//当前系统时间和签证有效日期对比
-		if(dateDifference<180){
-			$('.msgg').remove();
-	 		$('#div11 .k-datepicker').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照已过期,请及时更换</span>");
-		}else if(dateDifference>180 && dateDifference<240){
-			$('.msgg').remove();
-	 		$('#div11 .k-datepicker').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照即将过期，请及时更换</span>");
-		}else if(dateDifference>240){
-			$('.msgg').remove();
-			
-		}
+     	if(passporteffectdate!=null&&passporteffectdate!=''&&passporteffectdate!=undefined){
+     		var dateDifference =null;
+    		var a=myDate.getTime();//系统日期
+    		var b=passporteffectdate.getTime();//签证有效日期
+    		var daynum=(b-a)/(1000*3600*24);
+    		if(daynum<0){
+    			dateDifference = 0;
+    		}else if(daynum>0){
+    			dateDifference = Math.ceil(daynum);
+    		}
+    		//当前系统时间和签证有效日期对比
+    		if(dateDifference<180){
+    			$('.msgg').remove();
+    	 		$('#div11 .k-datepicker').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照已过期,请及时更换</span>");
+    		}else if(dateDifference>180 && dateDifference<240){
+    			$('.msgg').remove();
+    	 		$('#div11 .k-datepicker').append("<span class='msgg k-widget k-tooltip k-tooltip-validation k-invalid-msg'><span class='k-icon k-i-warning'> </span>您的护照即将过期，请及时更换</span>");
+    		}else if(dateDifference>240){
+    			$('.msgg').remove();
+    			
+    		}
+     	}
+     	
         
     },
     showSaveBtn: function () {

@@ -101,7 +101,7 @@ function downloadsave(){
 	
 	
 	var index= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
-	$.getJSON("/visa/neworderjp/validate?type=order&orderid=" + $.queryString("cid")+"&sendComId="+sendComId+"&landComId="+landComId, {}, function (resp) {
+	$.getJSON("/visa/neworderjp/downloadselectsavenew?type=order&orderid=" + $.queryString("cid")+"&sendComId="+sendComId+"&landComId="+landComId, {}, function (resp) {
 		if (resp.code === "SUCCESS") {
 			if(index!=null){
 
