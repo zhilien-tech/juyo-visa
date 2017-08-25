@@ -39,6 +39,7 @@ public class NewOrderJapanLandSqlForm extends KenDoParamForm {
 	private long customerid;
 	private int userType;
 	private String comIdList;
+	private String orderIds;
 
 	@Override
 	public Sql sql(SqlManager paramSqlManager) {
@@ -48,8 +49,19 @@ public class NewOrderJapanLandSqlForm extends KenDoParamForm {
 		 */
 		String sqlString = paramSqlManager.get("newcustomerjapan_landlist");
 		Sql sql = Sqls.create(sqlString);
+
 		sql.setCondition(cnd());
+		String string = sql.toString();
+		if (!Util.isEmpty(keywords)) {
+			String replaceAll = string.replaceAll("@aaa", this.keywords);
+			Sql sql2 = Sqls.create(replaceAll);
+
+			return sql2;
+		}
+		/*sql.setParam("ordernumber", keywords);
+		sql.setParam("aaa", keywords);*/
 		return sql;
+
 	}
 
 	private Cnd cnd() {
@@ -71,22 +83,59 @@ public class NewOrderJapanLandSqlForm extends KenDoParamForm {
 			cnd.and(e1.or(e2));
 		}
 		if (!Util.isEmpty(keywords)) {
-			SqlExpressionGroup e1 = Cnd.exps("vnoj.ordernumber", "like", "%" + keywords + "%");
-			SqlExpressionGroup e2 = Cnd.exps("iii.chinesefullname", "like", "%" + keywords + "%");
-			SqlExpressionGroup e3 = Cnd.exps("qqq.telephone", "like", "%" + keywords + "%");
-			SqlExpressionGroup e4 = Cnd.exps("qqq.email", "like", "%" + keywords + "%");
-			SqlExpressionGroup e5 = Cnd.exps("qqq.linkman", "like", "%" + keywords + "%");
-			SqlExpressionGroup e6 = Cnd.exps("iii.phone", "like", "%" + keywords + "%");
+			if (keywords.contains("@")) {
+				keywords = keywords.replace("@", "@");
+				/*SqlExpressionGroup e1 = Cnd.exps("vnoj.ordernumber", "like", "%" + keywords + "% escape /");
+				SqlExpressionGroup e2 = null;
+				if (!Util.isEmpty(this.orderIds)) {
+
+					e2 = Cnd.exps("vnoj.id", "in", this.orderIds);
+				}
+							SqlExpressionGroup e2 = Cnd.exps("iii.chinesefullname", "like", "%" + keywords + "%");
+				 SqlExpressionGroup e3 = Cnd.exps("qqq.telephone", "like", "%" + keywords + "% escape /");
+				SqlExpressionGroup e4 = Cnd.exps("qqq.email", "like", "%" + keywords + "% escape /");
+				SqlExpressionGroup e5 = Cnd.exps("qqq.linkman", "like", "%" + keywords + "% escape /");
+				SqlExpressionGroup e6 = Cnd.exps("iii.phone", "like", "%" + keywords + "%");
+				SqlExpressionGroup e7 = Cnd.exps("iii.familyphone", "like", "%" + keywords + "%");
+				SqlExpressionGroup e8 = Cnd.exps("iii.email", "like", "%" + keywords + "%");
+				if (!Util.isEmpty(e2)) {
+					cnd.and(e1.or(e2).or(e3).or(e4).or(e5).or(e2));
+
+				} else {
+
+					cnd.and(e1.or(e2).or(e3).or(e4).or(e5));
+				}*/
+			} else {
+
+			}
+			SqlExpressionGroup e1 = Cnd.exps("vnoj.ordernumber", "like", "%" + "@aaa" + "%");
+			SqlExpressionGroup e2 = null;
+			if (!Util.isEmpty(this.orderIds)) {
+
+				e2 = Cnd.exps("vnoj.id", "in", this.orderIds);
+			}
+			/*			SqlExpressionGroup e2 = Cnd.exps("iii.chinesefullname", "like", "%" + keywords + "%");
+			 */SqlExpressionGroup e3 = Cnd.exps("qqq.telephone", "like", "%" + "@aaa" + "%");
+			SqlExpressionGroup e4 = Cnd.exps("qqq.email", "like", "%" + "@aaa" + "%");
+			SqlExpressionGroup e5 = Cnd.exps("qqq.linkman", "like", "%" + "@aaa" + "%");
+			/*SqlExpressionGroup e6 = Cnd.exps("iii.phone", "like", "%" + keywords + "%");
 			SqlExpressionGroup e7 = Cnd.exps("iii.familyphone", "like", "%" + keywords + "%");
-			SqlExpressionGroup e8 = Cnd.exps("iii.email", "like", "%" + keywords + "%");
-			cnd.and(e1.or(e2).or(e3).or(e4).or(e5).or(e6).or(e7).or(e8));
+			SqlExpressionGroup e8 = Cnd.exps("iii.email", "like", "%" + keywords + "%");*/
+			if (!Util.isEmpty(e2)) {
+				cnd.and(e1.or(e2).or(e3).or(e4).or(e5).or(e2));
+
+			} else {
+
+				cnd.and(e1.or(e2).or(e3).or(e4).or(e5));
+			}
 			//			cnd.and(e1);
 		}
 		if (!Util.isEmpty(state) && state > 0) {
 			SqlExpressionGroup e1 = Cnd.exps("vnoj.status", "=", state);
-			SqlExpressionGroup e2 = Cnd.exps("vncj.status", "=", state);
+			/*SqlExpressionGroup e2 = Cnd.exps("vncj.status", "=", state);*/
 			//			cnd.and(e1).or(e2);
-			cnd.and(e1.or(e2));
+			//			cnd.and(e1.or(e2));
+			cnd.and(e1);
 		}
 		if (UserLoginEnum.JP_DJS_ADMIN.intKey() == userType) {
 

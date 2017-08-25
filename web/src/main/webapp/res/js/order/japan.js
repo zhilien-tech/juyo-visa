@@ -127,7 +127,7 @@ function regCmd(command) {
 					type: 2,
 					title: '下载',
 					area: ['450px', '300px'],
-					shadeClose: true,
+					shadeClose: false,
 					content: '/order/download.html?cid='+data.id,
 					end: function(){//添加完页面点击返回的时候自动加载表格数据
 						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
@@ -165,7 +165,7 @@ function regCmd(command) {
 					type: 2,
 					title: '编辑客户信息',
 					area: ['950px', '600px'],
-					shadeClose: true,
+					shadeClose: false,
 					content: '/japan/japancustomerEdit.html?cid=' + data.id + "&check=true"
 				});
 				break;
@@ -175,7 +175,7 @@ function regCmd(command) {
 					type: 2,
 					title: '编辑订单',
 					area: ['950px', '600px'],
-					shadeClose: true,
+					shadeClose: false,
 					content: '/japan/japanEdit.html?cid=' + data.id + "&check=true"
 				});
 				break;

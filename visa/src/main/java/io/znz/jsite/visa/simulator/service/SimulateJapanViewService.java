@@ -45,6 +45,7 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.lang.Files;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.uxuexi.core.common.util.Util;
@@ -64,6 +65,7 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 	private QiniuUploadServiceImpl qiniuUploadService;
 
 	/**查询第一个可提交签证网站的日本客户信息*/
+	@Transactional
 	public ResultObject fetchJapanOrder() {
 		/*List<NewOrderJpEntity> orderListSubmiting = dbDao.query(NewOrderJpEntity.class,
 				Cnd.where("status", "=", VisaJapanApproStatusEnum.japancoming.intKey()), null);
@@ -88,6 +90,7 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 	}
 
 	@SuppressWarnings("null")
+	@Transactional
 	public ResultObject getJapanOrderInfo() {
 		List<NewOrderJpEntity> orderList = dbDao.query(NewOrderJpEntity.class,
 				Cnd.where("status", "=", VisaJapanApproStatusEnum.readySubmit.intKey()), null);
@@ -224,15 +227,23 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 			}
 			if (!Util.isEmpty(map)) {
 				ResultObject ro = ResultObject.success(map);
+				String ordernumber = orderList.get(0).getOrdernumber();
 
 				ro.addAttribute("oid", orderid + "");
+				/*	if (!Util.isEmpty(ordernumber)) {
+						ro.addAttribute("oid", ordernumber);
 
+					} else {
+						ro.addAttribute("oid", "");
+
+					}*/
 				return ro;
 			}
 		}
 		return ResultObject.fail("暂无任务");
 	}
 
+	@Transactional
 	public Object ds160Japan(Long cid) {
 
 		if (Util.isEmpty(cid)) {
@@ -261,6 +272,7 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 
 	}
 
+	@Transactional
 	public Object UploadJapan(MultipartFile file, Long cid, JapanSimulatorForm jpForm) {
 		if (Util.isEmpty(cid)) {
 			return ResultObject.fail("任务id不能为空！");
@@ -307,6 +319,7 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 	 * @param jpForm
 	 * @param response 
 	 */
+	@Transactional
 	public void agentDownload(final JapanSimulatorForm jpForm, HttpServletResponse response) {
 		InputStream is = null;
 		OutputStream out = null;
@@ -367,6 +380,7 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 		}//end of outter try
 	}
 
+	@Transactional
 	public void japanErrorHandle(JapanErrorHandleForm jpForm, HttpServletResponse response, Long cid) {
 		if (!Util.isEmpty(cid) && cid > 0) {
 			NewOrderJpEntity order = dbDao.fetch(NewOrderJpEntity.class, cid);

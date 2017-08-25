@@ -523,17 +523,17 @@ public abstract class NewTemplate {
 			if (!Util.isEmpty(startDate)) {
 
 				dtEntry = new DateTime(startDate);
-				if (dtEntry.isBeforeNow()) {
-					throw new JSiteException("入境时间不能在当前时间之前!");
-				}
+				/*	if (dtEntry.isBeforeNow()) {
+						throw new JSiteException("入境时间不能在当前时间之前!");
+					}*/
 				map.put("topmostSubform[0].Page1[0].#area[21].T68[2]", df1.format(startDate));
 			}
 			if (!Util.isEmpty(endDate)) {
 
 				dtDepart = new DateTime(endDate);
-				if (dtDepart.isBefore(startDate.getTime())) {
+				/*if (dtDepart.isBefore(startDate.getTime())) {
 					throw new JSiteException("出境时间不能在入境时间之前!");
-				}
+				}*/
 				map.put("topmostSubform[0].Page1[0].#area[21].T68[3]", df1.format(endDate));
 			}
 			if (!Util.isEmpty(dtEntry) && !Util.isEmpty(dtDepart)) {
