@@ -149,7 +149,7 @@ function regCmd(command) {
     					type: 2,
     					title: '下载',
     					area: ['450px', '300px'],
-    					shadeClose: true,
+    					shadeClose: false,
     					content: '/order/download.html?cid='+data.id,
     					end: function(){//添加完页面点击返回的时候自动加载表格数据
     						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
