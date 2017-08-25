@@ -140,7 +140,7 @@ function regCmd(command) {
 						type: 2,
 						title: '编辑-日本招宝信息',
 						area: ['550px', '610px'],
-						shadeClose: true,
+						shadeClose: false,
 						content: '/comebaby/comebabyEdit.html?cid=' + data.id + "&check=true"
 					});
 				}
@@ -155,7 +155,7 @@ function regCmd(command) {
 					type: 2,
 					title: '编辑客户信息',
 					area: ['550px', '600px'],
-					shadeClose: true,
+					shadeClose: false,
 					content: '/comebaby/comebabyEdit.html?cid=' + data.id + "&check=true"
 				});
 				break;
