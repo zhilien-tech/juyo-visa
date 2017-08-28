@@ -230,13 +230,13 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 				String ordernumber = orderList.get(0).getOrdernumber();
 
 				ro.addAttribute("oid", orderid + "");
-				/*	if (!Util.isEmpty(ordernumber)) {
-						ro.addAttribute("oid", ordernumber);
+				if (!Util.isEmpty(ordernumber)) {
+					ro.addAttribute("ordernumber", ordernumber);
 
-					} else {
-						ro.addAttribute("oid", "");
+				} else {
+					ro.addAttribute("ordernumber", "");
 
-					}*/
+				}
 				return ro;
 			}
 		}
