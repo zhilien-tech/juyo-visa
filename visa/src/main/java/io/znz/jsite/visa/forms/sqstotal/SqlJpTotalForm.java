@@ -109,9 +109,11 @@ public class SqlJpTotalForm extends KenDoParamForm {
 			cnd.and(e1.or(e2));
 		}
 		if (!Util.isEmpty(keyword)) {
-			cnd.and("vnoj.ordernumber", "like", "%" + keyword + "%").or("eee.fullName", "like", "%" + keyword + "%")
-					.or("vnoj.completedNumber", "like", "%" + keyword + "%")
-					.or("mm.chinesefullname", "like", "%" + keyword + "%");
+			SqlExpressionGroup e1 = Cnd.exps("vnoj.ordernumber", "like", "%" + keyword + "%");
+			SqlExpressionGroup e2 = Cnd.exps("vnoj.completedNumber", "like", "%" + keyword + "%");
+			SqlExpressionGroup e3 = Cnd.exps("mm.chinesefullname", "like", "%" + keyword + "%");
+			SqlExpressionGroup e4 = Cnd.exps("eee.fullName", "like", "%" + keyword + "%");
+			cnd.and(e1.or(e2).or(e3).or(e4));
 		}
 		cnd.and("vnoj.comId", "=", comId);
 		cnd.orderBy("vnoj.createTime", "DESC");
