@@ -94,7 +94,8 @@ public class DjsJpTotalForm extends KenDoParamForm {
 		if (usertype == 6) {
 			//1507-001 账号专用
 			if (!Util.isEmpty(sqs_id) && !sqs_id.equals("-1")) {
-				cnd.and("c.id", "=", sqs_id);
+				/*cnd.and("c.id", "=", sqs_id);*/
+				cnd.and("vnoj.sendComId", "=", sqs_id);
 			}
 			//递送之后的单子
 			SqlExpressionGroup e1 = Cnd.exps("vnoj.status", "=", OrderVisaApproStatusEnum.readySubmit.intKey());
@@ -104,6 +105,9 @@ public class DjsJpTotalForm extends KenDoParamForm {
 			SqlExpressionGroup e3 = Cnd.exps("c.comType", "=", 1);
 			SqlExpressionGroup e4 = Cnd.exps("vnoj.comId", "=", 0);
 			cnd.and(e3.or(e4));
+			//只展示有关系的单子
+			cnd.and("vnoj.sendComId", ">", "0");
+			cnd.and("vnoj.landComId", ">", "0");
 		} else {
 			if (!Util.isEmpty(sqs_id) && !sqs_id.equals("-1")) {
 				cnd.and("vnoj.sendComId", "=", sqs_id);
@@ -139,7 +143,6 @@ public class DjsJpTotalForm extends KenDoParamForm {
 					.or("vnoj.completedNumber", "like", "%" + keyword + "%")
 					.or("mm.chinesefullname", "like", "%" + keyword + "%");
 		}
-
 		cnd.orderBy("vnoj.createTime", "DESC");
 		return cnd;
 	}

@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Sqls;
+import org.nutz.dao.entity.Record;
+import org.nutz.dao.sql.Sql;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,21 +36,43 @@ public class NewSystemStatisticService extends NutzBaseService {
 	//下拉列表
 	public Object compSelectfind(int compType) {
 		List<CompanyEntity> companyList = Lists.newArrayList();
+		List<NewComeBabyJpEntity> sqsCompList = Lists.newArrayList();
+		List<NewComeBabyJpDjsEntity> disCompList = Lists.newArrayList();
 
 		if (compType == 1) {
 			//送签社
-			companyList = dbDao.query(CompanyEntity.class, Cnd.where("comType", "=", compType), null);
+			//companyList = dbDao.query(CompanyEntity.class, Cnd.where("comType", "=", compType), null);
+			Sql sql = Sqls.create(sqlManager.get("system_statistic_sqsbaby"));
+			Cnd cnd = Cnd.NEW();
+			cnd.and("vnoj.sendComId", ">", "0");
+			cnd.and("vnoj.landComId", ">", "0");
+			cnd.orderBy("vncj.id", null);
 
-		} else {
+			List<Record> record = dbDao.query(sql, null, null);
+			for (Record rec : record) {
+				NewComeBabyJpEntity sqsEntity = new NewComeBabyJpEntity();
+				String id = rec.getString("id");
+				String comfullname = rec.getString("comfullname");
+				sqsEntity.setId(Long.valueOf(id));
+				sqsEntity.setComFullName(comfullname);
+				sqsCompList.add(sqsEntity);
+			}
+			return sqsCompList;
+		}
+		//地接社
+		if (compType == 2) {
 			//地接社
-			companyList = dbDao.query(CompanyEntity.class, Cnd.where("comType", "=", compType), null);
+			/*companyList = dbDao.query(CompanyEntity.class, Cnd.where("comType", "=", compType), null);
 			CompanyEntity djsComp = new CompanyEntity();
 			djsComp.setId(0);
 			djsComp.setComName("株式会社金通商事");
-			companyList.add(0, djsComp);
+			companyList.add(0, djsComp);*/
+
+			disCompList = dbDao.query(NewComeBabyJpDjsEntity.class, null, null);
+			return disCompList;
 		}
-		int size = companyList.size();
-		return companyList;
+		/*return companyList;*/
+		return new ArrayList();
 	}
 
 	//招宝信息统计

@@ -3,33 +3,35 @@ SELECT
 	vnoj.id,
 	vnoj.comId,
 	c.comType,
-		(
+	(
 		SELECT
 			COUNT(*)
 		FROM
-			visa_new_company where comType=1
+			visa_new_company
+		WHERE
+			comType = 1
 	) AS sqscount,
 	(
 		SELECT
-			COUNT(*)+1
+			COUNT(*)
 		FROM
-			visa_new_company where comType=2
+			visa_new_comebaby_jp_djs
 	) AS djscount,
 	vnoj.ordernumber,
-
-IF (c.comType = 1, c.comName, '') AS 'comFullName',
- vnoj.completedNumber,
- eee.fullName AS username,
-
-IF (c.comType = 2, c.comName, IF (vnoj.comId = 0, '株式会社金通商事', '')) AS 'landcomFullName',
- vnoj.headnum,
- vnoj.visatype,
- vnoj.senddate,
- vnoj.outdate,
- vnoj.updatetime,
- vnoj.countrytype,
- vnoj.`status`,
- vnoj.createtime,
+	vnoj.sendComId,
+	come.comFullName,
+	vnoj.completedNumber,
+	eee.fullName AS username,
+	djs.landcomFullName,
+	vnoj.landComId,
+	vnoj.headnum,
+	vnoj.visatype,
+	vnoj.senddate,
+	vnoj.outdate,
+	vnoj.updatetime,
+	vnoj.countrytype,
+	vnoj.`status`,
+	vnoj.createtime,
 
 IF (
 	aaa.oneormore = 0,
@@ -52,56 +54,6 @@ IF (
 FROM
 	visa_new_order_jp vnoj
 LEFT JOIN visa_new_customersource_jp vcm ON vnoj.id = vcm.order_jp_id
-LEFT JOIN (
-	SELECT
-		*
-	FROM
-		(
-			SELECT
-				aa.ismainproposer,
-				vnoj.id AS 'orderid',
-				vncj.*, concat(
-					vncj.chinesexingen,
-					vncj.chinesenameen
-				) AS 'fullnameen'
-			FROM
-				visa_new_customer_jp vncj
-			LEFT JOIN visa_new_customer_order_jp vncoj ON vncj.id = vncoj.customer_jp_id
-			LEFT JOIN visa_new_order_jp vnoj ON vnoj.id = vncoj.order_jp_id
-			LEFT JOIN visa_new_proposer_info_jp aa ON aa.customer_jp_id = vncj.id
-			ORDER BY
-				aa.ismainproposer DESC,
-				aa.relationproposer DESC,
-				vncj.chinesefullname DESC
-		) m
-	WHERE
-		m.id = (
-			SELECT
-				n.id
-			FROM
-				(
-					SELECT
-						vnoj.id AS 'orderid',
-						vncj.id
-					FROM
-						visa_new_customer_jp vncj
-					LEFT JOIN visa_new_customer_order_jp vncoj ON vncj.id = vncoj.customer_jp_id
-					LEFT JOIN visa_new_order_jp vnoj ON vnoj.id = vncoj.order_jp_id
-					LEFT JOIN visa_new_proposer_info_jp aa ON aa.customer_jp_id = vncj.id
-					AND aa.order_jp_id = vnoj.id
-					ORDER BY
-						aa.ismainproposer DESC,
-						aa.relationproposer DESC,
-						vncj.chinesefullname DESC
-				) n
-			WHERE
-				n.orderid = m.orderid
-			GROUP BY
-				n.orderid
-			LIMIT 0,
-			1
-		)
-) mm ON vnoj.id = mm.orderid
 LEFT JOIN visa_new_comebaby_jp come ON come.id = vnoj.sendComId
 LEFT JOIN visa_new_comebaby_jp_djs djs ON djs.id = vnoj.landComId
 LEFT JOIN visa_employee eee ON eee.id = vnoj.operatePersonId
@@ -116,4 +68,51 @@ LEFT JOIN (
 	GROUP BY
 		bbb.trip_jp_id
 ) ccc ON ccc.trip_jp_id = aaa.id
+LEFT JOIN visa_new_customer_order_jp hhh ON vnoj.id = hhh.customer_jp_id
+LEFT JOIN visa_new_customer_jp iii ON iii.id = hhh.customer_jp_id
+LEFT JOIN (
+	SELECT
+		n.id,
+		n.orderid,
+		n.fullnameen,
+		n.ismainproposer,
+		n.chinesefullname
+	FROM
+		(
+			SELECT
+				vnoj.id AS 'orderid',
+				vncj.id,
+				aa.ismainproposer,
+				vncj.chinesefullname,
+				concat(
+					vncj.chinesexingen,
+					vncj.chinesenameen
+				) AS 'fullnameen'
+			FROM
+				visa_new_customer_jp vncj
+			LEFT JOIN visa_new_customer_order_jp vncoj ON vncj.id = vncoj.customer_jp_id
+			LEFT JOIN visa_new_order_jp vnoj ON vnoj.id = vncoj.order_jp_id
+			LEFT JOIN visa_new_proposer_info_jp aa ON aa.customer_jp_id = vncj.id
+			AND aa.order_jp_id = vnoj.id
+			ORDER BY
+				aa.ismainproposer DESC,
+				aa.relationproposer DESC,
+				vncj.chinesefullname DESC
+		) n
+	GROUP BY
+		n.orderid
+) mm ON vnoj.id = mm.orderid
 $condition
+
+/*system_statistic_sqsbaby*/
+SELECT
+	vncj.id,
+	vncj.comFullName
+FROM
+	visa_new_order_jp vnoj
+LEFT JOIN visa_new_comebaby_jp vncj ON vncj.id = vnoj.sendComId
+WHERE
+	vnoj.landComId > 0
+GROUP BY
+	vncj.id
+	

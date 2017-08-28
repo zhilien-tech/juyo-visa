@@ -73,16 +73,24 @@ public class NewSysStatisticSqlForm extends KenDoParamForm {
 			cnd.and(e1.or(e2).or(e3).or(e4));
 		}
 		if (!Util.isEmpty(sqs_id) && !sqs_id.equals("-1")) {
-			cnd.and("c.id", "=", sqs_id);
+			/*cnd.and("c.id", "=", sqs_id);*/
+			cnd.and("vnoj.sendComId", "=", sqs_id);
 		}
 		if (!Util.isEmpty(djs_id) && !djs_id.equals("-1")) {
 			if (djs_id.equals("0")) {
 				//株式会社金通商事   特殊账号 不存在公司
-				cnd.and("vnoj.comId", "=", djs_id);
+				SqlExpressionGroup e1 = Cnd.exps("vnoj.comId", "=", djs_id);
+				SqlExpressionGroup e2 = Cnd.exps("vnoj.landComId", "=", 1);
+				SqlExpressionGroup e3 = Cnd.exps("c.comType", "=", 1);
+				cnd.and(e1.or(e2.and(e3)));
 			} else {
-				cnd.and("c.id", "=", djs_id);
+				/*cnd.and("c.id", "=", djs_id);*/
+				cnd.and("vnoj.landComId", "=", djs_id);
 			}
 		}
+		//只展示有关系的单子
+		cnd.and("vnoj.sendComId", ">", "0");
+		cnd.and("vnoj.landComId", ">", "0");
 		cnd.orderBy("vnoj.createTime", "DESC");
 		return cnd;
 	}
