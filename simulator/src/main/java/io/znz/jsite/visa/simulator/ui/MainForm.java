@@ -87,7 +87,7 @@ public class MainForm extends JPanel {
 	public MainForm() {
 		initComponents();
 		pyFile.setText(System.getProperty("user.dir") + "/conf/japan.py");
-		host.setText("218.244.148.21");
+		host.setText("http://218.244.148.21");
 		port.setText("9004");
 		upload.setEnabled(false);//禁用上传按钮
 		filesPicker.setEnabled(false); //禁用选择文件上传的按钮
@@ -213,7 +213,8 @@ public class MainForm extends JPanel {
 
 		if (task.getCode() == ResultObject.ResultCode.SUCCESS) {
 			final String oid = String.valueOf(task.getAttributes().get("oid"));
-			log("检测到任务:" + oid);
+			final String ordernumber = String.valueOf(task.getAttributes().get("ordernumber"));
+			log("检测到任务:" + ordernumber);
 			return task;
 		} else {
 			log("暂无可执行的任务,10秒后再次检测");
@@ -271,18 +272,19 @@ public class MainForm extends JPanel {
 		}
 
 		final String oid = String.valueOf(task.getAttributes().get("oid"));
+		final String ordernumber = String.valueOf(task.getAttributes().get("ordernumber"));
 
 		//准备提交填表任务
 		String ds160rs = HttpClientUtil.get(getBaseUrl() + TASK_SUBMITING_URI + oid);
 		ResultObject<Map, Object> ds160ro = JSON.parseObject(ds160rs, ResultObject.class);
 		if (ds160ro.getCode() == ResultObject.ResultCode.SUCCESS) {
-			log("任务码:" + oid + " 提交中...");
+			log("任务码:" + ordernumber + " 提交中...");
 		} else {
-			log("任务码:" + oid + "准备提交失败");
+			log("任务码:" + ordernumber + "准备提交失败");
 			return false;
 		}
 
-		log("========================开始执行任务:" + oid + "===========================");
+		log("========================开始执行任务:" + ordernumber + "===========================");
 		String remoteFileUrl = String.valueOf(task.getData().get("excelUrl"));
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -331,7 +333,7 @@ public class MainForm extends JPanel {
 		} else {
 			JOptionPane.showMessageDialog(new JLabel(), "自动化脚本不存在");
 		}
-		log("========================任务:" + oid + " 执行完毕===========================");
+		log("========================任务:" + ordernumber + " 执行完毕===========================");
 		log("========================总计用时:" + ((System.currentTimeMillis() - startTime) / 1000)
 				+ "秒===========================");
 		return true;
