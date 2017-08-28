@@ -46,8 +46,8 @@ public class NewSystemStatisticService extends NutzBaseService {
 			Cnd cnd = Cnd.NEW();
 			cnd.and("vnoj.sendComId", ">", "0");
 			cnd.and("vnoj.landComId", ">", "0");
-			cnd.orderBy("vncj.id", null);
-
+			cnd.groupBy("vncj.id");
+			sql.setCondition(cnd);
 			List<Record> record = dbDao.query(sql, null, null);
 			for (Record rec : record) {
 				NewComeBabyJpEntity sqsEntity = new NewComeBabyJpEntity();

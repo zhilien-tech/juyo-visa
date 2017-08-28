@@ -89,6 +89,9 @@ public class SqlJpTotalForm extends KenDoParamForm {
 		if (!Util.isEmpty(djs_id) && !djs_id.equals("-1")) {
 			cnd.and("vnoj.landComId", "=", djs_id);
 		}
+		//只展示有关系的单子
+		cnd.and("vnoj.sendComId", ">", "0");
+		cnd.and("vnoj.landComId", ">", "0");
 		//时间
 		if (!Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
 			SqlExpressionGroup e1 = Cnd.exps("vnoj.createtime", ">=", start_time)

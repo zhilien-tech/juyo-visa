@@ -106,13 +106,9 @@ $condition
 
 /*system_statistic_sqsbaby*/
 SELECT
-	vncj.id,
-	vncj.comFullName
+	vncj.*
 FROM
 	visa_new_order_jp vnoj
 LEFT JOIN visa_new_comebaby_jp vncj ON vncj.id = vnoj.sendComId
-WHERE
-	vnoj.landComId > 0
-GROUP BY
-	vncj.id
+$condition
 	

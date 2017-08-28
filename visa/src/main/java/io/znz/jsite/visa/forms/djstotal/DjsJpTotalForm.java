@@ -105,16 +105,15 @@ public class DjsJpTotalForm extends KenDoParamForm {
 			SqlExpressionGroup e3 = Cnd.exps("c.comType", "=", 1);
 			SqlExpressionGroup e4 = Cnd.exps("vnoj.comId", "=", 0);
 			cnd.and(e3.or(e4));
-			//只展示有关系的单子
-			cnd.and("vnoj.sendComId", ">", "0");
-			cnd.and("vnoj.landComId", ">", "0");
 		} else {
 			if (!Util.isEmpty(sqs_id) && !sqs_id.equals("-1")) {
 				cnd.and("vnoj.sendComId", "=", sqs_id);
 			}
 			cnd.and("vnoj.comId", "=", comId);
 		}
-
+		//只展示有关系的单子
+		cnd.and("vnoj.sendComId", ">", "0");
+		cnd.and("vnoj.landComId", ">", "0");
 		//地接社
 		if (!Util.isEmpty(djs_id) && !djs_id.equals("-1")) {
 			SqlExpressionGroup e3 = Cnd.exps("vnoj.comId", "=", 0);
@@ -139,9 +138,11 @@ public class DjsJpTotalForm extends KenDoParamForm {
 			cnd.and(e1.or(e2));
 		}
 		if (!Util.isEmpty(keyword)) {
-			cnd.and("vnoj.ordernumber", "like", "%" + keyword + "%").or("eee.fullName", "like", "%" + keyword + "%")
-					.or("vnoj.completedNumber", "like", "%" + keyword + "%")
-					.or("mm.chinesefullname", "like", "%" + keyword + "%");
+			SqlExpressionGroup e1 = Cnd.exps("vnoj.ordernumber", "like", "%" + keyword + "%");
+			SqlExpressionGroup e2 = Cnd.exps("eee.fullName", "like", "%" + keyword + "%");
+			SqlExpressionGroup e3 = Cnd.exps("vnoj.completedNumber", "like", "%" + keyword + "%");
+			SqlExpressionGroup e4 = Cnd.exps("mm.chinesefullname", "like", "%" + keyword + "%");
+			cnd.and(e1.or(e2).or(e3).or(e4));
 		}
 		cnd.orderBy("vnoj.createTime", "DESC");
 		return cnd;
