@@ -6,6 +6,7 @@
 
 package io.znz.jsite.visa.forms.sqstotal;
 
+import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
 import io.znz.jsite.visa.form.KenDoParamForm;
 
 import java.util.Date;
@@ -72,7 +73,7 @@ public class SqlJpTotalForm extends KenDoParamForm {
 		 * 默认使用了当前form关联entity的单表查询sql,如果是多表复杂sql，
 		 * 请使用sqlManager获取自定义的sql，并设置查询条件
 		 */
-		String sqlString = paramSqlManager.get("sqsjptotal_list_data");
+		String sqlString = paramSqlManager.get("sqsjptotal_list_data_new");
 		Sql sql = Sqls.create(sqlString);
 		sql.setCondition(cnd());
 		return sql;
@@ -82,13 +83,20 @@ public class SqlJpTotalForm extends KenDoParamForm {
 		Cnd cnd = Cnd.NEW();
 		//送签社
 		if (!Util.isEmpty(sqs_id) && !sqs_id.equals("-1")) {
-			cnd.and("c.id", "=", comId);
-			//cnd.and("vnoj.sendComId", "=", sqs_id);
+			//cnd.and("c.id", "=", comId);
+			cnd.and("vnoj.sendComId", "=", sqs_id);
 		}
 		//地接社
 		if (!Util.isEmpty(djs_id) && !djs_id.equals("-1")) {
 			cnd.and("vnoj.landComId", "=", djs_id);
 		}
+		//只展示有关系的单子
+		cnd.and("vnoj.sendComId", ">", "0");
+		cnd.and("vnoj.landComId", ">", "0");
+		//递送之后的单子
+		SqlExpressionGroup e11 = Cnd.exps("vnoj.status", "=", OrderVisaApproStatusEnum.readySubmit.intKey());
+		SqlExpressionGroup e22 = Cnd.exps("vnoj.status", ">", OrderVisaApproStatusEnum.japansend.intKey());
+		cnd.and(e11.or(e22));
 		//时间
 		if (!Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
 			SqlExpressionGroup e1 = Cnd.exps("vnoj.createtime", ">=", start_time)
@@ -106,9 +114,11 @@ public class SqlJpTotalForm extends KenDoParamForm {
 			cnd.and(e1.or(e2));
 		}
 		if (!Util.isEmpty(keyword)) {
-			cnd.and("vnoj.ordernumber", "like", "%" + keyword + "%").or("eee.fullName", "like", "%" + keyword + "%")
-					.or("vnoj.completedNumber", "like", "%" + keyword + "%")
-					.or("mm.chinesefullname", "like", "%" + keyword + "%");
+			SqlExpressionGroup e1 = Cnd.exps("vnoj.ordernumber", "like", "%" + keyword + "%");
+			SqlExpressionGroup e2 = Cnd.exps("vnoj.completedNumber", "like", "%" + keyword + "%");
+			SqlExpressionGroup e3 = Cnd.exps("mm.chinesefullname", "like", "%" + keyword + "%");
+			SqlExpressionGroup e4 = Cnd.exps("eee.fullName", "like", "%" + keyword + "%");
+			cnd.and(e1.or(e2).or(e3).or(e4));
 		}
 		cnd.and("vnoj.comId", "=", comId);
 		cnd.orderBy("vnoj.createTime", "DESC");

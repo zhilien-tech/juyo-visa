@@ -131,7 +131,10 @@ var grid = $("#grid").kendoGrid({
 				}
 				$("#total_count").html(recordcount);
 				if(sqslist == "" || sqslist == null || sqslist == undefined){
+					$('.k-grid-content span').remove();
 					$('.k-grid-content').append('<span style="display: block;text-align: center;line-height:3rem;color: #dcdcdc;font-size: 13px;">暂&nbsp;无&nbsp;可&nbsp;用&nbsp;数&nbsp;据</span>');
+				}else{
+					$('.k-grid-content span').remove();
 				}
                 return sqslist;  //响应到页面的数据
             },
@@ -152,7 +155,7 @@ var grid = $("#grid").kendoGrid({
         	template: "<span class='row-number'></span>" 
         },
         {field: 'ordernumber', title: ' 订单号', width: 150},
-        {field: 'comname', title: '送签社'},
+        {field: 'comfullname', title: '送签社'},
         {field: 'username', title: '操作人'},
         {field: 'landcomfullname', title: '地接社'},
         {field: 'completednumber', title: '受付番号'},
@@ -191,7 +194,7 @@ $(function(){
 	
 	$("#sqs_id").kendoDropDownList({
 		optionLabel: "送签社",
-		dataTextField: "comName",
+		dataTextField: "comFullName",
 		dataValueField: "id",
 		dataSource: {
 			transport: {
