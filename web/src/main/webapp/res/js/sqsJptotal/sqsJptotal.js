@@ -155,9 +155,9 @@ var grid = $("#grid").kendoGrid({
         	template: "<span class='row-number'></span>" 
         },
         {field: 'ordernumber', title: ' 订单号', width: 150},
-        {field: 'comfullname', title: '送签社'},
+        {field: 'comfullname', title: '送签社',template: "<span class='ellipsis' title='#=data.comfullname#'>#=data.comfullname?data.comfullname:''#</span>"},
         {field: 'username', title: '操作人'},
-        {field: 'landcomfullname', title: '地接社'},
+        {field: 'landcomfullname', title: '地接社',template: "<span class='ellipsis' title='#=data.landcomfullname#'>#=data.landcomfullname?data.landcomfullname:''#</span>"},
         {field: 'completednumber', title: '受付番号'},
         {field: 'mainporposer', title: '主申请人', width: 100},
         {field: 'headnum', title: '人数', width: 80},

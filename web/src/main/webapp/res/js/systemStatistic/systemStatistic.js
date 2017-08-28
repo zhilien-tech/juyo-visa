@@ -151,9 +151,9 @@ var grid = $("#grid").kendoGrid({
 	        		  container.hide().prev().hide();
 	        	  }
 	          },
-	          {field: 'comfullname', title: '送签社', width:150},
+	          {field: 'comfullname', title: '送签社', width:150,template: "<span class='ellipsis' title='#=data.comfullname#'>#=data.comfullname?data.comfullname:''#</span>"},
 	          {field: 'username', title: '操作人', width:110},
-	          {field: 'landcomfullname', title: '地接社', width:150},
+	          {field: 'landcomfullname', title: '地接社', width:150,template: "<span class='ellipsis' title='#=data.landcomfullname#'>#=data.landcomfullname?data.landcomfullname:''#</span>"},
 	          {field: 'completednumber', title: '受付番号', width:140},
 	          {field: 'mainporposer', title: '主申请人', width: 100},
 	          {field: 'headnum', title: '人数', width:80},
