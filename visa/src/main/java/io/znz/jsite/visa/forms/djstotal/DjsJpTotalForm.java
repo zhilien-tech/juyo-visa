@@ -75,7 +75,7 @@ public class DjsJpTotalForm extends KenDoParamForm {
 		 * 默认使用了当前form关联entity的单表查询sql,如果是多表复杂sql，
 		 * 请使用sqlManager获取自定义的sql，并设置查询条件
 		 */
-		String sqlString = paramSqlManager.get("djsjptotal_list_data");
+		String sqlString = paramSqlManager.get("djsjptotal_list_data_new");
 		Sql sql = Sqls.create(sqlString);
 		sql.setCondition(cnd());
 

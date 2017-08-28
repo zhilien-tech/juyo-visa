@@ -118,6 +118,7 @@ var grid = $("#grid").kendoGrid({
 				$('.k-grid-content').find('.mySpan').remove();
 				if(d.list.length==0){
 					$('.k-grid-content').append('<span class="mySpan" style="display: block;text-align: center;line-height:3rem;color: #dcdcdc;font-size: 13px;">暂&nbsp;无&nbsp;可&nbsp;用&nbsp;数&nbsp;据</span>');
+
 				}
 
                 return sqslist;  //响应到页面的数据

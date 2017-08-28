@@ -150,8 +150,9 @@ public class NewOrderJapanLandSqlForm extends KenDoParamForm {
 			cnd.and("vncj.id", "=", customerid);
 		}
 		SqlExpressionGroup e1 = Cnd.exps("vnoj.status", ">", 17);
+		SqlExpressionGroup e3 = Cnd.exps("vnoj.status", "=", 8);
 		SqlExpressionGroup e2 = Cnd.exps("vnoj.island", "=", 1);
-		cnd.and(e1.or(e2));
+		cnd.and(e1.or(e2).or(e3));
 
 		cnd.orderBy("vnoj.updatetime", "desc");
 		cnd.groupBy("vnoj.id");
