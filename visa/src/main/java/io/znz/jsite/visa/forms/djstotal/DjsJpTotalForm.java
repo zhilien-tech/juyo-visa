@@ -97,10 +97,6 @@ public class DjsJpTotalForm extends KenDoParamForm {
 				/*cnd.and("c.id", "=", sqs_id);*/
 				cnd.and("vnoj.sendComId", "=", sqs_id);
 			}
-			//递送之后的单子
-			SqlExpressionGroup e1 = Cnd.exps("vnoj.status", "=", OrderVisaApproStatusEnum.readySubmit.intKey());
-			SqlExpressionGroup e2 = Cnd.exps("vnoj.status", ">", OrderVisaApproStatusEnum.japansend.intKey());
-			cnd.and(e1.or(e2));
 			//送签社 or 1507账号
 			SqlExpressionGroup e3 = Cnd.exps("c.comType", "=", 1);
 			SqlExpressionGroup e4 = Cnd.exps("vnoj.comId", "=", 0);
@@ -111,9 +107,15 @@ public class DjsJpTotalForm extends KenDoParamForm {
 			}
 			cnd.and("vnoj.comId", "=", comId);
 		}
+
 		//只展示有关系的单子
 		cnd.and("vnoj.sendComId", ">", "0");
 		cnd.and("vnoj.landComId", ">", "0");
+		//递送之后的单子
+		SqlExpressionGroup e11 = Cnd.exps("vnoj.status", "=", OrderVisaApproStatusEnum.readySubmit.intKey());
+		SqlExpressionGroup e22 = Cnd.exps("vnoj.status", ">", OrderVisaApproStatusEnum.japansend.intKey());
+		cnd.and(e11.or(e22));
+
 		//地接社
 		if (!Util.isEmpty(djs_id) && !djs_id.equals("-1")) {
 			SqlExpressionGroup e3 = Cnd.exps("vnoj.comId", "=", 0);
@@ -137,6 +139,7 @@ public class DjsJpTotalForm extends KenDoParamForm {
 			SqlExpressionGroup e2 = Cnd.exps("vnoj.createtime", ">=", start_time);
 			cnd.and(e1.or(e2));
 		}
+		//文本框
 		if (!Util.isEmpty(keyword)) {
 			SqlExpressionGroup e1 = Cnd.exps("vnoj.ordernumber", "like", "%" + keyword + "%");
 			SqlExpressionGroup e2 = Cnd.exps("eee.fullName", "like", "%" + keyword + "%");

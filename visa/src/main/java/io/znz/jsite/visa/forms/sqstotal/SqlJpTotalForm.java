@@ -6,6 +6,7 @@
 
 package io.znz.jsite.visa.forms.sqstotal;
 
+import io.znz.jsite.visa.enums.OrderVisaApproStatusEnum;
 import io.znz.jsite.visa.form.KenDoParamForm;
 
 import java.util.Date;
@@ -82,8 +83,8 @@ public class SqlJpTotalForm extends KenDoParamForm {
 		Cnd cnd = Cnd.NEW();
 		//送签社
 		if (!Util.isEmpty(sqs_id) && !sqs_id.equals("-1")) {
-			cnd.and("c.id", "=", comId);
-			//cnd.and("vnoj.sendComId", "=", sqs_id);
+			//cnd.and("c.id", "=", comId);
+			cnd.and("vnoj.sendComId", "=", sqs_id);
 		}
 		//地接社
 		if (!Util.isEmpty(djs_id) && !djs_id.equals("-1")) {
@@ -92,6 +93,10 @@ public class SqlJpTotalForm extends KenDoParamForm {
 		//只展示有关系的单子
 		cnd.and("vnoj.sendComId", ">", "0");
 		cnd.and("vnoj.landComId", ">", "0");
+		//递送之后的单子
+		SqlExpressionGroup e11 = Cnd.exps("vnoj.status", "=", OrderVisaApproStatusEnum.readySubmit.intKey());
+		SqlExpressionGroup e22 = Cnd.exps("vnoj.status", ">", OrderVisaApproStatusEnum.japansend.intKey());
+		cnd.and(e11.or(e22));
 		//时间
 		if (!Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
 			SqlExpressionGroup e1 = Cnd.exps("vnoj.createtime", ">=", start_time)

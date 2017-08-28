@@ -223,3 +223,12 @@ LEFT JOIN (
 		n.orderid
 ) mm ON vnoj.id = mm.orderid
 $condition
+
+/*sqsjptotal_sqsbaby*/
+SELECT
+	vncj.*
+FROM
+	visa_new_order_jp vnoj
+LEFT JOIN visa_new_comebaby_jp vncj ON vncj.id = vnoj.sendComId
+LEFT JOIN visa_new_company c ON c.id = vnoj.comId
+$condition

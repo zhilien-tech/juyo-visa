@@ -116,7 +116,23 @@ public class DjsJpTotleService extends NutzBaseService {
 				//通过session获取公司的id
 				CompanyJobEntity company = (CompanyJobEntity) session.getAttribute(Const.USER_COMPANY_KEY);
 				long comId = company.getComId();//得到公司的id
-				sqsCompList = dbDao.query(NewComeBabyJpEntity.class, Cnd.where("comId", "=", comId), null);
+				//sqsCompList = dbDao.query(NewComeBabyJpEntity.class, Cnd.where("comId", "=", comId), null);
+				Sql sql = Sqls.create(sqlManager.get("djsjptotal_sqsbaby"));
+				Cnd cnd = Cnd.NEW();
+				cnd.and("vnoj.sendComId", ">", "0");
+				cnd.and("vnoj.landComId", ">", "0");
+				cnd.and("c.id", "=", comId);
+				cnd.groupBy("vncj.id");
+				sql.setCondition(cnd);
+				List<Record> record = dbDao.query(sql, null, null);
+				for (Record rec : record) {
+					NewComeBabyJpEntity sqsEntity = new NewComeBabyJpEntity();
+					String id = rec.getString("id");
+					String comfullname = rec.getString("comfullname");
+					sqsEntity.setId(Long.valueOf(id));
+					sqsEntity.setComFullName(comfullname);
+					sqsCompList.add(sqsEntity);
+				}
 				return sqsCompList;
 			}
 		}

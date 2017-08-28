@@ -155,7 +155,7 @@ var grid = $("#grid").kendoGrid({
         	template: "<span class='row-number'></span>" 
         },
         {field: 'ordernumber', title: ' 订单号', width: 150},
-        {field: 'comname', title: '送签社'},
+        {field: 'comfullname', title: '送签社'},
         {field: 'username', title: '操作人'},
         {field: 'landcomfullname', title: '地接社'},
         {field: 'completednumber', title: '受付番号'},
@@ -194,7 +194,7 @@ $(function(){
 	
 	$("#sqs_id").kendoDropDownList({
 		optionLabel: "送签社",
-		dataTextField: "comName",
+		dataTextField: "comFullName",
 		dataValueField: "id",
 		dataSource: {
 			transport: {
