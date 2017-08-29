@@ -21,6 +21,7 @@ var proposers=new kendo.data.DataSource({
         read: {
             dataType: "json",
             url: "/visa/neworderjp/porposerdatasource?orderid="+$.queryString("cid"),
+    
         },
         parameterMap: function (options, type) {
             if (options.filter) {
@@ -102,6 +103,7 @@ flights = new kendo.data.DataSource({
         read: {
             dataType: "json",
             url: "/visa/flight/json",
+           
         },
         parameterMap: function (options, type) {
             if (options.filter) {
@@ -361,6 +363,19 @@ var viewModel = kendo.observable({
 			}
 		}
 		///console.log(e.data.arrivecity);
+    },
+    changeBegincity:function(e){
+    	var a=viewModel.get("customer.dateplanJpList");
+		console.log(JSON.stringify(a));
+		viewModel.set("customer.dateplanJpList["+(a.length-1)+"].arrivecity",e.data.startcity);
+	/*	for(var i=0;i<a.length;i++){
+			if(a[i].startcity==e.data.startcity){
+				var b=i+1;
+			}
+		}*/
+    },
+    changeBegincitySingle:function(){
+    	viewModel.set("customer.tripJp.returnarrivecity",viewModel.get("customer.tripJp.startcity"));
     }
 });
 kendo.bind($(document.body), viewModel);
