@@ -105,7 +105,7 @@ public class FlightController extends BaseController {
 					//获取Excel模板第二行之后的数据
 					Map<Integer, String[]> map = excelReader.readExcelContent(is);
 					List<Flight> filghts = Lists.newArrayList();
-					for (int i = 1; i <= map.size(); i++) {
+					for (int i = map.size(); i > 0; i--) {
 						Flight flight = new Flight();
 						String[] row = map.get(i);
 						flight.setFrom(row[0]);
