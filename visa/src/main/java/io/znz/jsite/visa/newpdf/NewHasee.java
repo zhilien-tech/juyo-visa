@@ -985,7 +985,6 @@ public class NewHasee extends NewTemplate {
 				if (!Util.isEmpty(comeBaby)) {
 					text = String.format("電  話：%s", comeBaby.getLandtelephone());
 				} else {
-
 					text = String.format("電  話：%s", " ");
 				}
 				Paragraph p = new Paragraph(text, font);

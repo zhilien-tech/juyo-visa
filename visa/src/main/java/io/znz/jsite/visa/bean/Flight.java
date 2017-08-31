@@ -33,10 +33,10 @@ public class Flight {
 	@org.nutz.dao.entity.annotation.Id
 	private Integer id;
 	@Column(name = "`from`")
-	@org.nutz.dao.entity.annotation.Column("from")
+	@org.nutz.dao.entity.annotation.Column("`from`")
 	private String from;//起飞机场
 	@Column(name = "`to`")
-	@org.nutz.dao.entity.annotation.Column("to")
+	@org.nutz.dao.entity.annotation.Column("`to`")
 	private String to;//降落机场
 	@org.nutz.dao.entity.annotation.Column("company")
 	private String company;//航空公司
