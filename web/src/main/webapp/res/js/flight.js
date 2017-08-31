@@ -105,7 +105,9 @@ var grid = $("#grid").kendoGrid({
 
 
 $(".k-grid-importExcel").click(function(){
-	$("#excelFile").click();
+	
+	$("#excelFile-button").click();
+	
 });
 //选中后开始导入
 function onfileChange() {
@@ -127,7 +129,6 @@ function onfileChange() {
 
 //文件上传
 function uploadFile(){
-	alert(localhostPaht);
 	var index=null;
 	$.fileupload1 = $('#excelFile').uploadify({
 		'auto' : true,//选择文件后自动上传
@@ -175,3 +176,7 @@ function uploadFile(){
        }
 	});
 }
+
+$(function(){
+    uploadFile();
+});

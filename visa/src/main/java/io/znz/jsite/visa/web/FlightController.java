@@ -10,6 +10,7 @@ import io.znz.jsite.visa.util.ExcelReader;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.google.common.collect.Lists;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
 
 /**
@@ -109,10 +111,40 @@ public class FlightController extends BaseController {
 						flight.setFrom(row[0]);
 						flight.setTo(row[2]);
 						flight.setLine(row[4]);
-						String dapartureDate = row[5];
-						String landDate = row[6];
-						//flight.setDeparture(); //起飞时间
-						//flight.setLanding();
+						String departureStr = row[5];
+						String landStr = row[6];
+						if (!Util.isEmpty(departureStr)) {
+							int dLength = departureStr.length();
+							if (departureStr.contains(":") && (dLength == 5 || dLength == 7)) {
+								if (departureStr.length() == 7) {
+									departureStr = departureStr.substring(0, 5);
+								}
+								String[] split = departureStr.split(":");
+								String hours = split[0];
+								String mins = split[1];
+								Date date = new Date();
+								date.setHours(Integer.valueOf(hours));
+								date.setMinutes(Integer.valueOf(mins));
+								flight.setDeparture(date); //起飞时间
+							}
+						}
+
+						if (!Util.isEmpty(landStr)) {
+							int lLength = landStr.length();
+							if (landStr.contains(":") && (lLength == 5 || lLength == 7)) {
+								if (landStr.length() == 7) {
+									landStr = landStr.substring(0, 5);
+								}
+								String[] split = landStr.split(":");
+								String hours = split[0];
+								String mins = split[1];
+								Date date = new Date();
+								date.setHours(Integer.valueOf(hours));
+								date.setMinutes(Integer.valueOf(mins));
+								flight.setLanding(date); //起飞时间
+							}
+						}
+
 						flight.setFromTerminal(row[7]);
 						flight.setFromCity(row[8]);
 						flight.setToTerminal(row[9]);
@@ -128,4 +160,9 @@ public class FlightController extends BaseController {
 		return null;
 
 	}
+
+	/*public Date string2Date(String str){
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+	
+	}*/
 }

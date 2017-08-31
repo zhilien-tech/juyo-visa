@@ -113,3 +113,10 @@ ADD COLUMN `errorMsg`  varchar(255) NULL COMMENT '自动填表错误信息' AFTE
 /******************************************************************************
 version : 8.0.0   end
 ******************************************************************************/ 
+
+/******************************************************************************
+version : 9.0.0   start
+******************************************************************************/ 
+ALTER TABLE `visa_flight`
+MODIFY COLUMN `departure`  varchar(255) NULL DEFAULT NULL AFTER `company`,
+MODIFY COLUMN `landing`  varchar(255) NULL DEFAULT NULL AFTER `from_terminal`;
