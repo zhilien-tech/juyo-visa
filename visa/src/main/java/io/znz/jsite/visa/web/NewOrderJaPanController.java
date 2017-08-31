@@ -1873,6 +1873,7 @@ public class NewOrderJaPanController {
 		if ("" == orderid || null == orderid || "null".equals(orderid)) {
 			orderid = 0 + "";
 		}
+
 		long orderId = Long.valueOf(orderid);
 		List<NewProposerInfoJpEntity> query = dbDao.query(NewProposerInfoJpEntity.class,
 				Cnd.where("ismainproposer", "=", 1).and("order_jp_id", "=", orderId), null);

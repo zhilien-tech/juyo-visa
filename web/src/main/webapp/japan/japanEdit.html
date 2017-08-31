@@ -477,7 +477,7 @@
                                                     data-value-primitive="true"
                                                     data-text-field="text"
                                                     data-value-field="text"
-                                                    data-bind="value:customer.tripJp.startcity,source:startcitynew"
+                                                    data-bind="value:customer.tripJp.startcity,source:startcitynew,events: { change: changeBegincitySingle }"
                                                     style="width: 100%;"></select>
 	                                        
 	                                           <!--  <input id="startcity" class="k-textbox" style="width: 100%;text-transform:uppercase;"
@@ -982,7 +982,7 @@
                                                     data-value-primitive="true"
                                                     data-text-field="text"
                                                     data-value-field="text"
-                                                    data-bind="value:startcity,source:startcitynew"
+                                                    data-bind="value:startcity,source:startcitynew,events: { change: changeBegincity }"
                                                     style="width: 100%;"></select>
                     
                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->

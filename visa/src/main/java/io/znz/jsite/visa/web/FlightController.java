@@ -58,6 +58,7 @@ public class FlightController extends BaseController {
 		Pageable pageable = filter.getPageable();
 		Criterion[] filters = filter.getFilter(Flight.class);
 		return flightService.search(pageable, filters);
+
 	}
 
 	@RequestMapping(value = "save", method = RequestMethod.POST)
