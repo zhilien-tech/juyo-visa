@@ -106,7 +106,6 @@ var grid = $("#grid").kendoGrid({
 
 $(".k-grid-importExcel").click(function(){
 	
-	$("#excelFile-button").click();
 	
 });
 //选中后开始导入
@@ -152,6 +151,7 @@ function uploadFile(){
 		 'onUploadSuccess': function(file, data, response) {
 			 if(index!=null){
 					layer.close(index);
+					grid.dataSource.read();
 			 }
 		},
        //加上此句会重写onSelectError方法【需要重写的事件】
