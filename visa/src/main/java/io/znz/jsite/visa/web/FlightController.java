@@ -123,10 +123,14 @@ public class FlightController extends BaseController {
 								String[] split = departureStr.split(":");
 								String hours = split[0];
 								String mins = split[1];
-								Date date = new Date();
-								date.setHours(Integer.valueOf(hours));
-								date.setMinutes(Integer.valueOf(mins));
-								flight.setDeparture(date); //起飞时间
+								int hour = Integer.valueOf(hours);
+								int min = Integer.valueOf(mins);
+								if (hour >= 0 && hour <= 24 && min >= 0 && min <= 59) {
+									Date date = new Date();
+									date.setHours(hour);
+									date.setMinutes(min);
+									flight.setDeparture(date); //起飞时间
+								}
 							}
 						}
 
@@ -139,10 +143,15 @@ public class FlightController extends BaseController {
 								String[] split = landStr.split(":");
 								String hours = split[0];
 								String mins = split[1];
-								Date date = new Date();
-								date.setHours(Integer.valueOf(hours));
-								date.setMinutes(Integer.valueOf(mins));
-								flight.setLanding(date); //起飞时间
+								int hour = Integer.valueOf(hours);
+								int min = Integer.valueOf(mins);
+								if (hour >= 0 && hour <= 24 && min >= 0 && min <= 59) {
+									Date date = new Date();
+									date.setHours(hour);
+									date.setMinutes(min);
+									flight.setLanding(date); //降落时间
+								}
+
 							}
 						}
 
