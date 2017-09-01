@@ -6,7 +6,7 @@ var visatypelist=[
                   {text:"东三县",value:2},
                   {text:"单次",value:0},
                   {text:"新三县",value:3},
-                  {text:"冲绳",value:4},
+                  {text:"冲绳三年多次",value:4},
                   {text:"普通三年",value:5}
                   ];
 
