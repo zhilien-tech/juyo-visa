@@ -85,6 +85,23 @@ def _checkbox(elmId,val,timeout=3600):
     else:
         logging.info("\"" + elmId + "\"" + ":" + "False,")
 
+#勾选checkbox
+def _checkbox_new(elmId,val,timeout=3600):
+    _check_alert_to_close()
+    logging.info("Waiting Checkbox id: " + elmId)
+    elm_ipt_x = WebDriverWait(driver, timeout).until(
+        EC.presence_of_element_located((By.ID, elmId))
+    )
+    
+    #如果没有选中，而且欲填值为true，则(click)勾选上
+    if not elm_ipt_x.is_selected():
+        if val:
+            elm_ipt_x.click()
+    if val:
+        logging.info("\"" + elmId + "\"" + ":" + "True,")
+    else:
+        logging.info("\"" + elmId + "\"" + ":" + "False,")
+
 #勾选单选组
 def _radiobox(elmId1,elmId2,isSelectId1,timeout=3600):
 	#是否选中第一个
@@ -193,7 +210,9 @@ _textInput("ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_FULL_NAME_NATIVE",answ
 
 #用母语填写全称姓名的时候，名字是生僻字电脑打不出的时候才选Does Not Apply/Technology Not Available
 answer = True
-_checkbox("ctl00_SiteContentPlaceHolder_FormView1_cbxAPP_FULL_NAME_NATIVE_NA",answer)
+#_checkbox("ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_FULL_NAME_NATIVE_NA",answer)
+val = data_json["ctl00_SiteContentPlaceHolder_FormView1_cbxAPP_FULL_NAME_NATIVE_NA"]
+_checkbox_new("ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_FULL_NAME_NATIVE_NA",val)
 
 #是否使用曾用名
 answer = data_json["ctl00_SiteContentPlaceHolder_FormView1_rblOtherNames_0"]
@@ -260,7 +279,9 @@ answer = "BEIJING"
 _textInput("ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_POB_ST_PROVINCE",answer)
 #Checkbox
 answer = True
-_checkbox("ctl00_SiteContentPlaceHolder_FormView1_cbxAPP_POB_ST_PROVINCE_NA",answer)
+val = data_json["ctl00_SiteContentPlaceHolder_FormView1_cbxAPP_POB_ST_PROVINCE_NA"]
+_checkbox_new("ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_POB_ST_PROVINCE_NA",val)
+#_checkbox("ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_POB_ST_PROVINCE_NA",answer)
 #Select
 answer = "CHIN"
 _select("ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_POB_CNTRY",answer)
@@ -310,10 +331,14 @@ answer = "1101009198710189765"
 _textInput("ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_NATIONAL_ID",answer)
 #Checkbox
 answer = True
-_checkbox("ctl00_SiteContentPlaceHolder_FormView1_cbxAPP_SSN_NA",answer)
+val = data_json["ctl00_SiteContentPlaceHolder_FormView1_cbxAPP_SSN_NA"]
+_checkbox_new("ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_SSN_NA",val)
+#_checkbox("ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_SSN_NA",answer)
 #Checkbox
 answer = True
-_checkbox("ctl00_SiteContentPlaceHolder_FormView1_cbxAPP_TAX_ID_NA",answer)
+val = data_json["ctl00_SiteContentPlaceHolder_FormView1_cbxAPP_TAX_ID_NA"]
+_checkbox_new("ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_TAX_ID_NA",val)
+#_checkbox("ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_TAX_ID_NA",answer)
 #Button
 time.sleep(3)
 _button("ctl00_SiteContentPlaceHolder_UpdateButton3")
@@ -348,11 +373,14 @@ _radiobox("ctl00_SiteContentPlaceHolder_FormView1_rblMailingAddrSame_0","ctl00_S
 answer = "18687184553"
 _textInput("ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_HOME_TEL",answer)
 #Text Input
-answer = "82459957"
-_textInput("ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_MOBILE_TEL",answer)
+#answer = "82459957"
+#_textInput("ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_MOBILE_TEL",answer)
 #Checkbox
 answer = True
-_checkbox("ctl00_SiteContentPlaceHolder_FormView1_cbxAPP_BUS_TEL_NA",answer)
+_checkbox("ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_MOBILE_TEL_NA",answer)
+#ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_BUS_TEL_NA
+_checkbox("ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_BUS_TEL_NA",answer)
+
 #Text Input
 answer = "82459957@qq.com"
 _textInput("ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_EMAIL_ADDR",answer)
@@ -374,7 +402,9 @@ answer = "G21323345"
 _textInput("ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_NUM",answer)
 #Checkbox
 answer = True
-_checkbox("ctl00_SiteContentPlaceHolder_FormView1_cbxPPT_BOOK_NUM_NA",answer)
+val = data_json["ctl00_SiteContentPlaceHolder_FormView1_cbxPPT_BOOK_NUM_NA"]
+_checkbox_new("ctl00_SiteContentPlaceHolder_FormView1_cbexPPT_BOOK_NUM_NA",val)
+#_checkbox("ctl00_SiteContentPlaceHolder_FormView1_cbxPPT_BOOK_NUM_NA",answer)
 time.sleep(3)
 #Select
 answer = "CHIN"
@@ -1431,25 +1461,25 @@ time.sleep(3)
 element = _wait_for_elm_by_id("ctl00_SiteContentPlaceHolder_UpdateButton3")
 logging.info("Load Page Title :%s",driver.title)
 answer = False
-try:
-    _radiobox("ctl00_SiteContentPlaceHolder_FormView1_rblRemovalHearing_0","ctl00_SiteContentPlaceHolder_FormView1_rblRemovalHearing_1",answer,not_exist_timeout)
-except TimeoutException:
-    logging.info("Timeout exception catched,element not exists.")
+#try:
+#    _radiobox("ctl00_SiteContentPlaceHolder_FormView1_rblRemovalHearing_0","ctl00_SiteContentPlaceHolder_FormView1_rblRemovalHearing_1",answer,not_exist_timeout)
+#except TimeoutException:
+#    logging.info("Timeout exception catched,element not exists.")
 answer = False
 try:
     _radiobox("ctl00_SiteContentPlaceHolder_FormView1_rblImmigrationFraud_0","ctl00_SiteContentPlaceHolder_FormView1_rblImmigrationFraud_1",answer,not_exist_timeout)
 except TimeoutException:
     logging.info("Timeout exception catched,element not exists.")
-answer = False
-try:
-    _radiobox("ctl00_SiteContentPlaceHolder_FormView1_rblFailToAttend_0","ctl00_SiteContentPlaceHolder_FormView1_rblFailToAttend_1",answer,not_exist_timeout)
-except TimeoutException:
-    logging.info("Timeout exception catched,element not exists.")
-answer = False
-try:
-    _radiobox("ctl00_SiteContentPlaceHolder_FormView1_rblVisaViolation_0","ctl00_SiteContentPlaceHolder_FormView1_rblVisaViolation_1",answer,not_exist_timeout)
-except TimeoutException:
-    logging.info("Timeout exception catched,element not exists.")
+#answer = False
+#try:
+#    _radiobox("ctl00_SiteContentPlaceHolder_FormView1_rblFailToAttend_0","ctl00_SiteContentPlaceHolder_FormView1_rblFailToAttend_1",answer,not_exist_timeout)
+#except TimeoutException:
+#    logging.info("Timeout exception catched,element not exists.")
+#answer = False
+#try:
+#    _radiobox("ctl00_SiteContentPlaceHolder_FormView1_rblVisaViolation_0","ctl00_SiteContentPlaceHolder_FormView1_rblVisaViolation_1",answer,not_exist_timeout)
+#except TimeoutException:
+#    logging.info("Timeout exception catched,element not exists.")
 #Button
 time.sleep(3)
 _button("ctl00_SiteContentPlaceHolder_UpdateButton3")
@@ -1475,10 +1505,10 @@ try:
 except TimeoutException:
     logging.info("Timeout exception catched,element not exists.")
 answer = False
-try:
-    _radiobox("ctl00_SiteContentPlaceHolder_FormView1_rblAttWoReimb_0","ctl00_SiteContentPlaceHolder_FormView1_rblAttWoReimb_1",answer,not_exist_timeout)
-except TimeoutException:
-    logging.info("Timeout exception catched,element not exists.")
+#try:
+#    _radiobox("ctl00_SiteContentPlaceHolder_FormView1_rblAttWoReimb_0","ctl00_SiteContentPlaceHolder_FormView1_rblAttWoReimb_1",answer,not_exist_timeout)
+#except TimeoutException:
+#    logging.info("Timeout exception catched,element not exists.")
 #Button
 time.sleep(3)
 _button("ctl00_SiteContentPlaceHolder_UpdateButton3")
@@ -1495,7 +1525,11 @@ _button("ctl00_SiteContentPlaceHolder_btnUploadPhoto")
 time.sleep(3)
 element = _wait_for_elm_by_id("ctl00_cphMain_imageFileUpload")
 logging.info("Load Page Title :%s",driver.title)
-_textInput("ctl00_cphMain_imageFileUpload","~/SSSS.jpg")
+uploadurl=data_json["ctl00_cphMain_imageFileUpload"]
+ctl00_cphMain_imageFileUpload = driver.find_element_by_id('ctl00_cphMain_imageFileUpload')
+ctl00_cphMain_imageFileUpload.send_keys(uploadurl);
+logging.info("File Url :%s",uploadurl)
+#_textInput("ctl00_cphMain_imageFileUpload","~/SSSS.jpg")
 time.sleep(5)
 _button("ctl00_cphButtons_btnUpload")
 
