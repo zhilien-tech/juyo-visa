@@ -948,12 +948,14 @@ public class SimulateViewService extends NutzBaseService<NewCustomerEntity> {
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlCountry", "CHIN");
 		//邮件地址与家庭地址相同,不用管
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_rblMailingAddrSame_0", true);
-		//不管
-		//电话信息
+
+		//Primary Phone Number  填
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_HOME_TEL", customer.getPhone());
-		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_cbxAPP_BUS_TEL_NA", true);
-		//不管,没有办公电话
-		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_MOBILE_TEL", customer.getMobile());
+		// Secondary Phone Number  选择not apply
+		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_MOBILE_TEL_NA", true);
+		// Work Phone Number 选择not apply
+		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_BUS_TEL_NA", true);
+
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_EMAIL_ADDR", customer.getEmail());
 		//护照信息
 		validator(map, "ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_TYPE", "R");
