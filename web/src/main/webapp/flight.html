@@ -11,8 +11,18 @@
     <link rel="stylesheet" href="res/plugin/font-awesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="res/css/colors.min.css"/>
     <link rel="stylesheet" href="res/css/common.min.css?v=1"/>
+    <style type="text/css">
+    	#excelFile{height: 30px;width: 0 !important;float: left;}
+    	#excelFile object{width:65px;left:73px;top: 4px;}
+    	#excelFile-queue{display:none;}
+    </style>
 </head>
 <body class="clear-scroll">
+	<input name="excelFile" id="excelFile" onchange="javascript:onfileChange();" type="file"/>
+	<!-- <form id="uploadExcelForm" action="visa/flight/importExcel" name="excelForm" enctype="multipart/form-data" method="post" target="hidden_frame" style="display: inline;">
+		<input name="excelFile" id="excelFile" onchange="javascript:onfileChange();" type="file"/>
+	</form> -->
+	<!-- <button type="button" style="float: left;position: relative;top: -30px;left: 80px;">导入</button> -->
 <div id="grid"></div>
 </body>
 <script src="res/plugin/jquery.min.js"></script>
@@ -21,7 +31,9 @@
 <script src="res/plugin/kendoui/js/kendo.web.min.js"></script>
 <script src="res/plugin/kendoui/js/cultures/kendo.culture.zh-CN.min.js"></script>
 <script src="res/plugin/kendoui/js/messages/kendo.messages.zh-CN.min.js"></script>
+<script src="/res/js/projectpath/projectpath.js"></script>
+<script src="res/upload/jquery.uploadify.min.js"></script>
 <script src="res/js/common.js"></script>
-
 <script src="res/js/flight.js"></script>
+
 </html>

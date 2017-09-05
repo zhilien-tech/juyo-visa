@@ -152,7 +152,14 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 				NewComeBabyJpEntity comeBaby = dbDao.fetch(NewComeBabyJpEntity.class, sendComId);
 				map.put("visaAccount", "1507-001");
 				map.put("visaPasswd", "kintsu0821");
-				map.put("agentNo", comeBaby.getCompletedNumber());
+				if (!Util.isEmpty(comeBaby)) {
+					map.put("agentNo", comeBaby.getCompletedNumber());
+
+				} else {
+					//数据错误
+					map.put("agentNo", " ");
+
+				}
 				if (!Util.isEmpty(order)) {
 					map.put("visaType1", order.getVisatype() + "");
 					map.put("VISA_STAY_PREF_2", false);
@@ -176,6 +183,7 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 
 				map.put("visaAccount", "1507-001");
 				map.put("visaPasswd", "kintsu0821");
+				//数据错误
 				map.put("agentNo", " ");
 
 				if (!Util.isEmpty(order)) {

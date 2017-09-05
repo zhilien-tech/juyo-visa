@@ -205,7 +205,7 @@
                                                 <!-- <option value="1">一年单次</option> -->
                                                 <option value="2">东三县</option>
                                                 <option value="3">新三县</option>
-                                                <option value="4">冲绳</option>
+                                                <option value="4">冲绳三年多次</option>
                                                 <option value="5">普通三年</option>
                                                 <!-- <option value="6">普通五年</option> -->
                                             </select>
@@ -477,7 +477,7 @@
                                                     data-value-primitive="true"
                                                     data-text-field="text"
                                                     data-value-field="text"
-                                                    data-bind="value:customer.tripJp.startcity,source:startcitynew"
+                                                    data-bind="value:customer.tripJp.startcity,source:startcitynew,events: { change: changeBegincitySingle }"
                                                     style="width: 100%;"></select>
 	                                        
 	                                           <!--  <input id="startcity" class="k-textbox" style="width: 100%;text-transform:uppercase;"
@@ -982,7 +982,7 @@
                                                     data-value-primitive="true"
                                                     data-text-field="text"
                                                     data-value-field="text"
-                                                    data-bind="value:startcity,source:startcitynew"
+                                                    data-bind="value:startcity,source:startcitynew,events: { change: changeBegincity }"
                                                     style="width: 100%;"></select>
                     
                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
