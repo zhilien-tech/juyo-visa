@@ -33,9 +33,9 @@ var proposers=new kendo.data.DataSource({
 
 //出发城市
 var startcity=[
-               {text:"北京",value:1},
-               {text:"上海浦东",value:2},
-               {text:"上海虹桥",value:3},
+			   {text:"北京",value:1},
+               {text:"上海",value:2},
+               {text:"东京",value:3},
                {text:"广州",value:4},
                {text:"沈阳",value:5},
                {text:"天津",value:6},
@@ -95,9 +95,9 @@ var startcity=[
                {text:"大分",value:60},
                {text:"宫崎",value:61},
                {text:"鹿儿岛",value:62},
-               {text:"那霸",value:63}
-
-               ];
+               {text:"那霸",value:63},
+               {text:"兵库",value:64}
+             ];
 var defaults = {
 		visatype:0,
 		area:0,

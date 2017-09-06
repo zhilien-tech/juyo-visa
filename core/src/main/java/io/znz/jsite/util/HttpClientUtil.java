@@ -17,6 +17,8 @@ import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.DeflateDecompressingEntity;
+import org.apache.http.client.entity.GzipDecompressingEntity;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -75,7 +77,6 @@ public class HttpClientUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		return body;
 	}
 
@@ -191,19 +192,25 @@ public class HttpClientUtil {
 	}
 
 	private static String paseResponse(HttpResponse response) {
-		HttpEntity entity = response.getEntity();
-		ContentType contentType = ContentType.getOrDefault(entity);
+		String body = null;
+		HttpEntity httpEntity = response.getEntity();
+		if (httpEntity.getContentEncoding() != null) {
+			if ("gzip".equalsIgnoreCase(httpEntity.getContentEncoding().getValue())) {
+				httpEntity = new GzipDecompressingEntity(httpEntity);
+			} else if ("deflate".equalsIgnoreCase(httpEntity.getContentEncoding().getValue())) {
+				httpEntity = new DeflateDecompressingEntity(httpEntity);
+			}
+		}
+		ContentType contentType = ContentType.getOrDefault(httpEntity);
 		Charset charset = contentType.getCharset();
 
-		String body = null;
 		try {
-			body = EntityUtils.toString(entity, charset);
+			body = EntityUtils.toString(httpEntity, charset);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		return body;
 	}
 
