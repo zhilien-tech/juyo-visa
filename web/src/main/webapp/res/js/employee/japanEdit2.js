@@ -14,6 +14,7 @@ var customersourceEnum=[
     {text:"直客",value:3},
     {text:"线下",value:4}
   ];
+
 var proposersnew=[];
 var proposers=new kendo.data.DataSource({
     serverFiltering: true,
@@ -351,6 +352,7 @@ var viewModel = kendo.observable({
 		}
     },
     abab:function(){
+    	alert(1);
     	viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
     },
     baba:function(e){
@@ -1125,7 +1127,6 @@ $(function () {
 			 data: JSON.stringify(viewModel.customer),
 			 success: function (result) {
 					viewModel.set("customer", $.extend(true, defaults, result));
-		        	
 		        	if(viewModel.get("customer.tripJp.oneormore")==1){
 		        		$('.WangFan').addClass('hide');
 		        		$('.DuoCheng').removeClass('hide');
