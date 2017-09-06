@@ -285,4 +285,10 @@ public class NewCustomerEntity implements Serializable {
 	private PlaceInformationEntity placeinformation;
 	//申请的制作者
 	private ApplicantProducerEntity applicantproducer;
+	//是否参军
+	private Boolean isarmy;
+	//是否有曾用名
+	private Boolean isoldname;
+	//是否丢失证件
+	private Boolean ispassportlose;
 }

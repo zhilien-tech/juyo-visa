@@ -166,10 +166,15 @@ var viewModel = kendo.observable({
     },
     //参过军
     joinArmy: function () {
-    	//var joinArmy = viewModel.get("customer.army");
     	var state = viewModel.get("customer.army.armydo")|| viewModel.get("customer.army.armyname")
-    			 || viewModel.get("customer.army.armytype")|| viewModel.get("customer.army.country")
-    			 || viewModel.get("customer.army.enddate")|| viewModel.get("customer.army.startdate");
+	    		|| viewModel.get("customer.army.armytype")|| viewModel.get("customer.army.country")
+	    		|| viewModel.get("customer.army.enddate")|| viewModel.get("customer.army.startdate");
+    	var armyid = viewModel.get("customer.army.id");
+    	//viewModel.set("customer.isarmy",false);
+    	if(armyid && armyid > 0){
+    		//state = true;    	
+    		viewModel.set("customer.isarmy",true);
+		}
     	return state;
     },
     //工作信息详情
@@ -259,9 +264,14 @@ kendo.bind($(document.body), viewModel);
 //丢过护照
 $("#pp_lost").change(function () {
 	///console.log("==1==="+JSON.stringify(viewModel.customer.passportlose));
-	var a={"sendcountry":"CHN","customerid":0,"id":0,"passport":"","reason":"","reasonen":""};
+	/*var a={"sendcountry":"CHN","customerid":0,"id":0,"passport":"","reason":"","reasonen":""};
 	var b={"sendcountry":"CHN","customerid":0,"id":-1,"passport":"","reason":"","reasonen":""};
-	viewModel.set("customer.passportlose", $(this).is(':checked') ? a : b);
+	viewModel.set("customer.passportlose", $(this).is(':checked') ? a : b);*/
+	if($(this).is(':checked')){
+		viewModel.set("customer.ispassportlose",true);
+	}else{
+		viewModel.set("customer.ispassportlose",false);
+	}
 	///console.log("===2=="+JSON.stringify(viewModel.customer.passportlose));
 });
 
@@ -275,6 +285,11 @@ $("#has_used_name").change(function () {
     viewModel.set("customer.oldname.oldnameen", value);
     viewModel.set("customer.oldname.oldxing", value);
     viewModel.set("customer.oldname.oldxingen", value);
+    if($(this).is(':checked')){
+		viewModel.set("customer.isoldname",true);
+	}else{
+		viewModel.set("customer.isoldname",false);
+	}
 });
 
 //其他国家居民
@@ -357,12 +372,17 @@ $("#has_never_educated").change(function () {
 $("#join_army").change(function () {
 	//viewModel.set("customer.army", $(this).is(':checked') ? " " : "");
 	var value = $(this).is(':checked') ? " " : "";
-    viewModel.set("customer.army.armydo", value);
-    viewModel.set("customer.army.armyname", value);
-    viewModel.set("customer.army.armytype", value);
-    viewModel.set("customer.army.country", value);
-    viewModel.set("customer.army.enddate", value);
-    viewModel.set("customer.army.startdate", value);
+	viewModel.set("customer.army.armydo", value);
+	viewModel.set("customer.army.armyname", value);
+	viewModel.set("customer.army.armytype", value);
+	viewModel.set("customer.army.country", value);
+	viewModel.set("customer.army.enddate", value);
+	viewModel.set("customer.army.startdate", value);
+	if($(this).is(':checked')){
+		viewModel.set("customer.isarmy",true);
+	}else{
+		viewModel.set("customer.isarmy",false);
+	}
 });
 /*$("#join_army").change(function () {
     if ($(this).is(':checked')) {

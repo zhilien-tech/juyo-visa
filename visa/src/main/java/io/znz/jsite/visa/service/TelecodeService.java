@@ -21,7 +21,7 @@ public class TelecodeService {
 
 	private static final Log log = Logs.get();
 
-	private static final String URL = "http://apps.chasedream.com/chinese-commercial-code/";
+	private static final String URL = "https://apps.chasedream.com/chinese-commercial-code/";
 	private static final String ID_STATE = "__VIEWSTATE";
 	private static final String ID_VALIDATION = "__EVENTVALIDATION";
 

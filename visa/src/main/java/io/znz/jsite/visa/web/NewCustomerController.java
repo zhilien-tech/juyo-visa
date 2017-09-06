@@ -150,13 +150,19 @@ public class NewCustomerController {
 			dbDao.insert(customer);
 		}
 		NewArmyEntity army = customer.getArmy();
-		if (!Util.isEmpty(army)) {
+		boolean isarmy = customer.getIsarmy();
+		if (isarmy) {
+			//if (!Util.isEmpty(army)) {
 			if (!Util.isEmpty(army.getId()) && army.getId() > 0) {
 				nutDao.update(army);
 			} else {
 
 				army.setCustomerid(customer.getId());
 				dbDao.insert(army);
+			}
+		} else {
+			if (!Util.isEmpty(army.getId()) && army.getId() > 0) {
+				dbDao.delete(army);
 			}
 		}
 		NewParentsEntity father = customer.getFather();
@@ -200,13 +206,19 @@ public class NewCustomerController {
 			}
 		}
 		NewOldnameEntity oldname = customer.getOldname();
-		if (!Util.isEmpty(oldname)) {
+		Boolean isoldname = customer.getIsoldname();
+		if (isoldname) {
+			//if (!Util.isEmpty(oldname)) {
 			if (!Util.isEmpty(oldname.getId()) && oldname.getId() > 0) {
 				nutDao.update(oldname);
 			} else {
 
 				oldname.setCustomerid(customer.getId());
 				dbDao.insert(oldname);
+			}
+		} else {
+			if (!Util.isEmpty(oldname.getId()) && oldname.getId() > 0) {
+				dbDao.delete(oldname);
 			}
 		}
 		List<NewOldworksEntity> oldworkslist = customer.getOldworkslist();
@@ -248,13 +260,19 @@ public class NewCustomerController {
 			}
 		}
 		NewPassportloseEntity passportlose = customer.getPassportlose();
-		if (!Util.isEmpty(passportlose)) {
+		Boolean ispassportlose = customer.getIspassportlose();
+		if (ispassportlose) {
+			//if (!Util.isEmpty(passportlose)) {
 			if (!Util.isEmpty(passportlose.getId()) && passportlose.getId() > 0) {
 				nutDao.update(passportlose);
 			} else {
 
 				passportlose.setCustomerid(customer.getId());
 				dbDao.insert(passportlose);
+			}
+		} else {
+			if (!Util.isEmpty(passportlose.getId()) && passportlose.getId() > 0) {
+				dbDao.delete(passportlose);
 			}
 		}
 		NewWorkinfoEntity workinfo = customer.getWorkinfo();
