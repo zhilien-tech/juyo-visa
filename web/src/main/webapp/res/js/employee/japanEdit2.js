@@ -386,14 +386,7 @@ var viewModel = kendo.observable({
 			}
 			viewModel.set("proposers",proposersnew);
 		}
-<<<<<<< HEAD
-    },
-    abab:function(){
-    	alert(1);
-    	viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
-    },
-    baba:function(e){
-=======
+
 	},
 	updateData1:function(e){
 		var person=new Object();
@@ -421,7 +414,7 @@ var viewModel = kendo.observable({
 		viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
 	},
 	baba:function(e){
->>>>>>> refs/remotes/origin/master
+
 		var a=viewModel.get("customer.dateplanJpList");
 		console.log(JSON.stringify(a));
 		for(var i=0;i<a.length;i++){
@@ -1125,7 +1118,7 @@ $("#DuoCheng_WangFan").change(function(){
 				viewModel.set("customer", $.extend(true, defaults, result));
 				if(indexnew!=null){
 
-<<<<<<< HEAD
+
    	function autogenerate(){
    	 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 	   	 $.ajax({
@@ -1161,9 +1154,6 @@ $("#DuoCheng_WangFan").change(function(){
 			 error: function(XMLHttpRequest, textStatus, errorThrown){
 				 if(indexnew!=null){
 						layer.close(indexnew);
-=======
-					layer.close(indexnew);
->>>>>>> refs/remotes/origin/master
 				}
 				if(viewModel.get("customer.tripJp.oneormore")==1){
 					$('.WangFan').addClass('hide');
