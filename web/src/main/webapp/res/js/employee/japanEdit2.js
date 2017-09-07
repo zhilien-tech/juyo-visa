@@ -229,8 +229,15 @@ var viewModel = kendo.observable({
 				}
 			}
 		});
-		viewModel.set("scenic",scenicDs);
+		//viewModel.set("scenic",scenicDs);
 		var multiSelect = $("#scenic_select_"+dataUid).data("kendoMultiSelect");
+		
+		var selectModel = kendo.observable({
+			scenicDs:scenicDs
+		});
+		multiSelect.dataSource = selectModel.get("scenicDs");
+		kendo.bind($("#scenic_select_"+dataUid), selectModel);
+		
 		multiSelect.dataSource.filter({}); //clear applied filter before setting value
 		$.ajax({
 			type: 'GET',
