@@ -75,7 +75,6 @@ var startcity=[
                {text:"名古屋",value:39},
                {text:"津市",value:40},
                {text:"大津",value:41},
-               {text:"京都",value:42},
                {text:"大阪",value:43},
                {text:"神户",value:44},
                {text:"奈良",value:45},
