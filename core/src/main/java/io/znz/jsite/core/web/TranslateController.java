@@ -3,6 +3,7 @@ package io.znz.jsite.core.web;
 import io.znz.jsite.base.bean.ResultObject;
 import io.znz.jsite.util.HttpClientUtil;
 import io.znz.jsite.util.Md5Util;
+import io.znz.jsite.util.TranslateUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 /**
@@ -54,13 +54,13 @@ public class TranslateController {
 			JSONObject segments = jsonObject.getJSONArray("trans_result").getJSONObject(0);
 			return ResultObject.success(segments.getString("dst"));
 		} else if (GOOGLE.equalsIgnoreCase(api)) {
-			String url = MessageFormat.format(URL_GOOGLE, from, to, URLEncoder.encode(q, ENCODING));
-			JSONArray segments = JSON.parseArray(HttpClientUtil.get(url)).getJSONArray(0);
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < segments.size(); i++) {
-				sb.append(segments.getJSONArray(i).getString(0));
+			String result = null;
+			try {
+				result = TranslateUtil.translate(q, "en");
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			return ResultObject.success(sb.toString());
+			return ResultObject.success(result);
 		}
 		return ResultObject.fail("暂无可用翻译结果");
 	}

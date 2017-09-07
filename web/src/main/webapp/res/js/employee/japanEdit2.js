@@ -14,6 +14,7 @@ var customersourceEnum=[
                         {text:"直客",value:3},
                         {text:"线下",value:4}
                         ];
+var arricity = null;
 var proposersnew=[];
 var proposers=new kendo.data.DataSource({
 	serverFiltering: true,
@@ -190,12 +191,16 @@ flights = new kendo.data.DataSource({
 		read: {
 			dataType: "json",
 			url: "/visa/scenic/json",
-		},
+			data:{
+				filter:$("#arricity").val()
+			}
+		}/*,
 		parameterMap: function (options, type) {
 			if (options.filter) {
+				//alert(JSON.stringify(options.filter));
 				return {filter: options.filter.filters[0].value};
 			}
-		},
+		},*/
 	}
 });
 
@@ -207,6 +212,42 @@ var viewModel = kendo.observable({
 	flights: flights,
 	hotels: hotels,
 	scenic: scenic,
+	scenicChange: function(e){
+		
+		var dataUid = e.data.uid;
+		arricity = $("#arricity_"+dataUid).val();
+		viewModel.set("customer.tripplanJpList.city",arricity);
+		
+		scenicDs = new kendo.data.DataSource({
+			serverFiltering: true,
+			transport: {
+				read: {
+					dataType: "json",
+					url: "/visa/scenic/json",
+					data:{
+						filter:arricity
+					}
+				}
+			}
+		});
+		viewModel.set("scenic",scenicDs);
+		var multiSelect = $("#scenic_select_"+dataUid).data("kendoMultiSelect");
+		multiSelect.dataSource.filter({}); //clear applied filter before setting value
+		$.ajax({
+			type: 'GET',
+			url: "/visa/scenic/arricity?arricity="+arricity,
+			contentType: "application/json",
+			dataType: 'json',
+			success: function (result) {
+				var selectList = [];
+				for(var i=0; i<result.length && i<4; i++){
+					selectList.push(result[i].id);
+				}
+				multiSelect.value(selectList);
+			}
+		});
+		
+	},
 	addOne: function (e) {
 		var key = $.isString(e) ? e : $(e.target).data('params');
 		//viewModel.get(key).push(keys[key]);
@@ -223,6 +264,8 @@ var viewModel = kendo.observable({
 			insurance: false,
 			outDistrict: false,
 		});
+		
+		
 	},
 	delOne: function (e) {
 		var key = $(e.target).data('params');
