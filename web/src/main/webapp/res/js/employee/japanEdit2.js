@@ -1270,7 +1270,6 @@ function autogenerate(){
 		success: function (result) {
 			viewModel.set("customer", $.extend(true, defaults, result));
 
-			alert(viewModel.get("customer.tripplanJpList"));
 			viewModel.set("customer.tripplanJpList",result.tripplanJpList);
 			
 			//获取所有的景区下拉列表jquery元素，遍历获取每一个的id，得到此id对应城市
