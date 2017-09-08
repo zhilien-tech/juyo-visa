@@ -609,7 +609,7 @@
             <li>
                 <span class="k-link" onclick="autogenerate();">行程安排</span>
                 <div class="container-fluid">
-                    <div data-bind="source:customer.tripplanJpList" data-template="tpl_trip"></div>
+                    <div id="trip_div" data-bind="source:customer.tripplanJpList" data-template="tpl_trip"></div>
                     <div class="row">
                         <div class="col-xs-12">
                             <button data-bind="click:addOne" data-params="customer.tripplanJpList"
@@ -864,15 +864,15 @@
               <div class="form-group">
                   <label for="traveler_city_name">城市:<span style="color: red">*</span></label>
                   <div class='input-group'>
-						<select id=""
+						<select id="arricity_#:data.uid#"
                                                     data-role="dropdownlist"
                                                     data-filter="startswith"
                                                     data-suggest="true"
                                                     data-auto-bind="true"
                                                     data-value-primitive="true"
                                                     data-text-field="text"
-                                                    data-value-field="value"
-                                                    data-bind="value:city,source:startcitynew,events: { change: abab }"
+                                                    data-value-field="text"
+                                                    data-bind="value:city,source:startcitynew,events: { change: scenicChange }"
                                                     style="width: 100%;"></select>
                       <!--<input id="traveler_city_name" style="width: 100%;" class="k-textbox"
                              name="headcount" data-bind="value:city"/> -->
@@ -883,14 +883,15 @@
 		   <div class="col-xs-6">
                 <div class="form-group">
                     <label>景区:</label>
-                    <select class="fill"
+					<input class="k-textbox" id="scenic_input_#:data.uid#" type="hidden" data-bind="value:scenicIds"/>
+                    <select name="scenic_name"  class="fill" id = "scenic_select_#:data.uid#"
                             data-role="multiselect"
                             data-auto-close="false"
 						
                             data-tag-mode="multiple"
                             data-value-field="id"
                             data-text-field="name"
-                            data-bind="source:scenic,value:scenics">
+                            data-bind="value:scenics">
                     </select>
                 </div>
             </div>
@@ -899,13 +900,14 @@
             <div class="col-xs-6">
                 <div class="form-group">
                     <label>酒店:</label>
-                    <input class="fill"
+					<input class="k-textbox" id="hotel_input_#:data.uid#" type="hidden" data-bind="value:hotelid"/>
+                    <input name="hotel_name" class="fill" id = "hotel_select_#:data.uid#"
                            data-role="dropdownlist"
                            data-filter="startswith"
                            data-value-field="id"
                            data-text-field="name"
                            data-value-template="tpl_hotel"
-                           data-bind="source:hotels,value:hotelid"/>
+                           data-bind="value:hotelid"/>
                 </div>
             </div>
             <div class="col-xs-2">

@@ -7,14 +7,15 @@
  */
 var sixnum=[];
 var threenum=[];
+var arricity = null;
 //客户来源
 var customersourceEnum=[
 
-    {text:"线上",value:1},
-    {text:"OTS",value:2},
-    {text:"直客",value:3},
-    {text:"线下",value:4}
-  ];
+                        {text:"线上",value:1},
+                        {text:"OTS",value:2},
+                        {text:"直客",value:3},
+                        {text:"线下",value:4}
+                        ];
 
 var proposersnew=[];
 var proposers=new kendo.data.DataSource({
@@ -36,8 +37,8 @@ var proposers=new kendo.data.DataSource({
 //出发城市
 var startcity=[
                {text:"北京",value:1},
-               {text:"上海浦东",value:2},
-               {text:"上海虹桥",value:3},
+               {text:"上海",value:2},
+               {text:"东京",value:3},
                {text:"广州",value:4},
                {text:"沈阳",value:5},
                {text:"天津",value:6},
@@ -97,7 +98,8 @@ var startcity=[
                {text:"大分",value:60},
                {text:"宫崎",value:61},
                {text:"鹿儿岛",value:62},
-               {text:"那霸",value:63}
+               {text:"那霸",value:63},
+               {text:"兵库",value:64}
 
                ];
 var defaults = {
@@ -186,7 +188,7 @@ flights = new kendo.data.DataSource({
 			}
 		},
 	}
-}), scenic = new kendo.data.DataSource({
+}),scenic = new kendo.data.DataSource({
 	serverFiltering: true,
 	transport: {
 		read: {
@@ -207,8 +209,6 @@ var viewModel = kendo.observable({
 	startcitynew:startcity,
 	proposers:proposersnew,
 	flights: flights,
-	hotels: hotels,
-	scenic: scenic,
 	addOne: function (e) {
 		var key = $.isString(e) ? e : $(e.target).data('params');
 		//viewModel.get(key).push(keys[key]);
@@ -279,7 +279,7 @@ var viewModel = kendo.observable({
 	aaa:function(e){
 		/* console.log(e.data.id);
     	  console.log(e.data.istogetherlinkman);*/
-    	  //$("#main1_"+e.data.id).is(':checked')
+		//$("#main1_"+e.data.id).is(':checked')
 		if(!e.data.istogetherlinkman){
 
 			var proposerInfoJpList=viewModel.get("customer.proposerInfoJpList");
@@ -327,6 +327,83 @@ var viewModel = kendo.observable({
 				});
 			}
 		}
+	},
+	scenicChange: function(e){
+		//景区
+		var dataUid = e.data.uid; 
+		arricity = $("#arricity_"+dataUid).val();
+		viewModel.set("customer.tripplanJpList.city",arricity);
+
+		//景区
+		scenicDs = new kendo.data.DataSource({
+			serverFiltering: true,
+			transport: {
+				read: {
+					dataType: "json",
+					url: "/visa/scenic/json",
+					data:{
+						filter:arricity
+					}
+				}
+			}
+		});
+
+		//viewModel.set("scenic",scenicDs);
+		var multiSelect = $("#scenic_select_"+dataUid).data("kendoMultiSelect");
+		//console.log(JSON.stringify(scenicDs));
+
+		//默认值
+		multiSelect.dataSource.filter({}); //clear applied filter before setting value
+		multiSelect.setDataSource(scenicDs);
+		//scenic.data([]) ;
+
+		$.ajax({
+			type: 'GET',
+			url: "/visa/scenic/arricity?arricity="+arricity,
+			contentType: "application/json",
+			dataType: 'json',
+			success: function (result) {
+				var selectList = [];
+				for(var i=0; i<result.length && i<4; i++){
+					selectList.push(result[i].id);
+				}
+				multiSelect.value(selectList);
+			}
+		});
+
+
+		//酒店
+		hotelDs = new kendo.data.DataSource({
+			serverFiltering: true,
+			transport: {
+				read: {
+					dataType: "json",
+					url: "/visa/hotel/json",
+					data:{
+						filter:arricity
+					}
+				}
+			}
+		});
+		var multiSelect_hotel = $("#hotel_select_"+dataUid).data("kendoDropDownList");
+
+		//默认值
+		multiSelect_hotel.dataSource.filter({}); //clear applied filter before setting value
+		multiSelect_hotel.setDataSource(hotelDs);
+
+		$.ajax({
+			type: 'GET',
+			url: "/visa/hotel/arricity?arricity="+arricity,
+			contentType: "application/json",
+			dataType: 'json',
+			success: function (result) {
+				var selectList = [];
+				if(result.length > 0){
+					selectList.push(result[0].id);
+					multiSelect_hotel.value(selectList);
+				}
+			}
+		});
 	},
 	changeismainproposer:function(e){
 		///console.log(e.data.id);
@@ -412,9 +489,10 @@ var viewModel = kendo.observable({
 	},
 	abab:function(){
 		viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
+		viewModel.set("customer.tripplanJpList.city",viewModel.get("customer.tripJp.arrivecity"));
 	},
-	baba:function(e){
 
+	baba:function(e){
 		var a=viewModel.get("customer.dateplanJpList");
 		console.log(JSON.stringify(a));
 		for(var i=0;i<a.length;i++){
@@ -1117,43 +1195,7 @@ $("#DuoCheng_WangFan").change(function(){
 			success: function (result) {
 				viewModel.set("customer", $.extend(true, defaults, result));
 				if(indexnew!=null){
-
-
-   	function autogenerate(){
-   	 var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
-	   	 $.ajax({
-			 type: "POST",
-			 url: "/visa/neworderjp/autogenerate",
-			 contentType: "application/json",
-			 dataType: "json",
-			 data: JSON.stringify(viewModel.customer),
-			 success: function (result) {
-					viewModel.set("customer", $.extend(true, defaults, result));
-		        	if(viewModel.get("customer.tripJp.oneormore")==1){
-		        		$('.WangFan').addClass('hide');
-		        		$('.DuoCheng').removeClass('hide');
-		        	}else{
-		        		$('.WangFan').removeClass('hide');
-		        		$('.DuoCheng').addClass('hide');
-		        	}
-		        	defaults.customermanage.telephone=result.customermanage.telephone;
-		        	defaults.customermanage.email=result.customermanage.email;
-		        	var color = $("#cus_phone").data("kendoMultiSelect");
-					color.value(result.customermanage.id);
-		        	var color = $("#cus_email").data("kendoMultiSelect");
-					color.value(result.customermanage.id);
-					var color = $("#cus_fullComName").data("kendoMultiSelect");
-					color.value(result.customermanage.id);
-					var color = $("#cus_linkman").data("kendoMultiSelect");
-
-					color.value(result.customermanage.id);
-					 if(indexnew!=null){
-							layer.close(indexnew);
-					 }
-			 },
-			 error: function(XMLHttpRequest, textStatus, errorThrown){
-				 if(indexnew!=null){
-						layer.close(indexnew);
+					layer.close(indexnew);
 				}
 				if(viewModel.get("customer.tripJp.oneormore")==1){
 					$('.WangFan').addClass('hide');
@@ -1222,10 +1264,65 @@ function autogenerate(){
 		success: function (result) {
 			viewModel.set("customer", $.extend(true, defaults, result));
 
-			if(viewModel.get("customer.tripJp.oneormore")==1){
+			alert(viewModel.get("customer.tripplanJpList"));
+			viewModel.set("customer.tripplanJpList",result.tripplanJpList);
+			
+			//获取所有的景区下拉列表jquery元素，遍历获取每一个的id，得到此id对应城市
+			$('[name="scenic_name"]').each(function(index, element){
+				var scenicId = $(this).attr("id");
+				var dataUid = scenicId.split("scenic_select_")[1];
+				var cityId = "arricity_" + dataUid;
+				var scenicInput = $("#scenic_input_"+dataUid).val();
+				var hotelId = "hotel_select_" + dataUid;
+				var hotelInput = $("#hotel_input_"+dataUid).val();
+				var arricity = $("#"+cityId).val();
+				//scenic
+				var scenicNew = new kendo.data.DataSource({
+					serverFiltering: true,
+					transport: {
+						read: {
+							dataType: "json",
+							url: "/visa/scenic/json",
+							data:{
+								filter:arricity
+							}
+						}
+					}
+				})
+				var scenicSelect = $("#"+scenicId).data("kendoMultiSelect");
+				scenicSelect.setDataSource(scenicNew);
+				scenicSelect.value(scenicInput.split(","));
+				$(scenicInput).each(function(index, element){
+					console.log(element.id);
+				});
+
+				//酒店
+				var hotelNew = new kendo.data.DataSource({
+					serverFiltering: true,
+					transport: {
+						read: {
+							dataType: "json",
+							url: "/visa/hotel/json",
+							data:{
+								filter:arricity
+							}
+						}
+					}
+				});
+				var multiSelect_hotel = $("#"+hotelId).data("kendoDropDownList");
+				multiSelect_hotel.setDataSource(hotelNew);
+				//回显
+				console.log(hotelInput);
+				multiSelect_hotel.value(hotelInput);
+
+			});
+
+
+
+			if(viewModel.get("customer.tripJp.oneormore")==1){//多程
 				$('.WangFan').addClass('hide');
 				$('.DuoCheng').removeClass('hide');
-			}else{
+			}else{//单程
 				$('.WangFan').removeClass('hide');
 				$('.DuoCheng').addClass('hide');
 			}
@@ -1248,9 +1345,9 @@ function autogenerate(){
 			if(indexnew!=null){
 				layer.close(indexnew);
 			}
-			console.log(XMLHttpRequest);
-			console.log(textStatus);
-			console.log(errorThrown);
+			//console.log(XMLHttpRequest);
+			//console.log(textStatus);
+		//	console.log(errorThrown);
 			           /* layer.msg('失败!',{time:2000});*/
 			     }
 	});
