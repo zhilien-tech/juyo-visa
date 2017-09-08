@@ -175,38 +175,7 @@ flights = new kendo.data.DataSource({
 			}
 		},
 	}
-}), hotels = new kendo.data.DataSource({
-	serverFiltering: true,
-	transport: {
-		read: {
-			dataType: "json",
-			url: "/visa/hotel/json",
-		},
-		parameterMap: function (options, type) {
-			if (options.filter) {
-				return {filter: options.filter.filters[0].value};
-			}
-		},
-	}
-}),scenic = new kendo.data.DataSource({
-	serverFiltering: true,
-	transport: {
-		read: {
-			dataType: "json",
-			url: "/visa/scenic/json",
-			data:{
-				filter:$("#arricity").val()
-			}
-		}/*,
-		parameterMap: function (options, type) {
-			if (options.filter) {
-				//alert(JSON.stringify(options.filter));
-				return {filter: options.filter.filters[0].value};
-			}
-		},*/
-	}
 });
-
 
 var viewModel = kendo.observable({
 	customersourceEnum:customersourceEnum,
@@ -346,9 +315,9 @@ var viewModel = kendo.observable({
 			transport: {
 				read: {
 					dataType: "json",
-					url: "/visa/scenic/json",
+					url: "/visa/scenic/arricity",
 					data:{
-						filter:arricity
+						arricity:arricity
 					}
 				}
 			}
@@ -384,9 +353,9 @@ var viewModel = kendo.observable({
 			transport: {
 				read: {
 					dataType: "json",
-					url: "/visa/hotel/json",
+					url: "/visa/hotel/arricity",
 					data:{
-						filter:arricity
+						arricity:arricity
 					}
 				}
 			}
@@ -1261,6 +1230,7 @@ $("#DuoCheng_WangFan").change(function(){
 
 function autogenerate(){
 	var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
+	
 	$.ajax({
 		type: "POST",
 		url: "/visa/neworderjp/autogenerate",
@@ -1271,7 +1241,6 @@ function autogenerate(){
 			viewModel.set("customer", $.extend(true, defaults, result));
 
 			viewModel.set("customer.tripplanJpList",result.tripplanJpList);
-			
 			//获取所有的景区下拉列表jquery元素，遍历获取每一个的id，得到此id对应城市
 			$('[name="scenic_name"]').each(function(index, element){
 				var scenicId = $(this).attr("id");
@@ -1281,15 +1250,16 @@ function autogenerate(){
 				var hotelId = "hotel_select_" + dataUid;
 				var hotelInput = $("#hotel_input_"+dataUid).val();
 				var arricity = $("#"+cityId).val();
+				
 				//scenic
 				var scenicNew = new kendo.data.DataSource({
 					serverFiltering: true,
 					transport: {
 						read: {
 							dataType: "json",
-							url: "/visa/scenic/json",
+							url: "/visa/scenic/arricity",
 							data:{
-								filter:arricity
+								arricity:arricity
 							}
 						}
 					}
@@ -1307,9 +1277,9 @@ function autogenerate(){
 					transport: {
 						read: {
 							dataType: "json",
-							url: "/visa/hotel/json",
+							url: "/visa/hotel/arricity",
 							data:{
-								filter:arricity
+								arricity:arricity
 							}
 						}
 					}

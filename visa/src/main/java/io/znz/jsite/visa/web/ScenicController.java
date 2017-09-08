@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.uxuexi.core.common.util.Util;
+import com.uxuexi.core.db.dao.IDbDao;
 
 /**
  * Created by Chaly on 2017/3/7.
@@ -28,6 +29,8 @@ import com.uxuexi.core.common.util.Util;
 public class ScenicController extends BaseController {
 	@Autowired
 	private ScenicService scenicService;
+	@Autowired
+	protected IDbDao dbDao;
 
 	@RequestMapping(value = "list")
 	@ResponseBody
@@ -64,6 +67,6 @@ public class ScenicController extends BaseController {
 		if (Util.isEmpty(arricity)) {
 			return null;
 		}
-		return scenicService.findByFilter(arricity);
+		return scenicService.findByCity(arricity);
 	}
 }
