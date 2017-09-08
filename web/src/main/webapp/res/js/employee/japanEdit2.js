@@ -16,7 +16,7 @@ var customersourceEnum=[
                         {text:"直客",value:3},
                         {text:"线下",value:4}
                         ];
-
+var arricity = null;
 var proposersnew=[];
 var proposers=new kendo.data.DataSource({
 	serverFiltering: true,
@@ -77,7 +77,6 @@ var startcity=[
                {text:"名古屋",value:39},
                {text:"津市",value:40},
                {text:"大津",value:41},
-               {text:"京都",value:42},
                {text:"大阪",value:43},
                {text:"神户",value:44},
                {text:"奈良",value:45},
@@ -102,6 +101,7 @@ var startcity=[
                {text:"兵库",value:64}
 
                ];
+
 var defaults = {
 		visatype:0,
 		area:0,
@@ -194,12 +194,16 @@ flights = new kendo.data.DataSource({
 		read: {
 			dataType: "json",
 			url: "/visa/scenic/json",
-		},
+			data:{
+				filter:$("#arricity").val()
+			}
+		}/*,
 		parameterMap: function (options, type) {
 			if (options.filter) {
+				//alert(JSON.stringify(options.filter));
 				return {filter: options.filter.filters[0].value};
 			}
-		},
+		},*/
 	}
 });
 
@@ -225,6 +229,8 @@ var viewModel = kendo.observable({
 			insurance: false,
 			outDistrict: false,
 		});
+		
+		
 	},
 	delOne: function (e) {
 		var key = $(e.target).data('params');

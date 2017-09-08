@@ -5,7 +5,6 @@ import io.znz.jsite.base.bean.PageFilter;
 import io.znz.jsite.base.bean.ResultObject;
 import io.znz.jsite.visa.bean.Flight;
 import io.znz.jsite.visa.bean.Scenic;
-import io.znz.jsite.visa.entity.customer.CustomerManageEntity;
 import io.znz.jsite.visa.service.ScenicService;
 
 import org.hibernate.criterion.Criterion;
