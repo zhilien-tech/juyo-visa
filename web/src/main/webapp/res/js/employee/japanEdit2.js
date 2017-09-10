@@ -142,6 +142,7 @@ keys = {
 			daynum:"",
 			nowdate:"",
 			city:"",
+			scenicIds:"",
 			viewid:"",	
 			hotelid:"",
 			hometype:"",
@@ -184,25 +185,7 @@ flights = new kendo.data.DataSource({
 			}
 		},
 	}
-}), scenic = new kendo.data.DataSource({
-	serverFiltering: true,
-	transport: {
-		read: {
-			dataType: "json",
-			url: "/visa/scenic/json",
-			data:{
-				filter:$("#arricity").val()
-			}
-		}/*,
-		parameterMap: function (options, type) {
-			if (options.filter) {
-				//alert(JSON.stringify(options.filter));
-				return {filter: options.filter.filters[0].value};
-			}
-		},*/
-	}
 });
-
 
 var viewModel = kendo.observable({
 	customersourceEnum:customersourceEnum,
@@ -210,13 +193,13 @@ var viewModel = kendo.observable({
 	proposers:proposersnew,
 	flights: flights,
 	hotels: hotels,
-	scenic: scenic,
 	scenicChange: function(e){
 		
-		var dataUid = e.data.uid;
+		var dataUid = e.data.uid; 
 		arricity = $("#arricity_"+dataUid).val();
 		viewModel.set("customer.tripplanJpList.city",arricity);
 		
+		//景区
 		scenicDs = new kendo.data.DataSource({
 			serverFiltering: true,
 			transport: {
@@ -229,16 +212,16 @@ var viewModel = kendo.observable({
 				}
 			}
 		});
+		
 		//viewModel.set("scenic",scenicDs);
 		var multiSelect = $("#scenic_select_"+dataUid).data("kendoMultiSelect");
+		//console.log(JSON.stringify(scenicDs));
 		
-		var selectModel = kendo.observable({
-			scenicDs:scenicDs
-		});
-		multiSelect.dataSource = selectModel.get("scenicDs");
-		kendo.bind($("#scenic_select_"+dataUid), selectModel);
-		
+		//默认值
 		multiSelect.dataSource.filter({}); //clear applied filter before setting value
+		multiSelect.setDataSource(scenicDs);
+		//scenic.data([]) ;
+		
 		$.ajax({
 			type: 'GET',
 			url: "/visa/scenic/arricity?arricity="+arricity,
@@ -252,7 +235,6 @@ var viewModel = kendo.observable({
 				multiSelect.value(selectList);
 			}
 		});
-		
 	},
 	addOne: function (e) {
 		var key = $.isString(e) ? e : $(e.target).data('params');
@@ -278,7 +260,6 @@ var viewModel = kendo.observable({
 		var all = viewModel.get(key);
 		all.splice(all.indexOf(e.data), 1);
 	},
-
 	delOneApplicant: function (e) {
 		var key = $(e.target).data('params');
 		var all = viewModel.get(key);
@@ -1231,6 +1212,36 @@ function autogenerate(){
 		data: JSON.stringify(viewModel.customer),
 		success: function (result) {
 			viewModel.set("customer", $.extend(true, defaults, result));
+			
+			//获取所有的景区下拉列表jquery元素，遍历获取每一个的id，得到此id对应城市
+			$('[name="scenic_name"]').each(function(index, element){
+				var scenicId = $(this).attr("id");
+				var dataUid = scenicId.split("scenic_select_")[1];
+				var cityId = "arricity_" + dataUid;
+				var inputId = "scenic_input_" + dataUid;
+				var scenicInput = $("#"+inputId).val();
+
+				var scenicNew = new kendo.data.DataSource({
+					serverFiltering: true,
+					transport: {
+						read: {
+							dataType: "json",
+							url: "/visa/scenic/json",
+							data:{
+								filter:arricity
+							}
+						}
+					}
+				})
+				var scenicSelect = $("#"+scenicId).data("kendoMultiSelect");
+				scenicSelect.setDataSource(scenicNew);
+				console.log(scenicInput);
+				scenicSelect.value(scenicInput.split(","));
+				$(scenicInput).each(function(index, element){
+					console.log(element.id);
+				});
+				
+			});
 
 			if(viewModel.get("customer.tripJp.oneormore")==1){
 				$('.WangFan').addClass('hide');
