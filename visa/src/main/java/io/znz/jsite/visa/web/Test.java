@@ -6,10 +6,6 @@
 
 package io.znz.jsite.visa.web;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 /**
  * TODO(这里用一句话描述这个类的作用)
  * <p>
@@ -19,33 +15,28 @@ import java.util.Set;
  * @Date	 2017年6月14日 	 
  */
 public abstract class Test {
-	public Test() {
-
-	}
 
 	public static void main(String args[]) {
-		String strInput = "abacacde";
-		//			Test ts = new Test();
-		//		System.out.println(ts.strFilter(strInput));
-	}
-
-	public String strFilter(String strInput) {
-
-		//No.1
-		//开始写代码， 在此写入实现代码。 
-		String temp = "";
-		Set<String> s = new HashSet<String>();
-		for (int i = 0; i < strInput.length(); i++) {
-			s.add(strInput.charAt(i) + "");
+		String a = "ABFCEF";
+		String b = "CF";
+		String c = "结果：";
+		for (int i = 0; i < a.length();) {
+			if (a.length() < 1) {
+				break;
+			}
+			for (int j = 0; j < b.length(); j++) {
+				System.out.print(a.charAt(i) + "");
+				System.out.println(b.charAt(j) + "");
+				if ((a.charAt(i) + "").equals(b.charAt(j) + "")) {
+					c += a.charAt(i) + "";
+					b = b.substring(j + 1, b.length());
+					break;
+				}
+			}
+			a = a.substring(1, a.length());
 		}
-		Iterator<String> it = s.iterator();
-		while (it.hasNext()) {
-			String str = it.next();
-			temp += str;
-		}
 
-		//end_code
+		System.out.println(c);
 
-		return temp;
 	}
 }

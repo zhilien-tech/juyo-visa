@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.uxuexi.core.common.util.Util;
+import com.uxuexi.core.db.dao.IDbDao;
+
 /**
  * Created by Chaly on 2017/3/7.
  */
@@ -26,6 +29,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ScenicController extends BaseController {
 	@Autowired
 	private ScenicService scenicService;
+	@Autowired
+	protected IDbDao dbDao;
 
 	@RequestMapping(value = "list")
 	@ResponseBody
@@ -58,7 +63,10 @@ public class ScenicController extends BaseController {
 
 	@RequestMapping(value = "arricity")
 	@ResponseBody
-	public Object arricity(@RequestParam(required = false) String arricity) {
-		return scenicService.findByFilter(arricity);
+	public Object arricity(String arricity) {
+		if (Util.isEmpty(arricity)) {
+			return null;
+		}
+		return scenicService.findByCity(arricity);
 	}
 }
