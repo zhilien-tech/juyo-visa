@@ -58,4 +58,51 @@ public class NewTripJpEntity implements Serializable {
 	private Flight gofilght;
 	private Flight returnfilght;
 
+	/**
+	 * (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((arrivecity == null) ? 0 : arrivecity.hashCode());
+		result = prime * result + ((oneormore == null) ? 0 : oneormore.hashCode());
+		result = prime * result + ((returndate == null) ? 0 : returndate.hashCode());
+		result = prime * result + ((startdate == null) ? 0 : startdate.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		NewTripJpEntity other = (NewTripJpEntity) obj;
+		if (arrivecity == null) {
+			if (other.arrivecity != null)
+				return false;
+		} else if (!arrivecity.equals(other.arrivecity))
+			return false;
+		if (oneormore == null) {
+			if (other.oneormore != null)
+				return false;
+		} else if (!oneormore.equals(other.oneormore))
+			return false;
+		if (returndate == null) {
+			if (other.returndate != null)
+				return false;
+		} else if (!returndate.equals(other.returndate))
+			return false;
+		if (startdate == null) {
+			if (other.startdate != null)
+				return false;
+		} else if (!startdate.equals(other.startdate))
+			return false;
+		return true;
+	}
+
 }
