@@ -1587,14 +1587,17 @@ public class NewOrderJaPanController {
 		//客户端传递的出行信息
 		NewTripJpEntity tripJp1 = order.getTripJp();
 		NewTripJpEntity tripJp_db = dbDao.fetch(NewTripJpEntity.class, Cnd.where("order_jp_id", "=", order.getId()));
-		int oneormoreDb = tripJp_db.getOneormore();
+		int oneormoreDb = 3;
+		if (!Util.isEmpty(tripJp_db)) {
+			oneormoreDb = tripJp_db.getOneormore();
+		}
 
 		if (!Util.isEmpty(tripJp1.getOneormore())) {
 			int oneormore2 = tripJp1.getOneormore().intValue();
 			//单程
 			if (oneormore2 == 0) {
 				if (!Util.isEmpty(tripJp1.getStartdate())) {
-					if (tripJp1.getArrivecity().equals(tripJp_db.getArrivecity())
+					if (!Util.isEmpty(tripJp_db) && tripJp1.getArrivecity().equals(tripJp_db.getArrivecity())
 							&& tripJp1.getStartdate().equals(tripJp_db.getStartdate())
 							&& tripJp1.getReturndate().equals(tripJp_db.getReturndate()) && oneormore2 == oneormoreDb) {
 						List<NewTripplanJpEntity> query = dbDao.query(NewTripplanJpEntity.class,
@@ -1678,7 +1681,7 @@ public class NewOrderJaPanController {
 			} else if (oneormore2 == 1) {
 				List<NewDateplanJpEntity> query = dbDao.query(NewDateplanJpEntity.class,
 						Cnd.where("trip_jp_id", "=", tripJp1.getId()), null);
-				if (tripJp1.getArrivecity().equals(tripJp_db.getArrivecity())
+				if (!Util.isEmpty(tripJp_db) && tripJp1.getArrivecity().equals(tripJp_db.getArrivecity())
 						&& tripJp1.getStartdate().equals(tripJp_db.getStartdate())
 						&& tripJp1.getReturndate().equals(tripJp_db.getReturndate()) && oneormore2 == oneormoreDb) {
 					if (!Util.isEmpty(query) && query.size() > 0) {
