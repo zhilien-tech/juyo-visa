@@ -1852,15 +1852,18 @@ public class NewOrderJaPanController {
 				}
 			}
 			if (sceniclist.size() > 0) {
-				String view[] = t.getViewid().split(",");
-				List<Scenic> slist = Lists.newArrayList();
-				for (int j = 0; j < view.length; j++) {
-					if (!Util.isEmpty(view[j])) {
-						Scenic fetch = dbDao.fetch(Scenic.class, Long.valueOf(view[j]));
-						slist.add(fetch);
+				String viewid = t.getViewid();
+				if (!Util.isEmpty(viewid)) {
+					String view[] = t.getViewid().split(",");
+					List<Scenic> slist = Lists.newArrayList();
+					for (int j = 0; j < view.length; j++) {
+						if (!Util.isEmpty(view[j])) {
+							Scenic fetch = dbDao.fetch(Scenic.class, Long.valueOf(view[j]));
+							slist.add(fetch);
+						}
 					}
+					t.setScenics(slist);
 				}
-				t.setScenics(slist);
 			}
 
 			//t.setIntime(nowdate);
