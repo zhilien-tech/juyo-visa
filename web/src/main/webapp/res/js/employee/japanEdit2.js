@@ -339,6 +339,7 @@ var viewModel = kendo.observable({
 			contentType: "application/json",
 			dataType: 'json',
 			success: function (result) {
+				console.log(result);
 				var selectList = [];
 				for(var i=0; i<result.length && i<4; i++){
 					selectList.push(result[i].id);
@@ -1232,6 +1233,7 @@ $("#DuoCheng_WangFan").change(function(){
 function autogenerate(){
 	var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 	
+	
 	$.ajax({
 		type: "POST",
 		url: "/visa/neworderjp/autogenerate",
@@ -1239,38 +1241,8 @@ function autogenerate(){
 		dataType: "json",
 		data: JSON.stringify(viewModel.customer),
 		success: function (result) {
+			$("#trip_div").removeClass("hide");
 			viewModel.set("customer", $.extend(true, defaults, result));
-			
-			//获取所有的景区下拉列表jquery元素，遍历获取每一个的id，得到此id对应城市
-			$('[name="scenic_name"]').each(function(index, element){
-				var scenicId = $(this).attr("id");
-				var dataUid = scenicId.split("scenic_select_")[1];
-				var cityId = "arricity_" + dataUid;
-				var inputId = "scenic_input_" + dataUid;
-				var scenicInput = $("#"+inputId).val();
-
-				var scenicNew = new kendo.data.DataSource({
-					serverFiltering: true,
-					transport: {
-						read: {
-							dataType: "json",
-							url: "/visa/scenic/json",
-							data:{
-								filter:arricity
-							}
-						}
-					}
-				})
-				var scenicSelect = $("#"+scenicId).data("kendoMultiSelect");
-				scenicSelect.setDataSource(scenicNew);
-				console.log(scenicInput);
-				scenicSelect.value(scenicInput.split(","));
-				$(scenicInput).each(function(index, element){
-					console.log(element.id);
-				});
-				
-			});
-
 			viewModel.set("customer.tripplanJpList",result.tripplanJpList);
 			//获取所有的景区下拉列表jquery元素，遍历获取每一个的id，得到此id对应城市
 			$('[name="scenic_name"]').each(function(index, element){
@@ -1348,6 +1320,7 @@ function autogenerate(){
 			}
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
+			$("#trip_div").addClass("hide");
 			if(indexnew!=null){
 				layer.close(indexnew);
 			}

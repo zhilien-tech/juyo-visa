@@ -65,6 +65,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -1675,25 +1676,25 @@ public class NewOrderJaPanController {
 				//单程
 				if (tripTypeClient == 0) {
 					//数据库中的行程类型
-					if (!Util.isEmpty(tripJpClient.getStartdate())) {
+					if (!Util.isEmpty(tripJp_db)) {
 
 						//如果行程条件没变 直接用数据库中的
 						if (tripJpClient.equals(tripJp_db)) {
 							//如果数据库中已经存在
-							List<NewTripplanJpEntity> tripListDb = dbDao.query(NewTripplanJpEntity.class,
-									Cnd.where("order_jp_id", "=", order.getId()), null);
-							List<NewTripplanJpEntity> tripplanJpListnew = null;
-
-							if (tripListDb.size() > 0) {
-								tripplanJpListnew = tripListDb;
-								String arrivecity = null;
-								NewTripJpEntity tripJp = order.getTripJp();
-								arrivecity = tripJp.getArrivecity();
-								editTripplan(arrivecity, tripplanJpListnew);
-							} else {
-								// 新增 do nothing
-							}
-							order.setTripplanJpList(tripplanJpListnew);
+							//							List<NewTripplanJpEntity> tripListDb = dbDao.query(NewTripplanJpEntity.class,
+							//									Cnd.where("order_jp_id", "=", order.getId()), null);
+							//							List<NewTripplanJpEntity> tripplanJpListnew = null;
+							//
+							//							if (tripListDb.size() > 0) {
+							//								tripplanJpListnew = tripListDb;
+							//								String arrivecity = null;
+							//								NewTripJpEntity tripJp = order.getTripJp();
+							//								arrivecity = tripJp.getArrivecity();
+							//								editTripplan(arrivecity, tripplanJpListnew);
+							//						} else {
+							// 新增 do nothing
+							//}
+							//order.setTripplanJpList(tripplanJpListnew);
 						} else {
 							Date startdate = null;
 							Date enddate = null;
@@ -1710,11 +1711,14 @@ public class NewOrderJaPanController {
 									newTripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
 									this.daynum = 1;
 								}
+							} else {
+								autoGenerateNew(order);
 							}
 							order.setTripplanJpList(tripplanJpListnew);
 						}
+
+						//多程
 					}
-					//多程
 				} else if (tripTypeClient == 1) {
 					//出行信息
 					List<NewDateplanJpEntity> dateplanJpListInDb = dbDao.query(NewDateplanJpEntity.class,
@@ -1725,21 +1729,21 @@ public class NewOrderJaPanController {
 					if (!Util.isEmpty(dateplanJpListInDb)) {
 						//只要条件改变全部新增，否则 取数据库中的数据使用
 						if (dateplanJpListInDb.containsAll(dateplanJpListClient)) {
-							if (!Util.isEmpty(dateplanJpListInDb) && dateplanJpListInDb.size() > 0) {
-								if (!Util.isEmpty(dateplanJpListInDb.get(0).getStartdate())) {
-									//已经保存的行程安排
-									List<NewTripplanJpEntity> tripPlansInDb = dbDao.query(NewTripplanJpEntity.class,
-											Cnd.where("order_jp_id", "=", order.getId()), null);
-
-									List<NewTripplanJpEntity> tripplanJpList = null;
-
-									tripplanJpList = tripPlansInDb;
-									String arrivecity = null;
-									NewTripJpEntity tripJp = order.getTripJp();
-									arrivecity = tripJp.getArrivecity();
-									editTripplan(arrivecity, tripplanJpList);
-								}
-							}
+							//							if (!Util.isEmpty(dateplanJpListInDb) && dateplanJpListInDb.size() > 0) {
+							//								if (!Util.isEmpty(dateplanJpListInDb.get(0).getStartdate())) {
+							//									//已经保存的行程安排
+							//									List<NewTripplanJpEntity> tripPlansInDb = dbDao.query(NewTripplanJpEntity.class,
+							//											Cnd.where("order_jp_id", "=", order.getId()), null);
+							//
+							//									List<NewTripplanJpEntity> tripplanJpList = null;
+							//
+							//									tripplanJpList = tripPlansInDb;
+							//									String arrivecity = null;
+							//									NewTripJpEntity tripJp = order.getTripJp();
+							//									arrivecity = tripJp.getArrivecity();
+							//									editTripplan(arrivecity, tripplanJpList);
+							//								}
+							//							}
 						} else {
 							Date startdate = null;
 							Date enddate = null;
@@ -1769,8 +1773,11 @@ public class NewOrderJaPanController {
 							this.daynum = 1;
 							order.setTripplanJpList(tripplanJpListnew);
 						}
+					} else {
+						autoGenerateNew(order);
 					}
-				}//行程类型判断结束
+				} //行程类判断结束
+
 			}
 		}
 	}
@@ -1802,8 +1809,23 @@ public class NewOrderJaPanController {
 
 				if (i < hotellist.size() && hotellist.size() > 0) {
 					if (!Util.isEmpty(hotellist)) {
-						int hotelFoot = new Random().nextInt(10000) % hotellist.size();
-						t.setHotelid(hotellist.get(hotelFoot).getId());
+
+						Object[] values = new Object[20];
+						HashMap<Object, Object> hashMap = new HashMap<Object, Object>();
+						// 生成随机数字并存入HashMap
+						for (int j = 0; j < values.length; j++) {
+							int hotelFoot = new Random().nextInt(10000) % hotellist.size();
+							hashMap.put(hotelFoot, j);
+						}
+						// 从HashMap导入数组
+						values = hashMap.keySet().toArray();
+						// 遍历数组并打印数据
+						for (int j = 0; j < values.length; j++) {
+							t.setHotelid((Integer) values[j]);
+						}
+
+						//						int hotelFoot = new Random().nextInt(10000) % hotellist.size();
+						//						t.setHotelid(hotellist.get(hotelFoot).getId());
 					}
 				}
 				t.setHometype(0);
