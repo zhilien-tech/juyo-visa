@@ -305,6 +305,7 @@ var viewModel = kendo.observable({
 		}
 	},
 	scenicChange: function(e){
+		
 		//景区
 		var dataUid = e.data.uid; 
 		arricity = $("#arricity_"+dataUid).val();
@@ -340,10 +341,29 @@ var viewModel = kendo.observable({
 			dataType: 'json',
 			success: function (result) {
 				var selectList = [];
+				var viewIdStr = "";
+				var scenicList = [] ;
 				for(var i=0; i<result.length && i<4; i++){
 					selectList.push(result[i].id);
+					viewIdStr += result[i].id +",";
+					
+					var scenic = {} ;
+					scenic.id=result[i].id;
+					scenicList.push(scenic) ;
 				}
 				multiSelect.value(selectList);
+				
+				var tripPlanId = $("#tripPlanId_"+dataUid).val();
+				var tripplanJpList = viewModel.customer.tripplanJpList;
+				$(tripplanJpList).each(function(index,element){
+					console.log(element);
+					var eleId = element.id;
+					if( tripPlanId == eleId){
+						element.viewid = viewIdStr;
+						element.scenics = scenicList;
+					}
+				});
+				
 			}
 		});
 
@@ -377,6 +397,17 @@ var viewModel = kendo.observable({
 				if(result.length > 0){
 					selectList.push(result[0].id);
 					multiSelect_hotel.value(selectList);
+					
+					var tripPlanId = $("#tripPlanId_"+dataUid).val();
+					var tripplanJpList = viewModel.customer.tripplanJpList;
+					$(tripplanJpList).each(function(index,element){
+						var eleId = element.id;
+						if( tripPlanId == eleId){
+							element.hotelid = result[0].id;
+							console.log(element.hotelid+"=====================");
+						}
+					});
+					
 				}
 			}
 		});
