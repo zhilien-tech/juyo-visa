@@ -65,7 +65,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -1587,6 +1586,7 @@ public class NewOrderJaPanController {
 	@RequestMapping(value = "autogenerate")
 	@ResponseBody
 	public Object autogenerate(@RequestBody NewOrderJpEntity order) throws IllegalArgumentException {
+		//long startTime = System.currentTimeMillis(); //获取开始时间
 		long orderId = order.getId();
 		if (0 >= orderId) {
 			//新增
@@ -1595,6 +1595,9 @@ public class NewOrderJaPanController {
 			//编辑
 			autoGenerateEdit(order);
 		}
+		//long endTime = System.currentTimeMillis(); //获取结束时间
+
+		//System.out.println("程序运行时间：" + (endTime - startTime) + "ms");
 		return order;
 	}
 
@@ -1810,23 +1813,8 @@ public class NewOrderJaPanController {
 
 				if (i < hotellist.size() && hotellist.size() > 0) {
 					if (!Util.isEmpty(hotellist)) {
-
-						Object[] values = new Object[20];
-						HashMap<Object, Object> hashMap = new HashMap<Object, Object>();
-						// 生成随机数字并存入HashMap
-						for (int j = 0; j < values.length; j++) {
-							int hotelFoot = new Random().nextInt(10000) % hotellist.size();
-							hashMap.put(hotelFoot, j);
-						}
-						// 从HashMap导入数组
-						values = hashMap.keySet().toArray();
-						// 遍历数组并打印数据
-						for (int j = 0; j < values.length; j++) {
-							t.setHotelid((Integer) values[j]);
-						}
-
-						//						int hotelFoot = new Random().nextInt(10000) % hotellist.size();
-						//						t.setHotelid(hotellist.get(hotelFoot).getId());
+						int hotelFoot = new Random().nextInt(10000) % hotellist.size();
+						t.setHotelid(hotellist.get(hotelFoot).getId());
 					}
 				}
 				t.setHometype(0);
