@@ -421,6 +421,7 @@ public class NewOrderJaPanController {
 		if (!Util.isEmpty(tripJp)) {
 
 			if (tripJp.getOneormore() == 0) {
+				//单程
 				Flight gofilght = tripJp.getGofilght();
 				Flight returnfilght = tripJp.getReturnfilght();
 				if (!Util.isEmpty(gofilght)) {
