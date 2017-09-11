@@ -1685,20 +1685,20 @@ public class NewOrderJaPanController {
 						//如果行程条件没变 直接用数据库中的
 						if (tripJpClient.equals(tripJp_db)) {
 							//如果数据库中已经存在
-							//							List<NewTripplanJpEntity> tripListDb = dbDao.query(NewTripplanJpEntity.class,
-							//									Cnd.where("order_jp_id", "=", order.getId()), null);
-							//							List<NewTripplanJpEntity> tripplanJpListnew = null;
-							//
-							//							if (tripListDb.size() > 0) {
-							//								tripplanJpListnew = tripListDb;
-							//								String arrivecity = null;
-							//								NewTripJpEntity tripJp = order.getTripJp();
-							//								arrivecity = tripJp.getArrivecity();
-							//								editTripplan(arrivecity, tripplanJpListnew);
-							//						} else {
-							// 新增 do nothing
-							//}
-							//order.setTripplanJpList(tripplanJpListnew);
+							List<NewTripplanJpEntity> tripListDb = dbDao.query(NewTripplanJpEntity.class,
+									Cnd.where("order_jp_id", "=", order.getId()), null);
+							List<NewTripplanJpEntity> tripplanJpListnew = null;
+
+							if (tripListDb.size() > 0) {
+								tripplanJpListnew = tripListDb;
+								String arrivecity = null;
+								NewTripJpEntity tripJp = order.getTripJp();
+								arrivecity = tripJp.getArrivecity();
+								editTripplan(arrivecity, tripplanJpListnew);
+							} else {
+								//新增 do nothing
+							}
+							order.setTripplanJpList(tripplanJpListnew);
 						} else {
 							Date startdate = null;
 							Date enddate = null;
@@ -1733,21 +1733,21 @@ public class NewOrderJaPanController {
 					if (!Util.isEmpty(dateplanJpListInDb)) {
 						//只要条件改变全部新增，否则 取数据库中的数据使用
 						if (dateplanJpListInDb.containsAll(dateplanJpListClient)) {
-							//							if (!Util.isEmpty(dateplanJpListInDb) && dateplanJpListInDb.size() > 0) {
-							//								if (!Util.isEmpty(dateplanJpListInDb.get(0).getStartdate())) {
-							//									//已经保存的行程安排
-							//									List<NewTripplanJpEntity> tripPlansInDb = dbDao.query(NewTripplanJpEntity.class,
-							//											Cnd.where("order_jp_id", "=", order.getId()), null);
-							//
-							//									List<NewTripplanJpEntity> tripplanJpList = null;
-							//
-							//									tripplanJpList = tripPlansInDb;
-							//									String arrivecity = null;
-							//									NewTripJpEntity tripJp = order.getTripJp();
-							//									arrivecity = tripJp.getArrivecity();
-							//									editTripplan(arrivecity, tripplanJpList);
-							//								}
-							//							}
+							if (!Util.isEmpty(dateplanJpListInDb) && dateplanJpListInDb.size() > 0) {
+								if (!Util.isEmpty(dateplanJpListInDb.get(0).getStartdate())) {
+									//已经保存的行程安排
+									List<NewTripplanJpEntity> tripPlansInDb = dbDao.query(NewTripplanJpEntity.class,
+											Cnd.where("order_jp_id", "=", order.getId()), null);
+
+									List<NewTripplanJpEntity> tripplanJpList = null;
+
+									tripplanJpList = tripPlansInDb;
+									String arrivecity = null;
+									NewTripJpEntity tripJp = order.getTripJp();
+									arrivecity = tripJp.getArrivecity();
+									editTripplan(arrivecity, tripplanJpList);
+								}
+							}
 						} else {
 							Date startdate = null;
 							Date enddate = null;
