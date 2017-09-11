@@ -842,14 +842,15 @@
     </div>
 </script>
 <script id="tpl_trip" type="text/x-kendo-template">
-    <div>
+    <div class="tripDivIndex">
 		<div class="row">
 			<div class="col-xs-2">
                <div class="form-group">
                     <label for="traveler_last_daynum_cn">第几天:<span style="color: red">*</span></label>
                     <div class='input-group'>
 					   <input id="tripPlanId_#:data.uid#" type="hidden" name="tripPlanId" data-bind="value:id"/>
-                       <input id="traveler_last_daynum_cn" style="width: 100%;" class="k-textbox"
+					   <input id="tripPlanDayNum_#:data.uid#" type="hidden" name="tripPlanDayNum" data-bind="value:daynum"/>
+                       <input id="traveler_last_daynum_cn" readOnly="true" style="width: 100%;" class="k-textbox"
                               name="headcount" data-bind="value:daynum"/>
                        <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
                     </div>
