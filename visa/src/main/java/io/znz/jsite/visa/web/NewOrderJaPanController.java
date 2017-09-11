@@ -1828,29 +1828,15 @@ public class NewOrderJaPanController {
 				t.setHomeday(1);//homeday住几晚
 			}
 
-			if (i < sceniclist.size() && sceniclist.size() > 0) {
-				if (sceniclist.size() / 4 >= this.daynum) {
-					int start = 0;
-					if (this.daynum > 1) {
-						start = (this.daynum - 1) * 4;
-					}
-					//					int start = (this.daynum - 1) * 4 - 1;
-					int end = this.daynum * 4 - 1;
-					String str = "";
-					for (int j = start; j <= end; j++) {
-						str += sceniclist.get(j).getId() + ",";
-					}
-					t.setViewid(str);
-				} else if (i >= sceniclist.size() && sceniclist.size() > 0) {
-					int start = 0;
-					int end = 3;
-					String str = "";
-					for (int j = start; j <= end; j++) {
-						str += sceniclist.get(j).getId() + ",";
-					}
-					t.setViewid(str);
-				}
+			//随机获取景区
+			String viewIdStr = "";
+			for (int f = 0; f < 4 && f < sceniclist.size(); f++) {
+				int scenicFoot = new Random().nextInt(10000) % sceniclist.size();
+				int scenicId = sceniclist.get(scenicFoot).getId();
+				viewIdStr += scenicId + ",";
 			}
+			t.setViewid(viewIdStr);
+
 			if (sceniclist.size() > 0) {
 				String viewid = t.getViewid();
 				if (!Util.isEmpty(viewid)) {
