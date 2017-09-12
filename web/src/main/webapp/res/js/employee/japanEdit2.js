@@ -354,14 +354,25 @@ var viewModel = kendo.observable({
 				multiSelect.value(selectList);
 				
 				var tripPlanId = $("#tripPlanId_"+dataUid).val();
+				var tripPlanDayNum = $("#tripPlanDayNum_"+dataUid).val();
 				var tripplanJpList = viewModel.customer.tripplanJpList;
 				$(tripplanJpList).each(function(index,element){
-					console.log(element);
 					var eleId = element.id;
-					if( tripPlanId == eleId){
-						element.viewid = viewIdStr;
-						element.scenics = scenicList;
+					if(tripPlanId <= 0){
+						//添加
+						var tripIndex = index+1;
+						if( tripIndex == tripPlanDayNum){
+							element.viewid = viewIdStr;
+							element.scenics = scenicList;
+						}
+					}else{
+						//编辑
+						if( tripPlanId == eleId){
+							element.viewid = viewIdStr;
+							element.scenics = scenicList;
+						}
 					}
+					
 				});
 				
 			}
@@ -399,12 +410,20 @@ var viewModel = kendo.observable({
 					multiSelect_hotel.value(selectList);
 					
 					var tripPlanId = $("#tripPlanId_"+dataUid).val();
+					var tripPlanDayNum = $("#tripPlanDayNum_"+dataUid).val();
 					var tripplanJpList = viewModel.customer.tripplanJpList;
 					$(tripplanJpList).each(function(index,element){
 						var eleId = element.id;
-						if( tripPlanId == eleId){
-							element.hotelid = result[0].id;
-							console.log(element.hotelid+"=====================");
+						if(tripPlanId <= 0){
+							//添加
+							var tripIndex = index+1;
+							if( tripIndex == tripPlanDayNum){
+								element.hotelid = result[0].id;
+							}
+						}else{
+							if( tripPlanId == eleId){
+								element.hotelid = result[0].id;
+							}
 						}
 					});
 					
