@@ -1834,6 +1834,8 @@ public class NewOrderJaPanController {
 				t.setHomeday(1);//homeday住几晚
 			}
 
+			//随机获取景区
+
 			String viewIdStr = "";
 			for (int f = 0; f < 4 && f < sceniclist.size(); f++) {
 				int scenicFoot = new Random().nextInt(10000) % sceniclist.size();
@@ -1841,6 +1843,7 @@ public class NewOrderJaPanController {
 				viewIdStr += scenicId + ",";
 			}
 			t.setViewid(viewIdStr);
+
 			if (sceniclist.size() > 0) {
 				String viewid = t.getViewid();
 				if (!Util.isEmpty(viewid)) {
