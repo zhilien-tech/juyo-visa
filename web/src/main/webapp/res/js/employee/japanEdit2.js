@@ -114,22 +114,8 @@ var defaults = {
 		tripplanJpList:[],
 		fastMail:{},
 		customerresourceJp:{},
-		proposerInfoJpList:[]/*,
-		customers: [
-		            {
-		                lastName: "",
-		                firstName: "",
-		                passport: "",
-		                main: true,
-		                depositSource: "",
-		                depositMethod: "",
-		                depositSum: 0,
-		                depositCount: 1,
-		                receipt: false,
-		                insurance: false,
-		                outDistrict: false,
-		            }
-		        ]*/
+		proposerInfoJpList:[]
+		
 }, 
 keys = {
 		"customer.dateplanJpList":{
@@ -155,7 +141,8 @@ keys = {
 			intime:"",
 			outtime:"",
 			breakfast:"",
-			dinner:""
+			dinner:"",
+			scenics:[]
 		},
 		"customer.proposerInfoJpList":{}
 },
@@ -185,20 +172,23 @@ var viewModel = kendo.observable({
 	proposers:proposersnew,
 	flights: flights,
 	addOne: function (e) {
-		var key = $.isString(e) ? e : $(e.target).data('params');
+		var key = $.isString(e) ? e : $(e.target).data('params'); //customer.tripplanJpList
 		//viewModel.get(key).push(keys[key]);
-		viewModel.get(key).push({
-			lastName: "",
-			firstName: "",
-			passport: "",
-			main: false,
-			depositSource: "",
-			depositMethod: "",
-			depositSum: 0,
-			depositCount: 1,
-			receipt: false,
-			insurance: false,
-			outDistrict: false,
+		viewModel.customer.tripplanJpList.push({
+			daynum:"",
+			nowdate:"",
+			city:"",
+			scenicIds:"",
+			viewid:"",	
+			hotelid:"",
+			hometype:"",
+			homenum:"",
+			homeday:"",
+			intime:"",
+			outtime:"",
+			breakfast:"",
+			dinner:"",
+			scenics:[]
 		});
 		
 		
@@ -333,17 +323,17 @@ var viewModel = kendo.observable({
 		multiSelect.dataSource.filter({}); //clear applied filter before setting value
 		multiSelect.setDataSource(scenicDs);
 		//scenic.data([]) ;
-
+		
+		var scenicList = [] ;
+		var viewIdStr = "";
 		$.ajax({
 			type: 'GET',
+			async: true,
 			url: "/visa/scenic/arricity?arricity="+arricity,
 			contentType: "application/json",
 			dataType: 'json',
 			success: function (result) {
-				console.log(result);
 				var selectList = [];
-				var viewIdStr = "";
-				var scenicList = [] ;
 				for(var i=0; i<result.length && i<4; i++){
 					selectList.push(result[i].id);
 					viewIdStr += result[i].id +",";
@@ -357,28 +347,31 @@ var viewModel = kendo.observable({
 				var tripPlanId = $("#tripPlanId_"+dataUid).val();
 				var tripPlanDayNum = $("#tripPlanDayNum_"+dataUid).val();
 				var tripplanJpList = viewModel.customer.tripplanJpList;
-				$(tripplanJpList).each(function(index,element){
-					var eleId = element.id;
-					if(tripPlanId <= 0){
-						//添加
-						var tripIndex = index+1;
-						if( tripIndex == tripPlanDayNum){
-							element.viewid = viewIdStr;
-							element.scenics = scenicList;
-						}
-					}else{
-						//编辑
-						if( tripPlanId == eleId){
-							element.viewid = viewIdStr;
-							element.scenics = scenicList;
-						}
-					}
-					
-				});
+				console.log(tripplanJpList);
+				
+//				$(tripplanJpList).each(function(index,element){
+//					var eleId = element.id;
+//					if(tripPlanId <= 0){
+//						//添加
+//						var tripIndex = index+1;
+//						if( tripIndex == tripPlanDayNum){
+//							element.viewid = viewIdStr;
+//							element.scenics = scenicList;
+//						}
+//					}else{
+//						//编辑
+//						if( tripPlanId == eleId){
+//							element.viewid = viewIdStr;
+//							element.scenics = scenicList;
+//						}
+//					}
+//					
+//				});
 				
 			}
 		});
-
+		e.data.scenics = scenicList;
+		e.data.viewid = viewIdStr;
 
 		//酒店
 		hotelDs = new kendo.data.DataSource({
@@ -399,8 +392,10 @@ var viewModel = kendo.observable({
 		multiSelect_hotel.dataSource.filter({}); //clear applied filter before setting value
 		multiSelect_hotel.setDataSource(hotelDs);
 
+		var hotelId_add = 0;
 		$.ajax({
 			type: 'GET',
+			async: true,
 			url: "/visa/hotel/arricity?arricity="+arricity,
 			contentType: "application/json",
 			dataType: 'json',
@@ -413,7 +408,8 @@ var viewModel = kendo.observable({
 					var tripPlanId = $("#tripPlanId_"+dataUid).val();
 					var tripPlanDayNum = $("#tripPlanDayNum_"+dataUid).val();
 					var tripplanJpList = viewModel.customer.tripplanJpList;
-					$(tripplanJpList).each(function(index,element){
+					hotelId_add = result[0].id;
+					/*$(tripplanJpList).each(function(index,element){
 						var eleId = element.id;
 						if(tripPlanId <= 0){
 							//添加
@@ -426,11 +422,12 @@ var viewModel = kendo.observable({
 								element.hotelid = result[0].id;
 							}
 						}
-					});
+					});*/
 					
 				}
 			}
 		});
+		e.data.hotelid = hotelId_add;
 	},
 	changeismainproposer:function(e){
 		///console.log(e.data.id);
@@ -521,7 +518,7 @@ var viewModel = kendo.observable({
 
 	baba:function(e){
 		var a=viewModel.get("customer.dateplanJpList");
-		console.log(JSON.stringify(a));
+		//console.log(JSON.stringify(a));
 		for(var i=0;i<a.length;i++){
 			if(a[i].arrivecity==e.data.arrivecity){
 				var b=i+1;
@@ -909,7 +906,7 @@ function orderJpsave(){
 			viewModel.set("customer.island",1);
 		}
 
-		console.log(JSON.stringify(sixnum.length));
+		//console.log(JSON.stringify(sixnum.length));
 		//对东三县东六县的值进行处理
 		var visatype=viewModel.get("customer.visatype");
 		if(visatype==2 || visatype==3 || visatype==4){
@@ -966,7 +963,7 @@ function orderJpsave(){
 			viewModel.set("customer.threenum",threenumstr);
 	}*/
 
-		console.log(JSON.stringify(viewModel.customer));
+		//console.log(JSON.stringify(viewModel.customer));
 		var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 
 		$.ajax({
@@ -976,7 +973,7 @@ function orderJpsave(){
 			dataType: "json",
 			data: JSON.stringify(viewModel.customer),
 			success: function (result) {
-				console.log(result.code);
+				//console.log(result.code);
 				if(result.code=="SUCCESS"){
 					if(indexnew!=null){
 						layer.close(indexnew);
@@ -995,9 +992,9 @@ function orderJpsave(){
 					layer.close(indexnew);
 				}
 
-				console.log(XMLHttpRequest);
-				console.log(textStatus);
-				console.log(errorThrown);
+				//console.log(XMLHttpRequest);
+				//console.log(textStatus);
+				//console.log(errorThrown);
 				           /* layer.msg('失败!',{time:2000});*/
 				         }
 		});
@@ -1340,7 +1337,7 @@ function autogenerate(){
 				var multiSelect_hotel = $("#"+hotelId).data("kendoDropDownList");
 				multiSelect_hotel.setDataSource(hotelNew);
 				//回显
-				console.log(hotelInput);
+				//console.log(hotelInput);
 				multiSelect_hotel.value(hotelInput);
 
 			});
@@ -1425,9 +1422,9 @@ function addporposer(){
 					layer.close(indexnew);
 				}
 
-				console.log(XMLHttpRequest);
-				console.log(textStatus);
-				console.log(errorThrown);
+				//console.log(XMLHttpRequest);
+				//console.log(textStatus);
+				//console.log(errorThrown);
 				            layer.msg('失败!',{time:2000});
 				         }
 		});
