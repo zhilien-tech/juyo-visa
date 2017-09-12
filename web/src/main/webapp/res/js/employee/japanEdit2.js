@@ -174,8 +174,10 @@ var viewModel = kendo.observable({
 	addOne: function (e) {
 		var key = $.isString(e) ? e : $(e.target).data('params'); //customer.tripplanJpList
 		//viewModel.get(key).push(keys[key]);
+		var tripplanJpNum = viewModel.customer.tripplanJpList.length + 1;
+		console.log(tripplanJpNum);
 		viewModel.customer.tripplanJpList.push({
-			daynum:"",
+			daynum:tripplanJpNum,
 			nowdate:"",
 			city:"",
 			scenicIds:"",
@@ -196,7 +198,24 @@ var viewModel = kendo.observable({
 	delOne: function (e) {
 		var key = $(e.target).data('params');
 		var all = viewModel.get(key);
+		var currentDaynum = e.data.daynum;
+		//手动更新界面
+		$("input#traveler_last_daynum_cn").each(function(){
+			var daynum = this.value ;
+			if(daynum > currentDaynum){
+				$(this).val(daynum - 1);
+			}
+		});
+		
+		$(all).each(function(index,element){
+			var daynum = element.daynum;
+			if(daynum > currentDaynum){
+				element.daynum =  daynum - 1 ;
+			}
+		});
+		
 		all.splice(all.indexOf(e.data), 1);
+		console.log(e.data.daynum);
 	},
 	delOneApplicant: function (e) {
 		var key = $(e.target).data('params');
@@ -386,12 +405,30 @@ var viewModel = kendo.observable({
 					var tripPlanDayNum = $("#tripPlanDayNum_"+dataUid).val();
 					var tripplanJpList = viewModel.customer.tripplanJpList;
 					hotelId_add = result[0].id;
+					/*$(tripplanJpList).each(function(index,element){
+						var eleId = element.id;
+						if(tripPlanId <= 0){
+							//添加
+							var tripIndex = index+1;
+							if( tripIndex == tripPlanDayNum){
+								element.hotelid = result[0].id;
+							}
+						}else{
+							if( tripPlanId == eleId){
+								element.hotelid = result[0].id;
+							}
+						}
+					});*/
+					
 				}
 			}
 		});
 		e.data.hotelid = hotelId_add;
 	},
 	changeismainproposer:function(e){
+		///console.log(e.data.id);
+		///console.log(e.data);
+		///console.log(e.data.fullname);
 		var person=new Object();
 		person.text=e.data.xing+e.data.name;
 		person.value=e.data.id;
