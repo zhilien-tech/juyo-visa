@@ -305,7 +305,7 @@ var viewModel = kendo.observable({
 		}
 	},
 	scenicChange: function(e){
-		
+		alert(JSON.stringify(e.data));
 		//景区
 		var dataUid = e.data.uid; 
 		arricity = $("#arricity_"+dataUid).val();
@@ -324,7 +324,6 @@ var viewModel = kendo.observable({
 				}
 			}
 		});
-
 		//viewModel.set("scenic",scenicDs);
 		var multiSelect = $("#scenic_select_"+dataUid).data("kendoMultiSelect");
 		//console.log(JSON.stringify(scenicDs));
