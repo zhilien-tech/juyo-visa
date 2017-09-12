@@ -592,7 +592,10 @@ public class NewOrderJaPanController {
 				List<Scenic> scenics = newPeerPersionEntity.getScenics();
 				String viewid = "";
 				for (Scenic scenic : scenics) {
-					viewid += scenic.getId() + ",";
+					Integer scenicId = scenic.getId();
+					if (!Util.isEmpty(scenicId)) {
+						viewid += scenicId + ",";
+					}
 				}
 				newPeerPersionEntity.setViewid(viewid);
 				/*	if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
@@ -769,7 +772,10 @@ public class NewOrderJaPanController {
 										List<Scenic> scenics = newPeerPersionEntity.getScenics();
 										String viewid = "";
 										for (Scenic scenic : scenics) {
-											viewid += scenic.getId() + ",";
+											Integer scenicId = scenic.getId();
+											if (!Util.isEmpty(scenicId)) {
+												viewid += scenicId + ",";
+											}
 										}
 										newPeerPersionEntity.setViewid(viewid);
 										/*	if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
@@ -1806,15 +1812,15 @@ public class NewOrderJaPanController {
 			if (this.daynum == this.daytotal) {
 				t.setHometype(-1);//hometyp 房间类型
 				if (!Util.isEmpty(hotellist)) {
-					int hotelFoot = new Random().nextInt(10000) % hotellist.size();
-					t.setHotelid(hotellist.get(hotelFoot).getId());
+					//int hotelFoot = new Random().nextInt(10000) % hotellist.size();
+					t.setHotelid(hotellist.get(0).getId());
 				}
 			} else {
 
 				if (i < hotellist.size() && hotellist.size() > 0) {
 					if (!Util.isEmpty(hotellist)) {
-						int hotelFoot = new Random().nextInt(10000) % hotellist.size();
-						t.setHotelid(hotellist.get(hotelFoot).getId());
+						//int hotelFoot = new Random().nextInt(10000) % hotellist.size();
+						t.setHotelid(hotellist.get(0).getId());
 					}
 				}
 				t.setHometype(0);
