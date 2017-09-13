@@ -512,55 +512,68 @@ var viewModel = kendo.observable({
 	travelFromCitySingle_G:function(e){
 		viewModel.set("customer.tripJp.returnarrivecity",viewModel.get("customer.tripJp.startcity"));
 		//往返 去程航班
-		goFlightByCity(e, "fromCitySingle_go", "toCitySingle_go", "flight_select_go_single");
+		goFlightByCity("fromCitySingle_go", "toCitySingle_go", "flight_select_go_single");
 		//往返 返程航班
-		goFlightByCity(e, "fromCitySingle_return", "toCitySingle_return", "flight_select_return_single");
+		goFlightByCity("fromCitySingle_return", "toCitySingle_return", "flight_select_return_single");
 		
 	},
 	travelToCitySingle_G:function(e){
 		viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
 		viewModel.set("customer.tripplanJpList.city",viewModel.get("customer.tripJp.arrivecity"));
 		//往返 去程航班
-		goFlightByCity(e, "fromCitySingle_go", "toCitySingle_go", "flight_select_go_single");
+		goFlightByCity("fromCitySingle_go", "toCitySingle_go", "flight_select_go_single");
 		//往返 返程航班
-		goFlightByCity(e, "fromCitySingle_return", "toCitySingle_return", "flight_select_return_single");
+		goFlightByCity("fromCitySingle_return", "toCitySingle_return", "flight_select_return_single");
 		
 	},
 	travelFromCitySingle_R:function(e){
 		//往返 返程航班
-		goFlightByCity(e, "fromCitySingle_return", "toCitySingle_return", "flight_select_return_single");
+		goFlightByCity("fromCitySingle_return", "toCitySingle_return", "flight_select_return_single");
 		
 	},
 	travelToCitySingle_R:function(e){
 		//往返 返程航班
-		goFlightByCity(e, "fromCitySingle_retrun", "toCitySingle_return", "flight_select_return_single");
+		goFlightByCity("fromCitySingle_retrun", "toCitySingle_return", "flight_select_return_single");
 		
 	},
 	travelFromCityMore:function(e){
 		
+		var dataUid = e.data.uid;
+		goFlightByCity("fromCityMore_select_"+dataUid, "toCityMore_select_"+dataUid, "flightMore_select_"+dataUid);
+		
 		//出行信息 多程出发城市
 		var a=viewModel.get("customer.dateplanJpList");
-		console.log(JSON.stringify(a));
 		viewModel.set("customer.dateplanJpList["+(a.length-1)+"].arrivecity",e.data.startcity);
 		/*	for(var i=0;i<a.length;i++){
 			if(a[i].startcity==e.data.startcity){
 				var b=i+1;
 			}
 		}*/
+		
+		
 	},
 	travelToCityMore:function(e){
+		//出行信息， 多程抵达城市
+		//航班联动
+		var dataUid = e.data.uid;
+		goFlightByCity("fromCityMore_select_"+dataUid, "toCityMore_select_"+dataUid, "flightMore_select_"+dataUid);
+		
 		//出行信息 多程抵达城市
 		var a=viewModel.get("customer.dateplanJpList");
 		//console.log(JSON.stringify(a));
 		for(var i=0;i<a.length;i++){
 			if(a[i].arrivecity==e.data.arrivecity){
 				var b=i+1;
-				viewModel.set("customer.dateplanJpList["+b+"].startcity",e.data.arrivecity);
+				var startCity = viewModel.get("customer.dateplanJpList["+b+"].startcity");
+				if(undefined != startCity){
+					viewModel.set("customer.dateplanJpList["+b+"].startcity",e.data.arrivecity);
+					
+					var dataUid = viewModel.get("customer.dateplanJpList["+b+"]").uid;
+					goFlightByCity("fromCityMore_select_"+dataUid, "toCityMore_select_"+dataUid, "flightMore_select_"+dataUid);
+					
+				}
 			}
 		}
-		
-		
-		
 	},
 	
 });
@@ -1513,8 +1526,7 @@ function addthree(a,num){
 }
 
 //出行城市的航班
-function goFlightByCity(e, fromCityEle, toCityEle, filghtSelect){
-	var dataUid = e.data.uid;
+function goFlightByCity(fromCityEle, toCityEle, flightSelect){
 	var fromCity = $("#"+fromCityEle).val();
 	if(fromCity == null){
 		fromCity = "北京";
@@ -1537,7 +1549,7 @@ function goFlightByCity(e, fromCityEle, toCityEle, filghtSelect){
 			}
 		}
 	});
-	var singleSelect_flight = $("#"+filghtSelect).data("kendoDropDownList");
+	var singleSelect_flight = $("#"+flightSelect).data("kendoDropDownList");
 	singleSelect_flight.setDataSource(flightDS);
 	
 	
@@ -1559,4 +1571,6 @@ function goFlightByCity(e, fromCityEle, toCityEle, filghtSelect){
 	});
 	
 }
+
+
 
