@@ -108,7 +108,9 @@ var defaults = {
 		customermanage:{},
 		tripJp:{
 			oneormore:0,
-			trippurpose:"旅游"
+			trippurpose:"旅游",
+			gofilght:{},
+			returnfilght:{}
 		},
 		dateplanJpList:[],
 		tripplanJpList:[],
@@ -512,34 +514,34 @@ var viewModel = kendo.observable({
 	travelFromCitySingle_G:function(e){
 		viewModel.set("customer.tripJp.returnarrivecity",viewModel.get("customer.tripJp.startcity"));
 		//往返 去程航班
-		goFlightByCity("fromCitySingle_go", "toCitySingle_go", "flight_select_go_single");
+		goFlightByCity("fromCitySingle_go", "toCitySingle_go", "flight_select_go_single", "singleGo");
 		//往返 返程航班
-		goFlightByCity("fromCitySingle_return", "toCitySingle_return", "flight_select_return_single");
+		goFlightByCity("fromCitySingle_return", "toCitySingle_return", "flight_select_return_single", "singleReturn");
 		
 	},
 	travelToCitySingle_G:function(e){
 		viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
 		viewModel.set("customer.tripplanJpList.city",viewModel.get("customer.tripJp.arrivecity"));
 		//往返 去程航班
-		goFlightByCity("fromCitySingle_go", "toCitySingle_go", "flight_select_go_single");
+		goFlightByCity("fromCitySingle_go", "toCitySingle_go", "flight_select_go_single", "singleGo");
 		//往返 返程航班
-		goFlightByCity("fromCitySingle_return", "toCitySingle_return", "flight_select_return_single");
+		goFlightByCity("fromCitySingle_return", "toCitySingle_return", "flight_select_return_single", "singleReturn");
 		
 	},
 	travelFromCitySingle_R:function(e){
 		//往返 返程航班
-		goFlightByCity("fromCitySingle_return", "toCitySingle_return", "flight_select_return_single");
+		goFlightByCity("fromCitySingle_return", "toCitySingle_return", "flight_select_return_single", "singleReturn");
 		
 	},
 	travelToCitySingle_R:function(e){
 		//往返 返程航班
-		goFlightByCity("fromCitySingle_retrun", "toCitySingle_return", "flight_select_return_single");
+		goFlightByCity("fromCitySingle_retrun", "toCitySingle_return", "flight_select_return_single", "singleReturn");
 		
 	},
 	travelFromCityMore:function(e){
 		
 		var dataUid = e.data.uid;
-		goFlightByCity("fromCityMore_select_"+dataUid, "toCityMore_select_"+dataUid, "flightMore_select_"+dataUid);
+		goFlightByCity("fromCityMore_select_"+dataUid, "toCityMore_select_"+dataUid, "flightMore_select_"+dataUid, "moreType");
 		
 		//出行信息 多程出发城市
 		var a=viewModel.get("customer.dateplanJpList");
@@ -556,20 +558,21 @@ var viewModel = kendo.observable({
 		//出行信息， 多程抵达城市
 		//航班联动
 		var dataUid = e.data.uid;
-		goFlightByCity("fromCityMore_select_"+dataUid, "toCityMore_select_"+dataUid, "flightMore_select_"+dataUid);
+		goFlightByCity("fromCityMore_select_"+dataUid, "toCityMore_select_"+dataUid, "flightMore_select_"+dataUid, "moreType");
 		
 		//出行信息 多程抵达城市
 		var a=viewModel.get("customer.dateplanJpList");
+		console.log(JSON.stringify(a));
 		//console.log(JSON.stringify(a));
 		for(var i=0;i<a.length;i++){
 			if(a[i].arrivecity==e.data.arrivecity){
 				var b=i+1;
 				var startCity = viewModel.get("customer.dateplanJpList["+b+"].startcity");
+				viewModel.set("customer.dateplanJpList["+b+"].startcity",e.data.arrivecity);
 				if(undefined != startCity){
-					viewModel.set("customer.dateplanJpList["+b+"].startcity",e.data.arrivecity);
-					
+					//出行信息 多程 相邻两天 城市航班联动
 					var dataUid = viewModel.get("customer.dateplanJpList["+b+"]").uid;
-					goFlightByCity("fromCityMore_select_"+dataUid, "toCityMore_select_"+dataUid, "flightMore_select_"+dataUid);
+					goFlightByCity("fromCityMore_select_"+dataUid, "toCityMore_select_"+dataUid, "flightMore_select_"+dataUid, "moreType");
 					
 				}
 			}
@@ -1526,7 +1529,7 @@ function addthree(a,num){
 }
 
 //出行城市的航班
-function goFlightByCity(fromCityEle, toCityEle, flightSelect){
+function goFlightByCity(fromCityEle, toCityEle, flightSelect, tripType){
 	var fromCity = $("#"+fromCityEle).val();
 	if(fromCity == null){
 		fromCity = "北京";
@@ -1563,6 +1566,18 @@ function goFlightByCity(fromCityEle, toCityEle, flightSelect){
 		success: function (result) {
 			if(result.length > 0){
 				singleSelect_flight.value(result[0].id) ;
+				
+				if("singleGo" == tripType){
+					//往返 去程
+					viewModel.customer.tripJp.gofilght.id = result[0].id;
+				}else if ("singleReturn" == tripType){
+					//往返 返程
+					viewModel.customer.tripJp.returnfilght.id = result[0].id;
+				}else{
+					//多程
+					
+				}
+				
 			}
 		},
 		error: function (error){
