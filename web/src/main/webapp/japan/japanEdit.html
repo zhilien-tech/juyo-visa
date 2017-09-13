@@ -469,7 +469,7 @@
 	                                        <label for="usa_city">出发城市:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
 	                                        
-	                                        	 <select id=""
+	                                        	 <select id="fromCitySingle_go"
                                                     data-role="dropdownlist"
                                                     data-filter="startswith"
                                                     data-suggest="true"
@@ -477,7 +477,7 @@
                                                     data-value-primitive="true"
                                                     data-text-field="text"
                                                     data-value-field="text"
-                                                    data-bind="value:customer.tripJp.startcity,source:startcitynew,events: { change: changeBegincitySingle }"
+                                                    data-bind="value:customer.tripJp.startcity,source:startcitynew,events: { change: travelFromCitySingle_G }"
                                                     style="width: 100%;"></select>
 	                                        
 	                                           <!--  <input id="startcity" class="k-textbox" style="width: 100%;text-transform:uppercase;"
@@ -490,7 +490,7 @@
 	                                    <div class="form-group">
 	                                        <label for="usa_city">抵达城市:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                        	 	 <select id=""
+	                                        	 	 <select id="toCitySingle_go"
                                                     data-role="dropdownlist"
                                                     data-filter="startswith"
                                                     data-suggest="true"
@@ -498,7 +498,7 @@
                                                     data-value-primitive="true"
                                                     data-text-field="text"
                                                     data-value-field="text"
-                                                    data-bind="value:customer.tripJp.arrivecity,source:startcitynew,events: { change: abab }"
+                                                    data-bind="value:customer.tripJp.arrivecity,source:startcitynew,events: { change: travelToCitySingle_G }"
                                                     style="width: 100%;" ></select>
 	                                            <!-- <input id="endcity" class="k-textbox" style="width: 100%;text-transform:uppercase;"
 	                                                   data-bind="value:customer.tripJp.arrivecity"/> -->
@@ -510,9 +510,9 @@
 	                                    <div class="form-group">
 	                                        <label for="usa_city">航班号:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                           <!--  <input id="" class="k-textbox" style="width: 100%;text-transform:uppercase;"
+	                                           <!--  <input id="flight_select_go_single" class="k-textbox" style="width: 100%;text-transform:uppercase;"
 	                                                   data-bind="value:customer.tripJp.flightnum"/> -->
-	                                                   <select id="usa_city"
+	                                                   <select id="flight_select_go_single"
                                                        data-role="dropdownlist"
                                                        data-filter="startswith"
 				                                       data-value-field="id"
@@ -543,7 +543,7 @@
 	                                    <div class="form-group">
 	                                        <label for="usa_city">出发城市:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                         <select id=""
+	                                         <select id="fromCitySingle_return"
                                                     data-role="dropdownlist"
                                                     data-filter="startswith"
                                                     data-suggest="true"
@@ -551,7 +551,7 @@
                                                     data-value-primitive="true"
                                                     data-text-field="text"
                                                     data-value-field="text"
-                                                    data-bind="value:customer.tripJp.returnstartcity,source:startcitynew"
+                                                    data-bind="value:customer.tripJp.returnstartcity,source:startcitynew,events: { change: travelFromCitySingle_R }"
                                                     style="width: 100%;"></select>
 	                                           <!--  <input id="" class="k-textbox" style="width: 100%;text-transform:uppercase;"
 	                                                   data-bind="value:customer.tripJp.returnstartcity"/> -->
@@ -563,7 +563,7 @@
 	                                    <div class="form-group">
 	                                        <label for="usa_city">抵达城市:<span style="color: red">*</span></label>
 	                                        <div class='input-group'>
-	                                        	  <select id=""
+	                                        	  <select id="toCitySingle_return"
                                                     data-role="dropdownlist"
                                                     data-filter="startswith"
                                                     data-suggest="true"
@@ -571,7 +571,7 @@
                                                     data-value-primitive="true"
                                                     data-text-field="text"
                                                     data-value-field="text"
-                                                    data-bind="value:customer.tripJp.returnarrivecity,source:startcitynew"
+                                                    data-bind="value:customer.tripJp.returnarrivecity,source:startcitynew,events: { change: travelFromCitySingle_R }"
                                                     style="width: 100%;"></select>
 	                                        		
 	                                            <!-- <input id="" class="k-textbox" style="width: 100%;text-transform:uppercase;"
@@ -587,7 +587,7 @@
 	                                            <!-- <input id="" class="k-textbox" style="width: 100%;text-transform:uppercase;"
 	                                                   data-bind="value:customer.tripJp.returnflightnum"/> -->
 	                                                   
-	                                                   <select id="usa_city"
+	                                                   <select id="flight_select_return_single"
                                                        data-role="dropdownlist"
                                                        data-filter="startswith"
 				                                       data-value-field="id"
@@ -989,7 +989,7 @@
               <div class="form-group">
                   <label for="traveler_city_name">出发城市:<span style="color: red">*</span></label>
                   <div class='input-group'>
- 								<select id=""
+ 								<select id="flight_select_#:data.uid#"
                                                     data-role="dropdownlist"
                                                     data-filter="startswith"
                                                     data-suggest="true"
@@ -997,7 +997,7 @@
                                                     data-value-primitive="true"
                                                     data-text-field="text"
                                                     data-value-field="text"
-                                                    data-bind="value:startcity,source:startcitynew,events: { change: changeBegincity }"
+                                                    data-bind="value:startcity,source:startcitynew,events: { change: travelFromCityMore }"
                                                     style="width: 100%;"></select>
                     
                       <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
@@ -1017,7 +1017,7 @@
                                                     data-value-primitive="true"
                                                     data-text-field="text"
                                                     data-value-field="text"
-                                                    data-bind="value:arrivecity,source:startcitynew,events: { change: baba }"
+                                                    data-bind="value:arrivecity,source:startcitynew,events: { change: travelToCityMore }"
                                                     style="width: 100%;"></select>
 
                 
@@ -1038,8 +1038,7 @@
 				                                       data-auto-bind="true"
 				                                       data-value-template="tpl_flight"
 				                                       data-template="tpl_flight"
-                                                       data-bind="value:flight,source:flights"
-                            >
+                                                       data-bind="source:flights">
                     </select>
                 </div>
             </div>

@@ -152,7 +152,6 @@ flights = new kendo.data.DataSource({
 		read: {
 			dataType: "json",
 			url: "/visa/flight/json",
-
 		},
 		parameterMap: function (options, type) {
 			if (options.filter) {
@@ -170,7 +169,7 @@ var viewModel = kendo.observable({
 	customersourceEnum:customersourceEnum,
 	startcitynew:startcity,
 	proposers:proposersnew,
-	flights: flights,
+	flights:flights,
 	addOne: function (e) {
 		var key = $.isString(e) ? e : $(e.target).data('params'); //customer.tripplanJpList
 		//viewModel.get(key).push(keys[key]);
@@ -347,7 +346,6 @@ var viewModel = kendo.observable({
 				var tripPlanId = $("#tripPlanId_"+dataUid).val();
 				var tripPlanDayNum = $("#tripPlanDayNum_"+dataUid).val();
 				var tripplanJpList = viewModel.customer.tripplanJpList;
-				console.log(tripplanJpList);
 				
 //				$(tripplanJpList).each(function(index,element){
 //					var eleId = element.id;
@@ -511,23 +509,36 @@ var viewModel = kendo.observable({
 			viewModel.set("proposers",proposersnew);
 		}
 	},
-	abab:function(){
+	travelFromCitySingle_G:function(e){
+		viewModel.set("customer.tripJp.returnarrivecity",viewModel.get("customer.tripJp.startcity"));
+		//往返 去程航班
+		goFlightByCity(e, "fromCitySingle_go", "toCitySingle_go", "flight_select_go_single");
+		//往返 返程航班
+		goFlightByCity(e, "fromCitySingle_return", "toCitySingle_return", "flight_select_return_single");
+		
+	},
+	travelToCitySingle_G:function(e){
 		viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
 		viewModel.set("customer.tripplanJpList.city",viewModel.get("customer.tripJp.arrivecity"));
+		//往返 去程航班
+		goFlightByCity(e, "fromCitySingle_go", "toCitySingle_go", "flight_select_go_single");
+		//往返 返程航班
+		goFlightByCity(e, "fromCitySingle_return", "toCitySingle_return", "flight_select_return_single");
+		
 	},
-
-	baba:function(e){
-		var a=viewModel.get("customer.dateplanJpList");
-		//console.log(JSON.stringify(a));
-		for(var i=0;i<a.length;i++){
-			if(a[i].arrivecity==e.data.arrivecity){
-				var b=i+1;
-				viewModel.set("customer.dateplanJpList["+b+"].startcity",e.data.arrivecity);
-			}
-		}
-		///console.log(e.data.arrivecity);
+	travelFromCitySingle_R:function(e){
+		//往返 返程航班
+		goFlightByCity(e, "fromCitySingle_return", "toCitySingle_return", "flight_select_return_single");
+		
 	},
-	changeBegincity:function(e){
+	travelToCitySingle_R:function(e){
+		//往返 返程航班
+		goFlightByCity(e, "fromCitySingle_retrun", "toCitySingle_return", "flight_select_return_single");
+		
+	},
+	travelFromCityMore:function(e){
+		
+		//出行信息 多程出发城市
 		var a=viewModel.get("customer.dateplanJpList");
 		console.log(JSON.stringify(a));
 		viewModel.set("customer.dateplanJpList["+(a.length-1)+"].arrivecity",e.data.startcity);
@@ -537,9 +548,21 @@ var viewModel = kendo.observable({
 			}
 		}*/
 	},
-	changeBegincitySingle:function(){
-		viewModel.set("customer.tripJp.returnarrivecity",viewModel.get("customer.tripJp.startcity"));
-	}
+	travelToCityMore:function(e){
+		//出行信息 多程抵达城市
+		var a=viewModel.get("customer.dateplanJpList");
+		//console.log(JSON.stringify(a));
+		for(var i=0;i<a.length;i++){
+			if(a[i].arrivecity==e.data.arrivecity){
+				var b=i+1;
+				viewModel.set("customer.dateplanJpList["+b+"].startcity",e.data.arrivecity);
+			}
+		}
+		
+		
+		
+	},
+	
 });
 kendo.bind($(document.body), viewModel);
 
@@ -1487,5 +1510,53 @@ function addthree(a,num){
 	}else{
 		threenum.removeByValue(threenum);
 	}
+}
+
+//出行城市的航班
+function goFlightByCity(e, fromCityEle, toCityEle, filghtSelect){
+	var dataUid = e.data.uid;
+	var fromCity = $("#"+fromCityEle).val();
+	if(fromCity == null){
+		fromCity = "北京";
+	}
+	var toCity = $("#"+toCityEle).val();
+	if(toCity == null){
+		toCity = "北京";
+	}
+	//航班
+	var flightDS = new kendo.data.DataSource({
+		serverFiltering: true,
+		transport: {
+			read: {
+				dataType: "json",
+				url: "/visa/flight/filghtByCity",
+				data:{
+					fromCity:fromCity, 
+					toCity:toCity
+				}
+			}
+		}
+	});
+	var singleSelect_flight = $("#"+filghtSelect).data("kendoDropDownList");
+	singleSelect_flight.setDataSource(flightDS);
+	
+	
+	//设置默认选中还在
+	$.ajax({
+		type: 'GET',
+		async: true,
+		url: "/visa/flight/filghtByCity?fromCity="+fromCity+"&toCity="+toCity,
+		contentType: "application/json",
+		dataType: 'json',
+		success: function (result) {
+			if(result.length > 0){
+				singleSelect_flight.value(result[0].id) ;
+			}
+		},
+		error: function (error){
+			console.log(error);
+		}
+	});
+	
 }
 
