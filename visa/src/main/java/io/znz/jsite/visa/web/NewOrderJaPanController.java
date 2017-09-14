@@ -562,15 +562,19 @@ public class NewOrderJaPanController {
 			//客户端传来的信息为多程
 			if (oneormore == 1) {
 				for (NewDateplanJpEntity newPeerPersionEntity : dateplanJpList) {
-					newPeerPersionEntity.setFlightnum(newPeerPersionEntity.getFlight().getId() + "");
-
-					/*if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
-					nutDao.update(newPeerPersionEntity);
-					} else {*/
-					newPeerPersionEntity.setTrip_jp_id(tripJp.getId());
+					int tripJpId = tripJp.getId();
+					Flight flight = newPeerPersionEntity.getFlight();
+					if (!Util.isEmpty(flight)) {
+						int flightId = flight.getId();
+						if (flightId > 0) {
+							newPeerPersionEntity.setFlightnum(flightId + "");
+						}
+					}
+					if (tripJpId > 0) {
+						newPeerPersionEntity.setTrip_jp_id(tripJpId);
+					}
 
 					dbDao.insert(newPeerPersionEntity);
-					//}
 				}
 				startdate = dateplanJpList.get(0).getStartdate();
 				enddate = dateplanJpList.get(dateplanJpList.size() - 1).getStartdate();
