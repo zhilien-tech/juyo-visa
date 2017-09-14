@@ -556,20 +556,12 @@ public class NewOrderJaPanController {
 		if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
 			//判断数据库中如果有数据，删除
 			if (!Util.isEmpty(list1) && list1.size() > 0) {
-
 				dbDao.delete(list1);
 			}
 			//客户端传来的信息为多程
 			if (oneormore == 1) {
 				for (NewDateplanJpEntity newPeerPersionEntity : dateplanJpList) {
 					int tripJpId = tripJp.getId();
-					Flight flight = newPeerPersionEntity.getFlight();
-					if (!Util.isEmpty(flight)) {
-						int flightId = flight.getId();
-						if (flightId > 0) {
-							newPeerPersionEntity.setFlightnum(flightId + "");
-						}
-					}
 					if (tripJpId > 0) {
 						newPeerPersionEntity.setTrip_jp_id(tripJpId);
 					}

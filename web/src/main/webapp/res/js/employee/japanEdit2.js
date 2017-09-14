@@ -615,6 +615,29 @@ var viewModel = kendo.observable({
 kendo.bind($(document.body), viewModel);
 
 
+//加载航班数据源
+/*$(function () {
+	var fromCity = $("#fromCitySingle_go").val();
+	var toCity = $("#toCitySingle_go").val();
+	console.log("页面加载："+ fromCity+"---"+ toCity);
+	var flightNew = new kendo.data.DataSource({
+		serverFiltering: true,
+		transport: {
+			read: {
+				dataType: "json",
+				url: "/visa/flight/filghtByCity",
+				data:{
+					fromCity: fromCity,
+					toCity: toCity
+				}
+			}
+		}
+	});
+	var singleSelect_flight = $("#flight_select_go_single").data("kendoDropDownList");
+	singleSelect_flight.setDataSource(flightNew);
+	//singleSelect_flight.value();
+});*/
+
 function comsource(){
 	viewModel.set("customer.customermanage.fullComName",'');
 	viewModel.set("customer.customermanage.linkman",'');
@@ -1114,6 +1137,8 @@ function orderJpsave(){
 	}
 }
 
+
+//编辑订单信息
 $(function () {
 	//如果有传递ID就是修改
 	var oid = $.queryString("cid");
@@ -1123,6 +1148,88 @@ $(function () {
 			//console.log(JSON.stringify(resp));
 			viewModel.set("customer", $.extend(true, defaults, resp));
 
+			//单程 动态设置航班数据源
+			var tripJp = viewModel.customer.tripJp;
+			//去程
+			var fromCityGo = tripJp.startcity;
+			if(fromCityGo == null){
+				fromCityGo = "北京";
+			}
+			var toCityGo = tripJp.arrivecity;
+			if(toCityGo == null){
+				toCityGo = "北京";
+			}
+			//航班
+			var flightGoDS = new kendo.data.DataSource({
+				serverFiltering: true,
+				transport: {
+					read: {
+						dataType: "json",
+						url: "/visa/flight/filghtByCity",
+						data:{
+							fromCity:fromCityGo, 
+							toCity:toCityGo
+						}
+					}
+				}
+			});
+			var singleSelect_flight_Go = $("#flight_select_go_single").data("kendoDropDownList");
+			singleSelect_flight_Go.setDataSource(flightGoDS);
+			singleSelect_flight_Go.value(tripJp.flightnum);
+			//返程
+			var fromCityRetrun = tripJp.returnstartcity;
+			if(fromCityRetrun == null){
+				fromCityRetrun = "北京";
+			}
+			var toCityReturn = tripJp.returnarrivecity;
+			if(toCityReturn == null){
+				toCityReturn = "北京";
+			}
+			//航班
+			var flightRetrunDS = new kendo.data.DataSource({
+				serverFiltering: true,
+				transport: {
+					read: {
+						dataType: "json",
+						url: "/visa/flight/filghtByCity",
+						data:{
+							fromCity:fromCityRetrun, 
+							toCity:toCityReturn
+						}
+					}
+				}
+			});
+			var singleSelect_flight_Return = $("#flight_select_return_single").data("kendoDropDownList");
+			singleSelect_flight_Return.setDataSource(flightRetrunDS);
+			singleSelect_flight_Return.value(tripJp.returnflightnum);
+			
+			
+			//多程  动态设置航班数据源
+			var dateplanJpList =  viewModel.customer.dateplanJpList;
+			$(dateplanJpList).each(function(index, element){
+				var dataUid = element.uid;
+				var fromCity = element.startcity;
+				var toCity = element.arrivecity;
+				//航班
+				var flightDS = new kendo.data.DataSource({
+					serverFiltering: true,
+					transport: {
+						read: {
+							dataType: "json",
+							url: "/visa/flight/filghtByCity",
+							data:{
+								fromCity:fromCity, 
+								toCity:toCity
+							}
+						}
+					}
+				});
+				var singleSelect_flight = $("#flightMore_select_"+dataUid).data("kendoDropDownList");
+				singleSelect_flight.setDataSource(flightDS);
+				singleSelect_flight.value(element.flightnum);
+			});
+			
+			
 			var visatype=viewModel.get("customer.visatype");
 			if(visatype==2 || visatype==3 || visatype==4){ //东三县，新三县，冲绳，选择时，下方均出现7个县，允许多选
 				var sixnumstr=viewModel.get("customer.sixnum");
@@ -1546,7 +1653,6 @@ Array.prototype.removeByValue = function(val) {
 function addSix(a,num){
 	if($(a).is(':checked')){
 		sixnum.push(num);
-//		alert(JSON.stringify(sixnum));
 	}else{
 		sixnum.removeByValue(sixnum);
 	}
@@ -1554,7 +1660,6 @@ function addSix(a,num){
 function addthree(a,num){
 	if($(a).is(':checked')){
 		threenum.push(num);
-//		alert(JSON.stringify(threenum));
 	}else{
 		threenum.removeByValue(threenum);
 	}
