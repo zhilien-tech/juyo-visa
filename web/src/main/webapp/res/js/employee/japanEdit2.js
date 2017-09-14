@@ -108,7 +108,9 @@ var defaults = {
 		customermanage:{},
 		tripJp:{
 			oneormore:0,
-			trippurpose:"旅游"
+			trippurpose:"旅游",
+			gofilght:{},
+			returnfilght:{}
 		},
 		dateplanJpList:[],
 		tripplanJpList:[],
@@ -152,7 +154,6 @@ flights = new kendo.data.DataSource({
 		read: {
 			dataType: "json",
 			url: "/visa/flight/json",
-
 		},
 		parameterMap: function (options, type) {
 			if (options.filter) {
@@ -170,7 +171,7 @@ var viewModel = kendo.observable({
 	customersourceEnum:customersourceEnum,
 	startcitynew:startcity,
 	proposers:proposersnew,
-	flights: flights,
+	flights:flights,
 	addOne: function (e) {
 		var key = $.isString(e) ? e : $(e.target).data('params'); //customer.tripplanJpList
 		//viewModel.get(key).push(keys[key]);
@@ -194,6 +195,18 @@ var viewModel = kendo.observable({
 		});
 		
 		
+	},
+	addOneDatePlan: function (e) {
+		viewModel.customer.dateplanJpList.push({
+				startdate:"",
+				startcity:"",
+				arrivecity:"",
+				flightnum:"",
+				returndate:"",
+				returnstartcity:"",
+				returnarrivecity:"",
+				returnflightnum:""
+		});
 	},
 	delOne: function (e) {
 		var key = $(e.target).data('params');
@@ -364,6 +377,27 @@ var viewModel = kendo.observable({
 				var tripPlanId = $("#tripPlanId_"+dataUid).val();
 				var tripPlanDayNum = $("#tripPlanDayNum_"+dataUid).val();
 				var tripplanJpList = viewModel.customer.tripplanJpList;
+	
+//				$(tripplanJpList).each(function(index,element){
+//					var eleId = element.id;
+//					if(tripPlanId <= 0){
+//						//添加
+//						var tripIndex = index+1;
+//						if( tripIndex == tripPlanDayNum){
+//							element.viewid = viewIdStr;
+//							element.scenics = scenicList;
+//						}
+//					}else{
+//						//编辑
+//						if( tripPlanId == eleId){
+//							element.viewid = viewIdStr;
+//							element.scenics = scenicList;
+//						}
+//					}
+//					
+//				});
+				
+
 			}
 		});
 		e.data.scenics = scenicList;
@@ -507,35 +541,73 @@ var viewModel = kendo.observable({
 			viewModel.set("proposers",proposersnew);
 		}
 	},
-	abab:function(){
+	travelFromCitySingle_G:function(e){
+		viewModel.set("customer.tripJp.returnarrivecity",viewModel.get("customer.tripJp.startcity"));
+		//往返 去程航班
+		goFlightByCity(e,"fromCitySingle_go", "toCitySingle_go", "flight_select_go_single", "singleGo");
+		//往返 返程航班
+		goFlightByCity(e,"fromCitySingle_return", "toCitySingle_return", "flight_select_return_single", "singleReturn");
+		
+	},
+	travelToCitySingle_G:function(e){
 		viewModel.set("customer.tripJp.returnstartcity",viewModel.get("customer.tripJp.arrivecity"));
 		viewModel.set("customer.tripplanJpList.city",viewModel.get("customer.tripJp.arrivecity"));
+		//往返 去程航班
+		goFlightByCity(e,"fromCitySingle_go", "toCitySingle_go", "flight_select_go_single", "singleGo");
+		//往返 返程航班
+		goFlightByCity(e,"fromCitySingle_return", "toCitySingle_return", "flight_select_return_single", "singleReturn");
+		
 	},
+	travelFromCitySingle_R:function(e){
+		//往返 返程航班
+		goFlightByCity(e,"fromCitySingle_return", "toCitySingle_return", "flight_select_return_single", "singleReturn");
+		
+	},
+	travelToCitySingle_R:function(e){
+		//往返 返程航班
+		goFlightByCity(e,"fromCitySingle_retrun", "toCitySingle_return", "flight_select_return_single", "singleReturn");
+		
+	},
+	travelFromCityMore:function(e){
+		var dataUid = e.data.uid;
+		goFlightByCity(e,"fromCityMore_select_"+dataUid, "toCityMore_select_"+dataUid, "flightMore_select_"+dataUid, "moreType");
+	},
+	travelToCityMore:function(e){
 
-	baba:function(e){
-		var a=viewModel.get("customer.dateplanJpList");
-		//console.log(JSON.stringify(a));
-		for(var i=0;i<a.length;i++){
-			if(a[i].arrivecity==e.data.arrivecity){
-				var b=i+1;
-				viewModel.set("customer.dateplanJpList["+b+"].startcity",e.data.arrivecity);
-			}
+		//出行信息， 多程抵达城市
+		//航班联动
+		var dataUid = e.data.uid;
+		goFlightByCity(e,"fromCityMore_select_"+dataUid, "toCityMore_select_"+dataUid, "flightMore_select_"+dataUid, "moreType");
+		
+		
+		//出行信息 多程抵达城市
+		var dataPlanList =viewModel.customer.dateplanJpList;
+		
+		var index = dataPlanList.indexOf(e.data);
+		var b=index+1;
+		var dataUid = viewModel.get("customer.dateplanJpList["+b+"]").uid;
+		//改变页面显示数据
+		viewModel.set("customer.dateplanJpList["+b+"].startcity",e.data.arrivecity);
+		
+		//处理传到后台的数据
+		var datePlan = dataPlanList[b];
+		datePlan.startcity=e.data.arrivecity;
+		
+		var toCity = $("#toCityMore_select_"+dataUid).val();
+		if(null==toCity || undefined==toCity || ""==toCity){
+			toCity = "北京";
 		}
-		///console.log(e.data.arrivecity);
+		datePlan.arrivecity = toCity;
+		datePlan.flightnum = $("#flightMore_select_"+dataUid).val(); //暂未获取到
+		
+		var startCity = viewModel.get("customer.dateplanJpList["+b+"].startcity");
+		if(undefined != startCity){
+			//出行信息 多程 下一个
+			nextFlightByCity(e,"fromCityMore_select_"+dataUid, "toCityMore_select_"+dataUid, "flightMore_select_"+dataUid,datePlan);
+		}
+		
 	},
-	changeBegincity:function(e){
-		var a=viewModel.get("customer.dateplanJpList");
-		console.log(JSON.stringify(a));
-		viewModel.set("customer.dateplanJpList["+(a.length-1)+"].arrivecity",e.data.startcity);
-		/*	for(var i=0;i<a.length;i++){
-			if(a[i].startcity==e.data.startcity){
-				var b=i+1;
-			}
-		}*/
-	},
-	changeBegincitySingle:function(){
-		viewModel.set("customer.tripJp.returnarrivecity",viewModel.get("customer.tripJp.startcity"));
-	}
+	
 });
 kendo.bind($(document.body), viewModel);
 
@@ -1484,4 +1556,125 @@ function addthree(a,num){
 		threenum.removeByValue(threenum);
 	}
 }
+
+//出行城市的航班
+function goFlightByCity(e,fromCityEle, toCityEle, flightSelect, tripType){
+	var eData = e.data;
+	var fromCity = $("#"+fromCityEle).val();
+	if(fromCity == null){
+		fromCity = "北京";
+	}
+	var toCity = $("#"+toCityEle).val();
+	if(toCity == null){
+		toCity = "北京";
+	}
+	//航班
+	var flightDS = new kendo.data.DataSource({
+		serverFiltering: true,
+		transport: {
+			read: {
+				dataType: "json",
+				url: "/visa/flight/filghtByCity",
+				data:{
+					fromCity:fromCity, 
+					toCity:toCity
+				}
+			}
+		}
+	});
+	var singleSelect_flight = $("#"+flightSelect).data("kendoDropDownList");
+	singleSelect_flight.setDataSource(flightDS);
+	
+	
+	//设置默认选中
+	var moreFilght = null;
+	$.ajax({
+		type: 'GET',
+		async: true,
+		url: "/visa/flight/filghtByCity?fromCity="+fromCity+"&toCity="+toCity,
+		contentType: "application/json",
+		dataType: 'json',
+		success: function (result) {
+			if(result.length > 0){
+				singleSelect_flight.value(result[0].id) ;
+				
+				if("singleGo" == tripType){
+					//往返 去程
+					viewModel.customer.tripJp.gofilght.id = result[0].id;
+				}else if ("singleReturn" == tripType){
+					//往返 返程
+					viewModel.customer.tripJp.returnfilght.id = result[0].id;
+				}else if("moreType" == tripType){
+					//多程
+					moreFilght = result[0].id;
+					eData.startcity = fromCity;
+					eData.arrivecity = toCity;
+					eData.flightnum = moreFilght;
+				}else{
+					
+					
+					
+				}
+				
+			}
+		},
+		error: function (error){
+			console.log(error);
+		}
+	});
+	
+}
+
+
+//出行城市的航班
+function nextFlightByCity(e,fromCityEle, toCityEle, flightSelect, datePlan){
+	var eData = e.data;
+	var fromCity = $("#"+fromCityEle).val();
+	if(fromCity == null){
+		fromCity = "北京";
+	}
+	var toCity = $("#"+toCityEle).val();
+	if(toCity == null){
+		toCity = "北京";
+	}
+	//航班
+	var flightDS = new kendo.data.DataSource({
+		serverFiltering: true,
+		transport: {
+			read: {
+				dataType: "json",
+				url: "/visa/flight/filghtByCity",
+				data:{
+					fromCity:fromCity, 
+					toCity:toCity
+				}
+			}
+		}
+	});
+	var singleSelect_flight = $("#"+flightSelect).data("kendoDropDownList");
+	singleSelect_flight.setDataSource(flightDS);
+	
+	
+	//设置默认选中
+	var moreFilght = null;
+	var flightnum = 0;
+	$.ajax({
+		type: 'GET',
+		async: false,
+		url: "/visa/flight/filghtByCity?fromCity="+fromCity+"&toCity="+toCity,
+		contentType: "application/json",
+		dataType: 'json',
+		success: function (result) {
+			if(result.length > 0){
+				singleSelect_flight.value(result[0].id) ;
+				flightnum = result[0].id;
+			}
+		},
+		error: function (error){
+			console.log(error);
+		}
+	});
+	datePlan.flightnum = flightnum;
+}
+
 
