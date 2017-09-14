@@ -1152,11 +1152,11 @@ $(function () {
 			var tripJp = viewModel.customer.tripJp;
 			//去程
 			var fromCityGo = tripJp.startcity;
-			if(fromCityGo == null){
+			if(fromCityGo == null || fromCityGo == undefined || fromCityGo == ""){
 				fromCityGo = "北京";
 			}
 			var toCityGo = tripJp.arrivecity;
-			if(toCityGo == null){
+			if(toCityGo == null || toCityGo == undefined || toCityGo == ""){
 				toCityGo = "北京";
 			}
 			//航班
@@ -1178,11 +1178,11 @@ $(function () {
 			singleSelect_flight_Go.value(tripJp.flightnum);
 			//返程
 			var fromCityRetrun = tripJp.returnstartcity;
-			if(fromCityRetrun == null){
+			if(fromCityRetrun == null || fromCityRetrun == undefined || fromCityRetrun == ""){
 				fromCityRetrun = "北京";
 			}
 			var toCityReturn = tripJp.returnarrivecity;
-			if(toCityReturn == null){
+			if(toCityReturn == null  || toCityReturn == undefined || toCityReturn == ""){
 				toCityReturn = "北京";
 			}
 			//航班
