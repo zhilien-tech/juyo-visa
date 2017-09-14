@@ -200,7 +200,7 @@ var viewModel = kendo.observable({
 		var all = viewModel.get(key);
 		var currentDaynum = e.data.daynum;
 		//手动更新界面
-		$("input#traveler_last_daynum_cn").each(function(){
+		$("input#traveler_last_daynum_cn").each(function(){			
 			var daynum = this.value ;
 			if(daynum > currentDaynum){
 				$(this).val(daynum - 1);
