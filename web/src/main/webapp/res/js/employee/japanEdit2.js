@@ -1785,4 +1785,30 @@ function nextFlightByCity(e,fromCityEle, toCityEle, flightSelect, datePlan){
 	datePlan.flightnum = flightnum;
 }
 
+$("#dataPlanSpan").parent().click(function(e){
+	//多程  动态设置航班数据源
+	var dateplanJpList =  viewModel.customer.dateplanJpList;
+	$(dateplanJpList).each(function(index, element){
+		var dataUid = element.uid;
+		var fromCity = element.startcity;
+		var toCity = element.arrivecity;
+		//航班
+		var flightDS = new kendo.data.DataSource({
+			serverFiltering: true,
+			transport: {
+				read: {
+					dataType: "json",
+					url: "/visa/flight/filghtByCity",
+					data:{
+						fromCity:fromCity, 
+						toCity:toCity
+					}
+				}
+			}
+		});
+		var singleSelect_flight = $("#flightMore_select_"+dataUid).data("kendoDropDownList");
+		singleSelect_flight.setDataSource(flightDS);
+		singleSelect_flight.value(element.flightnum);
+	});
+});
 
