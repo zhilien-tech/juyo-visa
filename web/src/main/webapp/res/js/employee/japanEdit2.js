@@ -326,6 +326,11 @@ var viewModel = kendo.observable({
 			}
 		}
 	},
+	flightChange: function(e){
+		var dataUid = e.data.uid;
+		var flightNum = $("#flightMore_select_"+dataUid).val();
+		e.data.flightnum = flightNum;
+	},
 	scenicChange: function(e){
 		//景区
 		var dataUid = e.data.uid; 
@@ -1718,6 +1723,7 @@ function goFlightByCity(e,fromCityEle, toCityEle, flightSelect, tripType){
 					eData.startcity = fromCity;
 					eData.arrivecity = toCity;
 					eData.flightnum = moreFilght;
+					console.log("1级："+moreFilght);
 				}else{
 					
 					
