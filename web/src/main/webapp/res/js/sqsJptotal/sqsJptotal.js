@@ -54,7 +54,7 @@ var visatypeStatus=[
 	{text:"东三县",value:2},           
 	{text:"新三县",value:3},           
 	{text:"冲绳三年多次",value:4},           
-	{text:"普通三年",value:5},           
+	{text:"普通三年多次",value:5},           
 	{text:"普通五年",value:6}      
 ];
 var defaults = {

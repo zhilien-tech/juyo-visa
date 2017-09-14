@@ -15,6 +15,7 @@ import org.nutz.dao.entity.annotation.Table;
 @Data
 @Table("visa_new_dateplan_jp")
 public class NewDateplanJpEntity implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 	@Column
 	@Comment("主键")
@@ -58,5 +59,50 @@ public class NewDateplanJpEntity implements Serializable {
 	private String returnflightnum;
 
 	private Flight flight;
+
+	/**
+	 * (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((arrivecity == null) ? 0 : arrivecity.hashCode());
+		result = prime * result + ((returndate == null) ? 0 : returndate.hashCode());
+		result = prime * result + ((startdate == null) ? 0 : startdate.hashCode());
+		return result;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		NewDateplanJpEntity other = (NewDateplanJpEntity) obj;
+		if (arrivecity == null) {
+			if (other.arrivecity != null)
+				return false;
+		} else if (!arrivecity.equals(other.arrivecity))
+			return false;
+		if (returndate == null) {
+			if (other.returndate != null)
+				return false;
+		} else if (!returndate.equals(other.returndate))
+			return false;
+		if (startdate == null) {
+			if (other.startdate != null)
+				return false;
+		} else if (!startdate.equals(other.startdate))
+			return false;
+		return true;
+	}
 
 }

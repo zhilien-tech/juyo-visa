@@ -14,7 +14,7 @@ var visatypelist=[
                 {text:"单次",value:0},
                 {text:"新三县",value:3},
                 {text:"冲绳三年多次",value:4},
-                {text:"普通三年",value:5}
+                {text:"普通三年多次",value:5}
                 ];
 //状态listorder
 var statuslist=[

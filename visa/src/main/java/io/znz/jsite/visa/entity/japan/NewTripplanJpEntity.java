@@ -13,6 +13,8 @@ import org.nutz.dao.entity.annotation.Comment;
 import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.Table;
 
+import com.uxuexi.core.common.util.Util;
+
 @Data
 @Table("visa_new_tripplan_jp")
 public class NewTripplanJpEntity implements Serializable {
@@ -74,6 +76,24 @@ public class NewTripplanJpEntity implements Serializable {
 
 	private List<Scenic> scenics;//景点
 
+	private String scenicIds;
+
 	private Date endDate;//生成酒店的pdf用到
+
+	public void setScenics(List<Scenic> scenics) {
+		this.scenics = scenics;
+		if (!Util.isEmpty(scenics)) {
+			StringBuffer buff = new StringBuffer();
+			for (int i = 0; i < scenics.size(); i++) {
+				if (i == scenics.size() - 1) {
+					buff.append(scenics.get(i).getId());
+				} else {
+					buff.append(scenics.get(i).getId() + ",");
+				}
+
+			}
+			this.scenicIds = buff.toString();
+		}
+	}
 
 }

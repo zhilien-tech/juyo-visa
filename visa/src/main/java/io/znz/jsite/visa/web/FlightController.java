@@ -80,6 +80,12 @@ public class FlightController extends BaseController {
 		return flightService.findByFilter(filter);
 	}
 
+	@RequestMapping(value = "filghtByCity")
+	@ResponseBody
+	public Object filghtByCity(String fromCity, String toCity) {
+		return flightService.filghtByCity(fromCity, toCity);
+	}
+
 	//日本航班信息 Excel导入
 	@RequestMapping(value = "importExcel")
 	@ResponseBody

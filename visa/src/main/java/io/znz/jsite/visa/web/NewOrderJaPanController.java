@@ -2,7 +2,7 @@
  * NewOrderJaPanController.java
  * io.znz.jsite.visa.web
  * Copyright (c) 2017, 北京科技有限公司版权所有.
-*/
+ */
 
 package io.znz.jsite.visa.web;
 
@@ -67,6 +67,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -95,6 +96,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.google.common.collect.Lists;
 import com.ibm.icu.util.Calendar;
+import com.sun.star.lang.IllegalArgumentException;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.dao.IDbDao;
 import com.uxuexi.core.db.util.DbSqlUtil;
@@ -213,6 +215,7 @@ public class NewOrderJaPanController {
 			NewOrderJpEntity orderNew = dbDao.fetch(NewOrderJpEntity.class, order.getId());
 			order.setUpdatetime(new Date());
 			nutDao.update(order);
+			//人数
 			int a = order.getHeadnum() - orderNew.getHeadnum();
 			if (a > 0) {
 
@@ -417,6 +420,7 @@ public class NewOrderJaPanController {
 		if (!Util.isEmpty(tripJp)) {
 
 			if (tripJp.getOneormore() == 0) {
+				//单程
 				Flight gofilght = tripJp.getGofilght();
 				Flight returnfilght = tripJp.getReturnfilght();
 				if (!Util.isEmpty(gofilght)) {
@@ -542,36 +546,40 @@ public class NewOrderJaPanController {
 			//List<NewPeerPersionEntity> insert = dbDao.insert(peerList);
 		}
 		//================================
+		//从客户端接收的多程的行程安排
 		List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
+		//查库的信息
 		List<NewDateplanJpEntity> list1 = dbDao.query(NewDateplanJpEntity.class,
 				Cnd.where("trip_jp_id", "=", tripJp.getId()), null);
-		if (!Util.isEmpty(list1) && list1.size() > 0) {
 
-			dbDao.delete(list1);
-		}
+		//判断客户端传来的数据是否填写
 		if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
-
+			//判断数据库中如果有数据，删除
+			if (!Util.isEmpty(list1) && list1.size() > 0) {
+				dbDao.delete(list1);
+			}
+			//客户端传来的信息为多程
 			if (oneormore == 1) {
 				for (NewDateplanJpEntity newPeerPersionEntity : dateplanJpList) {
-					newPeerPersionEntity.setFlightnum(newPeerPersionEntity.getFlight().getId() + "");
-
-					/*if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
-					nutDao.update(newPeerPersionEntity);
-					} else {*/
-					newPeerPersionEntity.setTrip_jp_id(tripJp.getId());
+					int tripJpId = tripJp.getId();
+					if (tripJpId > 0) {
+						newPeerPersionEntity.setTrip_jp_id(tripJpId);
+					}
 
 					dbDao.insert(newPeerPersionEntity);
-					//}
 				}
 				startdate = dateplanJpList.get(0).getStartdate();
 				enddate = dateplanJpList.get(dateplanJpList.size() - 1).getStartdate();
 				arrivecity = dateplanJpList.get(0).getArrivecity();
 			}
 		}
+		//从客户端接收的单程的行程安排
 		List<NewTripplanJpEntity> tripplanJpList = order.getTripplanJpList();
+		//判断客户端是否填写行程安排
 		if (!Util.isEmpty(tripplanJpList) && tripplanJpList.size() > 0) {
 			List<NewTripplanJpEntity> list2 = dbDao.query(NewTripplanJpEntity.class,
 					Cnd.where("order_jp_id", "=", orderOld.getId()), null);
+			//查库是否有行程安排，如果有，删除
 			if (!Util.isEmpty(list2) && list2.size() > 0) {
 
 				dbDao.delete(list2);
@@ -580,7 +588,10 @@ public class NewOrderJaPanController {
 				List<Scenic> scenics = newPeerPersionEntity.getScenics();
 				String viewid = "";
 				for (Scenic scenic : scenics) {
-					viewid += scenic.getId() + ",";
+					Integer scenicId = scenic.getId();
+					if (!Util.isEmpty(scenicId)) {
+						viewid += scenicId + ",";
+					}
 				}
 				newPeerPersionEntity.setViewid(viewid);
 				/*	if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
@@ -591,14 +602,17 @@ public class NewOrderJaPanController {
 				dbDao.insert(newPeerPersionEntity);
 				//}
 			}
-		} else {
+		} else {//客户端没填写行程安排的情况
+			//获取客户端单程的出行信息
 			NewTripJpEntity tripJp1 = order.getTripJp();
 			if (!Util.isEmpty(tripJp1.getOneormore())) {
 				int oneormore2 = tripJp1.getOneormore().intValue();
+				//如果为单程
 				if (oneormore2 == 0) {
 					if (!Util.isEmpty(tripJp1.getStartdate())) {
 						List<NewTripplanJpEntity> query = dbDao.query(NewTripplanJpEntity.class,
 								Cnd.where("order_jp_id", "=", order.getId()), null);
+						//如果库中有行程安排
 						if (query.size() > 0) {
 
 						} else {
@@ -616,7 +630,7 @@ public class NewOrderJaPanController {
 									enddate = tripJp.getReturndate();
 									arrivecity = tripJp.getArrivecity();
 									this.daytotal = (int) ((enddate.getTime() - startdate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
-									tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+									newTripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
 									this.daynum = 1;
 								}
 
@@ -641,20 +655,20 @@ public class NewOrderJaPanController {
 												cal.add(Calendar.DATE, -1);
 												enddate = cal.getTime();
 											}
-											tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+											newTripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
 										}
 									}
 									this.daynum = 1;
 								}
 							}
 							/*	if (!Util.isEmpty(tripplanJpList) && tripplanJpList.size() > 0) {
-								
+
 							} else {
 								Calendar cNow = Calendar.getInstance();
 								 Calendar cReturnDate = Calendar.getInstance();
 								 cNow.setTime(startdate);
 								 cReturnDate.setTime(enddate);
-								 
+
 								 long todayMs = cNow.getTimeInMillis();
 								 long returnMs = cReturnDate.getTimeInMillis();
 								 long intervalMs = todayMs - returnMs;*/
@@ -704,7 +718,7 @@ public class NewOrderJaPanController {
 										enddate = tripJp.getReturndate();
 										arrivecity = tripJp.getArrivecity();
 										this.daytotal = (int) ((enddate.getTime() - startdate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
-										tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+										newTripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
 										this.daynum = 1;
 									}
 
@@ -730,20 +744,20 @@ public class NewOrderJaPanController {
 													cal.add(Calendar.DATE, -1);
 													enddate = cal.getTime();
 												}
-												tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+												newTripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
 											}
 										}
 										this.daynum = 1;
 									}
 								}
 								/*	if (!Util.isEmpty(tripplanJpList) && tripplanJpList.size() > 0) {
-									
+
 								} else {
 									Calendar cNow = Calendar.getInstance();
 									 Calendar cReturnDate = Calendar.getInstance();
 									 cNow.setTime(startdate);
 									 cReturnDate.setTime(enddate);
-									 
+
 									 long todayMs = cNow.getTimeInMillis();
 									 long returnMs = cReturnDate.getTimeInMillis();
 									 long intervalMs = todayMs - returnMs;*/
@@ -754,7 +768,10 @@ public class NewOrderJaPanController {
 										List<Scenic> scenics = newPeerPersionEntity.getScenics();
 										String viewid = "";
 										for (Scenic scenic : scenics) {
-											viewid += scenic.getId() + ",";
+											Integer scenicId = scenic.getId();
+											if (!Util.isEmpty(scenicId)) {
+												viewid += scenicId + ",";
+											}
 										}
 										newPeerPersionEntity.setViewid(viewid);
 										/*	if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
@@ -1031,7 +1048,7 @@ public class NewOrderJaPanController {
 					Cnd.where("id", "=", orderid));
 			//成功以后分享次数加1
 		}
-		*/
+		 */
 		List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
 				Cnd.where("order_jp_id", "=", orderid), null);
 		String nullEmail = "";
@@ -1570,159 +1587,208 @@ public class NewOrderJaPanController {
 
 	@RequestMapping(value = "autogenerate")
 	@ResponseBody
-	public Object autogenerate(@RequestBody NewOrderJpEntity order) {
-		NewTripJpEntity tripJp1 = order.getTripJp();
-		if (!Util.isEmpty(tripJp1.getOneormore())) {
-			int oneormore2 = tripJp1.getOneormore().intValue();
-			if (oneormore2 == 0) {
-				if (!Util.isEmpty(tripJp1.getStartdate())) {
-					List<NewTripplanJpEntity> query = dbDao.query(NewTripplanJpEntity.class,
-							Cnd.where("order_jp_id", "=", order.getId()), null);
-					if (query.size() > 0) {
+	public Object autogenerate(@RequestBody NewOrderJpEntity order) throws IllegalArgumentException {
+		//long startTime = System.currentTimeMillis(); //获取开始时间
+		long orderId = order.getId();
+		if (0 >= orderId) {
+			//新增
+			autoGenerateNew(order);
+		} else {
+			//编辑
+			autoGenerateEdit(order);
+		}
+		//long endTime = System.currentTimeMillis(); //获取结束时间
 
-					} else {
-						Date startdate = null;
-						Date enddate = null;
-						String arrivecity = null;
-						NewTripJpEntity tripJp = order.getTripJp();
-						List<NewTripplanJpEntity> tripplanJpList = order.getTripplanJpList();
-						List<NewTripplanJpEntity> tripplanJpListnew = Lists.newArrayList();
+		//System.out.println("程序运行时间：" + (endTime - startTime) + "ms");
+		return order;
+	}
 
-						if (!Util.isEmpty(tripJp)) {
+	//add
+	private void autoGenerateNew(NewOrderJpEntity order) {
+		NewTripJpEntity tripJpClient = order.getTripJp();
+		if (!Util.isEmpty(tripJpClient.getOneormore())) {
+			//行程类型
+			int tripTypeClient = tripJpClient.getOneormore().intValue();
+			//单程
+			if (tripTypeClient == 0) {
 
-							if (tripJp.getOneormore() == 0) {
-								startdate = tripJp.getStartdate();
-								enddate = tripJp.getReturndate();
-								arrivecity = tripJp.getArrivecity();
-								this.daytotal = (int) ((enddate.getTime() - startdate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
-								tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
-								this.daynum = 1;
-							}
+				Date startdate = null;
+				Date enddate = null;
+				String arrivecity = null;
+				NewTripJpEntity tripJp = order.getTripJp();
+				List<NewTripplanJpEntity> tripplanJpListnew = Lists.newArrayList();
 
-						}
-						Integer oneormore = tripJp.getOneormore();
-
-						List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
-						if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
-
-							if (oneormore == 1) {
-								this.daytotal = (int) ((dateplanJpList.get(dateplanJpList.size() - 1).getStartdate()
-										.getTime() - dateplanJpList.get(0).getStartdate().getTime()) / (24 * 60 * 60 * 1000)) + 1;
-								for (int i = 0; i < dateplanJpList.size(); i++) {
-									if (i < dateplanJpList.size() - 1) {
-
-										startdate = dateplanJpList.get(i).getStartdate();
-										enddate = dateplanJpList.get(i + 1).getStartdate();
-										arrivecity = dateplanJpList.get(i).getArrivecity();
-										if (i < dateplanJpList.size() - 2) {
-											Calendar cal = Calendar.getInstance();
-											cal.setTime(enddate);
-											cal.add(Calendar.DATE, -1);
-											enddate = cal.getTime();
-										}
-										tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
-									}
-								}
-								this.daynum = 1;
-							}
-						}
-						/*	if (!Util.isEmpty(tripplanJpList) && tripplanJpList.size() > 0) {
-							
-						} else {
-							Calendar cNow = Calendar.getInstance();
-							 Calendar cReturnDate = Calendar.getInstance();
-							 cNow.setTime(startdate);
-							 cReturnDate.setTime(enddate);
-							 
-							 long todayMs = cNow.getTimeInMillis();
-							 long returnMs = cReturnDate.getTimeInMillis();
-							 long intervalMs = todayMs - returnMs;*/
-
-						order.setTripplanJpList(tripplanJpListnew);
+				if (!Util.isEmpty(tripJp)) {
+					if (tripJp.getOneormore() == 0) {
+						startdate = tripJp.getStartdate();
+						enddate = tripJp.getReturndate();
+						arrivecity = tripJp.getArrivecity();
+						this.daytotal = (int) ((enddate.getTime() - startdate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+						newTripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+						this.daynum = 1;
 					}
 				}
-			} else if (oneormore2 == 1) {
+				order.setTripplanJpList(tripplanJpListnew);
 
-				List<NewDateplanJpEntity> query = dbDao.query(NewDateplanJpEntity.class,
-						Cnd.where("trip_jp_id", "=", tripJp1.getId()), null);
-				if (!Util.isEmpty(query) && query.size() > 0) {
-					if (!Util.isEmpty(query.get(0).getStartdate())) {
-						List<NewTripplanJpEntity> query1 = dbDao.query(NewTripplanJpEntity.class,
-								Cnd.where("order_jp_id", "=", order.getId()), null);
-						if (query1.size() > 0) {
+			} else if (tripTypeClient == 1) {
 
+				Date startdate = null;
+				Date enddate = null;
+				String arrivecity = null;
+
+				List<NewDateplanJpEntity> dateplanJpListClient = order.getDateplanJpList();
+				//天数
+				this.daytotal = (int) ((dateplanJpListClient.get(dateplanJpListClient.size() - 1).getStartdate()
+						.getTime() - dateplanJpListClient.get(0).getStartdate().getTime()) / (24 * 60 * 60 * 1000)) + 1;
+
+				List<NewTripplanJpEntity> tripplanJpListnew = Lists.newArrayList();
+				for (int i = 0; i < dateplanJpListClient.size(); i++) {
+					if (i < dateplanJpListClient.size() - 1) {
+
+						startdate = dateplanJpListClient.get(i).getStartdate();
+						enddate = dateplanJpListClient.get(i + 1).getStartdate();
+						arrivecity = dateplanJpListClient.get(i).getArrivecity();
+
+						if (i < dateplanJpListClient.size() - 2) {
+							Calendar cal = Calendar.getInstance();
+							cal.setTime(enddate);
+							cal.add(Calendar.DATE, -1);
+							enddate = cal.getTime();
+						}
+						newTripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+					}
+				}
+				this.daynum = 1;
+				order.setTripplanJpList(tripplanJpListnew);
+
+			}//行程类型判断结束
+		}
+	}
+
+	private void autoGenerateEdit(NewOrderJpEntity order) throws IllegalArgumentException {
+		long orderId = order.getId();
+		NewOrderJpEntity orderDb = dbDao.fetch(NewOrderJpEntity.class, Cnd.where("id", "=", orderId));
+		if (Util.isEmpty(orderDb)) {
+			throw new IllegalArgumentException("订单不存在");
+		} else {
+			//编辑
+			NewTripJpEntity tripJp_db = dbDao
+					.fetch(NewTripJpEntity.class, Cnd.where("order_jp_id", "=", order.getId()));
+
+			NewTripJpEntity tripJpClient = order.getTripJp();
+			if (!Util.isEmpty(tripJpClient.getOneormore())) {
+				//行程类型
+				int tripTypeClient = tripJpClient.getOneormore().intValue();
+				//单程
+				if (tripTypeClient == 0) {
+					//数据库中的行程类型
+					if (!Util.isEmpty(tripJp_db)) {
+
+						//如果行程条件没变 直接用数据库中的
+						if (tripJpClient.equals(tripJp_db)) {
+							//如果数据库中已经存在
+							List<NewTripplanJpEntity> tripListDb = dbDao.query(NewTripplanJpEntity.class,
+									Cnd.where("order_jp_id", "=", order.getId()), null);
+							List<NewTripplanJpEntity> tripplanJpListnew = null;
+
+							if (tripListDb.size() > 0) {
+								tripplanJpListnew = tripListDb;
+								String arrivecity = null;
+								NewTripJpEntity tripJp = order.getTripJp();
+								arrivecity = tripJp.getArrivecity();
+								editTripplan(arrivecity, tripplanJpListnew);
+							} else {
+								//新增 do nothing
+							}
+							order.setTripplanJpList(tripplanJpListnew);
 						} else {
 							Date startdate = null;
 							Date enddate = null;
 							String arrivecity = null;
 							NewTripJpEntity tripJp = order.getTripJp();
-							List<NewTripplanJpEntity> tripplanJpList = order.getTripplanJpList();
 							List<NewTripplanJpEntity> tripplanJpListnew = Lists.newArrayList();
 
 							if (!Util.isEmpty(tripJp)) {
-
 								if (tripJp.getOneormore() == 0) {
 									startdate = tripJp.getStartdate();
 									enddate = tripJp.getReturndate();
 									arrivecity = tripJp.getArrivecity();
 									this.daytotal = (int) ((enddate.getTime() - startdate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
-									tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+									newTripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
 									this.daynum = 1;
 								}
-
-							}
-							Integer oneormore = tripJp.getOneormore();
-
-							List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
-							if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
-
-								if (oneormore == 1) {
-									this.daytotal = (int) ((dateplanJpList.get(dateplanJpList.size() - 1)
-											.getStartdate().getTime() - dateplanJpList.get(0).getStartdate().getTime()) / (24 * 60 * 60 * 1000)) + 1;
-									for (int i = 0; i < dateplanJpList.size(); i++) {
-										if (i < dateplanJpList.size() - 1) {
-
-											startdate = dateplanJpList.get(i).getStartdate();
-											enddate = dateplanJpList.get(i + 1).getStartdate();
-											arrivecity = dateplanJpList.get(i).getArrivecity();
-											if (i < dateplanJpList.size() - 2) {
-												Calendar cal = Calendar.getInstance();
-												cal.setTime(enddate);
-												cal.add(Calendar.DATE, -1);
-												enddate = cal.getTime();
-											}
-											tripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
-										}
-									}
-									this.daynum = 1;
-								}
-							}
-							/*	if (!Util.isEmpty(tripplanJpList) && tripplanJpList.size() > 0) {
-								
 							} else {
-								Calendar cNow = Calendar.getInstance();
-								 Calendar cReturnDate = Calendar.getInstance();
-								 cNow.setTime(startdate);
-								 cReturnDate.setTime(enddate);
-								 
-								 long todayMs = cNow.getTimeInMillis();
-								 long returnMs = cReturnDate.getTimeInMillis();
-								 long intervalMs = todayMs - returnMs;*/
-
+								autoGenerateNew(order);
+							}
 							order.setTripplanJpList(tripplanJpListnew);
 						}
 
+						//多程
 					}
-				}
+				} else if (tripTypeClient == 1) {
+					//出行信息
+					List<NewDateplanJpEntity> dateplanJpListInDb = dbDao.query(NewDateplanJpEntity.class,
+							Cnd.where("trip_jp_id", "=", tripJpClient.getId()), null);
+
+					//页面上的出行信息
+					List<NewDateplanJpEntity> dateplanJpListClient = order.getDateplanJpList();
+					if (!Util.isEmpty(dateplanJpListInDb)) {
+						//只要条件改变全部新增，否则 取数据库中的数据使用
+						if (dateplanJpListInDb.containsAll(dateplanJpListClient)) {
+							if (!Util.isEmpty(dateplanJpListInDb) && dateplanJpListInDb.size() > 0) {
+								if (!Util.isEmpty(dateplanJpListInDb.get(0).getStartdate())) {
+									//已经保存的行程安排
+									List<NewTripplanJpEntity> tripPlansInDb = dbDao.query(NewTripplanJpEntity.class,
+											Cnd.where("order_jp_id", "=", order.getId()), null);
+
+									List<NewTripplanJpEntity> tripplanJpList = null;
+
+									tripplanJpList = tripPlansInDb;
+									String arrivecity = null;
+									NewTripJpEntity tripJp = order.getTripJp();
+									arrivecity = tripJp.getArrivecity();
+									editTripplan(arrivecity, tripplanJpList);
+								}
+							}
+						} else {
+							Date startdate = null;
+							Date enddate = null;
+							String arrivecity = null;
+
+							//天数
+							this.daytotal = (int) ((dateplanJpListClient.get(dateplanJpListClient.size() - 1)
+									.getStartdate().getTime() - dateplanJpListClient.get(0).getStartdate().getTime()) / (24 * 60 * 60 * 1000)) + 1;
+
+							List<NewTripplanJpEntity> tripplanJpListnew = Lists.newArrayList();
+							for (int i = 0; i < dateplanJpListClient.size(); i++) {
+								if (i < dateplanJpListClient.size() - 1) {
+
+									startdate = dateplanJpListClient.get(i).getStartdate();
+									enddate = dateplanJpListClient.get(i + 1).getStartdate();
+									arrivecity = dateplanJpListClient.get(i).getArrivecity();
+
+									if (i < dateplanJpListClient.size() - 2) {
+										Calendar cal = Calendar.getInstance();
+										cal.setTime(enddate);
+										cal.add(Calendar.DATE, -1);
+										enddate = cal.getTime();
+									}
+									newTripplan(order, startdate, enddate, arrivecity, tripplanJpListnew);
+								}
+							}
+							this.daynum = 1;
+							order.setTripplanJpList(tripplanJpListnew);
+						}
+					} else {
+						autoGenerateNew(order);
+					}
+				} //行程类判断结束
 
 			}
-
 		}
-
-		return order;
 	}
 
-	private void tripplan(NewOrderJpEntity order, Date startdate, Date enddate, String arrivecity,
+	private void newTripplan(NewOrderJpEntity order, Date startdate, Date enddate, String arrivecity,
 			List<NewTripplanJpEntity> tripplanJpListnew) {
 		Date nowdate = startdate;
 		DateFormat df = new SimpleDateFormat("yyyyMMdd");
@@ -1736,60 +1802,58 @@ public class NewOrderJaPanController {
 			NewTripplanJpEntity t = new NewTripplanJpEntity();
 			//Calendar cal1 = Calendar.getInstance();
 			cal.setTime(nowdate);
-			t.setDaynum(this.daynum);
+			t.setDaynum(this.daynum);//daynum 第几天
 			t.setCity(arrivecity);
 			t.setNowdate(nowdate);
 			if (this.daynum == this.daytotal) {
-				t.setHometype(-1);
-			} else {
-
-				if (i < hotellist.size()) {
-
+				t.setHometype(-1);//hometyp 房间类型
+				if (!Util.isEmpty(hotellist)) {
+					//int hotelFoot = new Random().nextInt(10000) % hotellist.size();
 					t.setHotelid(hotellist.get(0).getId());
 				}
+			} else {
+
+				if (i < hotellist.size() && hotellist.size() > 0) {
+					if (!Util.isEmpty(hotellist)) {
+						//int hotelFoot = new Random().nextInt(10000) % hotellist.size();
+						t.setHotelid(hotellist.get(0).getId());
+					}
+				}
 				t.setHometype(0);
-				if (!Util.isEmpty(order.getHeadnum())) {
+				if (!Util.isEmpty(order.getHeadnum())) {//headnum 人数
 					int home = (int) Math.ceil(order.getHeadnum() / 2.0);
 					t.setHomenum(home);
 				} else {
 					t.setHomenum(1);
 
 				}
-				t.setHomeday(1);
+				t.setHomeday(1);//homeday住几晚
 			}
 
-			if (i < sceniclist.size()) {
-				if (sceniclist.size() / 4 >= this.daynum) {
-					int start = 0;
-					if (this.daynum > 1) {
-						start = (this.daynum - 1) * 4;
+			//随机获取景区
+
+			String viewIdStr = "";
+			for (int f = 0; f < 4 && f < sceniclist.size(); f++) {
+				int scenicFoot = new Random().nextInt(10000) % sceniclist.size();
+				int scenicId = sceniclist.get(scenicFoot).getId();
+				viewIdStr += scenicId + ",";
+			}
+			t.setViewid(viewIdStr);
+
+			if (sceniclist.size() > 0) {
+				String viewid = t.getViewid();
+				if (!Util.isEmpty(viewid)) {
+					String view[] = t.getViewid().split(",");
+					List<Scenic> slist = Lists.newArrayList();
+					for (int j = 0; j < view.length; j++) {
+						if (!Util.isEmpty(view[j])) {
+							Scenic fetch = dbDao.fetch(Scenic.class, Long.valueOf(view[j]));
+							slist.add(fetch);
+						}
 					}
-					//					int start = (this.daynum - 1) * 4 - 1;
-					int end = this.daynum * 4 - 1;
-					String str = "";
-					for (int j = start; j <= end; j++) {
-						str += sceniclist.get(j).getId() + ",";
-					}
-					t.setViewid(str);
-				} else {
-					int start = 0;
-					int end = 3;
-					String str = "";
-					for (int j = start; j <= end; j++) {
-						str += sceniclist.get(j).getId() + ",";
-					}
-					t.setViewid(str);
+					t.setScenics(slist);
 				}
 			}
-			String view[] = t.getViewid().split(",");
-			List<Scenic> slist = Lists.newArrayList();
-			for (int j = 0; j < view.length; j++) {
-				if (!Util.isEmpty(view[j])) {
-					Scenic fetch = dbDao.fetch(Scenic.class, Long.valueOf(view[j]));
-					slist.add(fetch);
-				}
-			}
-			t.setScenics(slist);
 
 			//t.setIntime(nowdate);
 			//cal1.set(Calendar.DAY_OF_MONTH, nowdate.getDate() + 1);
@@ -1806,9 +1870,36 @@ public class NewOrderJaPanController {
 		}
 	}
 
+	private void editTripplan(String arrivecity, List<NewTripplanJpEntity> tripplanJpList) {
+		List<Scenic> sceniclist = dbDao.query(Scenic.class, Cnd.where("city", "=", arrivecity), null);
+		if (!Util.isEmpty(tripplanJpList)) {
+			for (NewTripplanJpEntity t : tripplanJpList) {
+				if (sceniclist.size() > 0) {
+					String view[] = t.getViewid().split(",");
+					List<Scenic> slist = Lists.newArrayList();
+					for (int j = 0; j < view.length; j++) {
+						if (!Util.isEmpty(view[j])) {
+							Scenic fetch = dbDao.fetch(Scenic.class, Long.valueOf(view[j]));
+							slist.add(fetch);
+						}
+					}
+					t.setScenics(slist);
+				}
+
+				//t.setIntime(nowdate);
+				//cal1.set(Calendar.DAY_OF_MONTH, nowdate.getDate() + 1);
+				/*t.setOrder_jp_id(orderOld.getId());*/
+				//t.setOuttime(cal1.getTime());
+				t.setBreakfast(1);
+				t.setDinner(1);
+			}
+		}
+
+	}
+
 	/*	
 		 //根据地点筛选航班
-		
+
 		@RequestMapping(value = "deliveryJpsave")
 		@ResponseBody
 		public Object deliveryJpsave() {
