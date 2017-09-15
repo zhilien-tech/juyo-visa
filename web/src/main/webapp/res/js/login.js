@@ -46,35 +46,56 @@ $(function () {
 	});
 	//document.getElementById("VerificatCode1").click();
 	$("#VerificatCode1").click();
+	
 	//记住密码
 	var str = getCookie("loginInfo");
 	//str = str.replace(/(^\s*)|(\s*$)/g, "");
-	
 	if(str == undefined || str == null || str == ""){
-		
 		$("input[type='checkbox']").attr("checked", false);
 		$("#remFlag").val("0");
-		$("#uname").val("");
 		$("#pass").val("");
 	}else{
 		str = str.substring(1,str.length-1);
-		var username = str.split(",")[0];
+		var name = str.split(",")[0];
 		var password = str.split(",")[1];
 		var remFlag = str.split(",")[2];
 		if(remFlag == 1){
-			$("input[type='checkbox']").attr("checked", true);
+			$("#remFlag").attr("checked", true);
 			$("#remFlag").val("1");
-			//自动填充用户名和密码
-			$("#uname").val(username);
+			//自动填充密码
 			$("#pass").val(password);
+			
 		}else{
-			$("input[type='checkbox']").attr("checked", false);
+			$("#remFlag").attr("checked", false);
 			$("#remFlag").val("0");
-			$("#uname").val("");		
 			$("#pass").val("");
 		}
-		
-		
+		$("#uname").val(name);
+	}
+	
+	//游客用户名密码
+	var ykStr = getCookie("loginYkInfo");
+	if(ykStr == undefined || ykStr == null || ykStr == ""){
+		$("input[type='checkbox']").attr("checked", false);
+		$("#remFlagYk").val("0");
+		$("#ykpass").val("");
+	}else{
+		ykStr = ykStr.substring(1,ykStr.length-1);
+		var nameYk = ykStr.split(",")[0];
+		var passwordYk = ykStr.split(",")[1];
+		var remFlagYk = ykStr.split(",")[2];
+		//游客
+		if(remFlagYk == 1){
+			$("#remFlagYk").attr("checked", true);
+			$("#remFlagYk").val("1");
+			//自动填充密码
+			$("#ykpass").val(passwordYk);
+		}else{
+			$("#remFlagYk").attr("checked", false);
+			$("#remFlagYk").val("0");
+			$("#ykpass").val("");
+		}
+		$("#ykname").val(nameYk);
 	}
 	
 	
@@ -96,10 +117,10 @@ function getCookie(cname) {
 
 //记住密码功能
 function rememberPass(){
-	var remFlag = $("input[type='checkbox']").attr("checked");
+	var remFlag = $("#remFlag").attr("checked");
 	if(remFlag == "checked"){ //如果选中设置remFlag为0		
 		$("#remFlag").val("0");
-		$("input[type='checkbox']").attr("checked", false);	
+		$("#remFlag").attr("checked", false);	
 	}else{ //如果没选中设置remFlag为1
 		//cookie存用户名和密码,回显的是真实的用户名和密码,存在安全问题.
 		/*var conFlag = confirm("记录密码功能不宜在公共场所(如网吧等)使用,以防密码泄露.您确定要使用此功能吗?");
@@ -111,7 +132,18 @@ function rememberPass(){
 			$("#remFlag").val("0");
 		}*/
 		$("#remFlag").val("1");
-		$("input[type='checkbox']").attr("checked", true);
+		$("#remFlag").attr("checked", true);
+	}
+}
+
+function rememberPassYk(){
+	var remFlag = $("#remFlagYk").attr("checked");
+	if(remFlag == "checked"){ //如果选中设置remFlag为0		
+		$("#remFlagYk").val("0");
+		$("#remFlagYk").attr("checked", false);	
+	}else{ //如果没选中设置remFlag为1
+		$("#remFlagYk").val("1");
+		$("#remFlagYk").attr("checked", true);
 	}
 }
 
@@ -121,10 +153,3 @@ function userClick(){
 function visitorclick(){
 	$("#VerificatCode2").click();
 }
-
-$("#compId").click(function(){
-	var name = $("#uname").val();		
-	var passWord = $("#pass").val();
-	var rem = $("#remFlag").val();
-	console.log(name +"---"+passWord +"---"+rem);
-});
