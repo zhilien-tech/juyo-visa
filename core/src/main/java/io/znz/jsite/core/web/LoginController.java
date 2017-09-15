@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -111,9 +112,22 @@ public class LoginController extends BaseController {
 	public String auth(@RequestParam String to, @RequestParam(required = false) String login,
 			@RequestParam(FormAuthenticationFilter.DEFAULT_USERNAME_PARAM) String username,
 			@RequestParam(FormAuthenticationFilter.DEFAULT_PASSWORD_PARAM) String password,
-			@RequestParam(required = false) Integer logintype,
+			@RequestParam(required = false) Integer logintype, @RequestParam(required = false) String captcha,
+			HttpServletResponse response, HttpServletRequest request, RedirectAttributesModelMap model) {
 
-			@RequestParam(required = false) String captcha, HttpServletRequest request, RedirectAttributesModelMap model) {
+		//记住用户名、密码功能(注意：cookie存放密码会存在安全隐患)
+		String remFlag = request.getParameter("rememberMe");
+		String passWord = password;
+		if (!Util.eq("1", remFlag)) { //"1"表示用户勾选记住密码
+			passWord = "";
+			remFlag = "0";
+		}
+		String loginInfo = username + "," + passWord + "," + remFlag;
+		Cookie userCookie = new Cookie("loginInfo", loginInfo);
+		userCookie.setMaxAge(30 * 24 * 60 * 60); //存活期为一个月 30*24*60*60
+		userCookie.setPath("/");
+		response.addCookie(userCookie);
+
 		//获取Shiro自动保存的跳转@RequestParam(value = FormAuthenticationFilter.DEFAULT_REMEMBER_ME_PARAM, required = false) boolean rememberMe,
 		/*SavedRequest savedRequest = WebUtils.getSavedRequest(request);
 		if (savedRequest != null && StringUtils.isNotBlank(savedRequest.getRequestUrl())) {
