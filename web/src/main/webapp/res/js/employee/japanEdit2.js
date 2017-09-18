@@ -1124,8 +1124,19 @@ function orderJpsave(){
 
 		var str="";
 		if(emptyNum.length>0){
+			var flag = 1;
 			for(var i=0;i<emptyNum.length;i++){
-				str+=emptyNum[i].text+",";
+				var emptyStr = emptyNum[i].text+",";
+				if(flag == 1){
+					if(emptyNum[i].text == "关联的主申请人"){
+						flag = 0;
+					}
+				}else{
+					if(emptyNum[i].text == "关联的主申请人"){
+						emptyStr = "";
+					}
+				}
+				str += emptyStr;
 			}
 			str+="不能为空！"
 		}
