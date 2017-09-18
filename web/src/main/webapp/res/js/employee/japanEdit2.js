@@ -1127,14 +1127,11 @@ function orderJpsave(){
 			var flag = 1;
 			for(var i=0;i<emptyNum.length;i++){
 				var emptyStr = emptyNum[i].text+",";
-				if(flag == 1){
-					if(emptyNum[i].text == "关联的主申请人"){
-						flag = 0;
-					}
-				}else{
-					if(emptyNum[i].text == "关联的主申请人"){
+				if(emptyNum[i].text == "关联的主申请人"){
+					if(flag == 0){
 						emptyStr = "";
 					}
+					flag = 0;
 				}
 				str += emptyStr;
 			}
@@ -1533,6 +1530,8 @@ function autogenerate(){
 				//回显
 				//console.log(hotelInput);
 				multiSelect_hotel.value(hotelInput);
+				
+				//最后一天 不生成酒店
 
 			});
 
