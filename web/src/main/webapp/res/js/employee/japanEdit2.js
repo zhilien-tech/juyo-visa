@@ -1532,6 +1532,9 @@ function autogenerate(){
 				multiSelect_hotel.value(hotelInput);
 				
 				//最后一天 不生成酒店
+				if(index == $('[name="scenic_name"]').length-1){
+					multiSelect_hotel.value("");
+				}
 
 			});
 
