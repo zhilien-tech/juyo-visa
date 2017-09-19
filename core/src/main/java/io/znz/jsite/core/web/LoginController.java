@@ -115,19 +115,6 @@ public class LoginController extends BaseController {
 			@RequestParam(required = false) Integer logintype, @RequestParam(required = false) String captcha,
 			HttpServletResponse response, HttpServletRequest request, RedirectAttributesModelMap model) {
 
-		//记住用户名、密码功能(注意：cookie存放密码会存在安全隐患)
-		String remFlag = request.getParameter("rememberMe");
-		String passWord = password;
-		if (!Util.eq("1", remFlag)) { //"1"表示用户勾选记住密码
-			passWord = "";
-			remFlag = "0";
-		}
-		String loginInfo = username + "," + passWord + "," + remFlag;
-		Cookie userCookie = new Cookie("loginInfo", loginInfo);
-		userCookie.setMaxAge(30 * 24 * 60 * 60); //存活期为一个月 30*24*60*60
-		userCookie.setPath("/");
-		response.addCookie(userCookie);
-
 		//获取Shiro自动保存的跳转@RequestParam(value = FormAuthenticationFilter.DEFAULT_REMEMBER_ME_PARAM, required = false) boolean rememberMe,
 		/*SavedRequest savedRequest = WebUtils.getSavedRequest(request);
 		if (savedRequest != null && StringUtils.isNotBlank(savedRequest.getRequestUrl())) {
@@ -178,6 +165,55 @@ public class LoginController extends BaseController {
 				if (!Util.isEmpty(fetch)) {
 					Integer userId = fetch.getId();//得到当前登录用户id
 					Integer userType = fetch.getUserType();//得到用户类型
+
+					String loginInfo = null;
+					String loginYkInfo = null;
+					Cookie[] cookies = request.getCookies();
+					if (!Util.isEmpty(cookies)) {
+						for (Cookie cookie : cookies) {
+							String cName = cookie.getName();
+							if (Util.eq("loginInfo", cName)) {
+								//非游客
+								loginInfo = cookie.getValue();
+							}
+							if (Util.eq("loginYkInfo", cName)) {
+								//游客
+								loginYkInfo = cookie.getValue();
+							}
+						}
+					}
+					if (userType == 2) {
+						//游客
+						String nameYk = username;
+						String passWordYk = password;
+						String remFlagYk = request.getParameter("rememberMeYk");
+						if (!Util.eq("1", remFlagYk)) { //"1"表示用户勾选记住密码
+							passWordYk = "";
+							remFlagYk = "0";
+						}
+						loginYkInfo = nameYk + "," + passWordYk + "," + remFlagYk;
+					} else {
+						String name = username;
+						String passWord = password;
+						String remFlag = request.getParameter("rememberMe");
+						if (!Util.eq("1", remFlag)) { //"1"表示用户勾选记住密码
+							passWord = "";
+							remFlag = "0";
+						}
+						loginInfo = name + "," + passWord + "," + remFlag;
+					}
+
+					//记住用户名、密码功能(注意：cookie存放密码会存在安全隐患)
+					Cookie userCookie = new Cookie("loginInfo", loginInfo);
+					userCookie.setMaxAge(30 * 24 * 60 * 60); //存活期为一个月 30*24*60*60
+					userCookie.setPath("/");
+					response.addCookie(userCookie);
+
+					Cookie ykCookie = new Cookie("loginYkInfo", loginYkInfo);
+					ykCookie.setMaxAge(30 * 24 * 60 * 60); //存活期为一个月 30*24*60*60
+					ykCookie.setPath("/");
+					response.addCookie(ykCookie);
+
 					String telephone = fetch.getTelephone();//得到数据库中用户名
 					String pwd = fetch.getPassword();//得到数据库中密码
 					String slt = fetch.getSalt();//得到数据库中盐值

@@ -1138,26 +1138,31 @@
         <div class="row" data-bind="invisible:isMainProposer">
             <div class="col-xs-6">
                 <div class="form-group">
-                    <label>关联的主申请人:</label>
+                    <label>关联的主申请人:<span style="color: red">*</span></label>
                     <input class="fill" data-role="dropdownlist"
-							 data-filter="startswith"
-                           data-suggest="true"
-                           data-auto-bind="true"
+							data-filter="startswith"
+                            data-suggest="true"
+                            data-auto-bind="true"
                             data-value-primitive="true"
                             data-value-field="value"
                             data-text-field="text"
-                            data-bind="value:relationproposer,source:proposers"/>
+                            data-bind="value:relationproposer,source:proposers"
+							required validationMessage="关联的主申请人不能为空" name="relationproposer"
+					/>
+					<span class="k-invalid-msg" data-for="relationproposer" ></span><!-- 验证提示语 -->
+
                 </div>
             </div>
             <div class="col-xs-6">
                 <div class="form-group">
-                    <label>与主申请人关系:</label>
+                    <label>与主申请人关系:<span style="color: red">*</span></label>
                     <select class="fill" data-role="dropdownlist"
-							 data-filter="startswith"
-                           data-suggest="true"
-                           data-auto-bind="true"
+							data-filter="startswith"
+                            data-suggest="true"
+                            data-auto-bind="true"
                             data-value-primitive="true"
-                            data-bind="value:relation">
+                            data-bind="value:relation"
+							required validationMessage="与主申请人关系不能为空" name="relation">
                         <option value="1">配偶</option>
                         <option value="2">子女</option>
                         <option value="3">父母</option>
@@ -1165,6 +1170,7 @@
                         <option value="5">朋友</option>
                         <option value="6">其他</option>
                     </select>
+					<span class="k-invalid-msg" data-for="relation" ></span><!-- 验证提示语 -->
                 </div>
             </div>
         </div>

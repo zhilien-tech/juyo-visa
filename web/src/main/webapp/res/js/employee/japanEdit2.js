@@ -1124,8 +1124,16 @@ function orderJpsave(){
 
 		var str="";
 		if(emptyNum.length>0){
+			var flag = 1;
 			for(var i=0;i<emptyNum.length;i++){
-				str+=emptyNum[i].text+",";
+				var emptyStr = emptyNum[i].text+",";
+				if(emptyNum[i].text == "关联的主申请人"){
+					if(flag == 0){
+						emptyStr = "";
+					}
+					flag = 0;
+				}
+				str += emptyStr;
 			}
 			str+="不能为空！"
 		}
@@ -1522,6 +1530,11 @@ function autogenerate(){
 				//回显
 				//console.log(hotelInput);
 				multiSelect_hotel.value(hotelInput);
+				
+				//最后一天 不生成酒店
+				if(index == $('[name="scenic_name"]').length-1){
+					multiSelect_hotel.value("");
+				}
 
 			});
 
