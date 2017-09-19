@@ -172,13 +172,15 @@ function gmtZone(){
 	var now = new Date();
 	var chinaZone = -8;
 	var gmtHours = now.getTimezoneOffset()/60;
-	console.log("与东八区时区差："+(gmtHours-chinaZone));
+	console.log("与东八区的时区差："+(chinaZone-gmtHours));
 	var zoneSub = chinaZone-gmtHours;
 	return zoneSub;
 }
 
 $(function(){
 	gmtZone();
+	$("#goDate").kendoDatePicker({format:"yyyy/MM/dd"});
+	$("#returnDate").kendoDatePicker({format:"yyyy/MM/dd"});
 });
 
 
@@ -287,7 +289,7 @@ var viewModel = kendo.observable({
 		return result;
 	},
 	customer: defaults,
-	aaa:function(e){
+	togetherClick:function(e){
 		/* console.log(e.data.id);
     	  console.log(e.data.istogetherlinkman);*/
 		//$("#main1_"+e.data.id).is(':checked')

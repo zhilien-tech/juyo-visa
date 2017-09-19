@@ -533,7 +533,7 @@
 	                                    <div class="form-group">
 	                                        <label for="us_contact_last_name_en">返回日期:</label>
 	                                        <div class='input-group'>
-	                                            <input id="us_contact_last_name_en" data-role="datepicker" style="width: 100%;" data-bind="value:customer.tripJp.returndate"
+	                                            <input id="returnDate" data-role="datepicker" style="width: 100%;" data-bind="value:customer.tripJp.returndate"
 	                                                   name="sendtime"/>
 	                                            <!-- <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span> -->
 	                                        </div>
@@ -1114,7 +1114,7 @@
                 <div class="form-group">
                     <label>统一联系人:</label>
                     <div class="onoffswitch">
-                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main1_#:data.id#" data-bind="checked:istogetherlinkman,click:aaa" >
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="main1_#:data.id#" data-bind="checked:istogetherlinkman,click:togetherClick" >
                         <label class="onoffswitch-label" for="main1_#:data.id#">
                             <span class="onoffswitch-inner"></span>
                             <span class="onoffswitch-switch"></span>
