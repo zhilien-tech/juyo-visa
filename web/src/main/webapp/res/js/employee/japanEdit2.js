@@ -167,6 +167,21 @@ flights = new kendo.data.DataSource({
 
 });
 
+//计算时区差
+function gmtZone(){
+	var now = new Date();
+	var chinaZone = -8;
+	var gmtHours = now.getTimezoneOffset()/60;
+	console.log("与东八区时区差："+(gmtHours-chinaZone));
+	var zoneSub = chinaZone-gmtHours;
+	return zoneSub;
+}
+
+$(function(){
+	gmtZone();
+});
+
+
 var viewModel = kendo.observable({
 	customersourceEnum:customersourceEnum,
 	startcitynew:startcity,
@@ -193,8 +208,6 @@ var viewModel = kendo.observable({
 			dinner:"",
 			scenics:[]
 		});
-		
-		
 	},
 	addOneDatePlan: function (e) {
 		viewModel.customer.dateplanJpList.push({
@@ -417,6 +430,14 @@ var viewModel = kendo.observable({
 					url: "/visa/hotel/arricity",
 					data:{
 						arricity:arricity
+					}
+				},
+				parameterMap: function (options, type) {
+					if (options.filter) {
+						if(options.filter.filters[0]==null||options.filter.filters[0]==''||options.filter.filters[0]==undefined){
+							return null;
+						}
+						return {filter: options.filter.filters[0].value};
 					}
 				}
 			}
@@ -1523,7 +1544,15 @@ function autogenerate(){
 								arricity:arricity
 							}
 						}
-					}
+					},
+					parameterMap: function (options, type) {
+						if (options.filter) {
+							if(options.filter.filters[0]==null||options.filter.filters[0]==''||options.filter.filters[0]==undefined){
+								return null;
+							}
+							return {filter: options.filter.filters[0].value};
+						}
+					},
 				});
 				var multiSelect_hotel = $("#"+hotelId).data("kendoDropDownList");
 				multiSelect_hotel.setDataSource(hotelNew);
@@ -1830,4 +1859,5 @@ $("#dataPlanSpan").parent().click(function(e){
 		singleSelect_flight.value(element.flightnum);
 	});
 });
+
 
