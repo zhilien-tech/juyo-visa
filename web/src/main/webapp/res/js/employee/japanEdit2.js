@@ -1301,6 +1301,12 @@ $(function () {
 				var dataUid = element.uid;
 				var fromCity = element.startcity;
 				var toCity = element.arrivecity;
+				if(fromCity == null || fromCity == undefined || fromCity == ""){
+					fromCity = "北京";
+				}
+				if(toCity == null  || toCity == undefined || toCity == ""){
+					toCity = "北京";
+				}
 				//航班
 				var flightDS = new kendo.data.DataSource({
 					/*serverFiltering: true,
@@ -1939,7 +1945,7 @@ function nextFlightByCity(e,fromCityEle, toCityEle, flightSelect, datePlan){
 	
 	
 	//设置默认选中
-	var moreFilght = null;
+	/*var moreFilght = null;
 	var flightnum = 0;
 	$.ajax({
 		type: 'GET',
@@ -1957,7 +1963,7 @@ function nextFlightByCity(e,fromCityEle, toCityEle, flightSelect, datePlan){
 			console.log(error);
 		}
 	});
-	datePlan.flightnum = flightnum;
+	datePlan.flightnum = flightnum;*/
 }
 
 $("#dataPlanSpan").parent().click(function(e){
@@ -1967,6 +1973,12 @@ $("#dataPlanSpan").parent().click(function(e){
 		var dataUid = element.uid;
 		var fromCity = element.startcity;
 		var toCity = element.arrivecity;
+		if(fromCity == null || fromCity == undefined || fromCity == ""){
+			fromCity = "北京";
+		}
+		if(toCity == null  || toCity == undefined || toCity == ""){
+			toCity = "北京";
+		}
 		//航班
 		var flightDS = new kendo.data.DataSource({
 			/*serverFiltering: true,
