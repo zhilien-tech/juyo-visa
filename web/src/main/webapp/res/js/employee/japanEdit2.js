@@ -1833,7 +1833,7 @@ function goFlightByCity(e,fromCityEle, toCityEle, flightSelect, tripType){
 			read: {
 				type: "POST",
 				dataType: "json",
-				url: "/visa/flight/filghtByCity"
+				url: "/visa/flight/filghtByCityFilter"
 			},
 			parameterMap:function(data,type){
 				if (data.filter) {
