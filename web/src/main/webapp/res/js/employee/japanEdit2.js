@@ -181,6 +181,8 @@ $(function(){
 	gmtZone();
 	$("#goDate").kendoDatePicker({format:"yyyy/MM/dd"});
 	$("#returnDate").kendoDatePicker({format:"yyyy/MM/dd"});
+	$("#senddate").kendoDatePicker({format:"yyyy/MM/dd"});
+	$("#outdate").kendoDatePicker({format:"yyyy/MM/dd"});
 });
 
 

@@ -15,6 +15,9 @@ import org.nutz.dao.entity.annotation.Comment;
 import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.Table;
 
+import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.Util;
+
 /**
  * TODO(这里用一句话描述这个类的作用)
  * <p>
@@ -57,5 +60,28 @@ public class NewDeliveryJapanEntity {
 	@Column
 	@Comment("护照快递地址")
 	private String fastmailaddress;
+
+	//日本时区 少一小时
+	public Date getEarlydate() {
+		if (!Util.isEmpty(earlydate)) {
+			int hours = earlydate.getHours();
+			if (hours == 23) {
+				earlydate = DateUtil.addDay(earlydate, 1);
+				earlydate.setHours(0);
+			}
+		}
+		return earlydate;
+	}
+
+	public Date getLatterdate() {
+		if (!Util.isEmpty(latterdate)) {
+			int hours = latterdate.getHours();
+			if (hours == 23) {
+				latterdate = DateUtil.addDay(latterdate, 1);
+				latterdate.setHours(0);
+			}
+		}
+		return latterdate;
+	}
 
 }
