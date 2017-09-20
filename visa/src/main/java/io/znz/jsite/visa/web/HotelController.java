@@ -5,6 +5,7 @@ import io.znz.jsite.base.bean.PageFilter;
 import io.znz.jsite.base.bean.ResultObject;
 import io.znz.jsite.visa.bean.Flight;
 import io.znz.jsite.visa.bean.Hotel;
+import io.znz.jsite.visa.form.FilterValueForm;
 import io.znz.jsite.visa.service.HotelService;
 
 import org.hibernate.criterion.Criterion;
@@ -69,4 +70,14 @@ public class HotelController extends BaseController {
 		}
 		return hotelService.findByCity(arricity);
 	}
+
+	@RequestMapping(value = "arricityfilter")
+	@ResponseBody
+	public Object arricity(FilterValueForm form) {
+		if (Util.isEmpty(form.getToCity())) {
+			return null;
+		}
+		return hotelService.findByCityFilter(form.getToCity(), form);
+	}
+
 }
