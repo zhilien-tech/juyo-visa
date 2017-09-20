@@ -1997,9 +1997,16 @@ public class NewOrderJaPanController {
 	public Object downloadselectsavenew(long orderid, final HttpSession session, long sendComId, long landComId) {
 		NewOrderJpEntity order1 = dbDao.fetch(NewOrderJpEntity.class, orderid);
 		if (!Util.isEmpty(order1)) {
-
-			dbDao.update(NewOrderJpEntity.class, Chain.make("sendComId", sendComId).add("landComId", landComId),
-					Cnd.where("id", "=", order1.getId()));
+			//受付番号
+			String completedNumber = "";
+			NewComeBabyJpEntity newcomebabyjpentity = dbDao.fetch(NewComeBabyJpEntity.class, sendComId);
+			if (!Util.isEmpty(newcomebabyjpentity) && !Util.isEmpty(newcomebabyjpentity.getCompletedNumber())) {
+				completedNumber = newcomebabyjpentity.getCompletedNumber();
+			}
+			dbDao.update(
+					NewOrderJpEntity.class,
+					Chain.make("sendComId", sendComId).add("landComId", landComId)
+							.add("completedNumber", completedNumber), Cnd.where("id", "=", order1.getId()));
 			order1 = dbDao.fetch(NewOrderJpEntity.class, order1.getId());
 		}
 		return ResultObject.success("保存成功");
