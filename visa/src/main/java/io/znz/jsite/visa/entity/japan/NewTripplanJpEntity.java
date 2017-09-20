@@ -13,6 +13,7 @@ import org.nutz.dao.entity.annotation.Comment;
 import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.Table;
 
+import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
 
 @Data
@@ -79,6 +80,18 @@ public class NewTripplanJpEntity implements Serializable {
 	private String scenicIds;
 
 	private Date endDate;//生成酒店的pdf用到
+
+	public Date getNowdate() {
+		if (!Util.isEmpty(nowdate)) {
+			int hours = nowdate.getHours();
+			if (hours == 23) {
+				nowdate = DateUtil.addDay(nowdate, 1);
+				nowdate.setHours(0);
+			}
+		}
+
+		return nowdate;
+	}
 
 	public void setScenics(List<Scenic> scenics) {
 		this.scenics = scenics;

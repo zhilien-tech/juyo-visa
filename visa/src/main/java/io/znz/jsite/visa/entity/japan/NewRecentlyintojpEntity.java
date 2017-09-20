@@ -10,6 +10,9 @@ import org.nutz.dao.entity.annotation.Comment;
 import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.Table;
 
+import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.Util;
+
 @Data
 @Table("visa_new_recentlyintojp")
 public class NewRecentlyintojpEntity implements Serializable {
@@ -38,5 +41,27 @@ public class NewRecentlyintojpEntity implements Serializable {
 	@Column
 	@Comment("创建时间")
 	private Date createTime;
+
+	public Date getIntoDate() {
+		if (!Util.isEmpty(intoDate)) {
+			int hours = intoDate.getHours();
+			if (hours == 23) {
+				intoDate = DateUtil.addDay(intoDate, 1);
+				intoDate.setHours(0);
+			}
+		}
+		return intoDate;
+	}
+
+	public Date getOutofDate() {
+		if (!Util.isEmpty(outofDate)) {
+			int hours = outofDate.getHours();
+			if (hours == 23) {
+				outofDate = DateUtil.addDay(outofDate, 1);
+				outofDate.setHours(0);
+			}
+		}
+		return outofDate;
+	}
 
 }

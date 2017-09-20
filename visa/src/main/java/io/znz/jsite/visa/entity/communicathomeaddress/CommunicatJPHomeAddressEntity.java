@@ -15,6 +15,9 @@ import org.nutz.dao.entity.annotation.Comment;
 import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.Table;
 
+import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.Util;
+
 /**
  * 日本通信地址与家庭地址
  * @author   崔建斌
@@ -81,4 +84,26 @@ public class CommunicatJPHomeAddressEntity {
 	@Column
 	@Comment("备注")
 	private String remark;
+
+	public Date getIssueDate() {
+		if (!Util.isEmpty(issueDate)) {
+			int hours = issueDate.getHours();
+			if (hours == 23) {
+				issueDate = DateUtil.addDay(issueDate, 1);
+				issueDate.setHours(0);
+			}
+		}
+		return issueDate;
+	}
+
+	public Date getExpirationDate() {
+		if (!Util.isEmpty(expirationDate)) {
+			int hours = expirationDate.getHours();
+			if (hours == 23) {
+				expirationDate = DateUtil.addDay(expirationDate, 1);
+				expirationDate.setHours(0);
+			}
+		}
+		return expirationDate;
+	}
 }
