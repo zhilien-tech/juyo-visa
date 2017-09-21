@@ -20,5 +20,5 @@ import lombok.Data;
 public class JapanErrorHandleForm {
 	private int errorCode;
 	private String errorMsg;
-
+	private String acceptancenum;
 }
