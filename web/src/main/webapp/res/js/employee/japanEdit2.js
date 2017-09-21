@@ -177,14 +177,6 @@ function gmtZone(){
 	return zoneSub;
 }
 
-$(function(){
-	gmtZone();
-	$("#goDate").kendoDatePicker({format:"yyyy/MM/dd"});
-	$("#returnDate").kendoDatePicker({format:"yyyy/MM/dd"});
-	$("#senddate").kendoDatePicker({format:"yyyy/MM/dd"});
-	$("#outdate").kendoDatePicker({format:"yyyy/MM/dd"});
-});
-
 
 var viewModel = kendo.observable({
 	customersourceEnum:customersourceEnum,
@@ -1035,9 +1027,75 @@ var emptyNum=[];
 //存放格式错误的数组
 var errorNum=[];
 
+
 var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
 //信息保存
 function orderJpsave(){
+	
+	//只要有一个被选中
+	var isMainFlag = false;
+	$(".isMainProposerClass").each(function(index,element){
+		if($(element).is(':checked')){
+			isMainFlag = true;
+		}
+	});
+	
+	//主申请人非空校验
+	$(".divMainRelationRow").each(function(index,element){
+		var divMainRelationRowId = element.id;
+		
+		var dataUid = divMainRelationRowId.split("_")[1];
+		var xing = $("#xing_"+dataUid).val();
+		var name = $("#name_"+dataUid).val();
+		var main = $("#main_"+dataUid).is(':checked');
+		var relationproposer = $("#relationproposer_"+dataUid);
+		var relation = $("#relation_"+dataUid);
+		
+		
+		if(isMainFlag){
+			if(!main){
+				//不是主申请人
+				relationproposer.attr("required","true");
+				relationproposer.attr("validationMessage","关联的主申请人不能为空");
+				relationproposer.nextAll().remove();
+				relationproposer.after('<span class="k-invalid-msg" data-for="relationproposer_'+dataUid+'"></span>');
+				
+				relation.attr("required","true");
+				relation.attr("validationMessage","与主申请人关系不能为空");
+				relation.nextAll().remove();
+				relation.after('<span class="k-invalid-msg" data-for="relation_'+dataUid+'"></span>"></span>');
+			}else{
+				relationproposer.removeAttr("required");
+				relationproposer.removeAttr("validationMessage");
+				relationproposer.nextAll().remove();
+				relation.removeAttr("required");
+				relation.removeAttr("validationMessage");
+				relation.nextAll().remove();
+			}
+		}else{
+			if( (xing!=null && xing!="" && xing!=undefined) || (name!=null && name!="" && name!=undefined) || main){
+				relationproposer.attr("required","true");
+				relationproposer.attr("validationMessage","关联的主申请人不能为空");
+				relationproposer.nextAll().remove();
+				relationproposer.after('<span class="k-invalid-msg" data-for="relationproposer_'+dataUid+'"></span>');
+				
+				relation.attr("required","true");
+				relation.attr("validationMessage","与主申请人关系不能为空");
+				relation.nextAll().remove();
+				relation.after('<span class="k-invalid-msg" data-for="relation_'+dataUid+'"></span>"></span>');
+				
+			}else{
+				relationproposer.removeAttr("required");
+				relationproposer.removeAttr("validationMessage");
+				relationproposer.nextAll().remove();
+				relation.removeAttr("required");
+				relation.removeAttr("validationMessage");
+				relation.nextAll().remove();
+			}
+		}
+		
+	});
+	
 	if(validatable.validate()){
 		//清空验证的数组
 		emptyNum.splice(0,emptyNum.length);
@@ -1048,12 +1106,10 @@ function orderJpsave(){
 			viewModel.set("customer.island",1);
 		}
 
-		//console.log(JSON.stringify(sixnum.length));
 		//对东三县东六县的值进行处理
 		var visatype=viewModel.get("customer.visatype");
 		if(visatype==2 || visatype==3 || visatype==4){
 			var sixnumstr="";
-
 			var a=sixnum.length;	
 			if(sixnum.length>0){
 				for(var i=0;i<sixnum.length;i++){
@@ -1061,31 +1117,16 @@ function orderJpsave(){
 				}
 				var sixa=viewModel.get("customer.sixnum");
 				if(sixa!=null&&sixa!=''&&sixa!=undefined){
-
 					viewModel.set("customer.threenum","");
 					viewModel.set("customer.sixnum",viewModel.get("customer.sixnum")+sixnumstr);
-
 				}else{
-
 					viewModel.set("customer.threenum","");
 					viewModel.set("customer.sixnum",sixnumstr);
-
 				}
 			}else{
-				/*var sixa=viewModel.get("customer.sixnum");
-				if(sixa!=null&&sixa!=''&&sixa!=undefined){
-					viewModel.set("customer.threenum","");
-					viewModel.set("customer.sixnum",viewModel.get("customer.sixnum"));
-				}else{
-
-					viewModel.set("customer.sixnum","");
-				}*/
 				$('.dongxiancheck input').each(function(){
-//					alert($(this).is(':checked'));
 					if($(this).is(':checked')){
-
 						sixnumstr+=$(this).attr("id")+",";
-//						alert($(this).attr("id"));
 					}
 				});
 				viewModel.set("customer.threenum","");
@@ -1096,16 +1137,6 @@ function orderJpsave(){
 			viewModel.set("customer.threenum","");
 
 		}
-		/*else if(visatype==2){
-		var threenumstr="";
-			for(var i=0;i<threenum.length;i++){
-				threenumstr+=threenum[i]+",";
-			}
-			viewModel.set("customer.sixnum","");
-			viewModel.set("customer.threenum",threenumstr);
-	}*/
-
-		//console.log(JSON.stringify(viewModel.customer));
 		var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
 
 		$.ajax({
@@ -1134,13 +1165,8 @@ function orderJpsave(){
 					layer.close(indexnew);
 				}
 
-				//console.log(XMLHttpRequest);
-				//console.log(textStatus);
-				//console.log(errorThrown);
-				           /* layer.msg('失败!',{time:2000});*/
-				         }
+			}
 		});
-		//	}
 	}else{
 		//验证————————————————————————————————————
 		$('.k-tooltip-validation').each(function(){
@@ -1191,6 +1217,7 @@ function orderJpsave(){
 		emptyNum.splice(0,emptyNum.length);
 		errorNum.splice(0,errorNum.length);
 	}
+	
 }
 
 
