@@ -394,8 +394,10 @@ public class SimulateJapanViewService extends NutzBaseService<NewCustomerEntity>
 			NewOrderJpEntity order = dbDao.fetch(NewOrderJpEntity.class, cid);
 			int errorCode = jpForm.getErrorCode();
 			String errorMsg = jpForm.getErrorMsg();
+			String acceptancenum = jpForm.getAcceptancenum();
 			order.setErrorCode(errorCode);
 			order.setErrorMsg(errorMsg);
+			order.setCompletedNumber(acceptancenum);
 			dbDao.update(order, null);
 
 			if (errorCode == ErrorCodeEnum.completedNumberFail.intKey()) {
