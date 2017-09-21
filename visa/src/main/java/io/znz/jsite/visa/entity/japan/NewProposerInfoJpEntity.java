@@ -43,10 +43,10 @@ public class NewProposerInfoJpEntity implements Serializable {
 	private boolean ismainproposer;
 	@Column
 	@Comment("关联的主申请人")
-	private Integer relationproposer;
+	private int relationproposer;
 	@Column
 	@Comment("与主申请人之间的关系")
-	private Integer relation;
+	private int relation;
 
 	@Column
 	@Comment("姓")
