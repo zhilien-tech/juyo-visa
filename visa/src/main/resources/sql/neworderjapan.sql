@@ -11,7 +11,7 @@ SELECT
 	vnoj.countrytype,
 	vnoj.`status`,
 	vnoj.createtime,
-	vcm.email,
+	vncj.email,
 	vncj.chinesefullname,
 	vnoj.completedNumber,
 vnoj.errorMsg
