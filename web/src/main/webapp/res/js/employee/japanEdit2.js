@@ -1194,6 +1194,7 @@ function orderJpsave(){
 		var str="";
 		if(emptyNum.length>0){
 			var flag = 1;
+			var relationFlag = 1;
 			for(var i=0;i<emptyNum.length;i++){
 				var emptyStr = emptyNum[i].text+",";
 				if(emptyNum[i].text == "关联的主申请人"){
@@ -1201,6 +1202,12 @@ function orderJpsave(){
 						emptyStr = "";
 					}
 					flag = 0;
+				}
+				if(emptyNum[i].text == "与主申请人关系"){
+					if(relationFlag == 0){
+						emptyStr = "";
+					}
+					relationFlag = 0;
 				}
 				str += emptyStr;
 			}
