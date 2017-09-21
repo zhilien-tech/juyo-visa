@@ -14,6 +14,9 @@ import org.nutz.dao.entity.annotation.Comment;
 import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.Table;
 
+import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.Util;
+
 @Data
 @Table("visa_new_customer_jp")
 public class NewCustomerJpEntity implements Serializable {
@@ -196,6 +199,28 @@ public class NewCustomerJpEntity implements Serializable {
 
 	public boolean isMain() {
 		return this.main;
+	}
+
+	public Date getPassportsenddate() {
+		if (!Util.isEmpty(passportsenddate)) {
+			int hours = passportsenddate.getHours();
+			if (hours == 23) {
+				passportsenddate = DateUtil.addDay(passportsenddate, 1);
+				passportsenddate.setHours(0);
+			}
+		}
+		return passportsenddate;
+	}
+
+	public Date getPpassporteffectdate() {
+		if (!Util.isEmpty(passporteffectdate)) {
+			int hours = passporteffectdate.getHours();
+			if (hours == 23) {
+				passporteffectdate = DateUtil.addDay(passporteffectdate, 1);
+				passporteffectdate.setHours(0);
+			}
+		}
+		return passporteffectdate;
 	}
 
 	//日本纳税人认证码

@@ -5,12 +5,15 @@ import io.znz.jsite.base.HibernateDao;
 import io.znz.jsite.util.StringUtils;
 import io.znz.jsite.visa.bean.Flight;
 import io.znz.jsite.visa.dao.FlightDao;
+import io.znz.jsite.visa.form.FilterValueForm;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.uxuexi.core.common.util.Util;
 
 /**
  * Created by Chaly on 2017/4/11.
@@ -45,4 +48,22 @@ public class FlightService extends BaseService<Flight, Integer> {
 		}
 		return result;
 	}
+
+	public List<Flight> filghtByCity(String fromCity, String toCity, FilterValueForm form) {
+
+		List<Flight> result = null;
+		if (StringUtils.isNotBlank(fromCity) && StringUtils.isNotBlank(toCity)) {
+			String filterValue = form.getFilterValue();
+
+			if (Util.isEmpty(filterValue)) {
+				result = flightDao.filghtByCity(fromCity, toCity);
+			} else {
+				result = flightDao.filghtByCityFilter(fromCity, toCity, filterValue);
+			}
+		} else {
+			//result = flightDao.findAll();
+		}
+		return result;
+	}
+
 }

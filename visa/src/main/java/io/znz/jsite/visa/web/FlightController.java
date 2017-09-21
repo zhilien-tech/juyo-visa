@@ -4,6 +4,7 @@ import io.znz.jsite.base.BaseController;
 import io.znz.jsite.base.bean.PageFilter;
 import io.znz.jsite.base.bean.ResultObject;
 import io.znz.jsite.visa.bean.Flight;
+import io.znz.jsite.visa.form.FilterValueForm;
 import io.znz.jsite.visa.service.FlightService;
 import io.znz.jsite.visa.util.Const;
 import io.znz.jsite.visa.util.ExcelReader;
@@ -84,6 +85,12 @@ public class FlightController extends BaseController {
 	@ResponseBody
 	public Object filghtByCity(String fromCity, String toCity) {
 		return flightService.filghtByCity(fromCity, toCity);
+	}
+
+	@RequestMapping(value = "filghtByCityFilter")
+	@ResponseBody
+	public Object filghtByCity(FilterValueForm form) {
+		return flightService.filghtByCity(form.getFromCity(), form.getToCity(), form);
 	}
 
 	//日本航班信息 Excel导入

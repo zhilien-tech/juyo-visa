@@ -167,6 +167,25 @@ flights = new kendo.data.DataSource({
 
 });
 
+//计算时区差
+function gmtZone(){
+	var now = new Date();
+	var chinaZone = -8;
+	var gmtHours = now.getTimezoneOffset()/60;
+	console.log("与东八区的时区差："+(chinaZone-gmtHours));
+	var zoneSub = chinaZone-gmtHours;
+	return zoneSub;
+}
+
+$(function(){
+	gmtZone();
+	$("#goDate").kendoDatePicker({format:"yyyy/MM/dd"});
+	$("#returnDate").kendoDatePicker({format:"yyyy/MM/dd"});
+	$("#senddate").kendoDatePicker({format:"yyyy/MM/dd"});
+	$("#outdate").kendoDatePicker({format:"yyyy/MM/dd"});
+});
+
+
 var viewModel = kendo.observable({
 	customersourceEnum:customersourceEnum,
 	startcitynew:startcity,
@@ -193,8 +212,6 @@ var viewModel = kendo.observable({
 			dinner:"",
 			scenics:[]
 		});
-		
-		
 	},
 	addOneDatePlan: function (e) {
 		viewModel.customer.dateplanJpList.push({
@@ -274,7 +291,7 @@ var viewModel = kendo.observable({
 		return result;
 	},
 	customer: defaults,
-	aaa:function(e){
+	togetherClick:function(e){
 		/* console.log(e.data.id);
     	  console.log(e.data.istogetherlinkman);*/
 		//$("#main1_"+e.data.id).is(':checked')
@@ -410,7 +427,7 @@ var viewModel = kendo.observable({
 
 		//酒店
 		hotelDs = new kendo.data.DataSource({
-			serverFiltering: true,
+			/*serverFiltering: true,
 			transport: {
 				read: {
 					dataType: "json",
@@ -418,7 +435,33 @@ var viewModel = kendo.observable({
 					data:{
 						arricity:arricity
 					}
+				},
+				parameterMap: function (options, type) {
+					if (options.filter) {
+						if(options.filter.filters[0]==null||options.filter.filters[0]==''||options.filter.filters[0]==undefined){
+							return null;
+						}
+						return {filter: options.filter.filters[0].value};
+					}
 				}
+			}*/
+			serverFiltering: true,
+			filter:"contains",
+			transport: {
+				read: {
+					type: "POST",
+					dataType: "json",
+					url: "/visa/hotel/arricityfilter"
+				},
+				parameterMap:function(data,type){
+					if (data.filter) {
+						if(data.filter.filters[0]==null||data.filter.filters[0]==''||data.filter.filters[0]==undefined){
+							return { toCity:arricity};
+						}
+						return { toCity:arricity,filterValue:data.filter.filters[0].value};
+					}						
+				}
+				
 			}
 		});
 		var multiSelect_hotel = $("#hotel_select_"+dataUid).data("kendoDropDownList");
@@ -1174,7 +1217,7 @@ $(function () {
 			}
 			//航班
 			var flightGoDS = new kendo.data.DataSource({
-				serverFiltering: true,
+				/*serverFiltering: true,
 				transport: {
 					read: {
 						dataType: "json",
@@ -1183,6 +1226,23 @@ $(function () {
 							fromCity:fromCityGo, 
 							toCity:toCityGo
 						}
+					}
+				}*/
+				serverFiltering: true,
+				filter:"contains",
+				transport: {
+					read: {
+						type: "POST",
+						dataType: "json",
+						url: "/visa/flight/filghtByCityFilter"
+					},
+					parameterMap:function(data,type){
+						if (data.filter) {
+							if(data.filter.filters[0]==null||data.filter.filters[0]==''||data.filter.filters[0]==undefined){
+								return { fromCity:fromCityGo, toCity:toCityGo};
+							}
+							return { fromCity:fromCityGo, toCity:toCityGo,filterValue:data.filter.filters[0].value};
+						}						
 					}
 				}
 			});
@@ -1200,7 +1260,7 @@ $(function () {
 			}
 			//航班
 			var flightRetrunDS = new kendo.data.DataSource({
-				serverFiltering: true,
+				/*serverFiltering: true,
 				transport: {
 					read: {
 						dataType: "json",
@@ -1210,6 +1270,24 @@ $(function () {
 							toCity:toCityReturn
 						}
 					}
+				}*/
+				serverFiltering: true,
+				filter:"contains",
+				transport: {
+					read: {
+						type: "POST",
+						dataType: "json",
+						url: "/visa/flight/filghtByCityFilter"
+					},
+					parameterMap:function(data,type){
+						if (data.filter) {
+							if(data.filter.filters[0]==null||data.filter.filters[0]==''||data.filter.filters[0]==undefined){
+								return { fromCity:fromCityRetrun, toCity:toCityReturn};
+							}
+							return { fromCity:fromCityRetrun, toCity:toCityReturn,filterValue:data.filter.filters[0].value};
+						}						
+					}
+					
 				}
 			});
 			var singleSelect_flight_Return = $("#flight_select_return_single").data("kendoDropDownList");
@@ -1223,9 +1301,15 @@ $(function () {
 				var dataUid = element.uid;
 				var fromCity = element.startcity;
 				var toCity = element.arrivecity;
+				if(fromCity == null || fromCity == undefined || fromCity == ""){
+					fromCity = "北京";
+				}
+				if(toCity == null  || toCity == undefined || toCity == ""){
+					toCity = "北京";
+				}
 				//航班
 				var flightDS = new kendo.data.DataSource({
-					serverFiltering: true,
+					/*serverFiltering: true,
 					transport: {
 						read: {
 							dataType: "json",
@@ -1234,6 +1318,23 @@ $(function () {
 								fromCity:fromCity, 
 								toCity:toCity
 							}
+						}
+					}*/
+					serverFiltering: true,
+					filter:"contains",
+					transport: {
+						read: {
+							type: "POST",
+							dataType: "json",
+							url: "/visa/flight/filghtByCityFilter",
+						},
+						parameterMap:function(data,type){
+							if (data.filter) {
+								if(data.filter.filters[0]==null||data.filter.filters[0]==''||data.filter.filters[0]==undefined){
+									return { fromCity:fromCity, toCity:toCity};
+								}
+								return { fromCity:fromCity, toCity:toCity,filterValue:data.filter.filters[0].value};
+							}						
 						}
 					}
 				});
@@ -1470,8 +1571,6 @@ $("#DuoCheng_WangFan").change(function(){
 
 function autogenerate(){
 	var indexnew= layer.load(1, {shade: [0.1,'#fff']});//0.1透明度的白色背景 
-	
-	
 	$.ajax({
 		type: "POST",
 		url: "/visa/neworderjp/autogenerate",
@@ -1514,7 +1613,7 @@ function autogenerate(){
 
 				//酒店
 				var hotelNew = new kendo.data.DataSource({
-					serverFiltering: true,
+					/*serverFiltering: true,
 					transport: {
 						read: {
 							dataType: "json",
@@ -1523,6 +1622,33 @@ function autogenerate(){
 								arricity:arricity
 							}
 						}
+					},
+					parameterMap: function (options, type) {
+						if (options.filter) {
+							if(options.filter.filters[0]==null||options.filter.filters[0]==''||options.filter.filters[0]==undefined){
+								return null;
+							}
+							return {filter: options.filter.filters[0].value};
+						}
+					},*/
+					ignoreCase:true,
+					serverFiltering: true,
+					filter:"contains",
+					transport: {
+						read: {
+							type: "POST",
+							dataType: "json",
+							url: "/visa/hotel/arricityfilter"
+						},
+						parameterMap:function(data,type){
+							if (data.filter) {
+								if(data.filter.filters[0]==null||data.filter.filters[0]==''||data.filter.filters[0]==undefined){
+									return { toCity:arricity};
+								}
+								return { toCity:arricity,filterValue:data.filter.filters[0].value};
+							}						
+						}
+						
 					}
 				});
 				var multiSelect_hotel = $("#"+hotelId).data("kendoDropDownList");
@@ -1696,7 +1822,7 @@ function goFlightByCity(e,fromCityEle, toCityEle, flightSelect, tripType){
 	}
 	//航班
 	var flightDS = new kendo.data.DataSource({
-		serverFiltering: true,
+		/*serverFiltering: true,
 		transport: {
 			read: {
 				dataType: "json",
@@ -1706,6 +1832,24 @@ function goFlightByCity(e,fromCityEle, toCityEle, flightSelect, tripType){
 					toCity:toCity
 				}
 			}
+		}*/
+		serverFiltering: true,
+		filter:"contains",
+		transport: {
+			read: {
+				type: "POST",
+				dataType: "json",
+				url: "/visa/flight/filghtByCityFilter"
+			},
+			parameterMap:function(data,type){
+				if (data.filter) {
+					if(data.filter.filters[0]==null||data.filter.filters[0]==''||data.filter.filters[0]==undefined){
+						return { fromCity:fromCity, toCity:toCity};
+					}
+					return { fromCity:fromCity, toCity:toCity,filterValue:data.filter.filters[0].value};
+				}						
+			}
+			
 		}
 	});
 	var singleSelect_flight = $("#"+flightSelect).data("kendoDropDownList");
@@ -1713,7 +1857,7 @@ function goFlightByCity(e,fromCityEle, toCityEle, flightSelect, tripType){
 	
 	
 	//设置默认选中
-	var moreFilght = null;
+	/*var moreFilght = null;
 	$.ajax({
 		type: 'GET',
 		async: false,
@@ -1749,7 +1893,7 @@ function goFlightByCity(e,fromCityEle, toCityEle, flightSelect, tripType){
 			console.log(error);
 		}
 	});
-	
+*/	
 }
 
 
@@ -1766,7 +1910,7 @@ function nextFlightByCity(e,fromCityEle, toCityEle, flightSelect, datePlan){
 	}
 	//航班
 	var flightDS = new kendo.data.DataSource({
-		serverFiltering: true,
+		/*serverFiltering: true,
 		transport: {
 			read: {
 				dataType: "json",
@@ -1776,6 +1920,24 @@ function nextFlightByCity(e,fromCityEle, toCityEle, flightSelect, datePlan){
 					toCity:toCity
 				}
 			}
+		}*/
+		serverFiltering: true,
+		filter:"contains",
+		transport: {
+			read: {
+				type: "POST",
+				dataType: "json",
+				url: "/visa/flight/filghtByCityFilter"
+			},
+			parameterMap:function(data,type){
+				if (data.filter) {
+					if(data.filter.filters[0]==null||data.filter.filters[0]==''||data.filter.filters[0]==undefined){
+						return { fromCity:fromCity, toCity:toCity};
+					}
+					return { fromCity:fromCity, toCity:toCity,filterValue:data.filter.filters[0].value};
+				}						
+			}
+			
 		}
 	});
 	var singleSelect_flight = $("#"+flightSelect).data("kendoDropDownList");
@@ -1783,7 +1945,7 @@ function nextFlightByCity(e,fromCityEle, toCityEle, flightSelect, datePlan){
 	
 	
 	//设置默认选中
-	var moreFilght = null;
+	/*var moreFilght = null;
 	var flightnum = 0;
 	$.ajax({
 		type: 'GET',
@@ -1801,7 +1963,7 @@ function nextFlightByCity(e,fromCityEle, toCityEle, flightSelect, datePlan){
 			console.log(error);
 		}
 	});
-	datePlan.flightnum = flightnum;
+	datePlan.flightnum = flightnum;*/
 }
 
 $("#dataPlanSpan").parent().click(function(e){
@@ -1811,9 +1973,15 @@ $("#dataPlanSpan").parent().click(function(e){
 		var dataUid = element.uid;
 		var fromCity = element.startcity;
 		var toCity = element.arrivecity;
+		if(fromCity == null || fromCity == undefined || fromCity == ""){
+			fromCity = "北京";
+		}
+		if(toCity == null  || toCity == undefined || toCity == ""){
+			toCity = "北京";
+		}
 		//航班
 		var flightDS = new kendo.data.DataSource({
-			serverFiltering: true,
+			/*serverFiltering: true,
 			transport: {
 				read: {
 					dataType: "json",
@@ -1823,6 +1991,23 @@ $("#dataPlanSpan").parent().click(function(e){
 						toCity:toCity
 					}
 				}
+			}*/
+			serverFiltering: true,
+			filter:"contains",
+			transport: {
+				read: {
+					type: "POST",
+					dataType: "json",
+					url: "/visa/flight/filghtByCityFilter",
+				},
+				parameterMap:function(data,type){
+					if (data.filter) {
+						if(data.filter.filters[0]==null||data.filter.filters[0]==''||data.filter.filters[0]==undefined){
+							return { fromCity:fromCity, toCity:toCity};
+						}
+						return { fromCity:fromCity, toCity:toCity,filterValue:data.filter.filters[0].value};
+					}						
+				}
 			}
 		});
 		var singleSelect_flight = $("#flightMore_select_"+dataUid).data("kendoDropDownList");
@@ -1830,4 +2015,5 @@ $("#dataPlanSpan").parent().click(function(e){
 		singleSelect_flight.value(element.flightnum);
 	});
 });
+
 
