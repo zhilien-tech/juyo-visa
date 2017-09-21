@@ -70,7 +70,7 @@ public class NewOrderJapanSqlForm extends KenDoParamForm {
 			SqlExpressionGroup e1 = Cnd.exps("vnoj.ordernumber", "like", "%" + keywords + "%");
 			SqlExpressionGroup e2 = Cnd.exps("vncj.chinesefullname", "like", "%" + keywords + "%");
 			SqlExpressionGroup e3 = Cnd.exps("vcm.telephone", "like", "%" + keywords + "%");
-			SqlExpressionGroup e4 = Cnd.exps("vcm.email", "like", "%" + keywords + "%");
+			SqlExpressionGroup e4 = Cnd.exps("vncj.email", "like", "%" + keywords + "%");
 			SqlExpressionGroup e5 = Cnd.exps("vcm.linkman", "like", "%" + keywords + "%");
 			SqlExpressionGroup e6 = Cnd.exps("vncj.phone", "like", "%" + keywords + "%");
 			//			cnd.and(e1).or(e2).or(e3).or(e4).or(e5).or(e6);

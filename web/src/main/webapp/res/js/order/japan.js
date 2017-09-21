@@ -445,6 +445,13 @@ var grid = $("#grid").kendoGrid({
         });  
     }*/
 }).data("kendoGrid");
+//搜索回车事件
+function onkeyEnter(){
+ if(event.keyCode==13){
+ $("#searchBtn").click();
+ }
+}
+
 //页面刷新
 function successCallback(id){
 	//grid.GetJQuery().refresh();
