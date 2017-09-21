@@ -187,7 +187,6 @@ $("#searchBtn").on('click', function () {
 })
 //搜索回车事件
 function onkeyEnter(){
-	alert(1);
 	 if(event.keyCode==13){
 		 $("#searchBtn").click();
 	 }
