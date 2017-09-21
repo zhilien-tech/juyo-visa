@@ -84,9 +84,9 @@ public class NewOrderJapanSqlForm extends KenDoParamForm {
 		}
 
 		if (!Util.isEmpty(comId) && comId > 0) {
-			cnd.and("comId", "=", comId);
+			cnd.and("vnoj.comId", "=", comId);
 		} else {
-			cnd.and("comId", "=", -1);
+			cnd.and("vnoj.comId", "=", -1);
 
 		}
 
