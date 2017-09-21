@@ -13,6 +13,9 @@ import org.nutz.dao.entity.annotation.Comment;
 import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.Table;
 
+import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.Util;
+
 @Data
 @Table("visa_new_order_jp")
 public class NewOrderJpEntity implements Serializable {
@@ -144,6 +147,29 @@ public class NewOrderJpEntity implements Serializable {
 	private List<NewTripplanJpEntity> tripplanJpList;
 
 	private NewFastmailJpEntity fastMail;
+
+	public Date getSenddate() {
+		if (!Util.isEmpty(senddate)) {
+			int hours = senddate.getHours();
+			if (hours == 23) {
+				senddate = DateUtil.addDay(senddate, 1);
+				senddate.setHours(0);
+
+			}
+		}
+		return senddate;
+	}
+
+	public Date getOutdate() {
+		if (!Util.isEmpty(outdate)) {
+			int hours = outdate.getHours();
+			if (hours == 23) {
+				outdate = DateUtil.addDay(outdate, 1);
+				outdate.setHours(0);
+			}
+		}
+		return outdate;
+	}
 
 	//日本下载需要的东西
 	private String template;

@@ -12,6 +12,9 @@ import org.nutz.dao.entity.annotation.Comment;
 import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.Table;
 
+import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.Util;
+
 @Data
 @Table("visa_new_trip_jp")
 public class NewTripJpEntity implements Serializable {
@@ -57,6 +60,30 @@ public class NewTripJpEntity implements Serializable {
 
 	private Flight gofilght;
 	private Flight returnfilght;
+
+	//日本时区 少一小时
+	public Date getStartdate() {
+		if (!Util.isEmpty(startdate)) {
+			int hours = startdate.getHours();
+			if (hours == 23) {
+				startdate = DateUtil.addDay(startdate, 1);
+				startdate.setHours(0);
+			}
+		}
+		return startdate;
+	}
+
+	public Date getReturndate() {
+		if (!Util.isEmpty(returndate)) {
+			int hours = returndate.getHours();
+			if (hours == 23) {
+				returndate = DateUtil.addDay(returndate, 1);
+				returndate.setHours(0);
+			}
+		}
+
+		return returndate;
+	}
 
 	/**
 	 * (non-Javadoc)

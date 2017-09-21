@@ -18,4 +18,7 @@ public interface HotelDao extends HibernateDao<Hotel, Integer> {
 
 	@Query("SELECT h FROM Hotel h WHERE h.city LIKE %?1%")
 	List<Hotel> findByCity(String filter);
+
+	@Query("SELECT h FROM Hotel h WHERE  h.city LIKE %?1% AND (LOWER(h.name) LIKE %?2% OR UPPER(h.name) LIKE '%?2%')")
+	List<Hotel> findByCityFilter(String toCity, String filterVal);
 }

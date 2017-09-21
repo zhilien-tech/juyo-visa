@@ -766,21 +766,22 @@ public class NewOrderJaPanController {
 								if (!Util.isEmpty(tripplanJpListnew) && tripplanJpListnew.size() > 0) {
 									for (NewTripplanJpEntity newPeerPersionEntity : tripplanJpListnew) {
 										List<Scenic> scenics = newPeerPersionEntity.getScenics();
-										String viewid = "";
-										for (Scenic scenic : scenics) {
-											Integer scenicId = scenic.getId();
-											if (!Util.isEmpty(scenicId)) {
-												viewid += scenicId + ",";
+										if (!Util.isEmpty(scenics)) {
+											String viewid = "";
+											for (Scenic scenic : scenics) {
+												Integer scenicId = scenic.getId();
+												if (!Util.isEmpty(scenicId)) {
+													viewid += scenicId + ",";
+												}
 											}
-										}
-										newPeerPersionEntity.setViewid(viewid);
-										/*	if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
-												nutDao.update(newPeerPersionEntity);
-											} else {*/
-										newPeerPersionEntity.setOrder_jp_id(orderOld.getId());
+											newPeerPersionEntity.setViewid(viewid);
+											/*	if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
+													nutDao.update(newPeerPersionEntity);
+												} else {*/
+											newPeerPersionEntity.setOrder_jp_id(orderOld.getId());
 
-										dbDao.insert(newPeerPersionEntity);
-										//}
+											dbDao.insert(newPeerPersionEntity);
+										}
 									}
 								}
 							}
@@ -1997,9 +1998,16 @@ public class NewOrderJaPanController {
 	public Object downloadselectsavenew(long orderid, final HttpSession session, long sendComId, long landComId) {
 		NewOrderJpEntity order1 = dbDao.fetch(NewOrderJpEntity.class, orderid);
 		if (!Util.isEmpty(order1)) {
-
-			dbDao.update(NewOrderJpEntity.class, Chain.make("sendComId", sendComId).add("landComId", landComId),
-					Cnd.where("id", "=", order1.getId()));
+			//受付番号
+			String completedNumber = "";
+			NewComeBabyJpEntity newcomebabyjpentity = dbDao.fetch(NewComeBabyJpEntity.class, sendComId);
+			if (!Util.isEmpty(newcomebabyjpentity) && !Util.isEmpty(newcomebabyjpentity.getCompletedNumber())) {
+				completedNumber = newcomebabyjpentity.getCompletedNumber();
+			}
+			dbDao.update(
+					NewOrderJpEntity.class,
+					Chain.make("sendComId", sendComId).add("landComId", landComId)
+							.add("completedNumber", completedNumber), Cnd.where("id", "=", order1.getId()));
 			order1 = dbDao.fetch(NewOrderJpEntity.class, order1.getId());
 		}
 		return ResultObject.success("保存成功");

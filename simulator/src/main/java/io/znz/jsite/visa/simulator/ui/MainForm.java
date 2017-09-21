@@ -80,8 +80,8 @@ public class MainForm extends JPanel {
 	public MainForm() {
 		initComponents();
 		pyFile.setText(System.getProperty("user.dir") + "/conf/ds160.py");
-		host.setText("127.0.0.1");
-		port.setText("8080");
+		host.setText("218.244.148.21");
+		port.setText("9004");
 	}
 
 	//拼接 url 地址
