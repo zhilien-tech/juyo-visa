@@ -1063,7 +1063,7 @@ function orderJpsave(){
 				relation.attr("required","true");
 				relation.attr("validationMessage","与主申请人关系不能为空");
 				relation.nextAll().remove();
-				relation.after('<span class="k-invalid-msg" data-for="relation_'+dataUid+'"></span>"></span>');
+				relation.after('<span class="k-invalid-msg" data-for="relation_'+dataUid+'"></span>');
 			}else{
 				relationproposer.removeAttr("required");
 				relationproposer.removeAttr("validationMessage");
@@ -1082,7 +1082,7 @@ function orderJpsave(){
 				relation.attr("required","true");
 				relation.attr("validationMessage","与主申请人关系不能为空");
 				relation.nextAll().remove();
-				relation.after('<span class="k-invalid-msg" data-for="relation_'+dataUid+'"></span>"></span>');
+				relation.after('<span class="k-invalid-msg" data-for="relation_'+dataUid+'"></span>');
 				
 			}else{
 				relationproposer.removeAttr("required");
