@@ -626,18 +626,16 @@ var viewModel = kendo.observable({
 			var dataUid = viewModel.get("customer.dateplanJpList["+b+"]").uid;
 			//改变页面显示数据
 			viewModel.set("customer.dateplanJpList["+b+"].startcity",e.data.arrivecity);
-			viewModel.set("customer.dateplanJpList["+b+"].flightnum","");
-			
 			//处理传到后台的数据
 			var datePlan = dataPlanList[b];
 			datePlan.startcity=e.data.arrivecity;
+			datePlan.flightnum = "";
 			
 			var toCity = $("#toCityMore_select_"+dataUid).val();
 			if(null==toCity || undefined==toCity || ""==toCity){
 				toCity = "北京";
 			}
 			datePlan.arrivecity = toCity;
-			datePlan.flightnum = $("#flightMore_select_"+dataUid).val(); //暂未获取到
 			
 			var startCity = viewModel.get("customer.dateplanJpList["+b+"].startcity");
 			if(undefined != startCity){
@@ -645,7 +643,6 @@ var viewModel = kendo.observable({
 				nextFlightByCity(e,"fromCityMore_select_"+dataUid, "toCityMore_select_"+dataUid, "flightMore_select_"+dataUid,datePlan);
 			}
 		}
-		
 	},
 	
 });
