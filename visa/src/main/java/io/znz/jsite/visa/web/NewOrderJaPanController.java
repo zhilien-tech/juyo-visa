@@ -1834,7 +1834,7 @@ public class NewOrderJaPanController {
 			//随机获取景区
 
 			String viewIdStr = "";
-			for (int f = 0; f < 4 && f < sceniclist.size(); f++) {
+			for (int f = 0; f < 2 && f < sceniclist.size(); f++) {
 				int scenicFoot = new Random().nextInt(10000) % sceniclist.size();
 				int scenicId = sceniclist.get(scenicFoot).getId();
 				viewIdStr += scenicId + ",";
