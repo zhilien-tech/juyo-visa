@@ -901,7 +901,7 @@ public class NewHasee extends NewTemplate {
 		}
 	}
 
-	//根据航班id，获取航班信息 TODO
+	//根据航班id，获取航班信息 
 	public String getFlightInfoById(String id) {
 		String flightInfo = "";
 		if ((!Util.isEmpty(id)) && (!Util.eq("null", id))) {
