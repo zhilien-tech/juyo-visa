@@ -187,7 +187,6 @@ var viewModel = kendo.observable({
 		var key = $.isString(e) ? e : $(e.target).data('params'); //customer.tripplanJpList
 		//viewModel.get(key).push(keys[key]);
 		var tripplanJpNum = viewModel.customer.tripplanJpList.length + 1;
-		console.log(tripplanJpNum);
 		viewModel.customer.tripplanJpList.push({
 			daynum:tripplanJpNum,
 			nowdate:"",
@@ -610,14 +609,12 @@ var viewModel = kendo.observable({
 	},
 	travelFromCityMore:function(e){
 		var dataUid = e.data.uid;
-		e.data.flightnum = "";
 		goFlightByCity(e,"fromCityMore_select_"+dataUid, "toCityMore_select_"+dataUid, "flightMore_select_"+dataUid, "moreType");
 	},
 	travelToCityMore:function(e){
 		//出行信息， 多程抵达城市
 		//航班联动
 		var dataUid = e.data.uid;
-		e.data.flightnum = "";
 		goFlightByCity(e,"fromCityMore_select_"+dataUid, "toCityMore_select_"+dataUid, "flightMore_select_"+dataUid, "moreType");
 		//出行信息 多程抵达城市
 		var dataPlanList =viewModel.customer.dateplanJpList;
@@ -629,6 +626,7 @@ var viewModel = kendo.observable({
 			var dataUid = viewModel.get("customer.dateplanJpList["+b+"]").uid;
 			//改变页面显示数据
 			viewModel.set("customer.dateplanJpList["+b+"].startcity",e.data.arrivecity);
+			viewModel.set("customer.dateplanJpList["+b+"].flightnum","");
 			
 			//处理传到后台的数据
 			var datePlan = dataPlanList[b];
@@ -1845,6 +1843,18 @@ function addthree(a,num){
 //出行城市的航班
 function goFlightByCity(e,fromCityEle, toCityEle, flightSelect, tripType){
 	var eData = e.data;
+	if("singleGo" == tripType){
+		//往返 去程
+		e.data.customer.tripJp.gofilght= "";
+		e.data.customer.tripJp.flightnum= "";
+	}else if ("singleReturn" == tripType){
+		//往返 返程
+		e.data.customer.tripJp.returnfilght= "";
+		e.data.customer.tripJp.returnflightnum= "";
+	}else if("moreType" == tripType){
+		e.data.flightnum="";
+	}
+	
 	var fromCity = $("#"+fromCityEle).val();
 	if(fromCity == null){
 		fromCity = "北京";
@@ -1933,8 +1943,6 @@ function goFlightByCity(e,fromCityEle, toCityEle, flightSelect, tripType){
 //出行城市的航班
 function nextFlightByCity(e,fromCityEle, toCityEle, flightSelect, datePlan){
 	var eData = e.data;
-	e.data.flightnum = "";
-	e.data.returnflightnum = "";
 	var fromCity = $("#"+fromCityEle).val();
 	if(fromCity == null){
 		fromCity = "北京";

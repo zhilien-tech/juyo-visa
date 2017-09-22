@@ -415,7 +415,8 @@ public class NewHasee extends NewTemplate {
 									flight = dbdao.fetch(Flight.class, Long.valueOf(returnflightnum));
 								}
 							}
-							if (!Util.isEmpty(flight)) {
+							Integer id = flight.getId();
+							if ((!Util.isEmpty(flight)) && (!Util.eq("null", id)) && (!Util.eq(null, id))) {
 								//trip.getSeat()方式
 								String datas[] = { flight.getFrom(), flight.getLine(), "",
 										df6.format(startDate).toUpperCase(), df7.format(flight.getDeparture()),
