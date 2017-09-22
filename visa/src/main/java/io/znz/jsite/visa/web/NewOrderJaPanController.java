@@ -845,11 +845,11 @@ public class NewOrderJaPanController {
 			NewTripJpEntity newTripJpEntity = newTrips.get(0);
 			String gofilght = newTripJpEntity.getFlightnum();
 			String returnfilght = newTripJpEntity.getReturnflightnum();
-			if (!Util.isEmpty(gofilght)) {
+			if ((!Util.isEmpty(gofilght)) && (!Util.eq(gofilght, "null"))) {
 				Flight fetch = dbDao.fetch(Flight.class, Long.valueOf(gofilght));
 				newTripJpEntity.setGofilght(fetch);
 			}
-			if (!Util.isEmpty(returnfilght)) {
+			if ((!Util.isEmpty(returnfilght)) && (!Util.eq(returnfilght, "null"))) {
 				Flight fetch = dbDao.fetch(Flight.class, Long.valueOf(returnfilght));
 				newTripJpEntity.setReturnfilght(fetch);
 			}
@@ -2073,6 +2073,25 @@ public class NewOrderJaPanController {
 				}
 
 			}
+
+			//NewProposerInfoJpEntity
+			List<NewProposerInfoJpEntity> proposerList = dbDao.query(NewProposerInfoJpEntity.class,
+					Cnd.where("order_jp_id", "=", orderid), null);
+			if (!Util.isEmpty(proposerList) && proposerList.size() > 1) {
+				boolean hasMainFlag = false;
+				for (NewProposerInfoJpEntity proposerEntity : proposerList) {
+					boolean isMainProposer = proposerEntity.getIsMainProposer();
+					if (isMainProposer) {
+						hasMainFlag = true;
+					}
+				}
+				for (NewProposerInfoJpEntity proposerEntity : proposerList) {
+					if (!Util.isEmpty(proposerEntity)) {
+						addProposerValidate(proposerEntity, hasMainFlag);
+					}
+				}
+			}
+
 		}
 		//处理出行信息中出入境时间
 		if (!Util.isEmpty(orderid) && orderid > 0) {
@@ -2330,6 +2349,46 @@ public class NewOrderJaPanController {
 
 			return ResultObject.success("无错误");
 		}*/
+
+	}
+
+	//主申请人添加校验
+	private void addProposerValidate(NewProposerInfoJpEntity proposerEntity, boolean hasMainFlag) {
+		String xing = proposerEntity.getXing();
+		String name = proposerEntity.getName();
+		String fullName = xing + name;
+		int relation = proposerEntity.getRelation();
+		boolean isMainProposer = proposerEntity.getIsMainProposer();
+		int relationproposer = proposerEntity.getRelationproposer();
+		boolean contains = validateEmptyList.contains("关联的主申请人");
+		boolean relationContains = validateEmptyList.contains("与主申请人关系");
+
+		if (hasMainFlag) {
+			//有主申请人
+			if (!isMainProposer) {
+				if (relationproposer <= 0) {
+					if (!contains) {
+						validateEmptyList.add("关联的主申请人");
+					}
+				}
+				if (relation <= 0) {
+					if (!relationContains) {
+						validateEmptyList.add("与主申请人关系");
+					}
+				}
+			}
+		} else {
+			if (relationproposer <= 0) {
+				if (!contains) {
+					validateEmptyList.add("关联的主申请人");
+				}
+			}
+			if (relation <= 0) {
+				if (!relationContains) {
+					validateEmptyList.add("与主申请人关系");
+				}
+			}
+		}
 
 	}
 
