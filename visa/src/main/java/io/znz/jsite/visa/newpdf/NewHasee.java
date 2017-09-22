@@ -42,6 +42,12 @@ import org.jeecgframework.poi.excel.entity.params.ExcelExportEntity;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeFieldType;
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Dao;
+import org.nutz.dao.SqlManager;
+import org.nutz.dao.Sqls;
+import org.nutz.dao.entity.Record;
+import org.nutz.dao.sql.Sql;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
@@ -67,6 +73,18 @@ import com.uxuexi.core.db.dao.IDbDao;
 @Component
 public class NewHasee extends NewTemplate {
 	private IDbDao dbdao = SpringUtil.getBean("dbDao");
+
+	@Autowired
+	protected IDbDao dbDao;
+
+	@Autowired
+	protected Dao nutDao;
+
+	/**
+	 * 注入容器中的sqlManager对象，用于获取sql
+	 */
+	@Autowired
+	protected SqlManager sqlManager;
 
 	public String getPrefix() {
 		return "hasee/";
@@ -157,10 +175,9 @@ public class NewHasee extends NewTemplate {
 				map.put("entryDate", "");//入境日期
 
 			}
-			if (!Util.isEmpty(startFlightnum)) {
+			if ((!Util.isEmpty(startFlightnum)) && (!Util.eq("null", startFlightnum))) {
 				Flight entryFlight = dbdao.fetch(Flight.class, Long.valueOf(startFlightnum));
 				if (!Util.isEmpty(entryFlight)) {
-
 					map.put("entryFlight", entryFlight.getCompany() + ":" + entryFlight.getLine());//入境口岸/航班
 				}
 			}
@@ -178,7 +195,7 @@ public class NewHasee extends NewTemplate {
 				map.put("departDate", "");//出境日期
 
 			}
-			if (!Util.isEmpty(endFlightnum)) {
+			if ((!Util.isEmpty(endFlightnum)) && (!Util.eq("null", endFlightnum))) {
 
 				Flight departFlight = dbdao.fetch(Flight.class, Long.valueOf(endFlightnum));
 				if (Util.isEmpty(departFlight)) {
@@ -326,20 +343,40 @@ public class NewHasee extends NewTemplate {
 							for (int i = 0; i < dateplanJpList.size(); i++) {
 								/*NewTripJpEntity trip = trips.get(0);*/
 								NewDateplanJpEntity newDateplanJpEntity = dateplanJpList.get(i);
-								Flight flight = null;
+								String flightnum = newDateplanJpEntity.getFlightnum();
+								if ((!Util.isEmpty(flightnum)) && (!Util.eq("null", flightnum))) {
+									Flight flight = dbdao.fetch(Flight.class, Long.valueOf(flightnum));
+									//trip.getSeat()方式
+									String datas[] = {
+											flight.getFrom(),
+											flight.getLine(),
+											"",
+											df6.format(newDateplanJpEntity.getStartdate()).toUpperCase(),
+											df7.format(flight.getDeparture()),
+											df7.format(flight.getLanding()),
+											newDateplanJpEntity.getReturndate() != null ? df7
+													.format(newDateplanJpEntity.getReturndate()) : "", "OK", "2PC",
+											(i == 0 ? "--　" : "") + flight.getFromTerminal() + (i == 0 ? "" : "　--") };
+									for (int j = 0; j < datas.length; j++) {
+										String data = datas[j];
+										PdfPCell cell = new PdfPCell(new Paragraph(data, font));
+										cell.setHorizontalAlignment(j == 0 ? Element.ALIGN_LEFT : Element.ALIGN_CENTER);
+										cell.setUseVariableBorders(true);
+										cell.setBorderWidthLeft(0);
+										cell.setBorderWidthRight(0);
+										cell.setBorderWidthTop(0);
+										cell.setBorderWidthBottom(0);
+										table.addCell(cell);
+									}
+								}
 
-								flight = dbdao.fetch(Flight.class, Long.valueOf(newDateplanJpEntity.getFlightnum()));
-								//trip.getSeat()方式
-								String datas[] = {
-										flight.getFrom(),
-										flight.getLine(),
-										"",
-										df6.format(newDateplanJpEntity.getStartdate()).toUpperCase(),
-										df7.format(flight.getDeparture()),
-										df7.format(flight.getLanding()),
-										newDateplanJpEntity.getReturndate() != null ? df7.format(newDateplanJpEntity
-												.getReturndate()) : "", "OK", "2PC",
-										(i == 0 ? "--　" : "") + flight.getFromTerminal() + (i == 0 ? "" : "　--") };
+								//添加一个空行dbdao.fetch(Flight.class, Long.valueOf(trips.get(0).getFlightnum()));
+
+							}
+							String flightnumId = dateplanJpList.get(0).getFlightnum();
+							if ((!Util.isEmpty(flightnumId)) && (!Util.eq("null", flightnumId))) {
+								Flight flight1 = dbdao.fetch(Flight.class, Long.valueOf(flightnumId));
+								String datas[] = { flight1.getFrom(), "", "", "", "", "", "", "", "", "", };
 								for (int j = 0; j < datas.length; j++) {
 									String data = datas[j];
 									PdfPCell cell = new PdfPCell(new Paragraph(data, font));
@@ -351,23 +388,8 @@ public class NewHasee extends NewTemplate {
 									cell.setBorderWidthBottom(0);
 									table.addCell(cell);
 								}
-								//添加一个空行dbdao.fetch(Flight.class, Long.valueOf(trips.get(0).getFlightnum()));
+							}
 
-							}
-							Flight flight1 = dbdao.fetch(Flight.class,
-									Long.valueOf(dateplanJpList.get(0).getFlightnum()));
-							String datas[] = { flight1.getFrom(), "", "", "", "", "", "", "", "", "", };
-							for (int j = 0; j < datas.length; j++) {
-								String data = datas[j];
-								PdfPCell cell = new PdfPCell(new Paragraph(data, font));
-								cell.setHorizontalAlignment(j == 0 ? Element.ALIGN_LEFT : Element.ALIGN_CENTER);
-								cell.setUseVariableBorders(true);
-								cell.setBorderWidthLeft(0);
-								cell.setBorderWidthRight(0);
-								cell.setBorderWidthTop(0);
-								cell.setBorderWidthBottom(0);
-								table.addCell(cell);
-							}
 						}
 
 					}
@@ -381,44 +403,57 @@ public class NewHasee extends NewTemplate {
 						//单程相对应的处理
 						for (int i = 0; i < 2; i++) {
 							NewTripJpEntity trip = trips.get(0);
-							Flight flight = null;
+							Flight flight = new Flight();
 							if (i == 0) {
-
-								flight = dbdao.fetch(Flight.class, Long.valueOf(trip.getFlightnum()));
+								String flightnum = trip.getFlightnum();
+								if ((!Util.isEmpty(flightnum)) && (!Util.eq("null", flightnum))) {
+									flight = dbdao.fetch(Flight.class, Long.valueOf(flightnum));
+								}
 							} else {
-								flight = dbdao.fetch(Flight.class, Long.valueOf(trip.getReturnflightnum()));
+								String returnflightnum = trip.getReturnflightnum();
+								if ((!Util.isEmpty(returnflightnum)) && (!Util.eq("null", returnflightnum))) {
+									flight = dbdao.fetch(Flight.class, Long.valueOf(returnflightnum));
+								}
 							}
-							//trip.getSeat()方式
-							String datas[] = { flight.getFrom(), flight.getLine(), "",
-									df6.format(startDate).toUpperCase(), df7.format(flight.getDeparture()),
-									df7.format(flight.getLanding()), endDate != null ? df7.format(endDate) : "", "OK",
-									"2PC", (i == 0 ? "--　" : "") + flight.getFromTerminal() + (i == 0 ? "" : "　--") };
-							for (int j = 0; j < datas.length; j++) {
-								String data = datas[j];
-								PdfPCell cell = new PdfPCell(new Paragraph(data, font));
-								cell.setHorizontalAlignment(j == 0 ? Element.ALIGN_LEFT : Element.ALIGN_CENTER);
-								cell.setUseVariableBorders(true);
-								cell.setBorderWidthLeft(0);
-								cell.setBorderWidthRight(0);
-								cell.setBorderWidthTop(0);
-								cell.setBorderWidthBottom(0);
-								table.addCell(cell);
+							if (!Util.isEmpty(flight)) {
+								//trip.getSeat()方式
+								String datas[] = { flight.getFrom(), flight.getLine(), "",
+										df6.format(startDate).toUpperCase(), df7.format(flight.getDeparture()),
+										df7.format(flight.getLanding()), endDate != null ? df7.format(endDate) : "",
+										"OK", "2PC",
+										(i == 0 ? "--　" : "") + flight.getFromTerminal() + (i == 0 ? "" : "　--") };
+								for (int j = 0; j < datas.length; j++) {
+									String data = datas[j];
+									PdfPCell cell = new PdfPCell(new Paragraph(data, font));
+									cell.setHorizontalAlignment(j == 0 ? Element.ALIGN_LEFT : Element.ALIGN_CENTER);
+									cell.setUseVariableBorders(true);
+									cell.setBorderWidthLeft(0);
+									cell.setBorderWidthRight(0);
+									cell.setBorderWidthTop(0);
+									cell.setBorderWidthBottom(0);
+									table.addCell(cell);
+								}
 							}
 						}
 						//添加一个空行dbdao.fetch(Flight.class, Long.valueOf(trips.get(0).getFlightnum()));
 
-						Flight flight1 = dbdao.fetch(Flight.class, Long.valueOf(trips.get(0).getFlightnum()));
-						String datas[] = { flight1.getFrom(), "", "", "", "", "", "", "", "", "", };
-						for (int j = 0; j < datas.length; j++) {
-							String data = datas[j];
-							PdfPCell cell = new PdfPCell(new Paragraph(data, font));
-							cell.setHorizontalAlignment(j == 0 ? Element.ALIGN_LEFT : Element.ALIGN_CENTER);
-							cell.setUseVariableBorders(true);
-							cell.setBorderWidthLeft(0);
-							cell.setBorderWidthRight(0);
-							cell.setBorderWidthTop(0);
-							cell.setBorderWidthBottom(0);
-							table.addCell(cell);
+						String flightnum = trips.get(0).getFlightnum();
+						if ((!Util.isEmpty(flightnum)) && (!Util.eq("null", flightnum))) {
+							Flight flight1 = dbdao.fetch(Flight.class, Long.valueOf(flightnum));
+							if (!Util.isEmpty(flight1)) {
+								String datas[] = { flight1.getFrom(), "", "", "", "", "", "", "", "", "", };
+								for (int j = 0; j < datas.length; j++) {
+									String data = datas[j];
+									PdfPCell cell = new PdfPCell(new Paragraph(data, font));
+									cell.setHorizontalAlignment(j == 0 ? Element.ALIGN_LEFT : Element.ALIGN_CENTER);
+									cell.setUseVariableBorders(true);
+									cell.setBorderWidthLeft(0);
+									cell.setBorderWidthRight(0);
+									cell.setBorderWidthTop(0);
+									cell.setBorderWidthBottom(0);
+									table.addCell(cell);
+								}
+							}
 						}
 					}
 
@@ -679,6 +714,37 @@ public class NewHasee extends NewTemplate {
 			}
 			font.setSize(10);
 			//生成表体
+
+			//获取行程安排 去程、返程航班
+			String firstFlightInfo = ""; //去程航班
+			String lastFlightInfo = ""; // 返程航班
+			if (!Util.isEmpty(tripJp)) {
+				int tripType = tripJp.getOneormore().intValue();
+				if (tripType == 1) {
+					//多程
+					List<NewDateplanJpEntity> dateplanJpList = order.getDateplanJpList();
+					if (!Util.isEmpty(dateplanJpList) && dateplanJpList.size() > 0) {
+						for (int j = 0; j < dateplanJpList.size(); j++) {
+							NewDateplanJpEntity newDateplanJpEntity = dateplanJpList.get(j);
+							if (!Util.isEmpty(newDateplanJpEntity)) {
+								String flightId = newDateplanJpEntity.getFlightnum();
+								if (j == 0) {
+									firstFlightInfo = getFlightInfoById(flightId);//第一程
+								} else if (j == dateplanJpList.size() - 1) {
+									lastFlightInfo = getFlightInfoById(flightId);//最后一程
+								}
+							}
+						}
+					}
+				} else if (tripType == 0) {
+					//单程 TODO
+					String fromId = tripJp.getFlightnum();
+					firstFlightInfo = getFlightInfoById(fromId); //去程
+					String toId = tripJp.getReturnflightnum();
+					lastFlightInfo = getFlightInfoById(toId); // 返程
+				}
+			}
+
 			//旅游计划空处理
 			if (!Util.isEmpty(trips) && trips.size() > 0) {
 
@@ -690,21 +756,41 @@ public class NewHasee extends NewTemplate {
 					}*/
 					String viewid = trip.getViewid();
 					String[] split = viewid.split(",");
+					boolean firstFlag = true;
+					boolean lastFlag = true;
 					for (String string : split) {
-
 						Scenic scenic = this.dbdao.fetch(Scenic.class, Long.valueOf(string));
-						scenics.append(scenic.getNameJP()).append("、");
+						//第一天和最后一天 为去程、返程的航班信息
+						if (i == 0) { //第一天
+							if (firstFlag) {
+								scenics.append(firstFlightInfo);
+								firstFlag = false;
+							}
+
+						} else if (i == trips.size() - 1) { //最后一天
+							if (lastFlag) {
+								scenics.append(lastFlightInfo);
+								lastFlag = false;
+							}
+						} else { //其他
+							scenics.append(scenic.getNameJP()).append("、");
+						}
+
 					}
 					StringBuilder hotel = new StringBuilder();
 					//宾馆空处理
 					if (!Util.isEmpty(trip.getHotelid())) {
 
-						Hotel h = this.dbdao.fetch(Hotel.class, Long.valueOf(trip.getHotelid()));
-						if (!Util.isEmpty(h)) {
+						//最后一天酒店为空
+						if (i != trips.size() - 1) {
+							Hotel h = this.dbdao.fetch(Hotel.class, Long.valueOf(trip.getHotelid()));
+							if (!Util.isEmpty(h)) {
 
-							hotel = new StringBuilder(h.getNameJP()).append("\n").append(h.getAddressJP()).append("\n")
-									.append(h.getPhone());
+								hotel = new StringBuilder(h.getNameJP()).append("\n").append(h.getAddressJP())
+										.append("\n").append(h.getPhone());
+							}
 						}
+
 					}
 					String datas[] = { String.valueOf(i + 1), format(trip.getNowdate(), df9), scenics.toString(),
 							hotel.toString() };
@@ -813,6 +899,24 @@ public class NewHasee extends NewTemplate {
 				throw new JSiteException("行程计划表生成异常!");
 			}
 		}
+	}
+
+	//根据航班id，获取航班信息 
+	public String getFlightInfoById(String id) {
+		String flightInfo = "";
+		if ((!Util.isEmpty(id)) && (!Util.eq("null", id))) {
+			int fligthId = Integer.valueOf(id);
+			Sql sql = Sqls.create(sqlManager.get("pdfDownload_flight_id"));
+			Cnd cnd = Cnd.NEW();
+			cnd.and("f.id", "=", fligthId);
+			sql.setCondition(cnd);
+			Record flightRecord = dbDao.fetch(sql);
+			String line = flightRecord.getString("line");
+			String from = flightRecord.getString("from");
+			String to = flightRecord.getString("to");
+			flightInfo = line + ":" + from + "->" + to;
+		}
+		return flightInfo;
 	}
 
 	public ByteArrayOutputStream book(NewOrderJpEntity order) {

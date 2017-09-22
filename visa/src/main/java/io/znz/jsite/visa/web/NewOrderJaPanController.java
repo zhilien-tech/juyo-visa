@@ -677,18 +677,16 @@ public class NewOrderJaPanController {
 							if (!Util.isEmpty(tripplanJpListnew) && tripplanJpListnew.size() > 0) {
 								for (NewTripplanJpEntity newPeerPersionEntity : tripplanJpListnew) {
 									List<Scenic> scenics = newPeerPersionEntity.getScenics();
-									String viewid = "";
-									for (Scenic scenic : scenics) {
-										viewid += scenic.getId() + ",";
-									}
-									newPeerPersionEntity.setViewid(viewid);
-									/*	if (!Util.isEmpty(newPeerPersionEntity.getId()) && newPeerPersionEntity.getId() > 0) {
-											nutDao.update(newPeerPersionEntity);
-										} else {*/
-									newPeerPersionEntity.setOrder_jp_id(orderOld.getId());
+									if (!Util.isEmpty(scenics)) {
+										String viewid = "";
+										for (Scenic scenic : scenics) {
+											viewid += scenic.getId() + ",";
+										}
+										newPeerPersionEntity.setViewid(viewid);
+										newPeerPersionEntity.setOrder_jp_id(orderOld.getId());
 
-									dbDao.insert(newPeerPersionEntity);
-									//}
+										dbDao.insert(newPeerPersionEntity);
+									}
 								}
 							}
 						}
