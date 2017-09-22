@@ -540,7 +540,7 @@ public abstract class NewTemplate {
 
 				map.put("topmostSubform[0].Page1[0].T66[0]", (Days.daysBetween(dtEntry, dtDepart).getDays() + 1) + "天");
 			}
-			if (!Util.isEmpty(startFlightnum)) {
+			if ((!Util.isEmpty(startFlightnum)) && (!Util.eq("null", startFlightnum))) {
 
 				Flight flight = dbdao.fetch(Flight.class, Long.valueOf(startFlightnum));
 				if (!Util.isEmpty(flight)) {
