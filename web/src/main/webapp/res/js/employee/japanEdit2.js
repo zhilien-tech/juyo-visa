@@ -610,16 +610,15 @@ var viewModel = kendo.observable({
 	},
 	travelFromCityMore:function(e){
 		var dataUid = e.data.uid;
+		e.data.flightnum = "";
 		goFlightByCity(e,"fromCityMore_select_"+dataUid, "toCityMore_select_"+dataUid, "flightMore_select_"+dataUid, "moreType");
 	},
 	travelToCityMore:function(e){
-
 		//出行信息， 多程抵达城市
 		//航班联动
 		var dataUid = e.data.uid;
+		e.data.flightnum = "";
 		goFlightByCity(e,"fromCityMore_select_"+dataUid, "toCityMore_select_"+dataUid, "flightMore_select_"+dataUid, "moreType");
-		
-		
 		//出行信息 多程抵达城市
 		var dataPlanList =viewModel.customer.dateplanJpList;
 		
@@ -1934,6 +1933,8 @@ function goFlightByCity(e,fromCityEle, toCityEle, flightSelect, tripType){
 //出行城市的航班
 function nextFlightByCity(e,fromCityEle, toCityEle, flightSelect, datePlan){
 	var eData = e.data;
+	e.data.flightnum = "";
+	e.data.returnflightnum = "";
 	var fromCity = $("#"+fromCityEle).val();
 	if(fromCity == null){
 		fromCity = "北京";
