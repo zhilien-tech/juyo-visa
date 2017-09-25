@@ -286,7 +286,7 @@ var validatable = $("#customer_form").kendoValidator({
       },
       card: function(input){//身份证
     	  if (input.is("[name=card]")) {
-    		  var regex = /^\d{18}$/;
+    		  var regex = /^.{18}$/;
     		  var flag = regex.test(input.val());
         	  return flag;
           }
@@ -294,7 +294,7 @@ var validatable = $("#customer_form").kendoValidator({
       },
       passport: function(input){//护照
     	  if (input.is("[name=passport]")) {
-    		  var regex = /^\d{9}$/;
+    		  var regex = /^.{9}$/;
     		  var flag = regex.test(input.val());
         	  return flag;
           }
