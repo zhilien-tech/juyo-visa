@@ -272,8 +272,41 @@ var emptyNum=[];
 //存放格式错误的数组
 var errorNum=[];
 
+
 //信息保存
-var validatable = $("#aaaa").kendoValidator().data("kendoValidator");
+var validatable = $("#customer_form").kendoValidator({
+    rules: {
+      reg: function(input) {
+    	  if (input.is("[id=mobile]")) {
+    		  var regex = /^\d{11}$/;
+    		  var flag = regex.test(input.val());
+        	  return flag;
+          }
+          return true;
+      },
+      card: function(input){//身份证
+    	  if (input.is("[name=card]")) {
+    		  var regex = /^\d{18}$/;
+    		  var flag = regex.test(input.val());
+        	  return flag;
+          }
+    	  return true;
+      },
+      passport: function(input){//护照
+    	  if (input.is("[name=passport]")) {
+    		  var regex = /^\d{9}$/;
+    		  var flag = regex.test(input.val());
+        	  return flag;
+          }
+          return true;
+      }
+    },
+    messages:{
+    	reg:"手机号码必须为11位数字",
+    	card:"身份证号必须为18位",
+    	passport:"护照号必须为9位"
+    }
+}).data("kendoValidator");
 $("#saveCustomerData").on("click",function(){
 	if(validatable.validate()){
 		//清空验证的数组
@@ -317,13 +350,15 @@ $("#saveCustomerData").on("click",function(){
 	    	var none=$(this).css("display")=="none";//获取 判断验证提示隐藏
 	    	if(!none){
 		    	var verificationText=$(this).text().trim();//获取验证的文字信息
+		    	console.log(verificationText);
+		    	console.log("====");
 		    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
 		    	labelVal = labelVal.split(":");
 		    	labelVal.pop();
 		    	labelVal = labelVal.join(":");//截取 :之前的信息
 		    	var person=new Object();
 		    	person.text=labelVal;
-		    	person.error="";
+		    	person.error="";						    	
 		    	if(verificationText.indexOf("不能为空")>0){
 		    		emptyNum.push(person);
 		    	}else{
@@ -335,9 +370,10 @@ $("#saveCustomerData").on("click",function(){
 	    //end 验证————————————————————————————————
 		
 		
+	    
+	    
 		var str="";
-		if(emptyNum.length>0){
-			
+		if(emptyNum.length>0){			
 			for(var i=0;i<emptyNum.length;i++){
 				str+=emptyNum[i].text+",";
 			}
@@ -350,6 +386,8 @@ $("#saveCustomerData").on("click",function(){
 			}
 			str+="格式不正确！";
 		}
+		
+			
 		$.layer.alert(str);
 		//用完清空
 		emptyNum.splice(0,emptyNum.length);
