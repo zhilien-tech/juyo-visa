@@ -267,13 +267,7 @@ $("#has_usa_aboard").change(function () {
 });
 
 
-//存放空的数组
-var emptyNum=[];
-//存放格式错误的数组
-var errorNum=[];
-
-
-//信息保存
+//自定义校验规则
 var validatable = $("#customer_form").kendoValidator({
     rules: {
       reg: function(input) {
@@ -307,6 +301,15 @@ var validatable = $("#customer_form").kendoValidator({
     	passport:"护照号必须为9位"
     }
 }).data("kendoValidator");
+
+
+//存放空的数组
+var emptyNum=[];
+//存放格式错误的数组
+var errorNum=[];
+
+
+//信息保存
 $("#saveCustomerData").on("click",function(){
 	if(validatable.validate()){
 		//清空验证的数组
@@ -338,10 +341,14 @@ $("#saveCustomerData").on("click",function(){
 				 if(indexnew!=null){
 					layer.close(indexnew);
 				 }
-				 console.log(XMLHttpRequest);
-				 console.log(textStatus);
-				 console.log(errorThrown);
-	            layer.msg('保存失败!',{time:2000});
+				  
+				 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				 parent.layer.close(index);
+				 window.parent.successCallback('1');
+				 //console.log(XMLHttpRequest);
+				 //console.log(textStatus);
+				 //console.log(errorThrown);
+	           	layer.msg('保存失败!',{time:2000});
 	         }
 		});
 	}else{
