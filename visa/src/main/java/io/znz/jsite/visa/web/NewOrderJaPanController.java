@@ -1996,8 +1996,6 @@ public class NewOrderJaPanController {
 	public Object downloadselectsavenew(long orderid, final HttpSession session, long sendComId, long landComId) {
 		NewOrderJpEntity order1 = dbDao.fetch(NewOrderJpEntity.class, orderid);
 		if (!Util.isEmpty(order1)) {
-			//受付番号
-			NewComeBabyJpEntity newcomebabyjpentity = dbDao.fetch(NewComeBabyJpEntity.class, sendComId);
 			dbDao.update(NewOrderJpEntity.class, Chain.make("sendComId", sendComId).add("landComId", landComId),
 					Cnd.where("id", "=", order1.getId()));
 			order1 = dbDao.fetch(NewOrderJpEntity.class, order1.getId());
