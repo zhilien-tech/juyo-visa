@@ -357,8 +357,6 @@ $("#saveCustomerData").on("click",function(){
 	    	var none=$(this).css("display")=="none";//获取 判断验证提示隐藏
 	    	if(!none){
 		    	var verificationText=$(this).text().trim();//获取验证的文字信息
-		    	console.log(verificationText);
-		    	console.log("====");
 		    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
 		    	labelVal = labelVal.split(":");
 		    	labelVal.pop();
