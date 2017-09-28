@@ -154,6 +154,7 @@ function regCmd(command) {
         						parent.layer.close(index);
         					}
         				});
+            		  	$(arguments[0]).blur();//取消编辑按钮 焦点
 
             		} else if(resp.code === "FAIL"){
             			if(index!=null){
@@ -210,6 +211,8 @@ function regCmd(command) {
 					shadeClose: false,
 					content: '/japan/japancustomerEdit.html?cid=' + data.id + "&check=true"
 				});
+				//$(arguments[0]).blur();//取消编辑按钮 焦点
+				event.target.blur();//禁止焦点
 				break;
 			case "modify":
 				var data = grid.dataItem($(e.currentTarget).closest("tr"));
@@ -220,6 +223,8 @@ function regCmd(command) {
 					shadeClose: false,
 					content: '/japan/japanEdit.html?cid=' + data.id + "&check=true"
 				});
+				//$(arguments[0]).blur();//取消编辑按钮 焦点
+				event.target.blur();//禁止焦点
 				break;
 			case "download":
 				if (!(data = select(e))) return;

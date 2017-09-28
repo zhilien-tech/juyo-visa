@@ -77,7 +77,7 @@
         <input type="button" name="" class="btn btn-primary input-sm" value="搜索" onclick="successCallback(10);"  id = "searchBtn">
       </div>
       <div  class="col-xs-1 pull-right">
-        <input type="button" name="" class="btn btn-primary input-sm pull-right" value="下单" onclick="produceOrder();"/>
+        <input type="button" name="" class="btn btn-primary input-sm pull-right" value="下单" onclick="produceOrder(this);"/>
       </div>
     </div>
     <!--end 搜索条件 模块-->
@@ -185,7 +185,7 @@
 <script src="/res/plugin/webuploader/webuploader.min.js"></script>
 
 <script type="text/javascript">
-	function produceOrder(){
+	function produceOrder(self){
 		layer.open({
             type: 2,
             title: '编辑订单',
@@ -193,6 +193,7 @@
             shadeClose: false,
             content: '/japan/japanEdit.html?island=1'
         });
+		$(self).blur();//禁止焦点
 	}
 	$(document).ready(function() {
         $("#state").kendoDropDownList();//搜索引擎的 状态 下拉框初始化

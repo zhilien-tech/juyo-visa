@@ -277,6 +277,7 @@ function regCmd(command) {
 		              		shadeClose: false,
 		              		content: '/japan/japancustomerEdit.html?cid=' + data.id + "&check=true"
 		              	});
+		              	event.target.blur();//禁止焦点
 		              	break;
                 case "modify":
                     var data = grid.dataItem($(e.currentTarget).closest("tr"));
@@ -287,6 +288,7 @@ function regCmd(command) {
                         shadeClose: false,
                         content: '/japan/japanEdit.html?cid=' + data.id + "&check=true"
                     });
+                    event.target.blur();//禁止焦点
                     break;
                 case "download":
                 	 if (!(data = select(e))) return;
