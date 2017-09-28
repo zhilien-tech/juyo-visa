@@ -85,9 +85,9 @@ var countries = new kendo.data.DataSource({
 	        ]
 },
     keys = {
-        "customer.financeJpList": {},
-        "customer.orthercountryJpList": {},
-        "customer.recentlyintojpJpList": {}
+        "customer.financeJpList": [],
+        "customer.orthercountryJpList": [],
+        "customer.recentlyintojpJpList": []
     }
 /*****************************************************
  * 数据绑定
@@ -174,7 +174,8 @@ var viewModel = kendo.observable({
     },
     addOne: function (e) {
         var key = $.isString(e) ? e : $(e.target).data('params');
-        viewModel.get(key).push(keys[key]);
+        var cusId = viewModel.customer.id;
+        viewModel.customer.financeJpList.push({});
     },
     delOne: function (e) {
         var key = $(e.target).data('params');
@@ -357,8 +358,6 @@ $("#saveCustomerData").on("click",function(){
 	    	var none=$(this).css("display")=="none";//获取 判断验证提示隐藏
 	    	if(!none){
 		    	var verificationText=$(this).text().trim();//获取验证的文字信息
-		    	console.log(verificationText);
-		    	console.log("====");
 		    	var labelVal=$(this).parents('.form-group').find('label').text();//获取验证信息 对应的label名称
 		    	labelVal = labelVal.split(":");
 		    	labelVal.pop();

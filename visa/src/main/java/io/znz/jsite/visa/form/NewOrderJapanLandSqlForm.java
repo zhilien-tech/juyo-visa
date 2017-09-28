@@ -19,6 +19,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
+import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
 
 /**
@@ -47,6 +48,21 @@ public class NewOrderJapanLandSqlForm extends KenDoParamForm {
 		 * 默认使用了当前form关联entity的单表查询sql,如果是多表复杂sql，
 		 * 请使用sqlManager获取自定义的sql，并设置查询条件
 		 */
+		if (!Util.isEmpty(end_time)) {
+			if (end_time.getHours() == 23) {
+				end_time = DateUtil.addDay(end_time, 1);
+			}
+			end_time.setHours(23);
+			end_time.setMinutes(59);
+			end_time.setSeconds(59);
+		}
+		if (!Util.isEmpty(start_time)) {
+			if (start_time.getHours() == 23) {
+				start_time = DateUtil.addDay(start_time, 1);
+				start_time.setHours(0);
+			}
+		}
+
 		String sqlString = paramSqlManager.get("newcustomerjapan_landlist_new");
 		Sql sql = Sqls.create(sqlString);
 
@@ -67,20 +83,15 @@ public class NewOrderJapanLandSqlForm extends KenDoParamForm {
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
 		if (!Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
-			SqlExpressionGroup e1 = Cnd.exps("vnoj.senddate", ">=", start_time).and("vnoj.senddate", "<=", end_time);
-			SqlExpressionGroup e2 = Cnd.exps("vnoj.outdate", ">=", start_time).and("vnoj.outdate", "<=", end_time);
-			//			cnd.and(e1).or(e2);
-			cnd.and(e1.or(e2));
+			SqlExpressionGroup e1 = Cnd.exps("vnoj.createtime", ">=", start_time)
+					.and("vnoj.createtime", "<=", end_time);
+			cnd.and(e1);
 		} else if (Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
-			SqlExpressionGroup e1 = Cnd.exps("vnoj.senddate", "<=", end_time);
-			SqlExpressionGroup e2 = Cnd.exps("vnoj.outdate", "<=", end_time);
-			//			cnd.and(e1).or(e2);
-			cnd.and(e1.or(e2));
+			SqlExpressionGroup e1 = Cnd.exps("vnoj.createtime", "<=", end_time);
+			cnd.and(e1);
 		} else if (!Util.isEmpty(start_time) && Util.isEmpty(end_time)) {
-			SqlExpressionGroup e1 = Cnd.exps("vnoj.senddate", ">=", start_time);
-			SqlExpressionGroup e2 = Cnd.exps("vnoj.outdate", ">=", start_time);
-			//			cnd.and(e1).or(e2);
-			cnd.and(e1.or(e2));
+			SqlExpressionGroup e1 = Cnd.exps("vnoj.createtime", ">=", start_time);
+			cnd.and(e1);
 		}
 		if (!Util.isEmpty(keywords)) {
 			if (keywords.contains("@")) {
