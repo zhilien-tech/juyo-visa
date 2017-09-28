@@ -762,6 +762,13 @@ function showDetails(e){
 /*$('tbody[role="rowgroup"] tr').click(function(){
 	alert(45);
 });*/
+//回车事件
+function onkeyEnter(){
+	if (event.keyCode == 13){    
+		$("#searchBtn").click();
+	}		
+}
+
 $(function(){
 	for(var i=0;i<20;i++){
 		 grid.table.on('click', 'tr:eq('+i+') td:eq(11)', function () {

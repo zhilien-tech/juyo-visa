@@ -34,6 +34,7 @@ var statuslist=[
                 {text:"完成",value:13},
                 {text:"EVUS",value:14}*/
                 ];
+
 //注册命令
 function regCmd(command) {
 	var select = function (e) {
@@ -202,7 +203,6 @@ function regCmd(command) {
 				});
 				break;
 			case "customerEdit1":
-
 				if (!(data = select(e))) return;
 				layer.open({
 					type: 2,
@@ -264,6 +264,16 @@ function regCmd(command) {
 		}
 	};
 }
+function produceOrder(){
+	layer.open({
+        type: 2,
+        title: '编辑订单',
+        area: ['950px', '600px'],
+        shadeClose: false,
+        content: '/japan/japanEdit.html'
+    });
+} 
+
 function download(cid) {
 	$.getJSON("/visa/photo/list", {cid: cid}, function (result) {
 		if (result.code === "SUCCESS") {
@@ -450,11 +460,11 @@ var grid = $("#grid").kendoGrid({
         });  
     }*/
 }).data("kendoGrid");
-//搜索回车事件
+//回车事件
 function onkeyEnter(){
- if(event.keyCode==13){
- $("#searchBtn").click();
- }
+	if (event.keyCode == 13){    
+		$("#searchBtn").click();
+	}		
 }
 
 //页面刷新

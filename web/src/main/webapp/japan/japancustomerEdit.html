@@ -35,9 +35,9 @@
                                 </div>
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <button onclick="RecognizeImg()" class="k-button col-xs-12 k-button-icontext" style="margin-bottom: 10px;">
+                                        <span onclick="RecognizeImg()" class="k-button col-xs-12 k-button-icontext" style="margin-bottom: 10px;">
                                             <i class="fa fa-camera-retro"></i> 扫描护照
-                                        </button>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -567,9 +567,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <button data-bind="click:addOne" data-params="customer.financeJpList" class="k-button col-xs-12 k-button-icontext">
-                                            <span class="k-icon k-i-plus" data-bind="click:addOne" data-params="customer.financeJpList"></span>添加
-                                        </button>
+                                        <input type="button"  data-bind="click:addOne" data-params="customer.financeJpList" class="k-button col-xs-12 k-button-icontext" value="添加">
                                     </div>
                                 </div>
                             </div>
