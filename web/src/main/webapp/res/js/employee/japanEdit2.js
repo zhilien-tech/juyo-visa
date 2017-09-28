@@ -236,7 +236,6 @@ var viewModel = kendo.observable({
 		});
 		
 		all.splice(all.indexOf(e.data), 1);
-		console.log(e.data.daynum);
 	},
 	delOneApplicant: function (e) {
 		var key = $(e.target).data('params');

@@ -85,9 +85,9 @@ var countries = new kendo.data.DataSource({
 	        ]
 },
     keys = {
-        "customer.financeJpList": {},
-        "customer.orthercountryJpList": {},
-        "customer.recentlyintojpJpList": {}
+        "customer.financeJpList": [],
+        "customer.orthercountryJpList": [],
+        "customer.recentlyintojpJpList": []
     }
 /*****************************************************
  * 数据绑定
@@ -174,7 +174,8 @@ var viewModel = kendo.observable({
     },
     addOne: function (e) {
         var key = $.isString(e) ? e : $(e.target).data('params');
-        viewModel.get(key).push(keys[key]);
+        var cusId = viewModel.customer.id;
+        viewModel.customer.financeJpList.push({});
     },
     delOne: function (e) {
         var key = $(e.target).data('params');
