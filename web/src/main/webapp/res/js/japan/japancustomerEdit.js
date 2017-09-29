@@ -420,9 +420,9 @@ function agreeOrRefuse(flag){
 			 window.parent.successCallback('3');
 		 },
 		 error: function(XMLHttpRequest, textStatus, errorThrown) {
-			 console.log(XMLHttpRequest);
-			 console.log(textStatus);
-			 console.log(errorThrown);
+			 //console.log(XMLHttpRequest);
+			 //console.log(textStatus);
+			 //console.log(errorThrown);
             layer.msg('操作失败!',{time:2000});
          }
 	});
