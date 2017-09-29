@@ -13,7 +13,7 @@ var visatypelist=[
                 //{text:"东三县",value:2},
                 {text:"单次",value:0},
                 //{text:"新三县",value:3},
-                {text:"冲绳东六三年",value:4},
+                {text:"冲绳东北三年",value:4},
                 {text:"普通三年多次",value:5}
                 ];
 //状态listorder
