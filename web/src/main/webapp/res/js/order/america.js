@@ -145,6 +145,7 @@ function regCmd(command) {
                         shadeClose: false,
                         content: '/m/americaEdit.html?cid=' + data.id + "&check=true"
                     });
+                    $(this).blur();//禁止焦点
                     break;
                 case "customerEdit":
                 	/*var data = grid.dataItem($(e.currentTarget).closest("tr"));*/
@@ -158,6 +159,8 @@ function regCmd(command) {
                 		shadeClose: false,
                 		content: '/order/customerEdit.html?cid=' + data.id + "&check=true"
                 	});
+                	
+                	$(this).blur();//禁止焦点
                 	break;
                 case "validate":
                 	if (!(data = select(e))) return;

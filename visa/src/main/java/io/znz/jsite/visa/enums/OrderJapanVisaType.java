@@ -18,7 +18,7 @@ import com.uxuexi.core.common.enums.IEnum;
  */
 
 public enum OrderJapanVisaType implements IEnum {
-	SINGLE(0, "单次"), one(1, "一年单次"), THREE_COUNTY(2, "东三县"), SIX_COUNTY(3, "新三县"), run(4, "冲绳"), three(5, "普通三年多次"), five(
+	SINGLE(0, "单次"), one(1, "一年单次"), THREE_COUNTY(2, "东三县"), SIX_COUNTY(3, "新三县"), run(4, "冲绳东北三年"), three(5, "普通三年多次"), five(
 			6, "普通五年");
 	private int key;
 	private String value;

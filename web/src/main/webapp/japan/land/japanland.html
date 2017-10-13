@@ -62,22 +62,22 @@
         </select>
       </div>
       <div class="col-xs-2 padding-Left-0">
-      		<input type="text" id="start_time" name="" class="k-textbox fill uppercase" placeholder=" ">
+      		<input type="text" id="start_time" onkeypress="onkeyEnter();" name="" class="k-textbox fill uppercase" placeholder=" ">
 
       </div>
       <label class="timeLabel">至</label>
       <div class="col-xs-2">
-      		<input type="text" id="end_time" name="" class="k-textbox fill uppercase" placeholder=" ">
+      		<input type="text" id="end_time" onkeypress="onkeyEnter();" name="" class="k-textbox fill uppercase" placeholder=" ">
 
       </div>
       <div class="col-xs-2 padding-Left-0">
-      		<input type="text" id="keywords" name="" class="k-textbox fill uppercase" placeholder="订单号/联系人/电话/邮箱/申请人">
+      		<input type="text" id="keywords" onkeypress="onkeyEnter();" name="" class="k-textbox fill uppercase" placeholder="订单号/联系人/电话/邮箱/申请人">
       </div>
       <div class="col-xs-1 padding-Left-0">
-        <input type="button" name="" class="btn btn-primary input-sm" value="搜索" onclick="successCallback(10);">
+        <input type="button" name="" class="btn btn-primary input-sm" value="搜索" onclick="successCallback(10);"  id = "searchBtn">
       </div>
       <div  class="col-xs-1 pull-right">
-        <input type="button" name="" class="btn btn-primary input-sm pull-right" value="下单" onclick="produceOrder();"/>
+        <input type="button" name="" class="btn btn-primary input-sm pull-right" value="下单" onclick="produceOrder(this);"/>
       </div>
     </div>
     <!--end 搜索条件 模块-->
@@ -185,7 +185,7 @@
 <script src="/res/plugin/webuploader/webuploader.min.js"></script>
 
 <script type="text/javascript">
-	function produceOrder(){
+	function produceOrder(self){
 		layer.open({
             type: 2,
             title: '编辑订单',
@@ -193,6 +193,7 @@
             shadeClose: false,
             content: '/japan/japanEdit.html?island=1'
         });
+		$(self).blur();//禁止焦点
 	}
 	$(document).ready(function() {
         $("#state").kendoDropDownList();//搜索引擎的 状态 下拉框初始化

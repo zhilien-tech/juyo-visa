@@ -10,10 +10,10 @@ var genderlist=[
                  ];
 //签证类型
 var visatypelist=[
-                {text:"东三县",value:2},
+                //{text:"东三县",value:2},
                 {text:"单次",value:0},
-                {text:"新三县",value:3},
-                {text:"冲绳三年多次",value:4},
+                //{text:"新三县",value:3},
+                {text:"冲绳东北三年",value:4},
                 {text:"普通三年多次",value:5}
                 ];
 //状态listorder
@@ -277,6 +277,7 @@ function regCmd(command) {
 		              		shadeClose: false,
 		              		content: '/japan/japancustomerEdit.html?cid=' + data.id + "&check=true"
 		              	});
+		              	event.target.blur();//禁止焦点
 		              	break;
                 case "modify":
                     var data = grid.dataItem($(e.currentTarget).closest("tr"));
@@ -287,6 +288,7 @@ function regCmd(command) {
                         shadeClose: false,
                         content: '/japan/japanEdit.html?cid=' + data.id + "&check=true"
                     });
+                    event.target.blur();//禁止焦点
                     break;
                 case "download":
                 	 if (!(data = select(e))) return;
@@ -760,6 +762,13 @@ function showDetails(e){
 /*$('tbody[role="rowgroup"] tr').click(function(){
 	alert(45);
 });*/
+//回车事件
+function onkeyEnter(){
+	if (event.keyCode == 13){    
+		$("#searchBtn").click();
+	}		
+}
+
 $(function(){
 	for(var i=0;i<20;i++){
 		 grid.table.on('click', 'tr:eq('+i+') td:eq(11)', function () {

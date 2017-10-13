@@ -51,9 +51,9 @@ var landCom=new kendo.data.DataSource({
 var visatypeStatus=[
 	{text:"单次",value:0},           
 	{text:"一年单次",value:1},           
-	{text:"东三县",value:2},           
-	{text:"新三县",value:3},           
-	{text:"冲绳三年多次",value:4},           
+	//{text:"东三县",value:2},           
+	//{text:"新三县",value:3},           
+	{text:"冲绳东北三年",value:4},           
 	{text:"普通三年多次",value:5},           
 	{text:"普通五年",value:6}      
 ];
