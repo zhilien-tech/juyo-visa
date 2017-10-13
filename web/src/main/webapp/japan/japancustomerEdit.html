@@ -18,6 +18,7 @@
     </style>
 </head>
 <body  id="aaaa">
+<form id="customer_form">
 <div>
 
     <div class="container-fluid" style="padding-bottom: 15px;">
@@ -90,7 +91,7 @@
                                     <div class="form-group">
                                         <label for="passport_code">护照号:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="passport_code" data-bind="value:customer.passport" class="k-textbox fill uppercase"/>
+                                            <input id="passport_code" name="passport" data-bind="value:customer.passport" class="k-textbox fill uppercase"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -190,7 +191,7 @@
                                     <div class="form-group">
                                         <label for="card_id">身份证号:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="card_id" data-bind="value:customer.idcard" class="k-textbox fill"/>
+                                            <input id="card_id" name="card" data-bind="value:customer.idcard" class="k-textbox fill"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -240,7 +241,7 @@
                                     <div class="form-group">
                                         <label for="mobile">手机号码:<span style="color: red">*</span></label>
                                         <div class='input-group'>
-                                            <input id="mobile" data-bind="value:customer.phone" class="k-textbox fill" required validationMessage="手机号码不能为空" name="phone"/>
+                                            <input id="mobile"  data-bind="value:customer.phone" class="k-textbox fill" required validationMessage="手机号码不能为空" name="phone"/>
                                             <span class='input-group-addon'><i class='fa fa-lg fa-fw fa-lightbulb-o'></i></span>
                                         </div>
                                     </div>
@@ -651,7 +652,7 @@
     </div>
     
 </div>
-
+</form>
 </body>
 <!--引入 js 模板片段-->
 <script id="tpl_has_pr" type="text/text">
