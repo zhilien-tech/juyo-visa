@@ -461,7 +461,7 @@ public class NewHasee extends NewTemplate {
 				}
 			}
 
-			table.writeSelectedRows(0, -1, padding, 493, cbq);
+			table.writeSelectedRows(0, -1, padding, 350, cbq);
 			ps.close();
 			reader.close();
 			IOUtils.closeQuietly(stream);
