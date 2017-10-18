@@ -1483,82 +1483,67 @@ public class NewOrderJaPanController {
 		List<NewCustomerJpEntity> customerJpList = Lists.newArrayList();
 		List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
 				Cnd.where("order_jp_id", "=", orderid), null);
+		//根据订单id查询申请人
+		Cnd cnd = Cnd.NEW();
+		String sqlString = sqlManager.get("newcustomerjapan_list");
+		Sql sql = Sqls.create(sqlString);
+		sql.setParam("orderId", order.getId());
+		List<NewCustomerJpEntity> customerJpQueryList = DbSqlUtil.query(dbDao, NewCustomerJpEntity.class, sql);
+
 		for (NewCustomerOrderJpEntity newCustomerOrderJpEntity : query) {
-			NewCustomerJpEntity customer = dbDao.fetch(NewCustomerJpEntity.class,
-					newCustomerOrderJpEntity.getCustomer_jp_id());
+			if (!Util.isEmpty(newCustomerOrderJpEntity)) {
+				Long customerJpId = newCustomerOrderJpEntity.getCustomer_jp_id();
+				for (NewCustomerJpEntity customer : customerJpQueryList) {
+					Long customerId = customer.getId();
+					if (customerJpId == customerId) {
+						List<NewWorkinfoJpEntity> passportlose = dbDao.query(NewWorkinfoJpEntity.class,
+								Cnd.where("customer_jp_id", "=", customer.getId()), null);
+						if (!Util.isEmpty(passportlose) && passportlose.size() > 0) {
+							customer.setWorkinfoJp(passportlose.get(0));
+						} else {
+							customer.setWorkinfoJp(new NewWorkinfoJpEntity());
 
-			List<NewWorkinfoJpEntity> passportlose = dbDao.query(NewWorkinfoJpEntity.class,
-					Cnd.where("customer_jp_id", "=", customer.getId()), null);
-			if (!Util.isEmpty(passportlose) && passportlose.size() > 0) {
-				customer.setWorkinfoJp(passportlose.get(0));
-			} else {
-				customer.setWorkinfoJp(new NewWorkinfoJpEntity());
+						}
+						List<NewOldpassportJpEntity> oldname = dbDao.query(NewOldpassportJpEntity.class,
+								Cnd.where("customer_jp_id", "=", customer.getId()), null);
+						if (!Util.isEmpty(oldname) && oldname.size() > 0) {
+							customer.setOldpassportJp(oldname.get(0));
+						} else {
+							customer.setOldpassportJp(new NewOldpassportJpEntity());
+						}
+						List<NewFinanceJpEntity> orthercountry = dbDao.query(NewFinanceJpEntity.class,
+								Cnd.where("customer_jp_id", "=", customer.getId()), null);
+						if (!Util.isEmpty(orthercountry) && orthercountry.size() > 0) {
+							customer.setFinanceJpList(orthercountry);
+						}
+						List<NewOldnameJpEntity> father = dbDao.query(NewOldnameJpEntity.class,
+								Cnd.where("customer_jp_id", "=", customer.getId()), null);
+						if (!Util.isEmpty(father) && father.size() > 0) {
+							customer.setOldnameJp(father.get(0));
+						} else {
+							customer.setOldnameJp(new NewOldnameJpEntity());
 
-			}
-			List<NewOldpassportJpEntity> oldname = dbDao.query(NewOldpassportJpEntity.class,
-					Cnd.where("customer_jp_id", "=", customer.getId()), null);
-			if (!Util.isEmpty(oldname) && oldname.size() > 0) {
-				customer.setOldpassportJp(oldname.get(0));
-			} else {
-				customer.setOldpassportJp(new NewOldpassportJpEntity());
-			}
-			List<NewFinanceJpEntity> orthercountry = dbDao.query(NewFinanceJpEntity.class,
-					Cnd.where("customer_jp_id", "=", customer.getId()), null);
-			if (!Util.isEmpty(orthercountry) && orthercountry.size() > 0) {
-				customer.setFinanceJpList(orthercountry);
-			}
-			List<NewOldnameJpEntity> father = dbDao.query(NewOldnameJpEntity.class,
-					Cnd.where("customer_jp_id", "=", customer.getId()), null);
-			if (!Util.isEmpty(father) && father.size() > 0) {
-				customer.setOldnameJp(father.get(0));
-			} else {
-				customer.setOldnameJp(new NewOldnameJpEntity());
+						}
 
-			}
+						List<NewOrthercountryJpEntity> relation = dbDao.query(NewOrthercountryJpEntity.class,
+								Cnd.where("customer_jp_id", "=", customer.getId()), null);
+						if (!Util.isEmpty(relation) && relation.size() > 0) {
+							customer.setOrthercountryJpList(relation);
+						}
 
-			List<NewOrthercountryJpEntity> relation = dbDao.query(NewOrthercountryJpEntity.class,
-					Cnd.where("customer_jp_id", "=", customer.getId()), null);
-			if (!Util.isEmpty(relation) && relation.size() > 0) {
-				customer.setOrthercountryJpList(relation);
-			}
-
-			//TODO
-			List<NewRecentlyintojpJpEntity> teachinfo = dbDao.query(NewRecentlyintojpJpEntity.class,
-					Cnd.where("customer_jp_id", "=", customer.getId()), null);
-			if (!Util.isEmpty(teachinfo) && teachinfo.size() > 0) {
-				customer.setRecentlyintojpJpList(teachinfo);
+						//TODO
+						List<NewRecentlyintojpJpEntity> teachinfo = dbDao.query(NewRecentlyintojpJpEntity.class,
+								Cnd.where("customer_jp_id", "=", customer.getId()), null);
+						if (!Util.isEmpty(teachinfo) && teachinfo.size() > 0) {
+							customer.setRecentlyintojpJpList(teachinfo);
+						}
+					}
+				}
 			}
 
-			if (!Util.isEmpty(customer)) {
-				customerJpList.add(customer);
-			}
 		}
-		Collections.sort(customerJpList, new Comparator<NewCustomerJpEntity>() {
 
-			@Override
-			public int compare(NewCustomerJpEntity o1, NewCustomerJpEntity o2) {
-				String timeO1 = o1.getChinesefullname();
-				String timeO2 = o2.getChinesefullname();
-				if (!Util.isEmpty(timeO1) && !Util.isEmpty(timeO2)) {
-					return timeO2.compareTo(timeO1);
-				}
-
-				if (timeO1 == null && timeO2 == null) {
-					return 0;
-				}
-				if (timeO1 == null) {
-					return -1;
-				}
-				if (timeO2 == null) {
-					return -1;
-				}
-				return 0;
-
-			}
-
-		});
-
-		order.setCustomerJpList(customerJpList);
+		order.setCustomerJpList(customerJpQueryList);
 		if (order == null) {
 			return ResultObject.fail("订单不存在!");
 		}
