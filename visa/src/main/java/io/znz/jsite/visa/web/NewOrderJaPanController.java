@@ -1480,14 +1480,12 @@ public class NewOrderJaPanController {
 		if (!Util.isEmpty(newPayCompanyEntities) && newPayCompanyEntities.size() > 0) {
 			order.setFastMail(newPayCompanyEntities.get(0));
 		}
-		List<NewCustomerJpEntity> customerJpList = Lists.newArrayList();
 		List<NewCustomerOrderJpEntity> query = dbDao.query(NewCustomerOrderJpEntity.class,
 				Cnd.where("order_jp_id", "=", orderid), null);
 		//根据订单id查询申请人
-		Cnd cnd = Cnd.NEW();
 		String sqlString = sqlManager.get("newcustomerjapan_list");
 		Sql sql = Sqls.create(sqlString);
-		sql.setParam("orderId", order.getId());
+		sql.setParam("orderId", orderid);
 		List<NewCustomerJpEntity> customerJpQueryList = DbSqlUtil.query(dbDao, NewCustomerJpEntity.class, sql);
 
 		for (NewCustomerOrderJpEntity newCustomerOrderJpEntity : query) {
